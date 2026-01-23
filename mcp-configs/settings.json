@@ -1,0 +1,26 @@
+{
+  "$schema": "https://raw.githubusercontent.com/anthropics/claude-code/main/schemas/settings.schema.json",
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-filesystem", "/path/to/allowed/dir"],
+      "env": {}
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@anthropic-ai/mcp-server-github"],
+      "env": {
+        "GITHUB_TOKEN": "${GITHUB_TOKEN}"
+      }
+    }
+  },
+  "_comments": {
+    "note": "이 파일은 예시입니다. 실제 사용 시 경로와 토큰을 수정하세요.",
+    "available_servers": [
+      "filesystem - 파일 시스템 접근",
+      "github - GitHub API 연동",
+      "jira - Jira 연동 (DX 에이전트용)",
+      "kubernetes - K8s API 연동"
+    ]
+  }
+}
