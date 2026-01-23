@@ -11,9 +11,11 @@ ress-claude-agents/
 ├── global/
 │   └── CLAUDE.md                 # 공통 기본 설정
 ├── commands/
-│   ├── backend/                  # 백엔드 개발 명령어
+│   ├── backend/                  # 백엔드 개발 명령어 (Java/Kotlin)
+│   ├── go/                       # Go 백엔드 명령어
 │   ├── k8s/                      # Kubernetes 명령어
-│   └── terraform/                # Terraform 명령어
+│   ├── terraform/                # Terraform 명령어
+│   └── dx/                       # DX 명령어
 ├── project-templates/
 │   ├── backend-go/CLAUDE.md      # Go 백엔드 프로젝트용
 │   ├── backend-java/CLAUDE.md    # Java 백엔드 프로젝트용
