@@ -72,6 +72,22 @@ golangci-lint를 실행하고 문제를 수정합니다.
 | `/go-errors` | 에러 처리 패턴 (wrapping, sentinel, custom) |
 | `/go-gin` | Gin 프레임워크 (핸들러, 미들웨어, 라우팅) |
 | `/go-testing` | 테스트 패턴 (table-driven, mock, testify) |
+| `/concurrency-go` | 동시성 패턴 (Mutex, Channel, Worker Pool) |
+| `/distributed-lock` | MSA 분산 락 (Redis) |
+
+### 동시성 선택 가이드
+
+```
+공유 상태?
+    │
+    ├─ 없음 ────────────> Channels (Go Way)
+    │
+    └─ 있음
+         │
+         ├─ 읽기 많음 ─────> sync.RWMutex
+         │
+         └─ MSA 환경 ──────> Distributed Lock (/distributed-lock)
+```
 
 ---
 

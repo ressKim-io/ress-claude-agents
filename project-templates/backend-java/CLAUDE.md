@@ -48,6 +48,8 @@ src/main/java/com/example/
 | No transaction | @Transactional | Service layer |
 | JWT secret hardcoded | Environment variable | `grep -r "secret"` |
 | No cache for reads | @Cacheable on hot paths | Response time |
+| 동시 수정 무시 | @Version + @Retryable | Lost Update 방지 |
+| MSA에서 로컬 락 | 분산 락 (Redis) | Race condition |
 
 ## Technology Stack
 
@@ -63,6 +65,8 @@ src/main/java/com/example/
 - `/spring-cache` - Redis 캐싱 전략
 - `/spring-security` - Security, OAuth2, JWT 인증
 - `/spring-testing` - JUnit, Mockito, Testcontainers
+- `/concurrency-spring` - 동시성 문제 해결 (락킹, 데드락 방지)
+- `/distributed-lock` - MSA 분산 락 (Redis, Redisson)
 
 ## Commands
 - `/backend review` - Code review

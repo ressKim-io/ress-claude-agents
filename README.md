@@ -101,6 +101,7 @@ Personal Claude Code agents and configs for DevOps & backend development.
 /go-errors          # Go error handling patterns
 /go-gin             # Gin framework patterns
 /go-testing         # Go testing patterns
+/concurrency-go     # 동시성 패턴 (Mutex, Channel, Worker Pool)
 ```
 
 ### Spring (Java/Kotlin)
@@ -109,6 +110,7 @@ Personal Claude Code agents and configs for DevOps & backend development.
 /spring-cache       # Redis 캐싱 전략
 /spring-security    # Security, OAuth2, JWT 인증
 /spring-testing     # JUnit, Mockito, Testcontainers
+/concurrency-spring # 동시성 문제 해결 (락킹, 데드락 방지)
 ```
 
 ### Infrastructure
@@ -118,6 +120,7 @@ Personal Claude Code agents and configs for DevOps & backend development.
 /terraform-modules  # Terraform module patterns
 /terraform-security # Terraform security
 /git-workflow       # Git conventions
+/distributed-lock   # MSA 분산 락 (Redis, Redisson)
 ```
 
 ## Project Templates
@@ -142,7 +145,7 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 
 ```
 ress-claude-agents/
-├── .claude/skills/           # On-demand domain knowledge (12 files)
+├── .claude/skills/           # On-demand domain knowledge (15 files)
 ├── global/CLAUDE.md          # Global settings
 ├── commands/
 │   ├── help/                 # Help commands

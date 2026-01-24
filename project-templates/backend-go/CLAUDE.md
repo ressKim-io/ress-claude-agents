@@ -42,11 +42,15 @@ pkg/                     # Public libraries
 | `image: latest` | `image: v1.2.3` | Check Dockerfile |
 | No test | Table-driven test | `go test -cover` |
 | `_ = err` | Handle or log error | `grep "_ ="` |
+| `map` 동시 접근 | `sync.Map` 또는 Mutex | `go test -race` |
+| MSA에서 로컬 락 | 분산 락 (Redis) | Race condition |
 
 ## Skills Reference
 - `/go-errors` - Error handling patterns
 - `/go-gin` - Gin framework patterns
 - `/go-testing` - Testing patterns
+- `/concurrency-go` - 동시성 패턴 (Mutex, Channel, Worker Pool)
+- `/distributed-lock` - MSA 분산 락 (Redis)
 
 ## Commands
 - `/review` - Code review

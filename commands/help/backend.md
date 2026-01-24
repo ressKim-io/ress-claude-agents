@@ -78,6 +78,8 @@ OpenAPI/Swagger 문서를 생성합니다.
 | `/spring-cache` | Redis 캐싱 전략 |
 | `/spring-security` | Security, OAuth2, JWT 인증 |
 | `/spring-testing` | JUnit, Mockito, Testcontainers |
+| `/concurrency-spring` | 동시성 문제 해결 (락킹, 데드락 방지) |
+| `/distributed-lock` | MSA 분산 락 (Redis, Redisson) |
 
 ### 기술 선택 가이드
 
@@ -88,7 +90,11 @@ CRUD 위주? ──────────────> Spring Data JPA
      │
      ├─ 읽기 성능? ───────> + Redis (/spring-cache)
      │
-     └─ 인증 필요? ───────> + JWT (/spring-security)
+     ├─ 인증 필요? ───────> + JWT (/spring-security)
+     │
+     └─ 동시 수정? ───────> + @Version (/concurrency-spring)
+           │
+           └─ MSA? ──────> + 분산 락 (/distributed-lock)
 ```
 
 ---
