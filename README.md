@@ -71,7 +71,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 | 문제 | 해결 방법 |
 |------|----------|
 | 매번 같은 컨텍스트 설명 반복 | **Project Templates**: 프로젝트별 CLAUDE.md 제공 |
-| Claude가 프레임워크 패턴을 모름 | **Skills**: 32개 온디맨드 지식 파일 |
+| Claude가 프레임워크 패턴을 모름 | **Skills**: 36개 온디맨드 지식 파일 |
 | 반복적인 작업 수동 실행 | **Commands**: 29개 자동화 명령어 |
 | 긴 작업 시 컨텍스트 손실 | **Session Context**: 자동 저장/복원 |
 | 팀 간 모니터링/로그 가이드 부재 | **Monitoring/Logging Skills**: 역할별 가이드 |
@@ -83,9 +83,9 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │                    ress-claude-agents                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  📦 Project Templates        💡 Skills (33 files)          │
+│  📦 Project Templates        💡 Skills (36 files)          │
 │  ├─ Go Backend              ├─ Go/Spring 프레임워크         │
-│  ├─ Java/Kotlin Backend     ├─ Kubernetes/Terraform         │
+│  ├─ Java/Kotlin Backend     ├─ Kubernetes/Terraform/Istio   │
 │  ├─ Kubernetes              ├─ 모니터링 (Grafana, Prometheus)│
 │  └─ Terraform               ├─ 로깅 (Loki, ELK, 컴플라이언스)│
 │                             └─ API/DB/Docker 패턴           │
@@ -200,7 +200,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 
 ## Skills (On-demand Knowledge)
 
-필요할 때만 로드되는 도메인 지식 (33 files, ~8,000줄):
+필요할 때만 로드되는 도메인 지식 (36 files, ~9,500줄):
 
 ### Go
 ```
@@ -221,11 +221,14 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 /concurrency-spring # 동시성 문제 해결 (락킹, 데드락 방지)
 ```
 
-### Kubernetes & Terraform
+### Kubernetes, Istio & Terraform
 ```
 /k8s-security       # Pod Security Standards, RBAC
 /k8s-helm           # Helm chart best practices
 /k8s-traffic        # Istio Rate Limiting, 대기열, Circuit Breaker
+/istio-core         # Sidecar vs Ambient 모드 비교, 마이그레이션
+/istio-gateway      # Gateway API vs Istio Gateway, 트래픽 패턴
+/istio-observability # 모니터링 통합, Kiali, 모드별 메트릭 차이
 /terraform-modules  # Terraform module patterns
 /terraform-security # Terraform security
 ```
@@ -289,10 +292,11 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 
 ```
 ress-claude-agents/
-├── .claude/skills/           # On-demand domain knowledge (32 files)
+├── .claude/skills/           # On-demand domain knowledge (36 files)
 │   ├── go-*.md              # Go 패턴 (4 files)
 │   ├── spring-*.md          # Spring 패턴 (6 files)
 │   ├── k8s-*.md             # Kubernetes (3 files)
+│   ├── istio-*.md           # Istio Service Mesh (3 files)
 │   ├── terraform-*.md       # Terraform (2 files)
 │   ├── monitoring-*.md      # 모니터링 (4 files)
 │   ├── logging-*.md         # 로깅/컴플라이언스 (4 files)
@@ -333,7 +337,7 @@ ress-claude-agents/
 
 | 항목 | 수량 |
 |------|------|
-| Skills | 33 files (~8,000줄) |
+| Skills | 36 files (~9,500줄) |
 | Commands | 29 files |
 | Templates | 4 projects |
 | **Total** | ~11,700줄 |
