@@ -75,6 +75,9 @@ golangci-lint를 실행하고 문제를 수정합니다.
 | `/concurrency-go` | 동시성 패턴 (Mutex, Channel, Worker Pool) |
 | `/distributed-lock` | MSA 분산 락 (Redis) |
 | `/observability` | 로깅 + OpenTelemetry + 메트릭 |
+| `/api-design` | REST API 설계, 에러 처리 (RFC 9457) |
+| `/docker` | Dockerfile 최적화, 멀티스테이지 빌드 |
+| `/database` | 인덱스, 쿼리 최적화, 마이그레이션 |
 
 ### 동시성 선택 가이드
 

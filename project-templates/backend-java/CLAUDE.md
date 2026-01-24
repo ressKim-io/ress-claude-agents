@@ -68,6 +68,9 @@ src/main/java/com/example/
 - `/concurrency-spring` - 동시성 문제 해결 (락킹, 데드락 방지)
 - `/distributed-lock` - MSA 분산 락 (Redis, Redisson)
 - `/observability` - 로깅 + OpenTelemetry + 메트릭
+- `/api-design` - REST API 설계, 에러 처리 (RFC 9457)
+- `/docker` - Dockerfile 최적화, 멀티스테이지 빌드
+- `/database` - 인덱스, 쿼리 최적화, 마이그레이션
 
 ## Commands
 - `/backend review` - Code review

@@ -123,6 +123,9 @@ Personal Claude Code agents and configs for DevOps & backend development.
 /distributed-lock   # MSA 분산 락 (Redis, Redisson)
 /conventional-commits # 커밋 규칙 + 자동 버전/CHANGELOG
 /observability      # 로깅 + OpenTelemetry + 메트릭
+/docker             # Dockerfile 최적화, 멀티스테이지 빌드
+/api-design         # REST API 설계, 에러 처리 (RFC 9457)
+/database           # 인덱스, 쿼리 최적화, 마이그레이션
 ```
 
 ## Project Templates
@@ -147,7 +150,7 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 
 ```
 ress-claude-agents/
-├── .claude/skills/           # On-demand domain knowledge (17 files)
+├── .claude/skills/           # On-demand domain knowledge (20 files)
 ├── global/CLAUDE.md          # Global settings
 ├── commands/
 │   ├── help/                 # Help commands
