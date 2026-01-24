@@ -108,33 +108,9 @@ func GetUser(id int) (*User, error) {
 ### 20줄 초과 시 분리
 
 ```go
-// Before: 긴 함수 (50줄+)
+// Before: 긴 함수 (유효성 검증 + 재고 확인 + 주문 생성)
 func CreateOrder(req CreateOrderRequest) (*Order, error) {
-    // 1. 유효성 검증 (10줄)
-    if req.UserID == 0 {
-        return nil, errors.New("user id required")
-    }
-    if len(req.Items) == 0 {
-        return nil, errors.New("items required")
-    }
-    // ... 더 많은 검증
-
-    // 2. 재고 확인 (15줄)
-    for _, item := range req.Items {
-        stock, err := inventoryService.GetStock(item.ProductID)
-        if err != nil {
-            return nil, err
-        }
-        if stock < item.Quantity {
-            return nil, ErrInsufficientStock
-        }
-    }
-
-    // 3. 주문 생성 (20줄)
-    order := &Order{...}
-    // ...
-
-    return order, nil
+    // 50줄+ 로직...
 }
 
 // After: 책임별 함수 추출
@@ -142,11 +118,9 @@ func CreateOrder(req CreateOrderRequest) (*Order, error) {
     if err := validateOrderRequest(req); err != nil {
         return nil, fmt.Errorf("validate: %w", err)
     }
-
     if err := checkInventory(req.Items); err != nil {
         return nil, fmt.Errorf("inventory: %w", err)
     }
-
     return buildOrder(req)
 }
 
@@ -156,19 +130,6 @@ func validateOrderRequest(req CreateOrderRequest) error {
     }
     if len(req.Items) == 0 {
         return errors.New("items required")
-    }
-    return nil
-}
-
-func checkInventory(items []OrderItem) error {
-    for _, item := range items {
-        stock, err := inventoryService.GetStock(item.ProductID)
-        if err != nil {
-            return err
-        }
-        if stock < item.Quantity {
-            return ErrInsufficientStock
-        }
     }
     return nil
 }
@@ -372,10 +333,16 @@ if product.Stock < quantity {
 
 ## 고루틴/채널 리팩토링
 
-### Mutex → Channel 전환
+### Mutex vs Channel 선택
+
+| 상황 | 선택 |
+|------|------|
+| 단순 카운터/상태 보호 | `sync.Mutex` |
+| 복잡한 동기화/통신 | Channel |
+| 작업 분배 | Worker Pool (`/concurrency-go`) |
 
 ```go
-// Before: Mutex 기반
+// Mutex: 단순 상태 보호
 type Counter struct {
     mu    sync.Mutex
     value int
@@ -383,38 +350,10 @@ type Counter struct {
 
 func (c *Counter) Increment() {
     c.mu.Lock()
+    defer c.mu.Unlock()
     c.value++
-    c.mu.Unlock()
-}
-
-// After: Channel 기반 (복잡한 동기화에 적합)
-type Counter struct {
-    inc   chan struct{}
-    get   chan int
-    value int
-}
-
-func NewCounter() *Counter {
-    c := &Counter{
-        inc: make(chan struct{}),
-        get: make(chan int),
-    }
-    go c.run()
-    return c
-}
-
-func (c *Counter) run() {
-    for {
-        select {
-        case <-c.inc:
-            c.value++
-        case c.get <- c.value:
-        }
-    }
 }
 ```
-
-### Worker Pool 도입
 
 자세한 패턴은 `/concurrency-go` 참조.
 

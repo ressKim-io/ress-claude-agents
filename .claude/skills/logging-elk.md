@@ -86,34 +86,14 @@ GET /logs-*/_search
 
 ### 보안팀용 쿼리
 
-**로그인 실패 분석**
-```json
-GET /security-logs-*/_search
-{
-  "query": {
-    "bool": {
-      "must": [
-        { "term": { "event.keyword": "login_failed" } }
-      ],
-      "filter": [
-        { "range": { "@timestamp": { "gte": "now-1h" } } }
-      ]
-    }
-  },
-  "aggs": {
-    "by_ip": {
-      "terms": { "field": "client_ip.keyword", "size": 20 },
-      "aggs": {
-        "by_username": {
-          "terms": { "field": "username.keyword", "size": 5 }
-        }
-      }
-    }
-  }
-}
-```
+| 쿼리 유형 | 인덱스 | 핵심 조건 |
+|----------|--------|----------|
+| 로그인 실패 분석 | security-logs-* | `event: login_failed` + IP별 집계 |
+| Brute Force 탐지 | security-logs-* | 5분 내 5회 이상 실패 |
+| 봇/매크로 탐지 | bot-detection-* | `is_bot: true` + confidence >= 0.9 |
+| 개인정보 접근 | pii-access-* | accessor별 접근 횟수/고유 대상 수 |
 
-**Brute Force 탐지 (5회 이상 실패)**
+**예시: Brute Force 탐지**
 ```json
 GET /security-logs-*/_search
 {
@@ -134,54 +114,7 @@ GET /security-logs-*/_search
 }
 ```
 
-**봇/매크로 탐지 로그**
-```json
-GET /bot-detection-*/_search
-{
-  "query": {
-    "bool": {
-      "must": [
-        { "term": { "is_bot": true } },
-        { "range": { "confidence": { "gte": 0.9 } } }
-      ]
-    }
-  },
-  "aggs": {
-    "by_signal": {
-      "terms": { "field": "detection_signals.keyword" }
-    },
-    "by_country": {
-      "terms": { "field": "geo.country.keyword" }
-    }
-  }
-}
-```
-
-**개인정보 접근 감사**
-```json
-GET /pii-access-*/_search
-{
-  "query": {
-    "bool": {
-      "must": [
-        { "term": { "log_type.keyword": "personal_info_access" } }
-      ],
-      "filter": [
-        { "range": { "@timestamp": { "gte": "now-24h" } } }
-      ]
-    }
-  },
-  "aggs": {
-    "by_accessor": {
-      "terms": { "field": "accessor.keyword", "size": 50 },
-      "aggs": {
-        "access_count": { "value_count": { "field": "data_subject.keyword" } },
-        "unique_subjects": { "cardinality": { "field": "data_subject.keyword" } }
-      }
-    }
-  }
-}
-```
+자세한 보안 로그 분석은 `/logging-security` 참조.
 
 ---
 

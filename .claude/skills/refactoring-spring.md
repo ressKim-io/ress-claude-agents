@@ -252,46 +252,14 @@ for (Order order : orders) {
 }
 ```
 
-### 해결 방법 1: @EntityGraph
+### 해결 방법 요약
 
-```java
-public interface OrderRepository extends JpaRepository<Order, Long> {
-
-    // 즉시 로딩할 연관관계 명시
-    @EntityGraph(attributePaths = {"items", "items.product"})
-    List<Order> findWithItemsByUserId(Long userId);
-}
-```
-
-### 해결 방법 2: Fetch Join (JPQL)
-
-```java
-@Query("SELECT DISTINCT o FROM Order o " +
-       "JOIN FETCH o.items i " +
-       "JOIN FETCH i.product " +
-       "WHERE o.user.id = :userId")
-List<Order> findWithItemsByUserIdFetch(@Param("userId") Long userId);
-```
-
-### 해결 방법 3: Batch Size
-
-```yaml
-# application.yml
-spring:
-  jpa:
-    properties:
-      hibernate:
-        default_batch_fetch_size: 100
-```
-
-### 해결 방법 4: Projection (필요한 것만)
-
-```java
-// DTO Projection으로 필요한 필드만 조회
-@Query("SELECT new com.example.dto.OrderSummary(o.id, o.status, o.totalPrice) " +
-       "FROM Order o WHERE o.user.id = :userId")
-List<OrderSummary> findSummariesByUserId(@Param("userId") Long userId);
-```
+| 방법 | 적용 시점 | 특징 |
+|------|----------|------|
+| `@EntityGraph` | Repository 메서드 | 명시적 연관관계 로딩 |
+| Fetch Join | JPQL 쿼리 | 유연한 조인 제어 |
+| Batch Size | application.yml | 전역 IN 쿼리 최적화 |
+| Projection | DTO 조회 | 필요한 필드만 조회 |
 
 자세한 JPA 패턴은 `/spring-data` 참조.
 
