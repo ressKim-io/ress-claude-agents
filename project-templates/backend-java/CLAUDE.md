@@ -63,11 +63,14 @@ src/main/java/com/example/
 ## Skills (상세 패턴)
 - `/spring-data` - JPA, QueryDSL 패턴 및 조합
 - `/spring-cache` - Redis 캐싱 전략
-- `/spring-security` - Security, OAuth2, JWT 인증
-- `/spring-testing` - JUnit, Mockito, Testcontainers
+- `/spring-security` - Security 기본 설정, Method Security
+- `/spring-oauth2` - OAuth2, JWT 토큰 발급/검증
+- `/spring-testing` - JUnit, Mockito 단위 테스트
+- `/spring-testcontainers` - Testcontainers, REST Assured 통합 테스트
 - `/concurrency-spring` - 동시성 문제 해결 (락킹, 데드락 방지)
 - `/distributed-lock` - MSA 분산 락 (Redis, Redisson)
-- `/observability` - 로깅 + OpenTelemetry + 메트릭
+- `/observability` - 로깅 기본, 메트릭 (RED Method)
+- `/observability-otel` - OpenTelemetry 설정 및 Collector
 - `/api-design` - REST API 설계, 에러 처리 (RFC 9457)
 - `/docker` - Dockerfile 최적화, 멀티스테이지 빌드
 - `/database` - 인덱스, N+1 해결, 쿼리 최적화
