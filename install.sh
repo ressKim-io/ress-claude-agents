@@ -35,18 +35,37 @@ for cmd_dir in "$SCRIPT_DIR/commands"/*; do
     if [ -d "$cmd_dir" ]; then
         cmd_name=$(basename "$cmd_dir")
         target="$CLAUDE_DIR/commands/$cmd_name"
-        
+
         if [ -L "$target" ]; then
             rm "$target"
         elif [ -d "$target" ]; then
             echo "  Backing up existing $cmd_name to $cmd_name.backup"
             mv "$target" "$target.backup"
         fi
-        
+
         ln -s "$cmd_dir" "$target"
         echo "  -> Linked: $target"
     fi
 done
+
+# Symlink skills directory
+echo "Setting up skills..."
+SKILLS_SOURCE="$SCRIPT_DIR/.claude/skills"
+SKILLS_TARGET="$CLAUDE_DIR/skills"
+
+if [ -d "$SKILLS_SOURCE" ]; then
+    if [ -L "$SKILLS_TARGET" ]; then
+        rm "$SKILLS_TARGET"
+    elif [ -d "$SKILLS_TARGET" ]; then
+        echo "  Backing up existing skills to skills.backup"
+        mv "$SKILLS_TARGET" "$SKILLS_TARGET.backup"
+    fi
+
+    ln -s "$SKILLS_SOURCE" "$SKILLS_TARGET"
+    echo "  -> Linked: $SKILLS_TARGET"
+else
+    echo "  (no skills directory found, skipping)"
+fi
 
 # Symlink MCP configs (optional - user can choose)
 echo ""
@@ -68,6 +87,7 @@ echo ""
 echo "Installed components:"
 echo "  - Global CLAUDE.md: $CLAUDE_DIR/CLAUDE.md"
 echo "  - Commands: $CLAUDE_DIR/commands/"
+echo "  - Skills: $CLAUDE_DIR/skills/"
 echo ""
 echo "To use project templates, copy them manually:"
 echo "  cp $SCRIPT_DIR/project-templates/<type>/CLAUDE.md /your/project/"

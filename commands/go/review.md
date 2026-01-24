@@ -2,6 +2,15 @@
 
 변경된 Go 코드를 리뷰합니다.
 
+## Contract
+
+| Aspect | Description |
+|--------|-------------|
+| Input | Git diff 또는 특정 파일 |
+| Output | 이슈 목록 (파일:라인, 심각도, 제안) |
+| Required Tools | git, go |
+| Verification | 모든 Critical/High 이슈 해결 |
+
 ## Steps
 
 1. `git diff` 또는 `git diff --cached`로 변경 사항 확인
@@ -11,7 +20,6 @@
 - [ ] gofmt/goimports 적용 여부
 - [ ] 네이밍 컨벤션 준수 (CamelCase, camelCase)
 - [ ] 패키지 import 순서 (stdlib, external, internal)
-- [ ] 적절한 주석 (exported 함수에 GoDoc)
 
 ### Error Handling
 - [ ] 에러 래핑 (`fmt.Errorf("...: %w", err)`)
@@ -33,7 +41,20 @@
 - [ ] goroutine leak 가능성 없음
 - [ ] context 적절히 전파
 
-## Output
-- 이슈 발견 시 파일:라인 형식으로 지적
-- 개선 제안 코드 예시 제공
-- 심각도 표시 (Critical, Warning, Info)
+## Output Format
+```
+[Critical] file.go:42 - 에러 무시됨
+  현재: _ = db.Close()
+  수정: if err := db.Close(); err != nil { log.Error(err) }
+
+[Warning] file.go:58 - 에러 컨텍스트 없음
+  현재: return err
+  수정: return fmt.Errorf("failed to create user: %w", err)
+```
+
+## Usage
+```
+/review                    # 현재 변경사항 리뷰
+/review file.go            # 특정 파일 리뷰
+/review --staged           # staged 변경만 리뷰
+```
