@@ -112,7 +112,7 @@ COPY --from=builder /app/spring-boot-loader/ ./
 COPY --from=builder /app/snapshot-dependencies/ ./
 COPY --from=builder /app/application/ ./
 
-ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+ENV JAVA_OPTS="-XX:MaxRAMPercentage=75.0"
 EXPOSE 8080
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS org.springframework.boot.loader.launch.JarLauncher"]
 ```
@@ -278,3 +278,5 @@ docker buildx build \
 - [ ] JRE 이미지 (JDK X)
 - [ ] Spring Boot layered JAR
 - [ ] `-XX:MaxRAMPercentage`
+
+**관련 skill**: `/k8s-helm`, `/k8s-security`

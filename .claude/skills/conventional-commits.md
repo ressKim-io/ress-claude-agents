@@ -2,6 +2,24 @@
 
 커밋 메시지 규칙 및 자동화 패턴
 
+## Quick Reference
+
+```
+Conventional Commits
+    │
+    ├─ 포맷 ─────────> <type>(<scope>): <description>
+    │
+    ├─ 검증 ─────────> commitlint + husky
+    │
+    ├─ 릴리즈 자동화
+    │   ├─ 완전 자동 ──> semantic-release
+    │   └─ 반자동 ────> release-please
+    │
+    └─ Breaking ────> feat!: 또는 BREAKING CHANGE: footer
+```
+
+---
+
 ## 기본 포맷
 
 ```
@@ -120,17 +138,30 @@ npm install -D semantic-release
 - CHANGELOG.md 자동 생성
 - GitHub Release 자동 생성
 
-### 3. standard-version (수동 릴리즈)
+### 3. release-please (Google 권장)
 
 ```bash
-npm install -D standard-version
-
-# 버전 범프 + CHANGELOG 생성
-npx standard-version
-
-# 특정 버전으로
-npx standard-version --release-as minor
+# GitHub Action으로 사용 (권장)
+# .github/workflows/release-please.yml
+name: Release Please
+on:
+  push:
+    branches: [main]
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        with:
+          release-type: node  # 또는 go, python, java 등
 ```
+
+**동작:**
+- PR 자동 생성 (릴리즈 준비)
+- 머지 시 태그 + GitHub Release 생성
+- CHANGELOG.md 자동 업데이트
+
+> **Note**: `standard-version`은 2023년부터 maintenance 모드. 신규 프로젝트는 `semantic-release` 또는 `release-please` 권장
 
 ### 4. commitizen (대화형 커밋)
 

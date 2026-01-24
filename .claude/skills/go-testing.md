@@ -2,6 +2,22 @@
 
 Go 테스트 패턴 및 best practices.
 
+## Quick Reference
+
+```
+테스트 패턴 선택
+    │
+    ├─ 단위 테스트 ────> Table-Driven + t.Run()
+    │
+    ├─ Mock 생성 ─────> gomock 또는 mockery
+    │
+    ├─ HTTP 테스트 ───> httptest + gin.TestMode
+    │
+    └─ 커버리지 ──────> go test -cover ./...
+```
+
+---
+
 ## Table-Driven Tests
 
 ```go

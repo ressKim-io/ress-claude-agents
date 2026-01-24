@@ -2,6 +2,24 @@
 
 Kubernetes 보안 패턴 및 best practices.
 
+## Quick Reference
+
+```
+K8s 보안 적용 순서
+    │
+    ├─ Pod Security ───> runAsNonRoot + readOnlyRootFilesystem
+    │
+    ├─ Namespace ─────> PSS labels (enforce: restricted)
+    │
+    ├─ Network ───────> Default Deny + 허용 정책
+    │
+    ├─ RBAC ──────────> 최소 권한 Role + Custom SA
+    │
+    └─ Secrets ───────> Volume mount (env 지양)
+```
+
+---
+
 ## Pod Security Standards
 
 ### Restricted SecurityContext
@@ -150,6 +168,49 @@ env:
 | RBAC | Minimal permissions | Yes |
 | Secrets | Volume mount, not env | Recommended |
 
+## 2026 트렌드: 추가 보안 레이어
+
+### ValidatingAdmissionPolicy (K8s 1.30+)
+
+PSS를 보완하는 CEL 기반 정책
+
+```yaml
+apiVersion: admissionregistration.k8s.io/v1
+kind: ValidatingAdmissionPolicy
+metadata:
+  name: require-labels
+spec:
+  failurePolicy: Fail
+  matchConstraints:
+    resourceRules:
+    - apiGroups: ["apps"]
+      resources: ["deployments"]
+      operations: ["CREATE", "UPDATE"]
+  validations:
+  - expression: "has(object.metadata.labels.app)"
+    message: "deployment must have 'app' label"
+```
+
+### Zero Trust / mTLS
+
+```yaml
+# Istio/Linkerd로 서비스 간 mTLS 적용
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: production
+spec:
+  mtls:
+    mode: STRICT
+```
+
+**추가 도구**:
+- Kyverno: 정책 관리 (PSS 확장)
+- Falco: 런타임 위협 탐지
+
+---
+
 ## Anti-patterns
 
 | Mistake | Correct | Why |
@@ -159,3 +220,6 @@ env:
 | No NetworkPolicy | Default deny | Unrestricted traffic |
 | Default ServiceAccount | Custom SA | Minimal permissions |
 | ClusterRole for app | Role (namespaced) | Scope limitation |
+| PSS만 의존 | + ValidatingAdmissionPolicy | 세부 정책 필요 |
+
+**관련 skill**: `/k8s-helm`, `/docker`

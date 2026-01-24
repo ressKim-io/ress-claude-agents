@@ -185,3 +185,5 @@ helm template myapp charts/myapp/ | kubeval
 | Long template names | Use _helpers.tpl | DRY principle |
 | Missing NOTES.txt | Add post-install info | User guidance |
 | No resource limits | Always set limits | Cluster stability |
+
+**관련 skill**: `/docker`, `/k8s-security`

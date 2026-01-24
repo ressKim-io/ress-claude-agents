@@ -167,3 +167,5 @@ tfsec --format json --out results.json .
 | `0.0.0.0/0` ingress | Specific CIDRs | Network security |
 | No encryption | KMS encryption | Data protection |
 | Public S3 buckets | Block public access | Data exposure |
+
+**관련 skill**: `/terraform-modules`

@@ -2,6 +2,22 @@
 
 Git 워크플로우 패턴 및 best practices.
 
+## Quick Reference
+
+```
+Git 워크플로우
+    │
+    ├─ 커밋 ─────────> <type>(<scope>): <subject>
+    │
+    ├─ 브랜치 ───────> feature/#123-description
+    │
+    ├─ PR 크기 ──────> 최대 400줄 (테스트 제외)
+    │
+    └─ 머지 방식 ────> Squash and Merge
+```
+
+---
+
 ## Commit Convention
 
 ```

@@ -2,7 +2,53 @@
 
 Personal Claude Code agents and configs for DevOps & backend development.
 
-## Quick Start
+## Quick Start (수동 복사)
+
+원하는 영역만 선택해서 복사하면 바로 사용 가능합니다.
+
+### 복사 위치
+
+| 범위 | 복사할 위치 | 효과 |
+|------|------------|------|
+| **전역 (모든 프로젝트)** | `~/.claude/` | 어디서든 사용 가능 |
+| **프로젝트 전용** | `<프로젝트>/.claude/` | 해당 프로젝트만 적용 |
+
+### 원하는 영역만 복사
+
+```bash
+# 1. Skills만 (도메인 지식) - 가장 많이 사용
+cp -r .claude/skills ~/.claude/skills
+
+# 2. Commands만 (자동화 명령어)
+cp -r commands ~/.claude/commands
+
+# 3. 특정 skill만
+cp .claude/skills/spring-*.md ~/.claude/skills/
+
+# 4. 특정 command 카테고리만
+cp -r commands/k8s ~/.claude/commands/
+
+# 5. 전체 설정 (global CLAUDE.md 포함)
+cp global/CLAUDE.md ~/.claude/CLAUDE.md
+cp -r commands ~/.claude/commands
+cp -r .claude/skills ~/.claude/skills
+```
+
+### 사용 예시
+
+```bash
+# Go + K8s 프로젝트에 필요한 것만
+mkdir -p ~/.claude/skills
+cp .claude/skills/go-*.md ~/.claude/skills/
+cp .claude/skills/k8s-*.md ~/.claude/skills/
+cp -r commands/go commands/k8s ~/.claude/commands/
+```
+
+---
+
+## 자동 설치 (install.sh)
+
+스크립트로 설치하려면:
 
 ```bash
 # 전역 설치 (모든 프로젝트에 적용)

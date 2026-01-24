@@ -2,6 +2,22 @@
 
 Go 에러 처리 패턴 및 best practices.
 
+## Quick Reference
+
+```
+에러 처리 패턴
+    │
+    ├─ 에러 래핑 ────> fmt.Errorf("context: %w", err)
+    │
+    ├─ 에러 체크 ────> errors.Is() / errors.As()
+    │
+    ├─ Sentinel ────> var ErrNotFound = errors.New(...)
+    │
+    └─ Custom Type ─> Error() string 구현
+```
+
+---
+
 ## Error Wrapping
 
 컨텍스트를 추가하여 에러 추적을 용이하게 합니다.

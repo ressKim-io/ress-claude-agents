@@ -10,6 +10,9 @@ Spring Security 기본 설정 및 Method Security 패턴
     ├─ JWT 직접 발급 ────> JwtProvider + Filter
     │                      (상세: /spring-oauth2 참조)
     │
+    ├─ OAuth2 Authorization Server 구축
+    │   └─ Spring Authorization Server (신규 프로젝트)
+    │
     ├─ OAuth2 Provider ──> Resource Server 설정
     │                      (상세: /spring-oauth2 참조)
     │
@@ -173,6 +176,37 @@ public class CorsConfig {
 
 ---
 
+## Spring Authorization Server (자체 OAuth2 서버)
+
+Spring Security 6.x와 함께 사용하는 OAuth2 Authorization Server:
+
+```groovy
+implementation 'org.springframework.boot:spring-boot-starter-oauth2-authorization-server'
+```
+
+```java
+@Configuration
+public class AuthServerConfig {
+    @Bean
+    public RegisteredClientRepository registeredClientRepository() {
+        RegisteredClient client = RegisteredClient.withId(UUID.randomUUID().toString())
+            .clientId("my-client")
+            .clientSecret("{noop}secret")
+            .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+            .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+            .redirectUri("http://localhost:8080/callback")
+            .scope(OidcScopes.OPENID)
+            .scope("read")
+            .build();
+        return new InMemoryRegisteredClientRepository(client);
+    }
+}
+```
+
+**권장**: JWT 서명에는 RSA 키 기반 사용 (HMAC보다 안전)
+
+---
+
 ## 체크리스트
 
 - [ ] HTTPS 적용
@@ -181,3 +215,4 @@ public class CorsConfig {
 - [ ] Method Security 적용
 - [ ] Actuator 엔드포인트 보호
 - [ ] JWT 상세 설정: `/spring-oauth2` 참조
+- [ ] RSA 키 기반 JWT 서명 (HMAC 대신)

@@ -220,6 +220,22 @@ count(count by (endpoint) (http_requests_total))
 
 ---
 
+## 2026 트렌드: 통합 데이터베이스 스택
+
+```
+기존: Prometheus(메트릭) + Loki(로그) + Tempo(트레이스) 별도 운영
+트렌드: 단일 스토리지 기반 통합
+
+옵션:
+├─ ClickHouse 기반 ──> Signoz, Qryn (오픈소스)
+├─ Grafana Cloud ────> Managed LGTM Stack
+└─ VictoriaMetrics ──> Logs/Traces 지원 확대 중
+```
+
+**장점**: 운영 복잡도 감소, 쿼리 언어 통일, 비용 절감
+
+---
+
 ## 체크리스트
 
 ### 스케일링

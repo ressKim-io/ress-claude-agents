@@ -151,7 +151,7 @@ func ProcessOrder(ctx context.Context, orderID string) error {
 version: '3.8'
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
+    image: otel/opentelemetry-collector-contrib:0.115.0  # 2024.12 기준
     command: ["--config=/etc/otel-collector-config.yaml"]
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
@@ -239,6 +239,48 @@ trace.WithSampler(
 
 ---
 
+## Collector 버전 관리
+
+```yaml
+# 권장: 특정 버전 명시 (latest 지양)
+otel-collector:
+  image: otel/opentelemetry-collector-contrib:0.115.0
+
+# 업그레이드 가이드: https://github.com/open-telemetry/opentelemetry-collector/releases
+# Breaking changes 확인 후 업그레이드
+```
+
+| 버전 | 주요 변경 |
+|------|----------|
+| 0.100+ | Log body 구조 변경 |
+| 0.90+ | metrics.exporters 설정 변경 |
+| 0.80+ | processor 순서 중요도 증가 |
+
+---
+
+## 2026 트렌드: 차세대 관측성
+
+### eBPF 기반 모니터링
+
+```
+전통적 계측          eBPF 기반
+────────────        ────────────
+SDK 추가 필요        무침투적 (코드 변경 없음)
+런타임 오버헤드       커널 레벨에서 효율적 수집
+언어별 설정          언어 독립적
+```
+
+**대표 도구**: Coroot, Pixie, Cilium Hubble
+
+### 통합 Observability 스택 트렌드
+
+```
+기존: Prometheus + Loki + Tempo (별도 운영)
+트렌드: Grafana Cloud / ClickHouse 기반 통합 스택
+```
+
+---
+
 ## 체크리스트
 
 ### SDK 설정
@@ -247,10 +289,12 @@ trace.WithSampler(
 - [ ] 샘플링 비율 설정
 
 ### Collector
-- [ ] Collector 배포
+- [ ] Collector 배포 (버전 명시)
 - [ ] 파이프라인 구성 (traces/logs/metrics)
 - [ ] 백엔드 연결 (Tempo/Loki/Prometheus)
 
 ### 모니터링
 - [ ] Grafana 대시보드 구성
 - [ ] 알림 규칙 설정
+
+**관련 skill**: `/monitoring-grafana`, `/monitoring-metrics`, `/monitoring-logs`

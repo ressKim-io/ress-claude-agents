@@ -2,6 +2,22 @@
 
 Gin 웹 프레임워크 패턴 및 best practices.
 
+## Quick Reference
+
+```
+Gin 패턴 선택
+    │
+    ├─ 핸들러 구조 ────> Handler struct + DI (service, logger)
+    │
+    ├─ 라우팅 ────────> gin.New() + Group() 기반 구조화
+    │
+    ├─ 미들웨어 ──────> Recovery, Logging, Auth 순서
+    │
+    └─ 요청 바인딩 ───> ShouldBindJSON + validator tags
+```
+
+---
+
 ## Handler Structure
 
 ```go
