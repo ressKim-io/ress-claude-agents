@@ -40,6 +40,38 @@ fix/#456-description
 | No issue reference | Link to issue | Traceability |
 | Vague commit messages | Descriptive messages | History clarity |
 
+## Session Context Auto-Management
+
+### 자동 생성 조건
+다음 상황에서 `.claude/session-context.md` 자동 생성:
+- TodoWrite로 3개 이상 태스크 생성 시
+- 특정 MCP 서버나 테스트 환경 설정이 언급될 때
+- 멀티스텝 복잡한 작업 시작 시
+- 사용자가 "이거 기억해", "설정 저장해" 등 요청 시
+
+### 파일 내용
+```markdown
+# Session Context (auto-generated)
+## 현재 작업
+## 환경 설정
+## 진행 상황
+## 중요 결정사항
+```
+
+### 자동 업데이트
+- 새로운 설정/환경 정보가 나올 때마다 업데이트
+- 중요한 결정사항 발생 시 기록
+- auto compact 후 이 파일 먼저 읽기
+
+### 자동 삭제 조건
+- 모든 TodoWrite 태스크 완료 시
+- 사용자가 "작업 끝", "완료" 등 명시적 종료 시
+- `/session end` 명령 시
+
+### 수동 명령
+- `/session save` - 현재 상태 강제 저장
+- `/session end` - 세션 종료 및 정리
+
 ## Skills Reference
 - `/git-workflow` - Git conventions and patterns
 

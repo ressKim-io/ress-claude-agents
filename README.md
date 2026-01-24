@@ -19,11 +19,13 @@ ress-claude-agents/
 ├── global/
 │   └── CLAUDE.md                  # Global settings (50 lines)
 ├── commands/
+│   ├── help/                      # Help commands
 │   ├── backend/                   # Java/Kotlin commands
 │   ├── go/                        # Go commands
 │   ├── k8s/                       # Kubernetes commands
 │   ├── terraform/                 # Terraform commands
-│   └── dx/                        # DX commands
+│   ├── dx/                        # DX commands
+│   └── session/                   # Session context commands
 ├── project-templates/
 │   ├── backend-go/CLAUDE.md       # Go backend (~60 lines)
 │   ├── backend-java/CLAUDE.md     # Java backend (~60 lines)
@@ -50,6 +52,13 @@ Every command includes a Contract table:
 | Output | What this produces |
 | Required Tools | Dependencies |
 | Verification | Success check |
+
+### Session Context Auto-Management
+긴 작업 시 auto compact로 컨텍스트 손실 방지:
+- **자동 생성**: 복잡한 작업, MCP 테스트 등 시작 시 `.claude/session-context.md` 자동 생성
+- **자동 업데이트**: 환경 설정, 진행 상황, 결정사항 자동 기록
+- **자동 삭제**: 작업 완료 시 정리
+- **수동 명령**: `/session save`, `/session end`
 
 ## Installation
 
@@ -78,15 +87,17 @@ cp project-templates/k8s/CLAUDE.md /your/project/
 cp project-templates/terraform/CLAUDE.md /your/project/
 ```
 
-### Commands (20 total)
+### Commands (24 total)
 
 | Category | Commands |
 |----------|----------|
+| Help | `/help`, `/help <module>` |
 | Go | `/review`, `/test-gen`, `/lint`, `/refactor` |
 | Backend | `/review`, `/test-gen`, `/api-doc`, `/refactor` |
 | K8s | `/validate`, `/secure`, `/netpol`, `/helm-check` |
 | Terraform | `/plan-review`, `/security`, `/module-gen`, `/validate` |
 | DX | `/pr-create`, `/issue-create`, `/changelog`, `/release` |
+| Session | `/session save`, `/session end` |
 
 ### Skills (8 total)
 
