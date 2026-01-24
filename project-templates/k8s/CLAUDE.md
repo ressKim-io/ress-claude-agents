@@ -51,6 +51,14 @@ policies/                # NetworkPolicy, RBAC
 ## Skills Reference
 - `/k8s-security` - Security patterns, PSS, RBAC
 - `/k8s-helm` - Helm chart best practices
+- `/monitoring-grafana` - Grafana 대시보드, 알림, RBAC
+- `/monitoring-metrics` - Prometheus 스케일링, Thanos/VictoriaMetrics
+- `/monitoring-logs` - Fluent Bit, Loki, 로그 필터링
+- `/monitoring-troubleshoot` - 알림 대응, 트러블슈팅
+- `/logging-compliance` - 결제/개인정보 법적 로그 (PCI-DSS, 전자금융거래법)
+- `/logging-security` - 봇/매크로 탐지, 보안 감사 로그
+- `/logging-loki` - Loki + LogQL 검색/분석 (개발팀/보안팀용)
+- `/logging-elk` - ELK Stack 검색/분석 (Elasticsearch, Kibana)
 
 ## Commands
 - `/validate` - Security & best practice validation

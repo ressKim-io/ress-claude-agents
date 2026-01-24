@@ -12,6 +12,62 @@ Personal Claude Code agents and configs for DevOps & backend development.
 ./install.sh
 ```
 
+---
+
+## What & Why
+
+### 이 프로젝트의 목적
+
+Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정, 명령어, 지식 베이스 모음입니다.
+
+### 해결하는 문제들
+
+| 문제 | 해결 방법 |
+|------|----------|
+| 매번 같은 컨텍스트 설명 반복 | **Project Templates**: 프로젝트별 CLAUDE.md 제공 |
+| Claude가 프레임워크 패턴을 모름 | **Skills**: 32개 온디맨드 지식 파일 |
+| 반복적인 작업 수동 실행 | **Commands**: 29개 자동화 명령어 |
+| 긴 작업 시 컨텍스트 손실 | **Session Context**: 자동 저장/복원 |
+| 팀 간 모니터링/로그 가이드 부재 | **Monitoring/Logging Skills**: 역할별 가이드 |
+
+### 주요 기능
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    ress-claude-agents                       │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  📦 Project Templates        💡 Skills (32 files)          │
+│  ├─ Go Backend              ├─ Go/Spring 프레임워크         │
+│  ├─ Java/Kotlin Backend     ├─ Kubernetes/Terraform         │
+│  ├─ Kubernetes              ├─ 모니터링 (Grafana, Prometheus)│
+│  └─ Terraform               ├─ 로깅 (Loki, ELK, 컴플라이언스)│
+│                             └─ API/DB/Docker 패턴           │
+│                                                             │
+│  ⚡ Commands (29 files)      🔄 Session Management          │
+│  ├─ /go review, lint        ├─ 자동 컨텍스트 저장           │
+│  ├─ /backend test-gen       ├─ auto compact 대응            │
+│  ├─ /k8s validate, secure   └─ /session save, end           │
+│  ├─ /terraform plan-review                                  │
+│  └─ /dx pr-create, release                                  │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 지원 기술 스택
+
+| 분야 | 기술 |
+|------|------|
+| **Languages** | Go (Gin), Java/Kotlin (Spring Boot) |
+| **Infrastructure** | Kubernetes (Helm, Kustomize), Terraform |
+| **Containers** | Docker (Multi-stage builds) |
+| **Observability** | Prometheus, Grafana, OpenTelemetry |
+| **Logging** | Loki (LogQL), ELK Stack (Elasticsearch) |
+| **Database** | JPA, QueryDSL, 마이그레이션 (Flyway, Liquibase) |
+| **Security** | PCI-DSS, 개인정보보호, 봇/매크로 탐지 |
+
+---
+
 ## Installation
 
 ### 설치 옵션
@@ -59,6 +115,8 @@ Personal Claude Code agents and configs for DevOps & backend development.
 └── skills/
 ```
 
+---
+
 ## Commands
 
 ### Help
@@ -92,15 +150,17 @@ Personal Claude Code agents and configs for DevOps & backend development.
 | Terraform | `/terraform plan-review`, `/terraform security`, `/terraform module-gen`, `/terraform validate` |
 | DX | `/dx pr-create`, `/dx issue-create`, `/dx changelog`, `/dx release` |
 
+---
+
 ## Skills (On-demand Knowledge)
 
-필요할 때만 로드되는 도메인 지식:
+필요할 때만 로드되는 도메인 지식 (32 files, ~7,600줄):
 
 ### Go
 ```
-/go-errors          # Go error handling patterns
+/go-errors          # Error handling patterns
 /go-gin             # Gin framework patterns
-/go-testing         # Go testing patterns
+/go-testing         # Table-driven testing patterns
 /concurrency-go     # 동시성 패턴 (Mutex, Channel, Worker Pool)
 ```
 
@@ -108,26 +168,55 @@ Personal Claude Code agents and configs for DevOps & backend development.
 ```
 /spring-data        # JPA, QueryDSL 패턴 및 조합
 /spring-cache       # Redis 캐싱 전략
-/spring-security    # Security, OAuth2, JWT 인증
-/spring-testing     # JUnit, Mockito, Testcontainers
+/spring-security    # Security 기본 설정, Method Security
+/spring-oauth2      # OAuth2, JWT 토큰 발급/검증
+/spring-testing     # JUnit, Mockito 단위 테스트
+/spring-testcontainers  # Testcontainers, REST Assured 통합 테스트
 /concurrency-spring # 동시성 문제 해결 (락킹, 데드락 방지)
 ```
 
-### Infrastructure & DevOps
+### Kubernetes & Terraform
 ```
-/k8s-security       # Kubernetes security
-/k8s-helm           # Helm best practices
+/k8s-security       # Pod Security Standards, RBAC
+/k8s-helm           # Helm chart best practices
 /terraform-modules  # Terraform module patterns
 /terraform-security # Terraform security
-/git-workflow       # Git conventions
-/distributed-lock   # MSA 분산 락 (Redis, Redisson)
-/conventional-commits # 커밋 규칙 + 자동 버전/CHANGELOG
-/observability      # 로깅 + OpenTelemetry + 메트릭
-/docker             # Dockerfile 최적화, 멀티스테이지 빌드
-/api-design         # REST API 설계, 에러 처리 (RFC 9457)
-/database           # 인덱스, N+1 해결, 쿼리 최적화
-/database-migration # Flyway, Liquibase, 스키마 변경 패턴
 ```
+
+### Monitoring & Observability
+```
+/observability         # 로깅 기본, 메트릭 (RED Method)
+/observability-otel    # OpenTelemetry SDK 및 Collector 설정
+/monitoring-grafana    # Grafana 대시보드, 알림, RBAC
+/monitoring-metrics    # Prometheus 스케일링, Thanos/VictoriaMetrics
+/monitoring-logs       # Fluent Bit, Loki, 로그 필터링
+/monitoring-troubleshoot # 알림 대응, 트러블슈팅
+```
+
+### Logging & Compliance
+```
+/logging-compliance    # 결제/개인정보 법적 로그 (PCI-DSS, 전자금융거래법)
+/logging-security      # 봇/매크로 탐지, 보안 감사 로그
+/logging-loki          # Loki + LogQL 검색/분석 (개발팀/보안팀용)
+/logging-elk           # ELK Stack 검색/분석 (Elasticsearch, Kibana)
+```
+
+### API & Database
+```
+/api-design            # REST API 설계, 에러 처리 (RFC 9457)
+/docker                # Dockerfile 최적화, 멀티스테이지 빌드
+/database              # 인덱스, N+1 해결, 쿼리 최적화
+/database-migration    # Flyway, Liquibase, 스키마 변경 패턴
+/distributed-lock      # MSA 분산 락 (Redis, Redisson)
+```
+
+### Git & Workflow
+```
+/git-workflow          # Git conventions
+/conventional-commits  # 커밋 규칙 + 자동 버전/CHANGELOG
+```
+
+---
 
 ## Project Templates
 
@@ -147,24 +236,41 @@ cp project-templates/k8s/CLAUDE.md /your/project/
 cp project-templates/terraform/CLAUDE.md /your/project/
 ```
 
+---
+
 ## Structure
 
 ```
 ress-claude-agents/
-├── .claude/skills/           # On-demand domain knowledge (21 files)
+├── .claude/skills/           # On-demand domain knowledge (32 files)
+│   ├── go-*.md              # Go 패턴 (4 files)
+│   ├── spring-*.md          # Spring 패턴 (6 files)
+│   ├── k8s-*.md             # Kubernetes (2 files)
+│   ├── terraform-*.md       # Terraform (2 files)
+│   ├── monitoring-*.md      # 모니터링 (4 files)
+│   ├── logging-*.md         # 로깅/컴플라이언스 (4 files)
+│   ├── observability*.md    # Observability (2 files)
+│   ├── database*.md         # 데이터베이스 (2 files)
+│   └── *.md                 # 기타 (API, Docker, Git 등)
 ├── global/CLAUDE.md          # Global settings
 ├── commands/
-│   ├── help/                 # Help commands
-│   ├── session/              # Session context commands
-│   ├── go/                   # Go commands
-│   ├── backend/              # Java/Kotlin commands
-│   ├── k8s/                  # Kubernetes commands
-│   ├── terraform/            # Terraform commands
-│   └── dx/                   # DX commands
+│   ├── help/                 # Help commands (7 files)
+│   ├── session/              # Session context commands (2 files)
+│   ├── go/                   # Go commands (4 files)
+│   ├── backend/              # Java/Kotlin commands (4 files)
+│   ├── k8s/                  # Kubernetes commands (4 files)
+│   ├── terraform/            # Terraform commands (4 files)
+│   └── dx/                   # DX commands (4 files)
 ├── project-templates/        # Project-specific CLAUDE.md templates
+│   ├── backend-go/
+│   ├── backend-java/
+│   ├── k8s/
+│   └── terraform/
 ├── mcp-configs/              # MCP server settings
 └── install.sh                # Installer script
 ```
+
+---
 
 ## Design Principles
 
@@ -173,6 +279,19 @@ ress-claude-agents/
 3. **Command Contracts**: 명확한 Input/Output/Verification
 4. **Session Context**: auto compact 시에도 컨텍스트 유지
 5. **Selective Install**: 필요한 모듈만 선택 설치
+
+---
+
+## Statistics
+
+| 항목 | 수량 |
+|------|------|
+| Skills | 32 files (~7,600줄) |
+| Commands | 29 files |
+| Templates | 4 projects |
+| **Total** | ~11,700줄 |
+
+---
 
 ## Reference
 
