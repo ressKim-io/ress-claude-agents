@@ -83,7 +83,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │                    ress-claude-agents                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  📦 Project Templates        💡 Skills (32 files)          │
+│  📦 Project Templates        💡 Skills (33 files)          │
 │  ├─ Go Backend              ├─ Go/Spring 프레임워크         │
 │  ├─ Java/Kotlin Backend     ├─ Kubernetes/Terraform         │
 │  ├─ Kubernetes              ├─ 모니터링 (Grafana, Prometheus)│
@@ -200,7 +200,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 
 ## Skills (On-demand Knowledge)
 
-필요할 때만 로드되는 도메인 지식 (32 files, ~7,600줄):
+필요할 때만 로드되는 도메인 지식 (33 files, ~8,000줄):
 
 ### Go
 ```
@@ -225,6 +225,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 ```
 /k8s-security       # Pod Security Standards, RBAC
 /k8s-helm           # Helm chart best practices
+/k8s-traffic        # Istio Rate Limiting, 대기열, Circuit Breaker
 /terraform-modules  # Terraform module patterns
 /terraform-security # Terraform security
 ```
@@ -291,7 +292,7 @@ ress-claude-agents/
 ├── .claude/skills/           # On-demand domain knowledge (32 files)
 │   ├── go-*.md              # Go 패턴 (4 files)
 │   ├── spring-*.md          # Spring 패턴 (6 files)
-│   ├── k8s-*.md             # Kubernetes (2 files)
+│   ├── k8s-*.md             # Kubernetes (3 files)
 │   ├── terraform-*.md       # Terraform (2 files)
 │   ├── monitoring-*.md      # 모니터링 (4 files)
 │   ├── logging-*.md         # 로깅/컴플라이언스 (4 files)
@@ -332,7 +333,7 @@ ress-claude-agents/
 
 | 항목 | 수량 |
 |------|------|
-| Skills | 32 files (~7,600줄) |
+| Skills | 33 files (~8,000줄) |
 | Commands | 29 files |
 | Templates | 4 projects |
 | **Total** | ~11,700줄 |
