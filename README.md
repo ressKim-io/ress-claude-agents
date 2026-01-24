@@ -71,7 +71,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 | 문제 | 해결 방법 |
 |------|----------|
 | 매번 같은 컨텍스트 설명 반복 | **Project Templates**: 프로젝트별 CLAUDE.md 제공 |
-| Claude가 프레임워크 패턴을 모름 | **Skills**: 36개 온디맨드 지식 파일 |
+| Claude가 프레임워크 패턴을 모름 | **Skills**: 39개 온디맨드 지식 파일 |
 | 반복적인 작업 수동 실행 | **Commands**: 29개 자동화 명령어 |
 | 긴 작업 시 컨텍스트 손실 | **Session Context**: 자동 저장/복원 |
 | 팀 간 모니터링/로그 가이드 부재 | **Monitoring/Logging Skills**: 역할별 가이드 |
@@ -83,7 +83,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │                    ress-claude-agents                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  📦 Project Templates        💡 Skills (36 files)          │
+│  📦 Project Templates        💡 Skills (39 files)          │
 │  ├─ Go Backend              ├─ Go/Spring 프레임워크         │
 │  ├─ Java/Kotlin Backend     ├─ Kubernetes/Terraform/Istio   │
 │  ├─ Kubernetes              ├─ 모니터링 (Grafana, Prometheus)│
@@ -200,7 +200,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 
 ## Skills (On-demand Knowledge)
 
-필요할 때만 로드되는 도메인 지식 (36 files, ~9,500줄):
+필요할 때만 로드되는 도메인 지식 (39 files, ~10,350줄):
 
 ### Go
 ```
@@ -260,6 +260,13 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 /distributed-lock      # MSA 분산 락 (Redis, Redisson)
 ```
 
+### Refactoring
+```
+/refactoring-principles  # 코드 스멜 카탈로그, SOLID, 점진적 전략
+/refactoring-go          # Go Early Return, 인터페이스 추출, 성능 최적화
+/refactoring-spring      # God Class 분해, N+1 해결, 계층 분리
+```
+
 ### Git & Workflow
 ```
 /git-workflow          # Git conventions
@@ -292,7 +299,7 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 
 ```
 ress-claude-agents/
-├── .claude/skills/           # On-demand domain knowledge (36 files)
+├── .claude/skills/           # On-demand domain knowledge (39 files)
 │   ├── go-*.md              # Go 패턴 (4 files)
 │   ├── spring-*.md          # Spring 패턴 (6 files)
 │   ├── k8s-*.md             # Kubernetes (3 files)
@@ -302,6 +309,7 @@ ress-claude-agents/
 │   ├── logging-*.md         # 로깅/컴플라이언스 (4 files)
 │   ├── observability*.md    # Observability (2 files)
 │   ├── database*.md         # 데이터베이스 (2 files)
+│   ├── refactoring-*.md     # 리팩토링 (3 files)
 │   └── *.md                 # 기타 (API, Docker, Git 등)
 ├── global/CLAUDE.md          # Global settings
 ├── commands/
@@ -337,10 +345,10 @@ ress-claude-agents/
 
 | 항목 | 수량 |
 |------|------|
-| Skills | 36 files (~9,500줄) |
+| Skills | 39 files (~10,350줄) |
 | Commands | 29 files |
 | Templates | 4 projects |
-| **Total** | ~11,700줄 |
+| **Total** | ~12,550줄 |
 
 ---
 
