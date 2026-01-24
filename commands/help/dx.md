@@ -75,6 +75,7 @@ CHANGELOG를 생성합니다.
 | 명령어 | 내용 |
 |--------|------|
 | `/git-workflow` | Git 컨벤션, 브랜치 전략, 커밋 메시지 |
+| `/conventional-commits` | Conventional Commits, semantic-release, 자동 버전 |
 
 ---
 

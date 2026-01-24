@@ -67,6 +67,7 @@ src/main/java/com/example/
 - `/spring-testing` - JUnit, Mockito, Testcontainers
 - `/concurrency-spring` - 동시성 문제 해결 (락킹, 데드락 방지)
 - `/distributed-lock` - MSA 분산 락 (Redis, Redisson)
+- `/observability` - 로깅 + OpenTelemetry + 메트릭
 
 ## Commands
 - `/backend review` - Code review

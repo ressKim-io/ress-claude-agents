@@ -80,6 +80,7 @@ OpenAPI/Swagger 문서를 생성합니다.
 | `/spring-testing` | JUnit, Mockito, Testcontainers |
 | `/concurrency-spring` | 동시성 문제 해결 (락킹, 데드락 방지) |
 | `/distributed-lock` | MSA 분산 락 (Redis, Redisson) |
+| `/observability` | 로깅 + OpenTelemetry + 메트릭 |
 
 ### 기술 선택 가이드
 

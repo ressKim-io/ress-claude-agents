@@ -74,6 +74,7 @@ golangci-lint를 실행하고 문제를 수정합니다.
 | `/go-testing` | 테스트 패턴 (table-driven, mock, testify) |
 | `/concurrency-go` | 동시성 패턴 (Mutex, Channel, Worker Pool) |
 | `/distributed-lock` | MSA 분산 락 (Redis) |
+| `/observability` | 로깅 + OpenTelemetry + 메트릭 |
 
 ### 동시성 선택 가이드
 

@@ -113,7 +113,7 @@ Personal Claude Code agents and configs for DevOps & backend development.
 /concurrency-spring # 동시성 문제 해결 (락킹, 데드락 방지)
 ```
 
-### Infrastructure
+### Infrastructure & DevOps
 ```
 /k8s-security       # Kubernetes security
 /k8s-helm           # Helm best practices
@@ -121,6 +121,8 @@ Personal Claude Code agents and configs for DevOps & backend development.
 /terraform-security # Terraform security
 /git-workflow       # Git conventions
 /distributed-lock   # MSA 분산 락 (Redis, Redisson)
+/conventional-commits # 커밋 규칙 + 자동 버전/CHANGELOG
+/observability      # 로깅 + OpenTelemetry + 메트릭
 ```
 
 ## Project Templates
@@ -145,7 +147,7 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 
 ```
 ress-claude-agents/
-├── .claude/skills/           # On-demand domain knowledge (15 files)
+├── .claude/skills/           # On-demand domain knowledge (17 files)
 ├── global/CLAUDE.md          # Global settings
 ├── commands/
 │   ├── help/                 # Help commands

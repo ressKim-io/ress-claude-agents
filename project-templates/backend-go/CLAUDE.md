@@ -51,6 +51,7 @@ pkg/                     # Public libraries
 - `/go-testing` - Testing patterns
 - `/concurrency-go` - 동시성 패턴 (Mutex, Channel, Worker Pool)
 - `/distributed-lock` - MSA 분산 락 (Redis)
+- `/observability` - 로깅 + OpenTelemetry + 메트릭
 
 ## Commands
 - `/review` - Code review
