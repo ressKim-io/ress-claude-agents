@@ -96,10 +96,23 @@ Personal Claude Code agents and configs for DevOps & backend development.
 
 필요할 때만 로드되는 도메인 지식:
 
+### Go
 ```
 /go-errors          # Go error handling patterns
 /go-gin             # Gin framework patterns
 /go-testing         # Go testing patterns
+```
+
+### Spring (Java/Kotlin)
+```
+/spring-data        # JPA, QueryDSL 패턴 및 조합
+/spring-cache       # Redis 캐싱 전략
+/spring-security    # Security, OAuth2, JWT 인증
+/spring-testing     # JUnit, Mockito, Testcontainers
+```
+
+### Infrastructure
+```
 /k8s-security       # Kubernetes security
 /k8s-helm           # Helm best practices
 /terraform-modules  # Terraform module patterns
@@ -129,7 +142,7 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 
 ```
 ress-claude-agents/
-├── .claude/skills/           # On-demand domain knowledge (8 files)
+├── .claude/skills/           # On-demand domain knowledge (12 files)
 ├── global/CLAUDE.md          # Global settings
 ├── commands/
 │   ├── help/                 # Help commands

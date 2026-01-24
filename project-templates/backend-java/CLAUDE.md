@@ -46,12 +46,29 @@ src/main/java/com/example/
 | No validation | @Valid + DTO constraints | Controller tests |
 | Hardcoded secrets | @Value + env vars | `grep "password"` |
 | No transaction | @Transactional | Service layer |
+| JWT secret hardcoded | Environment variable | `grep -r "secret"` |
+| No cache for reads | @Cacheable on hot paths | Response time |
+
+## Technology Stack
+
+| 분야 | 기본 | 고급 |
+|------|------|------|
+| Data Access | Spring Data JPA | + QueryDSL |
+| Caching | Spring Cache | + Redis |
+| Security | Spring Security | + OAuth2, JWT |
+| Testing | JUnit, Mockito | + Testcontainers |
+
+## Skills (상세 패턴)
+- `/spring-data` - JPA, QueryDSL 패턴 및 조합
+- `/spring-cache` - Redis 캐싱 전략
+- `/spring-security` - Security, OAuth2, JWT 인증
+- `/spring-testing` - JUnit, Mockito, Testcontainers
 
 ## Commands
-- `/review` - Code review
-- `/test-gen` - Generate tests
-- `/api-doc` - Add OpenAPI annotations
-- `/refactor` - Code quality improvements
+- `/backend review` - Code review
+- `/backend test-gen` - Generate tests
+- `/backend api-doc` - Add OpenAPI annotations
+- `/backend refactor` - Code quality improvements
 
 ---
 *Applies with global CLAUDE.md settings*

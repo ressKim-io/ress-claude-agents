@@ -68,6 +68,31 @@ OpenAPI/Swagger 문서를 생성합니다.
 
 ---
 
+## Skills (상세 패턴)
+
+기술별 상세 패턴이 필요할 때 사용:
+
+| 명령어 | 내용 |
+|--------|------|
+| `/spring-data` | JPA, QueryDSL 패턴 및 조합 |
+| `/spring-cache` | Redis 캐싱 전략 |
+| `/spring-security` | Security, OAuth2, JWT 인증 |
+| `/spring-testing` | JUnit, Mockito, Testcontainers |
+
+### 기술 선택 가이드
+
+```
+CRUD 위주? ──────────────> Spring Data JPA
+     │
+     ├─ 동적 쿼리? ──────> + QueryDSL (/spring-data)
+     │
+     ├─ 읽기 성능? ───────> + Redis (/spring-cache)
+     │
+     └─ 인증 필요? ───────> + JWT (/spring-security)
+```
+
+---
+
 ## Quick Reference
 
 ```bash
