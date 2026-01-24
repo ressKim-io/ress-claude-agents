@@ -77,7 +77,8 @@ golangci-lint를 실행하고 문제를 수정합니다.
 | `/observability` | 로깅 + OpenTelemetry + 메트릭 |
 | `/api-design` | REST API 설계, 에러 처리 (RFC 9457) |
 | `/docker` | Dockerfile 최적화, 멀티스테이지 빌드 |
-| `/database` | 인덱스, 쿼리 최적화, 마이그레이션 |
+| `/database` | 인덱스, N+1 해결, 쿼리 최적화 |
+| `/database-migration` | Flyway, Liquibase, golang-migrate |
 
 ### 동시성 선택 가이드
 
