@@ -71,7 +71,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 | 문제 | 해결 방법 |
 |------|----------|
 | 매번 같은 컨텍스트 설명 반복 | **Project Templates**: 프로젝트별 CLAUDE.md 제공 |
-| Claude가 프레임워크 패턴을 모름 | **Skills**: 46개 온디맨드 지식 파일 |
+| Claude가 프레임워크 패턴을 모름 | **Skills**: 47개 온디맨드 지식 파일 |
 | 반복적인 작업 수동 실행 | **Commands**: 29개 자동화 명령어 |
 | 긴 작업 시 컨텍스트 손실 | **Session Context**: 자동 저장/복원 |
 | 팀 간 모니터링/로그 가이드 부재 | **Monitoring/Logging Skills**: 역할별 가이드 |
@@ -83,7 +83,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │                    ress-claude-agents                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  📦 Project Templates        💡 Skills (46 files)          │
+│  📦 Project Templates        💡 Skills (47 files)          │
 │  ├─ Go Backend              ├─ Go/Spring 프레임워크         │
 │  ├─ Java/Kotlin Backend     ├─ Kubernetes/Terraform/Istio   │
 │  ├─ Kubernetes              ├─ 모니터링 (Grafana, Prometheus)│
@@ -200,7 +200,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 
 ## Skills (On-demand Knowledge)
 
-필요할 때만 로드되는 도메인 지식 (46 files, ~10,500줄):
+필요할 때만 로드되는 도메인 지식 (47 files, ~11,000줄):
 
 ### Go
 ```
@@ -252,6 +252,11 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 /monitoring-metrics    # Prometheus 스케일링, Thanos/VictoriaMetrics
 /monitoring-logs       # Fluent Bit, Loki, 로그 필터링
 /monitoring-troubleshoot # 알림 대응, 트러블슈팅
+```
+
+### SRE
+```
+/sre-sli-slo           # SLI/SLO/SLA 정의, 에러 버짓, 다중 윈도우 알림
 ```
 
 ### Logging & Compliance
@@ -310,7 +315,7 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 
 ```
 ress-claude-agents/
-├── .claude/skills/           # On-demand domain knowledge (46 files)
+├── .claude/skills/           # On-demand domain knowledge (47 files)
 │   ├── go-*.md              # Go 패턴 (4 files)
 │   ├── spring-*.md          # Spring 패턴 (6 files)
 │   ├── k8s-*.md             # Kubernetes (5 files, 허브-스포크)
@@ -356,7 +361,7 @@ ress-claude-agents/
 
 | 항목 | 수량 |
 |------|------|
-| Skills | 46 files (~10,500줄) |
+| Skills | 47 files (~11,000줄) |
 | Commands | 29 files |
 | Templates | 4 projects |
 | **Total** | ~12,700줄 |
