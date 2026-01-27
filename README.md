@@ -71,7 +71,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 | 문제 | 해결 방법 |
 |------|----------|
 | 매번 같은 컨텍스트 설명 반복 | **Project Templates**: 프로젝트별 CLAUDE.md 제공 |
-| Claude가 프레임워크 패턴을 모름 | **Skills**: 48개 온디맨드 지식 파일 |
+| Claude가 프레임워크 패턴을 모름 | **Skills**: 60개 온디맨드 지식 파일 |
 | 반복적인 작업 수동 실행 | **Commands**: 29개 자동화 명령어 |
 | 긴 작업 시 컨텍스트 손실 | **Session Context**: 자동 저장/복원 |
 | 팀 간 모니터링/로그 가이드 부재 | **Monitoring/Logging Skills**: 역할별 가이드 |
@@ -83,12 +83,13 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │                    ress-claude-agents                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  📦 Project Templates        💡 Skills (48 files)          │
+│  📦 Project Templates        💡 Skills (60 files)          │
 │  ├─ Go Backend              ├─ Go/Spring 프레임워크         │
 │  ├─ Java/Kotlin Backend     ├─ Kubernetes/Terraform/Istio   │
 │  ├─ Kubernetes              ├─ 모니터링 (Grafana, Prometheus)│
 │  └─ Terraform               ├─ 로깅 (Loki, ELK, 컴플라이언스)│
-│                             └─ API/DB/Docker 패턴           │
+│                             ├─ DevOps (ArgoCD, KEDA, DR)    │
+│                             └─ API/DB/Docker/Kafka 패턴     │
 │                                                             │
 │  ⚡ Commands (29 files)      🔄 Session Management          │
 │  ├─ /go review, lint        ├─ 자동 컨텍스트 저장           │
@@ -105,12 +106,15 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 | 분야 | 기술 |
 |------|------|
 | **Languages** | Go (Gin), Java/Kotlin (Spring Boot) |
-| **Infrastructure** | Kubernetes (Helm, Kustomize), Terraform |
+| **Infrastructure** | Kubernetes (Helm, Kustomize), Terraform, AWS EKS |
+| **GitOps/CD** | ArgoCD, Argo Rollouts, KEDA |
+| **Service Mesh** | Istio (Sidecar/Ambient), mTLS, Traffic Management |
 | **Containers** | Docker (Multi-stage builds) |
-| **Observability** | Prometheus, Grafana, OpenTelemetry |
-| **Logging** | Loki (LogQL), ELK Stack (Elasticsearch) |
+| **Observability** | Prometheus, Grafana, OpenTelemetry, Loki |
+| **Messaging** | Apache Kafka (Strimzi Operator) |
 | **Database** | JPA, QueryDSL, 마이그레이션 (Flyway, Liquibase) |
-| **Security** | PCI-DSS, 개인정보보호, 봇/매크로 탐지 |
+| **Security** | Kyverno, Trivy, PCI-DSS, 봇/매크로 탐지 |
+| **SRE** | SLI/SLO, Chaos Engineering, DR (Velero) |
 
 ---
 
@@ -200,7 +204,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 
 ## Skills (On-demand Knowledge)
 
-필요할 때만 로드되는 도메인 지식 (48 files, ~11,500줄):
+필요할 때만 로드되는 도메인 지식 (60 files, ~14,500줄):
 
 ### Go
 ```
@@ -223,8 +227,10 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 
 ### Kubernetes & Terraform
 ```
-/k8s-security       # Pod Security Standards, RBAC
+/k8s-security       # Pod Security Standards, RBAC, Kyverno, Trivy
 /k8s-helm           # Helm chart best practices
+/k8s-autoscaling    # HPA, VPA, KEDA, Karpenter
+/k8s-scheduling     # Node Affinity, Taint, TopologySpreadConstraints
 /k8s-traffic        # 트래픽 제어 허브 (Rate Limiting, 대기열)
   └─ /k8s-traffic-istio    # Istio Rate Limiting, Circuit Breaker
   └─ /k8s-traffic-ingress  # NGINX/Kong Rate Limiting
@@ -234,7 +240,8 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 
 ### Istio Service Mesh
 ```
-/istio-core         # Sidecar vs Ambient 모드 비교, 마이그레이션
+/istio-core         # Sidecar vs Ambient 모드 비교, mTLS 강제
+/istio-security     # PeerAuthentication, AuthorizationPolicy, JWT
 /istio-gateway      # Gateway 허브 (Classic vs API 비교)
   └─ /istio-gateway-classic # Gateway + VirtualService + TLS
   └─ /istio-gateway-api     # Gateway API + HTTPRoute
@@ -254,14 +261,27 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 /monitoring-troubleshoot # 알림 대응, 트러블슈팅
 ```
 
-### SRE
+### SRE & DevOps
 ```
 /sre-sli-slo           # SLI/SLO/SLA 정의, 에러 버짓, 다중 윈도우 알림
+/cicd-devsecops        # GitHub Actions, Trivy, SonarQube, Kyverno
+/gitops-argocd         # ArgoCD, App of Apps, ApplicationSet
+/deployment-strategies # Canary, Blue-Green, Argo Rollouts
+/chaos-engineering     # LitmusChaos, GameDay 절차
+/disaster-recovery     # Velero, RTO/RPO, Multi-cluster DR
+/alerting-discord      # AlertManager, Discord 웹훅
+/finops                # Kubecost, Right-sizing, Spot Instance
 ```
 
-### CI/CD & DevSecOps
+### Infrastructure
 ```
-/cicd-devsecops        # GitHub Actions, Trivy, SonarQube, Kyverno
+/aws-eks               # EKS Terraform, IRSA, Karpenter, Add-ons
+/load-testing          # K6, K6 Operator, nGrinder
+```
+
+### Messaging
+```
+/kafka                 # Strimzi Operator, Producer/Consumer, KEDA
 ```
 
 ### Logging & Compliance
@@ -320,17 +340,21 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 
 ```
 ress-claude-agents/
-├── .claude/skills/           # On-demand domain knowledge (48 files)
+├── .claude/skills/           # On-demand domain knowledge (60 files)
 │   ├── go-*.md              # Go 패턴 (4 files)
 │   ├── spring-*.md          # Spring 패턴 (6 files)
-│   ├── k8s-*.md             # Kubernetes (5 files, 허브-스포크)
-│   ├── istio-*.md           # Istio Service Mesh (8 files, 허브-스포크)
+│   ├── k8s-*.md             # Kubernetes (8 files)
+│   ├── istio-*.md           # Istio Service Mesh (9 files)
 │   ├── terraform-*.md       # Terraform (2 files)
 │   ├── monitoring-*.md      # 모니터링 (4 files)
 │   ├── logging-*.md         # 로깅/컴플라이언스 (4 files)
 │   ├── observability*.md    # Observability (2 files)
 │   ├── database*.md         # 데이터베이스 (2 files)
 │   ├── refactoring-*.md     # 리팩토링 (3 files)
+│   ├── sre-*, cicd-*, gitops-*, deployment-*, chaos-*, disaster-*, alerting-*, finops-*
+│   │                        # SRE/DevOps (8 files)
+│   ├── aws-*, load-testing* # Infrastructure (2 files)
+│   ├── kafka*               # Messaging (1 file)
 │   └── *.md                 # 기타 (API, Docker, Git 등)
 ├── global/CLAUDE.md          # Global settings
 ├── commands/
@@ -366,10 +390,10 @@ ress-claude-agents/
 
 | 항목 | 수량 |
 |------|------|
-| Skills | 48 files (~11,500줄) |
+| Skills | 60 files (~14,500줄) |
 | Commands | 29 files |
 | Templates | 4 projects |
-| **Total** | ~12,700줄 |
+| **Total** | ~15,700줄 |
 
 ---
 
