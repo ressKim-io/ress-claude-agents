@@ -278,4 +278,126 @@ curl -X POST \
 - [ ] 장애 리뷰 일정 (24-48시간 내)
 - [ ] 개선 항목 추적
 
-**관련 skill**: `/monitoring-grafana`, `/monitoring-metrics`, `/monitoring-logs`
+---
+
+## Pod 알림 설정 (PrometheusRule)
+
+### 핵심 Pod 알림 규칙
+
+```yaml
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: pod-alerts
+  namespace: monitoring
+spec:
+  groups:
+    - name: pod-alerts
+      rules:
+        # Pod CrashLoopBackOff
+        - alert: PodCrashLooping
+          expr: |
+            sum(rate(kube_pod_container_status_restarts_total[15m])) by (namespace, pod) > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Pod {{ $labels.pod }} is crash looping"
+            description: "Pod {{ $labels.namespace }}/{{ $labels.pod }} has restarted"
+
+        # Pod Not Ready
+        - alert: PodNotReady
+          expr: |
+            sum by (namespace, pod) (kube_pod_status_phase{phase!="Running",phase!="Succeeded"}) > 0
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Pod {{ $labels.pod }} is not ready"
+
+        # Container High Memory
+        - alert: ContainerHighMemory
+          expr: |
+            (container_memory_working_set_bytes / container_spec_memory_limit_bytes) > 0.9
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Container memory usage > 90%"
+
+        # High Error Rate (SLO)
+        - alert: HighErrorRate
+          expr: |
+            sum(rate(http_requests_total{status=~"5.."}[5m])) by (service)
+            / sum(rate(http_requests_total[5m])) by (service) > 0.05
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Service {{ $labels.service }} error rate > 5%"
+```
+
+---
+
+## Discord 웹훅 연동
+
+### AlertManager 설정 (v0.25+)
+
+```yaml
+# alertmanager.yaml
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: 'discord-default'
+  group_by: ['alertname', 'namespace']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 4h
+  routes:
+    - match:
+        severity: critical
+      receiver: 'discord-critical'
+    - match:
+        severity: warning
+      receiver: 'discord-warning'
+
+receivers:
+  - name: 'discord-critical'
+    discord_configs:
+      - webhook_url: 'https://discord.com/api/webhooks/xxx/yyy'
+        title: '🔴 CRITICAL: {{ .CommonLabels.alertname }}'
+        message: |
+          **Status**: {{ .Status | toUpper }}
+          **Namespace**: {{ .CommonLabels.namespace }}
+          {{ range .Alerts }}
+          **Description**: {{ .Annotations.description }}
+          {{ end }}
+
+  - name: 'discord-warning'
+    discord_configs:
+      - webhook_url: 'https://discord.com/api/webhooks/xxx/zzz'
+        title: '🟡 Warning: {{ .CommonLabels.alertname }}'
+        message: |
+          **Status**: {{ .Status | toUpper }}
+          {{ range .Alerts }}
+          **Description**: {{ .Annotations.description }}
+          {{ end }}
+
+  - name: 'discord-default'
+    discord_configs:
+      - webhook_url: 'https://discord.com/api/webhooks/default/xxx'
+```
+
+### Discord 웹훅 생성 방법
+
+```
+1. Discord 서버 설정 → 연동 → 웹후크
+2. 새 웹후크 만들기
+3. 채널 선택 (alerts-critical, alerts-warning 등)
+4. 웹후크 URL 복사 → AlertManager 설정에 사용
+```
+
+상세한 알림 설정은 `/alerting-discord` 스킬 참조
+
+**관련 skill**: `/monitoring-grafana`, `/monitoring-metrics`, `/monitoring-logs`, `/alerting-discord`, `/sre-sli-slo`

@@ -342,4 +342,84 @@ Namespace B: Ambient Mode (신규, 리소스 효율)
 - [ ] 롤백 계획 수립
 - [ ] 모니터링 알림 조정
 
-**관련 skill**: `/istio-gateway`, `/istio-observability`, `/k8s-security`
+---
+
+## CRITICAL: mTLS 강제 설정
+
+### Namespace STRICT mTLS
+
+```yaml
+# 네임스페이스 전체에 mTLS 강제
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: production
+spec:
+  mtls:
+    mode: STRICT  # 모든 트래픽 mTLS 필수
+```
+
+### 메시 전체 STRICT mTLS
+
+```yaml
+# 전체 메시에 mTLS 강제 (istio-system에 적용)
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: istio-system
+spec:
+  mtls:
+    mode: STRICT
+```
+
+### 특정 포트 예외 (메트릭 수집)
+
+```yaml
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: metrics-exception
+  namespace: production
+spec:
+  selector:
+    matchLabels:
+      app: my-service
+  mtls:
+    mode: STRICT
+  portLevelMtls:
+    9090:  # Prometheus 메트릭 포트
+      mode: PERMISSIVE
+```
+
+### mTLS 마이그레이션 단계
+
+```
+1. PERMISSIVE 모드로 시작 (기존 트래픽 유지)
+   │
+2. Kiali에서 mTLS 적용 현황 확인
+   │
+3. 모든 서비스에 Sidecar 주입 완료 확인
+   │
+4. STRICT 모드로 전환
+   │
+5. 문제 발생 시 PERMISSIVE로 롤백
+```
+
+### mTLS 상태 확인
+
+```bash
+# istioctl로 mTLS 상태 확인
+istioctl authn tls-check <pod-name> -n <namespace>
+
+# PeerAuthentication 목록
+kubectl get peerauthentication -A
+
+# 특정 Pod의 mTLS 설정 확인
+istioctl x describe pod <pod-name> -n <namespace>
+```
+
+상세한 Istio 보안 설정은 `/istio-security` 스킬 참조
+
+**관련 skill**: `/istio-gateway`, `/istio-observability`, `/istio-security`, `/k8s-security`
