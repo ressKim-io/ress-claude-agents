@@ -11,8 +11,9 @@
 | Required Tools | - |
 | Verification | `terraform validate` 통과 |
 
-## Module Structure
+## Checklist
 
+### Module Structure
 ```
 modules/{name}/
 ├── main.tf          # 리소스 정의
@@ -23,9 +24,9 @@ modules/{name}/
 └── README.md        # 문서
 ```
 
-## File Templates
+### File Templates
 
-### versions.tf
+#### versions.tf
 ```hcl
 terraform {
   required_version = ">= 1.0"
@@ -38,7 +39,7 @@ terraform {
 }
 ```
 
-### variables.tf
+#### variables.tf
 ```hcl
 variable "project" {
   description = "Project name"
@@ -55,12 +56,15 @@ variable "environment" {
 }
 ```
 
-## Common Module Types
-
+### Common Module Types
 - VPC: vpc_cidr, subnets, NAT gateway
 - RDS: engine, instance_class, encryption
 - S3: versioning, encryption, public access block
 - EKS: node groups, addons
+
+## Output Format
+
+생성된 모듈 파일 구조
 
 ## Usage
 

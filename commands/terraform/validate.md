@@ -11,7 +11,7 @@ Terraform 코드의 best practice 및 품질을 검증합니다.
 | Required Tools | terraform |
 | Verification | `terraform validate` 통과 |
 
-## Validation Checklist
+## Checklist
 
 ### File Structure
 - [ ] 표준 파일 구조 (main.tf, variables.tf, outputs.tf, versions.tf)
@@ -34,20 +34,12 @@ Terraform 코드의 best practice 및 품질을 검증합니다.
 - [ ] State 잠금 설정
 - [ ] 암호화 활성화
 
-## Best Practice Rules
-
+### Best Practice Rules
 - BP001: 변수 description 누락
 - BP002: 버전 제약 누락
 - BP003: 하드코딩된 값
 - BP004: 태그 누락
 - BP005: count 대신 for_each 권장
-
-## Format Check
-
-```bash
-terraform fmt -check -recursive
-terraform validate
-```
 
 ## Output Format
 
@@ -70,4 +62,13 @@ terraform validate
 /validate                    # 현재 디렉토리
 /validate modules/vpc/       # 특정 모듈
 /validate --fix              # 자동 수정
+```
+
+## Best Practices
+
+### Format Check
+
+```bash
+terraform fmt -check -recursive
+terraform validate
 ```

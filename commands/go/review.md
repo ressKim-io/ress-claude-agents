@@ -11,10 +11,7 @@
 | Required Tools | git, go |
 | Verification | 모든 Critical/High 이슈 해결 |
 
-## Steps
-
-1. `git diff` 또는 `git diff --cached`로 변경 사항 확인
-2. 다음 항목 검토:
+## Checklist
 
 ### Code Style
 - [ ] gofmt/goimports 적용 여부
@@ -42,6 +39,7 @@
 - [ ] context 적절히 전파
 
 ## Output Format
+
 ```
 [Critical] file.go:42 - 에러 무시됨
   현재: _ = db.Close()
@@ -53,8 +51,14 @@
 ```
 
 ## Usage
+
 ```
 /review                    # 현재 변경사항 리뷰
 /review file.go            # 특정 파일 리뷰
 /review --staged           # staged 변경만 리뷰
 ```
+
+## Best Practices
+
+1. `git diff` 또는 `git diff --cached`로 변경 사항 확인
+2. 심각도별로 이슈 분류하여 리포트

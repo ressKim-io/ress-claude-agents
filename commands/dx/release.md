@@ -11,16 +11,16 @@
 | Required Tools | git, gh |
 | Verification | `gh release view` 로 확인 |
 
-## Process
+## Checklist
 
+### Process
 1. 현재 버전 확인
 2. 커밋 분석으로 다음 버전 결정
 3. CHANGELOG 업데이트
 4. 태그 생성 및 푸시
 5. GitHub Release 생성
 
-## Semantic Versioning
-
+### Semantic Versioning
 ```
 MAJOR.MINOR.PATCH
 
@@ -29,15 +29,13 @@ MINOR: New features (backwards compatible)
 PATCH: Bug fixes
 ```
 
-## Pre-release Checklist
-
+### Pre-release Checklist
 - [ ] 모든 테스트 통과
 - [ ] 코드 리뷰 완료
 - [ ] CHANGELOG.md 업데이트
 - [ ] 버전 파일 업데이트
 
-## Release Notes Template
-
+### Release Notes Template
 ```markdown
 ## v1.1.0
 
@@ -53,7 +51,7 @@ PATCH: Bug fixes
 **Full Changelog**: compare/v1.0.0...v1.1.0
 ```
 
-## Output
+## Output Format
 
 ```markdown
 ## Release Created
@@ -62,9 +60,9 @@ PATCH: Bug fixes
 - **URL:** https://github.com/user/repo/releases/tag/v1.1.0
 
 ### Actions Completed
-- ✅ CHANGELOG.md updated
-- ✅ Git tag created
-- ✅ GitHub Release created
+- CHANGELOG.md updated
+- Git tag created
+- GitHub Release created
 ```
 
 ## Usage

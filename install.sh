@@ -1,38 +1,178 @@
 #!/bin/bash
 
-set -e
+set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+readonly RED='\033[0;31m'
+readonly GREEN='\033[0;32m'
+readonly YELLOW='\033[1;33m'
+readonly BLUE='\033[0;34m'
+readonly NC='\033[0m' # No Color
 
-# Available modules
-ALL_MODULES=("backend" "go" "k8s" "terraform" "dx")
+# State tracking
+declare -a INSTALLED_COMPONENTS=()
+declare -a BACKUP_FILES=()
+INSTALL_SUCCESS=true
+
+# Discover available modules from commands directory (excluding session and help)
+discover_modules() {
+    local modules=()
+    if [[ -d "$SCRIPT_DIR/commands" ]]; then
+        for dir in "$SCRIPT_DIR/commands"/*/; do
+            local name
+            name=$(basename "$dir")
+            if [[ "$name" != "session" && "$name" != "help" ]]; then
+                modules+=("$name")
+            fi
+        done
+    fi
+    echo "${modules[@]}"
+}
+
+# Read modules dynamically
+IFS=' ' read -ra ALL_MODULES <<< "$(discover_modules)"
+
+# Logging functions
+log_info() {
+    echo -e "${GREEN}$1${NC}"
+}
+
+log_warn() {
+    echo -e "${YELLOW}$1${NC}"
+}
+
+log_error() {
+    echo -e "${RED}$1${NC}" >&2
+}
+
+log_section() {
+    echo -e "${BLUE}$1${NC}"
+}
+
+# Error handler
+handle_error() {
+    local line_no=$1
+    log_error "Error occurred at line $line_no"
+    INSTALL_SUCCESS=false
+}
+
+trap 'handle_error ${LINENO}' ERR
+
+# Backup and link/copy a file or directory
+# Usage: backup_and_link <source> <target> <scope> <type>
+# type: "file" or "dir"
+backup_and_link() {
+    local source="$1"
+    local target="$2"
+    local scope="$3"
+    local type="${4:-file}"
+
+    # Validate source exists
+    if [[ "$type" == "file" && ! -f "$source" ]]; then
+        log_error "Source file not found: $source"
+        return 1
+    elif [[ "$type" == "dir" && ! -d "$source" ]]; then
+        log_error "Source directory not found: $source"
+        return 1
+    fi
+
+    # Handle existing target
+    if [[ -L "$target" ]]; then
+        rm "$target" || {
+            log_error "Failed to remove existing symlink: $target"
+            return 1
+        }
+    elif [[ -e "$target" ]]; then
+        local backup="${target}.backup"
+        log_info "  Backing up existing: $(basename "$target")"
+        mv "$target" "$backup" || {
+            log_error "Failed to backup: $target"
+            return 1
+        }
+        BACKUP_FILES+=("$backup")
+    fi
+
+    # Create link or copy based on scope
+    if [[ "$scope" == "global" ]]; then
+        ln -s "$source" "$target" || {
+            log_error "Failed to create symlink: $target"
+            return 1
+        }
+        echo "  -> Linked: $target"
+    else
+        if [[ "$type" == "dir" ]]; then
+            cp -r "$source" "$target" || {
+                log_error "Failed to copy directory: $target"
+                return 1
+            }
+        else
+            cp "$source" "$target" || {
+                log_error "Failed to copy file: $target"
+                return 1
+            }
+        fi
+        echo "  -> Copied: $target"
+    fi
+
+    # Verify target was created
+    if [[ ! -e "$target" ]]; then
+        log_error "Target was not created: $target"
+        return 1
+    fi
+
+    return 0
+}
+
+# Create directory with verification
+create_dir() {
+    local dir="$1"
+    mkdir -p "$dir" || {
+        log_error "Failed to create directory: $dir"
+        return 1
+    }
+    if [[ ! -d "$dir" ]]; then
+        log_error "Directory was not created: $dir"
+        return 1
+    fi
+}
+
+# Validate module name
+validate_module() {
+    local mod="$1"
+    for valid_mod in "${ALL_MODULES[@]}"; do
+        if [[ "$mod" == "$valid_mod" ]]; then
+            return 0
+        fi
+    done
+    return 1
+}
 
 print_usage() {
-    echo "Usage: $0 [OPTIONS]"
-    echo ""
-    echo "Options:"
-    echo "  --global          Install to ~/.claude/ (all projects)"
-    echo "  --local           Install to ./.claude/ (current project only)"
-    echo "  --all             Install all modules"
-    echo "  --modules LIST    Install specific modules (comma-separated)"
-    echo "                    Available: backend, go, k8s, terraform, dx"
-    echo "  --with-skills     Include skills (on-demand knowledge)"
-    echo "  --with-mcp        Include MCP server configs"
-    echo "  -h, --help        Show this help"
-    echo ""
-    echo "Examples:"
-    echo "  $0                        # Interactive mode"
-    echo "  $0 --global               # Global install, core only"
-    echo "  $0 --global --all         # Global install, all modules"
-    echo "  $0 --local --modules go,k8s --with-skills"
-    echo ""
+    local modules_list
+    modules_list=$(IFS=,; echo "${ALL_MODULES[*]}")
+
+    cat << EOF
+Usage: $0 [OPTIONS]
+
+Options:
+  --global          Install to ~/.claude/ (all projects)
+  --local           Install to ./.claude/ (current project only)
+  --all             Install all modules
+  --modules LIST    Install specific modules (comma-separated)
+                    Available: $modules_list
+  --with-skills     Include skills (on-demand knowledge)
+  --with-mcp        Include MCP server configs
+  -h, --help        Show this help
+
+Examples:
+  $0                        # Interactive mode
+  $0 --global               # Global install, core only
+  $0 --global --all         # Global install, all modules
+  $0 --local --modules go,k8s --with-skills
+
+EOF
 }
 
 # Parse arguments
@@ -41,8 +181,10 @@ INSTALL_ALL=false
 SELECTED_MODULES=()
 WITH_SKILLS=false
 WITH_MCP=false
+HAS_ARGS=false
 
 while [[ $# -gt 0 ]]; do
+    HAS_ARGS=true
     case $1 in
         --global)
             INSTALL_SCOPE="global"
@@ -57,7 +199,19 @@ while [[ $# -gt 0 ]]; do
             shift
             ;;
         --modules)
+            if [[ -z "${2:-}" ]]; then
+                log_error "Missing argument for --modules"
+                exit 1
+            fi
             IFS=',' read -ra SELECTED_MODULES <<< "$2"
+            # Validate modules
+            for mod in "${SELECTED_MODULES[@]}"; do
+                if ! validate_module "$mod"; then
+                    log_error "Invalid module: $mod"
+                    log_error "Available modules: ${ALL_MODULES[*]}"
+                    exit 1
+                fi
+            done
             shift 2
             ;;
         --with-skills)
@@ -73,47 +227,47 @@ while [[ $# -gt 0 ]]; do
             exit 0
             ;;
         *)
-            echo -e "${RED}Unknown option: $1${NC}"
+            log_error "Unknown option: $1"
             print_usage
             exit 1
             ;;
     esac
 done
 
-echo -e "${BLUE}=== ress-claude-agents installer ===${NC}"
+log_section "=== ress-claude-agents installer ==="
 echo ""
 
 # Interactive mode if no scope specified
-if [ -z "$INSTALL_SCOPE" ]; then
-    echo -e "${YELLOW}Select installation scope:${NC}"
+if [[ -z "$INSTALL_SCOPE" ]]; then
+    log_warn "Select installation scope:"
     echo "  1) Global (~/.claude/) - applies to all projects"
     echo "  2) Local  (./.claude/) - applies to current project only"
-    read -p "Choice [1/2]: " scope_choice
+    read -rp "Choice [1/2]: " scope_choice
     case $scope_choice in
         1) INSTALL_SCOPE="global" ;;
         2) INSTALL_SCOPE="local" ;;
-        *) echo -e "${RED}Invalid choice${NC}"; exit 1 ;;
+        *) log_error "Invalid choice"; exit 1 ;;
     esac
     echo ""
 fi
 
 # Set target directory
-if [ "$INSTALL_SCOPE" = "global" ]; then
+if [[ "$INSTALL_SCOPE" == "global" ]]; then
     TARGET_DIR="$HOME/.claude"
-    echo -e "${GREEN}Installing globally to: $TARGET_DIR${NC}"
+    log_info "Installing globally to: $TARGET_DIR"
 else
     TARGET_DIR="$(pwd)/.claude"
-    echo -e "${GREEN}Installing locally to: $TARGET_DIR${NC}"
+    log_info "Installing locally to: $TARGET_DIR"
 fi
 
 # Interactive module selection if not specified
-if [ "$INSTALL_ALL" = false ] && [ ${#SELECTED_MODULES[@]} -eq 0 ]; then
+if [[ "$INSTALL_ALL" == false && ${#SELECTED_MODULES[@]} -eq 0 ]]; then
     echo ""
-    echo -e "${YELLOW}Select modules to install:${NC}"
+    log_warn "Select modules to install:"
     echo "  0) Core only (CLAUDE.md + session)"
     echo "  1) All modules"
     echo "  2) Select individually"
-    read -p "Choice [0/1/2]: " module_choice
+    read -rp "Choice [0/1/2]: " module_choice
 
     case $module_choice in
         0)
@@ -125,15 +279,15 @@ if [ "$INSTALL_ALL" = false ] && [ ${#SELECTED_MODULES[@]} -eq 0 ]; then
         2)
             echo ""
             for mod in "${ALL_MODULES[@]}"; do
-                read -p "  Include $mod? [y/N]: " -n 1 -r
+                read -rp "  Include $mod? [y/N]: " -n 1 reply
                 echo ""
-                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                if [[ "$reply" =~ ^[Yy]$ ]]; then
                     SELECTED_MODULES+=("$mod")
                 fi
             done
             ;;
         *)
-            echo -e "${RED}Invalid choice${NC}"
+            log_error "Invalid choice"
             exit 1
             ;;
     esac
@@ -141,25 +295,25 @@ if [ "$INSTALL_ALL" = false ] && [ ${#SELECTED_MODULES[@]} -eq 0 ]; then
 fi
 
 # Skills selection (interactive)
-if [ "$WITH_SKILLS" = false ] && [ -z "$1" ]; then
-    read -p "Include skills (on-demand knowledge)? [y/N]: " -n 1 -r
+if [[ "$WITH_SKILLS" == false && "$HAS_ARGS" == false ]]; then
+    read -rp "Include skills (on-demand knowledge)? [y/N]: " -n 1 reply
     echo ""
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
+    if [[ "$reply" =~ ^[Yy]$ ]]; then
         WITH_SKILLS=true
     fi
 fi
 
 # MCP selection (interactive, only for global)
-if [ "$INSTALL_SCOPE" = "global" ] && [ "$WITH_MCP" = false ] && [ -z "$1" ]; then
-    read -p "Include MCP server configs? [y/N]: " -n 1 -r
+if [[ "$INSTALL_SCOPE" == "global" && "$WITH_MCP" == false && "$HAS_ARGS" == false ]]; then
+    read -rp "Include MCP server configs? [y/N]: " -n 1 reply
     echo ""
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
+    if [[ "$reply" =~ ^[Yy]$ ]]; then
         WITH_MCP=true
     fi
 fi
 
 # Set modules to install
-if [ "$INSTALL_ALL" = true ]; then
+if [[ "$INSTALL_ALL" == true ]]; then
     SELECTED_MODULES=("${ALL_MODULES[@]}")
 fi
 
@@ -167,113 +321,104 @@ fi
 SELECTED_MODULES+=("session")
 
 echo ""
-echo -e "${BLUE}=== Installing ===${NC}"
+log_section "=== Installing ==="
 echo ""
 
-# Create target directory
-mkdir -p "$TARGET_DIR"
-mkdir -p "$TARGET_DIR/commands"
+# Create target directories
+create_dir "$TARGET_DIR"
+create_dir "$TARGET_DIR/commands"
 
 # Install core CLAUDE.md
-echo -e "${GREEN}[core]${NC} Installing CLAUDE.md..."
-if [ -L "$TARGET_DIR/CLAUDE.md" ]; then
-    rm "$TARGET_DIR/CLAUDE.md"
-elif [ -f "$TARGET_DIR/CLAUDE.md" ]; then
-    echo "  Backing up existing CLAUDE.md"
-    mv "$TARGET_DIR/CLAUDE.md" "$TARGET_DIR/CLAUDE.md.backup"
-fi
-
-if [ "$INSTALL_SCOPE" = "global" ]; then
-    ln -s "$SCRIPT_DIR/global/CLAUDE.md" "$TARGET_DIR/CLAUDE.md"
-    echo "  -> Linked: $TARGET_DIR/CLAUDE.md"
+log_info "[core] Installing CLAUDE.md..."
+if backup_and_link "$SCRIPT_DIR/global/CLAUDE.md" "$TARGET_DIR/CLAUDE.md" "$INSTALL_SCOPE" "file"; then
+    INSTALLED_COMPONENTS+=("Core (CLAUDE.md)")
+    if [[ "$INSTALL_SCOPE" == "local" ]]; then
+        log_warn "  (Edit this file to customize for your project)"
+    fi
 else
-    cp "$SCRIPT_DIR/global/CLAUDE.md" "$TARGET_DIR/CLAUDE.md"
-    echo "  -> Copied: $TARGET_DIR/CLAUDE.md"
-    echo -e "  ${YELLOW}(Edit this file to customize for your project)${NC}"
+    log_error "Failed to install CLAUDE.md"
+    INSTALL_SUCCESS=false
 fi
 
 # Install selected command modules
 for mod in "${SELECTED_MODULES[@]}"; do
-    if [ -d "$SCRIPT_DIR/commands/$mod" ]; then
-        echo -e "${GREEN}[$mod]${NC} Installing commands..."
+    source_dir="$SCRIPT_DIR/commands/$mod"
+    if [[ -d "$source_dir" ]]; then
+        log_info "[$mod] Installing commands..."
         target="$TARGET_DIR/commands/$mod"
 
-        if [ -L "$target" ]; then
-            rm "$target"
-        elif [ -d "$target" ]; then
-            mv "$target" "$target.backup"
-        fi
-
-        if [ "$INSTALL_SCOPE" = "global" ]; then
-            ln -s "$SCRIPT_DIR/commands/$mod" "$target"
-            echo "  -> Linked: $target"
+        if backup_and_link "$source_dir" "$target" "$INSTALL_SCOPE" "dir"; then
+            if [[ "$mod" != "session" ]]; then
+                INSTALLED_COMPONENTS+=("$mod commands")
+            fi
         else
-            cp -r "$SCRIPT_DIR/commands/$mod" "$target"
-            echo "  -> Copied: $target"
+            log_error "Failed to install $mod commands"
+            INSTALL_SUCCESS=false
         fi
+    else
+        log_warn "[$mod] Module directory not found, skipping"
     fi
 done
 
 # Install skills
-if [ "$WITH_SKILLS" = true ]; then
-    echo -e "${GREEN}[skills]${NC} Installing skills..."
+if [[ "$WITH_SKILLS" == true ]]; then
+    log_info "[skills] Installing skills..."
     SKILLS_SOURCE="$SCRIPT_DIR/.claude/skills"
     SKILLS_TARGET="$TARGET_DIR/skills"
 
-    if [ -d "$SKILLS_SOURCE" ]; then
-        if [ -L "$SKILLS_TARGET" ]; then
-            rm "$SKILLS_TARGET"
-        elif [ -d "$SKILLS_TARGET" ]; then
-            mv "$SKILLS_TARGET" "$SKILLS_TARGET.backup"
-        fi
-
-        if [ "$INSTALL_SCOPE" = "global" ]; then
-            ln -s "$SKILLS_SOURCE" "$SKILLS_TARGET"
-            echo "  -> Linked: $SKILLS_TARGET"
+    if [[ -d "$SKILLS_SOURCE" ]]; then
+        if backup_and_link "$SKILLS_SOURCE" "$SKILLS_TARGET" "$INSTALL_SCOPE" "dir"; then
+            INSTALLED_COMPONENTS+=("Skills")
         else
-            cp -r "$SKILLS_SOURCE" "$SKILLS_TARGET"
-            echo "  -> Copied: $SKILLS_TARGET"
+            log_error "Failed to install skills"
+            INSTALL_SUCCESS=false
         fi
     else
-        echo -e "  ${YELLOW}(skills directory not found, skipping)${NC}"
+        log_warn "  (skills directory not found, skipping)"
     fi
 fi
 
 # Install MCP configs (global only)
-if [ "$WITH_MCP" = true ] && [ "$INSTALL_SCOPE" = "global" ]; then
-    echo -e "${GREEN}[mcp]${NC} Installing MCP configs..."
-    MCP_SETTINGS="$TARGET_DIR/settings.json"
-    if [ -f "$MCP_SETTINGS" ]; then
-        cp "$MCP_SETTINGS" "$MCP_SETTINGS.backup"
-        echo "  Backed up existing settings.json"
+if [[ "$WITH_MCP" == true && "$INSTALL_SCOPE" == "global" ]]; then
+    log_info "[mcp] Installing MCP configs..."
+    MCP_SOURCE="$SCRIPT_DIR/mcp-configs/settings.json"
+    MCP_TARGET="$TARGET_DIR/settings.json"
+
+    if backup_and_link "$MCP_SOURCE" "$MCP_TARGET" "local" "file"; then
+        INSTALLED_COMPONENTS+=("MCP configs")
+    else
+        log_error "Failed to install MCP configs"
+        INSTALL_SUCCESS=false
     fi
-    cp "$SCRIPT_DIR/mcp-configs/settings.json" "$MCP_SETTINGS"
-    echo "  -> Copied: $MCP_SETTINGS"
 fi
 
 # Summary
 echo ""
-echo -e "${BLUE}=== Installation complete! ===${NC}"
+if [[ "$INSTALL_SUCCESS" == true ]]; then
+    log_section "=== Installation complete! ==="
+else
+    log_section "=== Installation completed with errors ==="
+fi
 echo ""
 echo "Installed to: $TARGET_DIR"
 echo ""
+
 echo "Components:"
-echo "  ✓ Core (CLAUDE.md + session context)"
-for mod in "${SELECTED_MODULES[@]}"; do
-    if [ "$mod" != "session" ]; then
-        echo "  ✓ $mod commands"
-    fi
+for component in "${INSTALLED_COMPONENTS[@]}"; do
+    echo "  + $component"
 done
-if [ "$WITH_SKILLS" = true ]; then
-    echo "  ✓ Skills (on-demand knowledge)"
-fi
-if [ "$WITH_MCP" = true ]; then
-    echo "  ✓ MCP configs"
+
+if [[ ${#BACKUP_FILES[@]} -gt 0 ]]; then
+    echo ""
+    echo "Backup files created:"
+    for backup in "${BACKUP_FILES[@]}"; do
+        echo "  - $backup"
+    done
 fi
 
 echo ""
-if [ "$INSTALL_SCOPE" = "local" ]; then
-    echo -e "${YELLOW}Note: Add .claude/ to .gitignore if needed${NC}"
+if [[ "$INSTALL_SCOPE" == "local" ]]; then
+    log_warn "Note: Add .claude/ to .gitignore if needed"
     echo ""
 fi
 
@@ -282,11 +427,28 @@ echo "  /session save  - Save session context"
 echo "  /session end   - End session and cleanup"
 for mod in "${SELECTED_MODULES[@]}"; do
     case $mod in
-        backend) echo "  /backend review, /backend test-gen, /backend api-doc, /backend refactor" ;;
-        go) echo "  /go review, /go test-gen, /go lint, /go refactor" ;;
-        k8s) echo "  /k8s validate, /k8s secure, /k8s netpol, /k8s helm-check" ;;
-        terraform) echo "  /terraform plan-review, /terraform security, /terraform module-gen, /terraform validate" ;;
-        dx) echo "  /dx pr-create, /dx issue-create, /dx changelog, /dx release" ;;
+        backend)
+            echo "  /backend review, /backend test-gen, /backend api-doc, /backend refactor"
+            ;;
+        go)
+            echo "  /go review, /go test-gen, /go lint, /go refactor"
+            ;;
+        k8s)
+            echo "  /k8s validate, /k8s secure, /k8s netpol, /k8s helm-check"
+            ;;
+        terraform)
+            echo "  /terraform plan-review, /terraform security, /terraform module-gen, /terraform validate"
+            ;;
+        dx)
+            echo "  /dx pr-create, /dx issue-create, /dx changelog, /dx release"
+            ;;
     esac
 done
 echo ""
+
+# Exit with appropriate status
+if [[ "$INSTALL_SUCCESS" == true ]]; then
+    exit 0
+else
+    exit 1
+fi

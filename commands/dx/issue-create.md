@@ -11,9 +11,11 @@
 | Required Tools | gh |
 | Verification | `gh issue view` 로 확인 |
 
-## Issue Templates
+## Checklist
 
-### Bug Report
+### Issue Templates
+
+#### Bug Report
 ```markdown
 ## Bug Description
 {버그 설명}
@@ -31,7 +33,7 @@
 - Version: {버전}
 ```
 
-### Feature Request
+#### Feature Request
 ```markdown
 ## Feature Description
 {기능 설명}
@@ -44,7 +46,7 @@
 - [ ] {기준 2}
 ```
 
-## Auto-Labeling
+### Auto-Labeling
 
 | Type | Labels |
 |------|--------|
@@ -52,7 +54,7 @@
 | feature | feature, enhancement |
 | task | task |
 
-## Output
+## Output Format
 
 ```markdown
 ## Issue Created

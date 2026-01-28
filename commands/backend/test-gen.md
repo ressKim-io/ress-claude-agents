@@ -11,9 +11,17 @@
 | Required Tools | - |
 | Verification | `./gradlew test` 또는 `mvn test` 통과 |
 
-## Test Templates
+## Checklist
 
-### Controller (@WebMvcTest)
+### Test Cases
+- [ ] Happy path (정상)
+- [ ] Edge cases (경계값)
+- [ ] Error cases (예외)
+- [ ] Null/empty handling
+
+### Test Templates
+
+#### Controller (@WebMvcTest)
 ```java
 @WebMvcTest(UserController.class)
 class UserControllerTest {
@@ -25,7 +33,7 @@ class UserControllerTest {
 }
 ```
 
-### Service (Unit)
+#### Service (Unit)
 ```java
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -37,7 +45,7 @@ class UserServiceTest {
 }
 ```
 
-### Repository (@DataJpaTest)
+#### Repository (@DataJpaTest)
 ```java
 @DataJpaTest
 class UserRepositoryTest {
@@ -48,12 +56,9 @@ class UserRepositoryTest {
 }
 ```
 
-## Test Cases
+## Output Format
 
-- Happy path (정상)
-- Edge cases (경계값)
-- Error cases (예외)
-- Null/empty handling
+생성된 테스트 파일 `*Test.java`
 
 ## Usage
 

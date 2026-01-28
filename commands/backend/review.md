@@ -11,7 +11,7 @@
 | Required Tools | git |
 | Verification | 모든 Critical 이슈 해결 |
 
-## Review Checklist
+## Checklist
 
 ### Security (Critical)
 - [ ] SQL Injection: native query 파라미터 바인딩

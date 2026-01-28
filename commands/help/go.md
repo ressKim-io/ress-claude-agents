@@ -4,97 +4,21 @@ Go 백엔드 개발을 위한 명령어입니다.
 
 ## 명령어
 
-### `/go review`
-Go 코드 리뷰를 수행합니다.
-
-```
-/go review              # 변경된 파일 리뷰
-/go review main.go      # 특정 파일 리뷰
-/go review ./pkg/...    # 패키지 리뷰
-```
-
-**검사 항목:**
-- 에러 처리 패턴
-- 고루틴/채널 사용
-- 인터페이스 설계
-- 테스트 가능성
-
----
-
-### `/go test-gen`
-테스트 코드를 생성합니다.
-
-```
-/go test-gen UserService        # 특정 구조체
-/go test-gen ./internal/...     # 패키지
-/go test-gen                    # 변경된 파일
-```
-
-**생성 패턴:**
-- Table-driven tests
-- Mock 인터페이스
-- 서브테스트 구조
-
----
-
-### `/go lint`
-golangci-lint를 실행하고 문제를 수정합니다.
-
-```
-/go lint                # 전체 린트
-/go lint --fix          # 자동 수정
-/go lint ./pkg/...      # 특정 패키지
-```
-
----
-
-### `/go refactor`
-리팩토링을 제안합니다.
-
-```
-/go refactor UserService    # 구조체 분석
-/go refactor main.go        # 파일 분석
-/go refactor --apply        # 리팩토링 적용
-```
-
-**검사 항목:**
-- 함수 길이 (30줄 초과)
-- 파라미터 수 (4개 초과)
-- 중복 코드
-- God struct
-
----
-
-## Skills (상세 지식)
-
-| 명령어 | 내용 |
+| 명령어 | 설명 |
 |--------|------|
-| `/go-errors` | 에러 처리 패턴 (wrapping, sentinel, custom) |
-| `/go-gin` | Gin 프레임워크 (핸들러, 미들웨어, 라우팅) |
-| `/go-testing` | 테스트 패턴 (table-driven, mock, testify) |
-| `/concurrency-go` | 동시성 패턴 (Mutex, Channel, Worker Pool) |
-| `/distributed-lock` | MSA 분산 락 (Redis) |
-| `/observability` | 로깅 + OpenTelemetry + 메트릭 |
-| `/api-design` | REST API 설계, 에러 처리 (RFC 9457) |
-| `/docker` | Dockerfile 최적화, 멀티스테이지 빌드 |
-| `/database` | 인덱스, N+1 해결, 쿼리 최적화 |
-| `/database-migration` | Flyway, Liquibase, golang-migrate |
+| `/go review` | Go 코드 리뷰 |
+| `/go test-gen` | Table-driven 테스트 생성 |
+| `/go lint` | golangci-lint 실행 및 수정 |
+| `/go refactor` | 리팩토링 제안 |
 
-### 동시성 선택 가이드
+## 관련 Skills
 
-```
-공유 상태?
-    │
-    ├─ 없음 ────────────> Channels (Go Way)
-    │
-    └─ 있음
-         │
-         ├─ 읽기 많음 ─────> sync.RWMutex
-         │
-         └─ MSA 환경 ──────> Distributed Lock (/distributed-lock)
-```
-
----
+| Skill | 내용 |
+|-------|------|
+| `/go-errors` | 에러 처리 패턴 |
+| `/go-gin` | Gin 프레임워크 |
+| `/go-testing` | 테스트 패턴 |
+| `/concurrency-go` | 동시성 패턴 |
 
 ## Quick Reference
 

@@ -11,7 +11,13 @@ OpenAPI/Swagger 어노테이션을 추가하거나 검증합니다.
 | Required Tools | - |
 | Verification | Swagger UI에서 API 문서 확인 |
 
-## Required Annotations
+## Checklist
+
+### Required Annotations
+- [ ] 모든 Controller에 @Tag
+- [ ] 모든 엔드포인트에 @Operation
+- [ ] 모든 DTO에 @Schema
+- [ ] example 값 설정
 
 ### Controller Level
 ```java
@@ -39,12 +45,9 @@ public class UserResponse {
 }
 ```
 
-## Validation Checklist
+## Output Format
 
-- [ ] 모든 Controller에 @Tag
-- [ ] 모든 엔드포인트에 @Operation
-- [ ] 모든 DTO에 @Schema
-- [ ] example 값 설정
+OpenAPI 어노테이션이 추가된 코드
 
 ## Usage
 

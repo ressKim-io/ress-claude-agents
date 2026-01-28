@@ -11,7 +11,7 @@ Kubernetes manifest에 보안 설정을 자동으로 추가합니다.
 | Required Tools | - |
 | Verification | `/validate` 통과 |
 
-## Security Settings to Add
+## Checklist
 
 ### Pod-level SecurityContext
 ```yaml
@@ -44,13 +44,18 @@ spec:
   automountServiceAccountToken: false
 ```
 
-## Transformation
+## Output Format
 
-Before → After 변환을 수행하고 변경 사항을 리포트합니다.
+```markdown
+## Security Hardening Report
 
-## Warnings
+### Changes Applied
+- [deployment.yaml] Added securityContext
+- [deployment.yaml] Added ServiceAccount settings
 
+### Warnings
 - `readOnlyRootFilesystem` 적용 시 `/tmp` 등에 쓰기가 필요하면 emptyDir 볼륨 마운트 필요
+```
 
 ## Usage
 

@@ -34,7 +34,28 @@ Go 코드 품질 개선을 위한 리팩토링을 제안합니다.
 - interface 분리
 - mock 가능한 구조
 
-## Common Patterns
+## Output Format
+
+```markdown
+## Refactoring Suggestions
+
+### High Priority
+- [파일:라인] 제안 내용
+
+### Code Examples
+- Before: {원본 코드}
+- After: {개선된 코드}
+```
+
+## Usage
+
+```
+/refactor user_service.go           # 파일 분석
+/refactor ./internal/handler/       # 패키지 분석
+/refactor --apply                   # 제안 적용
+```
+
+## Best Practices
 
 ### Early Return
 ```go
@@ -57,11 +78,4 @@ if !data.Valid { return nil }
 input, err := parseInput(r)
 result := processInput(input)
 writeResponse(w, result)
-```
-
-## Usage
-```
-/refactor user_service.go           # 파일 분석
-/refactor ./internal/handler/       # 패키지 분석
-/refactor --apply                   # 제안 적용
 ```

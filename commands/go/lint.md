@@ -11,38 +11,50 @@ golangci-lint를 실행하고 발견된 이슈를 수정합니다.
 | Required Tools | golangci-lint, goimports |
 | Verification | `golangci-lint run ./...` 통과 |
 
-## Steps
+## Checklist
 
-1. golangci-lint 실행
-```bash
-golangci-lint run ./...
-```
+### 기본 활성화 Linters
+- [ ] `errcheck`: 에러 체크 누락
+- [ ] `gosimple`: 코드 단순화 제안
+- [ ] `govet`: 의심스러운 구문
+- [ ] `staticcheck`: 정적 분석
+- [ ] `unused`: 미사용 코드
 
-2. 발견된 이슈 분석 및 수정
+### 권장 추가 Linters
+- [ ] `goimports`: import 정리
+- [ ] `misspell`: 오타
+- [ ] `unconvert`: 불필요한 타입 변환
 
-## Common Linters
-
-### 기본 활성화
-- `errcheck`: 에러 체크 누락
-- `gosimple`: 코드 단순화 제안
-- `govet`: 의심스러운 구문
-- `staticcheck`: 정적 분석
-- `unused`: 미사용 코드
-
-### 권장 추가
-- `goimports`: import 정리
-- `misspell`: 오타
-- `unconvert`: 불필요한 타입 변환
-
-## Auto-fix
-
+### Auto-fix
 가능한 이슈는 자동 수정:
 ```bash
 goimports -w .
 gofmt -s -w .
 ```
 
-## .golangci.yml 예시
+## Output Format
+
+```markdown
+## Lint Report
+
+### Fixed Issues
+- [errcheck] file.go:42 - 에러 체크 추가
+
+### Remaining Issues
+- [staticcheck] file.go:58 - 수동 검토 필요
+```
+
+## Usage
+
+```
+/lint                    # 전체 프로젝트
+/lint ./internal/...     # 특정 패키지
+/lint --fix              # 자동 수정 적용
+```
+
+## Best Practices
+
+### .golangci.yml 예시
 
 ```yaml
 linters:
@@ -59,11 +71,4 @@ issues:
     - path: _test\.go
       linters:
         - errcheck
-```
-
-## Usage
-```
-/lint                    # 전체 프로젝트
-/lint ./internal/...     # 특정 패키지
-/lint --fix              # 자동 수정 적용
 ```

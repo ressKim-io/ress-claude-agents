@@ -11,15 +11,20 @@
 | Required Tools | git, gh |
 | Verification | `gh pr view` 로 PR 확인 |
 
-## Process
+## Checklist
 
+### Process
 1. 브랜치 정보 확인
 2. 커밋 분석 및 분류
 3. PR 제목/본문 생성
 4. `gh pr create` 실행
 
-## PR Template
+### Auto-Detection
+- [ ] 이슈 번호: 브랜치명/커밋에서 추출 (#123)
+- [ ] 라벨: 커밋 타입 기반 (feat->feature, fix->bug)
+- [ ] 리뷰어: CODEOWNERS 기반
 
+### PR Template
 ```markdown
 ## Summary
 {커밋 기반 1-3문장 요약}
@@ -35,13 +40,7 @@
 Closes #123
 ```
 
-## Auto-Detection
-
-- 이슈 번호: 브랜치명/커밋에서 추출 (#123)
-- 라벨: 커밋 타입 기반 (feat→feature, fix→bug)
-- 리뷰어: CODEOWNERS 기반
-
-## Output
+## Output Format
 
 ```markdown
 ## PR Created

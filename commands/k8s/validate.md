@@ -11,7 +11,7 @@ Kubernetes manifest의 보안 및 best practice를 검증합니다.
 | Required Tools | kubectl (optional), kube-linter (optional) |
 | Verification | 모든 Critical 이슈 해결 |
 
-## Validation Checklist
+## Checklist
 
 ### Critical (즉시 수정 필요)
 - [ ] `runAsNonRoot: true` 설정

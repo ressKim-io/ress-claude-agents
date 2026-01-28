@@ -11,7 +11,7 @@ Helm chart의 best practice를 검증합니다.
 | Required Tools | helm |
 | Verification | `helm lint charts/` 통과 |
 
-## Validation Checklist
+## Checklist
 
 ### Chart.yaml
 - [ ] apiVersion: v2
@@ -34,13 +34,6 @@ Helm chart의 best practice를 검증합니다.
 ### NOTES.txt
 - [ ] 설치 후 안내 제공
 
-## Helm Lint Integration
-
-```bash
-helm lint charts/myapp/
-helm template myapp charts/myapp/ --debug
-```
-
 ## Output Format
 
 ```markdown
@@ -62,4 +55,13 @@ helm template myapp charts/myapp/ --debug
 /helm-check charts/myapp/     # 특정 차트
 /helm-check                   # 현재 디렉토리
 /helm-check --fix             # 자동 수정
+```
+
+## Best Practices
+
+### Helm Lint Integration
+
+```bash
+helm lint charts/myapp/
+helm template myapp charts/myapp/ --debug
 ```

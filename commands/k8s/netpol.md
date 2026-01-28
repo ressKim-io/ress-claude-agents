@@ -11,9 +11,11 @@ Kubernetes Network Policy를 생성하고 검증합니다.
 | Required Tools | kubectl (optional) |
 | Verification | `kubectl apply --dry-run=client -f netpol.yaml` |
 
-## Default Policies
+## Checklist
 
-### 1. Default Deny All (필수)
+### Default Policies (필수)
+
+#### 1. Default Deny All
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -24,7 +26,7 @@ spec:
   policyTypes: [Ingress, Egress]
 ```
 
-### 2. Allow DNS (필수)
+#### 2. Allow DNS
 ```yaml
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -43,8 +45,7 @@ spec:
       port: 53
 ```
 
-## Analysis Mode
-
+### Analysis Mode
 Deployment 분석 시 확인:
 1. 어떤 서비스와 통신하는지
 2. 외부 API 호출 여부
@@ -58,8 +59,8 @@ Deployment 분석 시 확인:
 ### Namespace: production
 
 #### Existing Policies
-1. default-deny-all ✓
-2. allow-dns ✓
+1. default-deny-all
+2. allow-dns
 
 #### Generated Policies
 - allow-backend-to-db.yaml

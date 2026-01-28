@@ -11,13 +11,14 @@
 | Required Tools | git |
 | Verification | CHANGELOG.md 내용 확인 |
 
-## Process
+## Checklist
 
+### Process
 1. 마지막 태그 이후 커밋 수집
 2. Conventional Commits로 분류
 3. Keep a Changelog 형식으로 생성
 
-## Commit Classification
+### Commit Classification
 
 | Type | Category |
 |------|----------|
@@ -28,7 +29,15 @@
 | remove | Removed |
 | security | Security |
 
-## CHANGELOG Format
+### Version Suggestion
+
+| Commits | Version |
+|---------|---------|
+| feat!: (breaking) | MAJOR |
+| feat: | MINOR |
+| fix: only | PATCH |
+
+## Output Format
 
 ```markdown
 ## [1.1.0] - 2025-01-23
@@ -39,14 +48,6 @@
 ### Fixed
 - Fix token refresh issue (#126)
 ```
-
-## Version Suggestion
-
-| Commits | Version |
-|---------|---------|
-| feat!: (breaking) | MAJOR |
-| feat: | MINOR |
-| fix: only | PATCH |
 
 ## Usage
 
