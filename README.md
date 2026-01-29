@@ -377,12 +377,18 @@ ress-claude-agents/
 │   ├── k8s/
 │   └── terraform/
 ├── mcp-configs/              # MCP server settings
+├── .github/workflows/
+│   └── ci.yml                # GitHub Actions CI (test, lint, validate)
+├── .githooks/
+│   └── pre-commit            # 커밋 전 검증 (문서, shellcheck)
 ├── scripts/
-│   └── generate-docs.sh      # 문서 생성/검증 스크립트
+│   ├── generate-docs.sh      # 문서 생성/검증 스크립트
+│   └── setup-hooks.sh        # Git hooks 설정
 ├── tests/
 │   ├── install.bats          # BATS 테스트 (36 cases)
 │   └── README.md             # 테스트 실행 가이드
 ├── modules.txt               # 설치 가능 모듈 목록
+├── Makefile                  # 공통 명령어 (make help)
 └── install.sh                # Installer script (동적 모듈 탐색, 에러 처리)
 ```
 
@@ -428,6 +434,27 @@ brew install yq
 
 # 요약 통계
 ./scripts/generate-docs.sh summary
+```
+
+### Git Hooks 설정
+
+```bash
+# Git hooks 설정 (최초 1회)
+./scripts/setup-hooks.sh
+
+# 이후 커밋 시 자동 검증 (문서 일관성, shellcheck)
+# 검증 우회 (권장하지 않음)
+git commit --no-verify
+```
+
+### Makefile
+
+```bash
+make help      # 사용 가능한 명령어 목록
+make test      # BATS 테스트 실행
+make validate  # 문서 일관성 검증
+make lint      # shellcheck 실행
+make all       # validate + test
 ```
 
 ---
