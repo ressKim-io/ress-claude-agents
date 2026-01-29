@@ -43,3 +43,14 @@
 /session end
 /session end --keep    # 파일 유지 (백업용)
 ```
+
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| session-context.md 찾을 수 없음 | 파일 미생성 또는 삭제됨 | `/session save`로 먼저 생성 |
+| 삭제 권한 에러 | 파일 권한 문제 | `chmod 644 .claude/session-context.md` |
+| 완료 리포트 누락 | 파일 내용 비어있음 | 세션 중 `/session save`로 주기적 저장 |
+| .claude 디렉토리 없음 | 디렉토리 미생성 | `mkdir -p .claude` 실행 |
+| 작업 요약 부정확 | 컨텍스트 정보 부족 | 세션 중 주요 작업마다 save 실행 |
+| Todo 정리 실패 | TodoWrite 권한 문제 | 수동으로 todo 목록 확인 및 정리 |

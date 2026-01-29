@@ -56,3 +56,14 @@ Closes #123
 /pr-create --draft      # Draft PR
 /pr-create --base dev   # develop 브랜치 대상
 ```
+
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| `command not found: gh` | GitHub CLI 미설치 | `brew install gh` |
+| 원격 브랜치 없음 에러 | push 안됨 | `git push -u origin <branch>` 먼저 실행 |
+| base 브랜치 찾을 수 없음 | 브랜치명 오류 | `git branch -r`로 원격 브랜치 확인 |
+| PR 템플릿 적용 안됨 | `.github/PULL_REQUEST_TEMPLATE.md` 없음 | 저장소에 PR 템플릿 추가 |
+| 리뷰어 자동 지정 실패 | CODEOWNERS 미설정 | `.github/CODEOWNERS` 파일 생성 |
+| draft PR 전환 불가 | GitHub 권한 문제 | `gh pr ready` 또는 웹에서 변경 |

@@ -74,3 +74,14 @@ Deployment 분석 시 확인:
 /netpol --analyze deploy.yaml # deployment 분석
 /netpol --validate           # 기존 정책 검증
 ```
+
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| NetworkPolicy 적용 안됨 | CNI 플러그인 미지원 | Calico, Cilium 등 NetworkPolicy 지원 CNI 확인 |
+| DNS 조회 실패 | egress DNS 허용 안됨 | `allow-dns` 정책 먼저 적용 |
+| 파드 간 통신 불가 | default-deny 적용 후 허용 정책 누락 | 필요한 ingress/egress 규칙 추가 |
+| namespaceSelector 동작 안함 | 네임스페이스 라벨 누락 | `kubectl label namespace <ns> name=<ns>` |
+| podSelector 매칭 안됨 | 라벨 오타 또는 불일치 | `kubectl get pods --show-labels`로 확인 |
+| 외부 API 호출 실패 | egress 0.0.0.0/0 미허용 | 필요한 CIDR 범위 egress 규칙 추가 |

@@ -71,3 +71,14 @@
 /issue-create bug        # 버그 리포트
 /issue-create feature    # 기능 요청
 ```
+
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| `command not found: gh` | GitHub CLI 미설치 | `brew install gh` |
+| `gh auth` 에러 | 인증 안됨 | `gh auth login` 실행 |
+| 권한 부족 에러 | 저장소 접근 권한 없음 | 저장소 권한 확인 또는 fork에서 작업 |
+| 라벨 적용 실패 | 라벨 미존재 | 저장소에 해당 라벨 먼저 생성 |
+| 템플릿 적용 안됨 | `.github/ISSUE_TEMPLATE` 미설정 | 저장소에 이슈 템플릿 추가 |
+| assignee 지정 실패 | 사용자명 오류 또는 권한 없음 | GitHub 사용자명 정확히 입력, collaborator 여부 확인 |

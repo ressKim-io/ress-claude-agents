@@ -65,3 +65,14 @@ terraform plan 결과를 분석하고 리뷰합니다.
 /plan-review                 # plan 실행 후 분석
 /plan-review tfplan          # 저장된 plan 분석
 ```
+
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| `terraform plan` 실패 | 인증 정보 누락 | AWS_PROFILE 또는 credentials 설정 확인 |
+| state lock 에러 | 다른 프로세스가 잠금 보유 | `terraform force-unlock <LOCK_ID>` (주의 필요) |
+| plan 파일 읽기 실패 | 바이너리 형식 불일치 | 동일 Terraform 버전으로 plan 재생성 |
+| 예상치 못한 리소스 변경 | state drift 발생 | `terraform refresh` 후 plan 재확인 |
+| `-/+ replace` 원인 불명 | force replacement 트리거 | 변경된 속성 중 `forces replacement` 표시 확인 |
+| 비용 추정 불가 | Infracost 미설치 | `brew install infracost` 후 API 키 설정 |

@@ -64,6 +64,17 @@ Terraform 코드의 best practice 및 품질을 검증합니다.
 /validate --fix              # 자동 수정
 ```
 
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| `terraform validate` 실패 | provider 초기화 안됨 | `terraform init` 먼저 실행 |
+| `terraform fmt -check` 실패 | 포맷 불일치 | `terraform fmt -recursive`로 자동 수정 |
+| variable 참조 에러 | 변수명 오타 또는 미정의 | variables.tf 파일 확인 |
+| backend 설정 에러 | S3/GCS 버킷 접근 불가 | 백엔드 버킷 권한 및 존재 여부 확인 |
+| version constraint 충돌 | 모듈 간 버전 요구사항 불일치 | 호환되는 버전 범위로 조정 |
+| 순환 의존성 에러 | 리소스 간 상호 참조 | `depends_on` 명시 또는 구조 재설계 |
+
 ## Best Practices
 
 ### Format Check

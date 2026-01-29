@@ -52,3 +52,14 @@
 /review                # 모든 변경 리뷰
 /review src/main/...   # 특정 파일
 ```
+
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| `git diff` 결과 없음 | 변경사항 없음 또는 이미 커밋됨 | `git status` 확인, `--cached` 옵션 사용 |
+| SQL Injection 오탐 | JPA Repository 메서드 오인식 | 실제 native query만 검토 대상 |
+| 리뷰 누락된 파일 존재 | gitignore 또는 경로 문제 | 전체 변경 파일 목록 확인 |
+| N+1 쿼리 감지 어려움 | 런타임에만 발생 | Hibernate 로그 활성화하여 실제 쿼리 확인 |
+| 테스트 커버리지 측정 실패 | Jacoco 설정 문제 | `build.gradle` 또는 `pom.xml` 설정 확인 |
+| 보안 이슈 심각도 판단 어려움 | 컨텍스트 부족 | 실제 사용처와 입력 데이터 흐름 추적 |

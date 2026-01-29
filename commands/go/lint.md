@@ -52,6 +52,17 @@ gofmt -s -w .
 /lint --fix              # 자동 수정 적용
 ```
 
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| `command not found: golangci-lint` | golangci-lint 미설치 | `brew install golangci-lint` 또는 `go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest` |
+| `typecheck` 에러 발생 | Go 모듈 의존성 문제 | `go mod tidy && go mod download` 실행 |
+| `.golangci.yml` 인식 안됨 | 설정 파일 위치 오류 | 프로젝트 루트에 파일 배치 확인 |
+| `out of memory` 에러 | 대규모 프로젝트 분석 시 메모리 부족 | `--concurrency 1` 옵션으로 병렬 처리 제한 |
+| 특정 linter 동작 안함 | 해당 linter 미활성화 | `.golangci.yml`의 `linters.enable` 확인 |
+| `GOPATH` 관련 에러 | 모듈 모드 미사용 | `GO111MODULE=on` 환경변수 설정 |
+
 ## Best Practices
 
 ### .golangci.yml 예시

@@ -67,6 +67,17 @@ mockgen -source={source_file} -destination=mocks/mock_{name}.go
 /test-gen --mock                    # mock 파일도 생성
 ```
 
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| `undefined` 에러 in test | 테스트 파일 패키지명 불일치 | 테스트 파일 패키지를 `{pkg}_test`로 통일 |
+| mock 생성 실패 | interface 정의 없음 | 먼저 interface 정의 후 mockgen 실행 |
+| `go test` timeout | 테스트가 외부 리소스 대기 | mock 사용 또는 `-timeout` 플래그 조정 |
+| 테스트 간 간섭 발생 | 전역 상태 공유 | 각 테스트에서 독립적 상태 초기화 |
+| 커버리지 0% | 빌드 태그 불일치 | `//go:build` 태그 확인 |
+| parallel 테스트 실패 | 공유 리소스 경쟁 | `t.Parallel()` 제거 또는 리소스 격리 |
+
 ## Best Practices
 
 1. 대상 파일/함수 확인

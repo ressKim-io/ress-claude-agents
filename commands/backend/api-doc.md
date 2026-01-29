@@ -56,3 +56,14 @@ OpenAPI 어노테이션이 추가된 코드
 /api-doc UserController  # 특정 Controller
 /api-doc --fix           # 자동 추가
 ```
+
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| Swagger UI에 API 미표시 | `@Tag` 또는 `@Operation` 누락 | Controller에 어노테이션 추가 확인 |
+| example 값 표시 안됨 | `@Schema(example = ...)` 누락 | DTO 필드에 example 추가 |
+| 500 응답코드만 표시 | `@ApiResponses` 미설정 | 모든 가능한 응답 코드 명시 |
+| springdoc 의존성 에러 | 버전 호환성 문제 | Spring Boot 버전에 맞는 springdoc 버전 사용 |
+| 인증 헤더 미표시 | Security Scheme 미설정 | `@SecurityScheme` 설정 추가 |
+| Swagger JSON 생성 안됨 | 패키지 스캔 범위 문제 | `springdoc.packagesToScan` 설정 확인 |

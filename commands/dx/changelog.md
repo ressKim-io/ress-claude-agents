@@ -56,3 +56,14 @@
 /changelog --version 1.2.0 # 특정 버전
 /changelog --dry-run       # 미리보기
 ```
+
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| 태그를 찾을 수 없음 | Git 태그 미존재 | `git tag -l`로 확인, 없으면 첫 번째 커밋부터 분석 |
+| 커밋 분류 실패 | Conventional Commits 미준수 | `type: description` 형식으로 커밋 메시지 작성 |
+| CHANGELOG 덮어쓰기 | 기존 내용 유실 | 새 버전을 파일 상단에 추가 (기존 유지) |
+| 버전 추천 부정확 | breaking change 미감지 | `feat!:` 또는 `BREAKING CHANGE:` 푸터 사용 |
+| 이슈 번호 링크 안됨 | PR/이슈 참조 형식 오류 | `(#123)` 형식으로 커밋에 명시 |
+| 중복 엔트리 발생 | 머지 커밋 포함됨 | `--no-merges` 옵션으로 머지 커밋 제외 |

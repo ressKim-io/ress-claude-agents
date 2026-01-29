@@ -74,3 +74,14 @@ PATCH: Bug fixes
 /release major        # 메이저 릴리스
 /release --dry-run    # 미리보기
 ```
+
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| 태그 push 실패 | 태그 보호 규칙 | GitHub 저장소 설정에서 태그 보호 확인 |
+| 이전 버전 찾을 수 없음 | 태그 형식 불일치 | `v1.0.0` 형식으로 통일 (v prefix) |
+| release 생성 권한 없음 | GitHub 권한 부족 | 저장소 maintainer 권한 필요 |
+| CHANGELOG 업데이트 충돌 | 동시 수정 발생 | main 브랜치 pull 후 재시도 |
+| 버전 파일 업데이트 누락 | package.json 등 미수정 | 버전 파일 목록 설정 확인 |
+| pre-release 플래그 누락 | alpha/beta 버전 인식 안됨 | `--prerelease` 플래그 명시 |

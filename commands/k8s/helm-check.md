@@ -57,6 +57,17 @@ Helm chart의 best practice를 검증합니다.
 /helm-check --fix             # 자동 수정
 ```
 
+## Troubleshooting
+
+| 증상 | 원인 | 해결 |
+|------|------|------|
+| `command not found: helm` | Helm 미설치 | `brew install helm` 또는 공식 스크립트로 설치 |
+| `helm lint` 실패 | 템플릿 문법 오류 | `helm template --debug`로 상세 에러 확인 |
+| values 파일 인식 안됨 | 파일 경로 오류 | `-f values.yaml` 옵션으로 명시적 지정 |
+| Chart.yaml 버전 에러 | apiVersion 불일치 | `apiVersion: v2` (Helm 3) 확인 |
+| 의존성 차트 다운로드 실패 | 저장소 미등록 | `helm repo add` 후 `helm dependency update` |
+| `NOTES.txt` 렌더링 에러 | 템플릿 변수 오류 | `.Values` 참조 경로 확인 |
+
 ## Best Practices
 
 ### Helm Lint Integration
