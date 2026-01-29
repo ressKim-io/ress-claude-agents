@@ -377,6 +377,11 @@ ress-claude-agents/
 │   ├── k8s/
 │   └── terraform/
 ├── mcp-configs/              # MCP server settings
+├── scripts/
+│   └── generate-docs.sh      # 문서 생성/검증 스크립트
+├── tests/
+│   ├── install.bats          # BATS 테스트 (36 cases)
+│   └── README.md             # 테스트 실행 가이드
 ├── modules.txt               # 설치 가능 모듈 목록
 └── install.sh                # Installer script (동적 모듈 탐색, 에러 처리)
 ```
@@ -394,6 +399,39 @@ ress-claude-agents/
 
 ---
 
+## Development
+
+### 테스트 실행
+
+```bash
+# BATS 설치 (macOS)
+brew install bats-core
+
+# 테스트 실행
+bats tests/install.bats
+
+# 상세 출력
+bats --verbose-run tests/install.bats
+```
+
+### 문서 생성/검증
+
+```bash
+# yq 설치 (YAML 파서)
+brew install yq
+
+# 모든 작업 실행
+./scripts/generate-docs.sh
+
+# 일관성 검증만
+./scripts/generate-docs.sh validate
+
+# 요약 통계
+./scripts/generate-docs.sh summary
+```
+
+---
+
 ## Statistics
 
 | 항목 | 수량 |
@@ -401,7 +439,8 @@ ress-claude-agents/
 | Skills | 60 files (~14,500줄) |
 | Commands | 29 files |
 | Templates | 4 projects |
-| **Total** | ~15,700줄 |
+| Tests | 36 cases |
+| **Total** | ~17,000줄 |
 
 ---
 
