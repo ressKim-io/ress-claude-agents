@@ -147,6 +147,13 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 | `--with-skills` | Skills 포함 |
 | `--with-mcp` | MCP 설정 포함 (global만) |
 
+### install.sh 특징
+
+- **동적 모듈 탐색**: `commands/` 디렉토리에서 자동으로 모듈 목록 생성
+- **입력 검증**: `--modules` 옵션에 잘못된 모듈명 입력 시 에러
+- **에러 처리**: `set -euo pipefail`로 안전한 실행, 실패 시 즉시 중단
+- **백업 관리**: 기존 파일 자동 백업 및 목록 출력
+
 ### 설치 결과
 
 **Global 설치** (symlink):
@@ -340,24 +347,23 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 
 ```
 ress-claude-agents/
-├── .claude/skills/           # On-demand domain knowledge (60 files)
-│   ├── go-*.md              # Go 패턴 (4 files)
-│   ├── spring-*.md          # Spring 패턴 (6 files)
-│   ├── k8s-*.md             # Kubernetes (8 files)
-│   ├── istio-*.md           # Istio Service Mesh (9 files)
-│   ├── terraform-*.md       # Terraform (2 files)
-│   ├── monitoring-*.md      # 모니터링 (4 files)
-│   ├── logging-*.md         # 로깅/컴플라이언스 (4 files)
-│   ├── observability*.md    # Observability (2 files)
-│   ├── database*.md         # 데이터베이스 (2 files)
-│   ├── refactoring-*.md     # 리팩토링 (3 files)
-│   ├── sre-*, cicd-*, gitops-*, deployment-*, chaos-*, disaster-*, alerting-*, finops-*
-│   │                        # SRE/DevOps (8 files)
-│   ├── aws-*, load-testing* # Infrastructure (2 files)
-│   ├── kafka*               # Messaging (1 file)
-│   └── *.md                 # 기타 (API, Docker, Git 등)
+├── .claude/
+│   ├── skills/               # On-demand domain knowledge (60 files)
+│   │   ├── go-*.md          # Go 패턴 (4 files)
+│   │   ├── spring-*.md      # Spring 패턴 (6 files)
+│   │   ├── k8s-*.md         # Kubernetes (8 files)
+│   │   ├── istio-*.md       # Istio Service Mesh (9 files)
+│   │   ├── terraform-*.md   # Terraform (2 files)
+│   │   ├── monitoring-*.md  # 모니터링 (4 files)
+│   │   ├── logging-*.md     # 로깅/컴플라이언스 (4 files)
+│   │   ├── observability*.md # Observability (2 files)
+│   │   ├── database*.md     # 데이터베이스 (2 files)
+│   │   ├── refactoring-*.md # 리팩토링 (3 files)
+│   │   └── ...              # SRE/DevOps, Infrastructure, Messaging 등
+│   └── standards.yml         # 코드 품질 기준 (함수 길이, 커버리지 등)
 ├── global/CLAUDE.md          # Global settings
 ├── commands/
+│   ├── manifest.yml          # 명령어 메타데이터 중앙 관리
 │   ├── help/                 # Help commands (7 files)
 │   ├── session/              # Session context commands (2 files)
 │   ├── go/                   # Go commands (4 files)
@@ -371,7 +377,8 @@ ress-claude-agents/
 │   ├── k8s/
 │   └── terraform/
 ├── mcp-configs/              # MCP server settings
-└── install.sh                # Installer script
+├── modules.txt               # 설치 가능 모듈 목록
+└── install.sh                # Installer script (동적 모듈 탐색, 에러 처리)
 ```
 
 ---
@@ -383,6 +390,7 @@ ress-claude-agents/
 3. **Command Contracts**: 명확한 Input/Output/Verification
 4. **Session Context**: auto compact 시에도 컨텍스트 유지
 5. **Selective Install**: 필요한 모듈만 선택 설치
+6. **Centralized Config**: 설정값 중앙화 (`standards.yml`, `manifest.yml`)
 
 ---
 
