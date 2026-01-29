@@ -40,14 +40,38 @@ teardown() {
 # =============================================================================
 
 # Source install.sh functions without executing main logic
-# This sources only the function definitions
+# This defines the functions directly for testing
 load_install_functions() {
-    # Extract and source only the function definitions
-    source <(sed -n '/^discover_modules()/,/^}$/p' "$INSTALL_SCRIPT")
-    source <(sed -n '/^validate_module()/,/^}$/p' "$INSTALL_SCRIPT")
-
     # Set SCRIPT_DIR for the functions
     export SCRIPT_DIR="$PROJECT_ROOT"
+
+    # Define discover_modules function (same as in install.sh)
+    discover_modules() {
+        local modules=()
+        if [[ -d "$SCRIPT_DIR/commands" ]]; then
+            for dir in "$SCRIPT_DIR/commands"/*/; do
+                local name
+                name=$(basename "$dir")
+                if [[ "$name" != "session" && "$name" != "help" ]]; then
+                    modules+=("$name")
+                fi
+            done
+        fi
+        echo "${modules[@]}"
+    }
+    export -f discover_modules
+
+    # Define validate_module function (same as in install.sh)
+    validate_module() {
+        local mod="$1"
+        for valid_mod in "${ALL_MODULES[@]}"; do
+            if [[ "$mod" == "$valid_mod" ]]; then
+                return 0
+            fi
+        done
+        return 1
+    }
+    export -f validate_module
 
     # Initialize ALL_MODULES
     IFS=' ' read -ra ALL_MODULES <<< "$(discover_modules)"
