@@ -11,7 +11,7 @@ Go 코드 품질 개선을 위한 리팩토링을 제안합니다.
 | Required Tools | go |
 | Verification | `go test ./...` 통과, 기능 동일 |
 
-## Analysis Areas
+## Checklist
 
 ### 1. 코드 구조
 - 함수 길이 (30줄 초과 시 분리 고려)
