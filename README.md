@@ -87,7 +87,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │                    ress-claude-agents                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  📦 Project Templates        💡 Skills (60 files)          │
+│  📦 Project Templates        💡 Skills (63 files)          │
 │  ├─ Go Backend              ├─ Go/Spring 프레임워크         │
 │  ├─ Java/Kotlin Backend     ├─ Kubernetes/Terraform/Istio   │
 │  ├─ Kubernetes              ├─ 모니터링 (Grafana, Prometheus)│
@@ -215,7 +215,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 
 ## Skills (On-demand Knowledge)
 
-필요할 때만 로드되는 도메인 지식 (60 files, ~14,500줄):
+필요할 때만 로드되는 도메인 지식 (63 files, ~16,000줄):
 
 ### Go
 ```
@@ -275,13 +275,16 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 ### SRE & DevOps
 ```
 /sre-sli-slo           # SLI/SLO/SLA 정의, 에러 버짓, 다중 윈도우 알림
+/supply-chain-security # SBOM, Cosign, SLSA, Kyverno verifyImages
 /cicd-devsecops        # GitHub Actions, Trivy, SonarQube, Kyverno
 /gitops-argocd         # ArgoCD, App of Apps, ApplicationSet
 /deployment-strategies # Canary, Blue-Green, Argo Rollouts
 /chaos-engineering     # LitmusChaos, GameDay 절차
 /disaster-recovery     # Velero, RTO/RPO, Multi-cluster DR
 /alerting-discord      # AlertManager, Discord 웹훅
+/platform-backstage    # IDP, Software Catalog, Golden Paths
 /finops                # Kubecost, Right-sizing, Spot Instance
+/finops-advanced       # Showback/Chargeback, 비용 이상 탐지, Infracost
 ```
 
 ### Infrastructure
@@ -467,11 +470,11 @@ make all       # validate + test
 
 | 항목 | 수량 |
 |------|------|
-| Skills | 60 files (~14,500줄) |
+| Skills | 63 files (~16,000줄) |
 | Commands | 29 files |
 | Templates | 4 projects |
 | Tests | 36 cases |
-| **Total** | ~17,000줄 |
+| **Total** | ~18,500줄 |
 
 ---
 
