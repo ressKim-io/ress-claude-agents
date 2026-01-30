@@ -51,7 +51,8 @@ log_section() {
     echo -e "${BLUE}$1${NC}"
 }
 
-# Error handler
+# Error handler (called by trap)
+# shellcheck disable=SC2329
 handle_error() {
     local line_no=$1
     log_error "Error occurred at line $line_no"

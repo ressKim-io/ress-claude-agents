@@ -110,9 +110,8 @@ generate_help_index() {
     categories=$(get_categories)
 
     for category in ${categories}; do
-        local title icon description
+        local title description
         title=$(get_category_title "${category}")
-        icon=$(get_category_icon "${category}")
         description=$(get_category_description "${category}")
 
         output+="## ${title}\n\n"
