@@ -52,7 +52,7 @@ log_section() {
 }
 
 # Error handler (called by trap)
-# shellcheck disable=SC2329
+# shellcheck disable=SC2329,SC2317
 handle_error() {
     local line_no=$1
     log_error "Error occurred at line $line_no"
