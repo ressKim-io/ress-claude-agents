@@ -2,9 +2,29 @@
 
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Shell Script](https://img.shields.io/badge/Shell_Script-Bash-green.svg)](https://www.gnu.org/software/bash/)
+[![Claude Code](https://img.shields.io/badge/Claude_Code-Powered-blueviolet.svg)](https://claude.ai/claude-code)
+[![AI Agents](https://img.shields.io/badge/AI_Agents-63_Skills-orange.svg)](#skills-on-demand-knowledge)
 
-Personal Claude Code agents and configs for DevOps & backend development.
+> **AI와 함께 일하는 DevOps Engineer의 실험실**
+>
+> Claude Code를 활용해 DevOps/백엔드 개발 생산성을 극대화하는 agents, skills, commands 모음
+
+## Why This Project?
+
+AI가 개발 워크플로우를 어떻게 바꿀 수 있는지 직접 실험하고 있습니다.
+
+```
+기존 방식                          AI-Augmented 방식
+──────────                         ─────────────────
+Google/StackOverflow 검색          /k8s-security 로 즉시 패턴 적용
+문서 왔다갔다 하며 복붙              /go review 로 코드 리뷰 자동화
+반복적인 boilerplate 작성           /terraform module-gen 으로 생성
+컨텍스트 매번 설명                   CLAUDE.md 로 프로젝트 컨텍스트 유지
+```
+
+**이 저장소는 Claude Code의 확장 시스템(Skills, Commands, MCP)을 활용해 AI를 "도메인 전문가"로 만드는 실험입니다.**
+
+---
 
 ## Quick Start (수동 복사)
 
@@ -75,7 +95,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 | 문제 | 해결 방법 |
 |------|----------|
 | 매번 같은 컨텍스트 설명 반복 | **Project Templates**: 프로젝트별 CLAUDE.md 제공 |
-| Claude가 프레임워크 패턴을 모름 | **Skills**: 60개 온디맨드 지식 파일 |
+| Claude가 프레임워크 패턴을 모름 | **Skills**: 63개 온디맨드 지식 파일 |
 | 반복적인 작업 수동 실행 | **Commands**: 29개 자동화 명령어 |
 | 긴 작업 시 컨텍스트 손실 | **Session Context**: 자동 저장/복원 |
 | 팀 간 모니터링/로그 가이드 부재 | **Monitoring/Logging Skills**: 역할별 가이드 |
@@ -355,7 +375,7 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── skills/               # On-demand domain knowledge (60 files)
+│   ├── skills/               # On-demand domain knowledge (63 files)
 │   │   ├── go-*.md          # Go 패턴 (4 files)
 │   │   ├── spring-*.md      # Spring 패턴 (6 files)
 │   │   ├── k8s-*.md         # Kubernetes (8 files)
@@ -480,5 +500,20 @@ make all       # validate + test
 
 ## Reference
 
-- [Claude Code Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)
-- Key principle: "For each line, ask: 'Would removing this cause Claude to make mistakes?'"
+### Claude Code & AI Development
+- [Claude Code Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices) - Anthropic 공식 가이드
+- [Claude Code Documentation](https://docs.anthropic.com/claude-code) - Skills, Commands, MCP 레퍼런스
+- [Model Context Protocol](https://modelcontextprotocol.io/) - MCP 공식 문서
+
+### Design Philosophy
+> "For each line, ask: 'Would removing this cause Claude to make mistakes?'"
+
+이 원칙에 따라 Skills 파일은 **최소한의 컨텍스트로 최대한의 정확도**를 목표로 설계되었습니다.
+
+---
+
+## About
+
+AI-augmented development에 관심이 있다면 이슈나 PR 환영합니다.
+
+**Built with Claude Code** - 이 저장소의 대부분의 코드와 문서는 Claude와 함께 작성되었습니다.
