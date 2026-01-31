@@ -3,7 +3,8 @@
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Powered-blueviolet.svg)](https://claude.ai/claude-code)
-[![AI Agents](https://img.shields.io/badge/AI_Agents-66_Skills-orange.svg)](#skills-on-demand-knowledge)
+[![Skills](https://img.shields.io/badge/Skills-66_Files-blue.svg)](#skills-on-demand-knowledge)
+[![Agents](https://img.shields.io/badge/Agents-6_Autonomous-orange.svg)](#agents-autonomous-ai-assistants)
 
 > **AI와 함께 일하는 DevOps Engineer의 실험실**
 >
@@ -40,22 +41,26 @@ Google/StackOverflow 검색          /k8s-security 로 즉시 패턴 적용
 ### 원하는 영역만 복사
 
 ```bash
-# 1. Skills만 (도메인 지식) - 가장 많이 사용
+# 1. Agents만 (자율 AI 에이전트) - 가장 강력
+cp -r .claude/agents ~/.claude/agents
+
+# 2. Skills만 (도메인 지식) - 가장 많이 사용
 cp -r .claude/skills ~/.claude/skills
 
-# 2. Commands만 (자동화 명령어)
+# 3. Commands만 (자동화 명령어)
 cp -r commands ~/.claude/commands
 
-# 3. 특정 skill만
+# 4. 특정 skill만
 cp .claude/skills/spring-*.md ~/.claude/skills/
 
-# 4. 특정 command 카테고리만
+# 5. 특정 command 카테고리만
 cp -r commands/k8s ~/.claude/commands/
 
-# 5. 전체 설정 (global CLAUDE.md 포함)
+# 6. 전체 설정 (global CLAUDE.md 포함)
 cp global/CLAUDE.md ~/.claude/CLAUDE.md
-cp -r commands ~/.claude/commands
+cp -r .claude/agents ~/.claude/agents
 cp -r .claude/skills ~/.claude/skills
+cp -r commands ~/.claude/commands
 ```
 
 ### 사용 예시
@@ -96,6 +101,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 |------|----------|
 | 매번 같은 컨텍스트 설명 반복 | **Project Templates**: 프로젝트별 CLAUDE.md 제공 |
 | Claude가 프레임워크 패턴을 모름 | **Skills**: 66개 온디맨드 지식 파일 |
+| 반복적인 분석 작업 | **Agents**: 6개 자율 AI 에이전트 (보안, 비용, 장애 등) |
 | 반복적인 작업 수동 실행 | **Commands**: 29개 자동화 명령어 |
 | 긴 작업 시 컨텍스트 손실 | **Session Context**: 자동 저장/복원 |
 | 팀 간 모니터링/로그 가이드 부재 | **Monitoring/Logging Skills**: 역할별 가이드 |
@@ -107,19 +113,19 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │                    ress-claude-agents                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  📦 Project Templates        💡 Skills (66 files)          │
-│  ├─ Go Backend              ├─ Go/Spring 프레임워크         │
-│  ├─ Java/Kotlin Backend     ├─ Kubernetes/Terraform/Istio   │
-│  ├─ Kubernetes              ├─ 모니터링 (Grafana, Prometheus)│
-│  └─ Terraform               ├─ 로깅 (Loki, ELK, 컴플라이언스)│
-│                             ├─ DevOps (ArgoCD, KEDA, DR)    │
-│                             └─ API/DB/Docker/Kafka 패턴     │
+│  🤖 Agents (6 files)         💡 Skills (66 files)          │
+│  ├─ security-scanner        ├─ Go/Spring 프레임워크         │
+│  ├─ k8s-troubleshooter      ├─ Kubernetes/Terraform/Istio   │
+│  ├─ terraform-reviewer      ├─ 모니터링 (Grafana, Prometheus)│
+│  ├─ incident-responder      ├─ 로깅 (Loki, ELK, 컴플라이언스)│
+│  ├─ code-reviewer           ├─ DevOps (ArgoCD, KEDA, DR)    │
+│  └─ cost-analyzer           └─ API/DB/Docker/Kafka 패턴     │
 │                                                             │
-│  ⚡ Commands (29 files)      🔄 Session Management          │
-│  ├─ /go review, lint        ├─ 자동 컨텍스트 저장           │
-│  ├─ /backend test-gen       ├─ auto compact 대응            │
-│  ├─ /k8s validate, secure   └─ /session save, end           │
-│  ├─ /terraform plan-review                                  │
+│  ⚡ Commands (29 files)      📦 Project Templates           │
+│  ├─ /go review, lint        ├─ Go Backend                   │
+│  ├─ /backend test-gen       ├─ Java/Kotlin Backend          │
+│  ├─ /k8s validate, secure   ├─ Kubernetes                   │
+│  ├─ /terraform plan-review  └─ Terraform                    │
 │  └─ /dx pr-create, release                                  │
 │                                                             │
 └─────────────────────────────────────────────────────────────┘
@@ -230,6 +236,42 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 | K8s | `/k8s validate`, `/k8s secure`, `/k8s netpol`, `/k8s helm-check` |
 | Terraform | `/terraform plan-review`, `/terraform security`, `/terraform module-gen`, `/terraform validate` |
 | DX | `/dx pr-create`, `/dx issue-create`, `/dx changelog`, `/dx release` |
+
+---
+
+## Agents (Autonomous AI Assistants)
+
+Claude Code의 Subagent 시스템을 활용한 **자율 실행 AI 에이전트** (6 files, ~1,900줄):
+
+> Skills는 "지식"이고, Agents는 "전문가"입니다. Skills를 참조하며 자율적으로 작업을 수행합니다.
+
+| Agent | 용도 | 자동 실행 |
+|-------|------|----------|
+| `security-scanner` | 보안 취약점 분석, OWASP Top 10, 시크릿 탐지 | 코드 변경 후 |
+| `k8s-troubleshooter` | K8s 문제 진단, 근본 원인 분석, AIOps | 장애 발생 시 |
+| `terraform-reviewer` | IaC 보안/비용/신뢰성 11개 도메인 리뷰 | `terraform plan` 전 |
+| `incident-responder` | 장애 대응 자동화, MTTR 단축, 런북 실행 | 인시던트 발생 시 |
+| `code-reviewer` | 멀티 언어 코드 리뷰, 버그/성능/보안 탐지 | PR 생성 후 |
+| `cost-analyzer` | FinOps 분석, 비용 이상 탐지, 최적화 제안 | 비용 리뷰 시 |
+
+### 사용 예시
+
+```bash
+# Claude Code에서 agents 확인
+/agents
+
+# Agent 직접 호출 (Task tool 통해 자동 선택됨)
+"보안 취약점 검사해줘"       → security-scanner 자동 실행
+"프로덕션 파드가 죽어요"      → k8s-troubleshooter 자동 실행
+"terraform plan 결과 리뷰해줘" → terraform-reviewer 자동 실행
+```
+
+### 2026 AI Agents 트렌드 반영
+
+- **Multi-Agent Architecture**: 전문화된 에이전트가 협력
+- **Human-on-the-Loop**: 파괴적 작업은 항상 승인 필요
+- **AIOps Integration**: 관측 데이터 기반 자동 진단
+- **Autonomous Remediation**: 승인된 런북 자동 실행
 
 ---
 
@@ -382,6 +424,13 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 ```
 ress-claude-agents/
 ├── .claude/
+│   ├── agents/               # Autonomous AI agents (6 files)
+│   │   ├── security-scanner.md
+│   │   ├── k8s-troubleshooter.md
+│   │   ├── terraform-reviewer.md
+│   │   ├── incident-responder.md
+│   │   ├── code-reviewer.md
+│   │   └── cost-analyzer.md
 │   ├── skills/               # On-demand domain knowledge (66 files)
 │   │   ├── go-*.md          # Go 패턴 (4 files)
 │   │   ├── spring-*.md      # Spring 패턴 (6 files)
@@ -497,11 +546,12 @@ make all       # validate + test
 
 | 항목 | 수량 |
 |------|------|
+| **Agents** | 6 files (~1,900줄) |
 | Skills | 66 files (~18,000줄) |
 | Commands | 29 files |
 | Templates | 4 projects |
 | Tests | 36 cases |
-| **Total** | ~20,500줄 |
+| **Total** | ~22,400줄 |
 
 ---
 
