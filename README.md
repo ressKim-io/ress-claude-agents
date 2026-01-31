@@ -3,7 +3,7 @@
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Powered-blueviolet.svg)](https://claude.ai/claude-code)
-[![AI Agents](https://img.shields.io/badge/AI_Agents-63_Skills-orange.svg)](#skills-on-demand-knowledge)
+[![AI Agents](https://img.shields.io/badge/AI_Agents-66_Skills-orange.svg)](#skills-on-demand-knowledge)
 
 > **AI와 함께 일하는 DevOps Engineer의 실험실**
 >
@@ -95,7 +95,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 | 문제 | 해결 방법 |
 |------|----------|
 | 매번 같은 컨텍스트 설명 반복 | **Project Templates**: 프로젝트별 CLAUDE.md 제공 |
-| Claude가 프레임워크 패턴을 모름 | **Skills**: 63개 온디맨드 지식 파일 |
+| Claude가 프레임워크 패턴을 모름 | **Skills**: 66개 온디맨드 지식 파일 |
 | 반복적인 작업 수동 실행 | **Commands**: 29개 자동화 명령어 |
 | 긴 작업 시 컨텍스트 손실 | **Session Context**: 자동 저장/복원 |
 | 팀 간 모니터링/로그 가이드 부재 | **Monitoring/Logging Skills**: 역할별 가이드 |
@@ -107,7 +107,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │                    ress-claude-agents                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  📦 Project Templates        💡 Skills (63 files)          │
+│  📦 Project Templates        💡 Skills (66 files)          │
 │  ├─ Go Backend              ├─ Go/Spring 프레임워크         │
 │  ├─ Java/Kotlin Backend     ├─ Kubernetes/Terraform/Istio   │
 │  ├─ Kubernetes              ├─ 모니터링 (Grafana, Prometheus)│
@@ -235,7 +235,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 
 ## Skills (On-demand Knowledge)
 
-필요할 때만 로드되는 도메인 지식 (63 files, ~16,000줄):
+필요할 때만 로드되는 도메인 지식 (66 files, ~18,000줄):
 
 ### Go
 ```
@@ -307,6 +307,13 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 /finops-advanced       # Showback/Chargeback, 비용 이상 탐지, Infracost
 ```
 
+### Developer Experience
+```
+/dx-metrics            # DORA, SPACE, DevEx, DX Core 4 프레임워크
+/dx-ai-agents          # AI 에이전트 거버넌스, Copilot/Claude 통합
+/dx-onboarding         # 개발자 온보딩 자동화, Time-to-First-Deploy
+```
+
 ### Infrastructure
 ```
 /aws-eks               # EKS Terraform, IRSA, Karpenter, Add-ons
@@ -375,7 +382,7 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── skills/               # On-demand domain knowledge (63 files)
+│   ├── skills/               # On-demand domain knowledge (66 files)
 │   │   ├── go-*.md          # Go 패턴 (4 files)
 │   │   ├── spring-*.md      # Spring 패턴 (6 files)
 │   │   ├── k8s-*.md         # Kubernetes (8 files)
@@ -490,11 +497,11 @@ make all       # validate + test
 
 | 항목 | 수량 |
 |------|------|
-| Skills | 63 files (~16,000줄) |
+| Skills | 66 files (~18,000줄) |
 | Commands | 29 files |
 | Templates | 4 projects |
 | Tests | 36 cases |
-| **Total** | ~18,500줄 |
+| **Total** | ~20,500줄 |
 
 ---
 
