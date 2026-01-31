@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Powered-blueviolet.svg)](https://claude.ai/claude-code)
 [![Skills](https://img.shields.io/badge/Skills-66_Files-blue.svg)](#skills-on-demand-knowledge)
-[![Agents](https://img.shields.io/badge/Agents-6_Autonomous-orange.svg)](#agents-autonomous-ai-assistants)
+[![Agents](https://img.shields.io/badge/Agents-8_Autonomous-orange.svg)](#agents-autonomous-ai-assistants)
 
 > **AI와 함께 일하는 DevOps Engineer의 실험실**
 >
@@ -113,13 +113,15 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │                    ress-claude-agents                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  🤖 Agents (6 files)         💡 Skills (66 files)          │
+│  🤖 Agents (8 files)         💡 Skills (66 files)          │
 │  ├─ security-scanner        ├─ Go/Spring 프레임워크         │
 │  ├─ k8s-troubleshooter      ├─ Kubernetes/Terraform/Istio   │
 │  ├─ terraform-reviewer      ├─ 모니터링 (Grafana, Prometheus)│
 │  ├─ incident-responder      ├─ 로깅 (Loki, ELK, 컴플라이언스)│
 │  ├─ code-reviewer           ├─ DevOps (ArgoCD, KEDA, DR)    │
-│  └─ cost-analyzer           └─ API/DB/Docker/Kafka 패턴     │
+│  ├─ cost-analyzer           └─ API/DB/Docker/Kafka 패턴     │
+│  ├─ go-expert (대용량)                                      │
+│  └─ java-expert (대용량)                                    │
 │                                                             │
 │  ⚡ Commands (29 files)      📦 Project Templates           │
 │  ├─ /go review, lint        ├─ Go Backend                   │
@@ -241,10 +243,11 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 
 ## Agents (Autonomous AI Assistants)
 
-Claude Code의 Subagent 시스템을 활용한 **자율 실행 AI 에이전트** (6 files, ~1,900줄):
+Claude Code의 Subagent 시스템을 활용한 **자율 실행 AI 에이전트** (8 files, ~3,000줄):
 
 > Skills는 "지식"이고, Agents는 "전문가"입니다. Skills를 참조하며 자율적으로 작업을 수행합니다.
 
+### DevOps Agents
 | Agent | 용도 | 자동 실행 |
 |-------|------|----------|
 | `security-scanner` | 보안 취약점 분석, OWASP Top 10, 시크릿 탐지 | 코드 변경 후 |
@@ -253,6 +256,12 @@ Claude Code의 Subagent 시스템을 활용한 **자율 실행 AI 에이전트**
 | `incident-responder` | 장애 대응 자동화, MTTR 단축, 런북 실행 | 인시던트 발생 시 |
 | `code-reviewer` | 멀티 언어 코드 리뷰, 버그/성능/보안 탐지 | PR 생성 후 |
 | `cost-analyzer` | FinOps 분석, 비용 이상 탐지, 최적화 제안 | 비용 리뷰 시 |
+
+### Language Experts (대용량 트래픽 특화)
+| Agent | 용도 | 핵심 기능 |
+|-------|------|----------|
+| `go-expert` | Go 대용량 트래픽 전문가 | Worker Pool, Fan-Out/In, Zero-Alloc, pprof |
+| `java-expert` | Java/Spring 대용량 트래픽 전문가 | Virtual Threads, WebFlux, JVM 튜닝, HikariCP |
 
 ### 사용 예시
 
@@ -424,13 +433,15 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── agents/               # Autonomous AI agents (6 files)
+│   ├── agents/               # Autonomous AI agents (8 files)
 │   │   ├── security-scanner.md
 │   │   ├── k8s-troubleshooter.md
 │   │   ├── terraform-reviewer.md
 │   │   ├── incident-responder.md
 │   │   ├── code-reviewer.md
-│   │   └── cost-analyzer.md
+│   │   ├── cost-analyzer.md
+│   │   ├── go-expert.md        # Go 대용량 트래픽 전문가
+│   │   └── java-expert.md      # Java/Spring 대용량 트래픽 전문가
 │   ├── skills/               # On-demand domain knowledge (66 files)
 │   │   ├── go-*.md          # Go 패턴 (4 files)
 │   │   ├── spring-*.md      # Spring 패턴 (6 files)
@@ -546,12 +557,12 @@ make all       # validate + test
 
 | 항목 | 수량 |
 |------|------|
-| **Agents** | 6 files (~1,900줄) |
+| **Agents** | 8 files (~3,000줄) |
 | Skills | 66 files (~18,000줄) |
 | Commands | 29 files |
 | Templates | 4 projects |
 | Tests | 36 cases |
-| **Total** | ~22,400줄 |
+| **Total** | ~23,500줄 |
 
 ---
 
