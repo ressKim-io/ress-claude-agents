@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Powered-blueviolet.svg)](https://claude.ai/claude-code)
 [![Skills](https://img.shields.io/badge/Skills-66_Files-blue.svg)](#skills-on-demand-knowledge)
-[![Agents](https://img.shields.io/badge/Agents-14_Autonomous-orange.svg)](#agents-autonomous-ai-assistants)
+[![Agents](https://img.shields.io/badge/Agents-17_Autonomous-orange.svg)](#agents-autonomous-ai-assistants)
 
 > **AI와 함께 일하는 DevOps Engineer의 실험실**
 >
@@ -113,7 +113,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │                    ress-claude-agents                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  🤖 Agents (14 files)        💡 Skills (66 files)          │
+│  🤖 Agents (17 files)        💡 Skills (66 files)          │
 │  ├─ security-scanner        ├─ Go/Spring 프레임워크         │
 │  ├─ k8s-troubleshooter      ├─ Kubernetes/Terraform/Istio   │
 │  ├─ terraform-reviewer      ├─ 모니터링 (Grafana, Prometheus)│
@@ -245,7 +245,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 
 ## Agents (Autonomous AI Assistants)
 
-Claude Code의 Subagent 시스템을 활용한 **자율 실행 AI 에이전트** (14 files, ~6,500줄):
+Claude Code의 Subagent 시스템을 활용한 **자율 실행 AI 에이전트** (17 files, ~5,100줄):
 
 > Skills는 "지식"이고, Agents는 "전문가"입니다. Skills를 참조하며 자율적으로 작업을 수행합니다.
 
@@ -270,7 +270,10 @@ Claude Code의 Subagent 시스템을 활용한 **자율 실행 AI 에이전트**
 |-------|------|----------|
 | `ticketing-expert` | 대규모 티켓팅 아키텍처 | Virtual Waiting Room, Redis 대기열, 좌석 잠금, Saga 패턴 |
 | `anti-bot` | 봇/매크로 방어 | Rate Limiting, 행동 분석, Device Fingerprint, WAF |
-| `load-tester` | 부하 테스트 | K6, Gatling, nGrinder, 100만 VU 시나리오 |
+| `load-tester` | 부하 테스트 허브 | 도구 비교, 선택 가이드, 공통 개념 |
+| `load-tester-k6` | K6 부하 테스트 | JavaScript, Grafana Cloud, K6 Operator |
+| `load-tester-gatling` | Gatling 부하 테스트 | Scala/Java DSL, 엔터프라이즈 |
+| `load-tester-ngrinder` | nGrinder 부하 테스트 | Groovy, Controller/Agent, 웹 UI |
 
 ### Workflow Automation
 | Agent | 용도 | 핵심 기능 |
@@ -452,7 +455,7 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── agents/               # Autonomous AI agents (14 files)
+│   ├── agents/               # Autonomous AI agents (17 files)
 │   │   ├── security-scanner.md
 │   │   ├── k8s-troubleshooter.md
 │   │   ├── terraform-reviewer.md
@@ -463,7 +466,10 @@ ress-claude-agents/
 │   │   ├── java-expert.md      # Java/Spring 대용량 트래픽 전문가
 │   │   ├── ticketing-expert.md # 대규모 티켓팅 아키텍처
 │   │   ├── anti-bot.md         # 봇/매크로 방어
-│   │   ├── load-tester.md      # K6/Gatling/nGrinder 부하 테스트
+│   │   ├── load-tester.md      # 부하 테스트 허브 (도구 비교/선택)
+│   │   ├── load-tester-k6.md   # K6 부하 테스트
+│   │   ├── load-tester-gatling.md  # Gatling 부하 테스트
+│   │   ├── load-tester-ngrinder.md # nGrinder 부하 테스트
 │   │   ├── git-workflow.md     # Git 워크플로우 자동화
 │   │   ├── ci-optimizer.md     # CI/CD 파이프라인 최적화
 │   │   └── pr-review-bot.md    # AI PR 자동 리뷰 설정
@@ -582,7 +588,7 @@ make all       # validate + test
 
 | 항목 | 수량 |
 |------|------|
-| **Agents** | 14 files (~6,500줄) |
+| **Agents** | 17 files (~5,100줄) |
 | Skills | 66 files (~18,000줄) |
 | Commands | 29 files |
 | Templates | 4 projects |
