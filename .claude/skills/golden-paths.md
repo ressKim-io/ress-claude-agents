@@ -1,6 +1,6 @@
 # Golden Paths 가이드
 
-개발자를 위한 표준화된 경로 설계, 템플릿 패턴, Self-Service 구축
+개발자를 위한 표준화된 경로 설계, 템플릿 패턴
 
 ## Quick Reference (결정 트리)
 
@@ -101,12 +101,7 @@ spring-boot-golden-path/
 │   └── helm/
 │       ├── Chart.yaml
 │       ├── values.yaml
-│       ├── values-dev.yaml
 │       └── templates/
-│           ├── deployment.yaml
-│           ├── service.yaml
-│           ├── hpa.yaml
-│           └── pdb.yaml
 │
 ├── 5. Observability
 │   ├── grafana/
@@ -116,9 +111,6 @@ spring-boot-golden-path/
 │
 └── 6. Documentation
     ├── docs/
-    │   ├── index.md
-    │   ├── architecture.md
-    │   └── runbook.md
     └── mkdocs.yml
 ```
 
@@ -141,11 +133,9 @@ metadata:
     - PostgreSQL + Redis
     - GitHub Actions CI/CD
     - Helm + ArgoCD deployment
-    - Grafana dashboards
   tags:
     - java
     - spring-boot
-    - recommended
     - golden-path
 spec:
   owner: group:team-platform
@@ -159,7 +149,6 @@ spec:
           title: Service Name
           type: string
           pattern: '^[a-z][a-z0-9-]{2,30}$'
-          description: 소문자, 하이픈 허용, 3-31자
         owner:
           title: Owner Team
           type: string
@@ -169,10 +158,6 @@ spec:
           type: string
           enum: ['tier-1', 'tier-2', 'tier-3']
           default: 'tier-2'
-          description: |
-            tier-1: 99.9% SLO, 24/7 on-call
-            tier-2: 99.5% SLO, 업무시간 on-call
-            tier-3: Best effort
 
     - title: Technical Options
       properties:
@@ -185,11 +170,6 @@ spec:
           title: Cache
           type: boolean
           default: true
-        messaging:
-          title: Messaging
-          type: string
-          enum: ['kafka', 'sqs', 'none']
-          default: 'none'
 
   steps:
     - id: fetch-template
@@ -200,15 +180,11 @@ spec:
           serviceName: ${{ parameters.serviceName }}
           owner: ${{ parameters.owner }}
           tier: ${{ parameters.tier }}
-          database: ${{ parameters.database }}
-          cache: ${{ parameters.cache }}
-          messaging: ${{ parameters.messaging }}
 
     - id: publish
       action: publish:github
       input:
         repoUrl: github.com?owner=my-org&repo=${{ parameters.serviceName }}
-        defaultBranch: main
 
     - id: register
       action: catalog:register
@@ -232,11 +208,7 @@ kind: Template
 metadata:
   name: go-service
   title: Go Microservice
-  description: |
-    High-performance Go service with:
-    - Go 1.22+, Gin framework
-    - Docker multi-stage build
-    - Kubernetes-native design
+  description: High-performance Go service with Gin framework
 spec:
   owner: group:team-platform
   type: service
@@ -274,7 +246,6 @@ spec:
         values:
           serviceName: ${{ parameters.serviceName }}
           framework: ${{ parameters.framework }}
-          grpc: ${{ parameters.grpc }}
 ```
 
 ### React Frontend Template
@@ -285,12 +256,7 @@ kind: Template
 metadata:
   name: react-frontend
   title: React Frontend Application
-  description: |
-    React SPA with:
-    - React 18+, TypeScript
-    - Vite build tool
-    - Testing (Vitest, RTL)
-    - CloudFront + S3 deployment
+  description: React SPA with Vite, TypeScript, CloudFront deployment
 spec:
   owner: group:team-platform
   type: website
@@ -313,249 +279,13 @@ spec:
           type: string
           enum: ['zustand', 'redux-toolkit', 'jotai', 'none']
           default: 'zustand'
-        testing:
-          title: Testing Framework
-          type: string
-          enum: ['vitest', 'jest']
-          default: 'vitest'
-```
-
----
-
-## Infrastructure Templates
-
-### Database Provisioning
-
-```hcl
-# terraform/modules/database/main.tf
-
-variable "service_name" {
-  description = "Service name for resource naming"
-  type        = string
-}
-
-variable "environment" {
-  description = "Environment (dev, staging, prod)"
-  type        = string
-}
-
-variable "engine" {
-  description = "Database engine"
-  type        = string
-  default     = "postgresql"
-}
-
-variable "instance_class" {
-  description = "Instance class based on tier"
-  type        = map(string)
-  default = {
-    "tier-1" = "db.r6g.xlarge"
-    "tier-2" = "db.r6g.large"
-    "tier-3" = "db.t4g.medium"
-  }
-}
-
-resource "aws_db_instance" "main" {
-  identifier = "${var.service_name}-${var.environment}"
-
-  engine         = var.engine
-  engine_version = "15.4"
-  instance_class = var.instance_class[var.tier]
-
-  allocated_storage     = 100
-  max_allocated_storage = 1000
-  storage_encrypted     = true
-
-  multi_az               = var.environment == "prod"
-  deletion_protection    = var.environment == "prod"
-  skip_final_snapshot    = var.environment != "prod"
-
-  performance_insights_enabled = true
-  monitoring_interval          = 60
-
-  tags = {
-    Service     = var.service_name
-    Environment = var.environment
-    ManagedBy   = "terraform"
-    GoldenPath  = "true"
-  }
-}
-```
-
-### Cache Provisioning
-
-```hcl
-# terraform/modules/cache/main.tf
-
-resource "aws_elasticache_replication_group" "main" {
-  replication_group_id = "${var.service_name}-${var.environment}"
-  description          = "Redis cache for ${var.service_name}"
-
-  engine               = "redis"
-  engine_version       = "7.0"
-  node_type            = var.environment == "prod" ? "cache.r6g.large" : "cache.t4g.medium"
-  num_cache_clusters   = var.environment == "prod" ? 2 : 1
-
-  automatic_failover_enabled = var.environment == "prod"
-  multi_az_enabled          = var.environment == "prod"
-
-  at_rest_encryption_enabled = true
-  transit_encryption_enabled = true
-
-  tags = {
-    Service     = var.service_name
-    Environment = var.environment
-    GoldenPath  = "true"
-  }
-}
-```
-
----
-
-## CI/CD Pipeline Templates
-
-### GitHub Actions CI
-
-```yaml
-# .github/workflows/ci.yaml
-name: CI
-
-on:
-  push:
-    branches: [main, develop]
-  pull_request:
-    branches: [main]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: 'temurin'
-          cache: 'gradle'
-
-      - name: Build
-        run: ./gradlew build
-
-      - name: Test
-        run: ./gradlew test
-
-      - name: Upload coverage
-        uses: codecov/codecov-action@v4
-
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          severity: 'CRITICAL,HIGH'
-
-      - name: Run Semgrep
-        uses: semgrep/semgrep-action@v1
-        with:
-          config: p/ci
-
-  docker:
-    needs: [build, security]
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build and push
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
-            ghcr.io/${{ github.repository }}:latest
-```
-
----
-
-## Observability Defaults
-
-### Grafana Dashboard Template
-
-```json
-{
-  "title": "${service_name} Dashboard",
-  "templating": {
-    "list": [
-      {
-        "name": "namespace",
-        "type": "query",
-        "query": "label_values(namespace)"
-      }
-    ]
-  },
-  "panels": [
-    {
-      "title": "Request Rate",
-      "type": "timeseries",
-      "targets": [{
-        "expr": "sum(rate(http_server_requests_seconds_count{namespace=\"$namespace\"}[5m]))"
-      }]
-    },
-    {
-      "title": "Error Rate",
-      "type": "stat",
-      "targets": [{
-        "expr": "sum(rate(http_server_requests_seconds_count{namespace=\"$namespace\",status=~\"5..\"}[5m])) / sum(rate(http_server_requests_seconds_count{namespace=\"$namespace\"}[5m]))"
-      }]
-    },
-    {
-      "title": "P99 Latency",
-      "type": "timeseries",
-      "targets": [{
-        "expr": "histogram_quantile(0.99, sum(rate(http_server_requests_seconds_bucket{namespace=\"$namespace\"}[5m])) by (le))"
-      }]
-    }
-  ]
-}
-```
-
-### Prometheus Alerts
-
-```yaml
-# prometheus/alerts.yaml
-groups:
-  - name: ${service_name}-alerts
-    rules:
-      - alert: HighErrorRate
-        expr: |
-          sum(rate(http_server_requests_seconds_count{namespace="${namespace}",status=~"5.."}[5m]))
-          / sum(rate(http_server_requests_seconds_count{namespace="${namespace}"}[5m])) > 0.05
-        for: 5m
-        labels:
-          severity: critical
-          service: ${service_name}
-        annotations:
-          summary: "High error rate for ${service_name}"
-
-      - alert: HighLatency
-        expr: |
-          histogram_quantile(0.99, sum(rate(http_server_requests_seconds_bucket{namespace="${namespace}"}[5m])) by (le)) > 1
-        for: 10m
-        labels:
-          severity: warning
-          service: ${service_name}
 ```
 
 ---
 
 ## Best Practices
 
-### Do's ✅
+### Do's
 
 | Practice | 이유 |
 |----------|------|
@@ -565,7 +295,7 @@ groups:
 | 피드백 수집 | 지속적 개선 |
 | 문서화 | 선택 이유, 탈출구 명시 |
 
-### Don'ts ❌
+### Don'ts
 
 | Anti-Pattern | 문제 |
 |--------------|------|
@@ -599,13 +329,4 @@ groups:
 - [ ] 개발자 피드백 수집
 
 **관련 agent**: `platform-engineer`
-**관련 skill**: `/backstage`, `/gitops-argocd`
-
----
-
-## Sources
-
-- [What are Golden Paths](https://platformengineering.org/blog/what-are-golden-paths-a-guide-to-streamlining-developer-workflows)
-- [Designing Golden Paths - Red Hat](https://www.redhat.com/en/blog/designing-golden-paths)
-- [Golden Paths - Google Cloud](https://cloud.google.com/blog/products/application-development/golden-paths-for-engineering-execution-consistency)
-- [AWS IDP Examples](https://docs.aws.amazon.com/prescriptive-guidance/latest/internal-developer-platform/examples.html)
+**관련 skill**: `/golden-paths-infra` (Infrastructure, CI/CD), `/backstage`, `/gitops-argocd`
