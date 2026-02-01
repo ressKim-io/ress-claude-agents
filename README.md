@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Powered-blueviolet.svg)](https://claude.ai/claude-code)
 [![Skills](https://img.shields.io/badge/Skills-66_Files-blue.svg)](#skills-on-demand-knowledge)
-[![Agents](https://img.shields.io/badge/Agents-10_Autonomous-orange.svg)](#agents-autonomous-ai-assistants)
+[![Agents](https://img.shields.io/badge/Agents-11_Autonomous-orange.svg)](#agents-autonomous-ai-assistants)
 
 > **AI와 함께 일하는 DevOps Engineer의 실험실**
 >
@@ -113,7 +113,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │                    ress-claude-agents                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  🤖 Agents (10 files)        💡 Skills (66 files)          │
+│  🤖 Agents (11 files)        💡 Skills (66 files)          │
 │  ├─ security-scanner        ├─ Go/Spring 프레임워크         │
 │  ├─ k8s-troubleshooter      ├─ Kubernetes/Terraform/Istio   │
 │  ├─ terraform-reviewer      ├─ 모니터링 (Grafana, Prometheus)│
@@ -121,7 +121,8 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │  ├─ code-reviewer           ├─ DevOps (ArgoCD, KEDA, DR)    │
 │  ├─ cost-analyzer           └─ API/DB/Docker/Kafka 패턴     │
 │  ├─ go/java-expert (대용량)                                 │
-│  └─ git-workflow, ci-optimizer                              │
+│  ├─ git-workflow, ci-optimizer                              │
+│  └─ pr-review-bot (자동리뷰)                                │
 │                                                             │
 │  ⚡ Commands (29 files)      📦 Project Templates           │
 │  ├─ /go review, lint        ├─ Go Backend                   │
@@ -268,6 +269,7 @@ Claude Code의 Subagent 시스템을 활용한 **자율 실행 AI 에이전트**
 |-------|------|----------|
 | `git-workflow` | Git 워크플로우 자동화 | 커밋 메시지 생성, PR 자동화, Changelog |
 | `ci-optimizer` | CI/CD 파이프라인 최적화 | 빌드 시간 분석, DORA 메트릭, Flaky 테스트 탐지 |
+| `pr-review-bot` | AI PR 자동 리뷰 설정 | Copilot/CodeRabbit/Claude Action 설정 가이드 |
 
 ### 사용 예시
 
@@ -439,7 +441,7 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── agents/               # Autonomous AI agents (10 files)
+│   ├── agents/               # Autonomous AI agents (11 files)
 │   │   ├── security-scanner.md
 │   │   ├── k8s-troubleshooter.md
 │   │   ├── terraform-reviewer.md
@@ -449,7 +451,8 @@ ress-claude-agents/
 │   │   ├── go-expert.md        # Go 대용량 트래픽 전문가
 │   │   ├── java-expert.md      # Java/Spring 대용량 트래픽 전문가
 │   │   ├── git-workflow.md     # Git 워크플로우 자동화
-│   │   └── ci-optimizer.md     # CI/CD 파이프라인 최적화
+│   │   ├── ci-optimizer.md     # CI/CD 파이프라인 최적화
+│   │   └── pr-review-bot.md    # AI PR 자동 리뷰 설정
 │   ├── skills/               # On-demand domain knowledge (66 files)
 │   │   ├── go-*.md          # Go 패턴 (4 files)
 │   │   ├── spring-*.md      # Spring 패턴 (6 files)
@@ -565,12 +568,12 @@ make all       # validate + test
 
 | 항목 | 수량 |
 |------|------|
-| **Agents** | 10 files (~3,900줄) |
+| **Agents** | 11 files (~4,400줄) |
 | Skills | 66 files (~18,000줄) |
 | Commands | 29 files |
 | Templates | 4 projects |
 | Tests | 36 cases |
-| **Total** | ~24,400줄 |
+| **Total** | ~24,900줄 |
 
 ---
 
