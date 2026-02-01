@@ -4,8 +4,8 @@
 
 | 항목 | 수량 | 상태 |
 |------|------|------|
-| **Agents** | 17 files (~5,100줄) | ✅ 최적화 완료 |
-| **Skills** | 66 files (~18,000줄) | ✅ |
+| **Agents** | 18 files (~5,400줄) | ✅ 최적화 완료 |
+| **Skills** | 68 files (~19,000줄) | ✅ |
 | **Commands** | 29 files | ✅ |
 | **Templates** | 4 projects | ✅ |
 | **Tests** | 36 cases | ✅ |
@@ -25,6 +25,23 @@
 - [x] 모든 에이전트에 Quick Reference 섹션 추가
 
 **결과**: 모든 Agent 파일 600줄 미만 (Claude 권장 범위 내)
+
+#### FinOps 확장 (2026-02-01)
+- [x] `finops-advisor.md` Agent 추가 (~300줄)
+  - FinOps Foundation Framework 2025 기반
+  - 성숙도 평가 (Crawl/Walk/Run)
+  - 도구 선택 가이드, Unit Economics
+  - GreenOps 통합
+- [x] `finops-tools.md` Skill 추가 (~400줄)
+  - Kubecost vs OpenCost vs Infracost 비교
+  - KEDA + Karpenter + Spot 통합 가이드
+- [x] `finops-greenops.md` Skill 추가 (~350줄)
+  - 탄소 발자국 측정 (Cloud Carbon Footprint)
+  - 저탄소 리전 선택 가이드
+  - ARM 인스턴스 (Graviton/T2A) 전환
+  - SCI (Software Carbon Intensity) 측정
+
+**결과**: FinOps 영역 완전 커버 (기본 → 고급 → 도구 → 지속가능성)
 
 ---
 
@@ -93,6 +110,12 @@
 - [x] 대용량 파일 압축 (7,800줄 → 5,100줄)
 - [x] Quick Reference 섹션 추가
 - [x] README 전면 개편
+
+### v1.2 - FinOps 확장 (2026-02)
+- [x] finops-advisor Agent 추가 (17 → 18 agents)
+- [x] finops-tools, finops-greenops Skills 추가 (66 → 68 skills)
+- [x] FinOps Foundation Framework 2025 반영
+- [x] GreenOps (지속가능성) 영역 추가
 
 ---
 

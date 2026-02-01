@@ -7,8 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Powered-blueviolet.svg)](https://docs.anthropic.com/claude-code)
 
-[![Agents](https://img.shields.io/badge/Agents-17-orange.svg)](#-agents-autonomous-ai-assistants)
-[![Skills](https://img.shields.io/badge/Skills-66-blue.svg)](#-skills-on-demand-knowledge)
+[![Agents](https://img.shields.io/badge/Agents-18-orange.svg)](#-agents-autonomous-ai-assistants)
+[![Skills](https://img.shields.io/badge/Skills-68-blue.svg)](#-skills-on-demand-knowledge)
 [![Commands](https://img.shields.io/badge/Commands-29-green.svg)](#commands)
 [![Last Updated](https://img.shields.io/badge/Updated-Feb_2026-brightgreen.svg)](#)
 
@@ -39,8 +39,8 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 | Metric | Value | Description |
 |--------|-------|-------------|
-| **17 Agents** | ~5,100 lines | 자율 실행 AI 에이전트 (보안, 인시던트, 비용 분석 등) |
-| **66 Skills** | ~18,000 lines | 온디맨드 도메인 지식 (Go, Spring, K8s, Istio 등) |
+| **18 Agents** | ~5,400 lines | 자율 실행 AI 에이전트 (보안, 인시던트, FinOps 등) |
+| **68 Skills** | ~19,000 lines | 온디맨드 도메인 지식 (Go, Spring, K8s, FinOps 등) |
 | **29 Commands** | Custom workflows | 자동화 명령어 (/go review, /k8s secure 등) |
 | **4 Templates** | Project setups | Go, Java, K8s, Terraform 프로젝트 템플릿 |
 | **100%** | Test coverage | BATS 테스트 + CI 검증 |
@@ -104,6 +104,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | 🚨 `incident-responder` | 장애 대응 자동화, MTTR 단축, 런북 실행 | 인시던트 발생 시 |
 | 👀 `code-reviewer` | 멀티 언어 코드 리뷰, 버그/성능/보안 탐지 | PR 생성 후 |
 | 💰 `cost-analyzer` | FinOps 분석, 비용 이상 탐지, 최적화 제안 | 비용 리뷰 시 |
+| 📈 `finops-advisor` | FinOps 전략, 성숙도 평가, 도구 선택, GreenOps | 비용 전략 수립 시 |
 
 ### Language Experts (High-Traffic)
 
@@ -135,7 +136,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills (On-demand Knowledge)
 
-필요할 때만 로드되는 도메인 지식 (66 files, ~18,000줄).
+필요할 때만 로드되는 도메인 지식 (68 files, ~19,000줄).
 
 <details>
 <summary><b>Go & Spring (10 files)</b></summary>
@@ -196,7 +197,10 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /deployment-strategies # Canary, Blue-Green
 /chaos-engineering  # LitmusChaos, GameDay
 /disaster-recovery  # Velero, Multi-cluster DR
-/finops             # Kubecost, Right-sizing
+/finops             # Kubecost, Right-sizing, Spot
+/finops-advanced    # Showback/Chargeback, 이상 탐지
+/finops-tools       # OpenCost, Infracost, KEDA+Karpenter
+/finops-greenops    # 탄소 발자국, 지속가능성, SCI
 ```
 </details>
 
@@ -244,13 +248,14 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── agents/               # 17 autonomous AI agents
+│   ├── agents/               # 18 autonomous AI agents
 │   │   ├── security-scanner.md
 │   │   ├── k8s-troubleshooter.md
 │   │   ├── ticketing-expert.md
+│   │   ├── finops-advisor.md # FinOps 전략, GreenOps
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder
 │   │   └── ...
-│   ├── skills/               # 66 on-demand knowledge files
+│   ├── skills/               # 68 on-demand knowledge files
 │   └── standards.yml         # Code quality standards
 ├── commands/                 # 29 automation commands
 ├── project-templates/        # Go, Java, K8s, Terraform
@@ -273,6 +278,7 @@ ress-claude-agents/
 | **Messaging** | Apache Kafka (Strimzi) |
 | **Security** | Kyverno, Trivy, PCI-DSS |
 | **SRE** | SLI/SLO, Chaos Engineering, DR |
+| **FinOps** | Kubecost, OpenCost, Infracost, GreenOps |
 
 ---
 
@@ -310,12 +316,12 @@ make all           # validate + test
 
 | Item | Count |
 |------|-------|
-| **Agents** | 17 files (~5,100 lines) |
-| **Skills** | 66 files (~18,000 lines) |
+| **Agents** | 18 files (~5,400 lines) |
+| **Skills** | 68 files (~19,000 lines) |
 | **Commands** | 29 files |
 | **Templates** | 4 projects |
 | **Tests** | 36 cases |
-| **Total** | ~25,000+ lines |
+| **Total** | ~26,000+ lines |
 
 ---
 
