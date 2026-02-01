@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Powered-blueviolet.svg)](https://claude.ai/claude-code)
 [![Skills](https://img.shields.io/badge/Skills-66_Files-blue.svg)](#skills-on-demand-knowledge)
-[![Agents](https://img.shields.io/badge/Agents-11_Autonomous-orange.svg)](#agents-autonomous-ai-assistants)
+[![Agents](https://img.shields.io/badge/Agents-14_Autonomous-orange.svg)](#agents-autonomous-ai-assistants)
 
 > **AI와 함께 일하는 DevOps Engineer의 실험실**
 >
@@ -113,7 +113,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │                    ress-claude-agents                       │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│  🤖 Agents (11 files)        💡 Skills (66 files)          │
+│  🤖 Agents (14 files)        💡 Skills (66 files)          │
 │  ├─ security-scanner        ├─ Go/Spring 프레임워크         │
 │  ├─ k8s-troubleshooter      ├─ Kubernetes/Terraform/Istio   │
 │  ├─ terraform-reviewer      ├─ 모니터링 (Grafana, Prometheus)│
@@ -121,8 +121,9 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 │  ├─ code-reviewer           ├─ DevOps (ArgoCD, KEDA, DR)    │
 │  ├─ cost-analyzer           └─ API/DB/Docker/Kafka 패턴     │
 │  ├─ go/java-expert (대용량)                                 │
-│  ├─ git-workflow, ci-optimizer                              │
-│  └─ pr-review-bot (자동리뷰)                                │
+│  ├─ ticketing-expert (100만 동시접속)                       │
+│  ├─ anti-bot, load-tester                                   │
+│  └─ git-workflow, ci-optimizer, pr-review-bot               │
 │                                                             │
 │  ⚡ Commands (29 files)      📦 Project Templates           │
 │  ├─ /go review, lint        ├─ Go Backend                   │
@@ -244,7 +245,7 @@ Claude Code를 **DevOps 및 백엔드 개발에 최적화**하기 위한 설정,
 
 ## Agents (Autonomous AI Assistants)
 
-Claude Code의 Subagent 시스템을 활용한 **자율 실행 AI 에이전트** (10 files, ~3,900줄):
+Claude Code의 Subagent 시스템을 활용한 **자율 실행 AI 에이전트** (14 files, ~6,500줄):
 
 > Skills는 "지식"이고, Agents는 "전문가"입니다. Skills를 참조하며 자율적으로 작업을 수행합니다.
 
@@ -264,6 +265,13 @@ Claude Code의 Subagent 시스템을 활용한 **자율 실행 AI 에이전트**
 | `go-expert` | Go 대용량 트래픽 전문가 | Worker Pool, Fan-Out/In, Zero-Alloc, pprof |
 | `java-expert` | Java/Spring 대용량 트래픽 전문가 | Virtual Threads, WebFlux, JVM 튜닝, HikariCP |
 
+### Ticketing Platform (100만 동시 접속)
+| Agent | 용도 | 핵심 기능 |
+|-------|------|----------|
+| `ticketing-expert` | 대규모 티켓팅 아키텍처 | Virtual Waiting Room, Redis 대기열, 좌석 잠금, Saga 패턴 |
+| `anti-bot` | 봇/매크로 방어 | Rate Limiting, 행동 분석, Device Fingerprint, WAF |
+| `load-tester` | 부하 테스트 | K6, Gatling, nGrinder, 100만 VU 시나리오 |
+
 ### Workflow Automation
 | Agent | 용도 | 핵심 기능 |
 |-------|------|----------|
@@ -281,6 +289,9 @@ Claude Code의 Subagent 시스템을 활용한 **자율 실행 AI 에이전트**
 "보안 취약점 검사해줘"       → security-scanner 자동 실행
 "프로덕션 파드가 죽어요"      → k8s-troubleshooter 자동 실행
 "terraform plan 결과 리뷰해줘" → terraform-reviewer 자동 실행
+"100만 동시접속 아키텍처 설계해줘" → ticketing-expert 자동 실행
+"봇 방어 전략 수립해줘"      → anti-bot 자동 실행
+"K6로 부하테스트 시나리오 작성해줘" → load-tester 자동 실행
 ```
 
 ### 2026 AI Agents 트렌드 반영
@@ -441,7 +452,7 @@ cp project-templates/terraform/CLAUDE.md /your/project/
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── agents/               # Autonomous AI agents (11 files)
+│   ├── agents/               # Autonomous AI agents (14 files)
 │   │   ├── security-scanner.md
 │   │   ├── k8s-troubleshooter.md
 │   │   ├── terraform-reviewer.md
@@ -450,6 +461,9 @@ ress-claude-agents/
 │   │   ├── cost-analyzer.md
 │   │   ├── go-expert.md        # Go 대용량 트래픽 전문가
 │   │   ├── java-expert.md      # Java/Spring 대용량 트래픽 전문가
+│   │   ├── ticketing-expert.md # 대규모 티켓팅 아키텍처
+│   │   ├── anti-bot.md         # 봇/매크로 방어
+│   │   ├── load-tester.md      # K6/Gatling/nGrinder 부하 테스트
 │   │   ├── git-workflow.md     # Git 워크플로우 자동화
 │   │   ├── ci-optimizer.md     # CI/CD 파이프라인 최적화
 │   │   └── pr-review-bot.md    # AI PR 자동 리뷰 설정
@@ -568,12 +582,12 @@ make all       # validate + test
 
 | 항목 | 수량 |
 |------|------|
-| **Agents** | 11 files (~4,400줄) |
+| **Agents** | 14 files (~6,500줄) |
 | Skills | 66 files (~18,000줄) |
 | Commands | 29 files |
 | Templates | 4 projects |
 | Tests | 36 cases |
-| **Total** | ~24,900줄 |
+| **Total** | ~27,000줄 |
 
 ---
 
