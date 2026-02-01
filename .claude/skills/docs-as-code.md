@@ -1,0 +1,700 @@
+# Docs as Code 가이드
+
+MkDocs, Docusaurus, Backstage TechDocs, API 문서 자동화
+
+## Quick Reference (결정 트리)
+
+```
+문서 도구 선택?
+    |
+    +-- Python 생태계/간단 ---------> MkDocs + Material
+    |       |
+    |       +-- 기술 문서 중심 -----> MkDocs Material
+    |       +-- Backstage 통합 ----> TechDocs
+    |
+    +-- React/JS 생태계 ------------> Docusaurus
+    |       |
+    |       +-- 버전 관리 필요 -----> Docusaurus
+    |       +-- 다국어 지원 --------> Docusaurus
+    |
+    +-- API 문서 -------------------> OpenAPI + 자동화
+            |
+            +-- REST API -----------> Swagger UI / Redoc
+            +-- GraphQL ------------> GraphQL Playground
+
+문서 호스팅?
+    |
+    +-- GitHub Pages ---------------> 무료, 간단
+    +-- Netlify/Vercel -------------> CI/CD 통합
+    +-- Backstage TechDocs ---------> 내부 포털
+```
+
+---
+
+## CRITICAL: Docs as Code 원칙
+
+| 원칙 | 설명 | 실천 |
+|------|------|------|
+| **버전 관리** | Git으로 문서 추적 | 코드와 함께 저장 |
+| **코드 리뷰** | PR로 문서 검토 | 기술 정확성 보장 |
+| **자동화** | CI/CD로 빌드/배포 | 수동 작업 제거 |
+| **코드 근접** | 코드와 문서 함께 | 동기화 유지 |
+| **재사용** | 컴포넌트화 | 중복 제거 |
+
+### 문서 부재 비용
+
+```
+중견 팀 (50명) 연간 손실:
+    |
+    +-- 온보딩 지연 ------------> $200K-$500K
+    +-- 지식 검색 시간 ---------> $150K-$300K
+    +-- 반복 질문 응답 ---------> $100K-$200K
+    +-- 잘못된 구현 재작업 -----> $200K-$500K
+    |
+    총계: $500K - $2M/년 손실 가능
+```
+
+---
+
+## MkDocs + Material
+
+### 설치 및 설정
+
+```bash
+# 설치
+pip install mkdocs-material
+pip install mkdocs-awesome-pages-plugin
+pip install mkdocs-git-revision-date-localized-plugin
+
+# 프로젝트 생성
+mkdocs new my-docs
+cd my-docs
+```
+
+### mkdocs.yml 설정
+
+```yaml
+site_name: My Project Documentation
+site_url: https://docs.example.com
+site_description: "프로젝트 기술 문서"
+
+repo_name: myorg/myproject
+repo_url: https://github.com/myorg/myproject
+
+theme:
+  name: material
+  language: ko
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: 다크 모드
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: 라이트 모드
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+
+plugins:
+  - search:
+      lang: ko
+  - git-revision-date-localized:
+      type: date
+      enable_creation_date: true
+  - awesome-pages
+
+markdown_extensions:
+  - admonition
+  - codehilite
+  - toc:
+      permalink: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Quick Start: getting-started/quickstart.md
+  - Guides:
+      - API Guide: guides/api.md
+      - Deployment: guides/deployment.md
+  - Reference:
+      - API Reference: reference/api.md
+      - Configuration: reference/config.md
+```
+
+### 문서 구조
+
+```
+docs/
+├── index.md
+├── getting-started/
+│   ├── installation.md
+│   └── quickstart.md
+├── guides/
+│   ├── api.md
+│   └── deployment.md
+├── reference/
+│   ├── api.md
+│   └── config.md
+├── assets/
+│   └── images/
+└── stylesheets/
+    └── extra.css
+```
+
+### 예시 문서
+
+```markdown
+# API 가이드
+
+이 가이드는 API 사용 방법을 설명합니다.
+
+## 인증
+
+!!! warning "중요"
+    모든 API 요청에는 인증 토큰이 필요합니다.
+
+### Bearer 토큰
+
+=== "cURL"
+
+    ```bash
+    curl -H "Authorization: Bearer <token>" \
+      https://api.example.com/v1/users
+    ```
+
+=== "Python"
+
+    ```python
+    import requests
+
+    headers = {"Authorization": "Bearer <token>"}
+    response = requests.get(
+        "https://api.example.com/v1/users",
+        headers=headers
+    )
+    ```
+
+## 시퀀스 다이어그램
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant A as API
+    participant D as Database
+
+    C->>A: POST /users
+    A->>D: INSERT user
+    D-->>A: user_id
+    A-->>C: 201 Created
+```
+
+## 참고
+
+자세한 내용은 [API 레퍼런스](../reference/api.md)를 참조하세요.
+```
+
+---
+
+## Docusaurus
+
+### 설치 및 설정
+
+```bash
+# 프로젝트 생성
+npx create-docusaurus@latest my-docs classic --typescript
+
+cd my-docs
+npm run start
+```
+
+### docusaurus.config.ts
+
+```typescript
+import {themes as prismThemes} from 'prism-react-renderer';
+import type {Config} from '@docusaurus/types';
+
+const config: Config = {
+  title: 'My Project',
+  tagline: '프로젝트 문서',
+  url: 'https://docs.example.com',
+  baseUrl: '/',
+
+  organizationName: 'myorg',
+  projectName: 'myproject',
+
+  i18n: {
+    defaultLocale: 'ko',
+    locales: ['ko', 'en'],
+  },
+
+  presets: [
+    [
+      'classic',
+      {
+        docs: {
+          sidebarPath: './sidebars.ts',
+          editUrl: 'https://github.com/myorg/myproject/tree/main/docs/',
+          // 버전 관리
+          lastVersion: 'current',
+          versions: {
+            current: {
+              label: '2.0',
+              path: '',
+            },
+          },
+        },
+        blog: {
+          showReadingTime: true,
+          editUrl: 'https://github.com/myorg/myproject/tree/main/blog/',
+        },
+        theme: {
+          customCss: './src/css/custom.css',
+        },
+      },
+    ],
+  ],
+
+  themeConfig: {
+    navbar: {
+      title: 'My Project',
+      items: [
+        {
+          type: 'docSidebar',
+          sidebarId: 'tutorialSidebar',
+          position: 'left',
+          label: '문서',
+        },
+        {
+          to: '/blog',
+          label: '블로그',
+          position: 'left'
+        },
+        {
+          type: 'docsVersionDropdown',
+          position: 'right',
+        },
+        {
+          type: 'localeDropdown',
+          position: 'right',
+        },
+        {
+          href: 'https://github.com/myorg/myproject',
+          label: 'GitHub',
+          position: 'right',
+        },
+      ],
+    },
+    prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
+      additionalLanguages: ['bash', 'yaml', 'json'],
+    },
+    algolia: {
+      appId: 'YOUR_APP_ID',
+      apiKey: 'YOUR_API_KEY',
+      indexName: 'myproject',
+    },
+  },
+};
+
+export default config;
+```
+
+### 버전 관리
+
+```bash
+# 새 버전 생성
+npm run docusaurus docs:version 1.0
+
+# 버전별 문서 구조
+docs/
+├── intro.md (현재 버전)
+└── ...
+versioned_docs/
+├── version-1.0/
+│   └── intro.md
+└── ...
+versioned_sidebars/
+└── version-1.0-sidebars.json
+```
+
+---
+
+## Backstage TechDocs
+
+### 아키텍처
+
+```
++------------------------------------------------------------------+
+|                     Backstage Platform                             |
++------------------------------------------------------------------+
+|                                                                    |
+|  +-------------+  +-------------+  +-------------+                 |
+|  | Catalog     |  | TechDocs    |  | Scaffolder  |                 |
+|  | (Entities)  |  | (Docs)      |  | (Templates) |                 |
+|  +-------------+  +-------------+  +-------------+                 |
+|                         |                                          |
+|                         v                                          |
+|  +----------------------------------------------------------+     |
+|  |                  TechDocs Backend                         |     |
+|  |  - MkDocs 빌드                                           |     |
+|  |  - S3/GCS 저장                                           |     |
+|  |  - 문서 검색                                              |     |
+|  +----------------------------------------------------------+     |
+|                                                                    |
++------------------------------------------------------------------+
+```
+
+### catalog-info.yaml 설정
+
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: my-service
+  description: "My Service Description"
+  annotations:
+    # TechDocs 활성화
+    backstage.io/techdocs-ref: dir:.
+
+spec:
+  type: service
+  lifecycle: production
+  owner: team-platform
+```
+
+### TechDocs 설정
+
+```yaml
+# mkdocs.yml (프로젝트 루트)
+site_name: My Service
+site_description: "Service documentation"
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - API: api.md
+  - Runbooks: runbooks.md
+```
+
+### Backstage app-config.yaml
+
+```yaml
+techdocs:
+  builder: 'local'  # 또는 'external'
+  generator:
+    runIn: 'local'  # 또는 'docker'
+  publisher:
+    type: 'awsS3'  # 또는 'googleGcs', 'azureBlobStorage'
+    awsS3:
+      bucketName: techdocs-bucket
+      region: ap-northeast-2
+      credentials:
+        roleArn: arn:aws:iam::123456789:role/techdocs-role
+```
+
+### CI/CD 빌드
+
+```yaml
+# .github/workflows/techdocs.yaml
+name: TechDocs Build
+
+on:
+  push:
+    paths:
+      - 'docs/**'
+      - 'mkdocs.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install techdocs-cli
+        run: npm install -g @techdocs/cli
+
+      - name: Generate docs
+        run: techdocs-cli generate --no-docker
+
+      - name: Publish to S3
+        run: |
+          techdocs-cli publish \
+            --publisher-type awsS3 \
+            --storage-name techdocs-bucket \
+            --entity default/Component/my-service
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+```
+
+---
+
+## API 문서 자동화
+
+### OpenAPI Generator
+
+```bash
+# OpenAPI 스펙에서 문서 생성
+npm install -g @openapitools/openapi-generator-cli
+
+openapi-generator-cli generate \
+  -i api/openapi.yaml \
+  -g html2 \
+  -o docs/api
+
+# 또는 Redoc 사용
+npm install -g redoc-cli
+redoc-cli build api/openapi.yaml -o docs/api/index.html
+```
+
+### OpenAPI 스펙 예시
+
+```yaml
+# api/openapi.yaml
+openapi: 3.0.3
+info:
+  title: My API
+  version: 1.0.0
+  description: |
+    # 개요
+    이 API는 사용자 관리 기능을 제공합니다.
+
+    ## 인증
+    모든 요청에 Bearer 토큰이 필요합니다.
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production
+
+paths:
+  /users:
+    get:
+      summary: 사용자 목록 조회
+      operationId: listUsers
+      tags:
+        - Users
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+          description: 최대 반환 개수
+      responses:
+        '200':
+          description: 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+              example:
+                - id: 1
+                  name: "홍길동"
+                  email: "hong@example.com"
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - name
+        - email
+      properties:
+        id:
+          type: integer
+          description: 사용자 ID
+        name:
+          type: string
+          description: 사용자 이름
+        email:
+          type: string
+          format: email
+          description: 이메일 주소
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+```
+
+### Swagger UI Kubernetes 배포
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swagger-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: swagger-ui
+  template:
+    metadata:
+      labels:
+        app: swagger-ui
+    spec:
+      containers:
+        - name: swagger-ui
+          image: swaggerapi/swagger-ui:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SWAGGER_JSON_URL
+              value: "/api/openapi.yaml"
+          volumeMounts:
+            - name: spec
+              mountPath: /api
+      volumes:
+        - name: spec
+          configMap:
+            name: openapi-spec
+```
+
+---
+
+## 문서 품질 측정
+
+### Vale (문서 린터)
+
+```yaml
+# .vale.ini
+StylesPath = .vale/styles
+
+MinAlertLevel = suggestion
+
+Packages = Microsoft, write-good
+
+[*.md]
+BasedOnStyles = Vale, Microsoft, write-good
+```
+
+```bash
+# 설치 및 실행
+brew install vale
+vale docs/
+```
+
+### 문서 커버리지
+
+```python
+# scripts/doc_coverage.py
+import os
+import yaml
+
+def check_coverage():
+    """API 엔드포인트 문서화 비율 확인"""
+    # OpenAPI 스펙 로드
+    with open('api/openapi.yaml') as f:
+        spec = yaml.safe_load(f)
+
+    total = 0
+    documented = 0
+
+    for path, methods in spec['paths'].items():
+        for method, details in methods.items():
+            if method in ['get', 'post', 'put', 'delete', 'patch']:
+                total += 1
+                if details.get('description') or details.get('summary'):
+                    documented += 1
+
+    coverage = (documented / total * 100) if total > 0 else 0
+    print(f"API Documentation Coverage: {coverage:.1f}%")
+    print(f"  Documented: {documented}/{total}")
+
+    return coverage >= 80  # 80% 이상 필수
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(0 if check_coverage() else 1)
+```
+
+---
+
+## Anti-Patterns
+
+| 실수 | 문제 | 해결 |
+|------|------|------|
+| 문서와 코드 분리 저장소 | 동기화 누락 | 같은 저장소 유지 |
+| 수동 배포 | 문서 최신화 지연 | CI/CD 자동화 |
+| 리뷰 없이 머지 | 품질 저하 | PR 리뷰 필수 |
+| 스크린샷 과다 | 업데이트 어려움 | 텍스트 + 다이어그램 |
+| 버전 관리 없음 | 구버전 혼란 | 명시적 버전 문서 |
+
+---
+
+## 체크리스트
+
+### 초기 설정
+- [ ] 문서 도구 선택 (MkDocs/Docusaurus)
+- [ ] 프로젝트 구조 설계
+- [ ] CI/CD 파이프라인 구성
+
+### 콘텐츠
+- [ ] Getting Started 가이드
+- [ ] API 레퍼런스
+- [ ] 아키텍처 문서
+- [ ] 런북/트러블슈팅
+
+### 품질
+- [ ] Vale 린터 설정
+- [ ] 문서 리뷰 프로세스
+- [ ] 커버리지 측정
+
+### Backstage
+- [ ] TechDocs 설정
+- [ ] catalog-info.yaml 추가
+- [ ] 자동 빌드 파이프라인
+
+**관련 skill**: `/backstage`, `/api-design`, `/dx-onboarding`
+
+---
+
+## Sources
+
+- [MkDocs Material](https://squidfunk.github.io/mkdocs-material/)
+- [Docusaurus](https://docusaurus.io/)
+- [Backstage TechDocs](https://backstage.io/docs/features/techdocs/)
+- [Docs as Code](https://konghq.com/blog/learning-center/what-is-docs-as-code)
+- [Technical Documentation Tools 2026](https://affine.pro/blog/best-technical-documentation-software-tools-for-developers)
+- [Vale](https://vale.sh/)
