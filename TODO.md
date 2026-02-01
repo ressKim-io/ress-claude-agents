@@ -1,203 +1,111 @@
-# TODO - DevOps/SRE Skills 로드맵
+# TODO - ress-claude-agents 로드맵
 
-## 개요
+## 현재 상태 (2026-02-01)
 
-현재 skills (60개) 기반으로 추가 필요한 영역 정리.
+| 항목 | 수량 | 상태 |
+|------|------|------|
+| **Agents** | 17 files (~5,100줄) | ✅ 최적화 완료 |
+| **Skills** | 66 files (~18,000줄) | ✅ |
+| **Commands** | 29 files | ✅ |
+| **Templates** | 4 projects | ✅ |
+| **Tests** | 36 cases | ✅ |
 
----
+### 최근 완료 (2026-02-01)
 
-## 🔴 높음 (바로 필요)
+#### Agent 파일 최적화
+- [x] `load-tester.md` (1,110줄) → 허브 + 3개 전문 에이전트로 분할
+  - `load-tester.md` (150줄) - 도구 비교, 선택 가이드
+  - `load-tester-k6.md` (292줄) - K6, Grafana Cloud
+  - `load-tester-gatling.md` (270줄) - Scala/Java DSL
+  - `load-tester-ngrinder.md` (375줄) - Groovy, Controller/Agent
+- [x] `anti-bot.md` 압축 (950줄 → 288줄)
+- [x] `ticketing-expert.md` 압축 (759줄 → 276줄)
+- [x] `java-expert.md` 압축 (578줄 → 282줄)
+- [x] `go-expert.md` 압축 (511줄 → 346줄)
+- [x] 모든 에이전트에 Quick Reference 섹션 추가
 
-### 1. SRE - SLI/SLO 정의
-- [x] `sre-sli-slo.md` 작성 ✅
-- SLI (Service Level Indicator) 정의
-- SLO (Service Level Objective) 설정
-- 에러 버짓 계산
-- 알림 기준 설정
-
-### 2. CI/CD & DevSecOps
-- [x] `cicd-devsecops.md` 작성 ✅
-- GitHub Actions / Jenkins 파이프라인
-- Kyverno 정책 (Policy as Code)
-- Trivy (컨테이너 취약점 스캔)
-- SonarQube (코드 품질)
-
-### 3. K8S Autoscaling (KEDA)
-- [x] `k8s-autoscaling.md` 작성 ✅
-- HPA (Horizontal Pod Autoscaler)
-- VPA (Vertical Pod Autoscaler)
-- KEDA (이벤트 기반 스케일링)
-- Karpenter (노드 오토스케일링)
-- Kafka 연동 스케일링
-
-### 4. GitOps (ArgoCD)
-- [x] `gitops-argocd.md` 작성 ✅
-- ArgoCD 설정 및 App of Apps
-- ApplicationSet (멀티 클러스터/환경)
-- Kustomize 패턴
-- Umbrella Helm Chart
-- Sync 전략
-
-### 5. 배포 전략
-- [x] `deployment-strategies.md` 작성 ✅
-- 카나리 배포 (Argo Rollouts)
-- Blue-Green 배포
-- Rolling Update
-- A/B 테스트 (프론트/기획 협업)
+**결과**: 모든 Agent 파일 600줄 미만 (Claude 권장 범위 내)
 
 ---
 
-## 🟡 중간 (곧 필요)
+## 🔴 높음 (다음 작업)
 
-### 6. K8S Scheduling
-- [x] `k8s-scheduling.md` 작성 ✅
-- Node Affinity / Anti-Affinity
-- Pod Affinity
-- Taint & Toleration
-- TopologySpreadConstraints
-- 노드 배치 전략
+### 1. Awesome Lists 등록
+- [ ] [awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code)에 PR 제출
+- [ ] [awesome-claude-skills](https://github.com/travisvn/awesome-claude-skills)에 PR 제출
+- [ ] [awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents)에 PR 제출
 
-### 7. 부하 테스트
-- [x] `load-testing.md` 작성 ✅
-- K6 스크립트 작성 (시나리오, Thresholds)
-- K6 Operator (K8S 분산 테스트)
-- nGrinder 설정
-- 트래픽 버티는 거 증명
-- 결과 시각화 및 보고서
+### 2. Agent 추가
+- [ ] `database-expert.md` - PostgreSQL, MySQL 최적화 전문가
+- [ ] `redis-expert.md` - Redis 클러스터, 캐싱 전략 전문가
+- [ ] `monitoring-expert.md` - Prometheus, Grafana, 알림 설정 전문가
 
-### 8. Kafka
-- [x] `kafka.md` 작성 ✅
-- Strimzi Operator (Kafka 클러스터)
-- Producer/Consumer 패턴 (Go, Java)
-- KEDA 연동 (Lag 기반 스케일링)
-- 모니터링 (Kafka Exporter)
+### 3. Skills 추가
+- [ ] `k8s-gateway-api.md` - Gateway API 표준 (Istio, NGINX 통합)
+- [ ] `aws-lambda.md` - Serverless 패턴
+- [ ] `grpc.md` - gRPC 서비스 설계
 
-### 9. Istio Security
-- [x] `istio-security.md` 작성 ✅
-- JWT 인증 (RequestAuthentication)
-- mTLS 강제 (PeerAuthentication)
-- AuthorizationPolicy (통신 허용)
-- Rate Limiting (EnvoyFilter)
-- Zero Trust 구현
+---
 
-### 10. FinOps
-- [x] `finops.md` 작성 ✅
-- 클라우드 비용 최적화
-- Kubecost 설치 및 설정
-- 리소스 Right-sizing (VPA)
-- Spot Instance 활용 (Karpenter)
-- Savings Plans 전략
-- 비용 모니터링 대시보드
+## 🟡 중간 (검토 필요)
+
+### 4. MCP Server 통합
+- [ ] Kubernetes MCP Server 테스트
+- [ ] GitHub MCP Server 연동
+- [ ] Slack MCP Server 알림 연동
+
+### 5. 문서 개선
+- [ ] Skills 사용 예시 GIF 추가
+- [ ] Agent 워크플로우 다이어그램
+- [ ] Video 튜토리얼 (YouTube)
+
+### 6. 테스트 강화
+- [ ] Agent 통합 테스트 추가
+- [ ] Skills 로드 성능 테스트
+- [ ] CI/CD 파이프라인 최적화
 
 ---
 
 ## 🟢 낮음 (나중에)
 
-### 11. Chaos Engineering
-- [x] `chaos-engineering.md` 작성 ✅
-- LitmusChaos 설치 및 설정
-- ChaosEngine / ChaosExperiment CRDs
-- Pod-Delete, Container-Kill, Network-Chaos
-- Probes (HTTP, Prometheus, Command)
-- GameDay 시나리오
+### 7. 국제화
+- [ ] 영문 README 작성
+- [ ] Skills 영문 버전
 
-### 12. AWS EKS
-- [x] `aws-eks.md` 작성 ✅
-- EKS 클러스터 구성 (Terraform)
-- VPC/Subnet 설계 (3-Tier)
-- IAM Role for Service Account (IRSA)
-- Add-ons 관리 (vpc-cni, coredns, kube-proxy)
-- Karpenter 노드 프로비저닝
-
-### 13. Disaster Recovery
-- [x] `disaster-recovery.md` 작성 ✅
-- DR 전략 (Active-Passive, Active-Active, Pilot Light)
-- RTO/RPO 정의
-- Velero 백업/복구
-- 멀티 클러스터 DR
-- DR 테스트 자동화
-
-### 14. Alerting & Discord
-- [x] `alerting-discord.md` 작성 ✅
-- AlertManager 설정
-- Discord 웹훅 연동 (v0.25+ 네이티브)
-- PrometheusRule (Pod/Node/SLO 알림)
-- 알림 라우팅 (팀별, 시간대별)
-- Silencing 절차
+### 8. 커뮤니티
+- [ ] Discord 서버 개설
+- [ ] Contributing 가이드 상세화
+- [ ] Issue/PR 템플릿 추가
 
 ---
 
-## 기존 Skills 보강
+## 완료된 마일스톤
 
-### istio-core.md
-- [x] mTLS 강제 설정 추가 ✅
-- [x] PeerAuthentication 예제 ✅
-- STRICT/PERMISSIVE 모드
-- 포트별 예외 설정 (메트릭)
-- mTLS 마이그레이션 단계
+### v1.0 - 초기 릴리스 (2026-01)
+- [x] 14개 Agent 작성
+- [x] 66개 Skills 작성
+- [x] 29개 Commands 작성
+- [x] BATS 테스트 36 cases
+- [x] GitHub Actions CI 설정
 
-### k8s-security.md
-- [x] Kyverno 정책 예제 추가 ✅
-- [x] Trivy 스캔 연동 ✅
-- 이미지 레지스트리 제한
-- 리소스 제한 필수
-- 필수 라벨 강제
-- CI/CD 통합 (GitHub Actions)
-
-### monitoring-troubleshoot.md
-- [x] Pod 알림 설정 ✅
-- [x] Discord 웹훅 예제 ✅
-- PrometheusRule CRD
-- AlertManager Discord 설정
+### v1.1 - Agent 최적화 (2026-02)
+- [x] load-tester 3분할 (14 → 17 agents)
+- [x] 대용량 파일 압축 (7,800줄 → 5,100줄)
+- [x] Quick Reference 섹션 추가
+- [x] README 전면 개편
 
 ---
 
-## 추가 작업
+## 참고 자료
 
-### 인프라
-- [ ] CloudFront Pro 검토
-- [x] EKS 구성 → `aws-eks.md` 참조
+### Claude Code Best Practices
+- [Anthropic 공식 가이드](https://www.anthropic.com/engineering/claude-code-best-practices)
+- Agent 파일 권장: 200-300줄, 최대 600줄
+- 150-200개 명령어 초과 시 무시 시작
+- CLAUDE.md가 너무 길면 약 절반 무시
 
-### 협업
-- [ ] 백엔드팀 소통 - 트래픽 시각자료
-- [ ] 프론트/기획 - A/B 테스트 논의
-
-### 보안
-- [ ] 내부 K8S 보안검사
-- [x] DR 사이버보안 대응 → `disaster-recovery.md` 참조
-
----
-
-## 진행 상황
-
-| 카테고리 | 전체 | 완료 | 진행률 |
-|---------|------|------|--------|
-| 높음 (신규) | 5 | 5 | 100% |
-| 중간 (신규) | 5 | 5 | 100% |
-| 낮음 (신규) | 4 | 4 | 100% |
-| 기존 보강 | 3 | 3 | 100% |
-| **합계** | **17** | **17** | **100%** |
-
----
-
-## 참고
-
-### 현재 커버되는 영역 (60 skills)
-- Istio (9 files) - core, gateway, observability, traffic, security
-- 모니터링 (4 files) - metrics, logs, grafana, troubleshoot
-- 로깅 (4 files) - loki, fluentbit, opensearch
-- K8S (8 files) - security, helm, autoscaling, scheduling, traffic
-- Go/Spring 개발 (13 files)
-- Terraform (2 files)
-- DevOps/SRE (12 files) - argocd, deployment, chaos, dr, alerting, finops, load-testing
-- 기타 (8 files) - kafka, aws-eks, docker 등
-
-### 완료된 작업 (2026-01-27)
-- 신규 12개 skill 파일 생성
-- 기존 3개 skill 파일 보강
-- 총 skills: 48개 → 60개
-
-### 향후 검토 사항
-- CloudFront Pro 도입
-- 팀 협업 문서화
-- 내부 보안 검사 자동화
+### Awesome Claude Code 레포지토리
+- [awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code)
+- [awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents)
+- [awesome-claude-skills](https://github.com/travisvn/awesome-claude-skills)
+- [anthropics/skills](https://github.com/anthropics/skills) (공식)
