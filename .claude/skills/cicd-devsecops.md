@@ -1,6 +1,6 @@
 # CI/CD & DevSecOps 가이드
 
-GitHub Actions, 보안 스캔(Trivy, SonarQube), Policy as Code(Kyverno)
+GitHub Actions, 보안 스캔(Trivy, SonarQube), 통합 파이프라인
 
 ## Quick Reference (결정 트리)
 
@@ -44,7 +44,7 @@ CI/CD 도구 선택?
 
 ## GitHub Actions 파이프라인
 
-### 기본 구조
+### 기본 CI/CD 워크플로우
 
 ```yaml
 # .github/workflows/ci.yaml
@@ -67,7 +67,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # SonarQube 분석용
+          fetch-depth: 0
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v2
@@ -88,8 +88,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Run Tests
-        run: |
-          go test -v -race -coverprofile=coverage.out ./...
+        run: go test -v -race -coverprofile=coverage.out ./...
 
       - name: Upload Coverage
         uses: codecov/codecov-action@v4
@@ -118,23 +117,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=sha,prefix=
-            type=ref,event=branch
-            type=semver,pattern={{version}}
-
       - name: Build and Push
         uses: docker/build-push-action@v5
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -163,7 +151,6 @@ jobs:
 
       - name: Deploy to K8s
         run: |
-          # ArgoCD 또는 kubectl apply
           argocd app sync ${{ env.APP_NAME }} --revision ${{ github.sha }}
 ```
 
@@ -191,13 +178,11 @@ jobs:
 
       # Helm 차트 검증
       - name: Helm Lint
-        run: |
-          helm lint ./charts/*
+        run: helm lint ./charts/*
 
       # Kyverno 정책 테스트
       - name: Kyverno CLI Test
-        run: |
-          kyverno apply ./policies/ --resource ./k8s/
+        run: kyverno apply ./policies/ --resource ./k8s/
 
       # 보안 정책 검증
       - name: Checkov Scan
@@ -240,12 +225,6 @@ trivy image --format spdx-json -o sbom.json myapp:latest
 ### CI 통합 설정
 
 ```yaml
-# .trivyignore - 무시할 CVE
-CVE-2023-12345  # 해당 없음 (미사용 기능)
-CVE-2023-67890  # 대응 중 (이슈 #123)
-```
-
-```yaml
 # trivy.yaml - 설정 파일
 severity:
   - CRITICAL
@@ -262,20 +241,6 @@ scan:
     - /var/cache
 
 ignore-unfixed: true
-```
-
-### Kubernetes Operator
-
-```yaml
-# Trivy Operator 설치
-helm repo add aqua https://aquasecurity.github.io/helm-charts/
-helm install trivy-operator aqua/trivy-operator \
-  --namespace trivy-system \
-  --create-namespace \
-  --set trivy.ignoreUnfixed=true
-
-# VulnerabilityReport 조회
-kubectl get vulnerabilityreports -A
 ```
 
 ---
@@ -334,357 +299,6 @@ conditions:
   - metric: new_duplicated_lines_density  # 중복
     op: GT
     value: 3                          # 3% 이하
-```
-
-### GitHub Integration
-
-```yaml
-# .github/workflows/sonar.yaml
-- name: SonarQube Scan
-  uses: SonarSource/sonarqube-scan-action@v2
-  env:
-    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-  with:
-    args: >
-      -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
-      -Dsonar.pullrequest.branch=${{ github.head_ref }}
-      -Dsonar.pullrequest.base=${{ github.base_ref }}
-```
-
----
-
-## Kyverno (Policy as Code)
-
-### CRITICAL: 핵심 정책
-
-```yaml
-# 1. 이미지 레지스트리 제한
-apiVersion: kyverno.io/v1
-kind: ClusterPolicy
-metadata:
-  name: restrict-image-registries
-spec:
-  validationFailureAction: Enforce
-  background: true
-  rules:
-    - name: validate-registries
-      match:
-        any:
-          - resources:
-              kinds:
-                - Pod
-      validate:
-        message: "이미지는 허용된 레지스트리에서만 가져올 수 있습니다"
-        pattern:
-          spec:
-            containers:
-              - image: "ghcr.io/* | gcr.io/* | *.dkr.ecr.*.amazonaws.com/*"
-```
-
-```yaml
-# 2. 리소스 제한 필수
-apiVersion: kyverno.io/v1
-kind: ClusterPolicy
-metadata:
-  name: require-resources
-spec:
-  validationFailureAction: Enforce
-  rules:
-    - name: require-limits
-      match:
-        any:
-          - resources:
-              kinds:
-                - Pod
-      validate:
-        message: "CPU/메모리 limits 설정이 필요합니다"
-        pattern:
-          spec:
-            containers:
-              - resources:
-                  limits:
-                    memory: "?*"
-                    cpu: "?*"
-```
-
-```yaml
-# 3. 권한 상승 금지
-apiVersion: kyverno.io/v1
-kind: ClusterPolicy
-metadata:
-  name: disallow-privilege-escalation
-spec:
-  validationFailureAction: Enforce
-  rules:
-    - name: deny-privilege-escalation
-      match:
-        any:
-          - resources:
-              kinds:
-                - Pod
-      validate:
-        message: "권한 상승이 금지되어 있습니다"
-        pattern:
-          spec:
-            containers:
-              - securityContext:
-                  allowPrivilegeEscalation: false
-```
-
-```yaml
-# 4. 라벨 필수
-apiVersion: kyverno.io/v1
-kind: ClusterPolicy
-metadata:
-  name: require-labels
-spec:
-  validationFailureAction: Enforce
-  rules:
-    - name: require-team-label
-      match:
-        any:
-          - resources:
-              kinds:
-                - Deployment
-                - StatefulSet
-      validate:
-        message: "team, app 라벨이 필요합니다"
-        pattern:
-          metadata:
-            labels:
-              team: "?*"
-              app: "?*"
-```
-
-### Mutation 정책
-
-```yaml
-# 기본값 자동 주입
-apiVersion: kyverno.io/v1
-kind: ClusterPolicy
-metadata:
-  name: add-default-securitycontext
-spec:
-  rules:
-    - name: add-security-context
-      match:
-        any:
-          - resources:
-              kinds:
-                - Pod
-      mutate:
-        patchStrategicMerge:
-          spec:
-            securityContext:
-              runAsNonRoot: true
-              seccompProfile:
-                type: RuntimeDefault
-            containers:
-              - (name): "*"
-                securityContext:
-                  allowPrivilegeEscalation: false
-                  readOnlyRootFilesystem: true
-                  capabilities:
-                    drop:
-                      - ALL
-```
-
-### Kyverno CLI (CI 검증)
-
-```bash
-# 정책 테스트
-kyverno apply ./policies/ --resource ./k8s/deployment.yaml
-
-# 정책 테스트 (테스트 케이스)
-kyverno test ./policies/tests/
-
-# 결과 출력
-kyverno apply ./policies/ -r ./k8s/ -o json
-```
-
-```yaml
-# policies/tests/require-labels-test.yaml
-apiVersion: cli.kyverno.io/v1alpha1
-kind: Test
-metadata:
-  name: require-labels-test
-policies:
-  - ../require-labels.yaml
-resources:
-  - resources.yaml
-results:
-  - policy: require-labels
-    rule: require-team-label
-    resource: good-deployment
-    kind: Deployment
-    result: pass
-  - policy: require-labels
-    rule: require-team-label
-    resource: bad-deployment
-    kind: Deployment
-    result: fail
-```
-
----
-
-## 통합 파이프라인 예시
-
-### Complete DevSecOps Pipeline
-
-```yaml
-# .github/workflows/devsecops.yaml
-name: DevSecOps Pipeline
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-
-jobs:
-  # Stage 1: Static Analysis
-  sast:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v2
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-
-      - name: Semgrep SAST
-        uses: returntocorp/semgrep-action@v1
-        with:
-          config: p/default
-
-  # Stage 2: Dependency Check
-  dependency-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Trivy FS Scan
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          severity: 'CRITICAL,HIGH'
-          exit-code: '1'
-
-  # Stage 3: Build & Image Scan
-  build:
-    needs: [sast, dependency-check]
-    runs-on: ubuntu-latest
-    outputs:
-      image-tag: ${{ steps.meta.outputs.tags }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Build Image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
-
-      - name: Trivy Image Scan
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ghcr.io/${{ github.repository }}:${{ github.sha }}
-          exit-code: '1'
-          severity: 'CRITICAL'
-
-      - name: Generate SBOM
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ghcr.io/${{ github.repository }}:${{ github.sha }}
-          format: 'spdx-json'
-          output: 'sbom.json'
-
-      - name: Upload SBOM
-        uses: actions/upload-artifact@v4
-        with:
-          name: sbom
-          path: sbom.json
-
-  # Stage 4: Policy Validation
-  policy-check:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Kyverno CLI
-        run: |
-          curl -LO https://github.com/kyverno/kyverno/releases/latest/download/kyverno-cli_linux_amd64.tar.gz
-          tar -xvf kyverno-cli_linux_amd64.tar.gz
-          sudo mv kyverno /usr/local/bin/
-
-      - name: Validate Policies
-        run: |
-          kyverno apply ./policies/ --resource ./k8s/
-
-      - name: Checkov IaC Scan
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: ./k8s
-          framework: kubernetes
-          soft_fail: false
-
-  # Stage 5: Deploy
-  deploy:
-    needs: [build, policy-check]
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - name: Deploy via ArgoCD
-        run: |
-          argocd app sync myapp --revision ${{ github.sha }}
-          argocd app wait myapp --timeout 300
-```
-
----
-
-## 보안 점수 대시보드
-
-### Metrics 수집
-
-```yaml
-# prometheus-rules.yaml
-groups:
-  - name: devsecops
-    rules:
-      - record: security:vulnerabilities:critical
-        expr: sum(trivy_vulnerability_total{severity="CRITICAL"})
-
-      - record: security:vulnerabilities:high
-        expr: sum(trivy_vulnerability_total{severity="HIGH"})
-
-      - record: security:policy_violations
-        expr: sum(kyverno_policy_results_total{result="fail"})
-
-      - record: security:sonar_issues
-        expr: sum(sonarqube_issues_total{severity="BLOCKER"})
-```
-
-### Grafana 대시보드 쿼리
-
-```promql
-# 취약점 트렌드
-sum(trivy_vulnerability_total) by (severity)
-
-# 정책 위반율
-sum(kyverno_policy_results_total{result="fail"})
-/
-sum(kyverno_policy_results_total)
-
-# 코드 품질 점수
-sonarqube_quality_gate_status{project="myapp"}
 ```
 
 ---
@@ -755,13 +369,8 @@ spec:
 - [ ] SBOM 생성
 - [ ] Quality Gate 설정
 
-### Policy as Code
-- [ ] Kyverno 설치
-- [ ] 필수 정책 적용 (이미지, 리소스, 권한)
-- [ ] CI에서 정책 검증
-
 ### 시크릿 관리
 - [ ] GitHub Secrets 사용
 - [ ] External Secrets Operator (선택)
 
-**관련 skill**: `/gitops-argocd`, `/k8s-security`, `/docker`
+**관련 skill**: `/cicd-policy` (Kyverno 정책), `/gitops-argocd`, `/k8s-security`, `/docker`

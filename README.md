@@ -7,8 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Powered-blueviolet.svg)](https://docs.anthropic.com/claude-code)
 
-[![Agents](https://img.shields.io/badge/Agents-18-orange.svg)](#-agents-autonomous-ai-assistants)
-[![Skills](https://img.shields.io/badge/Skills-68-blue.svg)](#-skills-on-demand-knowledge)
+[![Agents](https://img.shields.io/badge/Agents-21-orange.svg)](#-agents-autonomous-ai-assistants)
+[![Skills](https://img.shields.io/badge/Skills-72-blue.svg)](#-skills-on-demand-knowledge)
 [![Commands](https://img.shields.io/badge/Commands-29-green.svg)](#commands)
 [![Last Updated](https://img.shields.io/badge/Updated-Feb_2026-brightgreen.svg)](#)
 
@@ -39,8 +39,8 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 | Metric | Value | Description |
 |--------|-------|-------------|
-| **18 Agents** | ~5,400 lines | 자율 실행 AI 에이전트 (보안, 인시던트, FinOps 등) |
-| **68 Skills** | ~19,000 lines | 온디맨드 도메인 지식 (Go, Spring, K8s, FinOps 등) |
+| **21 Agents** | ~6,000 lines | 자율 실행 AI 에이전트 (보안, 인시던트, FinOps, MLOps 등) |
+| **72 Skills** | ~22,000 lines | 온디맨드 도메인 지식 (Go, Spring, K8s, FinOps, AIOps 등) |
 | **29 Commands** | Custom workflows | 자동화 명령어 (/go review, /k8s secure 등) |
 | **4 Templates** | Project setups | Go, Java, K8s, Terraform 프로젝트 템플릿 |
 | **100%** | Test coverage | BATS 테스트 + CI 검증 |
@@ -90,7 +90,7 @@ cp -r .claude/skills ~/.claude/skills    # Skills만
 
 ## 🤖 Agents (Autonomous AI Assistants)
 
-Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (17 files, ~5,100줄).
+Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (21 files, ~6,000줄).
 
 > **Skills**는 "지식"이고, **Agents**는 "전문가"입니다. 자율적으로 판단하고 작업을 수행합니다.
 
@@ -105,6 +105,14 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | 👀 `code-reviewer` | 멀티 언어 코드 리뷰, 버그/성능/보안 탐지 | PR 생성 후 |
 | 💰 `cost-analyzer` | FinOps 분석, 비용 이상 탐지, 최적화 제안 | 비용 리뷰 시 |
 | 📈 `finops-advisor` | FinOps 전략, 성숙도 평가, 도구 선택, GreenOps | 비용 전략 수립 시 |
+
+### Platform & MLOps
+
+| Agent | Description | Auto-trigger |
+|-------|-------------|--------------|
+| 🏗️ `platform-engineer` | IDP 설계, Backstage, Golden Path, DX 최적화 | 플랫폼 구축 시 |
+| 🧠 `mlops-expert` | GPU 스케줄링, 분산 학습, 모델 서빙, LLM 배포 | AI/ML 워크로드 시 |
+| 🗄️ `database-expert` | PostgreSQL/MySQL 튜닝, Connection Pooling, K8s DB | DB 성능 이슈 시 |
 
 ### Language Experts (High-Traffic)
 
@@ -136,7 +144,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills (On-demand Knowledge)
 
-필요할 때만 로드되는 도메인 지식 (68 files, ~19,000줄).
+필요할 때만 로드되는 도메인 지식 (72 files, ~22,000줄).
 
 <details>
 <summary><b>Go & Spring (10 files)</b></summary>
@@ -205,6 +213,19 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
+<summary><b>Platform & MLOps (6 files)</b></summary>
+
+```
+/backstage          # Developer Portal, Software Catalog
+/golden-paths       # 표준화 경로, 템플릿 패턴
+/k8s-gpu            # NVIDIA Operator, MIG, Kueue, Volcano
+/ml-serving         # KServe, vLLM, TensorRT-LLM
+/aiops              # AIOps, 이상 탐지, 자동 복구
+/supply-chain-security # SBOM, SLSA, Sigstore, Cosign
+```
+</details>
+
+<details>
 <summary><b>Developer Experience (3 files)</b></summary>
 
 ```
@@ -248,14 +269,17 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── agents/               # 18 autonomous AI agents
+│   ├── agents/               # 21 autonomous AI agents
 │   │   ├── security-scanner.md
 │   │   ├── k8s-troubleshooter.md
 │   │   ├── ticketing-expert.md
 │   │   ├── finops-advisor.md # FinOps 전략, GreenOps
+│   │   ├── platform-engineer.md # IDP, Backstage
+│   │   ├── mlops-expert.md   # GPU, 모델 서빙
+│   │   ├── database-expert.md # PostgreSQL, MySQL
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder
 │   │   └── ...
-│   ├── skills/               # 68 on-demand knowledge files
+│   ├── skills/               # 72 on-demand knowledge files
 │   └── standards.yml         # Code quality standards
 ├── commands/                 # 29 automation commands
 ├── project-templates/        # Go, Java, K8s, Terraform
@@ -274,11 +298,14 @@ ress-claude-agents/
 | **Infrastructure** | Kubernetes, Terraform, AWS EKS |
 | **GitOps** | ArgoCD, Argo Rollouts, KEDA |
 | **Service Mesh** | Istio (Sidecar/Ambient), mTLS |
-| **Observability** | Prometheus, Grafana, OpenTelemetry, Loki |
+| **Observability** | Prometheus, Grafana, OpenTelemetry, Loki, AIOps |
 | **Messaging** | Apache Kafka (Strimzi) |
-| **Security** | Kyverno, Trivy, PCI-DSS |
+| **Security** | Kyverno, Trivy, SBOM, SLSA, Sigstore |
 | **SRE** | SLI/SLO, Chaos Engineering, DR |
 | **FinOps** | Kubecost, OpenCost, Infracost, GreenOps |
+| **Platform** | Backstage, Golden Paths, Developer Portal |
+| **MLOps** | KServe, vLLM, GPU Operator, Kueue |
+| **Database** | PostgreSQL, MySQL, PgBouncer, ProxySQL |
 
 ---
 
@@ -316,12 +343,12 @@ make all           # validate + test
 
 | Item | Count |
 |------|-------|
-| **Agents** | 18 files (~5,400 lines) |
-| **Skills** | 68 files (~19,000 lines) |
+| **Agents** | 21 files (~6,000 lines) |
+| **Skills** | 72 files (~22,000 lines) |
 | **Commands** | 29 files |
 | **Templates** | 4 projects |
 | **Tests** | 36 cases |
-| **Total** | ~26,000+ lines |
+| **Total** | ~30,000+ lines |
 
 ---
 

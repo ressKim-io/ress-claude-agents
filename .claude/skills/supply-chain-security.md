@@ -1,141 +1,109 @@
 # Supply Chain Security 가이드
 
-SBOM, 이미지 서명 (Cosign), SLSA Framework, Kyverno 이미지 검증
+SBOM, SLSA, Sigstore를 활용한 소프트웨어 공급망 보안
 
 ## Quick Reference (결정 트리)
 
 ```
-공급망 보안 도구 선택?
+Supply Chain 보안 단계?
     │
-    ├─ SBOM 생성 ─────────> Syft (CLI) 또는 Trivy (통합)
+    ├─ 1단계: 투명성 ─────────> SBOM 생성
     │       │
-    │       ├─ SPDX 포맷 → 규정 준수 (ISO/IEC 5962)
-    │       └─ CycloneDX → 보안 분석 최적화
+    │       ├─ Syft ──────────> 컨테이너/소스 스캔
+    │       └─ Trivy ─────────> 취약점 + SBOM
     │
-    ├─ 이미지 서명 ───────> Cosign (Keyless/OIDC 추천)
+    ├─ 2단계: 서명 ───────────> Sigstore/Cosign
     │       │
-    │       ├─ CI 환경 → Keyless (OIDC Provider)
-    │       └─ 에어갭 환경 → Key-pair 방식
+    │       ├─ Keyless ───────> OIDC (GitHub/GitLab)
+    │       └─ Key-based ─────> HSM/KMS
     │
-    ├─ 정책 검증 ─────────> Kyverno verifyImages
+    ├─ 3단계: 출처 증명 ──────> SLSA Provenance
+    │       │
+    │       └─ in-toto ───────> 빌드 증명
     │
-    └─ Provenance ───────> SLSA (slsa-verifier)
+    └─ 4단계: 정책 적용 ──────> Admission Control
+            │
+            ├─ Kyverno ───────> 서명 검증
+            └─ Gatekeeper ────> OPA 정책
 ```
 
 ---
 
-## CRITICAL: 공급망 보안 레이어
+## CRITICAL: SLSA 레벨
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                 Software Supply Chain Security                   │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  Source ──> Build ──> Package ──> Deploy ──> Runtime            │
-│     │         │          │          │           │               │
-│   Code      SLSA       SBOM      Verify      Monitor            │
-│  Review   Provenance  Generate   Signature   Admission          │
-│   Scan     Level 3    Attach     Kyverno     Runtime            │
-│                       Sign                    Policy            │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐   │
-│  │ Trust Chain: Source → Build → Artifact → Registry → K8s │   │
-│  └──────────────────────────────────────────────────────────┘   │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
+| Level | 요구사항 | 보장 |
+|-------|----------|------|
+| **L0** | 없음 | 없음 |
+| **L1** | Provenance 존재 | 패키지가 어떻게 빌드되었는지 문서화 |
+| **L2** | 서명된 Provenance | 신뢰할 수 있는 빌드 서비스에서 생성 |
+| **L3** | 검증된 소스, 격리 빌드 | 빌드 프로세스 변조 방지 |
 
-**핵심 원칙**:
-| 원칙 | 설명 |
-|------|------|
-| **불변성** | 아티팩트는 빌드 후 변경 불가 |
-| **추적성** | 모든 컴포넌트의 출처 추적 가능 |
-| **검증** | 배포 전 서명 및 정책 검증 |
-| **투명성** | SBOM으로 구성요소 공개 |
+### 규제 요건
+
+| 규제 | 지역 | 요구사항 |
+|------|------|----------|
+| EO 14028 | 미국 | SBOM 제출 필수 |
+| Cyber Resilience Act | EU | 출처 증명 의무화 |
+| NIST SSDF | 미국 | 보안 개발 프레임워크 준수 |
 
 ---
 
 ## SBOM (Software Bill of Materials)
 
-### SBOM 포맷 비교
+### 포맷 비교
 
-| 포맷 | 장점 | 사용처 |
-|------|------|--------|
-| **SPDX** | ISO 표준, 라이선스 중심 | 법적 컴플라이언스 |
-| **CycloneDX** | 보안 중심, VEX 지원 | 취약점 관리 |
+| 포맷 | 장점 | 사용 |
+|------|------|------|
+| **SPDX 3.0** | ISO 표준, 법적 준수 | 규제 제출 |
+| **CycloneDX** | 보안 특화, VEX 지원 | 취약점 관리 |
 
 ### Syft로 SBOM 생성
 
 ```bash
-# 이미지 SBOM 생성 (SPDX JSON)
-syft myapp:latest -o spdx-json > sbom.spdx.json
+# 컨테이너 이미지 스캔
+syft packages myimage:latest -o spdx-json > sbom.spdx.json
 
-# 이미지 SBOM 생성 (CycloneDX)
-syft myapp:latest -o cyclonedx-json > sbom.cdx.json
-
-# 디렉토리에서 SBOM 생성
-syft dir:./src -o spdx-json > source-sbom.json
+# 소스 디렉토리 스캔
+syft dir:./src -o cyclonedx-json > sbom.cdx.json
 
 # OCI 레지스트리에 SBOM 첨부
-syft myapp:latest -o spdx-json | \
-  cosign attach sbom --sbom - ghcr.io/myorg/myapp:latest
+syft packages myimage:latest -o spdx-json | \
+  cosign attach sbom --sbom /dev/stdin myimage:latest
 ```
 
-### Trivy로 SBOM 생성
+### Trivy로 SBOM + 취약점 스캔
 
 ```bash
-# Trivy SBOM 생성 (SPDX)
-trivy image --format spdx-json -o sbom.spdx.json myapp:latest
+# SBOM 생성
+trivy image --format spdx-json -o sbom.json myimage:latest
 
-# Trivy SBOM 생성 (CycloneDX)
-trivy image --format cyclonedx -o sbom.cdx.json myapp:latest
+# SBOM에서 취약점 스캔
+trivy sbom sbom.json
 
-# SBOM 기반 취약점 스캔
-trivy sbom sbom.spdx.json
+# CI 통합 (CRITICAL/HIGH 발견 시 실패)
+trivy image --exit-code 1 --severity CRITICAL,HIGH myimage:latest
 ```
 
-### GitHub Actions SBOM 워크플로우
+### GitHub Actions 통합
 
 ```yaml
-# .github/workflows/sbom.yaml
 name: SBOM Generation
-
-on:
-  push:
-    branches: [main]
+on: [push]
 
 jobs:
   sbom:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      id-token: write  # Keyless signing
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
-
-      - name: Generate SBOM with Syft
+      - name: Generate SBOM
         uses: anchore/sbom-action@v0
         with:
-          image: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          image: ${{ env.IMAGE_NAME }}
           format: spdx-json
           output-file: sbom.spdx.json
 
-      - name: Attach SBOM to Image
-        run: |
-          cosign attach sbom \
-            --sbom sbom.spdx.json \
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
-
-      - name: Upload SBOM as Artifact
+      - name: Upload SBOM
         uses: actions/upload-artifact@v4
         with:
           name: sbom
@@ -144,60 +112,46 @@ jobs:
 
 ---
 
-## Cosign 이미지 서명
+## Sigstore / Cosign
 
-### CRITICAL: Keyless Signing (권장)
-
-```bash
-# OIDC 기반 Keyless 서명 (GitHub Actions, GitLab CI 등)
-# 별도 키 관리 불필요, Sigstore 인프라 사용
-cosign sign --yes ghcr.io/myorg/myapp:v1.0.0
-
-# 서명 검증
-cosign verify \
-  --certificate-identity-regexp="https://github.com/myorg/.*" \
-  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
-  ghcr.io/myorg/myapp:v1.0.0
-```
-
-### Key-pair Signing (에어갭 환경)
+### Keyless 서명 (권장)
 
 ```bash
-# 키 쌍 생성
-cosign generate-key-pair
+# OIDC 기반 keyless 서명
+cosign sign ghcr.io/myorg/myimage:latest
 
-# 이미지 서명
-cosign sign --key cosign.key ghcr.io/myorg/myapp:v1.0.0
+# 브라우저에서 OIDC 인증 수행
+# 인증서가 Fulcio에서 발급되고 Rekor에 기록됨
 
 # 서명 검증
-cosign verify --key cosign.pub ghcr.io/myorg/myapp:v1.0.0
+cosign verify ghcr.io/myorg/myimage:latest \
+  --certificate-identity=user@example.com \
+  --certificate-oidc-issuer=https://github.com/login/oauth
 ```
 
-### GitHub Actions Keyless 서명
+### CI/CD Keyless 서명
 
 ```yaml
-# .github/workflows/sign.yaml
-name: Build and Sign
-
+# GitHub Actions
+name: Sign Image
 on:
   push:
-    tags: ['v*']
+    branches: [main]
 
 jobs:
   sign:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      id-token: write  # OIDC 토큰 필요
       packages: write
-      id-token: write  # OIDC token for keyless signing
-
     steps:
       - uses: actions/checkout@v4
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3
 
-      - name: Login to Registry
+      - name: Login to GHCR
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -205,82 +159,47 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Push
-        id: build
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}:${{ github.sha }} .
+          docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
 
       - name: Sign Image (Keyless)
         run: |
-          cosign sign --yes \
-            ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
-
-      - name: Generate and Attach SBOM
-        run: |
-          syft ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} \
-            -o spdx-json > sbom.json
-          cosign attach sbom \
-            --sbom sbom.json \
-            ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
-
-      - name: Sign SBOM
-        run: |
-          cosign sign --yes \
-            --attachment sbom \
-            ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }}
+          cosign sign --yes ghcr.io/${{ github.repository }}:${{ github.sha }}
+        env:
+          COSIGN_EXPERIMENTAL: 1
 ```
 
-### Attestation (증명서)
+### Key 기반 서명 (오프라인 환경)
 
 ```bash
-# SLSA Provenance attestation 생성
-cosign attest --yes \
-  --predicate provenance.json \
-  --type slsaprovenance \
-  ghcr.io/myorg/myapp:v1.0.0
+# 키 쌍 생성
+cosign generate-key-pair
 
-# Attestation 검증
-cosign verify-attestation \
-  --certificate-identity-regexp="https://github.com/myorg/.*" \
-  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
-  --type slsaprovenance \
-  ghcr.io/myorg/myapp:v1.0.0
+# 서명
+cosign sign --key cosign.key myimage:latest
+
+# 검증
+cosign verify --key cosign.pub myimage:latest
 ```
 
 ---
 
-## SLSA Framework
+## SLSA Provenance
 
-### SLSA Levels
-
-| Level | 요구사항 | 설명 |
-|-------|----------|------|
-| **SLSA 1** | 빌드 문서화 | Provenance 존재 |
-| **SLSA 2** | 호스티드 빌드 | 신뢰할 수 있는 빌드 환경 |
-| **SLSA 3** | 소스 검증 | 변조 불가능한 빌드 |
-| **SLSA 4** | 2인 리뷰 | 완전한 소스 무결성 |
-
-### GitHub Actions SLSA 3 달성
+### GitHub Actions으로 SLSA L3 달성
 
 ```yaml
-# .github/workflows/slsa.yaml
 name: SLSA Build
-
 on:
   push:
-    tags: ['v*']
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      id-token: write
-      attestations: write
-
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
     steps:
       - uses: actions/checkout@v4
 
@@ -288,61 +207,57 @@ jobs:
         id: build
         uses: docker/build-push-action@v5
         with:
-          context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
 
-      - name: Generate SLSA Provenance
-        uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2.0.0
-        with:
-          image: ghcr.io/${{ github.repository }}
-          digest: ${{ steps.build.outputs.digest }}
-          registry-username: ${{ github.actor }}
-          registry-password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Verify Provenance
-        run: |
-          slsa-verifier verify-image \
-            ghcr.io/${{ github.repository }}@${{ steps.build.outputs.digest }} \
-            --source-uri github.com/${{ github.repository }} \
-            --source-tag ${{ github.ref_name }}
+  provenance:
+    needs: build
+    permissions:
+      actions: read
+      id-token: write
+      packages: write
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2.1.0
+    with:
+      image: ghcr.io/${{ github.repository }}
+      digest: ${{ needs.build.outputs.digest }}
+    secrets:
+      registry-username: ${{ github.actor }}
+      registry-password: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### Provenance 검증
+### Tekton Chains (Kubernetes CI)
 
-```bash
-# slsa-verifier 설치
-go install github.com/slsa-framework/slsa-verifier/v2/cli/slsa-verifier@latest
+```yaml
+# Tekton Chains 설치
+kubectl apply -f https://storage.googleapis.com/tekton-releases/chains/latest/release.yaml
 
-# 이미지 Provenance 검증
-slsa-verifier verify-image \
-  ghcr.io/myorg/myapp:v1.0.0 \
-  --source-uri github.com/myorg/myapp \
-  --source-tag v1.0.0
-
-# 아티팩트 Provenance 검증
-slsa-verifier verify-artifact \
-  ./myapp.tar.gz \
-  --provenance-path ./provenance.intoto.jsonl \
-  --source-uri github.com/myorg/myapp
+# Chains 설정 (cosign 서명 + SLSA provenance)
+kubectl patch configmap chains-config -n tekton-chains -p '
+{
+  "data": {
+    "artifacts.taskrun.format": "slsa/v1",
+    "artifacts.taskrun.storage": "oci",
+    "artifacts.oci.storage": "oci",
+    "signers.x509.fulcio.enabled": "true",
+    "transparency.enabled": "true"
+  }
+}'
 ```
 
 ---
 
-## Kyverno 이미지 검증
+## Kubernetes 정책 적용
 
-### CRITICAL: verifyImages 정책
+### Kyverno 서명 검증
 
 ```yaml
-# verify-signed-images.yaml
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
-  name: verify-signed-images
+  name: verify-image-signature
 spec:
   validationFailureAction: Enforce
   background: false
-  webhookTimeoutSeconds: 30
   rules:
     - name: verify-signature
       match:
@@ -362,56 +277,9 @@ spec:
                       url: https://rekor.sigstore.dev
 ```
 
-### 레지스트리별 검증 정책
+### Kyverno SBOM 검증
 
 ```yaml
-# multi-registry-verification.yaml
-apiVersion: kyverno.io/v1
-kind: ClusterPolicy
-metadata:
-  name: verify-multi-registry
-spec:
-  validationFailureAction: Enforce
-  rules:
-    # 내부 레지스트리 - 키 기반 서명
-    - name: verify-internal-images
-      match:
-        any:
-          - resources:
-              kinds:
-                - Pod
-      verifyImages:
-        - imageReferences:
-            - "registry.internal.com/*"
-          attestors:
-            - entries:
-                - keys:
-                    publicKeys: |-
-                      -----BEGIN PUBLIC KEY-----
-                      MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE...
-                      -----END PUBLIC KEY-----
-
-    # GitHub Container Registry - Keyless
-    - name: verify-ghcr-images
-      match:
-        any:
-          - resources:
-              kinds:
-                - Pod
-      verifyImages:
-        - imageReferences:
-            - "ghcr.io/myorg/*"
-          attestors:
-            - entries:
-                - keyless:
-                    subject: "https://github.com/myorg/*"
-                    issuer: "https://token.actions.githubusercontent.com"
-```
-
-### SBOM 검증 정책
-
-```yaml
-# verify-sbom.yaml
 apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
@@ -419,7 +287,7 @@ metadata:
 spec:
   validationFailureAction: Enforce
   rules:
-    - name: require-sbom-attestation
+    - name: check-sbom
       match:
         any:
           - resources:
@@ -427,245 +295,119 @@ spec:
                 - Pod
       verifyImages:
         - imageReferences:
-            - "ghcr.io/myorg/*"
+            - "*"
           attestations:
             - type: https://spdx.dev/Document
-              attestors:
-                - entries:
-                    - keyless:
-                        subject: "https://github.com/myorg/*"
-                        issuer: "https://token.actions.githubusercontent.com"
               conditions:
                 - all:
-                    # SBOM에 CRITICAL 취약점이 없어야 함
-                    - key: "{{ sbom.packages[?vulnerabilities[?severity=='CRITICAL']] | length(@) }}"
-                      operator: Equals
-                      value: "0"
+                    - key: "{{ creationInfo.creators[] }}"
+                      operator: AnyIn
+                      value: ["Tool: syft-*", "Tool: trivy-*"]
 ```
 
-### Provenance 검증 정책
+### OPA Gatekeeper
 
 ```yaml
-# verify-provenance.yaml
-apiVersion: kyverno.io/v1
-kind: ClusterPolicy
+apiVersion: templates.gatekeeper.sh/v1
+kind: ConstraintTemplate
 metadata:
-  name: verify-slsa-provenance
+  name: k8srequiredigestsignature
 spec:
-  validationFailureAction: Enforce
-  rules:
-    - name: check-slsa-level
-      match:
-        any:
-          - resources:
-              kinds:
-                - Pod
-      verifyImages:
-        - imageReferences:
-            - "ghcr.io/myorg/*"
-          attestations:
-            - type: https://slsa.dev/provenance/v0.2
-              attestors:
-                - entries:
-                    - keyless:
-                        subject: "https://github.com/myorg/*"
-                        issuer: "https://token.actions.githubusercontent.com"
-              conditions:
-                - all:
-                    # 신뢰할 수 있는 빌더에서 빌드됨
-                    - key: "{{ buildDefinition.buildType }}"
-                      operator: Equals
-                      value: "https://github.com/slsa-framework/slsa-github-generator/container@v1"
+  crd:
+    spec:
+      names:
+        kind: K8sRequireDigestSignature
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package k8srequiredigestsignature
+
+        violation[{"msg": msg}] {
+          container := input.review.object.spec.containers[_]
+          not contains(container.image, "@sha256:")
+          msg := sprintf("Container %v must use image digest", [container.name])
+        }
+---
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequireDigestSignature
+metadata:
+  name: require-digest
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
 ```
 
 ---
 
-## Dependency-Track 연동
-
-### 설치 (Helm)
-
-```bash
-helm repo add dependency-track https://dependencytrack.github.io/helm-charts
-helm install dependency-track dependency-track/dependency-track \
-  --namespace dependency-track \
-  --create-namespace \
-  --set ingress.enabled=true \
-  --set ingress.hostname=dependency-track.example.com
-```
-
-### CI에서 SBOM 업로드
+## 전체 파이프라인 예시
 
 ```yaml
-# .github/workflows/dependency-track.yaml
-- name: Generate SBOM
-  run: |
-    syft ghcr.io/${{ github.repository }}:${{ github.sha }} \
-      -o cyclonedx-json > sbom.cdx.json
-
-- name: Upload to Dependency-Track
-  run: |
-    curl -X POST \
-      -H "X-Api-Key: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}" \
-      -H "Content-Type: application/json" \
-      -d @sbom.cdx.json \
-      "${{ secrets.DEPENDENCY_TRACK_URL }}/api/v1/bom"
-```
-
-### Policy Violation 알림
-
-```yaml
-# prometheus-rules.yaml
-groups:
-  - name: supply-chain-security
-    rules:
-      - alert: CriticalVulnerabilityFound
-        expr: |
-          dependency_track_policy_violations{severity="CRITICAL"} > 0
-        for: 5m
-        labels:
-          severity: critical
-        annotations:
-          summary: "Critical vulnerability found in {{ $labels.project }}"
-
-      - alert: SBOMStale
-        expr: |
-          time() - dependency_track_project_last_bom_import > 86400 * 7
-        for: 1h
-        labels:
-          severity: warning
-        annotations:
-          summary: "SBOM not updated for 7 days: {{ $labels.project }}"
-```
-
----
-
-## 완전한 공급망 보안 워크플로우
-
-```yaml
-# .github/workflows/supply-chain-security.yaml
-name: Supply Chain Security
-
+name: Secure Supply Chain Pipeline
 on:
   push:
     branches: [main]
-    tags: ['v*']
 
 env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE: ghcr.io/${{ github.repository }}
 
 jobs:
-  build-sign-attest:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
       id-token: write
-      attestations: write
-
     outputs:
       digest: ${{ steps.build.outputs.digest }}
-
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Cosign
-        uses: sigstore/cosign-installer@v3
-
-      - name: Install Syft
-        uses: anchore/sbom-action/download-syft@v0
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Login to Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          tags: |
-            type=sha
-            type=ref,event=tag
-
-      # 1. Build and Push
-      - name: Build and Push
+      # 1. 빌드
+      - name: Build Image
         id: build
         uses: docker/build-push-action@v5
         with:
-          context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          provenance: true
-          sbom: true
+          tags: ${{ env.IMAGE }}:${{ github.sha }}
 
-      # 2. Sign Image (Keyless)
-      - name: Sign Image
-        run: |
-          cosign sign --yes \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
-
-      # 3. Generate and Attach SBOM
+      # 2. SBOM 생성
       - name: Generate SBOM
-        run: |
-          syft ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }} \
-            -o spdx-json > sbom.spdx.json
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ env.IMAGE }}:${{ github.sha }}
+          format: spdx-json
+          output-file: sbom.spdx.json
 
-      - name: Attach SBOM
-        run: |
-          cosign attach sbom \
-            --sbom sbom.spdx.json \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
-
-      # 4. Sign SBOM
-      - name: Sign SBOM
-        run: |
-          cosign sign --yes \
-            --attachment sbom \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
-
-      # 5. Scan for Vulnerabilities
+      # 3. 취약점 스캔
       - name: Scan Vulnerabilities
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build.outputs.digest }}
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
+          image-ref: ${{ env.IMAGE }}:${{ github.sha }}
+          exit-code: 1
+          severity: CRITICAL,HIGH
 
-      - name: Upload Trivy Results
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: trivy-results.sarif
-
-  verify:
-    needs: build-sign-attest
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install Cosign
+      # 4. 이미지 서명 (Keyless)
+      - name: Sign Image
         uses: sigstore/cosign-installer@v3
+      - run: cosign sign --yes ${{ env.IMAGE }}@${{ steps.build.outputs.digest }}
 
-      - name: Verify Signature
-        run: |
-          cosign verify \
-            --certificate-identity-regexp="https://github.com/${{ github.repository }}/.*" \
-            --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ needs.build-sign-attest.outputs.digest }}
+      # 5. SBOM 첨부
+      - name: Attach SBOM
+        run: cosign attach sbom --sbom sbom.spdx.json ${{ env.IMAGE }}@${{ steps.build.outputs.digest }}
 
-      - name: Verify SBOM
-        run: |
-          cosign verify \
-            --certificate-identity-regexp="https://github.com/${{ github.repository }}/.*" \
-            --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
-            --attachment sbom \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ needs.build-sign-attest.outputs.digest }}
+  # 6. SLSA Provenance 생성
+  provenance:
+    needs: build
+    permissions:
+      actions: read
+      id-token: write
+      packages: write
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_container_slsa3.yml@v2.1.0
+    with:
+      image: ${{ needs.build.env.IMAGE }}
+      digest: ${{ needs.build.outputs.digest }}
 ```
 
 ---
@@ -674,39 +416,41 @@ jobs:
 
 | 실수 | 문제 | 해결 |
 |------|------|------|
-| 서명 없이 배포 | 변조 감지 불가 | Cosign + Kyverno |
-| SBOM 미생성 | 취약점 추적 불가 | 빌드 시 자동 생성 |
-| Key 하드코딩 | 키 유출 위험 | Keyless 또는 Secret Manager |
-| Audit 모드만 사용 | 정책 우회 가능 | Enforce 모드 전환 |
-| 태그 기반 서명 | 태그 변경 시 무효화 | Digest 기반 서명 |
-| SBOM 미갱신 | 오래된 취약점 정보 | 빌드마다 갱신 |
+| 태그로 서명 | 변조 가능 | digest로 서명 |
+| SBOM 미생성 | 규제 미준수 | CI에서 자동 생성 |
+| 서명 검증 미적용 | 무의미한 서명 | Admission 정책 |
+| 장기 키 사용 | 키 유출 위험 | Keyless 채택 |
+| 수동 SBOM | 누락/불일치 | 자동화 파이프라인 |
 
 ---
 
 ## 체크리스트
 
-### SBOM
-- [ ] Syft 또는 Trivy로 SBOM 생성 자동화
-- [ ] SBOM 포맷 선택 (SPDX/CycloneDX)
-- [ ] 이미지에 SBOM 첨부
-- [ ] Dependency-Track 연동
+### SLSA Level 1
+- [ ] 빌드 스크립트 버전 관리
+- [ ] SBOM 생성 자동화
+- [ ] Provenance 문서화
 
-### 이미지 서명
-- [ ] Cosign 설치
-- [ ] Keyless 서명 설정 (OIDC)
-- [ ] CI/CD에 서명 단계 추가
-- [ ] 서명 검증 자동화
+### SLSA Level 2
+- [ ] Sigstore로 서명
+- [ ] Rekor 투명성 로그 기록
+- [ ] 신뢰할 수 있는 빌드 서비스 (GitHub Actions/Tekton)
 
-### Kyverno 정책
-- [ ] verifyImages 정책 적용
-- [ ] SBOM attestation 검증
-- [ ] Provenance 검증
-- [ ] Enforce 모드 활성화
+### SLSA Level 3
+- [ ] 소스 검증 (signed commits)
+- [ ] 격리된 빌드 환경
+- [ ] Kubernetes Admission 정책 적용
 
-### SLSA
-- [ ] SLSA Level 목표 설정
-- [ ] Provenance 생성 자동화
-- [ ] slsa-verifier로 검증
-- [ ] Rekor 투명성 로그 활용
+**관련 agent**: `security-scanner`
+**관련 skill**: `/k8s-security`
 
-**관련 skill**: `/cicd-devsecops`, `/k8s-security`, `/gitops-argocd`
+---
+
+## Sources
+
+- [Sigstore Documentation](https://docs.sigstore.dev/)
+- [SLSA Framework](https://slsa.dev/)
+- [OpenSSF Supply Chain Security](https://openssf.org/blog/2024/02/16/scaling-up-supply-chain-security-implementing-sigstore-for-seamless-container-image-signing/)
+- [Kyverno Image Verification](https://kyverno.io/docs/writing-policies/verify-images/)
+- [DevSecOps Trends 2026](https://www.practical-devsecops.com/devsecops-trends-2026/)
+- [Chainguard SLSA Guide](https://edu.chainguard.dev/compliance/slsa/what-is-slsa/)
