@@ -7,8 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Powered-blueviolet.svg)](https://docs.anthropic.com/claude-code)
 
-[![Agents](https://img.shields.io/badge/Agents-21-orange.svg)](#-agents-autonomous-ai-assistants)
-[![Skills](https://img.shields.io/badge/Skills-72-blue.svg)](#-skills-on-demand-knowledge)
+[![Agents](https://img.shields.io/badge/Agents-22-orange.svg)](#-agents-autonomous-ai-assistants)
+[![Skills](https://img.shields.io/badge/Skills-94-blue.svg)](#-skills-on-demand-knowledge)
 [![Commands](https://img.shields.io/badge/Commands-29-green.svg)](#commands)
 [![Last Updated](https://img.shields.io/badge/Updated-Feb_2026-brightgreen.svg)](#)
 
@@ -39,8 +39,8 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 | Metric | Value | Description |
 |--------|-------|-------------|
-| **21 Agents** | ~6,000 lines | 자율 실행 AI 에이전트 (보안, 인시던트, FinOps, MLOps 등) |
-| **72 Skills** | ~22,000 lines | 온디맨드 도메인 지식 (Go, Spring, K8s, FinOps, AIOps 등) |
+| **22 Agents** | ~6,500 lines | 자율 실행 AI 에이전트 (보안, 인시던트, FinOps, MLOps, OTel 등) |
+| **94 Skills** | ~35,000 lines | 온디맨드 도메인 지식 (Go, Spring, K8s, FinOps, MLOps, eBPF 등) |
 | **29 Commands** | Custom workflows | 자동화 명령어 (/go review, /k8s secure 등) |
 | **4 Templates** | Project setups | Go, Java, K8s, Terraform 프로젝트 템플릿 |
 | **100%** | Test coverage | BATS 테스트 + CI 검증 |
@@ -90,7 +90,7 @@ cp -r .claude/skills ~/.claude/skills    # Skills만
 
 ## 🤖 Agents (Autonomous AI Assistants)
 
-Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (21 files, ~6,000줄).
+Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (22 files, ~6,500줄).
 
 > **Skills**는 "지식"이고, **Agents**는 "전문가"입니다. 자율적으로 판단하고 작업을 수행합니다.
 
@@ -105,6 +105,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | 👀 `code-reviewer` | 멀티 언어 코드 리뷰, 버그/성능/보안 탐지 | PR 생성 후 |
 | 💰 `cost-analyzer` | FinOps 분석, 비용 이상 탐지, 최적화 제안 | 비용 리뷰 시 |
 | 📈 `finops-advisor` | FinOps 전략, 성숙도 평가, 도구 선택, GreenOps | 비용 전략 수립 시 |
+| 📡 `otel-expert` | 대규모 OTel 아키텍처, Tail Sampling, 비용 최적화 | 10K+ RPS OTel 구축 시 |
 
 ### Platform & MLOps
 
@@ -144,7 +145,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills (On-demand Knowledge)
 
-필요할 때만 로드되는 도메인 지식 (72 files, ~22,000줄).
+필요할 때만 로드되는 도메인 지식 (94 files, ~35,000줄).
 
 <details>
 <summary><b>Go & Spring (10 files)</b></summary>
@@ -165,7 +166,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Kubernetes & Istio (17 files)</b></summary>
+<summary><b>Kubernetes & Service Mesh (20 files)</b></summary>
 
 ```
 /k8s-security       # Pod Security, RBAC, Kyverno, Trivy
@@ -174,64 +175,73 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /k8s-scheduling     # Node Affinity, Taint, Topology
 /k8s-traffic        # Rate Limiting, 대기열
 
-/istio-core         # Sidecar vs Ambient, mTLS
+/istio-core         # Sidecar vs Ambient, mTLS, Ambient Mode
 /istio-security     # PeerAuth, AuthorizationPolicy
 /istio-gateway      # Classic vs Gateway API
 /istio-observability # Metrics, Tracing, Kiali
+
+/gateway-api        # Gateway API vs Ingress, Envoy, Kong (NEW)
+/crossplane         # Multi-cloud IaC, Compositions, XRDs (NEW)
 ```
 </details>
 
 <details>
-<summary><b>Monitoring & Observability (10 files)</b></summary>
+<summary><b>Monitoring & Observability (14 files)</b></summary>
 
 ```
 /observability      # 로깅, RED Method
 /observability-otel # OpenTelemetry SDK/Collector
+/observability-otel-scale # 대규모 OTel (10K+ RPS) (NEW)
+/ebpf-observability # eBPF, Grafana Beyla, Odigos, Hubble (NEW)
 /monitoring-grafana # 대시보드, 알림, RBAC
 /monitoring-metrics # Prometheus, Thanos, VictoriaMetrics
 /monitoring-logs    # Fluent Bit, Loki
 /logging-compliance # PCI-DSS, 전자금융거래법
 /logging-security   # 봇/매크로 탐지
+/aiops              # AIOps, 이상 탐지, 자동 복구
 ```
 </details>
 
 <details>
-<summary><b>SRE & DevOps (15 files)</b></summary>
+<summary><b>SRE & DevOps (18 files)</b></summary>
 
 ```
 /sre-sli-slo        # SLI/SLO, 에러 버짓
 /cicd-devsecops     # GitHub Actions, Trivy, SonarQube
-/gitops-argocd      # ArgoCD, App of Apps
+/gitops-argocd      # ArgoCD, App of Apps, AI-assisted GitOps
 /deployment-strategies # Canary, Blue-Green
 /chaos-engineering  # LitmusChaos, GameDay
 /disaster-recovery  # Velero, Multi-cluster DR
+/ephemeral-environments # PR Preview, Qovery, Namespace 격리 (NEW)
 /finops             # Kubecost, Right-sizing, Spot
 /finops-advanced    # Showback/Chargeback, 이상 탐지
-/finops-tools       # OpenCost, Infracost, KEDA+Karpenter
+/finops-tools       # OpenCost, Cast AI, Kubecost Advanced (NEW)
 /finops-greenops    # 탄소 발자국, 지속가능성, SCI
+/supply-chain-security # SBOM, SLSA, EU CRA, Sigstore (NEW)
 ```
 </details>
 
 <details>
-<summary><b>Platform & MLOps (6 files)</b></summary>
+<summary><b>Platform & MLOps (10 files)</b></summary>
 
 ```
 /backstage          # Developer Portal, Software Catalog
 /golden-paths       # 표준화 경로, 템플릿 패턴
 /k8s-gpu            # NVIDIA Operator, MIG, Kueue, Volcano
 /ml-serving         # KServe, vLLM, TensorRT-LLM
-/aiops              # AIOps, 이상 탐지, 자동 복구
-/supply-chain-security # SBOM, SLSA, Sigstore, Cosign
+/mlops-llmops       # Kubeflow, MLflow, RAG, LLM 가드레일 (NEW)
+/wasm-edge          # WebAssembly, WasmEdge, Spin, Krustlet (NEW)
 ```
 </details>
 
 <details>
-<summary><b>Developer Experience (3 files)</b></summary>
+<summary><b>Developer Experience (6 files)</b></summary>
 
 ```
 /dx-metrics         # DORA, SPACE, DevEx
-/dx-ai-agents       # AI 에이전트 거버넌스
+/dx-ai-agents       # AI 에이전트 거버넌스, 멀티 에이전트 오케스트레이션 (NEW)
 /dx-onboarding      # Time-to-First-Deploy
+/docs-as-code       # MkDocs, Docusaurus, TechDocs (NEW)
 ```
 </details>
 
@@ -269,7 +279,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── agents/               # 21 autonomous AI agents
+│   ├── agents/               # 22 autonomous AI agents
 │   │   ├── security-scanner.md
 │   │   ├── k8s-troubleshooter.md
 │   │   ├── ticketing-expert.md
@@ -277,9 +287,10 @@ ress-claude-agents/
 │   │   ├── platform-engineer.md # IDP, Backstage
 │   │   ├── mlops-expert.md   # GPU, 모델 서빙
 │   │   ├── database-expert.md # PostgreSQL, MySQL
+│   │   ├── otel-expert.md    # 대규모 OTel (NEW)
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder
 │   │   └── ...
-│   ├── skills/               # 72 on-demand knowledge files
+│   ├── skills/               # 94 on-demand knowledge files
 │   └── standards.yml         # Code quality standards
 ├── commands/                 # 29 automation commands
 ├── project-templates/        # Go, Java, K8s, Terraform
@@ -295,17 +306,18 @@ ress-claude-agents/
 | Category | Technologies |
 |----------|-------------|
 | **Languages** | Go (Gin), Java/Kotlin (Spring Boot) |
-| **Infrastructure** | Kubernetes, Terraform, AWS EKS |
-| **GitOps** | ArgoCD, Argo Rollouts, KEDA |
-| **Service Mesh** | Istio (Sidecar/Ambient), mTLS |
-| **Observability** | Prometheus, Grafana, OpenTelemetry, Loki, AIOps |
+| **Infrastructure** | Kubernetes, Terraform, Crossplane, AWS EKS |
+| **GitOps** | ArgoCD, Argo Rollouts, KEDA, AI-assisted GitOps |
+| **Service Mesh** | Istio (Sidecar/Ambient), Gateway API, Envoy |
+| **Observability** | Prometheus, Grafana, OpenTelemetry, Loki, eBPF, AIOps |
 | **Messaging** | Apache Kafka (Strimzi) |
-| **Security** | Kyverno, Trivy, SBOM, SLSA, Sigstore |
-| **SRE** | SLI/SLO, Chaos Engineering, DR |
-| **FinOps** | Kubecost, OpenCost, Infracost, GreenOps |
-| **Platform** | Backstage, Golden Paths, Developer Portal |
-| **MLOps** | KServe, vLLM, GPU Operator, Kueue |
+| **Security** | Kyverno, Trivy, SBOM, SLSA, Sigstore, EU CRA |
+| **SRE** | SLI/SLO, Chaos Engineering, DR, Ephemeral Environments |
+| **FinOps** | Kubecost, OpenCost, Cast AI, Infracost, GreenOps |
+| **Platform** | Backstage, Golden Paths, Developer Portal, Docs as Code |
+| **MLOps** | Kubeflow, MLflow, KServe, vLLM, GPU Operator, RAG |
 | **Database** | PostgreSQL, MySQL, PgBouncer, ProxySQL |
+| **Edge/Emerging** | WebAssembly, WasmEdge, Spin, Krustlet |
 
 ---
 
@@ -343,12 +355,12 @@ make all           # validate + test
 
 | Item | Count |
 |------|-------|
-| **Agents** | 21 files (~6,000 lines) |
-| **Skills** | 72 files (~22,000 lines) |
+| **Agents** | 22 files (~6,500 lines) |
+| **Skills** | 94 files (~35,000 lines) |
 | **Commands** | 29 files |
 | **Templates** | 4 projects |
 | **Tests** | 36 cases |
-| **Total** | ~30,000+ lines |
+| **Total** | ~45,000+ lines |
 
 ---
 
