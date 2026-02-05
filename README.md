@@ -3,7 +3,7 @@
 # ress-claude-agents
 
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
-![Skills](https://img.shields.io/badge/Skills-125-2563EB?style=for-the-badge)
+![Skills](https://img.shields.io/badge/Skills-126-2563EB?style=for-the-badge)
 ![Agents](https://img.shields.io/badge/Agents-23-F97316?style=for-the-badge)
 ![Lines](https://img.shields.io/badge/47K+_Lines-4F46E5?style=for-the-badge)
 
@@ -27,7 +27,7 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 > *이 반복 루프를 끊을 수 있다면?*
 
 저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
-125개의 Skills에 각 분야의 Best Practices를 구조화하고, 23개의 Agents가 자율적으로 판단하고 실행합니다.
+126개의 Skills에 각 분야의 Best Practices를 구조화하고, 23개의 Agents가 자율적으로 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
@@ -53,7 +53,7 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 | | Metric | Value | Description |
 |---|--------|-------|-------------|
 | 🤖 | **Agents** | 23 (~7,500줄) | 보안, 인시던트, FinOps, MLOps 등 자율 실행 전문가 |
-| 💡 | **Skills** | 125 (~40,300줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
+| 💡 | **Skills** | 126 (~40,900줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
 | ⚡ | **Commands** | 35 | `/go review`, `/java performance` 등 자동화 워크플로우 |
 | 📦 | **Templates** | 4 | Go, Java, K8s, Terraform 프로젝트 부트스트래핑 |
 | 🧪 | **Tests** | 36 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
@@ -151,7 +151,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills
 
-필요할 때만 로드되는 도메인 지식 (125 files, ~40,300줄).
+필요할 때만 로드되는 도메인 지식 (126 files, ~40,900줄).
 
 <details>
 <summary><b>Go & Spring (10 files)</b></summary>
@@ -276,13 +276,14 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Developer Experience (9 files)</b></summary>
+<summary><b>Developer Experience (10 files)</b></summary>
 
 ```
 /dx-metrics         # DORA, SPACE, DevEx
 /dx-ai-agents       # AI 에이전트 거버넌스, Copilot/Claude 통합
 /dx-ai-agents-orchestration # 멀티 에이전트, 가드레일, Self-Healing
 /dx-onboarding      # Time-to-First-Deploy
+/local-dev-makefile # make up으로 풀스택 실행, Hot Reload, Dockerfile.dev
 /docs-as-code       # MkDocs, Docusaurus, TechDocs
 /docs-as-code-automation # API 문서 자동화, CI/CD, 품질 측정
 /token-efficiency   # 토큰 & 컨텍스트 효율화, 낭비 패턴 방지
@@ -463,7 +464,7 @@ ress-claude-agents/
 │   │   ├── otel-expert.md    # 대규모 OTel
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder
 │   │   └── ...
-│   ├── skills/               # 125 on-demand knowledge files
+│   ├── skills/               # 126 on-demand knowledge files
 │   ├── inventory.yml         # Auto-generated skill/agent index
 │   └── standards.yml         # Code quality standards
 ├── commands/                 # 35 automation commands
