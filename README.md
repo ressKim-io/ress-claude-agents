@@ -1,60 +1,65 @@
-# ress-claude-agents
-
 <div align="center">
 
-[![Awesome](https://awesome.re/badge.svg)](https://awesome.re)
+# ress-claude-agents
+
+![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
+![Skills](https://img.shields.io/badge/Skills-125-2563EB?style=for-the-badge)
+![Agents](https://img.shields.io/badge/Agents-23-F97316?style=for-the-badge)
+![Lines](https://img.shields.io/badge/47K+_Lines-4F46E5?style=for-the-badge)
+
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Claude Code](https://img.shields.io/badge/Claude_Code-Powered-blueviolet.svg)](https://docs.anthropic.com/claude-code)
+[![GitHub stars](https://img.shields.io/github/stars/ressKim-io/ress-claude-agents?style=social)](https://github.com/ressKim-io/ress-claude-agents)
 
-[![Agents](https://img.shields.io/badge/Agents-23-orange.svg)](#-agents-autonomous-ai-assistants)
-[![Skills](https://img.shields.io/badge/Skills-124-blue.svg)](#-skills-on-demand-knowledge)
-[![Commands](https://img.shields.io/badge/Commands-34-green.svg)](#commands)
-[![Last Updated](https://img.shields.io/badge/Updated-Feb_2026-brightgreen.svg)](#)
+### AI가 동료가 되는 개발 환경을 설계합니다
 
-**Production-ready Claude Code extensions for DevOps & Backend Engineering**
+DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 
-[Quick Start](#-quick-start) · [Agents](#-agents-autonomous-ai-assistants) · [Skills](#-skills-on-demand-knowledge) · [Why AI-First](#-why-ai-first-development)
+[Why AI-First](#-why-ai-first) · [By Numbers](#-by-numbers) · [Quick Start](#-quick-start) · [Agents](#-agents) · [Skills](#-skills) · [Automation](#-automation-infrastructure)
 
 </div>
 
 ---
 
-## 🧪 Why AI-First Development
+## 🧪 Why AI-First
 
-> *"AI가 개발 워크플로우를 어떻게 바꿀 수 있을까?"*
+> *"Google 검색 → StackOverflow → 복사 → 적용 → 디버깅"*
+> *이 반복 루프를 끊을 수 있다면?*
 
-저는 이 질문에 답하기 위해 Claude Code를 일상 업무에 적극 활용하고 있습니다. 단순히 코드 자동완성이 아니라, **AI를 도메인 전문가로 만들어** 함께 일하는 방식을 실험합니다.
+저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
+125개의 Skills에 각 분야의 Best Practices를 구조화하고, 23개의 Agents가 자율적으로 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
 ──────────────────                    ──────────────────
 Google/StackOverflow 검색              → /k8s-security 로 즉시 패턴 적용
 Runbook 찾아서 수동 실행               → incident-responder 가 자동 진단
-100만 VU 테스트 시나리오 작성          → load-tester-k6 가 템플릿 제공
-"이거 어떻게 해요?" 반복 질문          → ticketing-expert 가 아키텍처 설계
+"이거 어떻게 해요?" 반복 질문          → 47,000줄의 지식 베이스가 즉시 답변
+100만 VU 테스트 시나리오 수동 작성     → load-tester-k6 가 템플릿 제공
 ```
 
-### 📊 This Repository by Numbers
+**이 레포가 해결하는 문제:**
+- 매번 같은 패턴을 검색하고 복사하는 비효율
+- 팀원마다 다른 코딩 스타일과 아키텍처 결정
+- 장애 대응 시 Runbook을 찾느라 낭비되는 MTTR
+- 새로운 기술 도입 시 러닝 커브
 
-| Metric | Value | Description |
-|--------|-------|-------------|
-| **23 Agents** | ~7,500 lines | 자율 실행 AI 에이전트 (보안, 인시던트, FinOps, MLOps, OTel 등) |
-| **124 Skills** | ~39,800 lines | 온디맨드 도메인 지식 (Go, Spring, K8s, MSA, FinOps, MLOps, eBPF 등) |
-| **34 Commands** | Custom workflows | 자동화 명령어 (/go review, /java performance 등) |
-| **4 Templates** | Project setups | Go, Java, K8s, Terraform 프로젝트 템플릿 |
-| **100%** | Test coverage | BATS 테스트 + CI 검증 |
+---
 
-### 🎯 Design Philosophy
+## 📊 By Numbers
 
-[Anthropic의 Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)를 따라 설계했습니다:
+<div align="center">
 
-1. **Compact CLAUDE.md** - 50-80줄, 핵심 규칙만
-2. **Progressive Disclosure** - 필요할 때만 Skills 로드 (~100 tokens → <5k tokens)
-3. **Optimized for Claude** - 모든 Skill 파일 500줄 미만, Agent 파일 600줄 미만 (Anthropic 권장)
-4. **Multi-Agent Architecture** - 전문화된 에이전트가 협력
+| | Metric | Value | Description |
+|---|--------|-------|-------------|
+| 🤖 | **Agents** | 23 (~7,500줄) | 보안, 인시던트, FinOps, MLOps 등 자율 실행 전문가 |
+| 💡 | **Skills** | 125 (~40,300줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
+| ⚡ | **Commands** | 35 | `/go review`, `/java performance` 등 자동화 워크플로우 |
+| 📦 | **Templates** | 4 | Go, Java, K8s, Terraform 프로젝트 부트스트래핑 |
+| 🧪 | **Tests** | 36 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
+| 📏 | **Total** | **47,000+ lines** | 체계적으로 카테고리화된 AI 지식 체계 |
 
-> *"For each line, ask: 'Would removing this cause Claude to make mistakes?'"*
+</div>
 
 ---
 
@@ -88,7 +93,7 @@ cp -r .claude/skills ~/.claude/skills    # Skills만
 
 ---
 
-## 🤖 Agents (Autonomous AI Assistants)
+## 🤖 Agents
 
 Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (23 files, ~7,500줄).
 
@@ -144,9 +149,9 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ---
 
-## 💡 Skills (On-demand Knowledge)
+## 💡 Skills
 
-필요할 때만 로드되는 도메인 지식 (124 files, ~39,800줄).
+필요할 때만 로드되는 도메인 지식 (125 files, ~40,300줄).
 
 <details>
 <summary><b>Go & Spring (10 files)</b></summary>
@@ -167,7 +172,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>MSA & High-Traffic (9 files) 🆕</b></summary>
+<summary><b>MSA & High-Traffic (9 files)</b></summary>
 
 ```
 /msa-saga               # Saga 패턴 (Choreography/Orchestration, Temporal.io)
@@ -271,7 +276,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Developer Experience (8 files)</b></summary>
+<summary><b>Developer Experience (9 files)</b></summary>
 
 ```
 /dx-metrics         # DORA, SPACE, DevEx
@@ -280,6 +285,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /dx-onboarding      # Time-to-First-Deploy
 /docs-as-code       # MkDocs, Docusaurus, TechDocs
 /docs-as-code-automation # API 문서 자동화, CI/CD, 품질 측정
+/token-efficiency   # 토큰 & 컨텍스트 효율화, 낭비 패턴 방지
 ```
 </details>
 
@@ -315,6 +321,131 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ---
 
+## 🏗️ Automation Infrastructure
+
+이 레포는 컨텐츠만이 아니라, **컨텐츠를 관리하는 시스템** 자체도 자동화했습니다.
+
+### Inventory 자동 생성
+
+```bash
+./scripts/generate-inventory.sh generate
+# → .claude/inventory.yml 자동 생성
+# → 모든 Skills/Agents 목록 + 줄 수 + 카테고리
+# → CI에서 freshness 검증 (outdated 시 빌드 실패)
+```
+
+Claude Code 세션 시작 시 `inventory.yml`만 읽으면 전체 구조를 파악할 수 있어, **세션 시작 비용을 최소화**합니다.
+
+### CI/CD Pipeline
+
+GitHub Actions로 4개 Job이 매 커밋마다 실행됩니다:
+
+| Job | Description |
+|-----|-------------|
+| **Test** | BATS 36 test cases 실행 |
+| **Docs** | README ↔ 실제 파일 정합성 검증 |
+| **Inventory** | `inventory.yml` freshness 체크 |
+| **Lint** | ShellCheck으로 모든 스크립트 정적 분석 |
+
+### Pre-commit Hooks & Quality Gates
+
+```bash
+make setup-hooks   # validate + lint 자동 실행
+make all           # 전체 검증 (validate + test)
+```
+
+- 모든 Skill 파일 **500줄 미만** (Anthropic guidelines)
+- 모든 Agent 파일 **600줄 미만**
+- Smart installer: `--global` / `--local` / `--with-skills` 옵션 지원
+
+---
+
+## 🛠️ Tech Stack
+
+<div align="center">
+
+**Languages & Frameworks**
+
+![Go](https://img.shields.io/badge/Go-00ADD8?style=flat-square&logo=go&logoColor=white)
+![Java](https://img.shields.io/badge/Java-ED8B00?style=flat-square&logo=openjdk&logoColor=white)
+![Spring](https://img.shields.io/badge/Spring_Boot-6DB33F?style=flat-square&logo=springboot&logoColor=white)
+![Kotlin](https://img.shields.io/badge/Kotlin-7F52FF?style=flat-square&logo=kotlin&logoColor=white)
+
+**Infrastructure & Orchestration**
+
+![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white)
+![Terraform](https://img.shields.io/badge/Terraform-844FBA?style=flat-square&logo=terraform&logoColor=white)
+![AWS](https://img.shields.io/badge/AWS_EKS-FF9900?style=flat-square&logo=amazoneks&logoColor=white)
+![Crossplane](https://img.shields.io/badge/Crossplane-0080FF?style=flat-square&logoColor=white)
+![Helm](https://img.shields.io/badge/Helm-0F1689?style=flat-square&logo=helm&logoColor=white)
+
+**GitOps & CI/CD**
+
+![ArgoCD](https://img.shields.io/badge/ArgoCD-EF7B4D?style=flat-square&logo=argo&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat-square&logo=githubactions&logoColor=white)
+![KEDA](https://img.shields.io/badge/KEDA-326CE5?style=flat-square&logoColor=white)
+
+**Service Mesh & Networking**
+
+![Istio](https://img.shields.io/badge/Istio-466BB0?style=flat-square&logo=istio&logoColor=white)
+![Envoy](https://img.shields.io/badge/Envoy-AC6199?style=flat-square&logoColor=white)
+
+**Observability**
+
+![Prometheus](https://img.shields.io/badge/Prometheus-E6522C?style=flat-square&logo=prometheus&logoColor=white)
+![Grafana](https://img.shields.io/badge/Grafana-F46800?style=flat-square&logo=grafana&logoColor=white)
+![OpenTelemetry](https://img.shields.io/badge/OpenTelemetry-000000?style=flat-square&logo=opentelemetry&logoColor=white)
+
+**Messaging & Database**
+
+![Kafka](https://img.shields.io/badge/Apache_Kafka-231F20?style=flat-square&logo=apachekafka&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
+
+**AI/ML**
+
+![Kubeflow](https://img.shields.io/badge/Kubeflow-2196F3?style=flat-square&logoColor=white)
+![MLflow](https://img.shields.io/badge/MLflow-0194E2?style=flat-square&logo=mlflow&logoColor=white)
+
+</div>
+
+---
+
+## 🎯 Design Philosophy
+
+[Anthropic의 Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)를 따라 설계했습니다:
+
+### Progressive Disclosure
+
+```
+세션 시작 → CLAUDE.md (~100 tokens)
+         → inventory.yml 참조로 전체 구조 파악
+         → 필요한 Skill만 로드 (<5,000 tokens)
+```
+
+매 세션마다 47,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
+
+### Token Efficiency
+
+| Rule | Description |
+|------|-------------|
+| 파일 크기 확인 | `wc -l` 사용 (전체 Read 금지) |
+| Agent 위임 | 대상 파일 미리 읽지 않기 (경로만 전달) |
+| Write 검증 | `wc -l` + `head`/`tail` (전체 Read-back 금지) |
+| 동일 파일 | 2회 이상 읽기 금지 (1회 Read + Edit 패턴) |
+
+### Anthropic Guidelines 준수
+
+- **모든 Skill 파일 500줄 미만** - Claude가 효율적으로 처리할 수 있는 크기
+- **Compact CLAUDE.md** - 50-80줄, 핵심 규칙만 포함
+- **Multi-Agent Architecture** - 전문화된 에이전트가 협력
+- **Inventory 시스템** - 세션 시작 비용 최소화
+
+> *"For each line, ask: 'Would removing this cause Claude to make mistakes?'"*
+
+---
+
 ## 📁 Structure
 
 ```
@@ -329,38 +460,34 @@ ress-claude-agents/
 │   │   ├── mlops-expert.md   # GPU, 모델 서빙
 │   │   ├── database-expert.md # PostgreSQL
 │   │   ├── database-expert-mysql.md # MySQL
-│   │   ├── otel-expert.md    # 대규모 OTel (NEW)
+│   │   ├── otel-expert.md    # 대규모 OTel
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder
 │   │   └── ...
-│   ├── skills/               # 124 on-demand knowledge files
+│   ├── skills/               # 125 on-demand knowledge files
+│   ├── inventory.yml         # Auto-generated skill/agent index
 │   └── standards.yml         # Code quality standards
-├── commands/                 # 29 automation commands
+├── commands/                 # 35 automation commands
 ├── project-templates/        # Go, Java, K8s, Terraform
+├── scripts/
+│   ├── generate-docs.sh      # Documentation generator
+│   └── generate-inventory.sh # Inventory generator
 ├── global/CLAUDE.md          # Global settings
 ├── tests/                    # BATS tests (36 cases)
-└── install.sh                # Installer with validation
+└── install.sh                # Smart installer
 ```
 
 ---
 
-## 🛠️ Tech Stack Coverage
+## 🧪 Development
 
-| Category | Technologies |
-|----------|-------------|
-| **Languages** | Go (Gin), Java/Kotlin (Spring Boot) |
-| **Infrastructure** | Kubernetes, Terraform, Crossplane, AWS EKS |
-| **GitOps** | ArgoCD, Argo Rollouts, KEDA, AI-assisted GitOps |
-| **Service Mesh** | Istio (Sidecar/Ambient), Gateway API, Envoy |
-| **Observability** | Prometheus, Grafana, OpenTelemetry, Loki, eBPF, AIOps |
-| **MSA Patterns** | Saga, CQRS, Event Sourcing, EDA, DDD, Resilience4j, Sharding, API Gateway |
-| **Messaging** | Apache Kafka (Strimzi) |
-| **Security** | Kyverno, Trivy, SBOM, SLSA, Sigstore, EU CRA |
-| **SRE** | SLI/SLO, Chaos Engineering, DR, Ephemeral Environments |
-| **FinOps** | Kubecost, OpenCost, Cast AI, Infracost, GreenOps |
-| **Platform** | Backstage, Golden Paths, Developer Portal, Docs as Code |
-| **MLOps** | Kubeflow, MLflow, KServe, vLLM, GPU Operator, RAG |
-| **Database** | PostgreSQL, MySQL, PgBouncer, ProxySQL |
-| **Edge/Emerging** | WebAssembly, WasmEdge, Spin, Krustlet |
+```bash
+make test          # BATS 테스트 (36 cases)
+make validate      # README ↔ 파일 정합성 검증
+make inventory     # .claude/inventory.yml 재생성
+make lint          # ShellCheck 정적 분석
+make all           # validate + test (전체 검증)
+make setup-hooks   # Pre-commit hook 설치
+```
 
 ---
 
@@ -376,34 +503,6 @@ ress-claude-agents/
 - [Claude Code Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices) - Anthropic 공식 가이드
 - [Claude Code Docs](https://docs.anthropic.com/claude-code) - Skills, Commands, MCP
 - [Agent Skills Standard](https://agentskills.io/) - Skills 표준
-
----
-
-## 🧪 Development
-
-```bash
-# 테스트 실행
-make test          # BATS 테스트
-
-# 문서 검증
-make validate      # 일관성 검증
-
-# 전체 검증
-make all           # validate + test
-```
-
----
-
-## 📈 Statistics
-
-| Item | Count |
-|------|-------|
-| **Agents** | 23 files (~7,500 lines) |
-| **Skills** | 124 files (~39,800 lines) |
-| **Commands** | 34 files |
-| **Templates** | 4 projects |
-| **Tests** | 36 cases |
-| **Total** | ~47,000+ lines |
 
 ---
 
@@ -432,10 +531,10 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 <div align="center">
 
-**Built with Claude Code** 🤖
+**Built with Claude Code**
 
-*이 저장소의 대부분의 코드와 문서는 Claude와 함께 작성되었습니다.*
+*AI를 도구가 아닌 동료로 — 47,000줄의 AI 지식 체계*
 
-[![GitHub Stars](https://img.shields.io/github/stars/ressKim-io/ress-claude-agents?style=social)](https://github.com/ressKim-io/ress-claude-agents)
+[![GitHub Stars](https://img.shields.io/github/stars/ressKim-io/ress-claude-agents?style=for-the-badge&color=yellow)](https://github.com/ressKim-io/ress-claude-agents)
 
 </div>
