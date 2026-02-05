@@ -55,7 +55,7 @@ jobs:
       - name: Generate inventory and check freshness
         run: |
           ./scripts/generate-inventory.sh generate
-          git diff --exit-code .claude/inventory.yml || {
+          git diff --exit-code -I '^generated:' .claude/inventory.yml || {
             echo "::error::inventory.yml is outdated. Run: ./scripts/generate-inventory.sh generate"
             exit 1
           }
