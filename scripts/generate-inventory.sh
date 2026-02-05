@@ -179,6 +179,19 @@ generate() {
     done
   } > "$tmp"
 
+  # If content (excluding timestamp) hasn't changed, preserve existing timestamp
+  if [ -f "$OUTPUT" ]; then
+    local existing_no_ts current_no_ts
+    existing_no_ts=$(grep -v '^generated:' "$OUTPUT" 2>/dev/null || echo "")
+    current_no_ts=$(grep -v '^generated:' "$tmp" 2>/dev/null || echo "")
+    if [ "$existing_no_ts" = "$current_no_ts" ]; then
+      local old_ts
+      old_ts=$(grep '^generated:' "$OUTPUT" | head -1)
+      sed -i.bak "s/^generated:.*/$old_ts/" "$tmp"
+      rm -f "$tmp.bak"
+    fi
+  fi
+
   mv "$tmp" "$OUTPUT"
   echo "Generated $OUTPUT ($skill_count skills, $agent_count agents)"
 }

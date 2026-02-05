@@ -52,13 +52,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Generate inventory and check freshness
-        run: |
-          ./scripts/generate-inventory.sh generate
-          git diff --exit-code -I '^generated:' .claude/inventory.yml || {
-            echo "::error::inventory.yml is outdated. Run: ./scripts/generate-inventory.sh generate"
-            exit 1
-          }
+      - name: Validate inventory freshness
+        run: ./scripts/generate-inventory.sh validate
 
   lint:
     name: Shellcheck
