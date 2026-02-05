@@ -3,8 +3,8 @@
 # ress-claude-agents
 
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
-![Skills](https://img.shields.io/badge/Skills-126-2563EB?style=for-the-badge)
-![Agents](https://img.shields.io/badge/Agents-23-F97316?style=for-the-badge)
+![Skills](https://img.shields.io/badge/Skills-128-2563EB?style=for-the-badge)
+![Agents](https://img.shields.io/badge/Agents-24-F97316?style=for-the-badge)
 ![Lines](https://img.shields.io/badge/47K+_Lines-4F46E5?style=for-the-badge)
 
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
@@ -27,7 +27,7 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 > *이 반복 루프를 끊을 수 있다면?*
 
 저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
-126개의 Skills에 각 분야의 Best Practices를 구조화하고, 23개의 Agents가 자율적으로 판단하고 실행합니다.
+128개의 Skills에 각 분야의 Best Practices를 구조화하고, 24개의 Agents가 자율적으로 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
@@ -52,8 +52,8 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 | | Metric | Value | Description |
 |---|--------|-------|-------------|
-| 🤖 | **Agents** | 23 (~7,500줄) | 보안, 인시던트, FinOps, MLOps 등 자율 실행 전문가 |
-| 💡 | **Skills** | 126 (~40,900줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
+| 🤖 | **Agents** | 24 (~7,900줄) | 보안, 인시던트, FinOps, MLOps 등 자율 실행 전문가 |
+| 💡 | **Skills** | 128 (~41,900줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
 | ⚡ | **Commands** | 35 | `/go review`, `/java performance` 등 자동화 워크플로우 |
 | 📦 | **Templates** | 4 | Go, Java, K8s, Terraform 프로젝트 부트스트래핑 |
 | 🧪 | **Tests** | 36 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
@@ -120,6 +120,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | 🧠 `mlops-expert` | GPU 스케줄링, 분산 학습, 모델 서빙, LLM 배포 | AI/ML 워크로드 시 |
 | 🗄️ `database-expert` | PostgreSQL 튜닝, PgBouncer, K8s DB 운영 | PostgreSQL 성능 이슈 시 |
 | 🗄️ `database-expert-mysql` | MySQL/InnoDB 튜닝, ProxySQL, MySQL HA | MySQL 성능 이슈 시 |
+| 🔴 `redis-expert` | Redis Cluster, Sentinel, 캐싱 전략, Lua | Redis 최적화 시 |
 
 ### Language Experts (High-Traffic)
 
@@ -151,7 +152,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills
 
-필요할 때만 로드되는 도메인 지식 (126 files, ~40,900줄).
+필요할 때만 로드되는 도메인 지식 (128 files, ~41,900줄).
 
 <details>
 <summary><b>Go & Spring (10 files)</b></summary>
@@ -291,11 +292,12 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Infrastructure & Database (12 files)</b></summary>
+<summary><b>Infrastructure & Database (14 files)</b></summary>
 
 ```
 /aws-eks            # EKS Terraform, IRSA, Add-ons
 /aws-eks-advanced   # Karpenter, 보안 강화, 운영 최적화
+/aws-lambda         # Serverless, 콜드 스타트 최적화, SnapStart
 /terraform-modules  # Module patterns
 /terraform-security # Security best practices
 /kafka              # Strimzi, KEDA 연동
@@ -303,6 +305,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /database           # 인덱스, N+1, 쿼리 최적화
 /database-migration # Flyway, Liquibase
 /distributed-lock   # Redis, Redisson
+/grpc               # gRPC 서비스 설계, Protocol Buffers, 스트리밍
 ```
 </details>
 
@@ -464,7 +467,7 @@ ress-claude-agents/
 │   │   ├── otel-expert.md    # 대규모 OTel
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder
 │   │   └── ...
-│   ├── skills/               # 126 on-demand knowledge files
+│   ├── skills/               # 128 on-demand knowledge files
 │   ├── inventory.yml         # Auto-generated skill/agent index
 │   └── standards.yml         # Code quality standards
 ├── commands/                 # 35 automation commands
