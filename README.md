@@ -8,7 +8,7 @@
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Powered-blueviolet.svg)](https://docs.anthropic.com/claude-code)
 
 [![Agents](https://img.shields.io/badge/Agents-23-orange.svg)](#-agents-autonomous-ai-assistants)
-[![Skills](https://img.shields.io/badge/Skills-115-blue.svg)](#-skills-on-demand-knowledge)
+[![Skills](https://img.shields.io/badge/Skills-121-blue.svg)](#-skills-on-demand-knowledge)
 [![Commands](https://img.shields.io/badge/Commands-34-green.svg)](#commands)
 [![Last Updated](https://img.shields.io/badge/Updated-Feb_2026-brightgreen.svg)](#)
 
@@ -40,7 +40,7 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 | Metric | Value | Description |
 |--------|-------|-------------|
 | **23 Agents** | ~7,500 lines | 자율 실행 AI 에이전트 (보안, 인시던트, FinOps, MLOps, OTel 등) |
-| **115 Skills** | ~35,500 lines | 온디맨드 도메인 지식 (Go, Spring, K8s, FinOps, MLOps, eBPF 등) |
+| **121 Skills** | ~38,400 lines | 온디맨드 도메인 지식 (Go, Spring, K8s, MSA, FinOps, MLOps, eBPF 등) |
 | **34 Commands** | Custom workflows | 자동화 명령어 (/go review, /java performance 등) |
 | **4 Templates** | Project setups | Go, Java, K8s, Terraform 프로젝트 템플릿 |
 | **100%** | Test coverage | BATS 테스트 + CI 검증 |
@@ -146,7 +146,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills (On-demand Knowledge)
 
-필요할 때만 로드되는 도메인 지식 (115 files, ~35,500줄).
+필요할 때만 로드되는 도메인 지식 (121 files, ~38,400줄).
 
 <details>
 <summary><b>Go & Spring (10 files)</b></summary>
@@ -163,6 +163,19 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /spring-oauth2      # OAuth2, JWT
 /spring-testing     # JUnit, Mockito
 /spring-testcontainers  # Testcontainers
+```
+</details>
+
+<details>
+<summary><b>MSA & High-Traffic (6 files) 🆕</b></summary>
+
+```
+/msa-saga               # Saga 패턴 (Choreography/Orchestration, Temporal.io)
+/msa-cqrs-eventsourcing # CQRS + Event Sourcing, Eventual Consistency
+/msa-resilience         # Circuit Breaker, Bulkhead, Retry/Timeout (Resilience4j)
+/msa-event-driven       # EDA, Transactional Outbox, Idempotent Consumer, DLQ
+/database-sharding      # 샤딩 전략, Citus, Vitess, Read Replica
+/high-traffic-design    # Backpressure, CDN, Connection Pool, Rate Limiting 심화
 ```
 </details>
 
@@ -276,6 +289,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /terraform-modules  # Module patterns
 /terraform-security # Security best practices
 /kafka              # Strimzi, KEDA 연동
+/kafka-patterns     # Producer/Consumer 패턴, 모니터링
 /database           # 인덱스, N+1, 쿼리 최적화
 /database-migration # Flyway, Liquibase
 /distributed-lock   # Redis, Redisson
@@ -315,7 +329,7 @@ ress-claude-agents/
 │   │   ├── otel-expert.md    # 대규모 OTel (NEW)
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder
 │   │   └── ...
-│   ├── skills/               # 115 on-demand knowledge files
+│   ├── skills/               # 121 on-demand knowledge files
 │   └── standards.yml         # Code quality standards
 ├── commands/                 # 29 automation commands
 ├── project-templates/        # Go, Java, K8s, Terraform
@@ -335,6 +349,7 @@ ress-claude-agents/
 | **GitOps** | ArgoCD, Argo Rollouts, KEDA, AI-assisted GitOps |
 | **Service Mesh** | Istio (Sidecar/Ambient), Gateway API, Envoy |
 | **Observability** | Prometheus, Grafana, OpenTelemetry, Loki, eBPF, AIOps |
+| **MSA Patterns** | Saga, CQRS, Event Sourcing, EDA, Resilience4j, Sharding |
 | **Messaging** | Apache Kafka (Strimzi) |
 | **Security** | Kyverno, Trivy, SBOM, SLSA, Sigstore, EU CRA |
 | **SRE** | SLI/SLO, Chaos Engineering, DR, Ephemeral Environments |
@@ -381,7 +396,7 @@ make all           # validate + test
 | Item | Count |
 |------|-------|
 | **Agents** | 23 files (~7,500 lines) |
-| **Skills** | 115 files (~35,500 lines) |
+| **Skills** | 121 files (~38,400 lines) |
 | **Commands** | 34 files |
 | **Templates** | 4 projects |
 | **Tests** | 36 cases |
