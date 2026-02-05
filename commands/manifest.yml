@@ -51,7 +51,45 @@ commands:
     related: [go-review, go-lint]
 
   # ============================================
-  # Backend Commands (Java/Kotlin)
+  # Java Commands (Java 21+ / Spring Boot 3.x)
+  # ============================================
+  - id: java-review
+    category: java
+    title: Java/Spring Code Review
+    description: Java/Spring 코드를 리뷰합니다 (Virtual Threads, DI, Security)
+    skills: [spring-data, spring-security, spring-testing, concurrency-spring]
+    related: [java-lint, java-refactor]
+
+  - id: java-test-gen
+    category: java
+    title: Java Test Generator
+    description: JUnit 5 + Testcontainers 테스트를 생성합니다
+    skills: [spring-testing, spring-testcontainers]
+    related: [java-review]
+
+  - id: java-lint
+    category: java
+    title: Java Static Analysis
+    description: SonarQube/Qodana 정적 분석을 수행합니다
+    skills: [cicd-devsecops]
+    related: [java-review, java-refactor]
+
+  - id: java-refactor
+    category: java
+    title: Java Refactoring
+    description: Modern Java 패턴 및 Virtual Threads 리팩토링을 제안합니다
+    skills: [refactoring-spring, refactoring-principles]
+    related: [java-review, java-lint]
+
+  - id: java-performance
+    category: java
+    title: Java Performance Optimization
+    description: Native Image, CDS, GC 튜닝 등 성능 최적화를 제안합니다
+    skills: []
+    related: [java-refactor]
+
+  # ============================================
+  # Backend Commands (Generic Java/Kotlin)
   # ============================================
   - id: backend-review
     category: backend
@@ -185,6 +223,11 @@ categories:
     title: Go
     description: Go 백엔드 개발
     icon: "🔵"
+
+  java:
+    title: Java
+    description: Java 21+ / Spring Boot 3.x 개발
+    icon: "☕"
 
   backend:
     title: Backend

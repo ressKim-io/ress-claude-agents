@@ -9,7 +9,7 @@
 
 [![Agents](https://img.shields.io/badge/Agents-22-orange.svg)](#-agents-autonomous-ai-assistants)
 [![Skills](https://img.shields.io/badge/Skills-94-blue.svg)](#-skills-on-demand-knowledge)
-[![Commands](https://img.shields.io/badge/Commands-29-green.svg)](#commands)
+[![Commands](https://img.shields.io/badge/Commands-34-green.svg)](#commands)
 [![Last Updated](https://img.shields.io/badge/Updated-Feb_2026-brightgreen.svg)](#)
 
 **Production-ready Claude Code extensions for DevOps & Backend Engineering**
@@ -41,7 +41,7 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 |--------|-------|-------------|
 | **22 Agents** | ~6,500 lines | 자율 실행 AI 에이전트 (보안, 인시던트, FinOps, MLOps, OTel 등) |
 | **94 Skills** | ~35,000 lines | 온디맨드 도메인 지식 (Go, Spring, K8s, FinOps, MLOps, eBPF 등) |
-| **29 Commands** | Custom workflows | 자동화 명령어 (/go review, /k8s secure 등) |
+| **34 Commands** | Custom workflows | 자동화 명령어 (/go review, /java performance 등) |
 | **4 Templates** | Project setups | Go, Java, K8s, Terraform 프로젝트 템플릿 |
 | **100%** | Test coverage | BATS 테스트 + CI 검증 |
 
@@ -266,6 +266,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | Category | Commands |
 |----------|----------|
 | **Go** | `/go review`, `/go test-gen`, `/go lint`, `/go refactor` |
+| **Java** | `/java review`, `/java test-gen`, `/java lint`, `/java refactor`, `/java performance` |
 | **Backend** | `/backend review`, `/backend test-gen`, `/backend api-doc`, `/backend refactor` |
 | **K8s** | `/k8s validate`, `/k8s secure`, `/k8s netpol`, `/k8s helm-check` |
 | **Terraform** | `/terraform plan-review`, `/terraform security`, `/terraform module-gen` |
@@ -357,7 +358,7 @@ make all           # validate + test
 |------|-------|
 | **Agents** | 22 files (~6,500 lines) |
 | **Skills** | 94 files (~35,000 lines) |
-| **Commands** | 29 files |
+| **Commands** | 34 files |
 | **Templates** | 4 projects |
 | **Tests** | 36 cases |
 | **Total** | ~45,000+ lines |
