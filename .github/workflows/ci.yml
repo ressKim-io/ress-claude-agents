@@ -44,6 +44,22 @@ jobs:
       - name: Validate documentation consistency
         run: ./scripts/generate-docs.sh validate
 
+  inventory:
+    name: Inventory Freshness
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Generate inventory and check freshness
+        run: |
+          ./scripts/generate-inventory.sh generate
+          git diff --exit-code .claude/inventory.yml || {
+            echo "::error::inventory.yml is outdated. Run: ./scripts/generate-inventory.sh generate"
+            exit 1
+          }
+
   lint:
     name: Shellcheck
     runs-on: ubuntu-latest

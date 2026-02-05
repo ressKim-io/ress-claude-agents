@@ -1,7 +1,7 @@
 # Makefile for ress-claude-agents
 # Claude Code Custom Commands & Skills Management
 
-.PHONY: help test validate generate lint install-global install-local setup-hooks clean all
+.PHONY: help test validate generate inventory lint install-global install-local setup-hooks clean all
 
 # Default target
 help:
@@ -12,6 +12,7 @@ help:
 	@echo "  test           Run BATS tests"
 	@echo "  validate       Validate documentation consistency"
 	@echo "  generate       Generate documentation (help/index.md)"
+	@echo "  inventory      Generate .claude/inventory.yml"
 	@echo "  lint           Run shellcheck on shell scripts"
 	@echo "  install-global Install commands globally (~/.claude)"
 	@echo "  install-local  Install commands to current project"
@@ -38,6 +39,11 @@ validate:
 generate:
 	@echo "Generating documentation..."
 	@./scripts/generate-docs.sh generate
+
+# Generate inventory
+inventory:
+	@echo "Generating inventory..."
+	@./scripts/generate-inventory.sh generate
 
 # Run shellcheck on shell scripts
 lint:

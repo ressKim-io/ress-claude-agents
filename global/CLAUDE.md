@@ -72,6 +72,19 @@ fix/#456-description
 - `/session save` - 현재 상태 강제 저장
 - `/session end` - 세션 종료 및 정리
 
+## Token Efficiency Rules
+- 파일 줄 수 확인은 `wc -l` 사용 (전체 Read 금지)
+- Agent 위임 전 대상 파일 미리 읽지 않기 (경로만 전달)
+- Write 후 검증은 `wc -l` + `head`/`tail` (전체 Read-back 금지)
+- 동일 파일 2회 이상 읽기 금지 (1회 Read + Edit 패턴 사용)
+- Write→Read→Rewrite 반복 루프 금지 (한 번에 올바르게 작성)
+- WebSearch는 타겟 3-4회 이내 (광범위 7-10회 금지)
+- 독립적인 Agent 작업은 병렬 실행 (순차 실행 금지)
+- Skill 참조: `/token-efficiency`
+
+## Repository Structure
+- 저장소 전체 구조는 `.claude/inventory.yml` 참조 (모든 스킬/에이전트 목록 + 줄 수)
+
 ## Skills Reference
 - `/git-workflow` - Git conventions and patterns
 
