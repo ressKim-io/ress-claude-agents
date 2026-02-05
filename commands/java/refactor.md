@@ -250,6 +250,15 @@ public class UserService {
 - [ ] 적절한 인덱스 추가
 - [ ] 캐시 적용 검토
 
+## Output Format
+
+```
+🔄 Refactoring: UserService.java
+   - Pattern: Virtual Threads Migration
+   - Changes: synchronized → ReentrantLock (3 occurrences)
+   - Tests: All passing ✅
+```
+
 ## Usage
 
 ```

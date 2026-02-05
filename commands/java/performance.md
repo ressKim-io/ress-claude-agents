@@ -305,6 +305,15 @@ jmc recording.jfr
 - [ ] 적절한 캐싱 적용
 - [ ] 인덱스 최적화
 
+## Output Format
+
+```
+⚡ Performance Analysis: OrderService
+   - Bottleneck: N+1 Query (findAllOrders)
+   - Impact: 150ms → 12ms (92% improvement)
+   - Applied: EntityGraph + Batch Fetch Size
+```
+
 ## Usage
 
 ```

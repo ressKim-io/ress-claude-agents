@@ -185,7 +185,7 @@ validate_consistency() {
         # Check if file exists
         if [[ ! -f "${file_path}" ]]; then
             log_error "Missing file for command '${cmd_id}': ${file_path}"
-            ((errors++))
+            errors=$((errors + 1))
             continue
         fi
 
@@ -193,7 +193,7 @@ validate_consistency() {
         for section in "${REQUIRED_SECTIONS[@]}"; do
             if ! grep -q "^## ${section}" "${file_path}"; then
                 log_warning "Missing section '${section}' in ${file_path}"
-                ((warnings++))
+                warnings=$((warnings + 1))
             fi
         done
     done
@@ -214,7 +214,7 @@ validate_consistency() {
 
                     if ! yq -e ".commands[] | select(.id == \"${expected_id}\")" "${MANIFEST_FILE}" &>/dev/null; then
                         log_warning "Orphan file (not in manifest): ${file}"
-                        ((warnings++))
+                        warnings=$((warnings + 1))
                     fi
                 fi
             done

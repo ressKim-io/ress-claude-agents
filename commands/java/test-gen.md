@@ -191,6 +191,18 @@ class UserRepositoryTest {
 - [ ] 예외 테스트는 assertThatThrownBy 사용
 - [ ] Collection 검증 시 contains/hasSize 활용
 
+## Output Format
+
+```
+✅ Generated: UserServiceTest.java
+   - Unit Tests: 5 (Given-When-Then)
+   - Integration Tests: 2 (Testcontainers)
+   - Coverage Target: 80%+
+
+📁 Output Location:
+   src/test/java/com/example/.../UserServiceTest.java
+```
+
 ## Usage
 
 ```
