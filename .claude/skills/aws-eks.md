@@ -397,126 +397,6 @@ module "ebs_csi_irsa" {
 
 ---
 
-## Karpenter 설정
-
-```hcl
-# karpenter.tf
-module "karpenter" {
-  source  = "terraform-aws-modules/eks/aws//modules/karpenter"
-  version = "~> 20.0"
-
-  cluster_name = module.eks.cluster_name
-
-  enable_irsa                     = true
-  irsa_oidc_provider_arn          = module.eks.oidc_provider_arn
-  irsa_namespace_service_accounts = ["karpenter:karpenter"]
-
-  node_iam_role_additional_policies = {
-    AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-  }
-}
-```
-
-```yaml
-# karpenter-nodepool.yaml
-apiVersion: karpenter.sh/v1
-kind: NodePool
-metadata:
-  name: default
-spec:
-  template:
-    spec:
-      requirements:
-        - key: kubernetes.io/arch
-          operator: In
-          values: ["amd64"]
-        - key: karpenter.sh/capacity-type
-          operator: In
-          values: ["spot", "on-demand"]
-        - key: karpenter.k8s.aws/instance-category
-          operator: In
-          values: ["c", "m", "r"]
-      nodeClassRef:
-        group: karpenter.k8s.aws
-        kind: EC2NodeClass
-        name: default
-  limits:
-    cpu: 1000
-  disruption:
-    consolidationPolicy: WhenEmptyOrUnderutilized
-    consolidateAfter: 30s
----
-apiVersion: karpenter.k8s.aws/v1
-kind: EC2NodeClass
-metadata:
-  name: default
-spec:
-  amiFamily: AL2023
-  role: KarpenterNodeRole-${CLUSTER_NAME}
-  subnetSelectorTerms:
-    - tags:
-        karpenter.sh/discovery: ${CLUSTER_NAME}
-  securityGroupSelectorTerms:
-    - tags:
-        karpenter.sh/discovery: ${CLUSTER_NAME}
-  blockDeviceMappings:
-    - deviceName: /dev/xvda
-      ebs:
-        volumeSize: 100Gi
-        volumeType: gp3
-        encrypted: true
-```
-
----
-
-## 보안 설정
-
-### 클러스터 보안
-
-```hcl
-# Private Endpoint만 사용 (보안 강화)
-cluster_endpoint_public_access  = false
-cluster_endpoint_private_access = true
-
-# 또는 Public + IP 제한
-cluster_endpoint_public_access       = true
-cluster_endpoint_public_access_cidrs = ["10.0.0.0/8", "회사IP/32"]
-```
-
-### Pod Security Standards
-
-```yaml
-# 네임스페이스에 PSS 적용
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: production
-  labels:
-    pod-security.kubernetes.io/enforce: restricted
-    pod-security.kubernetes.io/enforce-version: latest
-    pod-security.kubernetes.io/warn: restricted
-    pod-security.kubernetes.io/audit: restricted
-```
-
-### Security Group for Pods
-
-```yaml
-apiVersion: vpcresources.k8s.aws/v1beta1
-kind: SecurityGroupPolicy
-metadata:
-  name: db-access-policy
-  namespace: production
-spec:
-  podSelector:
-    matchLabels:
-      app: backend
-  securityGroups:
-    groupIds:
-      - sg-xxx  # RDS 접근 허용 SG
-```
-
----
-
 ## Anti-Patterns
 
 | 실수 | 문제 | 해결 |
@@ -531,27 +411,20 @@ spec:
 
 ## 체크리스트
 
-### VPC
-- [ ] 충분한 CIDR 할당 (/16 이상)
-- [ ] 3 AZ 분산
-- [ ] 서브넷 태그 설정
-- [ ] NAT Gateway (Private 노드용)
-
-### 클러스터
+- [ ] 충분한 CIDR 할당 (/16 이상), 3 AZ 분산
+- [ ] 서브넷 태그 설정 (ELB, internal-elb)
 - [ ] Private Endpoint 활성화
 - [ ] OIDC Provider 활성화 (IRSA)
-- [ ] 로깅 활성화
+- [ ] 로깅 활성화 (api, audit, authenticator)
 - [ ] 관리형 Add-ons 사용
+- [ ] IRSA로 Pod 권한 관리
+- [ ] Managed Node Group 또는 Karpenter 설정
 
-### 노드
-- [ ] Managed Node Group 또는 Karpenter
-- [ ] Spot + On-Demand 혼합
-- [ ] 적절한 인스턴스 타입
+---
 
-### 보안
-- [ ] IRSA 설정
-- [ ] Pod Security Standards
-- [ ] Network Policy
-- [ ] Security Group for Pods
+## 참조 스킬
 
-**관련 skill**: `/k8s-security`, `/k8s-autoscaling`, `/terraform-security`
+- `/aws-eks-advanced` - Karpenter, 보안 강화, 운영 최적화
+- `/k8s-security` - Kubernetes 보안
+- `/k8s-autoscaling` - Autoscaling (HPA, VPA, KEDA)
+- `/terraform-security` - Terraform 보안 설정

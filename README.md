@@ -7,8 +7,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude_Code-Powered-blueviolet.svg)](https://docs.anthropic.com/claude-code)
 
-[![Agents](https://img.shields.io/badge/Agents-22-orange.svg)](#-agents-autonomous-ai-assistants)
-[![Skills](https://img.shields.io/badge/Skills-94-blue.svg)](#-skills-on-demand-knowledge)
+[![Agents](https://img.shields.io/badge/Agents-23-orange.svg)](#-agents-autonomous-ai-assistants)
+[![Skills](https://img.shields.io/badge/Skills-115-blue.svg)](#-skills-on-demand-knowledge)
 [![Commands](https://img.shields.io/badge/Commands-34-green.svg)](#commands)
 [![Last Updated](https://img.shields.io/badge/Updated-Feb_2026-brightgreen.svg)](#)
 
@@ -39,8 +39,8 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 | Metric | Value | Description |
 |--------|-------|-------------|
-| **22 Agents** | ~6,500 lines | 자율 실행 AI 에이전트 (보안, 인시던트, FinOps, MLOps, OTel 등) |
-| **94 Skills** | ~35,000 lines | 온디맨드 도메인 지식 (Go, Spring, K8s, FinOps, MLOps, eBPF 등) |
+| **23 Agents** | ~7,500 lines | 자율 실행 AI 에이전트 (보안, 인시던트, FinOps, MLOps, OTel 등) |
+| **115 Skills** | ~35,500 lines | 온디맨드 도메인 지식 (Go, Spring, K8s, FinOps, MLOps, eBPF 등) |
 | **34 Commands** | Custom workflows | 자동화 명령어 (/go review, /java performance 등) |
 | **4 Templates** | Project setups | Go, Java, K8s, Terraform 프로젝트 템플릿 |
 | **100%** | Test coverage | BATS 테스트 + CI 검증 |
@@ -51,7 +51,7 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 1. **Compact CLAUDE.md** - 50-80줄, 핵심 규칙만
 2. **Progressive Disclosure** - 필요할 때만 Skills 로드 (~100 tokens → <5k tokens)
-3. **Optimized for Claude** - 모든 Agent 파일 600줄 미만 (권장 범위)
+3. **Optimized for Claude** - 모든 Skill 파일 500줄 미만, Agent 파일 600줄 미만 (Anthropic 권장)
 4. **Multi-Agent Architecture** - 전문화된 에이전트가 협력
 
 > *"For each line, ask: 'Would removing this cause Claude to make mistakes?'"*
@@ -90,7 +90,7 @@ cp -r .claude/skills ~/.claude/skills    # Skills만
 
 ## 🤖 Agents (Autonomous AI Assistants)
 
-Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (22 files, ~6,500줄).
+Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (23 files, ~7,500줄).
 
 > **Skills**는 "지식"이고, **Agents**는 "전문가"입니다. 자율적으로 판단하고 작업을 수행합니다.
 
@@ -113,7 +113,8 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 |-------|-------------|--------------|
 | 🏗️ `platform-engineer` | IDP 설계, Backstage, Golden Path, DX 최적화 | 플랫폼 구축 시 |
 | 🧠 `mlops-expert` | GPU 스케줄링, 분산 학습, 모델 서빙, LLM 배포 | AI/ML 워크로드 시 |
-| 🗄️ `database-expert` | PostgreSQL/MySQL 튜닝, Connection Pooling, K8s DB | DB 성능 이슈 시 |
+| 🗄️ `database-expert` | PostgreSQL 튜닝, PgBouncer, K8s DB 운영 | PostgreSQL 성능 이슈 시 |
+| 🗄️ `database-expert-mysql` | MySQL/InnoDB 튜닝, ProxySQL, MySQL HA | MySQL 성능 이슈 시 |
 
 ### Language Experts (High-Traffic)
 
@@ -145,7 +146,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills (On-demand Knowledge)
 
-필요할 때만 로드되는 도메인 지식 (94 files, ~35,000줄).
+필요할 때만 로드되는 도메인 지식 (115 files, ~35,500줄).
 
 <details>
 <summary><b>Go & Spring (10 files)</b></summary>
@@ -166,33 +167,40 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Kubernetes & Service Mesh (20 files)</b></summary>
+<summary><b>Kubernetes & Service Mesh (25 files)</b></summary>
 
 ```
 /k8s-security       # Pod Security, RBAC, Kyverno, Trivy
 /k8s-helm           # Helm chart best practices
-/k8s-autoscaling    # HPA, VPA, KEDA, Karpenter
-/k8s-scheduling     # Node Affinity, Taint, Topology
+/k8s-autoscaling    # HPA, VPA, KEDA
+/k8s-autoscaling-advanced # Karpenter, 조합 전략, 모니터링
+/k8s-scheduling     # Node Affinity, Taint, Pod Affinity
+/k8s-scheduling-advanced # 실전 시나리오, Topology Spread, 디버깅
 /k8s-traffic        # Rate Limiting, 대기열
 
-/istio-core         # Sidecar vs Ambient, mTLS, Ambient Mode
+/istio-core         # Sidecar vs Ambient, mTLS
+/istio-ambient      # Ambient 심화, ztunnel, Waypoint, Cilium 통합
 /istio-security     # PeerAuth, AuthorizationPolicy
 /istio-gateway      # Classic vs Gateway API
 /istio-observability # Metrics, Tracing, Kiali
 
-/gateway-api        # Gateway API vs Ingress, Envoy, Kong (NEW)
-/crossplane         # Multi-cloud IaC, Compositions, XRDs (NEW)
+/gateway-api        # Gateway API vs Ingress, Envoy, Kong
+/gateway-api-migration # Ingress NGINX 마이그레이션, Istio Gateway
+/crossplane         # Multi-cloud IaC, Compositions, XRDs
+/crossplane-advanced # 멀티클라우드 패턴, GitOps 통합, Drift Detection
 ```
 </details>
 
 <details>
-<summary><b>Monitoring & Observability (14 files)</b></summary>
+<summary><b>Monitoring & Observability (16 files)</b></summary>
 
 ```
 /observability      # 로깅, RED Method
 /observability-otel # OpenTelemetry SDK/Collector
-/observability-otel-scale # 대규모 OTel (10K+ RPS) (NEW)
-/ebpf-observability # eBPF, Grafana Beyla, Odigos, Hubble (NEW)
+/observability-otel-scale # 대규모 OTel 아키텍처 (10K+ RPS)
+/observability-otel-optimization # OTel 비용 최적화, 샘플링, 스케일링
+/ebpf-observability # eBPF, Grafana Beyla, Odigos
+/ebpf-observability-advanced # Cilium Hubble, DeepFlow, 프로덕션 요구사항
 /monitoring-grafana # 대시보드, 알림, RBAC
 /monitoring-metrics # Prometheus, Thanos, VictoriaMetrics
 /monitoring-logs    # Fluent Bit, Loki
@@ -203,53 +211,68 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>SRE & DevOps (18 files)</b></summary>
+<summary><b>SRE & DevOps (25 files)</b></summary>
 
 ```
 /sre-sli-slo        # SLI/SLO, 에러 버짓
 /cicd-devsecops     # GitHub Actions, Trivy, SonarQube
-/gitops-argocd      # ArgoCD, App of Apps, AI-assisted GitOps
+/gitops-argocd      # ArgoCD, App of Apps
+/gitops-argocd-advanced # ApplicationSet, Sync 전략, 시크릿
+/gitops-argocd-ai   # AI-assisted GitOps, Spacelift, 예측적 배포
 /deployment-strategies # Canary, Blue-Green
-/chaos-engineering  # LitmusChaos, GameDay
-/disaster-recovery  # Velero, Multi-cluster DR
-/ephemeral-environments # PR Preview, Qovery, Namespace 격리 (NEW)
+/chaos-engineering  # LitmusChaos, Probe, 기본 실험
+/chaos-engineering-gameday # GameDay 운영, 모니터링, 알림
+/disaster-recovery  # Velero, 백업, 복구 절차
+/disaster-recovery-advanced # 멀티 클러스터 DR, DB DR, 테스트
+/ephemeral-environments # PR Preview, ArgoCD ApplicationSet
+/ephemeral-environments-advanced # Qovery, DB 전략, 비용 최적화
+/load-testing       # K6 기본/고급, K6 on Kubernetes
+/load-testing-analysis # nGrinder, 결과 분석, SLO Threshold
 /finops             # Kubecost, Right-sizing, Spot
 /finops-advanced    # Showback/Chargeback, 이상 탐지
-/finops-tools       # OpenCost, Cast AI, Kubecost Advanced (NEW)
+/finops-tools       # OpenCost, Kubecost, Infracost, KEDA+Karpenter
+/finops-tools-advanced # Cast AI, Kubecost 고급, 4Rs Framework
 /finops-greenops    # 탄소 발자국, 지속가능성, SCI
-/supply-chain-security # SBOM, SLSA, EU CRA, Sigstore (NEW)
+/supply-chain-security # SBOM, SLSA, Sigstore
+/supply-chain-compliance # EU CRA, SBOM 자동화, VEX
 ```
 </details>
 
 <details>
-<summary><b>Platform & MLOps (10 files)</b></summary>
+<summary><b>Platform & MLOps (14 files)</b></summary>
 
 ```
 /backstage          # Developer Portal, Software Catalog
 /golden-paths       # 표준화 경로, 템플릿 패턴
 /k8s-gpu            # NVIDIA Operator, MIG, Kueue, Volcano
 /ml-serving         # KServe, vLLM, TensorRT-LLM
-/mlops-llmops       # Kubeflow, MLflow, RAG, LLM 가드레일 (NEW)
-/wasm-edge          # WebAssembly, WasmEdge, Spin, Krustlet (NEW)
+/mlops              # Kubeflow, KServe 배포
+/mlops-tracking     # MLflow, 실험 추적, Model Registry
+/llmops             # RAG 아키텍처, 프롬프트 관리, LLM 가드레일
+/wasm-edge          # WebAssembly, WasmEdge, Spin, K8s 통합
+/wasm-edge-iot      # Edge/IoT 활용, 성능 최적화
 ```
 </details>
 
 <details>
-<summary><b>Developer Experience (6 files)</b></summary>
+<summary><b>Developer Experience (8 files)</b></summary>
 
 ```
 /dx-metrics         # DORA, SPACE, DevEx
-/dx-ai-agents       # AI 에이전트 거버넌스, 멀티 에이전트 오케스트레이션 (NEW)
+/dx-ai-agents       # AI 에이전트 거버넌스, Copilot/Claude 통합
+/dx-ai-agents-orchestration # 멀티 에이전트, 가드레일, Self-Healing
 /dx-onboarding      # Time-to-First-Deploy
-/docs-as-code       # MkDocs, Docusaurus, TechDocs (NEW)
+/docs-as-code       # MkDocs, Docusaurus, TechDocs
+/docs-as-code-automation # API 문서 자동화, CI/CD, 품질 측정
 ```
 </details>
 
 <details>
-<summary><b>Infrastructure & Database (11 files)</b></summary>
+<summary><b>Infrastructure & Database (12 files)</b></summary>
 
 ```
-/aws-eks            # EKS Terraform, IRSA, Karpenter
+/aws-eks            # EKS Terraform, IRSA, Add-ons
+/aws-eks-advanced   # Karpenter, 보안 강화, 운영 최적화
 /terraform-modules  # Module patterns
 /terraform-security # Security best practices
 /kafka              # Strimzi, KEDA 연동
@@ -280,18 +303,19 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── agents/               # 22 autonomous AI agents
+│   ├── agents/               # 23 autonomous AI agents
 │   │   ├── security-scanner.md
 │   │   ├── k8s-troubleshooter.md
 │   │   ├── ticketing-expert.md
 │   │   ├── finops-advisor.md # FinOps 전략, GreenOps
 │   │   ├── platform-engineer.md # IDP, Backstage
 │   │   ├── mlops-expert.md   # GPU, 모델 서빙
-│   │   ├── database-expert.md # PostgreSQL, MySQL
+│   │   ├── database-expert.md # PostgreSQL
+│   │   ├── database-expert-mysql.md # MySQL
 │   │   ├── otel-expert.md    # 대규모 OTel (NEW)
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder
 │   │   └── ...
-│   ├── skills/               # 94 on-demand knowledge files
+│   ├── skills/               # 115 on-demand knowledge files
 │   └── standards.yml         # Code quality standards
 ├── commands/                 # 29 automation commands
 ├── project-templates/        # Go, Java, K8s, Terraform
@@ -356,12 +380,12 @@ make all           # validate + test
 
 | Item | Count |
 |------|-------|
-| **Agents** | 22 files (~6,500 lines) |
-| **Skills** | 94 files (~35,000 lines) |
+| **Agents** | 23 files (~7,500 lines) |
+| **Skills** | 115 files (~35,500 lines) |
 | **Commands** | 34 files |
 | **Templates** | 4 projects |
 | **Tests** | 36 cases |
-| **Total** | ~45,000+ lines |
+| **Total** | ~47,000+ lines |
 
 ---
 

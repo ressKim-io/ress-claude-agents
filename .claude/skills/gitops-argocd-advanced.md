@@ -440,4 +440,4 @@ sum(argocd_app_sync_total{phase="Failed"}) by (name)
 - [ ] Health 체크 확인
 - [ ] Sync 상태 대시보드
 
-**관련 skill**: `/gitops-argocd` (기본), `/cicd-devsecops`, `/deployment-strategies`, `/k8s-helm`
+**참조 스킬**: `/gitops-argocd` (기본 GitOps/ArgoCD), `/gitops-argocd-ai` (AI-assisted GitOps), `/cicd-devsecops`, `/deployment-strategies`, `/k8s-helm`
