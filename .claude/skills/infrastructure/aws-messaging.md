@@ -158,8 +158,7 @@ func (s *SQSClient) ReceiveAndProcess(ctx context.Context, handler func(string) 
 ```java
 // implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs:3.1.0'
 
-@Service
-@RequiredArgsConstructor
+@Service @RequiredArgsConstructor
 public class OrderEventPublisher {
     private final SqsTemplate sqsTemplate;
 
@@ -167,11 +166,9 @@ public class OrderEventPublisher {
         sqsTemplate.send(to -> to.queue("order-events")
             .payload(event).header("eventType", "OrderCreated"));
     }
-
     // FIFO 큐 전송
     public void publishOrderUpdated(OrderUpdatedEvent event) {
-        sqsTemplate.send(to -> to.queue("order-events.fifo")
-            .payload(event)
+        sqsTemplate.send(to -> to.queue("order-events.fifo").payload(event)
             .header(SqsHeaders.SQS_GROUP_ID_HEADER, event.getOrderId())
             .header(SqsHeaders.SQS_DEDUPLICATION_ID_HEADER, event.getEventId()));
     }
@@ -217,24 +214,11 @@ SNS → SQS 구독 시 Raw Message Delivery 활성화 권장
 ### Go SDK v2 — SNS Publish
 
 ```go
-type SNSPublisher struct {
-	client   *sns.Client
-	topicARN string
-}
-
-func NewSNSPublisher(ctx context.Context, topicARN string) (*SNSPublisher, error) {
-	cfg, err := config.LoadDefaultConfig(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("AWS 설정 로드 실패: %w", err)
-	}
-	return &SNSPublisher{client: sns.NewFromConfig(cfg), topicARN: topicARN}, nil
-}
-
+// 초기화: config.LoadDefaultConfig → sns.NewFromConfig (SQSClient 패턴 동일)
 func (p *SNSPublisher) Publish(ctx context.Context, event any, eventType string) error {
 	payload, _ := json.Marshal(event)
 	_, err := p.client.Publish(ctx, &sns.PublishInput{
-		TopicArn: &p.topicARN,
-		Message:  aws.String(string(payload)),
+		TopicArn: &p.topicARN, Message: aws.String(string(payload)),
 		MessageAttributes: map[string]types.MessageAttributeValue{
 			"eventType": {DataType: aws.String("String"), StringValue: aws.String(eventType)},
 		},
@@ -242,7 +226,7 @@ func (p *SNSPublisher) Publish(ctx context.Context, event any, eventType string)
 	return err
 }
 
-// FIFO 토픽 발행
+// FIFO 토픽: MessageGroupId + MessageDeduplicationId 필수
 func (p *SNSPublisher) PublishFIFO(ctx context.Context, event any, groupID, dedupID string) error {
 	payload, _ := json.Marshal(event)
 	_, err := p.client.Publish(ctx, &sns.PublishInput{
@@ -281,13 +265,10 @@ public class NotificationPublisher {
 ```
 Event Source ──> Event Bus (라우터) ──> Rules (패턴 매칭) ──> Targets
                                                               ├─ Lambda
-                                                              ├─ SQS
+                                                              ├─ SQS / SNS
                                                               ├─ Step Functions
                                                               └─ API Gateway
-추가 기능:
-- Schema Registry: 이벤트 스키마 자동 검색 + 코드 생성
-- Pipes: Source → Filter → Enrichment → Target (파이프라인)
-- Archive & Replay: 이벤트 아카이브 후 재전송
+추가: Schema Registry(스키마 검색), Pipes(파이프라인), Archive & Replay
 ```
 
 ### Event Rule 패턴 / Pipes
@@ -311,22 +292,7 @@ Pipes: Source(SQS/DynamoDB/Kinesis) → Filter → Enrich(Lambda) → Target(Eve
 ### Go SDK v2 — EventBridge PutEvents
 
 ```go
-type EventBridgePublisher struct {
-	client  *eventbridge.Client
-	busName string
-	source  string
-}
-
-func NewEventBridgePublisher(ctx context.Context, busName, source string) (*EventBridgePublisher, error) {
-	cfg, err := config.LoadDefaultConfig(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("AWS 설정 로드 실패: %w", err)
-	}
-	return &EventBridgePublisher{
-		client: eventbridge.NewFromConfig(cfg), busName: busName, source: source,
-	}, nil
-}
-
+// 초기화: config.LoadDefaultConfig → eventbridge.NewFromConfig
 func (p *EventBridgePublisher) PutEvent(ctx context.Context, detailType string, detail any) error {
 	payload, _ := json.Marshal(detail)
 	out, err := p.client.PutEvents(ctx, &eventbridge.PutEventsInput{
@@ -358,23 +324,10 @@ public class EventBridgePublisher {
     public void publish(String busName, DomainEvent event) throws Exception {
         PutEventsResponse resp = ebClient.putEvents(PutEventsRequest.builder()
             .entries(PutEventsRequestEntry.builder()
-                .eventBusName(busName)
-                .source("com.myapp." + event.getSource())
-                .detailType(event.getType())
-                .detail(objectMapper.writeValueAsString(event))
-                .build())
-            .build());
-        if (resp.failedEntryCount() > 0) {
-            log.error("EventBridge 전송 실패: {}", resp.entries());
-        }
-    }
-}
-
-@Configuration
-public class EventBridgeConfig {
-    @Bean
-    public EventBridgeClient eventBridgeClient() {
-        return EventBridgeClient.builder().region(Region.AP_NORTHEAST_2).build();
+                .eventBusName(busName).source("com.myapp." + event.getSource())
+                .detailType(event.getType()).detail(objectMapper.writeValueAsString(event))
+                .build()).build());
+        if (resp.failedEntryCount() > 0) log.error("전송 실패: {}", resp.entries());
     }
 }
 ```
