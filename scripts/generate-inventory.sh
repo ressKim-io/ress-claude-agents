@@ -10,18 +10,28 @@ OUTPUT="$REPO_ROOT/.claude/inventory.yml"
 
 # Category mapping for skills (filename prefix -> category)
 categorize_skill() {
-  local name="$1"
+  local file_path="$1"
+  local rel_path="${file_path#"$SKILLS_DIR"/}"
+  local dir
+  dir=$(dirname "$rel_path")
+  if [ "$dir" != "." ]; then
+    echo "$dir"
+    return
+  fi
+  # Fallback: 루트에 남은 파일용 (기존 case 패턴 유지)
+  local name
+  name=$(basename "$file_path" .md)
   case "$name" in
     go-*|concurrency-go|refactoring-go) echo "go" ;;
     spring-*|concurrency-spring|refactoring-spring) echo "spring" ;;
-    msa-*|database-sharding|high-traffic-*|api-design|distributed-lock) echo "msa" ;;
+    msa-*|database-sharding|high-traffic-*|api-design|distributed-lock|grpc|graphql-*|task-queue) echo "msa" ;;
     k8s-gpu*) echo "platform" ;;
-    k8s-*|istio-*|gateway-*|crossplane-*) echo "kubernetes" ;;
-    observability-*|ebpf-*|monitoring-*|logging-*|aiops*|alerting-*) echo "observability" ;;
+    k8s-*|istio-*|gateway-*|crossplane*|linkerd*) echo "kubernetes" ;;
+    observability*|ebpf-*|monitoring-*|logging-*|aiops*|alerting-*) echo "observability" ;;
     sre-*|cicd-*|gitops-*|deployment-*|chaos-*|disaster-*|ephemeral-*|load-testing*|finops*|supply-chain-*) echo "sre" ;;
     backstage|golden-*|ml-*|mlops*|llmops|wasm-*|platform-*) echo "platform" ;;
-    dx-*|docs-*|token-*) echo "dx" ;;
-    aws-*|terraform-*|kafka*|database*|docker*) echo "infrastructure" ;;
+    dx-*|docs-*|token-*|local-dev-*) echo "dx" ;;
+    aws-*|terraform-*|kafka*|database*|docker*|redis-*|rabbitmq*) echo "infrastructure" ;;
     conventional-commits|git-workflow|refactoring-principles) echo "dx" ;;
     *) echo "other" ;;
   esac
@@ -99,7 +109,7 @@ generate() {
   local total_skill_lines=0
   local skill_count=0
 
-  for file in "$SKILLS_DIR"/*.md; do
+  while IFS= read -r file; do
     [ -f "$file" ] || continue
     local basename
     basename=$(basename "$file" .md)
@@ -109,11 +119,20 @@ generate() {
     lines=$(echo "$meta" | cut -d'|' -f1)
     title=$(echo "$meta" | cut -d'|' -f2)
     desc=$(echo "$meta" | cut -d'|' -f3-)
-    category=$(categorize_skill "$basename")
+    category=$(categorize_skill "$file")
     skill_entries+=("$category|$basename|$lines|$title|$desc")
     total_skill_lines=$((total_skill_lines + lines))
     skill_count=$((skill_count + 1))
-  done
+  done < <(find "$SKILLS_DIR" -name "*.md" -type f | sort)
+
+  # Duplicate name check
+  local all_names dupes
+  all_names=$(printf '%s\n' "${skill_entries[@]}" | cut -d'|' -f2 | sort)
+  dupes=$(echo "$all_names" | uniq -d)
+  if [ -n "$dupes" ]; then
+    echo "ERROR: Duplicate skill names: $dupes" >&2
+    exit 1
+  fi
 
   # Collect agent data
   declare -a agent_entries=()

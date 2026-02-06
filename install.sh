@@ -370,6 +370,13 @@ if [[ "$WITH_SKILLS" == true ]]; then
     if [[ -d "$SKILLS_SOURCE" ]]; then
         if backup_and_link "$SKILLS_SOURCE" "$SKILLS_TARGET" "$INSTALL_SCOPE" "dir"; then
             INSTALLED_COMPONENTS+=("Skills")
+            # Flatten: 서브디렉토리 내 파일들을 root에 심볼릭 링크
+            while IFS= read -r skill_file; do
+                skill_name=$(basename "$skill_file")
+                if [[ ! -e "$SKILLS_TARGET/$skill_name" ]]; then
+                    ln -sf "$skill_file" "$SKILLS_TARGET/$skill_name"
+                fi
+            done < <(find "$SKILLS_SOURCE" -mindepth 2 -name "*.md" -type f)
         else
             log_error "Failed to install skills"
             INSTALL_SUCCESS=false
