@@ -3,9 +3,9 @@
 # ress-claude-agents
 
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
-![Skills](https://img.shields.io/badge/Skills-128-2563EB?style=for-the-badge)
+![Skills](https://img.shields.io/badge/Skills-134-2563EB?style=for-the-badge)
 ![Agents](https://img.shields.io/badge/Agents-24-F97316?style=for-the-badge)
-![Lines](https://img.shields.io/badge/47K+_Lines-4F46E5?style=for-the-badge)
+![Lines](https://img.shields.io/badge/52K+_Lines-4F46E5?style=for-the-badge)
 
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -27,14 +27,14 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 > *이 반복 루프를 끊을 수 있다면?*
 
 저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
-128개의 Skills에 각 분야의 Best Practices를 구조화하고, 24개의 Agents가 자율적으로 판단하고 실행합니다.
+134개의 Skills에 각 분야의 Best Practices를 구조화하고, 24개의 Agents가 자율적으로 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
 ──────────────────                    ──────────────────
 Google/StackOverflow 검색              → /k8s-security 로 즉시 패턴 적용
 Runbook 찾아서 수동 실행               → incident-responder 가 자동 진단
-"이거 어떻게 해요?" 반복 질문          → 47,000줄의 지식 베이스가 즉시 답변
+"이거 어떻게 해요?" 반복 질문          → 52,000줄의 지식 베이스가 즉시 답변
 100만 VU 테스트 시나리오 수동 작성     → load-tester-k6 가 템플릿 제공
 ```
 
@@ -53,11 +53,11 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 | | Metric | Value | Description |
 |---|--------|-------|-------------|
 | 🤖 | **Agents** | 24 (~7,900줄) | 보안, 인시던트, FinOps, MLOps 등 자율 실행 전문가 |
-| 💡 | **Skills** | 128 (~41,900줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
+| 💡 | **Skills** | 134 (~44,900줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
 | ⚡ | **Commands** | 35 | `/go review`, `/java performance` 등 자동화 워크플로우 |
 | 📦 | **Templates** | 4 | Go, Java, K8s, Terraform 프로젝트 부트스트래핑 |
 | 🧪 | **Tests** | 36 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
-| 📏 | **Total** | **47,000+ lines** | 체계적으로 카테고리화된 AI 지식 체계 |
+| 📏 | **Total** | **52,000+ lines** | 9개 카테고리로 체계화된 AI 지식 체계 |
 
 </div>
 
@@ -95,7 +95,7 @@ cp -r .claude/skills ~/.claude/skills    # Skills만
 
 ## 🤖 Agents
 
-Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (23 files, ~7,500줄).
+Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (24 files, ~7,900줄).
 
 > **Skills**는 "지식"이고, **Agents**는 "전문가"입니다. 자율적으로 판단하고 작업을 수행합니다.
 
@@ -152,16 +152,17 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills
 
-필요할 때만 로드되는 도메인 지식 (128 files, ~41,900줄).
+필요할 때만 로드되는 도메인 지식 (134 files, ~44,900줄). 9개 카테고리 서브디렉토리로 체계화.
 
 <details>
-<summary><b>Go & Spring (10 files)</b></summary>
+<summary><b>Go & Spring (13 files)</b></summary>
 
 ```
 /go-errors          # Error handling patterns
 /go-gin             # Gin framework
 /go-testing         # Table-driven testing
 /concurrency-go     # Mutex, Channel, Worker Pool
+/refactoring-go     # Go 리팩토링, 코드 개선
 
 /spring-data        # JPA, QueryDSL
 /spring-cache       # Redis 캐싱
@@ -169,13 +170,16 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /spring-oauth2      # OAuth2, JWT
 /spring-testing     # JUnit, Mockito
 /spring-testcontainers  # Testcontainers
+/concurrency-spring # Spring 동시성, @Async, Virtual Threads
+/refactoring-spring # Spring 리팩토링, 코드 개선
 ```
 </details>
 
 <details>
-<summary><b>MSA & High-Traffic (9 files)</b></summary>
+<summary><b>MSA & High-Traffic (14 files)</b></summary>
 
 ```
+/api-design             # RESTful API 설계, 버저닝, 페이징
 /msa-saga               # Saga 패턴 (Choreography/Orchestration, Temporal.io)
 /msa-cqrs-eventsourcing # CQRS + Event Sourcing, Eventual Consistency
 /msa-resilience         # Circuit Breaker, Bulkhead, Retry/Timeout (Resilience4j)
@@ -185,11 +189,15 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /msa-observability      # Distributed Tracing, Correlation ID, Exemplar, Tempo
 /database-sharding      # 샤딩 전략, Citus, Vitess, Read Replica
 /high-traffic-design    # Backpressure, CDN, Connection Pool, Rate Limiting 심화
+/distributed-lock       # Redis, Redisson, Distributed Lock 패턴
+/grpc                   # gRPC 서비스 설계, Protocol Buffers, 스트리밍
+/graphql-federation     # Apollo Federation v2, GraphOS Router, Subgraph 설계
+/task-queue             # Celery, BullMQ, Go asynq, Priority Queue 패턴
 ```
 </details>
 
 <details>
-<summary><b>Kubernetes & Service Mesh (25 files)</b></summary>
+<summary><b>Kubernetes & Service Mesh (24 files)</b></summary>
 
 ```
 /k8s-security       # Pod Security, RBAC, Kyverno, Trivy
@@ -199,12 +207,20 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /k8s-scheduling     # Node Affinity, Taint, Pod Affinity
 /k8s-scheduling-advanced # 실전 시나리오, Topology Spread, 디버깅
 /k8s-traffic        # Rate Limiting, 대기열
+/k8s-traffic-ingress # Ingress 트래픽 관리
+/k8s-traffic-istio  # Istio 트래픽 관리
 
 /istio-core         # Sidecar vs Ambient, mTLS
 /istio-ambient      # Ambient 심화, ztunnel, Waypoint, Cilium 통합
 /istio-security     # PeerAuth, AuthorizationPolicy
 /istio-gateway      # Classic vs Gateway API
+/istio-gateway-api  # Gateway API with Istio
+/istio-gateway-classic # Classic Istio Gateway
 /istio-observability # Metrics, Tracing, Kiali
+/istio-metrics      # Istio 메트릭 수집, Prometheus
+/istio-tracing      # Istio 분산 트레이싱, Jaeger
+/istio-kiali        # Kiali 서비스 그래프, 시각화
+/linkerd            # Linkerd v2.17, Rust micro-proxy, 자동 mTLS, vs Istio 비교
 
 /gateway-api        # Gateway API vs Ingress, Envoy, Kong
 /gateway-api-migration # Ingress NGINX 마이그레이션, Istio Gateway
@@ -214,7 +230,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Monitoring & Observability (16 files)</b></summary>
+<summary><b>Monitoring & Observability (17 files)</b></summary>
 
 ```
 /observability      # 로깅, RED Method
@@ -226,9 +242,14 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /monitoring-grafana # 대시보드, 알림, RBAC
 /monitoring-metrics # Prometheus, Thanos, VictoriaMetrics
 /monitoring-logs    # Fluent Bit, Loki
+/monitoring-troubleshoot # 모니터링 트러블슈팅
 /logging-compliance # PCI-DSS, 전자금융거래법
 /logging-security   # 봇/매크로 탐지
+/logging-elk        # ELK Stack, Elasticsearch
+/logging-loki       # Grafana Loki, LogQL
+/alerting-discord   # Discord 알림 연동
 /aiops              # AIOps, 이상 탐지, 자동 복구
+/aiops-remediation  # AIOps 자동 복구, Runbook 자동화
 ```
 </details>
 
@@ -238,10 +259,12 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 ```
 /sre-sli-slo        # SLI/SLO, 에러 버짓
 /cicd-devsecops     # GitHub Actions, Trivy, SonarQube
+/cicd-policy        # CI/CD 정책, OPA Gatekeeper
 /gitops-argocd      # ArgoCD, App of Apps
 /gitops-argocd-advanced # ApplicationSet, Sync 전략, 시크릿
 /gitops-argocd-ai   # AI-assisted GitOps, Spacelift, 예측적 배포
 /deployment-strategies # Canary, Blue-Green
+/deployment-canary  # Canary 배포 심화, Flagger
 /chaos-engineering  # LitmusChaos, Probe, 기본 실험
 /chaos-engineering-gameday # GameDay 운영, 모니터링, 알림
 /disaster-recovery  # Velero, 백업, 복구 절차
@@ -252,6 +275,8 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /load-testing-analysis # nGrinder, 결과 분석, SLO Threshold
 /finops             # Kubecost, Right-sizing, Spot
 /finops-advanced    # Showback/Chargeback, 이상 탐지
+/finops-automation  # FinOps 자동화, 비용 알림
+/finops-showback    # Showback/Chargeback 구현
 /finops-tools       # OpenCost, Kubecost, Infracost, KEDA+Karpenter
 /finops-tools-advanced # Cast AI, Kubecost 고급, 4Rs Framework
 /finops-greenops    # 탄소 발자국, 지속가능성, SCI
@@ -261,15 +286,19 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Platform & MLOps (14 files)</b></summary>
+<summary><b>Platform & MLOps (13 files)</b></summary>
 
 ```
 /backstage          # Developer Portal, Software Catalog
+/platform-backstage # Backstage 플러그인, TechDocs 심화
 /golden-paths       # 표준화 경로, 템플릿 패턴
+/golden-paths-infra # 인프라 Golden Path, Terraform 템플릿
 /k8s-gpu            # NVIDIA Operator, MIG, Kueue, Volcano
+/k8s-gpu-scheduling # GPU 스케줄링, MPS, 분산 학습
 /ml-serving         # KServe, vLLM, TensorRT-LLM
 /mlops              # Kubeflow, KServe 배포
 /mlops-tracking     # MLflow, 실험 추적, Model Registry
+/mlops-llmops       # LLMOps, RAG 파이프라인, 프롬프트 관리
 /llmops             # RAG 아키텍처, 프롬프트 관리, LLM 가드레일
 /wasm-edge          # WebAssembly, WasmEdge, Spin, K8s 통합
 /wasm-edge-iot      # Edge/IoT 활용, 성능 최적화
@@ -277,35 +306,44 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Developer Experience (10 files)</b></summary>
+<summary><b>Developer Experience (15 files)</b></summary>
 
 ```
 /dx-metrics         # DORA, SPACE, DevEx
 /dx-ai-agents       # AI 에이전트 거버넌스, Copilot/Claude 통합
 /dx-ai-agents-orchestration # 멀티 에이전트, 가드레일, Self-Healing
+/dx-ai-security     # AI 보안, Prompt Injection 방어
 /dx-onboarding      # Time-to-First-Deploy
+/dx-onboarding-deploy # 배포 파이프라인 온보딩
+/dx-onboarding-environment # 개발 환경 자동화
+/dx-onboarding-gitpod # Gitpod/Codespaces 클라우드 IDE
 /local-dev-makefile # make up으로 풀스택 실행, Hot Reload, Dockerfile.dev
 /docs-as-code       # MkDocs, Docusaurus, TechDocs
 /docs-as-code-automation # API 문서 자동화, CI/CD, 품질 측정
+/conventional-commits # Conventional Commits, Changelog 자동화
+/git-workflow       # Git 브랜칭 전략, Trunk-based
+/refactoring-principles # 리팩토링 원칙, Code Smells
 /token-efficiency   # 토큰 & 컨텍스트 효율화, 낭비 패턴 방지
 ```
 </details>
 
 <details>
-<summary><b>Infrastructure & Database (14 files)</b></summary>
+<summary><b>Infrastructure & Database (13 files)</b></summary>
 
 ```
 /aws-eks            # EKS Terraform, IRSA, Add-ons
 /aws-eks-advanced   # Karpenter, 보안 강화, 운영 최적화
 /aws-lambda         # Serverless, 콜드 스타트 최적화, SnapStart
+/aws-messaging      # SQS, SNS, EventBridge, 선택 가이드
 /terraform-modules  # Module patterns
 /terraform-security # Security best practices
 /kafka              # Strimzi, KEDA 연동
 /kafka-patterns     # Producer/Consumer 패턴, 모니터링
+/redis-streams      # Redis Streams, Consumer Groups, PEL 관리
+/rabbitmq           # RabbitMQ v4.1, Quorum Queues, AMQP 1.0
+/docker             # Dockerfile, 멀티스테이지 빌드
 /database           # 인덱스, N+1, 쿼리 최적화
 /database-migration # Flyway, Liquibase
-/distributed-lock   # Redis, Redisson
-/grpc               # gRPC 서비스 설계, Protocol Buffers, 스트리밍
 ```
 </details>
 
@@ -392,6 +430,7 @@ make all           # 전체 검증 (validate + test)
 **Service Mesh & Networking**
 
 ![Istio](https://img.shields.io/badge/Istio-466BB0?style=flat-square&logo=istio&logoColor=white)
+![Linkerd](https://img.shields.io/badge/Linkerd-2BEDA7?style=flat-square&logo=linkerd&logoColor=white)
 ![Envoy](https://img.shields.io/badge/Envoy-AC6199?style=flat-square&logoColor=white)
 
 **Observability**
@@ -403,6 +442,7 @@ make all           # 전체 검증 (validate + test)
 **Messaging & Database**
 
 ![Kafka](https://img.shields.io/badge/Apache_Kafka-231F20?style=flat-square&logo=apachekafka&logoColor=white)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-FF6600?style=flat-square&logo=rabbitmq&logoColor=white)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
 ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
 ![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
@@ -428,7 +468,7 @@ make all           # 전체 검증 (validate + test)
          → 필요한 Skill만 로드 (<5,000 tokens)
 ```
 
-매 세션마다 47,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
+매 세션마다 52,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
 
 ### Token Efficiency
 
@@ -455,19 +495,24 @@ make all           # 전체 검증 (validate + test)
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── agents/               # 23 autonomous AI agents
+│   ├── agents/               # 24 autonomous AI agents
 │   │   ├── security-scanner.md
 │   │   ├── k8s-troubleshooter.md
 │   │   ├── ticketing-expert.md
-│   │   ├── finops-advisor.md # FinOps 전략, GreenOps
-│   │   ├── platform-engineer.md # IDP, Backstage
-│   │   ├── mlops-expert.md   # GPU, 모델 서빙
-│   │   ├── database-expert.md # PostgreSQL
-│   │   ├── database-expert-mysql.md # MySQL
+│   │   ├── redis-expert.md   # Redis Cluster, Sentinel
 │   │   ├── otel-expert.md    # 대규모 OTel
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder
 │   │   └── ...
-│   ├── skills/               # 128 on-demand knowledge files
+│   ├── skills/               # 134 on-demand knowledge files
+│   │   ├── dx/               # Developer Experience (15)
+│   │   ├── go/               # Go patterns (5)
+│   │   ├── spring/           # Spring Boot (8)
+│   │   ├── msa/              # MSA & High-Traffic (14)
+│   │   ├── kubernetes/       # K8s & Service Mesh (25)
+│   │   ├── observability/    # Monitoring & Observability (17)
+│   │   ├── platform/         # Platform & MLOps (13)
+│   │   ├── sre/              # SRE & DevOps (25)
+│   │   └── infrastructure/   # Infra & Database (14)
 │   ├── inventory.yml         # Auto-generated skill/agent index
 │   └── standards.yml         # Code quality standards
 ├── commands/                 # 35 automation commands
@@ -537,7 +582,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Built with Claude Code**
 
-*AI를 도구가 아닌 동료로 — 47,000줄의 AI 지식 체계*
+*AI를 도구가 아닌 동료로 — 52,000줄의 AI 지식 체계*
 
 [![GitHub Stars](https://img.shields.io/github/stars/ressKim-io/ress-claude-agents?style=for-the-badge&color=yellow)](https://github.com/ressKim-io/ress-claude-agents)
 

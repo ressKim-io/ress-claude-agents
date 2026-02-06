@@ -1,11 +1,11 @@
 # TODO - ress-claude-agents 로드맵
 
-## 현재 상태 (2026-02-06)
+## 현재 상태 (2026-02-07)
 
 | 항목 | 수량 | 상태 |
 |------|------|------|
 | **Agents** | 24 files (~7,900줄) | ✅ 최적화 완료 |
-| **Skills** | 128 files (~41,900줄) | ✅ |
+| **Skills** | 134 files (~44,900줄) | ✅ 9개 카테고리 서브디렉토리 |
 | **Commands** | 35 files | ✅ |
 | **Templates** | 4 projects | ✅ |
 | **Tests** | 36 cases | ✅ |
@@ -57,6 +57,18 @@
 ---
 
 ## 완료된 마일스톤
+
+### v1.4 - Skills 서브디렉토리 재편 + 6개 신규 스킬 (2026-02-07)
+- [x] 128개 Skills → 9개 카테고리 서브디렉토리 재편 (dx, go, spring, msa, kubernetes, observability, platform, sre, infrastructure)
+- [x] `redis-streams.md` Skill 추가 - Redis Streams, Consumer Groups, PEL 관리
+- [x] `rabbitmq.md` Skill 추가 - RabbitMQ v4.1, Quorum Queues, AMQP 1.0
+- [x] `aws-messaging.md` Skill 추가 - SQS, SNS, EventBridge 선택 가이드
+- [x] `graphql-federation.md` Skill 추가 - Apollo Federation v2, GraphOS Router
+- [x] `linkerd.md` Skill 추가 - Linkerd v2.17, Rust micro-proxy, vs Istio 비교
+- [x] `task-queue.md` Skill 추가 - Celery, BullMQ, Go asynq, Priority Queue 패턴
+- [x] `generate-inventory.sh` 재귀 탐색 + 디렉토리 기반 카테고리 지원
+- [x] `install.sh` flatten symlink 로직 추가 (하위 호환성)
+- [x] 128 → 134 Skills, ~41,900 → ~44,900줄
 
 ### v1.3 - Skills & Agent 확장 (2026-02-06)
 - [x] `redis-expert.md` Agent 추가 (~370줄) - Redis Cluster, Sentinel, 캐싱 전략
