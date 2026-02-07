@@ -4,8 +4,8 @@
 
 | 항목 | 수량 | 상태 |
 |------|------|------|
-| **Agents** | 24 files (~7,900줄) | ✅ 최적화 완료 |
-| **Skills** | 134 files (~44,900줄) | ✅ 9개 카테고리 서브디렉토리 |
+| **Agents** | 26 files (~8,800줄) | ✅ 최적화 완료 |
+| **Skills** | 137 files (~47,200줄) | ✅ 9개 카테고리 서브디렉토리 |
 | **Commands** | 35 files | ✅ |
 | **Templates** | 4 projects | ✅ |
 | **Tests** | 36 cases | ✅ |
@@ -57,6 +57,14 @@
 ---
 
 ## 완료된 마일스톤
+
+### v1.5 - 토이프로젝트 지원 확장 (2026-02-07)
+- [x] `architect-agent.md` Agent 추가 (~513줄) - MSA 설계, 서비스 경계, API 계약 정의
+- [x] `saga-agent.md` Agent 추가 (~475줄) - 분산 트랜잭션 오케스트레이션, Temporal.io
+- [x] `go-microservice.md` Skill 추가 (~494줄) - Go MSA 프로젝트 구조, 헥사고날 아키텍처
+- [x] `nats-messaging.md` Skill 추가 (~431줄) - NATS JetStream, KV Store, Consumer 패턴
+- [x] `state-machine.md` Skill 추가 (~412줄) - 도메인 상태머신, FSM, Event Sourcing 통합
+- [x] 24 → 26 Agents, 134 → 137 Skills, ~52K → ~56K lines
 
 ### v1.4 - Skills 서브디렉토리 재편 + 6개 신규 스킬 (2026-02-07)
 - [x] 128개 Skills → 9개 카테고리 서브디렉토리 재편 (dx, go, spring, msa, kubernetes, observability, platform, sre, infrastructure)
