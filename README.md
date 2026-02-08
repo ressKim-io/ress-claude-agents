@@ -5,7 +5,7 @@
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
 ![Skills](https://img.shields.io/badge/Skills-137-2563EB?style=for-the-badge)
 ![Agents](https://img.shields.io/badge/Agents-26-F97316?style=for-the-badge)
-![Lines](https://img.shields.io/badge/56K+_Lines-4F46E5?style=for-the-badge)
+![Lines](https://img.shields.io/badge/55K+_Lines-4F46E5?style=for-the-badge)
 
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -34,7 +34,7 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 ──────────────────                    ──────────────────
 Google/StackOverflow 검색              → /k8s-security 로 즉시 패턴 적용
 Runbook 찾아서 수동 실행               → incident-responder 가 자동 진단
-"이거 어떻게 해요?" 반복 질문          → 56,000줄의 지식 베이스가 즉시 답변
+"이거 어떻게 해요?" 반복 질문          → 55,000줄의 지식 베이스가 즉시 답변
 100만 VU 테스트 시나리오 수동 작성     → load-tester-k6 가 템플릿 제공
 ```
 
@@ -52,12 +52,12 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 | | Metric | Value | Description |
 |---|--------|-------|-------------|
-| 🤖 | **Agents** | 26 (~8,800줄) | 보안, 인시던트, FinOps, MLOps 등 자율 실행 전문가 |
-| 💡 | **Skills** | 137 (~47,200줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
+| 🤖 | **Agents** | 26 (~8,900줄) | 보안, 인시던트, FinOps, MLOps 등 자율 실행 전문가 |
+| 💡 | **Skills** | 137 (~46,300줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
 | ⚡ | **Commands** | 35 | `/go review`, `/java performance` 등 자동화 워크플로우 |
 | 📦 | **Templates** | 4 | Go, Java, K8s, Terraform 프로젝트 부트스트래핑 |
 | 🧪 | **Tests** | 36 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
-| 📏 | **Total** | **56,000+ lines** | 9개 카테고리로 체계화된 AI 지식 체계 |
+| 📏 | **Total** | **55,000+ lines** | 9개 카테고리로 체계화된 AI 지식 체계 |
 
 </div>
 
@@ -95,7 +95,7 @@ cp -r .claude/skills ~/.claude/skills    # Skills만
 
 ## 🤖 Agents
 
-Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (26 files, ~8,800줄).
+Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (26 files, ~8,900줄).
 
 > **Skills**는 "지식"이고, **Agents**는 "전문가"입니다. 자율적으로 판단하고 작업을 수행합니다.
 
@@ -159,7 +159,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills
 
-필요할 때만 로드되는 도메인 지식 (137 files, ~47,200줄). 9개 카테고리 서브디렉토리로 체계화.
+필요할 때만 로드되는 도메인 지식 (137 files, ~46,300줄). 9개 카테고리 서브디렉토리로 체계화.
 
 <details>
 <summary><b>Go & Spring (14 files)</b></summary>
@@ -479,7 +479,7 @@ make all           # 전체 검증 (validate + test)
          → 필요한 Skill만 로드 (<5,000 tokens)
 ```
 
-매 세션마다 56,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
+매 세션마다 55,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
 
 ### Token Efficiency
 
@@ -593,7 +593,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Built with Claude Code**
 
-*AI를 도구가 아닌 동료로 — 56,000줄의 AI 지식 체계*
+*AI를 도구가 아닌 동료로 — 55,000줄의 AI 지식 체계*
 
 [![GitHub Stars](https://img.shields.io/github/stars/ressKim-io/ress-claude-agents?style=for-the-badge&color=yellow)](https://github.com/ressKim-io/ress-claude-agents)
 
