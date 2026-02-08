@@ -504,10 +504,31 @@ Chatty Services 증상:
 
 Remember: MSA 설계의 핵심은 **비즈니스 도메인 정렬**입니다. 기술적 레이어가 아닌 비즈니스 역량(Business Capability) 중심으로 서비스를 분리하세요. "마이크로서비스는 목적이 아니라 수단"이며, 과도한 분리보다는 적절한 크기의 서비스가 더 중요합니다.
 
+## 참고 레퍼런스 아키텍처
+
+### Go
+| 레포 | 패턴 |
+|------|------|
+| [go-food-delivery-microservices](https://github.com/mehdihadeli/go-food-delivery-microservices) | DDD + CQRS + Event Sourcing + RabbitMQ + gRPC + OTel |
+| [shop-golang-microservices](https://github.com/meysamhadeli/shop-golang-microservices) | Vertical Slice + RabbitMQ + PostgreSQL |
+| [go-hexagonal](https://github.com/RanchoCooper/go-hexagonal) | Hexagonal Architecture + DDD 프레임워크 |
+| [evrone/go-clean-template](https://github.com/evrone/go-clean-template) | Clean Architecture 템플릿 |
+
+### Java/Spring
+| 레포 | 패턴 |
+|------|------|
+| [spring-food-delivery-microservices](https://github.com/mehdihadeli/spring-food-delivery-microservices) | DDD + CQRS + Vertical Slice + Event-Driven |
+| [booking-microservices-java-spring-boot](https://github.com/meysamhadeli/booking-microservices-java-spring-boot) | Vertical Slice + CQRS + gRPC + RabbitMQ |
+| [demo-microservices](https://github.com/miliariadnane/demo-microservices) | Spring Cloud + Event-Driven + K8s + AWS 배포 |
+| [ecommerce-microservice-backend-app](https://github.com/SelimHorri/ecommerce-microservice-backend-app) | Spring Cloud + Docker + K8s |
+
+### K8s 배포 참고
+| 레포 | 특징 |
+|------|------|
+| [Google Online Boutique](https://github.com/GoogleCloudPlatform/microservices-demo) | 11 서비스, gRPC, Istio, 다국어 |
+
 Sources:
 - [Microservices.io Patterns](https://microservices.io/patterns/microservices.html)
 - [DDD Bounded Context - Martin Fowler](https://martinfowler.com/bliki/BoundedContext.html)
 - [Proto Best Practices](https://protobuf.dev/best-practices/dos-donts/)
-- [MSA Best Practices 2026](https://www.tekrecruiter.com/post/top-10-microservices-architecture-best-practices-for-2026)
 - [Contract-First API Development](https://www.moesif.com/blog/technical/api-development/Mastering-Contract-First-API-Development-Key-Strategies-and-Benefits/)
-- [Microservice Anti-Patterns](https://blog.bitsrc.io/10-microservice-anti-patterns-278bcb7f385d)

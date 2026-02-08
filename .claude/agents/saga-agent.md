@@ -473,3 +473,21 @@ func GoodWorkflow(ctx workflow.Context) error {
 | `/msa-event-driven` | 이벤트 기반 아키텍처, Kafka/RabbitMQ 연동 |
 | `/distributed-lock` | 분산 락 (Redlock, DB Lock, ZooKeeper) |
 | `/msa-cqrs-eventsourcing` | CQRS + Event Sourcing 패턴 |
+
+## 10. 참고 레퍼런스
+
+### Go Saga 예제
+- [Saga_Pattern_with_NATS_Go](https://github.com/ChikenduHillary/Saga_Pattern_with_NATS_Go) -- Go + NATS JetStream Saga 오케스트레이션
+- [saga-example](https://github.com/minghsu0107/saga-example) -- Go Orchestration Saga (Order/Payment/Product)
+- [Saga x Temporal x Go x NATS](https://hieuphan.com/saga-pattern-x-temporal-x-golang-x-nats/) -- Temporal + NATS 통합 블로그
+
+### Java/Spring Saga 예제
+- [eventuate-tram-sagas](https://github.com/eventuate-tram/eventuate-tram-sagas-examples-customers-and-orders) -- Orchestration Saga + Spring Boot/JPA
+- [saga-orchestration](https://github.com/semotpan/saga-orchestration) -- Transactional Outbox + CDC + Debezium
+- [saga-pattern-microservices](https://github.com/uuhnaut69/saga-pattern-microservices) -- Outbox + Debezium + Kafka Connect
+- [spring-boot-saga-eventing](https://github.com/piomin/sample-spring-boot-saga-eventing) -- Spring Cloud Stream + Kafka
+
+### 공식 문서
+- [Temporal Saga Mastery Guide](https://temporal.io/blog/mastering-saga-patterns-for-distributed-transactions-in-microservices)
+- [Temporal Compensating Actions](https://temporal.io/blog/compensating-actions-part-of-a-complete-breakfast-with-sagas)
+- [Microservices.io Saga Pattern](https://microservices.io/patterns/data/saga.html)

@@ -482,3 +482,14 @@ spec:
 - `/spring-data` - Spring Data JPA, Repository 패턴
 - `/k8s-helm` - Kubernetes Helm 배포
 - `/deployment-strategies` - 배포 전략 (Blue-Green, Canary)
+
+## 참고 레퍼런스
+
+### Go
+- [go-food-delivery-microservices](https://github.com/mehdihadeli/go-food-delivery-microservices) -- CQRS + Event Sourcing + RabbitMQ + gRPC
+
+### Java/Spring
+- [event-sourcing-microservices-example](https://github.com/kbastani/event-sourcing-microservices-example) -- Event Sourcing + K8s + Helm 배포
+- [ddd-cqrs-4-java-example](https://github.com/fuinorg/ddd-cqrs-4-java-example) -- Quarkus + Spring Boot + EventStore
+- [booking-microservices-java-spring-boot](https://github.com/meysamhadeli/booking-microservices-java-spring-boot) -- CQRS + DDD + gRPC + MongoDB
+- [product-microservice-cqrs](https://github.com/SuperMohit/product-microservice-cqrs) -- Hexagonal + CQRS + Netflix OSS

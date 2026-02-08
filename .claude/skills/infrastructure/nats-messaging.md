@@ -429,3 +429,11 @@ nc.Subscribe("$JS.EVENT.ADVISORY.CONSUMER.MAX_DELIVERIES.>", func(msg *nats.Msg)
 - [ ] 모니터링: Prometheus Exporter, Consumer lag 알림, KEDA
 
 **관련 Skills**: `/kafka` (대용량 스트리밍), `/kafka-patterns` (이벤트 패턴), `/k8s-helm` (Helm), `/monitoring-metrics` (Prometheus)
+
+## 참고 레퍼런스
+
+- [Saga_Pattern_with_NATS_Go](https://github.com/ChikenduHillary/Saga_Pattern_with_NATS_Go) -- Go + NATS JetStream Saga 패턴
+- [go-microservices (NATS)](https://github.com/f4nt0md3v/go-microservices) -- Go + NATS Streaming + CockroachDB
+- [Go + NATS + gRPC Clean Architecture](https://dev.to/aleksk1ng/go-nats-grpc-and-postgresql-clean-architecture-microservice-with-monitoring-and-tracing-2kka) -- 모니터링/트레이싱 포함
+- [Building Distributed Systems with Go and NATS (O'Reilly)](https://www.oreilly.com/library/view/building-distributed-systems/9798868820892/) -- DDD + Hexagonal + Reactive
+- [How to Use NATS in Go (2026)](https://oneuptime.com/blog/post/2026-01-07-go-nats/view) -- 2026년 최신 가이드

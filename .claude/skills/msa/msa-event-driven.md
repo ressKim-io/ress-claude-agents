@@ -473,3 +473,16 @@ Knative Eventing 구성 요소:
 - `/msa-saga` - Saga 패턴 (Choreography/Orchestration)
 - `/msa-cqrs-eventsourcing` - CQRS, Event Sourcing 패턴
 - `/observability-otel` - OpenTelemetry 분산 추적
+- `/nats-messaging` - NATS JetStream 기반 이벤트 드리븐
+- `/rabbitmq` - RabbitMQ Exchange, Quorum Queue
+
+## 참고 레퍼런스
+
+### Go
+- [go-food-delivery-microservices](https://github.com/mehdihadeli/go-food-delivery-microservices) -- DDD + CQRS + Event Sourcing + RabbitMQ
+- [shop-golang-microservices](https://github.com/meysamhadeli/shop-golang-microservices) -- Vertical Slice + Event-Driven
+
+### Java/Spring
+- [spring-food-delivery-microservices](https://github.com/mehdihadeli/spring-food-delivery-microservices) -- DDD + CQRS + Event-Driven
+- [spring-kafka-microservices](https://github.com/ZaTribune/spring-kafka-microservices) -- Kafka 기반 E-commerce Event-Driven
+- [ecommerce-microservices](https://github.com/hoangtien2k3/ecommerce-microservices) -- Spring Cloud + Kafka + WebFlux Reactive

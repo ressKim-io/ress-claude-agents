@@ -486,9 +486,15 @@ ENTRYPOINT ["/myservice"]
 
 ## 관련 Skills
 
-- `/go-errors` -- Go 에러 처리 패턴 (sentinel, wrapping, custom types)
-- `/go-gin` -- Gin 프레임워크 핸들러, 라우팅, 미들웨어
-- `/go-testing` -- Go 테스트 전략, mock, 벤치마크
-- `/grpc` -- gRPC 서비스 설계, Protocol Buffers, 스트리밍
-- `/msa-resilience` -- Circuit Breaker, Retry, Bulkhead 패턴
-- `/msa-observability` -- 분산 추적, 메트릭, 로깅 통합
+- `/go-errors`, `/go-gin`, `/go-testing` -- Go 에러/프레임워크/테스트
+- `/grpc` -- gRPC, Protocol Buffers
+- `/msa-resilience` -- Circuit Breaker, Retry
+- `/msa-observability` -- 분산 추적, 메트릭
+
+## 참고 레퍼런스
+
+- [go-food-delivery-microservices](https://github.com/mehdihadeli/go-food-delivery-microservices) -- DDD + CQRS + Event Sourcing + gRPC + OTel
+- [go-hexagonal](https://github.com/RanchoCooper/go-hexagonal) -- Hexagonal + DDD 프레임워크
+- [evrone/go-clean-template](https://github.com/evrone/go-clean-template) -- Clean Architecture 템플릿
+- [todo-api-microservice-example](https://github.com/MarioCarrion/todo-api-microservice-example) -- DDD + Onion 튜토리얼
+- [Three Dots Labs](https://threedots.tech/post/introducing-clean-architecture/) -- Go Clean Architecture 블로그

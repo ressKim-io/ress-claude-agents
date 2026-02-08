@@ -484,3 +484,11 @@ groups:
 - `/deployment-strategies` - 무중단 배포 (Saga Worker 배포)
 - `/k8s-helm` - Helm Chart 관리 (Temporal 배포)
 - `/spring-data` - Spring Data JPA (Saga 상태 테이블)
+
+## 참고 레퍼런스
+
+- [Saga_Pattern_with_NATS_Go](https://github.com/ChikenduHillary/Saga_Pattern_with_NATS_Go) -- Go + NATS JetStream Saga
+- [saga-example](https://github.com/minghsu0107/saga-example) -- Go Orchestration Saga
+- [eventuate-tram-sagas](https://github.com/eventuate-tram/eventuate-tram-sagas-examples-customers-and-orders) -- Spring Orchestration Saga
+- [saga-orchestration](https://github.com/semotpan/saga-orchestration) -- Spring Outbox + CDC + Debezium
+- [Temporal Saga Mastery](https://temporal.io/blog/mastering-saga-patterns-for-distributed-transactions-in-microservices)

@@ -410,3 +410,10 @@ Delivered --> Refunded : REFUND\n[반품기간내]
 - **/msa-ddd**: Aggregate 내 상태 전이를 도메인 이벤트로 표현
 - **/msa-event-driven**: 이벤트 기반 아키텍처에서의 상태 변경 전파
 - **/msa-cqrs-eventsourcing**: Event Sourcing으로 상태 이력 관리 및 리플레이
+
+## 참고 레퍼런스
+
+- [looplab/fsm](https://github.com/looplab/fsm) -- Go FSM 라이브러리 (콜백, 이벤트, 비동기)
+- [Spring Statemachine](https://spring.io/projects/spring-statemachine/) -- Spring 공식 상태머신 프레임워크
+- [State Machine in DDD Context](https://patricsteiner.github.io/state-machine-in-a-ddd-context/) -- DDD 관점 상태머신 설계
+- [Temporal Workflow as State Machine](https://temporal.io/blog/saga-pattern-made-easy) -- Temporal 워크플로우를 상태머신으로 활용
