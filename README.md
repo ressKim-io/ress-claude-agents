@@ -3,9 +3,9 @@
 # ress-claude-agents
 
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
-![Skills](https://img.shields.io/badge/Skills-137-2563EB?style=for-the-badge)
+![Skills](https://img.shields.io/badge/Skills-140-2563EB?style=for-the-badge)
 ![Agents](https://img.shields.io/badge/Agents-26-F97316?style=for-the-badge)
-![Lines](https://img.shields.io/badge/55K+_Lines-4F46E5?style=for-the-badge)
+![Lines](https://img.shields.io/badge/57K+_Lines-4F46E5?style=for-the-badge)
 
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -27,14 +27,14 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 > *이 반복 루프를 끊을 수 있다면?*
 
 저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
-137개의 Skills에 각 분야의 Best Practices를 구조화하고, 26개의 Agents가 자율적으로 판단하고 실행합니다.
+140개의 Skills에 각 분야의 Best Practices를 구조화하고, 26개의 Agents가 자율적으로 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
 ──────────────────                    ──────────────────
 Google/StackOverflow 검색              → /k8s-security 로 즉시 패턴 적용
 Runbook 찾아서 수동 실행               → incident-responder 가 자동 진단
-"이거 어떻게 해요?" 반복 질문          → 55,000줄의 지식 베이스가 즉시 답변
+"이거 어떻게 해요?" 반복 질문          → 57,000줄의 지식 베이스가 즉시 답변
 100만 VU 테스트 시나리오 수동 작성     → load-tester-k6 가 템플릿 제공
 ```
 
@@ -53,11 +53,11 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 | | Metric | Value | Description |
 |---|--------|-------|-------------|
 | 🤖 | **Agents** | 26 (~8,900줄) | 보안, 인시던트, FinOps, MLOps 등 자율 실행 전문가 |
-| 💡 | **Skills** | 137 (~46,300줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
+| 💡 | **Skills** | 140 (~47,800줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
 | ⚡ | **Commands** | 35 | `/go review`, `/java performance` 등 자동화 워크플로우 |
 | 📦 | **Templates** | 4 | Go, Java, K8s, Terraform 프로젝트 부트스트래핑 |
 | 🧪 | **Tests** | 36 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
-| 📏 | **Total** | **55,000+ lines** | 9개 카테고리로 체계화된 AI 지식 체계 |
+| 📏 | **Total** | **57,000+ lines** | 9개 카테고리로 체계화된 AI 지식 체계 |
 
 </div>
 
@@ -159,7 +159,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills
 
-필요할 때만 로드되는 도메인 지식 (137 files, ~46,300줄). 9개 카테고리 서브디렉토리로 체계화.
+필요할 때만 로드되는 도메인 지식 (140 files, ~47,800줄). 9개 카테고리 서브디렉토리로 체계화.
 
 <details>
 <summary><b>Go & Spring (14 files)</b></summary>
@@ -295,13 +295,16 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Platform & MLOps (13 files)</b></summary>
+<summary><b>Platform & MLOps (16 files)</b></summary>
 
 ```
 /backstage          # Developer Portal, Software Catalog
 /platform-backstage # Backstage 플러그인, TechDocs 심화
 /golden-paths       # 표준화 경로, 템플릿 패턴
 /golden-paths-infra # 인프라 Golden Path, Terraform 템플릿
+/developer-self-service # 개발자 셀프서비스 플랫폼, Backstage Templates, Crossplane Claims
+/secrets-management # 시크릿 관리, ESO, Vault VSO, SOPS+age, 자동 로테이션
+/kratix             # Kratix Promise 기반 플랫폼 오케스트레이터, 소규모 적용 가능성
 /k8s-gpu            # NVIDIA Operator, MIG, Kueue, Volcano
 /k8s-gpu-scheduling # GPU 스케줄링, MPS, 분산 학습
 /ml-serving         # KServe, vLLM, TensorRT-LLM
@@ -479,7 +482,7 @@ make all           # 전체 검증 (validate + test)
          → 필요한 Skill만 로드 (<5,000 tokens)
 ```
 
-매 세션마다 55,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
+매 세션마다 57,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
 
 ### Token Efficiency
 
@@ -514,14 +517,14 @@ ress-claude-agents/
 │   │   ├── otel-expert.md    # 대규모 OTel
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder
 │   │   └── ...
-│   ├── skills/               # 137 on-demand knowledge files
+│   ├── skills/               # 140 on-demand knowledge files
 │   │   ├── dx/               # Developer Experience (15)
 │   │   ├── go/               # Go patterns (6)
 │   │   ├── spring/           # Spring Boot (8)
 │   │   ├── msa/              # MSA & High-Traffic (15)
-│   │   ├── kubernetes/       # K8s & Service Mesh (25)
+│   │   ├── kubernetes/       # K8s & Service Mesh (24)
 │   │   ├── observability/    # Monitoring & Observability (17)
-│   │   ├── platform/         # Platform & MLOps (13)
+│   │   ├── platform/         # Platform & MLOps (16)
 │   │   ├── sre/              # SRE & DevOps (25)
 │   │   └── infrastructure/   # Infra & Database (14)
 │   ├── inventory.yml         # Auto-generated skill/agent index
@@ -593,7 +596,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Built with Claude Code**
 
-*AI를 도구가 아닌 동료로 — 55,000줄의 AI 지식 체계*
+*AI를 도구가 아닌 동료로 — 57,000줄의 AI 지식 체계*
 
 [![GitHub Stars](https://img.shields.io/github/stars/ressKim-io/ress-claude-agents?style=for-the-badge&color=yellow)](https://github.com/ressKim-io/ress-claude-agents)
 

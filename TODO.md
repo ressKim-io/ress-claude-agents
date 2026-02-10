@@ -5,7 +5,7 @@
 | 항목 | 수량 | 상태 |
 |------|------|------|
 | **Agents** | 26 files (~8,900줄) | ✅ 최적화 완료 |
-| **Skills** | 137 files (~46,300줄) | ✅ 9개 카테고리 서브디렉토리 |
+| **Skills** | 140 files (~47,800줄) | ✅ 9개 카테고리 서브디렉토리 |
 | **Commands** | 35 files | ✅ |
 | **Templates** | 4 projects | ✅ |
 | **Tests** | 36 cases | ✅ |
@@ -57,6 +57,12 @@
 ---
 
 ## 완료된 마일스톤
+
+### v1.6 - Platform Engineering 셀프서비스 확장 (2026-02-10)
+- [x] `developer-self-service.md` Skill 추가 (~486줄) - Backstage Templates, Crossplane Claims, 셀프서비스 플랫폼
+- [x] `secrets-management.md` Skill 추가 (~499줄) - ESO, Vault VSO, Infisical, SOPS+age, 자동 로테이션
+- [x] `kratix.md` Skill 추가 (~497줄) - Promise CRD, Pipeline, 멀티클러스터, 소규모 적용 가능성 평가
+- [x] 137 → 140 Skills, platform 카테고리 13 → 16 files, ~56K → ~57K lines
 
 ### v1.5 - 토이프로젝트 지원 확장 (2026-02-07)
 - [x] `architect-agent.md` Agent 추가 (~513줄) - MSA 설계, 서비스 경계, API 계약 정의
