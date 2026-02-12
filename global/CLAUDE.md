@@ -86,6 +86,7 @@ fix/#456-description
 - 저장소 전체 구조는 `.claude/inventory.yml` 참조 (모든 스킬/에이전트 목록 + 줄 수)
 
 ## Skills Reference
+- `/go-database` - Go DB 라이브러리 선택 (pgx, sqlc, sqlx) 및 커넥션 풀 설정
 - `/git-workflow` - Git conventions and patterns
 
 ## DX Commands

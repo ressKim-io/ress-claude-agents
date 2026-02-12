@@ -46,6 +46,7 @@ pkg/                     # Public libraries
 | MSA에서 로컬 락 | 분산 락 (Redis) | Race condition |
 
 ## Skills Reference
+- `/go-database` - DB 라이브러리 선택 (pgx, sqlc, sqlx) 및 커넥션 풀 설정
 - `/go-errors` - Error handling patterns
 - `/go-gin` - Gin framework patterns
 - `/go-testing` - Testing patterns
