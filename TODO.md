@@ -5,7 +5,7 @@
 | 항목 | 수량 | 상태 |
 |------|------|------|
 | **Agents** | 26 files (~8,900줄) | ✅ 최적화 완료 |
-| **Skills** | 140 files (~47,800줄) | ✅ 9개 카테고리 서브디렉토리 |
+| **Skills** | 142 files (~48,700줄) | ✅ 9개 카테고리 서브디렉토리 |
 | **Commands** | 35 files | ✅ |
 | **Templates** | 4 projects | ✅ |
 | **Tests** | 36 cases | ✅ |
@@ -57,6 +57,11 @@
 ---
 
 ## 완료된 마일스톤
+
+### v1.7 - Spring jOOQ & Go Database 스킬 추가 (2026-02-13)
+- [x] `spring-jooq.md` Skill 추가 (~498줄) - jOOQ DSL, 코드 생성(Flyway+Testcontainers), MULTISET, Keyset Pagination, R2DBC
+- [x] `go-database.md` Skill 추가 (~426줄) - pgx, sqlc, sqlx, ent, bun 패턴
+- [x] 140 → 142 Skills, spring 카테고리 8 → 9 files, go 카테고리 6 → 7 files, ~57K → ~58K lines
 
 ### v1.6 - Platform Engineering 셀프서비스 확장 (2026-02-10)
 - [x] `developer-self-service.md` Skill 추가 (~486줄) - Backstage Templates, Crossplane Claims, 셀프서비스 플랫폼
