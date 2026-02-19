@@ -54,6 +54,7 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 |---|--------|-------|-------------|
 | 🤖 | **Agents** | 26 (~8,900줄) | 보안, 인시던트, FinOps, MLOps 등 자율 실행 전문가 |
 | 💡 | **Skills** | 160 (~57,000줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
+| 📏 | **Rules** | 8 (~870줄) | Git, 테스트, 보안, Java/Go/Spring 자동 적용 규칙 |
 | ⚡ | **Commands** | 35 | `/go review`, `/java performance` 등 자동화 워크플로우 |
 | 📦 | **Templates** | 4 | Go, Java, K8s, Terraform 프로젝트 부트스트래핑 |
 | 🧪 | **Tests** | 36 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
@@ -379,6 +380,33 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /database-migration # Flyway, Liquibase
 ```
 </details>
+
+---
+
+## 📏 Rules
+
+파일 경로 기반으로 **자동 적용**되는 코드 규칙 (8 files, ~870줄). Skills와 달리 명시적 호출 없이 항상 활성화됩니다.
+
+### Project Workflow (전체 적용)
+
+| Rule | Description | Key Points |
+|------|-------------|------------|
+| 📝 `git` | Git 워크플로우 | Conventional Commits, Branch 네이밍, PR 400줄 제한 |
+| 🧪 `testing` | 테스트 규칙 | TDD, Given-When-Then, 커버리지 80%+, @Disabled 금지 |
+| 🔄 `workflow` | 작업 순서 | Explore → Plan → Code → Verify → Commit (MANDATORY) |
+| 🔒 `security` | 보안 규칙 | 시크릿 하드코딩 금지, 입력 검증, PII 로깅 금지 |
+| 🐛 `debugging` | 디버깅 프로토콜 | Reproduce → Diagnose → Root Cause → Fix |
+
+### Language-Specific (경로 자동 매칭)
+
+| Rule | Path Pattern | Description |
+|------|-------------|-------------|
+| ☕ `java` | `**/*.java` | Effective Java: Record, Builder, DI, 불변 객체, Modern Java |
+| 🦫 `go` | `**/*.go` | Go Proverbs: 인터페이스, 에러 래핑, Context, Functional Options |
+| 🌱 `spring` | `**/*.java` | Spring Boot: @Transactional, DTO/Entity, 예외 전략, 계층 구조 |
+
+> **Skills vs Rules**: Rules는 "항상 자동 적용"되는 짧은 지시문, Skills는 "필요 시 로드"되는 상세 가이드입니다.
+> `.java` 파일 편집 시 `java.md` + `spring.md`가 자동 적용되고, 상세 내용은 `/effective-java`, `/spring-patterns` 스킬을 참조합니다.
 
 ---
 
