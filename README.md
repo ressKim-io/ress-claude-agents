@@ -4,8 +4,8 @@
 
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
 ![Skills](https://img.shields.io/badge/Skills-160-2563EB?style=for-the-badge)
-![Agents](https://img.shields.io/badge/Agents-26-F97316?style=for-the-badge)
-![Lines](https://img.shields.io/badge/66K+_Lines-4F46E5?style=for-the-badge)
+![Agents](https://img.shields.io/badge/Agents-27-F97316?style=for-the-badge)
+![Lines](https://img.shields.io/badge/67K+_Lines-4F46E5?style=for-the-badge)
 
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -27,7 +27,7 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 > *이 반복 루프를 끊을 수 있다면?*
 
 저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
-160개의 Skills에 각 분야의 Best Practices를 구조화하고, 26개의 Agents가 자율적으로 판단하고 실행합니다.
+160개의 Skills에 각 분야의 Best Practices를 구조화하고, 27개의 Agents가 자율적으로 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
@@ -52,13 +52,13 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 | | Metric | Value | Description |
 |---|--------|-------|-------------|
-| 🤖 | **Agents** | 26 (~8,900줄) | 보안, 인시던트, FinOps, MLOps 등 자율 실행 전문가 |
+| 🤖 | **Agents** | 27 (~9,100줄) | 보안, 인시던트, FinOps, MLOps 등 자율 실행 전문가 |
 | 💡 | **Skills** | 160 (~57,000줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
 | 📏 | **Rules** | 8 (~870줄) | Git, 테스트, 보안, Java/Go/Spring 자동 적용 규칙 |
-| ⚡ | **Commands** | 35 | `/go review`, `/java performance` 등 자동화 워크플로우 |
+| ⚡ | **Commands** | 40 | `/go review`, `/log-feedback` 등 자동화 워크플로우 |
 | 📦 | **Templates** | 4 | Go, Java, K8s, Terraform 프로젝트 부트스트래핑 |
 | 🧪 | **Tests** | 36 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
-| 📏 | **Total** | **66,000+ lines** | 9개 카테고리로 체계화된 AI 지식 체계 |
+| 📏 | **Total** | **67,000+ lines** | 9개 카테고리로 체계화된 AI 지식 체계 |
 
 </div>
 
@@ -96,7 +96,7 @@ cp -r .claude/skills ~/.claude/skills    # Skills만
 
 ## 🤖 Agents
 
-Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (26 files, ~8,900줄).
+Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (27 files, ~9,100줄).
 
 > **Skills**는 "지식"이고, **Agents**는 "전문가"입니다. 자율적으로 판단하고 작업을 수행합니다.
 
@@ -155,6 +155,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | 📝 `git-workflow` | Git 워크플로우 자동화 | 커밋 메시지 생성, PR 자동화 |
 | ⚙️ `ci-optimizer` | CI/CD 최적화 | 빌드 시간 분석, DORA 메트릭 |
 | 🔍 `pr-review-bot` | AI PR 리뷰 설정 | Copilot/CodeRabbit/Claude Action |
+| 📓 `dev-logger` | 개발 과정 기록 | AI 수정 요청, 의사결정, 트러블슈팅 로깅 |
 
 ---
 
@@ -420,6 +421,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | **K8s** | `/k8s validate`, `/k8s secure`, `/k8s netpol`, `/k8s helm-check` |
 | **Terraform** | `/terraform plan-review`, `/terraform security`, `/terraform module-gen` |
 | **DX** | `/dx pr-create`, `/dx issue-create`, `/dx changelog`, `/dx release` |
+| **Log** | `/log-feedback`, `/log-decision`, `/log-meta`, `/log-trouble`, `/log-summary` |
 | **Session** | `/session save`, `/session end` |
 
 ---
@@ -557,14 +559,21 @@ make all           # 전체 검증 (validate + test)
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── agents/               # 26 autonomous AI agents
+│   ├── agents/               # 27 autonomous AI agents
 │   │   ├── security-scanner.md
 │   │   ├── k8s-troubleshooter.md
 │   │   ├── ticketing-expert.md
 │   │   ├── redis-expert.md   # Redis Cluster, Sentinel
 │   │   ├── otel-expert.md    # 대규모 OTel
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder
+│   │   ├── dev-logger.md     # 개발 과정 기록
 │   │   └── ...
+│   ├── commands/              # 40 automation commands
+│   │   ├── log-feedback.md   # AI 수정 요청 기록
+│   │   ├── log-decision.md   # 의사결정 기록
+│   │   ├── log-meta.md       # Rule/Skill 변경 기록
+│   │   ├── log-trouble.md    # 트러블슈팅 기록
+│   │   └── log-summary.md    # 세션 요약
 │   ├── skills/               # 160 on-demand knowledge files
 │   │   ├── dx/               # Developer Experience (15)
 │   │   ├── go/               # Go patterns (8)
@@ -583,7 +592,10 @@ ress-claude-agents/
 │   │   └── debugging.md      # 디버깅 프로토콜, 에러 분석
 │   ├── inventory.yml         # Auto-generated skill/agent index
 │   └── standards.yml         # Code quality standards
-├── commands/                 # 35 automation commands
+├── docs/
+│   └── dev-logs/             # 개발 과정 기록 저장소
+│       └── sessions/         # 세션 요약
+├── commands/                 # 35 automation commands (legacy)
 ├── project-templates/        # Go, Java, K8s, Terraform
 ├── scripts/
 │   ├── generate-docs.sh      # Documentation generator
@@ -650,7 +662,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Built with Claude Code**
 
-*AI를 도구가 아닌 동료로 — 66,000줄의 AI 지식 체계*
+*AI를 도구가 아닌 동료로 — 67,000줄의 AI 지식 체계*
 
 [![GitHub Stars](https://img.shields.io/github/stars/ressKim-io/ress-claude-agents?style=for-the-badge&color=yellow)](https://github.com/ressKim-io/ress-claude-agents)
 
