@@ -157,7 +157,7 @@ resolve_plugin() {
 
     if [[ ! -f "$manifest" ]]; then
         log_error "Plugin not found: $plugin_name"
-        log_error "Available plugins: $(ls "$SCRIPT_DIR/plugins/"*.yml 2>/dev/null | xargs -I{} basename {} .yml | tr '\n' ', ')"
+        log_error "Available plugins: $(find "$SCRIPT_DIR/plugins/" -name '*.yml' -print0 2>/dev/null | xargs -0 -I{} basename {} .yml | tr '\n' ', ')"
         exit 1
     fi
 
