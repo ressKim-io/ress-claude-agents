@@ -1,3 +1,5 @@
+[English](../README.md) | **한국어**
+
 # 사용 가이드
 
 > 160개 Skills + 27개 Agents + 5개 Rules — "내 상황에 뭘 써야 하지?"를 해결하는 가이드

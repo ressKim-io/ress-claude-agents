@@ -1,3 +1,5 @@
+[English](../../scenarios/platform-bootstrap.md) | **한국어**
+
 # 시나리오: 플랫폼 팀 환경 구축
 
 > Backstage + ArgoCD + OpenTelemetry로 Internal Developer Platform을 구축하는 워크스루

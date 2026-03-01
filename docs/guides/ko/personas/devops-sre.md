@@ -1,3 +1,5 @@
+[English](../../personas/devops-sre.md) | **한국어**
+
 # DevOps / SRE 가이드
 
 > 인프라 운영, 배포, 관측성, 인시던트 대응을 위한 에이전트 + 스킬 활용 가이드

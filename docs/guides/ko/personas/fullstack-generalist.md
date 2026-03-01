@@ -1,3 +1,5 @@
+[English](../../personas/fullstack-generalist.md) | **한국어**
+
 # 풀스택 / 제너럴리스트 가이드
 
 > "모르면 물어봐" — 전반적인 개발에 Claude Code를 활용하는 가이드

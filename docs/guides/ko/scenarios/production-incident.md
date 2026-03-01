@@ -1,3 +1,5 @@
+[English](../../scenarios/production-incident.md) | **한국어**
+
 # 시나리오: 프로덕션 장애 대응
 
 > K8s 파드 OOMKilled 장애를 발견부터 해결까지 대응하는 워크스루
