@@ -47,18 +47,21 @@ categorize_agent() {
   case "$name" in
     go-expert) echo "go" ;;
     java-expert) echo "spring" ;;
+    python-expert) echo "python" ;;
     architect-agent|saga-agent) echo "architecture" ;;
     k8s-*) echo "kubernetes" ;;
     platform-engineer) echo "platform" ;;
     otel-expert) echo "observability" ;;
-    security-scanner|anti-bot|terraform-reviewer) echo "security" ;;
+    security-scanner|anti-bot|terraform-reviewer|compliance-auditor) echo "security" ;;
     ci-optimizer|git-workflow|pr-review-bot) echo "cicd" ;;
-    code-reviewer|ticketing-expert|dev-logger) echo "devops" ;;
+    code-reviewer|ticketing-expert|dev-logger|debugging-expert) echo "devops" ;;
     incident-responder) echo "sre" ;;
     load-tester*) echo "testing" ;;
     database-expert*|redis-expert) echo "database" ;;
     finops-*|cost-analyzer) echo "finops" ;;
     mlops-expert) echo "platform" ;;
+    messaging-expert) echo "messaging" ;;
+    service-mesh-expert) echo "service-mesh" ;;
     *) echo "other" ;;
   esac
 }
