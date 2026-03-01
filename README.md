@@ -3,7 +3,7 @@
 # ress-claude-agents
 
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
-![Skills](https://img.shields.io/badge/Skills-160-2563EB?style=for-the-badge)
+![Skills](https://img.shields.io/badge/Skills-161-2563EB?style=for-the-badge)
 ![Agents](https://img.shields.io/badge/Agents-27-F97316?style=for-the-badge)
 ![Lines](https://img.shields.io/badge/67K+_Lines-4F46E5?style=for-the-badge)
 
@@ -27,7 +27,7 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 > *이 반복 루프를 끊을 수 있다면?*
 
 저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
-160개의 Skills에 각 분야의 Best Practices를 구조화하고, 27개의 Agents가 자율적으로 판단하고 실행합니다.
+161개의 Skills에 각 분야의 Best Practices를 구조화하고, 27개의 Agents가 자율적으로 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
@@ -53,12 +53,12 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 | | Metric | Value | Description |
 |---|--------|-------|-------------|
 | 🤖 | **Agents** | 27 (~9,100줄) | 보안, 인시던트, FinOps, MLOps 등 자율 실행 전문가 |
-| 💡 | **Skills** | 160 (~57,000줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
+| 💡 | **Skills** | 161 (~57,000줄) | Go, Spring, K8s, MSA, eBPF 등 온디맨드 도메인 지식 |
 | 📏 | **Rules** | 8 (~870줄) | Git, 테스트, 보안, Java/Go/Spring 자동 적용 규칙 |
 | ⚡ | **Commands** | 40 | `/go review`, `/log-feedback` 등 자동화 워크플로우 |
 | 📦 | **Templates** | 4 | Go, Java, K8s, Terraform 프로젝트 부트스트래핑 |
 | 🧪 | **Tests** | 36 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
-| 📏 | **Total** | **67,000+ lines** | 9개 카테고리로 체계화된 AI 지식 체계 |
+| 📏 | **Total** | **67,000+ lines** | 13개 카테고리로 체계화된 AI 지식 체계 |
 
 </div>
 
@@ -181,10 +181,10 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills
 
-필요할 때만 로드되는 도메인 지식 (160 files, ~57,000줄). 9개 카테고리 서브디렉토리로 체계화.
+필요할 때만 로드되는 도메인 지식 (161 files, ~57,000줄). 13개 카테고리 서브디렉토리로 체계화.
 
 <details>
-<summary><b>Go & Spring (19 files)</b></summary>
+<summary><b>Go (8 files)</b></summary>
 
 ```
 /go-errors          # Error handling patterns
@@ -195,7 +195,13 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /concurrency-go     # Mutex, Channel, Worker Pool
 /refactoring-go     # Go 리팩토링, 코드 개선
 /effective-go       # Go Proverbs, 패턴 결정 가이드, Modern Go (1.21+)
+```
+</details>
 
+<details>
+<summary><b>Spring (11 files)</b></summary>
+
+```
 /spring-data        # JPA, QueryDSL
 /spring-jooq        # jOOQ DSL, 코드 생성, MULTISET, Keyset Pagination
 /spring-cache       # Redis 캐싱
@@ -211,7 +217,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>MSA & Architecture (23 files)</b></summary>
+<summary><b>MSA (14 files) — 런타임 구현 패턴</b></summary>
 
 ```
 /api-design             # RESTful API 설계, 버저닝, 페이징
@@ -228,20 +234,28 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /grpc                   # gRPC 서비스 설계, Protocol Buffers, 스트리밍
 /graphql-federation     # Apollo Federation v2, GraphOS Router, Subgraph 설계
 /task-queue             # Celery, BullMQ, Go asynq, Priority Queue 패턴
-/state-machine          # 도메인 상태머신, FSM, Event Sourcing 통합
-/modular-monolith       # Modular Monolith, Spring Modulith, Schema per Module
-/hexagonal-clean-architecture # 헥사고날/클린 아키텍처, Ports & Adapters
-/vertical-slice-architecture  # Vertical Slice, Feature 단위 조직, MediatR
-/cell-based-architecture     # Cell-Based Architecture, Blast Radius 격리
-/strangler-fig-pattern       # Strangler Fig, 레거시 점진적 현대화, CDC
-/agentic-ai-architecture     # Agentic AI, MCP/A2A 프로토콜, Multi-Agent
-/composable-architecture     # Composable/MACH, PBC, Micro-Frontends
-/data-mesh                   # Data Mesh, Data Product, Federated Governance
 ```
 </details>
 
 <details>
-<summary><b>Kubernetes & Service Mesh (28 files)</b></summary>
+<summary><b>Architecture (10 files) — 아키텍처 스타일 & 설계 패턴</b></summary>
+
+```
+/hexagonal-clean-architecture # 헥사고날/클린 아키텍처, Ports & Adapters
+/vertical-slice-architecture  # Vertical Slice, Feature 단위 조직, MediatR
+/cell-based-architecture     # Cell-Based Architecture, Blast Radius 격리
+/modular-monolith       # Modular Monolith, Spring Modulith, Schema per Module
+/strangler-fig-pattern  # Strangler Fig, 레거시 점진적 현대화, CDC
+/composable-architecture # Composable/MACH, PBC, Micro-Frontends
+/data-mesh              # Data Mesh, Data Product, Federated Governance
+/agentic-ai-architecture # Agentic AI, MCP/A2A 프로토콜, Multi-Agent
+/kafka-msa-patterns     # Kafka 기반 MSA 통합 패턴
+/state-machine          # 도메인 상태머신, FSM, Event Sourcing 통합
+```
+</details>
+
+<details>
+<summary><b>Kubernetes (10 files) — K8s Core & Gateway API</b></summary>
 
 ```
 /k8s-security       # Pod Security, RBAC, Kyverno, Trivy
@@ -252,8 +266,15 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /k8s-scheduling-advanced # 실전 시나리오, Topology Spread, 디버깅
 /k8s-traffic        # Rate Limiting, 대기열
 /k8s-traffic-ingress # Ingress 트래픽 관리
-/k8s-traffic-istio  # Istio 트래픽 관리
+/gateway-api        # Gateway API vs Ingress, Envoy, Kong
+/gateway-api-migration # Ingress NGINX 마이그레이션, Istio Gateway
+```
+</details>
 
+<details>
+<summary><b>Service Mesh (16 files) — Istio & Linkerd</b></summary>
+
+```
 /istio-core         # Sidecar vs Ambient, mTLS
 /istio-ambient      # Ambient GA (1.24+), ztunnel, HBONE, Waypoint, targetRefs
 /istio-security     # PeerAuth, AuthorizationPolicy
@@ -268,12 +289,8 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /istio-metrics      # Istio 메트릭 수집, Prometheus
 /istio-tracing      # Istio 분산 트레이싱, Jaeger
 /istio-kiali        # Kiali 서비스 그래프, 시각화
+/k8s-traffic-istio  # Istio 트래픽 관리
 /linkerd            # Linkerd v2.17, Rust micro-proxy, 자동 mTLS, vs Istio 비교
-
-/gateway-api        # Gateway API vs Ingress, Envoy, Kong
-/gateway-api-migration # Ingress NGINX 마이그레이션, Istio Gateway
-/crossplane         # Multi-cloud IaC, Compositions, XRDs
-/crossplane-advanced # 멀티클라우드 패턴, GitOps 통합, Drift Detection
 ```
 </details>
 
@@ -302,10 +319,9 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>SRE & DevOps (25 files)</b></summary>
+<summary><b>CI/CD & GitOps (11 files) — 배포 파이프라인</b></summary>
 
 ```
-/sre-sli-slo        # SLI/SLO, 에러 버짓
 /cicd-devsecops     # GitHub Actions, Trivy, SonarQube
 /cicd-policy        # CI/CD 정책, OPA Gatekeeper
 /gitops-argocd      # ArgoCD, App of Apps
@@ -313,12 +329,22 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /gitops-argocd-ai   # AI-assisted GitOps, Spacelift, 예측적 배포
 /deployment-strategies # Canary, Blue-Green
 /deployment-canary  # Canary 배포 심화, Flagger
+/ephemeral-environments # PR Preview, ArgoCD ApplicationSet
+/ephemeral-environments-advanced # Qovery, DB 전략, 비용 최적화
+/supply-chain-security # SBOM, SLSA, Sigstore
+/supply-chain-compliance # EU CRA, SBOM 자동화, VEX
+```
+</details>
+
+<details>
+<summary><b>SRE (14 files) — 운영 안정성</b></summary>
+
+```
+/sre-sli-slo        # SLI/SLO, 에러 버짓
 /chaos-engineering  # LitmusChaos, Probe, 기본 실험
 /chaos-engineering-gameday # GameDay 운영, 모니터링, 알림
 /disaster-recovery  # Velero, 백업, 복구 절차
 /disaster-recovery-advanced # 멀티 클러스터 DR, DB DR, 테스트
-/ephemeral-environments # PR Preview, ArgoCD ApplicationSet
-/ephemeral-environments-advanced # Qovery, DB 전략, 비용 최적화
 /load-testing       # K6 기본/고급, K6 on Kubernetes
 /load-testing-analysis # nGrinder, 결과 분석, SLO Threshold
 /finops             # Kubecost, Right-sizing, Spot
@@ -328,8 +354,6 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /finops-tools       # OpenCost, Kubecost, Infracost, KEDA+Karpenter
 /finops-tools-advanced # Cast AI, Kubecost 고급, 4Rs Framework
 /finops-greenops    # 탄소 발자국, 지속가능성, SCI
-/supply-chain-security # SBOM, SLSA, Sigstore
-/supply-chain-compliance # EU CRA, SBOM 자동화, VEX
 ```
 </details>
 
@@ -379,7 +403,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Infrastructure & Database (17 files)</b></summary>
+<summary><b>Infrastructure (11 files) — AWS, Terraform, Docker, IaC</b></summary>
 
 ```
 /aws-eks            # EKS Terraform, IRSA, Add-ons
@@ -388,17 +412,26 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /aws-messaging      # SQS, SNS, EventBridge, 선택 가이드
 /terraform-modules  # Module patterns
 /terraform-security # Security best practices
-/kafka              # Strimzi, KEDA 연동
-/kafka-patterns     # Producer/Consumer 패턴, 모니터링
-/kafka-advanced     # Transactional API, Exactly-Once, KIP-848, Inbox 패턴
-/kafka-streams      # KTable, Windowing, Interactive Queries, RocksDB 튜닝
-/kafka-connect-cdc  # Debezium CDC, Source/Sink Connectors, Schema Registry
-/redis-streams      # Redis Streams, Consumer Groups, PEL 관리
-/rabbitmq           # RabbitMQ v4.1, Quorum Queues, AMQP 1.0
-/nats-messaging     # NATS JetStream, KV Store, Consumer 패턴
+/crossplane         # Multi-cloud IaC, Compositions, XRDs
+/crossplane-advanced # 멀티클라우드 패턴, GitOps 통합, Drift Detection
 /docker             # Dockerfile, 멀티스테이지 빌드
 /database           # 인덱스, N+1, 쿼리 최적화
 /database-migration # Flyway, Liquibase
+```
+</details>
+
+<details>
+<summary><b>Messaging (8 files) — Kafka, RabbitMQ, NATS</b></summary>
+
+```
+/kafka              # Strimzi, KEDA 연동
+/kafka-advanced     # Transactional API, Exactly-Once, KIP-848, Inbox 패턴
+/kafka-patterns     # Producer/Consumer 패턴, 모니터링
+/kafka-streams      # KTable, Windowing, Interactive Queries, RocksDB 튜닝
+/kafka-connect-cdc  # Debezium CDC, Source/Sink Connectors, Schema Registry
+/rabbitmq           # RabbitMQ v4.1, Quorum Queues, AMQP 1.0
+/nats-messaging     # NATS JetStream, KV Store, Consumer 패턴
+/redis-streams      # Redis Streams, Consumer Groups, PEL 관리
 ```
 </details>
 
@@ -594,16 +627,20 @@ ress-claude-agents/
 │   │   ├── log-meta.md       # Rule/Skill 변경 기록
 │   │   ├── log-trouble.md    # 트러블슈팅 기록
 │   │   └── log-summary.md    # 세션 요약
-│   ├── skills/               # 160 on-demand knowledge files
-│   │   ├── dx/               # Developer Experience (15)
+│   ├── skills/               # 161 on-demand knowledge files (13 categories)
 │   │   ├── go/               # Go patterns (8)
 │   │   ├── spring/           # Spring Boot (11)
-│   │   ├── msa/              # MSA & Architecture (23)
-│   │   ├── kubernetes/       # K8s & Service Mesh (28)
+│   │   ├── msa/              # MSA runtime patterns (14)
+│   │   ├── architecture/     # Architecture styles (10)
+│   │   ├── kubernetes/       # K8s core & Gateway API (10)
+│   │   ├── service-mesh/     # Istio & Linkerd (16)
 │   │   ├── observability/    # Monitoring & Observability (17)
+│   │   ├── cicd/             # CI/CD & GitOps (11)
+│   │   ├── sre/              # SRE & Operations (14)
 │   │   ├── platform/         # Platform & MLOps (16)
-│   │   ├── sre/              # SRE & DevOps (25)
-│   │   └── infrastructure/   # Infra & Database (17)
+│   │   ├── dx/               # Developer Experience (15)
+│   │   ├── infrastructure/   # AWS, Terraform, Docker (11)
+│   │   └── messaging/        # Kafka, RabbitMQ, NATS (8)
 │   ├── rules/                # 5 project workflow rules
 │   │   ├── git.md            # Conventional Commits, Branch, PR
 │   │   ├── testing.md        # TDD, Coverage, Given-When-Then
