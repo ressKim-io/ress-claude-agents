@@ -110,7 +110,7 @@ cp -r .claude/skills ~/.claude/skills    # Skills만
 | 프로덕션 장애 대응 | [scenarios/production-incident.md](docs/guides/scenarios/production-incident.md) | 30-60분 |
 | 플랫폼 팀 환경 구축 | [scenarios/platform-bootstrap.md](docs/guides/scenarios/platform-bootstrap.md) | 1-2일 |
 
-**[콤보 레퍼런스](docs/guides/quick-reference.md)** — 상황별 에이전트+스킬 추천 조합 한눈에 보기
+**[콤보 레퍼런스](docs/guides/quick-reference.md)** — 상황별 에이전트+스킬 추천 조합 한눈에 보기 | [한국어 가이드](docs/guides/ko/README.md)
 
 ---
 
