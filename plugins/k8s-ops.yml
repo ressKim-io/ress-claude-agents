@@ -1,0 +1,12 @@
+name: k8s-ops
+description: "Kubernetes operations: troubleshooting, security, mesh, observability"
+agents:
+  - k8s-troubleshooter
+  - service-mesh-expert
+  - incident-responder
+  - otel-expert
+skills:
+  categories:
+    - kubernetes
+    - service-mesh
+    - observability

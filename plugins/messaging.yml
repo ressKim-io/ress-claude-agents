@@ -1,0 +1,8 @@
+name: messaging
+description: "Messaging systems: Kafka, RabbitMQ, NATS troubleshooting and patterns"
+agents:
+  - messaging-expert
+  - architect-agent
+skills:
+  categories:
+    - messaging

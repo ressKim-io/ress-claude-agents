@@ -1,0 +1,15 @@
+name: sre-full
+description: "Full SRE toolkit: incident response, cost analysis, load testing, debugging"
+agents:
+  - incident-responder
+  - cost-analyzer
+  - finops-advisor
+  - debugging-expert
+  - load-tester
+  - load-tester-k6
+skills:
+  categories:
+    - sre
+    - observability
+    - cicd
+    - infrastructure

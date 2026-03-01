@@ -398,3 +398,36 @@ load_install_functions() {
     [ "$status" -eq 0 ]
     [[ "$output" == *"Examples:"* ]]
 }
+
+# =============================================================================
+# 7. Plugin System Tests
+# =============================================================================
+
+@test "plugin option is documented in help" {
+    run bash "$INSTALL_SCRIPT" --help
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"--plugin"* ]]
+}
+
+@test "list-plugins option is documented in help" {
+    run bash "$INSTALL_SCRIPT" --help
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"--list-plugins"* ]]
+}
+
+@test "plugin manifests exist in plugins directory" {
+    [ -d "$PROJECT_ROOT/plugins" ]
+    local count
+    count=$(ls "$PROJECT_ROOT/plugins/"*.yml 2>/dev/null | wc -l | tr -d ' ')
+    [ "$count" -ge 1 ]
+}
+
+@test "plugin manifest has required fields" {
+    # Check that at least one plugin has name, description, agents
+    local manifest="$PROJECT_ROOT/plugins/k8s-ops.yml"
+    [ -f "$manifest" ]
+    grep -q "^name:" "$manifest"
+    grep -q "^description:" "$manifest"
+    grep -q "^agents:" "$manifest"
+    grep -q "categories:" "$manifest"
+}

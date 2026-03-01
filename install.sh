@@ -150,6 +150,47 @@ validate_module() {
     return 1
 }
 
+# Resolve plugin manifest to agent and skill category lists
+resolve_plugin() {
+    local plugin_name="$1"
+    local manifest="$SCRIPT_DIR/plugins/${plugin_name}.yml"
+
+    if [[ ! -f "$manifest" ]]; then
+        log_error "Plugin not found: $plugin_name"
+        log_error "Available plugins: $(ls "$SCRIPT_DIR/plugins/"*.yml 2>/dev/null | xargs -I{} basename {} .yml | tr '\n' ', ')"
+        exit 1
+    fi
+
+    # Parse agents from YAML (simple grep-based parsing)
+    PLUGIN_AGENTS=()
+    PLUGIN_SKILL_CATEGORIES=()
+    local in_agents=false
+    local in_categories=false
+    while IFS= read -r line; do
+        if [[ "$line" =~ ^agents: ]]; then
+            in_agents=true
+            in_categories=false
+            continue
+        elif [[ "$line" =~ ^skills: ]]; then
+            in_agents=false
+            continue
+        elif [[ "$line" =~ ^[[:space:]]+categories: ]]; then
+            in_categories=true
+            in_agents=false
+            continue
+        elif [[ "$line" =~ ^[a-z] && ! "$line" =~ ^[[:space:]] ]]; then
+            in_agents=false
+            in_categories=false
+        fi
+
+        if [[ "$in_agents" == true && "$line" =~ ^[[:space:]]+-[[:space:]]+(.*) ]]; then
+            PLUGIN_AGENTS+=("${BASH_REMATCH[1]}")
+        elif [[ "$in_categories" == true && "$line" =~ ^[[:space:]]+-[[:space:]]+(.*) ]]; then
+            PLUGIN_SKILL_CATEGORIES+=("${BASH_REMATCH[1]}")
+        fi
+    done < "$manifest"
+}
+
 print_usage() {
     local modules_list
     modules_list=$(IFS=,; echo "${ALL_MODULES[*]}")
@@ -165,6 +206,8 @@ Options:
                     Available: $modules_list
   --with-skills     Include skills (on-demand knowledge)
   --with-mcp        Include MCP server configs
+  --plugin NAME     Install a plugin bundle (see --list-plugins)
+  --list-plugins    List available plugin bundles
   -h, --help        Show this help
 
 Examples:
@@ -172,6 +215,8 @@ Examples:
   $0 --global               # Global install, core only
   $0 --global --all         # Global install, all modules
   $0 --local --modules go,k8s --with-skills
+  $0 --global --plugin k8s-ops --with-skills  # K8s operations bundle
+  $0 --list-plugins                            # Show available bundles
 
 EOF
 }
@@ -183,6 +228,8 @@ SELECTED_MODULES=()
 WITH_SKILLS=false
 WITH_MCP=false
 HAS_ARGS=false
+PLUGIN_NAME=""
+LIST_PLUGINS=false
 
 while [[ $# -gt 0 ]]; do
     HAS_ARGS=true
@@ -223,6 +270,18 @@ while [[ $# -gt 0 ]]; do
             WITH_MCP=true
             shift
             ;;
+        --plugin)
+            if [[ -z "${2:-}" ]]; then
+                log_error "Missing argument for --plugin"
+                exit 1
+            fi
+            PLUGIN_NAME="$2"
+            shift 2
+            ;;
+        --list-plugins)
+            LIST_PLUGINS=true
+            shift
+            ;;
         -h|--help)
             print_usage
             exit 0
@@ -237,6 +296,21 @@ done
 
 log_section "=== ress-claude-agents installer ==="
 echo ""
+
+# List plugins mode
+if [[ "$LIST_PLUGINS" == true ]]; then
+    log_section "Available plugin bundles:"
+    echo ""
+    for manifest in "$SCRIPT_DIR/plugins/"*.yml; do
+        [[ -f "$manifest" ]] || continue
+        pname=$(basename "$manifest" .yml)
+        pdesc=$(grep '^description:' "$manifest" | sed 's/^description:[[:space:]]*//;s/^"//;s/"$//')
+        echo "  $pname - $pdesc"
+    done
+    echo ""
+    echo "Usage: $0 --global --plugin <name> [--with-skills]"
+    exit 0
+fi
 
 # Interactive mode if no scope specified
 if [[ -z "$INSTALL_SCOPE" ]]; then
@@ -360,6 +434,57 @@ for mod in "${SELECTED_MODULES[@]}"; do
         log_warn "[$mod] Module directory not found, skipping"
     fi
 done
+
+# Install plugin agents
+if [[ -n "$PLUGIN_NAME" ]]; then
+    resolve_plugin "$PLUGIN_NAME"
+
+    log_info "[plugin:$PLUGIN_NAME] Installing agents..."
+    AGENTS_SOURCE="$SCRIPT_DIR/.claude/agents"
+    AGENTS_TARGET="$TARGET_DIR/agents"
+    create_dir "$AGENTS_TARGET"
+
+    for agent in "${PLUGIN_AGENTS[@]}"; do
+        agent_file="$AGENTS_SOURCE/${agent}.md"
+        if [[ -f "$agent_file" ]]; then
+            if backup_and_link "$agent_file" "$AGENTS_TARGET/${agent}.md" "$INSTALL_SCOPE" "file"; then
+                echo "    + Agent: $agent"
+            fi
+        else
+            log_warn "    Agent not found: $agent"
+        fi
+    done
+    INSTALLED_COMPONENTS+=("Plugin: $PLUGIN_NAME (${#PLUGIN_AGENTS[@]} agents)")
+
+    # Install plugin skill categories
+    if [[ "$WITH_SKILLS" == true && ${#PLUGIN_SKILL_CATEGORIES[@]} -gt 0 ]]; then
+        log_info "[plugin:$PLUGIN_NAME] Installing skill categories..."
+        SKILLS_SOURCE="$SCRIPT_DIR/.claude/skills"
+        SKILLS_TARGET="$TARGET_DIR/skills"
+        create_dir "$SKILLS_TARGET"
+
+        for category in "${PLUGIN_SKILL_CATEGORIES[@]}"; do
+            cat_dir="$SKILLS_SOURCE/$category"
+            if [[ -d "$cat_dir" ]]; then
+                create_dir "$SKILLS_TARGET/$category"
+                for skill_file in "$cat_dir"/*.md; do
+                    [[ -f "$skill_file" ]] || continue
+                    skill_name=$(basename "$skill_file")
+                    if backup_and_link "$skill_file" "$SKILLS_TARGET/$category/$skill_name" "$INSTALL_SCOPE" "file"; then
+                        echo "    + Skill: $category/$skill_name"
+                    fi
+                    # Also flatten to root for backward compat
+                    if [[ ! -e "$SKILLS_TARGET/$skill_name" ]]; then
+                        ln -sf "$skill_file" "$SKILLS_TARGET/$skill_name" 2>/dev/null || true
+                    fi
+                done
+            else
+                log_warn "    Skill category not found: $category"
+            fi
+        done
+        INSTALLED_COMPONENTS+=("Plugin skills: ${PLUGIN_SKILL_CATEGORIES[*]}")
+    fi
+fi
 
 # Install skills
 if [[ "$WITH_SKILLS" == true ]]; then
