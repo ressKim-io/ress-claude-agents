@@ -27,8 +27,8 @@ categorize_skill() {
     msa-*|database-sharding|high-traffic-*|api-design|distributed-lock|grpc|graphql-*|task-queue) echo "msa" ;;
     agentic-ai-*|cell-based-*|composable-*|data-mesh|hexagonal-*|modular-monolith|state-machine|strangler-*|vertical-slice-*|kafka-msa-*) echo "architecture" ;;
     k8s-gpu*) echo "platform" ;;
-    k8s-*|gateway-*) echo "kubernetes" ;;
     istio-*|k8s-traffic-istio|linkerd*) echo "service-mesh" ;;
+    k8s-*|gateway-*) echo "kubernetes" ;;
     observability*|ebpf-*|monitoring-*|logging-*|aiops*|alerting-*) echo "observability" ;;
     cicd-*|gitops-*|deployment-*|ephemeral-*|supply-chain-*) echo "cicd" ;;
     sre-*|chaos-*|disaster-*|load-testing*|finops*) echo "sre" ;;
