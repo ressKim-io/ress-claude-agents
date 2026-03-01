@@ -3,9 +3,9 @@
 # ress-claude-agents
 
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
-![Skills](https://img.shields.io/badge/Skills-173-2563EB?style=for-the-badge)
-![Agents](https://img.shields.io/badge/Agents-32-F97316?style=for-the-badge)
-![Lines](https://img.shields.io/badge/74K+_Lines-4F46E5?style=for-the-badge)
+![Skills](https://img.shields.io/badge/Skills-187-2563EB?style=for-the-badge)
+![Agents](https://img.shields.io/badge/Agents-36-F97316?style=for-the-badge)
+![Lines](https://img.shields.io/badge/81K+_Lines-4F46E5?style=for-the-badge)
 
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -27,14 +27,14 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 > *이 반복 루프를 끊을 수 있다면?*
 
 저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
-173개의 Skills에 각 분야의 Best Practices를 구조화하고, 32개의 Agents가 자율적으로 판단하고 실행합니다.
+187개의 Skills에 각 분야의 Best Practices를 구조화하고, 36개의 Agents가 자율적으로 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
 ──────────────────                    ──────────────────
 Google/StackOverflow 검색              → /k8s-security 로 즉시 패턴 적용
 Runbook 찾아서 수동 실행               → incident-responder 가 자동 진단
-"이거 어떻게 해요?" 반복 질문          → 74,000줄의 지식 베이스가 즉시 답변
+"이거 어떻게 해요?" 반복 질문          → 81,000줄의 지식 베이스가 즉시 답변
 100만 VU 테스트 시나리오 수동 작성     → load-tester-k6 가 템플릿 제공
 ```
 
@@ -52,13 +52,13 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 | | Metric | Value | Description |
 |---|--------|-------|-------------|
-| 🤖 | **Agents** | 32 (~11,500줄) | 보안, 인시던트, FinOps, MLOps, 디버깅 등 자율 실행 전문가 |
-| 💡 | **Skills** | 173 (~63,000줄) | Go, Spring, Python, K8s, MSA, AI/LLM 등 온디맨드 도메인 지식 |
+| 🤖 | **Agents** | 36 (~14,000줄) | 전략, 프론트엔드, 보안, SRE, MLOps 등 자율 실행 전문가 |
+| 💡 | **Skills** | 187 (~69,000줄) | Go, Spring, Python, React/Next.js, K8s, MSA, AI/LLM 등 온디맨드 도메인 지식 |
 | 📏 | **Rules** | 8 (~870줄) | Git, 테스트, 보안, Java/Go/Spring 자동 적용 규칙 |
 | ⚡ | **Commands** | 40 | `/go review`, `/log-feedback` 등 자동화 워크플로우 |
 | 📦 | **Templates** | 4 | Go, Java, K8s, Terraform 프로젝트 부트스트래핑 |
-| 🧪 | **Tests** | 40 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
-| 📏 | **Total** | **74,000+ lines** | 16개 카테고리로 체계화된 AI 지식 체계 |
+| 🧪 | **Tests** | 42 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
+| 📏 | **Total** | **81,000+ lines** | 17개 카테고리로 체계화된 AI 지식 체계 |
 
 </div>
 
@@ -96,7 +96,7 @@ cp -r .claude/skills ~/.claude/skills    # Skills만
 
 ## 📖 사용 가이드
 
-> "170개 스킬 중 내 상황에 뭘 써야 하지?" — 페르소나별 추천 조합 + 실전 시나리오
+> "187개 스킬 중 내 상황에 뭘 써야 하지?" — 페르소나별 추천 조합 + 실전 시나리오
 
 | 페르소나 | 가이드 | 핵심 도구 |
 |----------|--------|----------|
@@ -116,9 +116,23 @@ cp -r .claude/skills ~/.claude/skills    # Skills만
 
 ## 🤖 Agents
 
-Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (32 files, ~11,500줄).
+Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (36 files, ~14,000줄).
 
 > **Skills**는 "지식"이고, **Agents**는 "전문가"입니다. 자율적으로 판단하고 작업을 수행합니다.
+
+### Strategy & Planning
+
+| Agent | Description | Auto-trigger |
+|-------|-------------|--------------|
+| 👔 `tech-lead` | 기술 전략 수립, RFC/ADR 주도, Claude Code Team 오케스트레이션 | 아키텍처 결정, 팀 협업 시 |
+| 📋 `product-engineer` | 요구사항 분석, JTBD/RICE/Shape Up, MVP 스코핑 | 기능 기획, 우선순위 결정 시 |
+| 🔄 `migration-expert` | 프레임워크/DB/K8s 버전 업그레이드, 영향 분석, 마이그레이션 계획 | 메이저 업그레이드 시 |
+
+### Frontend
+
+| Agent | Description | Auto-trigger |
+|-------|-------------|--------------|
+| ⚛️ `frontend-expert` | React/Next.js/TypeScript 전문가, App Router, Core Web Vitals | 프론트엔드 코드 리뷰, 아키텍처 시 |
 
 ### DevOps & SRE
 
@@ -191,7 +205,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills
 
-필요할 때만 로드되는 도메인 지식 (173 files, ~63,000줄). 16개 카테고리 서브디렉토리로 체계화.
+필요할 때만 로드되는 도메인 지식 (187 files, ~69,000줄). 17개 카테고리 서브디렉토리로 체계화.
 
 <details>
 <summary><b>Go (8 files)</b></summary>
@@ -391,7 +405,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Developer Experience (15 files)</b></summary>
+<summary><b>Developer Experience (19 files)</b></summary>
 
 ```
 /dx-metrics         # DORA, SPACE, DevEx
@@ -409,6 +423,10 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /git-workflow       # Git 브랜칭 전략, Trunk-based
 /refactoring-principles # 리팩토링 원칙, Code Smells
 /token-efficiency   # 토큰 & 컨텍스트 효율화, 낭비 패턴 방지
+/rfc-adr            # RFC/ADR 워크플로우, 템플릿, 라이프사이클
+/engineering-strategy # Tech Radar, Build vs Buy, OKR, 로드맵
+/team-topologies    # Team Topologies, Conway's Law, 인터랙션 모드
+/product-thinking   # RICE, MoSCoW, Shape Up, JTBD, Story Mapping
 ```
 </details>
 
@@ -446,11 +464,14 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Security (2 files) — 컴플라이언스 & 위협 모델링</b></summary>
+<summary><b>Security (5 files) — 보안 패턴, 컴플라이언스, 위협 모델링</b></summary>
 
 ```
 /compliance-frameworks # SOC2, HIPAA, GDPR, PCI-DSS 프레임워크 매핑
 /threat-modeling       # STRIDE, DREAD, K8s Threat Matrix
+/owasp-top10           # OWASP Top 10 2021 + 실전 방어 패턴
+/auth-patterns         # OAuth2/OIDC/PKCE, JWT, Session, API Key
+/secure-coding         # 언어별 시큐어 코딩, 입력 검증, 암호화 패턴
 ```
 </details>
 
@@ -464,6 +485,20 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /python-async          # asyncio, TaskGroup, aiohttp, 동시성 패턴
 /python-patterns       # Type Safety, Pydantic, 디자인 패턴
 /python-performance    # cProfile, py-spy, tracemalloc, 최적화
+```
+</details>
+
+<details>
+<summary><b>Frontend (7 files) — React, Next.js, TypeScript, 테스트, 성능</b></summary>
+
+```
+/react-patterns        # React 19, Server Components, Suspense, 상태관리
+/nextjs                # Next.js 15 App Router, RSC, ISR, Middleware
+/typescript            # TypeScript 5.x 심화, 타입 패턴, 제네릭, Utility Types
+/frontend-testing      # Vitest, Playwright, Testing Library, MSW
+/frontend-performance  # Core Web Vitals, Bundle 최적화, Lazy Loading
+/css-design-system     # Tailwind CSS, Design System, Radix UI, Shadcn
+/state-management      # Zustand, Jotai, TanStack Query, React Context
 ```
 </details>
 
@@ -543,7 +578,7 @@ GitHub Actions로 4개 Job이 매 커밋마다 실행됩니다:
 
 | Job | Description |
 |-----|-------------|
-| **Test** | BATS 40 test cases 실행 |
+| **Test** | BATS 42 test cases 실행 |
 | **Docs** | README ↔ 실제 파일 정합성 검증 |
 | **Inventory** | `inventory.yml` freshness 체크 |
 | **Lint** | ShellCheck으로 모든 스크립트 정적 분석 |
@@ -572,6 +607,8 @@ GitHub Actions로 4개 Job이 매 커밋마다 실행됩니다:
 | `sre-full` | SRE 전체 툴킷 | 6 agents | sre, observability, kubernetes |
 | `ai-ml` | AI/ML | 2 agents | ai, platform |
 | `messaging` | 메시징 시스템 | 2 agents | messaging |
+| `frontend` | Frontend 개발 | 2 agents | frontend |
+| `strategy` | 기술 전략/계획 | 3 agents | dx |
 
 ### Pre-commit Hooks & Quality Gates
 
@@ -656,7 +693,7 @@ make all           # 전체 검증 (validate + test)
          → 필요한 Skill만 로드 (<5,000 tokens)
 ```
 
-매 세션마다 74,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
+매 세션마다 81,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
 
 ### Token Efficiency
 
@@ -683,7 +720,11 @@ make all           # 전체 검증 (validate + test)
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── agents/               # 32 autonomous AI agents
+│   ├── agents/               # 36 autonomous AI agents
+│   │   ├── tech-lead.md      # 기술 전략, RFC/ADR, 팀 오케스트레이션
+│   │   ├── product-engineer.md # 요구사항, JTBD, RICE, MVP
+│   │   ├── migration-expert.md # 버전 업그레이드, 마이그레이션
+│   │   ├── frontend-expert.md # React/Next.js/TypeScript
 │   │   ├── security-scanner.md
 │   │   ├── k8s-troubleshooter.md
 │   │   ├── debugging-expert.md # Cascade failure 분석
@@ -700,10 +741,11 @@ ress-claude-agents/
 │   │   ├── log-meta.md       # Rule/Skill 변경 기록
 │   │   ├── log-trouble.md    # 트러블슈팅 기록
 │   │   └── log-summary.md    # 세션 요약
-│   ├── skills/               # 173 on-demand knowledge files (16 categories)
+│   ├── skills/               # 187 on-demand knowledge files (17 categories)
 │   │   ├── go/               # Go patterns (8)
 │   │   ├── spring/           # Spring Boot (11)
 │   │   ├── python/           # Python/FastAPI/Django (6)
+│   │   ├── frontend/         # React, Next.js, TypeScript (7)
 │   │   ├── msa/              # MSA runtime patterns (14)
 │   │   ├── architecture/     # Architecture styles (10)
 │   │   ├── kubernetes/       # K8s core & Gateway API (10)
@@ -712,10 +754,10 @@ ress-claude-agents/
 │   │   ├── cicd/             # CI/CD & GitOps (11)
 │   │   ├── sre/              # SRE & Operations (14)
 │   │   ├── platform/         # Platform & MLOps (16)
-│   │   ├── dx/               # Developer Experience (15)
+│   │   ├── dx/               # Developer Experience (19)
 │   │   ├── infrastructure/   # AWS, Terraform, Docker (11)
 │   │   ├── messaging/        # Kafka, RabbitMQ, NATS (8)
-│   │   ├── security/         # Compliance & Threat Modeling (2)
+│   │   ├── security/         # Security & Compliance (5)
 │   │   └── ai/               # RAG, Prompt Engineering, Vector DB (4)
 │   ├── rules/                # 5 project workflow rules
 │   │   ├── git.md            # Conventional Commits, Branch, PR
@@ -728,21 +770,23 @@ ress-claude-agents/
 ├── docs/
 │   └── dev-logs/             # 개발 과정 기록 저장소
 │       └── sessions/         # 세션 요약
-├── plugins/                  # 7 plugin bundle manifests
+├── plugins/                  # 9 plugin bundle manifests
 │   ├── k8s-ops.yml           # K8s 운영 번들
 │   ├── backend-java.yml      # Java/Spring 백엔드 번들
 │   ├── backend-go.yml        # Go 백엔드 번들
 │   ├── backend-python.yml    # Python 백엔드 번들
 │   ├── sre-full.yml          # SRE 전체 툴킷
 │   ├── ai-ml.yml             # AI/ML 번들
-│   └── messaging.yml         # 메시징 시스템 번들
+│   ├── messaging.yml         # 메시징 시스템 번들
+│   ├── frontend.yml          # Frontend 개발 번들
+│   └── strategy.yml          # 기술 전략/계획 번들
 ├── commands/                 # 35 automation commands (legacy)
 ├── project-templates/        # Go, Java, K8s, Terraform
 ├── scripts/
 │   ├── generate-docs.sh      # Documentation generator
 │   └── generate-inventory.sh # Inventory generator
 ├── global/CLAUDE.md          # Global settings
-├── tests/                    # BATS tests (40 cases)
+├── tests/                    # BATS tests (42 cases)
 └── install.sh                # Smart installer (with --plugin support)
 ```
 
@@ -751,7 +795,7 @@ ress-claude-agents/
 ## 🧪 Development
 
 ```bash
-make test          # BATS 테스트 (40 cases)
+make test          # BATS 테스트 (42 cases)
 make validate      # README ↔ 파일 정합성 검증
 make inventory     # .claude/inventory.yml 재생성
 make lint          # ShellCheck 정적 분석
@@ -803,7 +847,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Built with Claude Code**
 
-*AI를 도구가 아닌 동료로 — 74,000줄의 AI 지식 체계*
+*AI를 도구가 아닌 동료로 — 81,000줄의 AI 지식 체계*
 
 [![GitHub Stars](https://img.shields.io/github/stars/ressKim-io/ress-claude-agents?style=for-the-badge&color=yellow)](https://github.com/ressKim-io/ress-claude-agents)
 
