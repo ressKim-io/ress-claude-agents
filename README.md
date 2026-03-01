@@ -15,7 +15,7 @@
 
 DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 
-[Why AI-First](#-why-ai-first) · [By Numbers](#-by-numbers) · [Quick Start](#-quick-start) · [Agents](#-agents) · [Skills](#-skills) · [Automation](#-automation-infrastructure)
+[Why AI-First](#-why-ai-first) · [By Numbers](#-by-numbers) · [Quick Start](#-quick-start) · [Guides](#-사용-가이드) · [Agents](#-agents) · [Skills](#-skills) · [Automation](#-automation-infrastructure)
 
 </div>
 
@@ -91,6 +91,26 @@ cp -r .claude/skills ~/.claude/skills    # Skills만
 "100만 동시접속 아키텍처 설계해줘" → ticketing-expert
 "K6로 부하테스트 시나리오 작성해줘" → load-tester-k6
 ```
+
+---
+
+## 📖 사용 가이드
+
+> "160개 스킬 중 내 상황에 뭘 써야 하지?" — 페르소나별 추천 조합 + 실전 시나리오
+
+| 페르소나 | 가이드 | 핵심 도구 |
+|----------|--------|----------|
+| **백엔드 개발자** (Java/Go) | [personas/backend-dev.md](docs/guides/personas/backend-dev.md) | `java-expert`, `go-expert`, `/msa-ddd` |
+| **DevOps / SRE** | [personas/devops-sre.md](docs/guides/personas/devops-sre.md) | `incident-responder`, `terraform-reviewer`, `/gitops-argocd` |
+| **풀스택 / 제너럴리스트** | [personas/fullstack-generalist.md](docs/guides/personas/fullstack-generalist.md) | `code-reviewer`, `architect-agent`, `/api-design` |
+
+| 시나리오 | 워크스루 | 소요 시간 |
+|----------|---------|----------|
+| 신규 MSA 서비스 개발 | [scenarios/new-microservice.md](docs/guides/scenarios/new-microservice.md) | 2-3시간 |
+| 프로덕션 장애 대응 | [scenarios/production-incident.md](docs/guides/scenarios/production-incident.md) | 30-60분 |
+| 플랫폼 팀 환경 구축 | [scenarios/platform-bootstrap.md](docs/guides/scenarios/platform-bootstrap.md) | 1-2일 |
+
+**[콤보 레퍼런스](docs/guides/quick-reference.md)** — 상황별 에이전트+스킬 추천 조합 한눈에 보기
 
 ---
 
