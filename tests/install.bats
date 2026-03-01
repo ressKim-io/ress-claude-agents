@@ -431,3 +431,21 @@ load_install_functions() {
     grep -q "^agents:" "$manifest"
     grep -q "categories:" "$manifest"
 }
+
+@test "frontend plugin manifest exists and has required fields" {
+    local manifest="$PROJECT_ROOT/plugins/frontend.yml"
+    [ -f "$manifest" ]
+    grep -q "^name: frontend" "$manifest"
+    grep -q "^description:" "$manifest"
+    grep -q "^agents:" "$manifest"
+    grep -q "categories:" "$manifest"
+}
+
+@test "strategy plugin manifest exists and has required fields" {
+    local manifest="$PROJECT_ROOT/plugins/strategy.yml"
+    [ -f "$manifest" ]
+    grep -q "^name: strategy" "$manifest"
+    grep -q "^description:" "$manifest"
+    grep -q "^agents:" "$manifest"
+    grep -q "categories:" "$manifest"
+}

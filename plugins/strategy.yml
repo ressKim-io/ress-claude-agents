@@ -1,0 +1,9 @@
+name: strategy
+description: "Technical strategy: RFC/ADR, engineering planning, product thinking, migration"
+agents:
+  - tech-lead
+  - product-engineer
+  - migration-expert
+skills:
+  categories:
+    - dx

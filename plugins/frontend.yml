@@ -1,0 +1,8 @@
+name: frontend
+description: "Frontend development: React, Next.js, TypeScript, testing, performance"
+agents:
+  - frontend-expert
+  - code-reviewer
+skills:
+  categories:
+    - frontend
