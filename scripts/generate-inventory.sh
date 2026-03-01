@@ -25,13 +25,17 @@ categorize_skill() {
     go-*|concurrency-go|refactoring-go) echo "go" ;;
     spring-*|concurrency-spring|refactoring-spring) echo "spring" ;;
     msa-*|database-sharding|high-traffic-*|api-design|distributed-lock|grpc|graphql-*|task-queue) echo "msa" ;;
+    agentic-ai-*|cell-based-*|composable-*|data-mesh|hexagonal-*|modular-monolith|state-machine|strangler-*|vertical-slice-*|kafka-msa-*) echo "architecture" ;;
     k8s-gpu*) echo "platform" ;;
-    k8s-*|istio-*|gateway-*|crossplane*|linkerd*) echo "kubernetes" ;;
+    k8s-*|gateway-*) echo "kubernetes" ;;
+    istio-*|k8s-traffic-istio|linkerd*) echo "service-mesh" ;;
     observability*|ebpf-*|monitoring-*|logging-*|aiops*|alerting-*) echo "observability" ;;
-    sre-*|cicd-*|gitops-*|deployment-*|chaos-*|disaster-*|ephemeral-*|load-testing*|finops*|supply-chain-*) echo "sre" ;;
+    cicd-*|gitops-*|deployment-*|ephemeral-*|supply-chain-*) echo "cicd" ;;
+    sre-*|chaos-*|disaster-*|load-testing*|finops*) echo "sre" ;;
     backstage|golden-*|ml-*|mlops*|llmops|wasm-*|platform-*) echo "platform" ;;
     dx-*|docs-*|token-*|local-dev-*) echo "dx" ;;
-    aws-*|terraform-*|kafka*|database*|docker*|redis-*|rabbitmq*) echo "infrastructure" ;;
+    kafka*|rabbitmq*|nats-*|redis-streams) echo "messaging" ;;
+    aws-*|terraform-*|crossplane*|database*|docker*) echo "infrastructure" ;;
     conventional-commits|git-workflow|refactoring-principles) echo "dx" ;;
     *) echo "other" ;;
   esac
@@ -43,13 +47,16 @@ categorize_agent() {
   case "$name" in
     go-expert) echo "go" ;;
     java-expert) echo "spring" ;;
-    k8s-*|platform-engineer) echo "kubernetes" ;;
+    architect-agent|saga-agent) echo "architecture" ;;
+    k8s-*) echo "kubernetes" ;;
+    platform-engineer) echo "platform" ;;
     otel-expert) echo "observability" ;;
     security-scanner|anti-bot|terraform-reviewer) echo "security" ;;
-    ci-optimizer|git-workflow|pr-review-bot|code-reviewer|ticketing-expert) echo "devops" ;;
+    ci-optimizer|git-workflow|pr-review-bot) echo "cicd" ;;
+    code-reviewer|ticketing-expert|dev-logger) echo "devops" ;;
     incident-responder) echo "sre" ;;
     load-tester*) echo "testing" ;;
-    database-expert*) echo "database" ;;
+    database-expert*|redis-expert) echo "database" ;;
     finops-*|cost-analyzer) echo "finops" ;;
     mlops-expert) echo "platform" ;;
     *) echo "other" ;;
