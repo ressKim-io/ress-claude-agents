@@ -55,6 +55,8 @@ categorize_agent() {
     security-scanner|anti-bot|terraform-reviewer|compliance-auditor) echo "security" ;;
     ci-optimizer|git-workflow|pr-review-bot) echo "cicd" ;;
     code-reviewer|ticketing-expert|dev-logger|debugging-expert) echo "devops" ;;
+    tech-lead|product-engineer|migration-expert) echo "devops" ;;
+    frontend-expert) echo "frontend" ;;
     incident-responder) echo "sre" ;;
     load-tester*) echo "testing" ;;
     database-expert*|redis-expert) echo "database" ;;
