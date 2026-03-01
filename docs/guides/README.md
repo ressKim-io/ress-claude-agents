@@ -2,7 +2,7 @@
 
 # Usage Guide
 
-> 160 Skills + 27 Agents + 5 Rules — Find the right tool for your situation
+> 161 Skills + 27 Agents + 5 Rules — Find the right tool for your situation
 
 ---
 
