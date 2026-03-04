@@ -27,7 +27,7 @@ cd ress-claude-agents
 |---|---|---|
 | Agents | 36 | ~14,000 |
 | Skills | 187 | ~69,000 |
-| Rules | 5 | ~600 |
+| Rules | 8 | ~870 |
 | Commands | 40 | - |
 | Tests | 42 cases | - |
 | **Total** | | **81,000+** |
