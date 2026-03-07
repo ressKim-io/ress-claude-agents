@@ -18,23 +18,27 @@ cd ress-claude-agents
 
 # Or install by role
 ./install.sh --global --plugin backend-java
-./install.sh --global --plugin k8s-ops
+
+# Or install by scenario (NEW)
+./install.sh --global --workflow eks-gitops-setup
 ```
 
 ## What's Inside
 
 | | Count | Lines |
 |---|---|---|
-| Agents | 36 | ~14,000 |
-| Skills | 187 | ~69,000 |
-| Rules | 8 | ~870 |
+| Agents | 37 | ~14,500 |
+| Skills | 198 | ~74,700 |
+| Rules | 5 | ~590 |
 | Commands | 40 | - |
-| Tests | 42 cases | - |
-| **Total** | | **81,000+** |
+| Tests | 51 cases | - |
+| Plugins | 9 bundles | - |
+| Workflows | 7 scenarios | - |
+| **Total** | | **87,000+** |
 
 ## Agents
 
-36 autonomous AI agents across 9 categories.
+37 autonomous AI agents across 9 categories.
 
 | Category | Agents |
 |---|---|
@@ -50,7 +54,7 @@ cd ress-claude-agents
 
 ## Skills
 
-187 on-demand knowledge files organized in 17 categories.
+198 on-demand knowledge files organized in 17 categories.
 
 | Category | Count | Topics |
 |---|---|---|
@@ -58,7 +62,7 @@ cd ress-claude-agents
 | Spring | 11 | JPA, Security, OAuth2, testing, Effective Java |
 | Python | 6 | FastAPI, Django, pytest, asyncio |
 | Frontend | 7 | React 19, Next.js 15, TypeScript, Vitest, Tailwind |
-| MSA | 14 | DDD, Saga, CQRS, Event Sourcing, gRPC, GraphQL |
+| MSA | 15 | DDD, Saga, CQRS, Event Sourcing, gRPC, Contract-First |
 | Architecture | 10 | Hexagonal, Cell-based, Modular Monolith, Data Mesh |
 | Kubernetes | 10 | Security, Helm, HPA/VPA/KEDA, Gateway API |
 | Service Mesh | 16 | Istio (Ambient, mTLS, multi-cluster), Linkerd |
@@ -66,7 +70,7 @@ cd ress-claude-agents
 | CI/CD | 11 | GitHub Actions, ArgoCD, Canary, Supply Chain |
 | SRE | 14 | SLI/SLO, Chaos Engineering, DR, FinOps |
 | Platform | 16 | Backstage, MLOps, WASM, GPU scheduling |
-| DX | 19 | DORA metrics, onboarding, RFC/ADR, Team Topologies |
+| DX | 20 | DORA metrics, onboarding, RFC/ADR, SDD, Team Topologies |
 | Infrastructure | 11 | AWS EKS, Terraform, Crossplane, Docker |
 | Messaging | 8 | Kafka, RabbitMQ, NATS, Redis Streams |
 | Security | 5 | OWASP, auth patterns, compliance frameworks |
@@ -93,10 +97,31 @@ Install agents and skills by role:
 | `frontend` | 2 | React, Next.js, TypeScript |
 | `strategy` | 3 | Tech strategy, product engineering |
 
+## Scenario Workflows
+
+Install everything needed for a specific scenario. Every workflow auto-includes `_base` (planning tools: SDD, RFC/ADR, docs-as-code).
+
+```bash
+./install.sh --list-workflows     # Show available workflows
+./install.sh --global --workflow eks-gitops-setup
+```
+
+| Workflow | Scenario | Key Components |
+|---|---|---|
+| `eks-gitops-setup` | EC2/kind -> EKS with ArgoCD, Terraform, Istio | 3 agents, 3 cat + 7 skills |
+| `gke-gitops-setup` | Local dev -> GKE with ArgoCD, Terraform | 3 agents, 3 cat + 7 skills |
+| `msa-migration` | Monolith -> MSA (DDD, Saga, CQRS) | 4 agents, 3 cat + 6 skills |
+| `compose-to-k8s` | Docker Compose -> Kubernetes | 2 agents, 2 cat + 4 skills |
+| `observability-full` | Full observability stack (Prometheus, OTel) | 2 agents, 2 cat + 2 skills |
+| `kafka-event-driven` | Kafka event-driven architecture | 3 agents, 2 cat + 4 skills |
+| `full-platform` | Complete platform setup (all combined) | 8 agents, 9 cat + 10 skills |
+
+> **Plugin vs Workflow**: Plugins are role-based ("I'm a Java developer"), Workflows are scenario-based ("I want to set up EKS GitOps").
+
 ## Development
 
 ```bash
-make test       # Run 42 BATS test cases
+make test       # Run 51 BATS test cases
 make validate   # Verify file consistency
 make inventory  # Regenerate .claude/inventory.yml
 make lint       # ShellCheck static analysis

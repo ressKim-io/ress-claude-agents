@@ -5,9 +5,9 @@
 # ress-claude-agents
 
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
-![Skills](https://img.shields.io/badge/Skills-187-2563EB?style=for-the-badge)
-![Agents](https://img.shields.io/badge/Agents-36-F97316?style=for-the-badge)
-![Lines](https://img.shields.io/badge/81K+_Lines-4F46E5?style=for-the-badge)
+![Skills](https://img.shields.io/badge/Skills-198-2563EB?style=for-the-badge)
+![Agents](https://img.shields.io/badge/Agents-37-F97316?style=for-the-badge)
+![Lines](https://img.shields.io/badge/87K+_Lines-4F46E5?style=for-the-badge)
 
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -29,14 +29,14 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 > *이 반복 루프를 끊을 수 있다면?*
 
 저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
-187개의 Skills에 각 분야의 Best Practices를 구조화하고, 36개의 Agents가 자율적으로 판단하고 실행합니다.
+198개의 Skills에 각 분야의 Best Practices를 구조화하고, 37개의 Agents가 자율적으로 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
 ──────────────────                    ──────────────────
 Google/StackOverflow 검색              → /k8s-security 로 즉시 패턴 적용
 Runbook 찾아서 수동 실행               → incident-responder 가 자동 진단
-"이거 어떻게 해요?" 반복 질문          → 81,000줄의 지식 베이스가 즉시 답변
+"이거 어떻게 해요?" 반복 질문          → 87,000줄의 지식 베이스가 즉시 답변
 100만 VU 테스트 시나리오 수동 작성     → load-tester-k6 가 템플릿 제공
 ```
 
@@ -54,13 +54,14 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 | | Metric | Value | Description |
 |---|--------|-------|-------------|
-| 🤖 | **Agents** | 36 (~14,000줄) | 전략, 프론트엔드, 보안, SRE, MLOps 등 자율 실행 전문가 |
-| 💡 | **Skills** | 187 (~69,000줄) | Go, Spring, Python, React/Next.js, K8s, MSA, AI/LLM 등 온디맨드 도메인 지식 |
-| 📏 | **Rules** | 8 (~870줄) | Git, 테스트, 보안, Java/Go/Spring 자동 적용 규칙 |
+| 🤖 | **Agents** | 37 (~14,500줄) | 전략, 프론트엔드, 보안, SRE, MLOps 등 자율 실행 전문가 |
+| 💡 | **Skills** | 198 (~74,700줄) | Go, Spring, Python, React/Next.js, K8s, MSA, AI/LLM 등 온디맨드 도메인 지식 |
+| 📏 | **Rules** | 5 (~590줄) | Git, 테스트, 보안, 워크플로우, 디버깅 자동 적용 규칙 |
 | ⚡ | **Commands** | 40 | `/go review`, `/log-feedback` 등 자동화 워크플로우 |
-| 📦 | **Templates** | 4 | Go, Java, K8s, Terraform 프로젝트 부트스트래핑 |
-| 🧪 | **Tests** | 42 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
-| 📏 | **Total** | **81,000+ lines** | 17개 카테고리로 체계화된 AI 지식 체계 |
+| 📦 | **Plugins** | 9 bundles | 역할 기반 에이전트+스킬 번들 설치 |
+| 🔄 | **Workflows** | 7 scenarios | 시나리오 기반 전체 스택 설치 (EKS, MSA, K8s 등) |
+| 🧪 | **Tests** | 51 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
+| 📏 | **Total** | **87,000+ lines** | 17개 카테고리로 체계화된 AI 지식 체계 |
 
 </div>
 
@@ -76,9 +77,12 @@ cd ress-claude-agents
 # 전역 설치 (모든 프로젝트에 적용)
 ./install.sh --global --all --with-skills
 
-# 또는 필요한 것만 수동 복사
-cp -r .claude/agents ~/.claude/agents    # Agents만
-cp -r .claude/skills ~/.claude/skills    # Skills만
+# 역할 기반 설치 (Plugin)
+./install.sh --global --plugin backend-java
+
+# 시나리오 기반 설치 (Workflow) — NEW
+./install.sh --global --workflow eks-gitops-setup
+./install.sh --list-workflows
 ```
 
 ### 사용 예시
@@ -118,7 +122,7 @@ cp -r .claude/skills ~/.claude/skills    # Skills만
 
 ## 🤖 Agents
 
-Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (36 files, ~14,000줄).
+Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (37 files, ~14,500줄).
 
 > **Skills**는 "지식"이고, **Agents**는 "전문가"입니다. 자율적으로 판단하고 작업을 수행합니다.
 
@@ -207,7 +211,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills
 
-필요할 때만 로드되는 도메인 지식 (187 files, ~69,000줄). 17개 카테고리 서브디렉토리로 체계화.
+필요할 때만 로드되는 도메인 지식 (198 files, ~74,700줄). 17개 카테고리 서브디렉토리로 체계화.
 
 <details>
 <summary><b>Go (8 files)</b></summary>
@@ -243,10 +247,11 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>MSA (14 files) — 런타임 구현 패턴</b></summary>
+<summary><b>MSA (15 files) — 런타임 구현 패턴</b></summary>
 
 ```
 /api-design             # RESTful API 설계, 버저닝, 페이징
+/contract-first         # Contract-First: OpenAPI, Protobuf, AsyncAPI, Pact, Schema Registry
 /msa-saga               # Saga 패턴 (Choreography/Orchestration, Temporal.io)
 /msa-cqrs-eventsourcing # CQRS + Event Sourcing, Eventual Consistency
 /msa-resilience         # Circuit Breaker, Bulkhead, Retry/Timeout (Resilience4j)
@@ -407,9 +412,10 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Developer Experience (19 files)</b></summary>
+<summary><b>Developer Experience (20 files)</b></summary>
 
 ```
+/spec-driven-development # SDD, PRD, Design Doc, Shape Up — 계획 방법론 비교 및 템플릿
 /dx-metrics         # DORA, SPACE, DevEx
 /dx-ai-agents       # AI 에이전트 거버넌스, Copilot/Claude 통합
 /dx-ai-agents-orchestration # 멀티 에이전트, 가드레일, Self-Healing
@@ -580,7 +586,7 @@ GitHub Actions로 4개 Job이 매 커밋마다 실행됩니다:
 
 | Job | Description |
 |-----|-------------|
-| **Test** | BATS 42 test cases 실행 |
+| **Test** | BATS 51 test cases 실행 |
 | **Docs** | README ↔ 실제 파일 정합성 검증 |
 | **Inventory** | `inventory.yml` freshness 체크 |
 | **Lint** | ShellCheck으로 모든 스크립트 정적 분석 |
@@ -612,6 +618,34 @@ GitHub Actions로 4개 Job이 매 커밋마다 실행됩니다:
 | `frontend` | Frontend 개발 | 2 agents | frontend |
 | `strategy` | 기술 전략/계획 | 3 agents | dx |
 
+### Scenario Workflows (NEW)
+
+**시나리오 기반**으로 필요한 에이전트+스킬+룰을 한 번에 설치합니다.
+모든 워크플로우에 `_base` (계획 도구: SDD, RFC/ADR, docs-as-code)가 자동 포함됩니다.
+
+```bash
+# 사용 가능한 워크플로우 목록
+./install.sh --list-workflows
+
+# EKS GitOps 전체 환경 한 번에 설치
+./install.sh --global --workflow eks-gitops-setup
+
+# Docker Compose → K8s 마이그레이션
+./install.sh --global --workflow compose-to-k8s
+```
+
+| Workflow | Scenario | Key Components |
+|----------|----------|----------------|
+| `eks-gitops-setup` | EC2/kind → EKS 프로덕션 (ArgoCD, Terraform, Istio) | 3 agents, 3 cat + 7 skills |
+| `gke-gitops-setup` | Local → GKE 프로덕션 (ArgoCD, Terraform) | 3 agents, 3 cat + 7 skills |
+| `msa-migration` | 모놀리스 → MSA 전환 (DDD, Saga, CQRS) | 4 agents, 3 cat + 6 skills |
+| `compose-to-k8s` | Docker Compose → Kubernetes | 2 agents, 2 cat + 4 skills |
+| `observability-full` | 전체 관측 스택 (Prometheus, OTel, Tracing) | 2 agents, 2 cat + 2 skills |
+| `kafka-event-driven` | Kafka 이벤트 기반 아키텍처 | 3 agents, 2 cat + 4 skills |
+| `full-platform` | 전체 플랫폼 구축 (인프라+MSA+관측+메시징) | 8 agents, 9 cat + 10 skills |
+
+> **Plugin vs Workflow**: Plugin은 **역할 기반** ("나는 Java 개발자"), Workflow는 **시나리오 기반** ("EKS GitOps 환경을 구축하고 싶다")
+
 ### Pre-commit Hooks & Quality Gates
 
 ```bash
@@ -621,7 +655,7 @@ make all           # 전체 검증 (validate + test)
 
 - 모든 Skill 파일 **500줄 미만** (Anthropic guidelines)
 - 모든 Agent 파일 **600줄 미만**
-- Smart installer: `--global` / `--local` / `--with-skills` / `--plugin` 옵션 지원
+- Smart installer: `--global` / `--local` / `--with-skills` / `--plugin` / `--workflow` 옵션 지원
 
 ---
 
@@ -695,7 +729,7 @@ make all           # 전체 검증 (validate + test)
          → 필요한 Skill만 로드 (<5,000 tokens)
 ```
 
-매 세션마다 81,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
+매 세션마다 87,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
 
 ### Token Efficiency
 
@@ -722,7 +756,7 @@ make all           # 전체 검증 (validate + test)
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── agents/               # 36 autonomous AI agents
+│   ├── agents/               # 37 autonomous AI agents
 │   │   ├── tech-lead.md      # 기술 전략, RFC/ADR, 팀 오케스트레이션
 │   │   ├── product-engineer.md # 요구사항, JTBD, RICE, MVP
 │   │   ├── migration-expert.md # 버전 업그레이드, 마이그레이션
@@ -743,12 +777,12 @@ ress-claude-agents/
 │   │   ├── log-meta.md       # Rule/Skill 변경 기록
 │   │   ├── log-trouble.md    # 트러블슈팅 기록
 │   │   └── log-summary.md    # 세션 요약
-│   ├── skills/               # 187 on-demand knowledge files (17 categories)
+│   ├── skills/               # 198 on-demand knowledge files (17 categories)
 │   │   ├── go/               # Go patterns (8)
 │   │   ├── spring/           # Spring Boot (11)
 │   │   ├── python/           # Python/FastAPI/Django (6)
 │   │   ├── frontend/         # React, Next.js, TypeScript (7)
-│   │   ├── msa/              # MSA runtime patterns (14)
+│   │   ├── msa/              # MSA runtime patterns (15)
 │   │   ├── architecture/     # Architecture styles (10)
 │   │   ├── kubernetes/       # K8s core & Gateway API (10)
 │   │   ├── service-mesh/     # Istio & Linkerd (16)
@@ -756,7 +790,7 @@ ress-claude-agents/
 │   │   ├── cicd/             # CI/CD & GitOps (11)
 │   │   ├── sre/              # SRE & Operations (14)
 │   │   ├── platform/         # Platform & MLOps (16)
-│   │   ├── dx/               # Developer Experience (19)
+│   │   ├── dx/               # Developer Experience (20)
 │   │   ├── infrastructure/   # AWS, Terraform, Docker (11)
 │   │   ├── messaging/        # Kafka, RabbitMQ, NATS (8)
 │   │   ├── security/         # Security & Compliance (5)
@@ -767,6 +801,12 @@ ress-claude-agents/
 │   │   ├── workflow.md       # Explore → Plan → Code → Commit
 │   │   ├── security.md       # 시크릿, 입력 검증, 인증/인가
 │   │   └── debugging.md      # 디버깅 프로토콜, 에러 분석
+│   ├── workflows/            # 7 scenario workflow bundles
+│   │   ├── _base.yml         # 공통 계획 도구 (SDD, RFC/ADR)
+│   │   ├── eks-gitops-setup.yml
+│   │   ├── msa-migration.yml
+│   │   ├── compose-to-k8s.yml
+│   │   └── ...
 │   ├── inventory.yml         # Auto-generated skill/agent index
 │   └── standards.yml         # Code quality standards
 ├── docs/
@@ -788,8 +828,8 @@ ress-claude-agents/
 │   ├── generate-docs.sh      # Documentation generator
 │   └── generate-inventory.sh # Inventory generator
 ├── global/CLAUDE.md          # Global settings
-├── tests/                    # BATS tests (42 cases)
-└── install.sh                # Smart installer (with --plugin support)
+├── tests/                    # BATS tests (51 cases)
+└── install.sh                # Smart installer (--plugin, --workflow)
 ```
 
 ---
@@ -797,7 +837,7 @@ ress-claude-agents/
 ## 🧪 Development
 
 ```bash
-make test          # BATS 테스트 (42 cases)
+make test          # BATS 테스트 (51 cases)
 make validate      # README ↔ 파일 정합성 검증
 make inventory     # .claude/inventory.yml 재생성
 make lint          # ShellCheck 정적 분석
@@ -849,7 +889,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Built with Claude Code**
 
-*AI를 도구가 아닌 동료로 — 81,000줄의 AI 지식 체계*
+*AI를 도구가 아닌 동료로 — 87,000줄의 AI 지식 체계*
 
 [![GitHub Stars](https://img.shields.io/github/stars/ressKim-io/ress-claude-agents?style=for-the-badge&color=yellow)](https://github.com/ressKim-io/ress-claude-agents)
 
