@@ -449,3 +449,81 @@ load_install_functions() {
     grep -q "^agents:" "$manifest"
     grep -q "categories:" "$manifest"
 }
+
+# =============================================================================
+# 8. Workflow System Tests
+# =============================================================================
+
+@test "workflow option is documented in help" {
+    run bash "$INSTALL_SCRIPT" --help
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"--workflow"* ]]
+    [[ "$output" == *"--list-workflows"* ]]
+}
+
+@test "list-workflows displays available workflows" {
+    run bash "$INSTALL_SCRIPT" --list-workflows
+    [ "$status" -eq 0 ]
+    [[ "$output" == *"Available scenario workflows"* ]]
+    [[ "$output" == *"_base (auto-included)"* ]]
+    [[ "$output" == *"compose-to-k8s"* ]]
+    [[ "$output" == *"eks-gitops-setup"* ]]
+    [[ "$output" == *"full-platform"* ]]
+}
+
+@test "workflows directory exists with _base.yml" {
+    [ -d "$PROJECT_ROOT/.claude/workflows" ]
+    [ -f "$PROJECT_ROOT/.claude/workflows/_base.yml" ]
+}
+
+@test "workflow manifests have required fields" {
+    for manifest in "$PROJECT_ROOT/.claude/workflows/"*.yml; do
+        [[ -f "$manifest" ]] || continue
+        grep -q "^name:" "$manifest"
+        grep -q "^description:" "$manifest"
+    done
+}
+
+@test "compose-to-k8s workflow manifest has agents and skills" {
+    local manifest="$PROJECT_ROOT/.claude/workflows/compose-to-k8s.yml"
+    [ -f "$manifest" ]
+    grep -q "^name: compose-to-k8s" "$manifest"
+    grep -q "^agents:" "$manifest"
+    grep -q "categories:" "$manifest"
+    grep -q "individual:" "$manifest"
+}
+
+@test "_base workflow has planning skills" {
+    local manifest="$PROJECT_ROOT/.claude/workflows/_base.yml"
+    [ -f "$manifest" ]
+    grep -q "spec-driven-development" "$manifest"
+    grep -q "rfc-adr" "$manifest"
+    grep -q "rules:" "$manifest"
+}
+
+@test "nonexistent workflow returns error" {
+    run bash "$INSTALL_SCRIPT" --global --workflow "nonexistent_workflow_xyz"
+    [ "$status" -eq 1 ]
+    [[ "$output" == *"Workflow not found"* ]]
+}
+
+@test "workflow option without argument returns error" {
+    run bash "$INSTALL_SCRIPT" --workflow
+    [ "$status" -eq 1 ]
+    [[ "$output" == *"Missing argument"* ]]
+}
+
+@test "all scenario workflow files exist" {
+    local expected_workflows=(
+        "eks-gitops-setup"
+        "gke-gitops-setup"
+        "msa-migration"
+        "compose-to-k8s"
+        "observability-full"
+        "kafka-event-driven"
+        "full-platform"
+    )
+    for wf in "${expected_workflows[@]}"; do
+        [ -f "$PROJECT_ROOT/.claude/workflows/${wf}.yml" ]
+    done
+}

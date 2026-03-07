@@ -1,0 +1,22 @@
+name: msa-migration
+description: "Monolith to MSA migration: DDD, contract-first, Saga, CQRS, service mesh"
+agents:
+  - architect-agent
+  - service-mesh-expert
+  - messaging-expert
+  - saga-agent
+skills:
+  categories:
+    - msa
+    - service-mesh
+    - messaging
+  individual:
+    - msa/contract-first
+    - msa/msa-ddd
+    - msa/msa-saga
+    - msa/msa-cqrs-eventsourcing
+    - msa/msa-api-gateway-patterns
+    - msa/msa-event-driven
+rules:
+  - security
+  - testing

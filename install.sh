@@ -191,6 +191,82 @@ resolve_plugin() {
     done < "$manifest"
 }
 
+# Resolve workflow manifest to merged agent, skill, and rule lists
+# Loads _base.yml first, then merges the scenario workflow
+resolve_workflow() {
+    local workflow_name="$1"
+    local workflow_file="$SCRIPT_DIR/.claude/workflows/${workflow_name}.yml"
+    local base_file="$SCRIPT_DIR/.claude/workflows/_base.yml"
+
+    if [[ ! -f "$workflow_file" ]]; then
+        log_error "Workflow not found: $workflow_name"
+        log_error "Available workflows: $(find "$SCRIPT_DIR/.claude/workflows/" -name '*.yml' ! -name '_base.yml' -print0 2>/dev/null | xargs -0 -I{} basename {} .yml | tr '\n' ', ')"
+        exit 1
+    fi
+
+    WORKFLOW_AGENTS=()
+    WORKFLOW_SKILL_CATEGORIES=()
+    WORKFLOW_SKILL_INDIVIDUAL=()
+    WORKFLOW_RULES=()
+
+    # Parse a single workflow YAML file into temp arrays
+    _parse_workflow_yaml() {
+        local file="$1"
+        local in_agents=false
+        local in_categories=false
+        local in_individual=false
+        local in_rules=false
+
+        while IFS= read -r line; do
+            if [[ "$line" =~ ^agents: ]]; then
+                in_agents=true; in_categories=false; in_individual=false; in_rules=false
+                continue
+            elif [[ "$line" =~ ^skills: ]]; then
+                in_agents=false; in_categories=false; in_individual=false; in_rules=false
+                continue
+            elif [[ "$line" =~ ^[[:space:]]+categories: ]]; then
+                in_categories=true; in_agents=false; in_individual=false; in_rules=false
+                continue
+            elif [[ "$line" =~ ^[[:space:]]+individual: ]]; then
+                in_individual=true; in_agents=false; in_categories=false; in_rules=false
+                continue
+            elif [[ "$line" =~ ^rules: ]]; then
+                in_rules=true; in_agents=false; in_categories=false; in_individual=false
+                continue
+            elif [[ "$line" =~ ^[a-z] && ! "$line" =~ ^[[:space:]] ]]; then
+                in_agents=false; in_categories=false; in_individual=false; in_rules=false
+            fi
+
+            if [[ "$line" =~ ^[[:space:]]+-[[:space:]]+(.*) ]]; then
+                local val="${BASH_REMATCH[1]}"
+                if [[ "$in_agents" == true ]]; then
+                    WORKFLOW_AGENTS+=("$val")
+                elif [[ "$in_categories" == true ]]; then
+                    WORKFLOW_SKILL_CATEGORIES+=("$val")
+                elif [[ "$in_individual" == true ]]; then
+                    WORKFLOW_SKILL_INDIVIDUAL+=("$val")
+                elif [[ "$in_rules" == true ]]; then
+                    WORKFLOW_RULES+=("$val")
+                fi
+            fi
+        done < "$file"
+    }
+
+    # Load _base.yml first (if it exists)
+    if [[ -f "$base_file" ]]; then
+        _parse_workflow_yaml "$base_file"
+    fi
+
+    # Then merge scenario workflow
+    _parse_workflow_yaml "$workflow_file"
+
+    # Deduplicate arrays
+    mapfile -t WORKFLOW_AGENTS < <(printf '%s\n' "${WORKFLOW_AGENTS[@]}" | sort -u)
+    mapfile -t WORKFLOW_SKILL_CATEGORIES < <(printf '%s\n' "${WORKFLOW_SKILL_CATEGORIES[@]}" | sort -u)
+    mapfile -t WORKFLOW_SKILL_INDIVIDUAL < <(printf '%s\n' "${WORKFLOW_SKILL_INDIVIDUAL[@]}" | sort -u)
+    mapfile -t WORKFLOW_RULES < <(printf '%s\n' "${WORKFLOW_RULES[@]}" | sort -u)
+}
+
 print_usage() {
     local modules_list
     modules_list=$(IFS=,; echo "${ALL_MODULES[*]}")
@@ -208,6 +284,8 @@ Options:
   --with-mcp        Include MCP server configs
   --plugin NAME     Install a plugin bundle (see --list-plugins)
   --list-plugins    List available plugin bundles
+  --workflow NAME   Install a scenario workflow (see --list-workflows)
+  --list-workflows  List available scenario workflows
   -h, --help        Show this help
 
 Examples:
@@ -217,6 +295,8 @@ Examples:
   $0 --local --modules go,k8s --with-skills
   $0 --global --plugin k8s-ops --with-skills  # K8s operations bundle
   $0 --list-plugins                            # Show available bundles
+  $0 --global --workflow compose-to-k8s        # Scenario workflow
+  $0 --list-workflows                          # Show available workflows
 
 EOF
 }
@@ -230,6 +310,8 @@ WITH_MCP=false
 HAS_ARGS=false
 PLUGIN_NAME=""
 LIST_PLUGINS=false
+WORKFLOW_NAME=""
+LIST_WORKFLOWS=false
 
 while [[ $# -gt 0 ]]; do
     HAS_ARGS=true
@@ -282,6 +364,18 @@ while [[ $# -gt 0 ]]; do
             LIST_PLUGINS=true
             shift
             ;;
+        --workflow)
+            if [[ -z "${2:-}" ]]; then
+                log_error "Missing argument for --workflow"
+                exit 1
+            fi
+            WORKFLOW_NAME="$2"
+            shift 2
+            ;;
+        --list-workflows)
+            LIST_WORKFLOWS=true
+            shift
+            ;;
         -h|--help)
             print_usage
             exit 0
@@ -312,6 +406,25 @@ if [[ "$LIST_PLUGINS" == true ]]; then
     exit 0
 fi
 
+# List workflows mode
+if [[ "$LIST_WORKFLOWS" == true ]]; then
+    log_section "Available scenario workflows:"
+    echo ""
+    for manifest in "$SCRIPT_DIR/.claude/workflows/"*.yml; do
+        [[ -f "$manifest" ]] || continue
+        wname=$(basename "$manifest" .yml)
+        wdesc=$(grep '^description:' "$manifest" | sed 's/^description:[[:space:]]*//;s/^"//;s/"$//')
+        if [[ "$wname" == "_base" ]]; then
+            echo "  $wname (auto-included) - $wdesc"
+        else
+            echo "  $wname - $wdesc"
+        fi
+    done
+    echo ""
+    echo "Usage: $0 --global --workflow <name>"
+    exit 0
+fi
+
 # Interactive mode if no scope specified
 if [[ -z "$INSTALL_SCOPE" ]]; then
     log_warn "Select installation scope:"
@@ -335,8 +448,8 @@ else
     log_info "Installing locally to: $TARGET_DIR"
 fi
 
-# Interactive module selection if not specified
-if [[ "$INSTALL_ALL" == false && ${#SELECTED_MODULES[@]} -eq 0 ]]; then
+# Interactive module selection if not specified (skip if plugin or workflow mode)
+if [[ "$INSTALL_ALL" == false && ${#SELECTED_MODULES[@]} -eq 0 && -z "$PLUGIN_NAME" && -z "$WORKFLOW_NAME" ]]; then
     echo ""
     log_warn "Select modules to install:"
     echo "  0) Core only (CLAUDE.md + session)"
@@ -483,6 +596,106 @@ if [[ -n "$PLUGIN_NAME" ]]; then
             fi
         done
         INSTALLED_COMPONENTS+=("Plugin skills: ${PLUGIN_SKILL_CATEGORIES[*]}")
+    fi
+fi
+
+# Install workflow
+if [[ -n "$WORKFLOW_NAME" ]]; then
+    resolve_workflow "$WORKFLOW_NAME"
+
+    # Install workflow agents
+    if [[ ${#WORKFLOW_AGENTS[@]} -gt 0 ]]; then
+        log_info "[workflow:$WORKFLOW_NAME] Installing agents..."
+        AGENTS_SOURCE="$SCRIPT_DIR/.claude/agents"
+        AGENTS_TARGET="$TARGET_DIR/agents"
+        create_dir "$AGENTS_TARGET"
+
+        for agent in "${WORKFLOW_AGENTS[@]}"; do
+            agent_file="$AGENTS_SOURCE/${agent}.md"
+            if [[ -f "$agent_file" ]]; then
+                if backup_and_link "$agent_file" "$AGENTS_TARGET/${agent}.md" "$INSTALL_SCOPE" "file"; then
+                    echo "    + Agent: $agent"
+                fi
+            else
+                log_warn "    Agent not found: $agent"
+            fi
+        done
+        INSTALLED_COMPONENTS+=("Workflow: $WORKFLOW_NAME (${#WORKFLOW_AGENTS[@]} agents)")
+    fi
+
+    # Install workflow rules
+    if [[ ${#WORKFLOW_RULES[@]} -gt 0 ]]; then
+        log_info "[workflow:$WORKFLOW_NAME] Installing rules..."
+        RULES_SOURCE="$SCRIPT_DIR/.claude/rules"
+        RULES_TARGET="$TARGET_DIR/rules"
+        create_dir "$RULES_TARGET"
+
+        for rule in "${WORKFLOW_RULES[@]}"; do
+            rule_file="$RULES_SOURCE/${rule}.md"
+            if [[ -f "$rule_file" ]]; then
+                if backup_and_link "$rule_file" "$RULES_TARGET/${rule}.md" "$INSTALL_SCOPE" "file"; then
+                    echo "    + Rule: $rule"
+                fi
+            else
+                log_warn "    Rule not found: $rule"
+            fi
+        done
+        INSTALLED_COMPONENTS+=("Workflow rules: ${WORKFLOW_RULES[*]}")
+    fi
+
+    # Install workflow skill categories
+    if [[ ${#WORKFLOW_SKILL_CATEGORIES[@]} -gt 0 ]]; then
+        log_info "[workflow:$WORKFLOW_NAME] Installing skill categories..."
+        SKILLS_SOURCE="$SCRIPT_DIR/.claude/skills"
+        SKILLS_TARGET="$TARGET_DIR/skills"
+        create_dir "$SKILLS_TARGET"
+
+        for category in "${WORKFLOW_SKILL_CATEGORIES[@]}"; do
+            cat_dir="$SKILLS_SOURCE/$category"
+            if [[ -d "$cat_dir" ]]; then
+                create_dir "$SKILLS_TARGET/$category"
+                for skill_file in "$cat_dir"/*.md; do
+                    [[ -f "$skill_file" ]] || continue
+                    skill_name=$(basename "$skill_file")
+                    if backup_and_link "$skill_file" "$SKILLS_TARGET/$category/$skill_name" "$INSTALL_SCOPE" "file"; then
+                        echo "    + Skill: $category/$skill_name"
+                    fi
+                    if [[ ! -e "$SKILLS_TARGET/$skill_name" ]]; then
+                        ln -sf "$skill_file" "$SKILLS_TARGET/$skill_name" 2>/dev/null || true
+                    fi
+                done
+            else
+                log_warn "    Skill category not found: $category"
+            fi
+        done
+    fi
+
+    # Install workflow individual skills
+    if [[ ${#WORKFLOW_SKILL_INDIVIDUAL[@]} -gt 0 ]]; then
+        log_info "[workflow:$WORKFLOW_NAME] Installing individual skills..."
+        SKILLS_SOURCE="$SCRIPT_DIR/.claude/skills"
+        SKILLS_TARGET="$TARGET_DIR/skills"
+        create_dir "$SKILLS_TARGET"
+
+        for skill_path in "${WORKFLOW_SKILL_INDIVIDUAL[@]}"; do
+            # skill_path format: category/skill-name (e.g., dx/spec-driven-development)
+            skill_dir=$(dirname "$skill_path")
+            skill_base=$(basename "$skill_path")
+            source_file="$SKILLS_SOURCE/${skill_path}.md"
+
+            if [[ -f "$source_file" ]]; then
+                create_dir "$SKILLS_TARGET/$skill_dir"
+                if backup_and_link "$source_file" "$SKILLS_TARGET/${skill_path}.md" "$INSTALL_SCOPE" "file"; then
+                    echo "    + Skill: ${skill_path}"
+                fi
+                if [[ ! -e "$SKILLS_TARGET/${skill_base}.md" ]]; then
+                    ln -sf "$source_file" "$SKILLS_TARGET/${skill_base}.md" 2>/dev/null || true
+                fi
+            else
+                log_warn "    Skill not found: $skill_path"
+            fi
+        done
+        INSTALLED_COMPONENTS+=("Workflow skills: ${#WORKFLOW_SKILL_CATEGORIES[@]} categories, ${#WORKFLOW_SKILL_INDIVIDUAL[@]} individual")
     fi
 fi
 

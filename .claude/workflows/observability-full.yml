@@ -1,0 +1,14 @@
+name: observability-full
+description: "Full observability stack: Prometheus, OTel, distributed tracing, logging"
+agents:
+  - k8s-troubleshooter
+  - incident-responder
+skills:
+  categories:
+    - observability
+    - kubernetes
+  individual:
+    - observability/kube-prometheus-stack
+    - observability/monitoring-prometheus-operator
+rules:
+  - security

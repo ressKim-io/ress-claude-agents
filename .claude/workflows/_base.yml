@@ -1,0 +1,14 @@
+name: base
+description: "All workflows inherit: planning, documentation, and design tools"
+agents:
+  - infra-roadmap-planner
+skills:
+  categories:
+    - dx
+  individual:
+    - dx/spec-driven-development
+    - dx/rfc-adr
+    - dx/docs-as-code
+rules:
+  - workflow
+  - git

@@ -1,0 +1,21 @@
+name: gke-gitops-setup
+description: "GKE GitOps setup: local dev -> GKE production with ArgoCD, Terraform"
+agents:
+  - k8s-troubleshooter
+  - service-mesh-expert
+  - terraform-reviewer
+skills:
+  categories:
+    - kubernetes
+    - infrastructure
+    - cicd
+  individual:
+    - infrastructure/terraform-k8s-bootstrap
+    - infrastructure/helm-environment-strategy
+    - infrastructure/compatibility-matrix
+    - infrastructure/compose-to-k8s
+    - cicd/gitops-argocd-helm
+    - service-mesh/istio-gitops
+    - observability/kube-prometheus-stack
+rules:
+  - security

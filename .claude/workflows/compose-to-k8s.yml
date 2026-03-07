@@ -1,0 +1,16 @@
+name: compose-to-k8s
+description: "Docker Compose to Kubernetes migration: Helm, monitoring, GitOps"
+agents:
+  - k8s-troubleshooter
+  - terraform-reviewer
+skills:
+  categories:
+    - kubernetes
+    - infrastructure
+  individual:
+    - infrastructure/compose-to-k8s
+    - infrastructure/helm-environment-strategy
+    - observability/kube-prometheus-stack
+    - observability/monitoring-prometheus-operator
+rules:
+  - security

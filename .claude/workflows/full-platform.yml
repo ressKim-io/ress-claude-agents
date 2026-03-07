@@ -1,0 +1,38 @@
+name: full-platform
+description: "Full platform setup: infrastructure, MSA, observability, messaging, service mesh"
+agents:
+  - architect-agent
+  - k8s-troubleshooter
+  - service-mesh-expert
+  - messaging-expert
+  - terraform-reviewer
+  - incident-responder
+  - saga-agent
+  - platform-engineer
+skills:
+  categories:
+    - kubernetes
+    - infrastructure
+    - cicd
+    - msa
+    - service-mesh
+    - observability
+    - messaging
+    - sre
+    - platform
+  individual:
+    - infrastructure/terraform-k8s-bootstrap
+    - infrastructure/helm-environment-strategy
+    - infrastructure/compose-to-k8s
+    - cicd/gitops-argocd-helm
+    - service-mesh/istio-gitops
+    - observability/kube-prometheus-stack
+    - messaging/kafka-k8s-operations
+    - msa/contract-first
+    - msa/msa-ddd
+    - dx/spec-driven-development
+rules:
+  - workflow
+  - git
+  - security
+  - testing
