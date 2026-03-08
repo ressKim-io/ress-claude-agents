@@ -57,6 +57,41 @@ if (obj instanceof String s) { ... }
 NEVER raw type 사용 — `List` 대신 `List<String>`.
 고정 값 집합은 MUST `enum` 사용. NEVER `int` 또는 `String` 상수로 대체.
 
+## 메서드 구조 (Composed Method)
+
+비즈니스 로직은 같은 추상화 수준의 메서드 호출로 구성한다 (SLAP 원칙).
+
+- 조건문/로직 블록이 3줄 이상이면 MUST 의도를 드러내는 메서드로 추출
+- 1-2줄 로직은 메서드 추출 대신 MUST 목적을 설명하는 인라인 주석 사용
+- 한 메서드는 PREFER 10-20줄 이내로 유지
+
+```java
+// BAD: 추상화 수준이 뒤섞임
+public void reserve(User user, Seat seat) {
+    if (seat.getStatus() != AVAILABLE) throw new SeatUnavailableException();
+    if (seat.isBlocked()) throw new SeatBlockedException();
+    if (seat.isExpired()) throw new SeatExpiredException();
+    if (user.getReservations().size() >= MAX_LIMIT) throw new LimitExceededException();
+    // 예약 생성 로직 10줄...
+}
+
+// GOOD: Composed Method — 메서드명이 곧 문서
+public void reserve(User user, Seat seat) {
+    validateSeatAvailable(seat);
+    validateReservationLimit(user);
+    createReservation(user, seat);
+}
+
+// GOOD: 1-2줄은 주석으로 의도 표현
+public void cancel(Reservation reservation) {
+    // 취소 가능 상태 확인
+    if (!reservation.isCancellable()) throw new CancelNotAllowedException();
+
+    reservation.cancel();
+    publishEvent(new ReservationCancelled(reservation.getId()));
+}
+```
+
 ## 예외 처리
 
 비즈니스 예외는 MUST custom `RuntimeException` 서브클래스 정의.

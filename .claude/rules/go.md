@@ -68,6 +68,47 @@ func NewServer(addr string, opts ...Option) *Server { ... }
 slog.Info("user created", "id", user.ID, "email", user.Email)
 ```
 
+## 메서드 구조 (Composed Method)
+
+비즈니스 로직은 같은 추상화 수준의 함수 호출로 구성한다 (SLAP 원칙).
+
+- 조건문/로직 블록이 3줄 이상이면 MUST 의도를 드러내는 함수로 추출
+- 1-2줄 로직은 함수 추출 대신 MUST 목적을 설명하는 인라인 주석 사용
+- 한 함수는 PREFER 10-20줄 이내로 유지
+
+```go
+// Bad: 추상화 수준이 뒤섞임
+func (s *Service) Reserve(ctx context.Context, userID, seatID string) error {
+    seat, err := s.repo.FindSeat(ctx, seatID)
+    if err != nil { return fmt.Errorf("find seat: %w", err) }
+    if seat.Status != Available { return ErrSeatUnavailable }
+    if seat.Blocked { return ErrSeatBlocked }
+    if seat.ExpiredAt.Before(time.Now()) { return ErrSeatExpired }
+    count, _ := s.repo.CountReservations(ctx, userID)
+    if count >= maxLimit { return ErrLimitExceeded }
+    // 예약 생성 로직 10줄...
+}
+
+// Good: Composed Method
+func (s *Service) Reserve(ctx context.Context, userID, seatID string) error {
+    seat, err := s.validateSeat(ctx, seatID)
+    if err != nil { return err }
+    if err := s.checkReservationLimit(ctx, userID); err != nil { return err }
+    return s.createReservation(ctx, userID, seat)
+}
+
+// Good: 1-2줄은 주석으로 의도 표현
+func (s *Service) Cancel(ctx context.Context, id string) error {
+    reservation, err := s.repo.Find(ctx, id)
+    if err != nil { return fmt.Errorf("find reservation: %w", err) }
+
+    // 취소 가능 상태 확인
+    if !reservation.Cancellable() { return ErrCancelNotAllowed }
+
+    return s.repo.Cancel(ctx, reservation)
+}
+```
+
 ## 코드 스타일
 
 - MUST Clear is better than clever — 영리한 코드보다 읽기 쉬운 코드
