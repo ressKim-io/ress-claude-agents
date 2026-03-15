@@ -198,6 +198,75 @@ du -sh /var/log/* | sort -rh | head -10
 2. 임시 파일 정리 → /tmp, /var/cache
 3. 볼륨 확장 → PVC resize
 
+### Healthcheck 프로토콜 문제
+
+**증상:** 컨테이너 healthcheck 실패, `unhealthy` 상태 반복
+
+**진단:**
+```bash
+# 컨테이너 healthcheck 로그 확인
+docker inspect --format='{{json .State.Health}}' <container>
+
+# 직접 healthcheck 명령 실행
+docker exec <container> wget --spider -q http://localhost:3100/ready
+docker exec <container> wget -qO /dev/null http://localhost:3100/ready
+```
+
+**원인 및 해결:**
+| 원인 | 증상 | 해결 |
+|------|------|------|
+| HEAD 메서드 미지원 | `wget --spider` 실패 (405) | `wget -qO /dev/null` (GET) 사용 |
+| 인증 필요 엔드포인트 | 401/403 응답 | Spring Security에서 healthcheck 경로 제외 |
+| 서비스 미기동 완료 | Connection refused | `start_period` 설정 또는 `depends_on: condition` 활용 |
+
+### ALB 타겟 헬스 검증
+
+**증상:** 배포 후 서비스 접근 불가, ALB 502/503
+
+**진단:**
+```bash
+# 타겟 그룹 헬스 확인
+aws elbv2 describe-target-health \
+  --target-group-arn <target-group-arn>
+
+# unhealthy 원인 확인
+# - "Target.Timeout": 응답 시간 초과
+# - "Target.FailedHealthChecks": healthcheck 경로/포트 문제
+# - "Target.NotInService": 인스턴스 미등록
+```
+
+**일반적 원인:**
+1. **포트 바인딩**: `127.0.0.1` 바인딩 → ALB 접근 불가 → `0.0.0.0` 필요
+2. **Healthcheck 경로**: 인증 필요 경로 → `/actuator/health` 등 인증 제외 경로 사용
+3. **Security Group**: ALB → EC2 인바운드 포트 미허용
+
+### CD 파이프라인 대기 메커니즘
+
+**증상:** 배포 파이프라인에서 서비스 기동 대기 중 timeout
+
+**AWS SSM waiter:**
+- 기본 timeout: ~100초 (`aws ssm send-command --timeout-seconds`)
+- 대규모 Spring Boot 앱은 기동에 30-120초 소요 → 기본 waiter timeout 초과 가능
+
+**대안: Shell polling 루프**
+```bash
+MAX_WAIT=300  # 최대 5분
+INTERVAL=10   # 10초 간격
+ELAPSED=0
+
+while [ $ELAPSED -lt $MAX_WAIT ]; do
+  if curl -sf http://localhost:8080/actuator/health > /dev/null 2>&1; then
+    echo "Service is healthy"
+    exit 0
+  fi
+  sleep $INTERVAL
+  ELAPSED=$((ELAPSED + INTERVAL))
+done
+
+echo "Service failed to start within ${MAX_WAIT}s"
+exit 1
+```
+
 ---
 
 ## 로그 기반 디버깅

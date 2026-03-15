@@ -320,6 +320,155 @@ spec:
         - /metadata/labels
 ```
 
+### ESO + ArgoCD Sync-Wave 순서
+
+ExternalSecret이 Secret을 생성한 후에야 Deployment가 참조 가능.
+
+```yaml
+# Wave -2: ExternalSecret (먼저 Secret 생성)
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: db-credentials
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: aws-secrets-manager
+    kind: ClusterSecretStore
+  target:
+    name: db-credentials
+
+---
+# Wave 0: Deployment (Secret이 존재해야 함)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-server
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  template:
+    spec:
+      containers:
+      - envFrom:
+        - secretRef:
+            name: db-credentials   # wave -2에서 생성됨
+```
+
+**연쇄 장애 패턴**: ESO가 Secret 생성 실패 → Deployment도 실패 → 전체 Sync 실패
+- ClusterSecretStore namespace 허용 목록 관리 필수
+- ESO controller 로그 확인: `kubectl logs -n external-secrets deploy/external-secrets`
+
+### Sealed Secrets
+
+ESO 대안. `kubeseal`로 암호화 → Git 커밋 가능한 SealedSecret 생성.
+
+```bash
+helm install sealed-secrets sealed-secrets/sealed-secrets -n kube-system
+kubeseal --format yaml < secret.yaml > sealed-secret.yaml  # Git에 커밋 가능
+```
+
+---
+
+## ECR CronJob 패턴
+
+Kind/로컬 환경에서 ECR private registry pull을 위한 자격증명 자동 갱신.
+
+```yaml
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ecr-credential-renew
+  namespace: kube-system
+spec:
+  schedule: "0 */6 * * *"          # 6시간마다 (ECR 토큰 12시간 유효)
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: ecr-credential-renewer
+          containers:
+          - name: ecr-login
+            image: amazon/aws-cli:2.22.0
+            command:
+            - /bin/sh
+            - -c
+            - |
+              TOKEN=$(aws ecr get-login-password --region $AWS_REGION)
+              kubectl delete secret ecr-pull-secret -n default --ignore-not-found
+              kubectl create secret docker-registry ecr-pull-secret \
+                -n default \
+                --docker-server=$AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com \
+                --docker-username=AWS \
+                --docker-password=$TOKEN
+            env:
+            - name: AWS_REGION
+              valueFrom:
+                configMapKeyRef:
+                  name: aws-config
+                  key: region
+            - name: AWS_ACCOUNT
+              valueFrom:
+                configMapKeyRef:
+                  name: aws-config
+                  key: account-id
+          restartPolicy: OnFailure
+```
+
+### IAM 최소 권한
+
+```json
+{
+  "Effect": "Allow",
+  "Action": [
+    "ecr:GetAuthorizationToken",
+    "ecr:BatchGetImage",
+    "ecr:GetDownloadUrlForLayer"
+  ],
+  "Resource": "*"
+}
+```
+
+**연쇄 장애**: Secret 미갱신 → `imagePullSecrets` 만료 → ImagePullBackOff → 전체 Pod 실패
+
+---
+
+## AWS 환경 종속값 변수화
+
+### Anti-pattern: 하드코딩
+
+```yaml
+# ❌ YAML에 직접 작성
+image:
+  repository: <account-id>.dkr.ecr.ap-northeast-2.amazonaws.com/example-server
+
+# ❌ Makefile/스크립트에 직접 작성
+AWS_ACCOUNT=<account-id>
+AWS_REGION=ap-northeast-2
+```
+
+### 올바른 패턴: values로 추출
+
+```yaml
+# values.yaml (환경별로 override)
+aws:
+  accountId: ""        # 환경별 values에서 설정
+  region: ""
+  partition: "aws"     # 기본값: aws (GovCloud: aws-us-gov)
+
+# templates/deployment.yaml
+image: "{{ .Values.aws.accountId }}.dkr.ecr.{{ .Values.aws.region }}.amazonaws.com/{{ .Chart.Name }}"
+
+# environments/dev/values.yaml
+aws:
+  accountId: "<account-id>"
+  region: "ap-northeast-2"
+```
+
+---
+
 ### Helm Chart 버전 관리 전략
 
 ```yaml

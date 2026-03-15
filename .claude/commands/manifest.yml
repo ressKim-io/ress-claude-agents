@@ -1,0 +1,250 @@
+# Commands Manifest
+# Central metadata for all commands
+
+commands:
+  # ============================================
+  # Session Commands
+  # ============================================
+  - id: session-save
+    category: session
+    title: Session Save
+    description: 현재 세션 컨텍스트를 저장합니다
+    skills: []
+    related: [session-end]
+
+  - id: session-end
+    category: session
+    title: Session End
+    description: 세션을 종료하고 컨텍스트 파일을 정리합니다
+    skills: []
+    related: [session-save]
+
+  # ============================================
+  # Go Commands
+  # ============================================
+  - id: go-review
+    category: go
+    title: Go Code Review
+    description: Go 코드를 리뷰하고 개선점을 제안합니다
+    skills: [go-errors, go-gin, go-testing, concurrency-go]
+    related: [go-lint, go-refactor]
+
+  - id: go-test-gen
+    category: go
+    title: Go Test Generator
+    description: Table-driven 테스트 코드를 생성합니다
+    skills: [go-testing]
+    related: [go-review]
+
+  - id: go-lint
+    category: go
+    title: Go Lint
+    description: golangci-lint를 실행하고 이슈를 수정합니다
+    skills: []
+    related: [go-review, go-refactor]
+
+  - id: go-refactor
+    category: go
+    title: Go Refactor
+    description: Go 코드 리팩토링을 제안합니다
+    skills: [refactoring-go, refactoring-principles]
+    related: [go-review, go-lint]
+
+  # ============================================
+  # Java Commands (Java 21+ / Spring Boot 3.x)
+  # ============================================
+  - id: java-review
+    category: java
+    title: Java/Spring Code Review
+    description: Java/Spring 코드를 리뷰합니다 (Virtual Threads, DI, Security)
+    skills: [spring-data, spring-security, spring-testing, concurrency-spring]
+    related: [java-lint, java-refactor]
+
+  - id: java-test-gen
+    category: java
+    title: Java Test Generator
+    description: JUnit 5 + Testcontainers 테스트를 생성합니다
+    skills: [spring-testing, spring-testcontainers]
+    related: [java-review]
+
+  - id: java-lint
+    category: java
+    title: Java Static Analysis
+    description: SonarQube/Qodana 정적 분석을 수행합니다
+    skills: [cicd-devsecops]
+    related: [java-review, java-refactor]
+
+  - id: java-refactor
+    category: java
+    title: Java Refactoring
+    description: Modern Java 패턴 및 Virtual Threads 리팩토링을 제안합니다
+    skills: [refactoring-spring, refactoring-principles]
+    related: [java-review, java-lint]
+
+  - id: java-performance
+    category: java
+    title: Java Performance Optimization
+    description: Native Image, CDS, GC 튜닝 등 성능 최적화를 제안합니다
+    skills: []
+    related: [java-refactor]
+
+  # ============================================
+  # Backend Commands (Generic Java/Kotlin)
+  # ============================================
+  - id: backend-review
+    category: backend
+    title: Backend Code Review
+    description: Java/Kotlin 백엔드 코드를 리뷰합니다
+    skills: [spring-data, spring-security, spring-testing, concurrency-spring]
+    related: [backend-refactor, backend-test-gen]
+
+  - id: backend-test-gen
+    category: backend
+    title: Test Code Generator
+    description: JUnit 테스트 코드를 생성합니다
+    skills: [spring-testing, spring-testcontainers]
+    related: [backend-review]
+
+  - id: backend-api-doc
+    category: backend
+    title: API Documentation Generator
+    description: OpenAPI/Swagger 어노테이션을 추가합니다
+    skills: [api-design]
+    related: [backend-review]
+
+  - id: backend-refactor
+    category: backend
+    title: Code Refactoring Assistant
+    description: 코드 품질 개선을 위한 리팩토링을 제안합니다
+    skills: [refactoring-spring, refactoring-principles]
+    related: [backend-review]
+
+  # ============================================
+  # Kubernetes Commands
+  # ============================================
+  - id: k8s-validate
+    category: k8s
+    title: Kubernetes Manifest Validator
+    description: 매니페스트의 best practice를 검증합니다
+    skills: [k8s-security]
+    related: [k8s-secure]
+
+  - id: k8s-secure
+    category: k8s
+    title: Kubernetes Security Hardening
+    description: 보안 설정을 자동으로 추가합니다
+    skills: [k8s-security]
+    related: [k8s-validate, k8s-netpol]
+
+  - id: k8s-netpol
+    category: k8s
+    title: Network Policy Generator
+    description: NetworkPolicy를 생성하고 검증합니다
+    skills: [k8s-security]
+    related: [k8s-secure]
+
+  - id: k8s-helm-check
+    category: k8s
+    title: Helm Chart Validator
+    description: Helm chart의 best practice를 검증합니다
+    skills: [k8s-helm]
+    related: [k8s-validate]
+
+  # ============================================
+  # Terraform Commands
+  # ============================================
+  - id: terraform-plan-review
+    category: terraform
+    title: Terraform Plan Review
+    description: terraform plan 결과를 분석합니다
+    skills: [terraform-modules, terraform-security]
+    related: [terraform-security, terraform-validate]
+
+  - id: terraform-security
+    category: terraform
+    title: Terraform Security Check
+    description: 보안 취약점을 검사합니다
+    skills: [terraform-security]
+    related: [terraform-plan-review, terraform-validate]
+
+  - id: terraform-module-gen
+    category: terraform
+    title: Terraform Module Generator
+    description: 재사용 가능한 모듈을 생성합니다
+    skills: [terraform-modules]
+    related: [terraform-validate]
+
+  - id: terraform-validate
+    category: terraform
+    title: Terraform Validation
+    description: best practice 및 품질을 검증합니다
+    skills: [terraform-modules]
+    related: [terraform-plan-review, terraform-security]
+
+  # ============================================
+  # DX Commands (Developer Experience)
+  # ============================================
+  - id: dx-pr-create
+    category: dx
+    title: Pull Request Creator
+    description: 커밋 기반으로 PR을 자동 생성합니다
+    skills: [git-workflow, conventional-commits]
+    related: [dx-changelog, dx-release]
+
+  - id: dx-issue-create
+    category: dx
+    title: GitHub Issue Creator
+    description: 템플릿 기반으로 Issue를 생성합니다
+    skills: [git-workflow]
+    related: [dx-pr-create]
+
+  - id: dx-changelog
+    category: dx
+    title: Changelog Generator
+    description: 커밋 히스토리 기반으로 CHANGELOG를 생성합니다
+    skills: [conventional-commits]
+    related: [dx-release, dx-pr-create]
+
+  - id: dx-release
+    category: dx
+    title: Release Manager
+    description: 버전 태그 및 GitHub Release를 생성합니다
+    skills: [conventional-commits, git-workflow]
+    related: [dx-changelog]
+
+# Category metadata
+categories:
+  session:
+    title: Session
+    description: 세션 컨텍스트 관리
+    icon: "📋"
+
+  go:
+    title: Go
+    description: Go 백엔드 개발
+    icon: "🔵"
+
+  java:
+    title: Java
+    description: Java 21+ / Spring Boot 3.x 개발
+    icon: "☕"
+
+  backend:
+    title: Backend
+    description: Java/Kotlin 백엔드 개발
+    icon: "☕"
+
+  k8s:
+    title: Kubernetes
+    description: Kubernetes 운영
+    icon: "☸️"
+
+  terraform:
+    title: Terraform
+    description: 인프라 관리
+    icon: "🏗️"
+
+  dx:
+    title: DX
+    description: Developer Experience
+    icon: "🛠️"

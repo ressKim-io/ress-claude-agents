@@ -318,10 +318,97 @@ argocd app diff my-app
 | 실수 | 문제 | 해결 |
 |------|------|------|
 | 소스/설정 같은 저장소 | 무한 Sync 루프 | 설정 저장소 분리 |
-| HEAD/main 직접 참조 | 예측 불가 배포 | 태그/커밋 SHA 사용 |
+| HEAD/main 직접 참조 | 예측 불가 배포 | 태그/커밋 SHA 사용 (아래 상세) |
 | selfHeal 없음 | Drift 방치 | selfHeal: true |
 | 시크릿 평문 커밋 | 보안 취약 | Sealed Secrets |
 | 단일 root-app | SPOF | 계층화된 App of Apps |
+
+### `targetRevision: main` 위험성
+
+```yaml
+# ❌ prod: 누군가 main에 push하면 즉시 프로덕션 배포
+targetRevision: main
+
+# ✅ prod: 태그 또는 커밋 SHA 고정
+targetRevision: v1.2.3
+targetRevision: a1b2c3d4e5f6
+
+# ⚠️ dev 환경에서 main 허용 시: 반드시 주석으로 사유 명시
+targetRevision: main    # dev only: auto-sync from main for rapid iteration
+```
+
+**구체적 위험 시나리오**:
+- 실수로 main에 직접 push → auto-sync가 즉시 프로덕션 반영
+- 여러 PR이 연속 머지 → 중간 상태가 일시적으로 배포
+- 롤백 시 "어떤 커밋이 배포되어 있었는지" 추적 불가
+
+**규칙**: prod/staging은 태그/SHA **필수**. dev에서 `main` 사용 시 주석 사유 명시.
+
+---
+
+## Bootstrap Sync-Wave 패턴
+
+클러스터 부트스트랩 시 리소스 생성 순서를 보장하는 패턴.
+
+### Sync-Wave 번호 체계
+
+```
+Wave -5: Namespaces (다른 모든 리소스의 전제 조건)
+Wave -3: CRDs (Operator가 인식할 커스텀 리소스 정의)
+Wave -2: Operators + ExternalSecrets (CRD 기반 컨트롤러)
+Wave -1: Gateways, Config (서비스 진입점)
+Wave  0: Applications (실제 워크로드)
+```
+
+### 예제: Istio + 모니터링 부트스트랩
+
+```yaml
+# Root Application이 관리하는 child Application들
+# Wave -3: Istio Base (CRDs)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-base
+  annotations:
+    argocd.argoproj.io/sync-wave: "-3"
+spec:
+  source:
+    chart: base
+    repoURL: https://istio-release.storage.googleapis.com/charts
+    targetRevision: 1.24.3
+
+---
+# Wave -2: Istiod (컨트롤 플레인, CRD 필요)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istiod
+  annotations:
+    argocd.argoproj.io/sync-wave: "-2"
+
+---
+# Wave -1: Istio Gateway (istiod 필요)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-gateway
+  annotations:
+    argocd.argoproj.io/sync-wave: "-1"
+
+---
+# Wave 0: 앱 워크로드 (모든 인프라 준비 완료 후)
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: example-server
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+```
+
+### Root → Child 순서 보장
+
+Root Application의 `syncPolicy`에서 child Application의 `sync-wave` 순서대로 생성.
+각 wave의 리소스가 Healthy 상태가 되어야 다음 wave로 진행.
 
 ---
 

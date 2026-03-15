@@ -164,6 +164,141 @@ service:
       exporters: [prometheusremotewrite]
 ```
 
+### OTel → Prometheus 레이블 매핑 스펙
+
+**출처**: [opentelemetry.io/docs/specs/otel/compatibility/prometheus_and_openmetrics](https://opentelemetry.io/docs/specs/otel/compatibility/prometheus_and_openmetrics/)
+
+| OTel Resource Attribute | Prometheus Label | 규칙 |
+|------------------------|-----------------|------|
+| `service.name` | `job` | 기본 매핑 |
+| `service.namespace` + `service.name` | `job` = `<namespace>/<service.name>` | namespace 있을 때 |
+| `service.instance.id` | `instance` | 인스턴스 식별 |
+
+**Attribute → Label 변환 규칙:**
+- `.` → `_` (예: `http.method` → `http_method`)
+- 특수문자 → `_` (영숫자, `_` 외 모든 문자)
+- 숫자로 시작 시 `_` 접두어 추가
+
+```
+# 예: service.namespace=myapp, service.name=example-server
+# → Prometheus job="myapp/example-server"
+
+# ❌ Anti-pattern: service_name 레이블로 대시보드/rules 작성
+sum by (service_name) (rate(http_requests_total[5m]))
+
+# ✅ Correct: job 레이블 사용
+sum by (job) (rate(http_requests_total[5m]))
+```
+
+### OTel 기본 히스토그램 버킷
+
+OTel SDK 기본 explicit bucket boundaries (초 단위):
+```
+[0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0]
+```
+
+**주의**: `le="2.0"` 버킷 없음 → Apdex 계산 시 `le="2.5"` 사용
+
+```promql
+# Apdex (T=0.5s, OTel 버킷 기준)
+(
+  sum(rate(http_server_request_duration_seconds_bucket{le="0.5"}[5m]))
+  + sum(rate(http_server_request_duration_seconds_bucket{le="2.5"}[5m]))
+) / 2
+/ sum(rate(http_server_request_duration_seconds_count[5m]))
+```
+
+커스텀 버킷이 필요하면 OTel SDK에서 View로 설정:
+```yaml
+# application.yml (Spring Boot OTel)
+otel:
+  metrics:
+    views:
+      - instrument_name: http.server.request.duration
+        histogram:
+          bucket_boundaries: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.0, 2.5, 5.0, 10.0]
+```
+
+### Recording Rule 패턴
+
+```yaml
+# ❌ BAD: label 불일치 시 or vector(0)이 실패할 수 있음
+- record: job:http_requests:error_rate
+  expr: |
+    sum(rate(http_requests_total{status=~"5.."}[5m])) by (job)
+    / sum(rate(http_requests_total[5m])) by (job)
+    or vector(0)
+
+# ✅ GOOD: on() 으로 label matching 무시 → universal fallback
+- record: job:http_requests:error_rate
+  expr: |
+    sum(rate(http_requests_total{status=~"5.."}[5m])) by (job)
+    / sum(rate(http_requests_total[5m])) by (job)
+    or on() vector(0)
+```
+
+**`or vector(0)` vs `or on() vector(0)` 차이:**
+- `or vector(0)`: `or`는 label set이 동일한 시계열끼리 매칭. 좌변이 `{job="svc-a"}`이면 `vector(0)`은 label이 `{}`이므로 매칭 실패 → fallback 미적용
+- `or on() vector(0)`: `on()`은 label matching을 명시적으로 빈 집합으로 제한 → label 불일치를 무시하고 universal fallback 적용
+- **MSA 필수**: 서비스가 여러 개면 `by (job)` 결과에 여러 label set 존재 → `on()` 없이는 fallback이 특정 시계열에만 적용되거나 전혀 적용 안 됨
+- 단일 서비스(모놀리식)에서는 양쪽 모두 동작하지만, MSA 전환 대비 **항상 `on()` 사용**
+
+### histogram_quantile — `by (le)` 필수
+
+```promql
+# ✅ by (le) 필수 — histogram_quantile은 le 레이블이 있어야 버킷 경계를 인식
+histogram_quantile(0.99, sum(rate(http_server_request_duration_seconds_bucket[5m])) by (le))
+
+# ✅ 추가 label로 분리할 때도 le 반드시 포함
+histogram_quantile(0.99, sum(rate(http_server_request_duration_seconds_bucket[5m])) by (le, job))
+
+# ❌ by (le) 누락 → 결과 NaN (가장 흔한 실수)
+histogram_quantile(0.99, sum(rate(http_server_request_duration_seconds_bucket[5m])))
+
+# ❌ by에 le 없이 다른 label만 → NaN
+histogram_quantile(0.99, sum(rate(http_server_request_duration_seconds_bucket[5m])) by (job))
+```
+
+### 나눗셈 0 보호 패턴
+
+```promql
+# ✅ 방법 1: > 0 필터 (분모가 0이면 시계열 자체를 제거 → NaN 대신 no data)
+sum(rate(errors_total[5m])) / (sum(rate(requests_total[5m])) > 0)
+
+# ✅ 방법 2: clamp_min (분모를 최소값으로 고정 → 0 대신 아주 작은 값)
+sum(rate(errors_total[5m])) / clamp_min(sum(rate(requests_total[5m])), 0.001)
+
+# ❌ 보호 없이 나눗셈 → 트래픽 없는 서비스에서 NaN/Inf 발생
+sum(rate(errors_total[5m])) / sum(rate(requests_total[5m]))
+```
+
+**선택 기준:**
+- `> 0`: 데이터 없는 서비스는 대시보드에서 완전히 사라짐 (recording rule 추천)
+- `clamp_min`: 데이터 없는 서비스도 0으로 표시됨 (대시보드 패널 추천)
+
+### OTel 메트릭 Suffix 규칙
+
+OTel SDK가 Prometheus exporter/remote write로 내보낼 때 자동 변환되는 suffix 규칙.
+
+| OTel 타입 | 단위 | Prometheus Suffix | 예시 |
+|-----------|------|------------------|------|
+| Counter | - | `_total` | `http_server_active_requests` → `http_server_active_requests_total` |
+| Histogram | s (seconds) | `_seconds_bucket`, `_seconds_sum`, `_seconds_count` | `http.server.request.duration` → `http_server_request_duration_seconds_bucket` |
+| Histogram | ms | `_milliseconds_bucket`, `_milliseconds_sum`, `_milliseconds_count` | 레거시 HikariCP 계측 |
+| Gauge | By (bytes) | `_bytes` | `jvm.memory.used` → `jvm_memory_used_bytes` |
+| Gauge | 1 (unitless) | `_ratio` | `jvm.cpu.recent_utilization` → `jvm_cpu_recent_utilization_ratio` |
+| Gauge | {threads} | 단위 제거 | `jvm.thread.count` → `jvm_thread_count` |
+
+**메트릭명 변환 규칙:**
+- `.` → `_` (OTel `http.server.request.duration` → Prometheus `http_server_request_duration_seconds`)
+- 단위가 메트릭명에 이미 포함되면 중복 추가 안 함
+- `{custom}` 중괄호 단위는 제거됨
+
+**레거시 Java agent 주의:**
+- HikariCP 등 일부 계측: `_milliseconds` suffix (opt-in 전 레거시)
+- Stable conventions 전환: `OTEL_SEMCONV_STABILITY_OPT_IN=database` 환경변수 설정
+- 전환 후: `db.client.connection.create_time` (seconds 단위, `_seconds` suffix)
+
 ---
 
 ## Cardinality 관리

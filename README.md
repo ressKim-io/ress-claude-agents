@@ -28,13 +28,13 @@ cd ress-claude-agents
 | | Count | Lines |
 |---|---|---|
 | Agents | 46 | ~18,700 |
-| Skills | 199 | ~75,200 |
-| Rules | 9 | ~1,020 |
-| Commands | 40 | - |
+| Skills | 200 | ~76,900 |
+| Rules | 13 | ~2,200 |
+| Commands | 43 | ~4,000 |
 | Tests | 51 cases | - |
 | Plugins | 9 bundles | - |
 | Workflows | 7 scenarios | - |
-| **Total** | | **91,000+** |
+| **Total** | | **102,000+** |
 
 ## Agents
 
@@ -56,7 +56,7 @@ cd ress-claude-agents
 
 ## Skills
 
-198 on-demand knowledge files organized in 17 categories.
+200 on-demand knowledge files organized in 17 categories.
 
 | Category | Count | Topics |
 |---|---|---|
@@ -73,7 +73,7 @@ cd ress-claude-agents
 | SRE | 14 | SLI/SLO, Chaos Engineering, DR, FinOps |
 | Platform | 16 | Backstage, MLOps, WASM, GPU scheduling |
 | DX | 20 | DORA metrics, onboarding, RFC/ADR, SDD, Team Topologies |
-| Infrastructure | 11 | AWS EKS, Terraform, Crossplane, Docker |
+| Infrastructure | 12 | AWS EKS, Terraform, Crossplane, Docker, EC2 CD |
 | Messaging | 8 | Kafka, RabbitMQ, NATS, Redis Streams |
 | Security | 5 | OWASP, auth patterns, compliance frameworks |
 | AI | 4 | RAG, prompt engineering, vector DB, LangChain |

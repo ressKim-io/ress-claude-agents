@@ -318,53 +318,80 @@ spec:
         - my-team-developers
 ```
 
+### AppProject 와일드카드 검증 가이드
+
+**`namespaceResourceWhitelist`**: `kind: "*"` 사용 카운트 → 2개+ API 그룹이면 최소 권한 위반 경고
+
+```yaml
+# ❌ 모든 리소스 허용 (사실상 무제한)
+namespaceResourceWhitelist:
+  - group: '*'
+    kind: '*'
+
+# ✅ 단계적 제한: 필요한 리소스만 명시
+namespaceResourceWhitelist:
+  - group: ''
+    kind: ConfigMap
+  - group: ''
+    kind: Secret
+  - group: ''
+    kind: Service
+  - group: apps
+    kind: Deployment
+```
+
+**`sourceRepos`**: 최소한 org prefix 제한
+
+```yaml
+# ❌ sourceRepos: ['*']
+# ✅ sourceRepos: ['https://github.com/my-org/*']
+```
+
+**`destinations`**: namespace 패턴 제한
+
+```yaml
+# ❌ namespace: '*'
+# ✅ namespace: '{team}-*'
+```
+
+상세 예제: `/k8s-security` 스킬의 AppProject 섹션 참조
+
 ---
 
-## 시크릿 관리
+## ApplicationSet 하이브리드 패턴
 
-### Sealed Secrets
+### 부트스트랩 = Application, 앱 배포 = ApplicationSet
 
-```bash
-# 설치
-helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
-helm install sealed-secrets sealed-secrets/sealed-secrets -n kube-system
-
-# Secret → SealedSecret 변환
-kubeseal --format yaml < secret.yaml > sealed-secret.yaml
 ```
+Bootstrap (순서 중요 → 개별 Application + sync-wave):
+  istio-base     (wave -3)
+  istiod         (wave -2)
+  gateway        (wave -1)
+  cert-manager   (wave -2)
+  external-secrets (wave -2)
+
+App Deployment (반복 패턴 → ApplicationSet):
+  example-server    (dev, staging, prod)
+  example-front     (dev, staging, prod)
+  example-payment   (dev, staging, prod)
+```
+
+### 혼합 금지 원칙
+
+같은 리소스를 Application과 ApplicationSet 양쪽에서 관리하면 충돌 발생.
 
 ```yaml
-# sealed-secret.yaml (Git에 커밋 가능)
-apiVersion: bitnami.com/v1alpha1
-kind: SealedSecret
-metadata:
-  name: my-secret
-  namespace: my-app
-spec:
-  encryptedData:
-    password: AgBy3i4OJSWK+...
+# ❌ istio-base를 Application으로도, ApplicationSet으로도 생성
+# → 두 컨트롤러가 동시에 sync하면서 충돌
+
+# ✅ 역할 분리
+# infrastructure/bootstrap/ → 개별 Application (sync-wave)
+# applications/ → ApplicationSet (Generator 기반)
 ```
 
-### External Secrets Operator
+---
 
-```yaml
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: my-secret
-spec:
-  refreshInterval: 1h
-  secretStoreRef:
-    name: aws-secrets-manager
-    kind: ClusterSecretStore
-  target:
-    name: my-secret
-  data:
-    - secretKey: password
-      remoteRef:
-        key: prod/myapp/db
-        property: password
-```
+**시크릿 관리**: `/gitops-argocd-helm` 스킬의 Secrets + Helm 통합 섹션 참조
 
 ---
 

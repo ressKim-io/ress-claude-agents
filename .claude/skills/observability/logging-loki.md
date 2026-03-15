@@ -21,6 +21,81 @@ Loki vs ELK 선택
 
 ---
 
+## Native OTLP vs LokiExporter (필수 이해)
+
+**권장 방식은 Native OTLP** (권장 방식). LokiExporter는 deprecated이므로 사용 금지.
+
+| 항목 | LokiExporter (deprecated) | Native OTLP (현재) |
+|------|--------------------------|---------------------|
+| 로그 레벨 필터 | `\| level="error"` | `\| detected_level="ERROR"` |
+| 서비스 필터 | `{job="dev/auth"}` | `{service_name="auth"}` |
+| 속성 접근 | JSON blob → `\| json` 파싱 필요 | Structured Metadata → 직접 접근 |
+| 속성 예시 | `\| json \| severity="INFO"` | `\| severity_text="INFO"` |
+
+### `detected_level` 규칙 (대문자)
+
+```logql
+# ✅ Native OTLP — 대문자 (OTel severityText 기준)
+{service_name=~"$svc"} | detected_level="ERROR"
+{service_name=~"$svc"} | detected_level=~"ERROR|WARN"
+
+# ❌ LokiExporter 방식 (사용 금지)
+{job="example-server"} | level="error"
+```
+
+- `detected_level`은 Loki가 severity를 자동 감지하여 structured metadata에 저장
+- **반드시 대문자** (`ERROR`, `WARN`, `INFO`, `DEBUG`) — OTel severityText 기준
+- 소문자 `level="error"`는 구 LokiExporter 방식이므로 절대 사용하지 않는다
+
+### Structured Metadata 설정
+
+```yaml
+# loki-values.yaml
+loki:
+  structuredConfig:
+    limits_config:
+      allow_structured_metadata: true  # Loki 3.0+ 기본 true
+      otlp_config:
+        resource_attributes:
+          ignore_defaults: true         # 기본 label 무시하고 직접 지정
+          attributes_config:
+            - action: index_label       # index label로 승격
+              attributes:
+                - service.name          # → service_name label (index)
+                - service.namespace     # → service_namespace label
+```
+
+- `index_label`: 쿼리 `{}` 내에서 직접 필터 가능 (성능 좋음)
+- 그 외: structured metadata로 저장 (파이프라인 `|` 으로 접근)
+- **`ignore_defaults: true`**: Loki 기본 index label 세트 무시, 명시적 설정만 사용
+
+### `service_name` 필터 패턴
+
+```logql
+# ✅ service_name은 namespace 없는 순수 서비스명 (OTel service.name)
+{service_name=~"$svc", service_name=~".+"}
+
+# service_name=~".+" 는 빈 값 제외 (safety guard)
+# Grafana 변수 $svc가 비어있을 때 전체 로그를 가져오는 것 방지
+```
+
+### Loki Schema v13 + TSDB
+
+```yaml
+# boltdb-shipper는 deprecated → tsdb 사용
+schemaConfig:
+  configs:
+    - from: "2024-01-01"
+      store: tsdb          # ✅ boltdb-shipper는 deprecated
+      object_store: filesystem
+      schema: v13          # 최신 schema
+```
+
+- `v13`은 TSDB store 필수
+- `boltdb-shipper` → `tsdb` 마이그레이션: `from` 날짜를 새로 추가하여 전환
+
+---
+
 ## 역할별 LogQL 쿼리
 
 ### 개발팀용 쿼리
@@ -277,7 +352,7 @@ count_over_time({app="api"} |= "error" [1h])
 ─────────────────
 - app, service, namespace
 - env (dev/staging/prod)
-- level (error/warn/info)
+- detected_level (ERROR/WARN/INFO) — Native OTLP 기준
 ```
 
 ---

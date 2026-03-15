@@ -230,6 +230,94 @@ services:
       retries: 5
 ```
 
+### 포트 바인딩 가이드
+
+| 형식 | 의미 | 접근 범위 |
+|------|------|----------|
+| `"127.0.0.1:3000:3000"` | localhost만 바인딩 | 로컬만 접근 가능 |
+| `"3000:3000"` | `0.0.0.0:3000:3000`과 동일 | 모든 네트워크 접근 가능 |
+| `"0.0.0.0:3000:3000"` | 명시적 전체 바인딩 | 모든 네트워크 접근 가능 |
+
+**CRITICAL**: ALB/reverse proxy 뒤에 있는 컨테이너는 **`0.0.0.0` 바인딩 필수**.
+`127.0.0.1` 바인딩 시 ALB health check 및 외부 트래픽 전달 불가.
+네트워크 접근 제한은 Security Group에서 처리한다.
+
+### Healthcheck 프로토콜
+
+| 방법 | HTTP 메서드 | 호환성 | 권장 |
+|------|-----------|--------|------|
+| `wget --spider` | HEAD | 일부 서비스 HEAD 미지원 (Loki 등) | ❌ |
+| `wget -qO /dev/null` | GET | 범용 호환 | ✅ |
+| `curl -f` | GET | 가장 범용적 (alpine에 curl 필요) | ✅ |
+
+```yaml
+# ❌ HEAD 미지원 서비스에서 실패
+healthcheck:
+  test: ["CMD", "wget", "--spider", "-q", "http://localhost:3100/ready"]
+
+# ✅ GET 요청으로 안전하게
+healthcheck:
+  test: ["CMD", "wget", "-qO", "/dev/null", "http://localhost:3100/ready"]
+```
+
+**ALB Healthcheck**: 인증 불필요한 엔드포인트 선택 (Spring Boot → `/actuator/health`)
+
+### 환경변수 기본값 패턴
+
+Docker Compose에서 앱에 전달하는 환경변수는 **반드시 기본값** 설정.
+
+```yaml
+# ✅ 기본값 패턴: .env 없이도 기동 가능
+services:
+  app:
+    environment:
+      DB_HOST: ${DB_HOST:-localhost}
+      DB_PORT: ${DB_PORT:-5432}
+      JWT_ACCESS_TIME: ${JWT_ACCESS_TIME:-3600000}
+      JWT_SOCIAL_VERIFY_TIME: ${JWT_SOCIAL_VERIFY_TIME:-300000}   # 누락 주의
+
+# ❌ 기본값 없음: .env 미설정 시 "${JWT_SOCIAL_VERIFY_TIME}" 문자열이 그대로 전달
+environment:
+  JWT_SOCIAL_VERIFY_TIME: ${JWT_SOCIAL_VERIFY_TIME}
+```
+
+**application.yml 양쪽 동기화 필수**:
+```yaml
+# Spring Boot application.yml — Docker 밖에서도 기본값 보장
+jwt:
+  social-verify-valid-time: ${JWT_SOCIAL_VERIFY_TIME:300000}
+```
+
+**체크 포인트**: 새 환경변수 추가 시 3곳 확인
+1. `docker-compose*.yml` — `${VAR:-default}`
+2. `application*.yml` — `${VAR:default}`
+3. `.env.example` — 문서화
+
+---
+
+### 네트워크 설정
+
+```yaml
+# 새 네트워크 생성 (기본)
+networks:
+  app-net:
+    driver: bridge
+
+# 기존 네트워크 재사용
+networks:
+  existing-net:
+    external: true
+
+# ❌ name + driver 조합 — 기존 네트워크와 Docker Compose 라벨 충돌 가능
+networks:
+  my-net:
+    name: shared-network
+    driver: bridge  # 라벨 com.docker.compose.network 충돌
+```
+
+**`external: true`**: Docker Compose 외부에서 미리 생성된 네트워크를 참조. Compose가 생성/삭제하지 않음.
+**`name:` + `driver:`**: Compose가 네트워크를 생성하려 하지만, 동일 이름의 기존 네트워크가 있으면 라벨 충돌 발생.
+
 ---
 
 ## 멀티 플랫폼 빌드
@@ -252,6 +340,9 @@ docker buildx build \
 | 빌드 도구 포함 | 멀티스테이지 분리 |
 | `COPY . .` 먼저 | 의존성 파일 먼저 |
 | apt 캐시 남김 | `rm -rf /var/lib/apt/lists/*` |
+| ALB 뒤 컨테이너에 `127.0.0.1` 포트 바인딩 | `0.0.0.0` 바인딩 (SG로 제한) |
+| Healthcheck에 `wget --spider` | `wget -qO /dev/null` 또는 `curl -f` (GET) |
+| `name:` + `driver:` 네트워크 조합 | 기존 네트워크 재사용 시 `external: true` |
 
 ---
 

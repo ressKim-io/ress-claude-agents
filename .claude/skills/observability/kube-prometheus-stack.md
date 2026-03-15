@@ -414,3 +414,57 @@ spec:
       jsonPointers:
         - /webhooks/0/clientConfig/caBundle
 ```
+
+### Apdex 계산 시 OTel 히스토그램 버킷 주의
+
+OTel SDK 기본 explicit bucket boundaries에 `le="2.0"` 없음. Apdex 4T 계산 시 `le="2.5"` 사용.
+
+```
+OTel 기본 버킷 (초): 0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0
+                                                                                          ↑ 2.0 없음, 2.5 사용
+```
+
+```promql
+# Apdex (T=0.5s): satisfied ≤ 0.5s, tolerating ≤ 4T=2.0s → le="2.5" 사용
+(
+  sum(rate(http_server_request_duration_seconds_bucket{le="0.5"}[5m]))
+  + sum(rate(http_server_request_duration_seconds_bucket{le="2.5"}[5m]))
+) / 2
+/ (sum(rate(http_server_request_duration_seconds_count[5m])) > 0)
+```
+
+정확한 2.0s 경계가 필요하면 OTel SDK View에서 커스텀 버킷 설정:
+```yaml
+# application.yml (Spring Boot OTel)
+otel:
+  metrics:
+    views:
+      - instrument_name: http.server.request.duration
+        histogram:
+          bucket_boundaries: [0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1.0, 2.0, 2.5, 5.0, 10.0]
+```
+
+### PrometheusRule CRD 라벨 필수
+
+PrometheusRule 리소스에 `app.kubernetes.io/part-of: {project}-monitoring` 라벨이 없으면 Mimir ruler selector에 매칭되지 않아 **rule이 로드되지 않는다** (silent failure).
+
+```yaml
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: example-recording-rules
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/part-of: {project}-monitoring  # ← 필수. 누락 시 Mimir에서 무시
+spec:
+  groups:
+    - name: example-sli
+      rules:
+        - record: example:sli:availability:5m
+          expr: ...
+```
+
+**검증 방법:**
+- `mimirtool rules lint <rule-file.yaml>` — 문법 검증
+- Mimir ruler API에서 로드된 rule 확인: `curl http://mimir:8080/prometheus/api/v1/rules`
+- label 누락은 에러 없이 rule이 누락되므로 반드시 사전 확인

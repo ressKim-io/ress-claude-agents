@@ -194,6 +194,171 @@ spec:
 
 ---
 
+---
+
+## Alloy Known Issues
+
+### `loki.attribute.labels` 미작동 (v1.8.x)
+
+Alloy v1.8.x에서 `loki.attribute.labels` 설정이 동작하지 않는 known issue.
+GitHub: #2064, #3216
+
+**대체: `loki.process` 파이프라인**
+
+```alloy
+// ❌ 미작동 (v1.8.x)
+otelcol.exporter.loki "default" {
+  forward_to = [loki.write.default.receiver]
+  // loki.attribute.labels = ["service_name", "severity"]  ← 무시됨
+}
+
+// ✅ 대체 (레거시): loki.process 파이프라인
+loki.process "add_labels" {
+  forward_to = [loki.write.default.receiver]
+
+  stage.json {
+    expressions = {
+      service_name = "resources.service\\.name",
+      severity     = "severity",
+    }
+  }
+
+  stage.labels {
+    values = {
+      service_name = "",
+      severity     = "",
+    }
+  }
+}
+```
+
+### Loki Native OTLP Endpoint (권장 대안, 2026-03-13+)
+
+`loki.process` 파이프라인 대신 Loki native OTLP endpoint 사용을 권장한다.
+Alloy의 `otelcol.exporter.otlphttp`로 Loki의 `/otlp` 엔드포인트에 직접 전송하고,
+Loki values의 `otlp_config`에서 `index_label`로 라벨 승격을 처리한다.
+
+**Alloy 설정:**
+```alloy
+// loki.process 불필요 — Loki가 OTLP 네이티브로 처리
+otelcol.exporter.otlphttp "loki" {
+  client {
+    endpoint = "http://loki:3100/otlp"
+  }
+}
+```
+
+**Loki values 설정:**
+```yaml
+loki:
+  structuredConfig:
+    limits_config:
+      allow_structured_metadata: true
+      otlp_config:
+        resource_attributes:
+          ignore_defaults: true
+          attributes_config:
+            - action: index_label
+              attributes:
+                - service.name       # → service_name label
+                - service.namespace  # → service_namespace label
+```
+
+**장점:**
+- `loki.process` JSON 파싱 불필요 → 성능 향상, 설정 단순화
+- OTel structured metadata 직접 활용 → attribute 손실 없음
+- `loki.attribute.labels` known issue 완전 회피
+
+---
+
+## HikariCP OTel 메트릭
+
+### 레거시 `_milliseconds` suffix 주의
+
+OTel Java agent의 HikariCP 계측은 레거시 semantic conventions 사용 시 `_milliseconds` suffix를 생성.
+
+```
+# 레거시 (기본)
+db_client_connections_create_time_milliseconds_bucket
+db_client_connections_create_time_milliseconds_sum
+
+# Stable (opt-in 후)
+db_client_connection_create_time_seconds_bucket
+db_client_connection_create_time_seconds_sum
+```
+
+**대시보드 작성 시:**
+- 레거시 사용 중이면 `_milliseconds_bucket` + 단위 변환 (`/ 1000`)
+- Stable 전환: `OTEL_SEMCONV_STABILITY_OPT_IN=database` 환경변수
+
+### BeanPostProcessor 빈 초기화 순서
+
+OTel auto-configuration과 HikariCP DataSource 빈 초기화 순서 충돌은 **발견이 늦는** 대표적 문제.
+앱은 정상 기동되지만 메트릭만 수집되지 않아, 대시보드 구축 시점에 발견된다.
+
+#### 증상 식별
+
+WARN 로그에서 다음 메시지가 출력되면 BPP 초기화 순서 문제:
+
+```
+Bean 'openTelemetry' of type [...] is not eligible for getting processed by all BeanPostProcessors
+```
+
+- 앱 기동 OK, 기능 정상 → 메트릭만 누락
+- `db_client_connections_usage` 등 HikariCP 메트릭이 Prometheus에 없음
+
+#### 3가지 핵심 문제와 해결
+
+| 문제 | 원인 | 해결 |
+|------|------|------|
+| non-static `@Bean` | Configuration 클래스 인스턴스화 시 의존 빈 조기 초기화 | **`static`** 팩토리 메서드 |
+| 직접 `OpenTelemetry` 주입 | BPP 생성 시점에 OTel 빈 강제 초기화 | **`ObjectProvider<OpenTelemetry>`** 지연 로딩 |
+| `postProcessAfterInitialization` | OTel auto-config이 After 단계에서 DataSource를 프록시 래핑 → `instanceof HikariDataSource` 실패 | **`postProcessBeforeInitialization`** |
+
+#### 검증된 패턴 (Spring Boot 3 + OTel)
+
+```java
+@Bean
+static BeanPostProcessor hikariMetricsPostProcessor(
+    ObjectProvider<OpenTelemetry> openTelemetryProvider) {
+    return new BeanPostProcessor() {
+        @Override
+        public Object postProcessBeforeInitialization(Object bean, String beanName) {
+            if (bean instanceof HikariDataSource ds) {
+                OpenTelemetry otel = openTelemetryProvider.getIfAvailable();
+                if (otel != null) {
+                    HikariTelemetry telemetry = HikariTelemetry.create(otel);
+                    ds.setMetricsTrackerFactory(telemetry.createMetricsTrackerFactory());
+                }
+            }
+            return bean;
+        }
+    };
+}
+```
+
+**3가지가 모두 필요한 이유:**
+- `static` 없으면 → Configuration 클래스의 다른 빈이 먼저 초기화됨
+- `ObjectProvider` 없으면 → BPP 등록 시 OTel 빈이 강제 생성되어 다른 BPP를 놓침
+- `Before` 대신 `After` 쓰면 → OTel auto-config의 DataSource 프록시가 원본을 감싸서 타입 체크 실패
+
+#### 검증 방법
+
+Prometheus에서 다음 메트릭이 수집되는지 확인:
+```promql
+db_client_connections_usage{state="used"}
+db_client_connections_max
+db_client_connections_create_time_milliseconds_bucket
+```
+
+#### Anti-patterns
+
+- ❌ BPP에서 `OpenTelemetry` 직접 주입 (non-static + eager initialization)
+- ❌ `postProcessAfterInitialization`에서 DataSource 타입 체크 (프록시 래핑 후 instanceof 실패)
+- ❌ `@DependsOn("openTelemetry")` 로 순서 강제 시도 (BPP 생명주기와 무관)
+
+---
+
 ## Sources
 
 - [OTel Collector Scaling](https://opentelemetry.io/docs/collector/scaling/)
