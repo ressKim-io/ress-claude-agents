@@ -5,9 +5,9 @@
 # ress-claude-agents
 
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
-![Skills](https://img.shields.io/badge/Skills-200-2563EB?style=for-the-badge)
+![Skills](https://img.shields.io/badge/Skills-205-2563EB?style=for-the-badge)
 ![Agents](https://img.shields.io/badge/Agents-46-F97316?style=for-the-badge)
-![Lines](https://img.shields.io/badge/102K+_Lines-4F46E5?style=for-the-badge)
+![Lines](https://img.shields.io/badge/104K+_Lines-4F46E5?style=for-the-badge)
 
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -29,14 +29,14 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 > *이 반복 루프를 끊을 수 있다면?*
 
 저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
-200개의 Skills에 각 분야의 Best Practices를 구조화하고, 46개의 Agents가 자율적으로 판단하고 실행합니다.
+205개의 Skills에 각 분야의 Best Practices를 구조화하고, 46개의 Agents가 자율적으로 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
 ──────────────────                    ──────────────────
 Google/StackOverflow 검색              → /k8s-security 로 즉시 패턴 적용
 Runbook 찾아서 수동 실행               → incident-responder 가 자동 진단
-"이거 어떻게 해요?" 반복 질문          → 102,000줄의 지식 베이스가 즉시 답변
+"이거 어떻게 해요?" 반복 질문          → 104,000줄의 지식 베이스가 즉시 답변
 100만 VU 테스트 시나리오 수동 작성     → load-tester-k6 가 템플릿 제공
 ```
 
@@ -54,14 +54,14 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 | | Metric | Value | Description |
 |---|--------|-------|-------------|
-| 🤖 | **Agents** | 46 (~18,700줄) | 전략, 프론트엔드, 보안, SRE, MLOps 등 자율 실행 전문가 |
-| 💡 | **Skills** | 200 (~76,900줄) | Go, Spring, Python, React/Next.js, K8s, MSA, AI/LLM 등 온디맨드 도메인 지식 |
+| 🤖 | **Agents** | 46 (~18,800줄) | 전략, 프론트엔드, 보안, SRE, MLOps 등 자율 실행 전문가 |
+| 💡 | **Skills** | 205 (~79,100줄) | Go, Spring, Python, React/Next.js, K8s, MSA, AI/LLM 등 온디맨드 도메인 지식 |
 | 📏 | **Rules** | 13 (~2,200줄) | Git, 테스트, 보안, 클라우드 CLI, 모니터링, 코드리뷰, 문서화 등 자동 적용 규칙 |
 | ⚡ | **Commands** | 43 | `/go review`, `/java lint`, `/review-pr` 등 자동화 워크플로우 |
 | 📦 | **Plugins** | 9 bundles | 역할 기반 에이전트+스킬 번들 설치 |
 | 🔄 | **Workflows** | 7 scenarios | 시나리오 기반 전체 스택 설치 (EKS, MSA, K8s 등) |
 | 🧪 | **Tests** | 51 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
-| 📏 | **Total** | **102,000+ lines** | 17개 카테고리로 체계화된 AI 지식 체계 |
+| 📏 | **Total** | **104,000+ lines** | 17개 카테고리로 체계화된 AI 지식 체계 |
 
 </div>
 
@@ -102,7 +102,7 @@ cd ress-claude-agents
 
 ## 📖 사용 가이드
 
-> "200개 스킬 중 내 상황에 뭘 써야 하지?" — 페르소나별 추천 조합 + 실전 시나리오
+> "205개 스킬 중 내 상황에 뭘 써야 하지?" — 페르소나별 추천 조합 + 실전 시나리오
 
 | 페르소나 | 가이드 | 핵심 도구 |
 |----------|--------|----------|
@@ -230,7 +230,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills
 
-필요할 때만 로드되는 도메인 지식 (198 files, ~74,700줄). 17개 카테고리 서브디렉토리로 체계화.
+필요할 때만 로드되는 도메인 지식 (205 files, ~79,100줄). 17개 카테고리 서브디렉토리로 체계화.
 
 <details>
 <summary><b>Go (8 files)</b></summary>
@@ -345,24 +345,31 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Monitoring & Observability (17 files)</b></summary>
+<summary><b>Monitoring & Observability (24 files)</b></summary>
 
 ```
 /observability      # 로깅, RED Method
-/observability-otel # OpenTelemetry SDK/Collector
+/observability-otel # OpenTelemetry SDK/Collector, Declarative Config
 /observability-otel-scale # 대규모 OTel 아키텍처 (10K+ RPS)
 /observability-otel-optimization # OTel 비용 최적화, 샘플링, 스케일링
+/observability-otel-migration # Alloy/Zipkin/SemConv 마이그레이션 (NEW)
+/observability-pyroscope # Continuous Profiling, Span Profiles (NEW)
+/observability-incident-playbook # 인시던트 대응 워크플로우 (NEW)
+/observability-cost # 관측 스택 비용 관리 (NEW)
+/monitoring-self-monitoring # 관측 스택 자체 모니터링 (NEW)
 /ebpf-observability # eBPF, Grafana Beyla, Odigos
 /ebpf-observability-advanced # Cilium Hubble, DeepFlow, 프로덕션 요구사항
 /monitoring-grafana # 대시보드, 알림, RBAC
 /monitoring-metrics # Prometheus, Thanos, VictoriaMetrics
 /monitoring-logs    # Fluent Bit, Loki
 /monitoring-troubleshoot # 모니터링 트러블슈팅
+/monitoring-prometheus-operator # kube-prometheus-stack 운영
 /logging-compliance # PCI-DSS, 전자금융거래법
 /logging-security   # 봇/매크로 탐지
 /logging-elk        # ELK Stack, Elasticsearch
 /logging-loki       # Grafana Loki, LogQL
 /alerting-discord   # Discord 알림 연동
+/kube-prometheus-stack # kube-prometheus-stack Helm 설정
 /aiops              # AIOps, 이상 탐지, 자동 복구
 /aiops-remediation  # AIOps 자동 복구, Runbook 자동화
 ```
@@ -805,7 +812,7 @@ ress-claude-agents/
 │   │   ├── architecture/     # Architecture styles (10)
 │   │   ├── kubernetes/       # K8s core & Gateway API (10)
 │   │   ├── service-mesh/     # Istio & Linkerd (16)
-│   │   ├── observability/    # Monitoring & Observability (17)
+│   │   ├── observability/    # Monitoring & Observability (24)
 │   │   ├── cicd/             # CI/CD & GitOps (11)
 │   │   ├── sre/              # SRE & Operations (14)
 │   │   ├── platform/         # Platform & MLOps (16)

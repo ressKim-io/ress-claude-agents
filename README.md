@@ -27,14 +27,14 @@ cd ress-claude-agents
 
 | | Count | Lines |
 |---|---|---|
-| Agents | 46 | ~18,700 |
-| Skills | 200 | ~76,900 |
+| Agents | 46 | ~18,800 |
+| Skills | 205 | ~79,100 |
 | Rules | 13 | ~2,200 |
 | Commands | 43 | ~4,000 |
 | Tests | 51 cases | - |
 | Plugins | 9 bundles | - |
 | Workflows | 7 scenarios | - |
-| **Total** | | **102,000+** |
+| **Total** | | **104,000+** |
 
 ## Agents
 
@@ -56,7 +56,7 @@ cd ress-claude-agents
 
 ## Skills
 
-200 on-demand knowledge files organized in 17 categories.
+205 on-demand knowledge files organized in 17 categories.
 
 | Category | Count | Topics |
 |---|---|---|
@@ -68,7 +68,7 @@ cd ress-claude-agents
 | Architecture | 10 | Hexagonal, Cell-based, Modular Monolith, Data Mesh |
 | Kubernetes | 10 | Security, Helm, HPA/VPA/KEDA, Gateway API |
 | Service Mesh | 16 | Istio (Ambient, mTLS, multi-cluster), Linkerd |
-| Observability | 17 | OpenTelemetry, eBPF, Prometheus, Grafana, AIOps |
+| Observability | 24 | OpenTelemetry, eBPF, Prometheus, Grafana, Pyroscope, AIOps |
 | CI/CD | 11 | GitHub Actions, ArgoCD, Canary, Supply Chain |
 | SRE | 14 | SLI/SLO, Chaos Engineering, DR, FinOps |
 | Platform | 16 | Backstage, MLOps, WASM, GPU scheduling |
