@@ -51,9 +51,9 @@ categorize_agent() {
     architect-agent|saga-agent) echo "architecture" ;;
     k8s-*) echo "kubernetes" ;;
     platform-engineer) echo "platform" ;;
-    otel-expert) echo "observability" ;;
-    security-scanner|anti-bot|terraform-reviewer|compliance-auditor) echo "security" ;;
-    ci-optimizer|git-workflow|pr-review-bot) echo "cicd" ;;
+    otel-expert|observability-reviewer) echo "observability" ;;
+    security-scanner|anti-bot|terraform-reviewer|compliance-auditor|dockerfile-reviewer) echo "security" ;;
+    ci-optimizer|git-workflow|pr-review-bot|cicd-reviewer|gitops-reviewer) echo "cicd" ;;
     code-reviewer|ticketing-expert|dev-logger|debugging-expert) echo "devops" ;;
     tech-lead|product-engineer|migration-expert) echo "devops" ;;
     frontend-expert) echo "frontend" ;;
