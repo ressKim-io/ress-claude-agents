@@ -219,121 +219,30 @@ data:
 
 ---
 
-## Prometheus Alert Rules
+## Prometheus Alert Rules (참조)
 
-### 핵심 알림 규칙
+기본 알림 규칙(PodCrashLooping, NodeNotReady, HighErrorRate 등)은 아래 skill에 상세 정의:
+- `/monitoring-troubleshoot` — Pod/Node 알림 규칙 + 진단 가이드
+- `/kube-prometheus-stack` — kube-prometheus-stack 기본 제공 규칙
+- `/observability-incident-playbook` — 알림 기반 인시던트 대응 워크플로우
+
+### 커스텀 규칙 작성 요점
 
 ```yaml
-# prometheus-rules.yaml
-apiVersion: monitoring.coreos.com/v1
-kind: PrometheusRule
-metadata:
-  name: kubernetes-alerts
-  namespace: monitoring
+# PrometheusRule 작성 시 필수 체크
 spec:
   groups:
-    - name: kubernetes-pods
+    - name: my-rules
       rules:
-        # Pod CrashLoopBackOff
-        - alert: PodCrashLooping
-          expr: |
-            sum(rate(kube_pod_container_status_restarts_total[15m])) by (namespace, pod) > 0
-          for: 5m
+        - alert: MyAlert
+          expr: <PromQL>
+          for: 5m                    # MUST: 플래핑 방지
           labels:
-            severity: warning
-            team: infra
+            severity: warning        # MUST: critical/warning/info
+            team: backend            # 팀 라우팅용
           annotations:
-            summary: "Pod {{ $labels.pod }} is crash looping"
-            description: "Pod {{ $labels.namespace }}/{{ $labels.pod }} has restarted more than 0 times in 15 minutes"
-            runbook_url: "https://wiki.example.com/runbooks/pod-crashloop"
-
-        # Pod Not Ready
-        - alert: PodNotReady
-          expr: |
-            sum by (namespace, pod) (kube_pod_status_phase{phase!="Running",phase!="Succeeded"}) > 0
-          for: 15m
-          labels:
-            severity: warning
-          annotations:
-            summary: "Pod {{ $labels.pod }} is not ready"
-            description: "Pod {{ $labels.namespace }}/{{ $labels.pod }} has been not ready for 15 minutes"
-
-        # High Memory Usage
-        - alert: ContainerHighMemory
-          expr: |
-            (container_memory_working_set_bytes / container_spec_memory_limit_bytes) > 0.9
-          for: 5m
-          labels:
-            severity: warning
-          annotations:
-            summary: "Container memory usage > 90%"
-            description: "Container {{ $labels.container }} in {{ $labels.namespace }}/{{ $labels.pod }} is using > 90% memory"
-
-    - name: kubernetes-nodes
-      rules:
-        # Node Not Ready
-        - alert: NodeNotReady
-          expr: |
-            kube_node_status_condition{condition="Ready",status="true"} == 0
-          for: 5m
-          labels:
-            severity: critical
-            team: infra
-          annotations:
-            summary: "Node {{ $labels.node }} is not ready"
-            description: "Node {{ $labels.node }} has been not ready for 5 minutes"
-
-        # Node High CPU
-        - alert: NodeHighCPU
-          expr: |
-            (1 - avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m]))) > 0.9
-          for: 10m
-          labels:
-            severity: warning
-          annotations:
-            summary: "Node CPU usage > 90%"
-            description: "Node {{ $labels.instance }} CPU usage is above 90% for 10 minutes"
-
-        # Node Disk Space Low
-        - alert: NodeDiskSpaceLow
-          expr: |
-            (node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes) < 0.1
-          for: 5m
-          labels:
-            severity: critical
-          annotations:
-            summary: "Node disk space < 10%"
-            description: "Node {{ $labels.instance }} has less than 10% disk space available"
-
-    - name: application-slo
-      rules:
-        # High Error Rate
-        - alert: HighErrorRate
-          expr: |
-            sum(rate(http_requests_total{status=~"5.."}[5m])) by (service)
-            /
-            sum(rate(http_requests_total[5m])) by (service)
-            > 0.05
-          for: 5m
-          labels:
-            severity: critical
-            team: backend
-          annotations:
-            summary: "Service {{ $labels.service }} error rate > 5%"
-            description: "Service {{ $labels.service }} has error rate above 5% for 5 minutes"
-            runbook_url: "https://wiki.example.com/runbooks/high-error-rate"
-
-        # High Latency (p99)
-        - alert: HighLatencyP99
-          expr: |
-            histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le, service))
-            > 1
-          for: 5m
-          labels:
-            severity: warning
-          annotations:
-            summary: "Service {{ $labels.service }} p99 latency > 1s"
-            description: "Service {{ $labels.service }} p99 latency is above 1 second"
+            summary: "설명"
+            runbook_url: "링크"      # MUST: 대응 가이드
 ```
 
 ---

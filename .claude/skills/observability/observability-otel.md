@@ -256,9 +256,10 @@ otel-collector:
 
 | 버전 | 주요 변경 |
 |------|----------|
+| 0.115+ | Zipkin exporter deprecated |
 | 0.100+ | Log body 구조 변경 |
-| 0.90+ | metrics.exporters 설정 변경 |
-| 0.80+ | processor 순서 중요도 증가 |
+
+- **Grafana Agent EOL**: Alloy로 전환 필수. 마이그레이션 가이드: `/observability-otel-migration`
 
 ### Semantic Conventions 변경 추적
 
@@ -401,28 +402,46 @@ loki.attribute.labels = ["service.name"]
 
 ---
 
-## 2026 트렌드: 차세대 관측성
+## Declarative Configuration (1.0.0 Stable, 2026)
 
-### eBPF 기반 모니터링
+SDK 설정을 코드 대신 YAML 파일로 관리. 환경별 설정 분리에 유용.
 
-```
-전통적 계측          eBPF 기반
-────────────        ────────────
-SDK 추가 필요        무침투적 (코드 변경 없음)
-런타임 오버헤드       커널 레벨에서 효율적 수집
-언어별 설정          언어 독립적
+```bash
+# 환경변수로 설정 파일 지정
+OTEL_EXPERIMENTAL_CONFIG_FILE=/etc/otel/sdk-config.yaml
 ```
 
-**대표 도구**: Coroot, Pixie, Cilium Hubble
-
-### 통합 Observability 스택 트렌드
-
+```yaml
+# sdk-config.yaml (file_format: "0.4")
+file_format: "0.4"
+resource:
+  attributes:
+    service.name: order-service
+tracer_provider:
+  processors:
+    - batch:
+        exporter:
+          otlp:
+            endpoint: http://collector:4317
+            protocol: grpc
 ```
-기존: Prometheus + Loki + Tempo (별도 운영)
-트렌드: Grafana Cloud / ClickHouse 기반 통합 스택
-```
 
----
+- 코드 변경 없이 환경별 샘플링/엔드포인트 전환 가능
+- 상세 마이그레이션 가이드: `/observability-otel-migration`
+
+## Zipkin Exporter Deprecation (2025-12)
+
+Zipkin exporter가 OTel Collector에서 deprecated. 2026-12 제거 예정.
+- 기존 Zipkin → OTLP exporter로 전환 필요
+- Tempo는 Zipkin/OTLP 모두 수신 가능하므로 exporter만 변경
+- 마이그레이션 가이드: `/observability-otel-migration`
+
+## Profiling Signal (OTLP v1.3.0)
+
+OTel에 네 번째 신호로 **Profiling** 추가. Pyroscope와 OTLP로 통합.
+- Alloy `pyroscope.ebpf` + `pyroscope.java` 컴포넌트로 수집
+- Span Profiles로 trace↔profile 연결
+- 상세 가이드: `/observability-pyroscope`
 
 ---
 
