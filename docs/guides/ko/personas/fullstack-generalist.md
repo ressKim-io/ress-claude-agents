@@ -76,13 +76,22 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 | `security-scanner` | 코드 변경 후 (보안 점검) |
 | `git-workflow` | 커밋, PR 생성 시 |
 
-### 리팩토링
+### 클린 코드 & 리팩토링
 
 | 스킬 | 대상 |
 |------|------|
+| `/clean-code` | Composed Method, Cognitive Complexity, Guard Clause, 네이밍 |
 | `/refactoring-principles` | 언어 무관 기본 원칙 |
 | `/refactoring-spring` | Spring Boot 코드 |
 | `/refactoring-go` | Go 코드 |
+
+```
+클린 코드 리뷰:
+  java-expert 또는 go-expert → /clean-code → /refactoring-principles
+
+"코드 가독성 확인해줘"
+→ /clean-code + code-reviewer
+```
 
 ### 기술 의사결정
 
@@ -151,7 +160,7 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 ```
 Week 1: 기본 사이클 익히기
   - code-reviewer, security-scanner, git-workflow
-  - /effective-java 또는 /effective-go
+  - /effective-java 또는 /effective-go, /clean-code
 
 Week 2: 프로젝트 구조
   - /api-design, /docker, /local-dev-makefile

@@ -40,6 +40,7 @@
 | `/effective-java` or `/effective-go` | `/msa-resilience` | `/msa-ddd` |
 | `/spring-patterns` or `/go-microservice` | `/database` | `/api-design` |
 | `/spring-testing` or `/go-testing` | `/msa-event-driven` | `/hexagonal-clean-architecture` |
+| `/clean-code` | `/refactoring-principles` | `/clean-code` |
 
 ---
 
@@ -69,6 +70,7 @@
 | Testing | `/spring-testcontainers` | Testcontainers, REST Assured |
 | Concurrency | `/concurrency-spring` | @Async, Virtual Threads |
 | Refactoring | `/refactoring-spring` | Spring refactoring patterns |
+| Clean Code | `/clean-code` | Guard Clause, Cognitive Complexity, naming, Tell Don't Ask |
 
 ### Example Requests
 
@@ -84,6 +86,12 @@
 
 "Write integration tests with Testcontainers"
 → /spring-testcontainers + /spring-testing
+
+"Check clean code quality and readability"
+→ java-expert + /clean-code + /refactoring-principles
+
+"Security review my Java code"
+→ java-expert (security checklist) + security-scanner
 ```
 
 ---
@@ -110,6 +118,7 @@
 | Concurrency | `/concurrency-go` | Mutex, Channel, Worker Pool |
 | Testing | `/go-testing` | Table-driven testing |
 | Refactoring | `/refactoring-go` | Go refactoring patterns |
+| Clean Code | `/clean-code` | Guard Clause, Cognitive Complexity, naming |
 
 ### Example Requests
 
@@ -125,6 +134,12 @@
 
 "Write table-driven tests"
 → /go-testing + /effective-go
+
+"Review Go error handling + OTel integration"
+→ go-expert (Handle OR Return + OTel patterns)
+
+"Clean code review for Go"
+→ go-expert + /clean-code + /refactoring-go
 ```
 
 ---

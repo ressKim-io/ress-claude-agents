@@ -19,6 +19,7 @@ Know these before you start.
 | `git` | Conventional Commits, PR 400-line limit |
 | `security` | No hardcoded secrets, input validation |
 | `debugging` | Reproduce → Diagnose → Root Cause → Fix |
+| `clean-code` | Method 20-50 lines, Cognitive Complexity ≤15, Guard Clause, WHY-only comments |
 
 ### Core Agents (Most Frequently Used)
 
@@ -46,6 +47,8 @@ Know these before you start.
 | Redis caching | `redis-expert` | `/spring-cache`, `/distributed-lock` | "Design a Redis caching strategy" |
 | Load testing | `load-tester-k6` | `/load-testing` | "Write a K6 load test scenario" |
 | Writing tests | `code-reviewer` | `/spring-testing`, `/go-testing` | "Write test code" |
+| Clean code review | `java-expert` or `go-expert` | `/clean-code`, `/refactoring-principles` | "Check clean code quality" |
+| Security code review | `java-expert` or `go-expert` | `/effective-java` or `/effective-go` | "Security review my Java/Go code" |
 
 ### Java Combos
 
@@ -55,6 +58,12 @@ New Spring project:
 
 Spring performance optimization:
   java-expert → /concurrency-spring → /spring-cache → /spring-jooq
+
+Clean code + refactoring:
+  java-expert → /clean-code → /refactoring-principles → /refactoring-spring
+
+Security hardening:
+  java-expert (security checklist) → security-scanner → /spring-security
 ```
 
 ### Go Combos
@@ -65,6 +74,12 @@ New Go project:
 
 Go performance optimization:
   go-expert → /concurrency-go → /go-database → /refactoring-go
+
+Clean code + refactoring:
+  go-expert → /clean-code → /refactoring-principles → /refactoring-go
+
+Error handling + OTel:
+  go-expert (Handle OR Return + OTel) → /observability-otel → /go-errors
 ```
 
 ---
@@ -85,6 +100,27 @@ Go performance optimization:
 | Chaos testing | `incident-responder` | `/chaos-engineering` | "Design a chaos experiment" |
 | DR planning | `k8s-troubleshooter` | `/disaster-recovery` | "Create a DR plan" |
 | CI/CD optimization | `ci-optimizer` | `/cicd-devsecops`, `/cicd-policy` | "Analyze the CI pipeline" |
+| K8s manifest review | `k8s-reviewer` | `/k8s-security`, `/k8s-helm` | "Review my K8s manifests" |
+| Dockerfile review | `dockerfile-reviewer` | `/docker` | "Review my Dockerfile" |
+| CI/CD pipeline review | `cicd-reviewer` | `/cicd-devsecops` | "Review my GitHub Actions" |
+| GitOps review | `gitops-reviewer` | `/gitops-argocd` | "Review my ArgoCD config" |
+| Observability review | `observability-reviewer` | `/observability-otel` | "Review my Prometheus rules" |
+
+### Security Review Combos (Red Team Prep)
+
+```
+K8s security audit:
+  k8s-security-reviewer + network-security-reviewer → /k8s-security
+
+Container security:
+  container-security-reviewer + dockerfile-reviewer → /docker
+
+CI/CD security:
+  cicd-security-reviewer → /supply-chain-security → /cicd-devsecops
+
+Full pre-pentest:
+  k8s-security-reviewer + container-security-reviewer + cicd-security-reviewer + network-security-reviewer
+```
 
 ### IaC Combos
 
@@ -115,7 +151,8 @@ eBPF-based Zero-Code:
 | Situation | Core Agent | Supporting Skills | How to Request |
 |-----------|-----------|-------------------|----------------|
 | New project setup | `architect-agent` | `/api-design`, `/docker` | "Design the project structure" |
-| Code cleanup | `code-reviewer` | `/refactoring-principles` | "Refactor this code" |
+| Code cleanup | `code-reviewer` | `/clean-code`, `/refactoring-principles` | "Refactor this code" |
+| Clean code check | `java-expert` or `go-expert` | `/clean-code` | "Check code readability" |
 | PR automation | `git-workflow` | `/conventional-commits`, `/git-workflow` | "Create a PR" |
 | Dev environment setup | `platform-engineer` | `/local-dev-makefile`, `/docker` | "Set up local dev environment" |
 | Documentation | `dev-logger` | `/docs-as-code` | "Generate API docs" |
@@ -139,11 +176,13 @@ Use multiple agents in sequence for complex workflows.
       ↓
 3. code-reviewer      → Code review, quality verification
       ↓
-4. security-scanner   → Security vulnerability check
+4. java-expert or go-expert → Clean code + security review (built-in checklists)
       ↓
-5. load-tester-k6     → Performance verification
+5. security-scanner   → Security vulnerability check
       ↓
-6. git-workflow       → Create PR
+6. load-tester-k6     → Performance verification
+      ↓
+7. git-workflow       → Create PR
 ```
 
 ### Production Incident Response

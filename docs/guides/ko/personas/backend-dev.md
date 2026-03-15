@@ -40,6 +40,7 @@
 | `/effective-java` 또는 `/effective-go` | `/msa-resilience` | `/msa-ddd` |
 | `/spring-patterns` 또는 `/go-microservice` | `/database` | `/api-design` |
 | `/spring-testing` 또는 `/go-testing` | `/msa-event-driven` | `/hexagonal-clean-architecture` |
+| `/clean-code` | `/refactoring-principles` | `/clean-code` |
 
 ---
 
@@ -69,6 +70,7 @@
 | 테스트 | `/spring-testcontainers` | Testcontainers, REST Assured |
 | 동시성 | `/concurrency-spring` | @Async, Virtual Threads |
 | 리팩토링 | `/refactoring-spring` | Spring 리팩토링 패턴 |
+| 클린 코드 | `/clean-code` | Guard Clause, Cognitive Complexity, 네이밍, Tell Don't Ask |
 
 ### 상황별 요청 예시
 
@@ -84,6 +86,12 @@
 
 "Testcontainers로 통합 테스트 작성해줘"
 → /spring-testcontainers + /spring-testing
+
+"클린 코드 품질 확인해줘"
+→ java-expert + /clean-code + /refactoring-principles
+
+"Java 보안 리뷰해줘"
+→ java-expert (보안 체크리스트) + security-scanner
 ```
 
 ---
@@ -110,6 +118,7 @@
 | 동시성 | `/concurrency-go` | Mutex, Channel, Worker Pool |
 | 테스트 | `/go-testing` | Table-driven testing |
 | 리팩토링 | `/refactoring-go` | Go 리팩토링 패턴 |
+| 클린 코드 | `/clean-code` | Guard Clause, Cognitive Complexity, 네이밍 |
 
 ### 상황별 요청 예시
 
@@ -125,6 +134,12 @@
 
 "Table-driven test 작성해줘"
 → /go-testing + /effective-go
+
+"Go 에러 핸들링 + OTel 통합 리뷰해줘"
+→ go-expert (Handle OR Return + OTel 패턴)
+
+"Go 클린 코드 리뷰해줘"
+→ go-expert + /clean-code + /refactoring-go
 ```
 
 ---

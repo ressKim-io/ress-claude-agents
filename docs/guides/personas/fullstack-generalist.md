@@ -76,13 +76,22 @@ Load specific skills directly with slash commands:
 | `security-scanner` | After code changes (security check) |
 | `git-workflow` | When committing, creating PRs |
 
-### Refactoring
+### Clean Code & Refactoring
 
 | Skill | Target |
 |-------|--------|
+| `/clean-code` | Composed Method, Cognitive Complexity, Guard Clause, naming |
 | `/refactoring-principles` | Language-agnostic fundamentals |
 | `/refactoring-spring` | Spring Boot code |
 | `/refactoring-go` | Go code |
+
+```
+Clean code review:
+  java-expert or go-expert → /clean-code → /refactoring-principles
+
+"Check my code readability"
+→ /clean-code + code-reviewer
+```
 
 ### Tech Decisions
 
@@ -151,7 +160,7 @@ Before ending a session:
 ```
 Week 1: Learn the basic cycle
   - code-reviewer, security-scanner, git-workflow
-  - /effective-java or /effective-go
+  - /effective-java or /effective-go, /clean-code
 
 Week 2: Project structure
   - /api-design, /docker, /local-dev-makefile

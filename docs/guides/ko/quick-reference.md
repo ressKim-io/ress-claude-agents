@@ -19,6 +19,7 @@
 | `git` | Conventional Commits, PR 400줄 제한 |
 | `security` | 시크릿 하드코딩 금지, 입력 검증 |
 | `debugging` | Reproduce → Diagnose → Root Cause → Fix |
+| `clean-code` | 메서드 20-50줄, Cognitive Complexity ≤15, Guard Clause, WHY 주석 |
 
 ### 핵심 Agents (가장 자주 사용)
 
@@ -46,6 +47,8 @@
 | Redis 캐싱 | `redis-expert` | `/spring-cache`, `/distributed-lock` | "Redis 캐싱 전략 설계해줘" |
 | 부하 테스트 | `load-tester-k6` | `/load-testing` | "K6로 부하테스트 시나리오 작성해줘" |
 | 테스트 작성 | `code-reviewer` | `/spring-testing`, `/go-testing` | "테스트 코드 작성해줘" |
+| 클린 코드 리뷰 | `java-expert` 또는 `go-expert` | `/clean-code`, `/refactoring-principles` | "클린 코드 품질 확인해줘" |
+| 보안 코드 리뷰 | `java-expert` 또는 `go-expert` | `/effective-java` 또는 `/effective-go` | "Java/Go 보안 리뷰해줘" |
 
 ### Java 전용 콤보
 
@@ -55,6 +58,12 @@ Spring 신규 프로젝트:
 
 Spring 성능 최적화:
   java-expert → /concurrency-spring → /spring-cache → /spring-jooq
+
+클린 코드 + 리팩토링:
+  java-expert → /clean-code → /refactoring-principles → /refactoring-spring
+
+보안 강화:
+  java-expert (보안 체크리스트) → security-scanner → /spring-security
 ```
 
 ### Go 전용 콤보
@@ -65,6 +74,12 @@ Go 신규 프로젝트:
 
 Go 성능 최적화:
   go-expert → /concurrency-go → /go-database → /refactoring-go
+
+클린 코드 + 리팩토링:
+  go-expert → /clean-code → /refactoring-principles → /refactoring-go
+
+에러 핸들링 + OTel:
+  go-expert (Handle OR Return + OTel) → /observability-otel → /go-errors
 ```
 
 ---
@@ -85,6 +100,27 @@ Go 성능 최적화:
 | 카오스 테스트 | `incident-responder` | `/chaos-engineering` | "카오스 실험 설계해줘" |
 | DR 계획 | `k8s-troubleshooter` | `/disaster-recovery` | "DR 계획 수립해줘" |
 | CI/CD 최적화 | `ci-optimizer` | `/cicd-devsecops`, `/cicd-policy` | "CI 파이프라인 분석해줘" |
+| K8s 매니페스트 리뷰 | `k8s-reviewer` | `/k8s-security`, `/k8s-helm` | "K8s 매니페스트 리뷰해줘" |
+| Dockerfile 리뷰 | `dockerfile-reviewer` | `/docker` | "Dockerfile 리뷰해줘" |
+| CI/CD 파이프라인 리뷰 | `cicd-reviewer` | `/cicd-devsecops` | "GitHub Actions 리뷰해줘" |
+| GitOps 리뷰 | `gitops-reviewer` | `/gitops-argocd` | "ArgoCD 설정 리뷰해줘" |
+| 관측성 리뷰 | `observability-reviewer` | `/observability-otel` | "Prometheus 규칙 리뷰해줘" |
+
+### 보안 리뷰 콤보 (Red Team 대비)
+
+```
+K8s 보안 감사:
+  k8s-security-reviewer + network-security-reviewer → /k8s-security
+
+컨테이너 보안:
+  container-security-reviewer + dockerfile-reviewer → /docker
+
+CI/CD 보안:
+  cicd-security-reviewer → /supply-chain-security → /cicd-devsecops
+
+펜테스트 전 종합:
+  k8s-security-reviewer + container-security-reviewer + cicd-security-reviewer + network-security-reviewer
+```
 
 ### IaC 콤보
 
@@ -115,7 +151,8 @@ eBPF 기반 Zero-Code:
 | 상황 | 핵심 에이전트 | 지원 스킬 | 이렇게 요청하세요 |
 |------|-------------|----------|-----------------|
 | 새 프로젝트 시작 | `architect-agent` | `/api-design`, `/docker` | "프로젝트 구조 설계해줘" |
-| 코드 정리 | `code-reviewer` | `/refactoring-principles` | "코드 리팩토링해줘" |
+| 코드 정리 | `code-reviewer` | `/clean-code`, `/refactoring-principles` | "코드 리팩토링해줘" |
+| 클린 코드 점검 | `java-expert` 또는 `go-expert` | `/clean-code` | "코드 가독성 확인해줘" |
 | PR 자동화 | `git-workflow` | `/conventional-commits`, `/git-workflow` | "PR 만들어줘" |
 | 개발환경 구축 | `platform-engineer` | `/local-dev-makefile`, `/docker` | "로컬 개발환경 설정해줘" |
 | 문서화 | `dev-logger` | `/docs-as-code` | "API 문서 생성해줘" |
@@ -139,11 +176,13 @@ eBPF 기반 Zero-Code:
       ↓
 3. code-reviewer      → 코드 리뷰, 품질 검증
       ↓
-4. security-scanner   → 보안 취약점 점검
+4. java-expert 또는 go-expert → 클린 코드 + 보안 리뷰 (내장 체크리스트)
       ↓
-5. load-tester-k6     → 성능 검증
+5. security-scanner   → 보안 취약점 점검
       ↓
-6. git-workflow       → PR 생성
+6. load-tester-k6     → 성능 검증
+      ↓
+7. git-workflow       → PR 생성
 ```
 
 ### 프로덕션 장애 대응 (Incident Response)
