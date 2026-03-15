@@ -10,7 +10,8 @@ paths: "**/*.java"
 
 여러 생성 방법이 필요하거나 캐싱이 필요하면 PREFER Static Factory (`of()`, `from()`, `valueOf()`).
 
-불변 데이터(DTO, VO, 이벤트, API 응답)는 MUST `record` 사용 (Java 16+).
+불변 데이터(DTO, VO, 이벤트, API 응답)는 PREFER `record` 사용 (Java 16+).
+Lombok `@Value` 또는 수동 불변 클래스도 허용 — 팀 컨벤션에 따른다.
 NEVER JPA `@Entity`에 record 사용 — JPA는 기본 생성자와 가변 상태가 필요하다.
 
 ## 의존성 주입
@@ -63,7 +64,7 @@ NEVER raw type 사용 — `List` 대신 `List<String>`.
 
 - 조건문/로직 블록이 3줄 이상이면 MUST 의도를 드러내는 메서드로 추출
 - 1-2줄 로직은 메서드 추출 대신 MUST 목적을 설명하는 인라인 주석 사용
-- 한 메서드는 PREFER 10-20줄 이내로 유지
+- 한 메서드는 PREFER 20-50줄 이내로 유지 (Cognitive Complexity ≤ 15 기준 병행)
 
 ```java
 // BAD: 추상화 수준이 뒤섞임

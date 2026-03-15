@@ -447,4 +447,153 @@ snyk test
 snyk code test
 ```
 
-Remember: Java 21+ Virtual Threads가 새로운 기본입니다. 단순한 블로킹 코드가 이제 스케일됩니다. WebFlux는 스트리밍/백프레셔가 필요할 때만. 프로파일링 먼저, 최적화는 나중에.
+## Clean Code Patterns
+
+### Guard Clause (Early Return)
+
+```java
+// ❌ BAD: Arrow Anti-Pattern (중첩 피라미드)
+public PaymentResult processPayment(PaymentRequest request) {
+    if (request != null) {
+        if (request.getAmount() != null) {
+            if (request.getAmount().compareTo(BigDecimal.ZERO) > 0) {
+                if (request.getPaymentMethod() != null) {
+                    // 핵심 로직이 4단 중첩 안에 묻힘
+                    return gateway.charge(request);
+                }
+            }
+        }
+    }
+    return PaymentResult.failed("Invalid request");
+}
+
+// ✅ GOOD: Guard Clause — happy path가 최외곽
+public PaymentResult processPayment(PaymentRequest request) {
+    if (request == null) return PaymentResult.failed("Request is null");
+    if (request.getAmount() == null) return PaymentResult.failed("Amount required");
+    if (request.getAmount().compareTo(BigDecimal.ZERO) <= 0) return PaymentResult.failed("Amount must be positive");
+    if (request.getPaymentMethod() == null) return PaymentResult.failed("Payment method required");
+
+    return gateway.charge(request);
+}
+```
+
+### Tell, Don't Ask
+
+```java
+// ❌ ASK: 외부에서 상태를 꺼내 판단
+public void cancelOrder(Order order) {
+    if (order.getStatus() == OrderStatus.PENDING
+        || order.getStatus() == OrderStatus.CONFIRMED) {
+        order.setStatus(OrderStatus.CANCELLED);
+        order.setCancelledAt(LocalDateTime.now());
+        order.setCancelReason("User requested");
+        eventPublisher.publish(new OrderCancelled(order.getId()));
+    } else {
+        throw new OrderCancelException("Cannot cancel order in status: " + order.getStatus());
+    }
+}
+
+// ✅ TELL: 객체에게 행동을 위임
+public void cancelOrder(Order order) {
+    order.cancel("User requested");  // Order가 상태 검증 + 전이 + 이벤트 발행
+    eventPublisher.publish(order.pullDomainEvents());
+}
+```
+
+### Record 활용 (선택사항 — DTO/Value Object에 적합)
+
+```java
+// Record는 불변 데이터 전달에 최적 (setter 없음, 모든 필드 final)
+// JPA Entity에는 사용 불가 — Entity는 일반 클래스 + Lombok 사용
+
+// ✅ API 응답 DTO
+public record OrderResponse(
+    Long id,
+    String status,
+    BigDecimal total,
+    LocalDateTime createdAt
+) {
+    public static OrderResponse from(Order order) {
+        return new OrderResponse(
+            order.getId(), order.getStatus().name(),
+            order.getTotal(), order.getCreatedAt()
+        );
+    }
+}
+
+// ✅ API 요청 DTO (Jakarta Validation 호환)
+public record CreateOrderRequest(
+    @NotNull Long userId,
+    @NotEmpty List<ItemRequest> items,
+    @Valid PaymentInfo payment
+) {}
+
+// ⚠️ Record를 쓰지 않아도 됨 — Lombok @Value도 동일한 효과
+@Value
+public class OrderResponse {
+    Long id;
+    String status;
+    BigDecimal total;
+}
+```
+
+### Cognitive Complexity 리팩토링
+
+```java
+// ❌ Cognitive Complexity = 14 (높은 중첩 + 조건 체이닝)
+public BigDecimal calculatePrice(Product product, User user, Coupon coupon) {
+    BigDecimal price = product.getBasePrice();
+    if (user != null) {                                    // +1
+        if (user.getMembership() != null) {                // +2 (중첩)
+            switch (user.getMembership().getGrade()) {     // +3 (중첩)
+                case GOLD: price = price.multiply(new BigDecimal("0.8")); break;
+                case SILVER: price = price.multiply(new BigDecimal("0.9")); break;
+            }
+        }
+        if (coupon != null && coupon.isValid()) {           // +2 (중첩) +1 (&&)
+            if (coupon.getMinAmount().compareTo(price) <= 0) { // +3 (중첩)
+                price = price.subtract(coupon.getDiscount());
+            }
+        }
+    }
+    return price;
+}
+
+// ✅ Cognitive Complexity = 5 (Guard Clause + Composed Method)
+public BigDecimal calculatePrice(Product product, User user, Coupon coupon) {
+    BigDecimal price = product.getBasePrice();
+    price = applyMembershipDiscount(price, user);
+    price = applyCoupon(price, coupon);
+    return price;
+}
+
+private BigDecimal applyMembershipDiscount(BigDecimal price, User user) {
+    if (user == null) return price;                        // +1
+    if (user.getMembership() == null) return price;        // +1
+    return user.getMembership().applyDiscount(price);      // Tell, Don't Ask
+}
+
+private BigDecimal applyCoupon(BigDecimal price, Coupon coupon) {
+    if (coupon == null || !coupon.isValid()) return price;  // +1 +1
+    return coupon.applyTo(price);                           // Tell, Don't Ask
+}
+```
+
+## Clean Code Checklist
+
+### Readability
+- [ ] 메서드 20-50줄 이내, Cognitive Complexity ≤ 15
+- [ ] Guard Clause로 중첩 최소화 (Arrow Anti-Pattern 제거)
+- [ ] 의도를 드러내는 이름 (`processPayment` not `doWork`)
+- [ ] Boolean 메서드는 `is/has/can` 접두사
+- [ ] 주석은 WHY만 (비즈니스 규칙, 규제 요건, 비자명한 최적화)
+- [ ] 매직 넘버 → Enum / Named Constant
+- [ ] Tell, Don't Ask — 객체에게 행동 위임
+
+### Domain Design
+- [ ] DTO와 Entity 분리 (Mass Assignment 방지)
+- [ ] Value Object로 Primitive Obsession 제거
+- [ ] Composed Method로 비즈니스 흐름 표현
+
+Remember: Java 21+ Virtual Threads가 새로운 기본입니다. 단순한 블로킹 코드가 이제 스케일됩니다. WebFlux는 스트리밍/백프레셔가 필요할 때만. 프로파일링 먼저, 최적화는 나중에. 가독성이 좋은 코드가 유지보수 가능한 코드입니다.

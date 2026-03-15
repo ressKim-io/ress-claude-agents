@@ -74,7 +74,7 @@ slog.Info("user created", "id", user.ID, "email", user.Email)
 
 - 조건문/로직 블록이 3줄 이상이면 MUST 의도를 드러내는 함수로 추출
 - 1-2줄 로직은 함수 추출 대신 MUST 목적을 설명하는 인라인 주석 사용
-- 한 함수는 PREFER 10-20줄 이내로 유지
+- 한 함수는 PREFER 20-50줄 이내로 유지 (Cognitive Complexity ≤ 15 기준 병행)
 
 ```go
 // Bad: 추상화 수준이 뒤섞임

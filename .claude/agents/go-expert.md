@@ -314,24 +314,14 @@ go test -race ./...
 
 ## Anti-Patterns
 
-```go
-// 🚫 Unbounded goroutines
-for item := range items { go process(item) }
-
-// 🚫 Missing context
-func DoWork() error { return longOperation() }
-
-// 🚫 Unprotected global map
-var cache = make(map[string]string)
-func Set(k, v string) { cache[k] = v }  // Race condition
-
-// 🚫 Global lock in hot path
-var mu sync.Mutex
-func Handle(r *Request) { mu.Lock(); defer mu.Unlock() }
-
-// 🚫 HTTP client per request
-func CallAPI() { client := &http.Client{}; client.Get(url) }
-```
+| Anti-Pattern | 문제 | 해결 |
+|-------------|------|------|
+| `for item := range items { go process(item) }` | OOM | Worker Pool |
+| `func DoWork() error { return longOperation() }` | Context 없음 | `ctx` 첫 파라미터 |
+| `var cache = map[string]string{}` | Race condition | `sync.Map` or `RWMutex` |
+| `var mu sync.Mutex` in hot path | 병목 | Sharding or lock-free |
+| `client := &http.Client{}` per request | 커넥션 누수 | 패키지 레벨 재사용 |
+| `log.Error(err); return err` | 중복 로그 | Handle OR Return |
 
 ## Performance Targets
 
@@ -361,9 +351,7 @@ func GetUser(db *sql.DB, id string) (*User, error) {
 func GetUser(db *sql.DB, id string) (*User, error) {
     return db.QueryRow("SELECT * FROM users WHERE id = $1", id).Scan(...)
 }
-```
 
-```go
 // ❌ VULNERABLE: Command injection
 func RunCommand(userInput string) {
     exec.Command("sh", "-c", "echo " + userInput).Run()
@@ -385,18 +373,14 @@ const apiKey = "sk-live-abc123def456"
 
 // ✅ HARDENED: 환경변수
 apiKey := os.Getenv("API_KEY")
-if apiKey == "" {
-    log.Fatal("API_KEY not set")
-}
-```
+if apiKey == "" { log.Fatal("API_KEY not set") }
 
-```go
-// ❌ VULNERABLE: 취약한 JWT 검증
+// ❌ VULNERABLE: JWT alg 미검증
 token, _ := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
     return []byte("secret"), nil  // alg 검증 없음
 })
 
-// ✅ HARDENED: 알고리즘 검증 + 강력한 키
+// ✅ HARDENED: 알고리즘 검증
 token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
     if _, ok := t.Method.(*jwt.SigningMethodRSA); !ok {
         return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
@@ -499,4 +483,117 @@ go test -race ./...
 go test -fuzz=FuzzParseInput ./...
 ```
 
-Remember: Go의 강점은 단순하고 효율적인 동시성입니다. Goroutine, channel, 표준 라이브러리를 활용하세요. 조기 최적화는 악의 근원이지만, 대용량 시스템에서는 이 패턴들을 처음부터 이해하는 것이 비용이 큰 재작성을 방지합니다.
+## Error Handling + OTel 통합
+
+### Handle OR Return 원칙 (Dave Cheney)
+
+에러를 로깅하는 것은 에러를 처리하는 것이다. **로깅했으면 반환하지 말고, 반환했으면 로깅하지 말라.**
+
+```go
+// ❌ BAD: log AND return — 모든 레이어에서 중복 로그 발생
+func (s *Service) GetUser(ctx context.Context, id string) (*User, error) {
+    user, err := s.repo.Find(ctx, id)
+    if err != nil {
+        slog.Error("failed to find user", "error", err)  // 여기서 로깅
+        return nil, fmt.Errorf("find user: %w", err)      // 또 반환 → 상위에서도 로깅
+    }
+    return user, nil
+}
+
+// ✅ GOOD: 각 레이어는 wrap + return만. 로깅은 최상위 핸들러에서만.
+// Repo: return nil, fmt.Errorf("querying user %s: %w", id, err)
+// Service: return nil, fmt.Errorf("getting user: %w", err)   ← wrap만, 로깅 X
+// Handler (경계): 로깅 + OTel 기록 ↓
+func (h *Handler) GetUser(w http.ResponseWriter, r *http.Request) {
+    user, err := h.svc.GetUser(r.Context(), chi.URLParam(r, "id"))
+    if err != nil {
+        span := trace.SpanFromContext(r.Context())
+        span.RecordError(err)
+        span.SetStatus(codes.Error, "get user failed")
+        slog.Error("get user failed", "error", err, "user_id", chi.URLParam(r, "id"))
+        http.Error(w, "internal error", http.StatusInternalServerError)
+        return
+    }
+    // 결과: 로그 1줄에 전체 컨텍스트 체인
+    // "get user failed: error=getting user: querying user abc123: sql: no rows"
+}
+```
+
+### OTel Span에 에러 기록
+
+```go
+// span.RecordError()는 상태를 변경하지 않음 — 반드시 SetStatus()도 호출
+func (s *Service) ProcessOrder(ctx context.Context, req OrderRequest) error {
+    ctx, span := tracer.Start(ctx, "Service.ProcessOrder")
+    defer span.End()
+
+    if err := s.validate(ctx, req); err != nil {
+        span.RecordError(err)                           // 에러 이벤트 기록
+        span.SetStatus(codes.Error, "validation failed") // 스팬 실패 표시
+        return fmt.Errorf("validating order: %w", err)
+    }
+
+    // 성공적으로 재시도된 에러 — 스팬 실패가 아님
+    if err := s.callPayment(ctx, req); err != nil {
+        span.RecordError(err)  // 가시성을 위해 기록만
+        // SetStatus 호출 안 함 — 재시도로 복구됨
+        slog.Warn("payment retry", "error", err)
+    }
+
+    return nil
+}
+```
+
+### 에러 타입 선택 가이드
+
+| 패턴 | 용도 | 예시 |
+|------|------|------|
+| Sentinel Error | 잘 알려진 조건 분기 | `var ErrNotFound = errors.New("not found")` |
+| Custom Error Type | 구조화된 데이터 전달 (HTTP 상태 매핑) | `type ValidationError struct { Field, Message string }` |
+| `fmt.Errorf %w` | 컨텍스트 추가 전파 (기본값) | `fmt.Errorf("create order %s: %w", id, err)` |
+| `errors.Join` | 독립적 에러 수집 (fan-out, validation) | `errors.Join(err1, err2, err3)` |
+
+```go
+// Sentinel Error — 호출자가 분기할 때
+var ErrNotFound = errors.New("not found")
+// 호출: if errors.Is(err, ErrNotFound) { ... }
+
+// Custom Error Type — HTTP 상태 매핑이 필요할 때
+type AppError struct {
+    Code    int    // HTTP status code
+    Message string // 사용자 노출용
+    Err     error  // 원본 에러 (내부용)
+}
+func (e *AppError) Error() string { return e.Message }
+func (e *AppError) Unwrap() error { return e.Err }
+// 호출: var appErr *AppError; if errors.As(err, &appErr) { w.WriteHeader(appErr.Code) }
+
+// errors.Join — 여러 goroutine 결과 수집
+func validateAll(items []Item) error {
+    var errs []error
+    for _, item := range items {
+        if err := validate(item); err != nil {
+            errs = append(errs, err)
+        }
+    }
+    return errors.Join(errs...)  // nil if no errors
+}
+```
+
+## Clean Code Checklist
+
+### Readability
+- [ ] 함수 20-50줄 이내, Cognitive Complexity ≤ 15
+- [ ] Guard Clause로 중첩 최소화
+- [ ] 의도를 드러내는 이름 (패키지명 중복 금지: `user.Service` not `user.UserService`)
+- [ ] 좁은 스코프 = 짧은 이름, 넓은 스코프 = 설명적 이름
+- [ ] 주석은 WHY만 (비즈니스 규칙, 비자명한 최적화, 외부 시스템 우회 사유)
+
+### Error Handling
+- [ ] Handle OR Return — 절대 둘 다 하지 않음
+- [ ] 모든 에러에 `fmt.Errorf("context: %w", err)` 래핑
+- [ ] `errors.Is()`/`errors.As()` 사용 (문자열 비교 금지)
+- [ ] OTel 스팬에 `RecordError()` + `SetStatus()` 둘 다 호출
+- [ ] `ctx` 충실히 전달 — 트레이스 체인 끊지 않기
+
+Remember: Go의 강점은 단순하고 효율적인 동시성입니다. Goroutine, channel, 표준 라이브러리를 활용하세요. 프로파일링 먼저, 최적화는 나중에. 에러는 wrap하고 경계에서만 로깅하세요.
