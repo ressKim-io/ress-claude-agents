@@ -27,24 +27,26 @@ cd ress-claude-agents
 
 | | Count | Lines |
 |---|---|---|
-| Agents | 37 | ~14,500 |
+| Agents | 46 | ~18,600 |
 | Skills | 198 | ~74,700 |
 | Rules | 5 | ~590 |
 | Commands | 40 | - |
 | Tests | 51 cases | - |
 | Plugins | 9 bundles | - |
 | Workflows | 7 scenarios | - |
-| **Total** | | **87,000+** |
+| **Total** | | **91,000+** |
 
 ## Agents
 
-37 autonomous AI agents across 9 categories.
+46 autonomous AI agents across 10 categories.
 
 | Category | Agents |
 |---|---|
 | Strategy | `tech-lead`, `product-engineer`, `migration-expert` |
 | Frontend | `frontend-expert` |
 | DevOps & SRE | `security-scanner`, `k8s-troubleshooter`, `terraform-reviewer`, `incident-responder`, `code-reviewer`, `cost-analyzer`, `finops-advisor`, `otel-expert`, `debugging-expert`, `compliance-auditor` |
+| DevOps Reviewers | `k8s-reviewer`, `dockerfile-reviewer`, `cicd-reviewer`, `gitops-reviewer`, `observability-reviewer` |
+| Security Reviewers | `k8s-security-reviewer`, `container-security-reviewer`, `cicd-security-reviewer`, `network-security-reviewer` |
 | Architecture | `architect-agent`, `saga-agent` |
 | Platform & MLOps | `platform-engineer`, `mlops-expert`, `database-expert`, `database-expert-mysql`, `redis-expert` |
 | Service Mesh & Messaging | `service-mesh-expert`, `messaging-expert` |

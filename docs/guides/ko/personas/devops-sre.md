@@ -81,6 +81,47 @@
 
 ---
 
+## 코드 리뷰 섹션 (NEW)
+
+### DevOps 종합 리뷰어 (Category Budget System)
+
+| 에이전트 | 용도 |
+|---------|------|
+| `k8s-reviewer` | K8s manifest, Helm, Kustomize 종합 리뷰 (9 도메인) |
+| `dockerfile-reviewer` | Dockerfile, docker-compose 종합 리뷰 (8 도메인) |
+| `cicd-reviewer` | GitHub Actions, GitLab CI 종합 리뷰 (8 도메인) |
+| `gitops-reviewer` | ArgoCD, Flux 설정 종합 리뷰 (8 도메인) |
+| `observability-reviewer` | Prometheus, Alertmanager, OTel, Grafana 리뷰 (9 도메인) |
+
+### 보안 전용 리뷰어 (공격자 관점 — Red Team 대비)
+
+| 에이전트 | 용도 |
+|---------|------|
+| `k8s-security-reviewer` | CIS K8s Benchmark + MITRE ATT&CK — 컨테이너 탈출, RBAC 상승 |
+| `container-security-reviewer` | CIS Docker Benchmark — 공급망 공격, 시크릿 유출, 이미지 CVE |
+| `cicd-security-reviewer` | OWASP CI/CD Top 10 — 파이프라인 오염, 스크립트 인젝션, SLSA |
+| `network-security-reviewer` | Zero Trust — 측면 이동, IMDS, egress 데이터 유출 |
+
+### 리뷰 흐름
+
+```
+1. 인프라 변경
+   → k8s-reviewer / dockerfile-reviewer / cicd-reviewer (품질 리뷰)
+   → k8s-security-reviewer / container-security-reviewer (공격 표면 리뷰)
+
+2. 펜테스트 전 강화
+   → k8s-security-reviewer + network-security-reviewer + cicd-security-reviewer
+   → 각 에이전트의 "Red Team 대비 Checklist" 따라 수행
+
+3. GitOps 설정
+   → gitops-reviewer (sync, drift, 환경 격리)
+
+4. 관측성 설정
+   → observability-reviewer (알림 품질, 카디널리티, SLO 정합성)
+```
+
+---
+
 ## K8s 운영 섹션
 
 ### 스케줄링/트래픽

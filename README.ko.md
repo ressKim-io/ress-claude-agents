@@ -6,8 +6,8 @@
 
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
 ![Skills](https://img.shields.io/badge/Skills-198-2563EB?style=for-the-badge)
-![Agents](https://img.shields.io/badge/Agents-37-F97316?style=for-the-badge)
-![Lines](https://img.shields.io/badge/87K+_Lines-4F46E5?style=for-the-badge)
+![Agents](https://img.shields.io/badge/Agents-46-F97316?style=for-the-badge)
+![Lines](https://img.shields.io/badge/91K+_Lines-4F46E5?style=for-the-badge)
 
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -29,7 +29,7 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 > *이 반복 루프를 끊을 수 있다면?*
 
 저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
-198개의 Skills에 각 분야의 Best Practices를 구조화하고, 37개의 Agents가 자율적으로 판단하고 실행합니다.
+198개의 Skills에 각 분야의 Best Practices를 구조화하고, 46개의 Agents가 자율적으로 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
@@ -54,14 +54,14 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 | | Metric | Value | Description |
 |---|--------|-------|-------------|
-| 🤖 | **Agents** | 37 (~14,500줄) | 전략, 프론트엔드, 보안, SRE, MLOps 등 자율 실행 전문가 |
+| 🤖 | **Agents** | 46 (~18,600줄) | 전략, 프론트엔드, 보안, SRE, MLOps 등 자율 실행 전문가 |
 | 💡 | **Skills** | 198 (~74,700줄) | Go, Spring, Python, React/Next.js, K8s, MSA, AI/LLM 등 온디맨드 도메인 지식 |
 | 📏 | **Rules** | 5 (~590줄) | Git, 테스트, 보안, 워크플로우, 디버깅 자동 적용 규칙 |
 | ⚡ | **Commands** | 40 | `/go review`, `/log-feedback` 등 자동화 워크플로우 |
 | 📦 | **Plugins** | 9 bundles | 역할 기반 에이전트+스킬 번들 설치 |
 | 🔄 | **Workflows** | 7 scenarios | 시나리오 기반 전체 스택 설치 (EKS, MSA, K8s 등) |
 | 🧪 | **Tests** | 51 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
-| 📏 | **Total** | **87,000+ lines** | 17개 카테고리로 체계화된 AI 지식 체계 |
+| 📏 | **Total** | **91,000+ lines** | 17개 카테고리로 체계화된 AI 지식 체계 |
 
 </div>
 
@@ -122,7 +122,7 @@ cd ress-claude-agents
 
 ## 🤖 Agents
 
-Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (37 files, ~14,500줄).
+Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (46 files, ~18,600줄).
 
 > **Skills**는 "지식"이고, **Agents**는 "전문가"입니다. 자율적으로 판단하고 작업을 수행합니다.
 
@@ -154,6 +154,25 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | 📡 `otel-expert` | 대규모 OTel 아키텍처, Tail Sampling, 비용 최적화 | 10K+ RPS OTel 구축 시 |
 | 🐛 `debugging-expert` | Cascade failure 분석, cross-service 디버깅 | 연쇄 장애 발생 시 |
 | 📜 `compliance-auditor` | SOC2/HIPAA/GDPR/PCI-DSS 컴플라이언스 감사 | 보안 감사 시 |
+
+### DevOps Reviewers (Category Budget System)
+
+| Agent | Description | Auto-trigger |
+|-------|-------------|--------------|
+| 📋 `k8s-reviewer` | K8s manifest, Helm, Kustomize 종합 리뷰 (9 도메인) | K8s manifest 변경 후 |
+| 🐳 `dockerfile-reviewer` | Dockerfile, docker-compose 종합 리뷰 (8 도메인) | Dockerfile 변경 후 |
+| ⚙️ `cicd-reviewer` | GitHub Actions, GitLab CI 종합 리뷰 (8 도메인) | 워크플로우 변경 후 |
+| 🔄 `gitops-reviewer` | ArgoCD/Flux 설정 종합 리뷰 (8 도메인) | GitOps 설정 변경 후 |
+| 📡 `observability-reviewer` | Prometheus/Alertmanager/OTel/Grafana 리뷰 (9 도메인) | 관측성 설정 변경 후 |
+
+### Security Reviewers (Attack Surface Focus — Red Team 대비)
+
+| Agent | Description | Auto-trigger |
+|-------|-------------|--------------|
+| 🛡️ `k8s-security-reviewer` | CIS K8s Benchmark + MITRE ATT&CK 기반 공격자 관점 K8s 보안 | 보안 감사, 펜테스트 대비 |
+| 🔒 `container-security-reviewer` | CIS Docker Benchmark + 공급망 공격 방지 컨테이너 보안 | 이미지 보안 검증 시 |
+| 🔐 `cicd-security-reviewer` | OWASP CI/CD Top 10 + SLSA 파이프라인 보안 | CI/CD 보안 검증 시 |
+| 🌐 `network-security-reviewer` | Zero Trust + Lateral Movement 방지 네트워크 보안 | 네트워크 정책 리뷰 시 |
 
 ### Architecture & Distributed Systems
 
@@ -756,7 +775,7 @@ make all           # 전체 검증 (validate + test)
 ```
 ress-claude-agents/
 ├── .claude/
-│   ├── agents/               # 37 autonomous AI agents
+│   ├── agents/               # 46 autonomous AI agents
 │   │   ├── tech-lead.md      # 기술 전략, RFC/ADR, 팀 오케스트레이션
 │   │   ├── product-engineer.md # 요구사항, JTBD, RICE, MVP
 │   │   ├── migration-expert.md # 버전 업그레이드, 마이그레이션
@@ -889,7 +908,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Built with Claude Code**
 
-*AI를 도구가 아닌 동료로 — 87,000줄의 AI 지식 체계*
+*AI를 도구가 아닌 동료로 — 91,000줄의 AI 지식 체계*
 
 [![GitHub Stars](https://img.shields.io/github/stars/ressKim-io/ress-claude-agents?style=for-the-badge&color=yellow)](https://github.com/ressKim-io/ress-claude-agents)
 

@@ -81,6 +81,47 @@
 
 ---
 
+## Code Review Section (NEW)
+
+### DevOps Reviewers (Category Budget System)
+
+| Agent | Use Case |
+|-------|----------|
+| `k8s-reviewer` | K8s manifest, Helm, Kustomize review (9 domains) |
+| `dockerfile-reviewer` | Dockerfile, docker-compose review (8 domains) |
+| `cicd-reviewer` | GitHub Actions, GitLab CI review (8 domains) |
+| `gitops-reviewer` | ArgoCD, Flux configuration review (8 domains) |
+| `observability-reviewer` | Prometheus, Alertmanager, OTel, Grafana review (9 domains) |
+
+### Security Reviewers (Attack Surface — Red Team Prep)
+
+| Agent | Use Case |
+|-------|----------|
+| `k8s-security-reviewer` | CIS K8s Benchmark + MITRE ATT&CK — container escape, RBAC escalation |
+| `container-security-reviewer` | CIS Docker Benchmark — supply chain, secret leakage, image CVE |
+| `cicd-security-reviewer` | OWASP CI/CD Top 10 — pipeline poisoning, script injection, SLSA |
+| `network-security-reviewer` | Zero Trust — lateral movement, IMDS, egress exfiltration |
+
+### Review Flow
+
+```
+1. Infrastructure changes
+   → k8s-reviewer / dockerfile-reviewer / cicd-reviewer (general quality)
+   → k8s-security-reviewer / container-security-reviewer (attack surface)
+
+2. Pre-pentest hardening
+   → k8s-security-reviewer + network-security-reviewer + cicd-security-reviewer
+   → Follow "Red Team 대비 Checklist" in each agent
+
+3. GitOps configuration
+   → gitops-reviewer (sync, drift, environment isolation)
+
+4. Observability config
+   → observability-reviewer (alert quality, cardinality, SLO consistency)
+```
+
+---
+
 ## K8s Operations Section
 
 ### Scheduling / Traffic
