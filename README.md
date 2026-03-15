@@ -27,9 +27,9 @@ cd ress-claude-agents
 
 | | Count | Lines |
 |---|---|---|
-| Agents | 46 | ~18,600 |
-| Skills | 198 | ~74,700 |
-| Rules | 5 | ~590 |
+| Agents | 46 | ~18,700 |
+| Skills | 199 | ~75,200 |
+| Rules | 9 | ~1,020 |
 | Commands | 40 | - |
 | Tests | 51 cases | - |
 | Plugins | 9 bundles | - |

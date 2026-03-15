@@ -5,7 +5,7 @@
 # ress-claude-agents
 
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
-![Skills](https://img.shields.io/badge/Skills-198-2563EB?style=for-the-badge)
+![Skills](https://img.shields.io/badge/Skills-199-2563EB?style=for-the-badge)
 ![Agents](https://img.shields.io/badge/Agents-46-F97316?style=for-the-badge)
 ![Lines](https://img.shields.io/badge/91K+_Lines-4F46E5?style=for-the-badge)
 
@@ -29,14 +29,14 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 > *이 반복 루프를 끊을 수 있다면?*
 
 저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
-198개의 Skills에 각 분야의 Best Practices를 구조화하고, 46개의 Agents가 자율적으로 판단하고 실행합니다.
+199개의 Skills에 각 분야의 Best Practices를 구조화하고, 46개의 Agents가 자율적으로 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
 ──────────────────                    ──────────────────
 Google/StackOverflow 검색              → /k8s-security 로 즉시 패턴 적용
 Runbook 찾아서 수동 실행               → incident-responder 가 자동 진단
-"이거 어떻게 해요?" 반복 질문          → 87,000줄의 지식 베이스가 즉시 답변
+"이거 어떻게 해요?" 반복 질문          → 91,000줄의 지식 베이스가 즉시 답변
 100만 VU 테스트 시나리오 수동 작성     → load-tester-k6 가 템플릿 제공
 ```
 
@@ -54,9 +54,9 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 | | Metric | Value | Description |
 |---|--------|-------|-------------|
-| 🤖 | **Agents** | 46 (~18,600줄) | 전략, 프론트엔드, 보안, SRE, MLOps 등 자율 실행 전문가 |
-| 💡 | **Skills** | 198 (~74,700줄) | Go, Spring, Python, React/Next.js, K8s, MSA, AI/LLM 등 온디맨드 도메인 지식 |
-| 📏 | **Rules** | 5 (~590줄) | Git, 테스트, 보안, 워크플로우, 디버깅 자동 적용 규칙 |
+| 🤖 | **Agents** | 46 (~18,700줄) | 전략, 프론트엔드, 보안, SRE, MLOps 등 자율 실행 전문가 |
+| 💡 | **Skills** | 199 (~75,200줄) | Go, Spring, Python, React/Next.js, K8s, MSA, AI/LLM 등 온디맨드 도메인 지식 |
+| 📏 | **Rules** | 9 (~1,020줄) | Git, 테스트, 보안, 워크플로우, 디버깅, 클린코드, Go, Java, Spring 자동 적용 규칙 |
 | ⚡ | **Commands** | 40 | `/go review`, `/log-feedback` 등 자동화 워크플로우 |
 | 📦 | **Plugins** | 9 bundles | 역할 기반 에이전트+스킬 번들 설치 |
 | 🔄 | **Workflows** | 7 scenarios | 시나리오 기반 전체 스택 설치 (EKS, MSA, K8s 등) |
@@ -748,7 +748,7 @@ make all           # 전체 검증 (validate + test)
          → 필요한 Skill만 로드 (<5,000 tokens)
 ```
 
-매 세션마다 87,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
+매 세션마다 91,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
 
 ### Token Efficiency
 
