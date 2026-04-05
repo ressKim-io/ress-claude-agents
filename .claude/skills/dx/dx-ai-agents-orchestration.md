@@ -4,6 +4,16 @@
 
 ## AI Agent 오케스트레이션
 
+### Conductor vs Orchestrator 모드 (2026)
+
+| 특성 | Conductor 모드 | Orchestrator 모드 |
+|------|-------------|-----------------|
+| Agent 수 | 1개 | 다수 (병렬) |
+| 실행 방식 | 동기, 순차 | 비동기, 병렬 |
+| Context | 공유 context | 각자 독립 context window |
+| 인간 개입 | 매 응답 검토 | 전략적 체크포인트만 |
+| 적합 | 단일 작업, 탐색 | 대규모 기능, cross-module |
+
 ### 멀티 에이전트 협업 패턴
 
 ```
@@ -37,6 +47,31 @@
 |                                                                    |
 +------------------------------------------------------------------+
 ```
+
+### 루프 방지 & 안전장치
+
+```yaml
+constraints:
+  maxIterations: 8              # 반복 제한 (필수)
+  reflectionBeforeRetry: true   # 재시도 전 "왜 실패했나" 반성
+  timeoutMinutes: 30            # 시간 제한
+  escalateOnStuck: true         # 막히면 인간 에스컬레이션
+```
+
+### Model Routing (비용/성능 최적화)
+
+| 작업 | 모델 계층 | 비용 |
+|------|---------|------|
+| 포맷팅, 린트 수정 | Economy (Haiku) | $ |
+| 테스트 생성, 코드 작성 | Standard (Sonnet) | $$ |
+| 아키텍처, 복잡 디버깅 | Frontier (Opus) | $$$$ |
+
+### 실전 사례 (2026)
+
+- **TELUS**: 30% 속도↑, 50만 시간 절약, 13,000+ AI 솔루션
+- **Zapier**: 89% AI 채택, 800+ agent 배포
+- **Rakuten**: 1250만줄 코드, 7시간 자율 실행
+- **Gartner**: multi-agent 조회 1,445% 급증 (2024→2025)
 
 ### 오케스트레이션 구현
 
@@ -361,12 +396,13 @@ sum(increase(ai_guardrail_triggered_total[1h])) by (rule, action)
 
 ## 참조 스킬
 
-- `dx-ai-agents.md` - AI 에이전트 거버넌스, Copilot/Claude 통합
-- `/dx-ai-security` - 보안/품질
-- `/dx-metrics` - 메트릭 수집
-- `/cicd-devsecops` - CI/CD DevSecOps
-- `/finops-advanced` - FinOps
-- `/aiops` - AIOps
+- `dx-ai-agents.md` — AI 에이전트 거버넌스, 엔지니어 역할 전환
+- `agentic-coding.md` — Agentic Coding 4가지 모드 상세, Agent Supervision
+- `spring-ai.md` — Spring AI MCP 통합, Function Calling
+- `finops-ai.md` — AI 비용 관리, Model Routing 비용
+- `observability-genai.md` — GenAI 관측성, Agent 루프 감지
+- `/dx-ai-security` — 보안/품질
+- `/aiops` — AIOps
 
 ---
 

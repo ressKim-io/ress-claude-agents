@@ -514,3 +514,7 @@ sum(
 - [ ] 자동화 정책 적용
 
 **관련 skill**: `/k8s-autoscaling`, `/k8s-scheduling`, `/monitoring-metrics`
+
+> **AI 워크로드 비용 관리**: LLM API 토큰 비용, GPU 인스턴스 최적화, Model Routing,
+> Shift-Left FinOps for AI는 `finops-ai.md` 참조.
+> 2026 기준 GPU 워크로드가 클라우드 비용의 18%를 차지하며 98% 팀이 AI 비용을 관리 중.

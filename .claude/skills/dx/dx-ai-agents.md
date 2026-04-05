@@ -18,6 +18,49 @@ AI 에이전트 유형?
     └─ 하이브리드 ────────────> 일부 자율 + 인간 검토
             │
             └─ 권장: PR 자동 생성 + 인간 머지
+
+2026 엔지니어 역할 전환?
+    │
+    ├─ 기존: 코드 작성자 (Implementer)
+    │
+    └─ 2026: Agent 오케스트레이터 (Supervisor)
+            ├─ 시스템 설계 & 아키텍처
+            ├─ Agent 지시 & 조율
+            ├─ 출력 품질 평가
+            └─ 전략적 문제 분해
+```
+
+---
+
+## CRITICAL: 2026 엔지니어 역할 변화
+
+코딩의 전술적 작업(작성, 디버깅, 유지보수)이 AI로 이동.
+엔지니어 가치는 **설계, 조율, 평가, 전략적 분해**에 집중.
+
+| 영역 | 기존 역할 | 2026 역할 |
+|------|---------|---------|
+| 코드 작성 | 직접 구현 | Agent에 지시, 결과 검증 |
+| 코드 리뷰 | 동료 코드 리뷰 | **Agent 코드 리뷰** (인지 부하↑) |
+| 아키텍처 | 설계 + 구현 | 설계 (구현은 Agent) |
+| 테스트 | 직접 작성 | TDD 계약 정의, Agent가 작성 |
+| 디버깅 | 직접 분석 | Agent에 진단 지시, 근본 원인 판단 |
+
+### Context Engineering (Agent 품질의 핵심)
+
+Agent 출력 품질 = 주입된 컨텍스트 품질. **CLAUDE.md / Rules를 사람과 AI 모두 읽을 수 있게** 작성.
+
+- "좋은 코드를 작성하라" (X) → "Guard Clause, 메서드 50줄 이내, p99 < 500ms" (O)
+- BAD/GOOD 예시 코드 포함
+- 금지 패턴 명시 (anti-patterns)
+
+### TDD with Agents
+
+```
+1. 인간: 요구사항 + 수용 기준 정의
+2. Agent: 테스트 작성 (수용 기준 기반)
+3. 인간: 테스트 검토 & 승인 ← 계약 확정
+4. Agent: 테스트 통과하는 코드 구현
+5. 규칙: Agent는 테스트 수정 불가 (테스트 = 계약)
 ```
 
 ---
@@ -324,10 +367,12 @@ jobs:
 
 ## 참조 스킬
 
-- `dx-ai-agents-orchestration.md` - 멀티 에이전트 협업, 가드레일, Self-Healing, 메트릭
-- `/dx-ai-security` - 보안/품질
-- `/dx-metrics` - 메트릭 수집
-- `/cicd-devsecops` - CI/CD DevSecOps
+- `dx-ai-agents-orchestration.md` — 멀티 에이전트 협업, 가드레일, Self-Healing, 메트릭
+- `agentic-coding.md` — Agentic Coding 4가지 모드, Agent Supervision, Code Review 변화
+- `spring-ai.md` — Spring AI 기반 LLM 통합, MCP, Advisors
+- `finops-ai.md` — AI 비용 관리, Model Routing 비용 최적화
+- `/dx-ai-security` — 보안/품질
+- `/dx-metrics` — 메트릭 수집
 
 ---
 
