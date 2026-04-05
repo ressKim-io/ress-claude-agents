@@ -1,0 +1,10 @@
+name: ai-engineering
+description: "AI-First engineering: agentic coding, SDD workflow, AI cost, GenAI observability, Go/Spring AI integration"
+agents:
+  - code-reviewer
+  - tech-lead
+  - product-engineer
+skills:
+  categories:
+    - ai
+    - dx
