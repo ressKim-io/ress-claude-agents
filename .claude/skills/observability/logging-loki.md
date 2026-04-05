@@ -49,25 +49,128 @@ Loki vs ELK 선택
 
 ### Structured Metadata 설정
 
+OTLP attribute를 Loki stream label로 승격하는 방법은 **2가지**:
+
+#### 방법 1: `distributor.otlp_config` (권장, 안정적)
+
 ```yaml
 # loki-values.yaml
 loki:
   structuredConfig:
-    limits_config:
-      allow_structured_metadata: true  # Loki 3.0+ 기본 true
+    distributor:
       otlp_config:
-        resource_attributes:
-          ignore_defaults: true         # 기본 label 무시하고 직접 지정
-          attributes_config:
-            - action: index_label       # index label로 승격
-              attributes:
-                - service.name          # → service_name label (index)
-                - service.namespace     # → service_namespace label
+        default_resource_attributes_as_index_labels:
+          # 기본 17개를 완전히 대체 (리스트 전체 교체)
+          - service.name          # → service_name
+          - service.namespace     # → service_namespace
+          - deployment.environment.name
+          - k8s.namespace.name
+          - k8s.deployment.name
+          - log_type              # ← 커스텀 attribute 추가
 ```
 
-- `index_label`: 쿼리 `{}` 내에서 직접 필터 가능 (성능 좋음)
-- 그 외: structured metadata로 저장 (파이프라인 `|` 으로 접근)
-- **`ignore_defaults: true`**: Loki 기본 index label 세트 무시, 명시적 설정만 사용
+**CRITICAL**: 이 설정은 기본 리스트를 **완전히 대체**한다. 유지할 기본 attribute를 모두 명시해야 함.
+
+#### 방법 2: `limits_config.otlp_config` (known bug 있음)
+
+```yaml
+loki:
+  structuredConfig:
+    limits_config:
+      allow_structured_metadata: true
+      otlp_config:
+        resource_attributes:
+          ignore_defaults: false
+          attributes_config:
+            - action: index_label
+              attributes:
+                - log_type
+            - action: structured_metadata
+              attributes:
+                - host.name
+            - action: drop
+              regex: "internal\\..*"
+        log_attributes:
+          - action: structured_metadata
+            attributes:
+              - user.id
+              - trace_id
+```
+
+**Known Bug**: `limits_config.otlp_config`의 `index_label` action이 일부 환경에서 동작하지 않음 (GitHub #13440, #15927). **distributor 방식을 우선 사용**.
+
+#### attribute 타입별 승격 가능 여부
+
+| Attribute 타입 | index_label | structured_metadata | drop |
+|---|---|---|---|
+| resource_attributes | **가능** | 가능 | 가능 |
+| scope_attributes | 불가 | 가능 | 가능 |
+| log_attributes | **불가** | 가능 | 가능 |
+
+**CRITICAL**: `log_type`을 index_label로 쓰려면 **반드시 resource attribute**로 설정해야 한다. OTel SDK에서 log attribute로 넣으면 승격 불가.
+
+#### Naming 변환 규칙
+
+OTLP attribute의 `.`은 Loki에서 `_`로 자동 변환:
+- `service.name` → `service_name`
+- `deployment.environment.name` → `deployment_environment_name`
+- `log_type` → `log_type` (점 없으면 그대로)
+
+#### log_type을 resource attribute로 설정하는 방법
+
+**Spring Boot application.yml:**
+```yaml
+otel:
+  resource:
+    attributes:
+      log_type: app   # 기본값
+```
+
+**또는 OTel Collector attributes processor:**
+```yaml
+processors:
+  attributes/log_type:
+    actions:
+      - key: log_type
+        value: app
+        action: upsert
+```
+
+### Structured Metadata 제한
+
+| 항목 | 기본값 | 설정키 |
+|------|--------|--------|
+| 최대 크기 | 64KB/entry | `max_structured_metadata_size` |
+| 최대 항목 수 | 128/entry | `max_structured_metadata_entries_count` |
+| 스키마 요구 | v13 + TSDB | 미충족 시 OTLP 거부 |
+
+### 보존 정책과 index_label
+
+`log_type`이 index_label로 승격되면 보존 정책 selector에서 사용 가능:
+
+```yaml
+limits_config:
+  retention_period: 744h  # 기본 30일
+  retention_stream:
+    - selector: '{log_type="payment"}'
+      priority: 3
+      period: 43800h  # 5년 (전자금융거래법 22조)
+    - selector: '{log_type="audit"}'
+      priority: 2
+      period: 17520h  # 2년 (개인정보보호법)
+    - selector: '{log_type="app"}'
+      priority: 1
+      period: 168h    # 7일
+```
+
+### Mixed Workload 주의 (OTLP + Push API 동시 사용)
+
+OTLP와 `/loki/api/v1/push`를 동시에 사용하면 distributor 경합 발생 가능 (#19392):
+- 메모리 스파이크 (512MiB+)
+- goroutine 블로킹
+- append 실패
+
+**대응**: `rate_store.max_request_parallelism`을 600 이상으로 설정하거나, **OTLP 단일 경로**로 통일.
 
 ### `service_name` 필터 패턴
 

@@ -1,3 +1,11 @@
+---
+paths:
+  - "**/debug*"
+  - "**/troubleshoot*"
+  - "**/dev-logs/**"
+  - "**/postmortem/**"
+---
+
 # Debugging Rules
 
 디버깅 및 문제 해결 시 반드시 따라야 할 프로토콜.

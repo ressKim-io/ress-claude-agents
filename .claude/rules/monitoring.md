@@ -1,3 +1,18 @@
+---
+paths:
+  - "**/monitoring/**"
+  - "**/grafana/**"
+  - "**/*dashboard*"
+  - "**/*alert*"
+  - "**/*recording*"
+  - "**/tempo/**"
+  - "**/loki/**"
+  - "**/mimir/**"
+  - "**/alloy/**"
+  - "**/otel*/**"
+  - "**/pyroscope/**"
+---
+
 # Monitoring Rules
 
 모니터링 관련 코드 작업 시 반드시 따라야 할 규칙.
@@ -18,11 +33,14 @@ Grafana 대시보드 JSON, Tempo/Loki/Mimir/Alloy/Pyroscope 설정, PromQL/LogQL
 - `=~` regex에 Grafana multi-value 변수 사용 금지 → `select()`로 대체
 - Tempo v2 API: tag key에 scope prefix 필수 (`resource.service.name`, `span.http.route`)
 - 서비스 필터: `{resource.service.name="$svc"}` (`$service_name` 아님)
+- **serviceMap 쿼리는 PromQL** (TraceQL 아님): `["{client=\"$svc\"}", "{server=\"$svc\"}"]`
 
 ### LogQL (Loki Native OTLP)
 
 - 로그 레벨 필터: `detected_level="ERROR"` (대문자) — `level="error"` 사용 금지
-- 서비스 필터: `{service_name=~"$svc"}` — `{job=...}` 사용 금지
+- 서비스 필터: `{service_name=~"$svc", service_name=~".+"}` — `{job=...}` 사용 금지. **`service_name=~".+"` 필수** — `$svc`가 `.*`로 치환 시 Loki가 empty-compatible matcher 거부
+- kube-events: `{job="kube-events"} | json | namespace=~"$ns"` — `namespace`는 post-extraction 필터이지 **stream selector가 아님**. `{namespace=~"$ns"}`로 쓰면 No data
+- Loki label API (`/loki/api/v1/labels`): 기본 최근 1시간만 조회 — 트래픽 적은 환경에서 `start`/`end` 파라미터 필수
 
 ### PromQL
 
@@ -32,8 +50,9 @@ Grafana 대시보드 JSON, Tempo/Loki/Mimir/Alloy/Pyroscope 설정, PromQL/LogQL
 
 ### Recording Rule
 
-- `or on() vector(0)` — MSA 대비 `on()` 명시 필수
-- MSA 전환 시 `by (job)` 추가 필요 (현재 주석으로 표시)
+- MSA: `or (0 * sum by (job) (rate(...)))` — `on() vector(0)`은 job 레이블 미보존
+- MSA: `by (job)` 필수 — `job=~"{namespace}/.+"` + `by (job)` 또는 `by (job, le)`
+- Helm template: `{{ $labels.job }}` → `{{ "{{" }} $labels.job {{ "}}" }}` 이스케이프
 
 ### OTel Semantic Conventions
 
@@ -44,10 +63,27 @@ Grafana 대시보드 JSON, Tempo/Loki/Mimir/Alloy/Pyroscope 설정, PromQL/LogQL
 
 - `prometheus`, `loki`, `tempo`, `pyroscope` — 변경 절대 금지
 
+### ServiceMonitor (Alloy Scraping)
+
+- 외부 Helm chart(ArgoCD, Pyroscope 등)의 ServiceMonitor에 **반드시** `release: kube-prometheus-stack` 라벨 추가
+- 라벨 없으면 Alloy `prometheus.operator.servicemonitors` selector에 매칭 안 됨 → 메트릭 수집 불가
+- chart마다 키 이름 다름: `additionalLabels`, `labels` 등 — `helm show values`로 확인 필수
+
 ### Alloy
 
 - River 문법 사용 (표준 OTel Collector YAML 아님)
 - `loki.attribute.labels` 미작동 → Loki native OTLP + `otlp_config.index_label` 사용
+
+### Tempo (chart v1.x legacyConfig)
+
+- **overrides 경로 2가지 구분 필수**:
+  - `tempo.overrides.defaults` → `tempo.yaml` 본문에 렌더링 (standardOverrides) → `metrics_generator.processors` **사용 가능**
+  - `tempo.per_tenant_overrides` → `overrides.yaml` ConfigMap에 렌더링 (**LegacyOverrides**) → `metrics_generator` 필드 **미지원** (파싱 에러 → CrashLoopBackOff)
+- 제한값(max_traces, ingestion_rate 등)은 `per_tenant_overrides`로 설정
+- metricsGenerator processors 활성화는 `overrides.defaults`로 설정
+- `multitenancy_enabled: false`일 때 tenant 키: `"single-tenant"`
+- CrashLoopBackOff 중 ConfigMap 업데이트 미반영 가능 → `kubectl delete pod`로 강제 재생성
+- `metricsGenerator.processor` config만으로는 processors 미활성화 — `overrides.defaults`에서 명시적 활성화 필수
 
 ### Pyroscope
 
@@ -95,6 +131,11 @@ TraceQL: {resource.service.name="$svc"}
 | Pyroscope tag에 점(`.`) 사용 | Pyroscope가 invalid로 거부 |
 | OTel Java Agent + Spring Boot Starter 동시 사용 | 이중 계측 발생 |
 | Tempo span_metrics에 unbounded 차원 추가 (`http.url`, `user.id`) | 카디널리티 폭발 |
+| Tempo `per_tenant_overrides`에 `metrics_generator` 키 사용 | LegacyOverrides 파싱 에러 → CrashLoopBackOff. `overrides.defaults`에서 설정 |
+| OTel Java Agent 환경에서 `process_start_time_seconds` 사용 | OTel Agent 미노출 (Prometheus client 전용). `kube_pod_start_time` 대체 |
 | `grafana/dashboards/` 수정 없이 chart 내 JSON만 수정 | SSOT 위반, 다음 동기화 시 덮어씀 |
-| `or vector(0)`에서 `on()` 생략 | MSA 전환 시 다중 서비스 환경에서 오류 |
+| `or on() vector(0)` MSA에서 사용 | job 레이블 미보존 → `or (0 * sum by (job) (...))` 사용 |
+| `serviceMapQuery`에 TraceQL 문법 사용 | PromQL 레이블 매처만 허용 (`client`, `server` 레이블) |
 | Alloy에서 표준 OTel Collector YAML 문법 사용 | River 문법만 동작 |
+| kube-events LogQL에서 `{namespace=~"$ns"}` stream selector 사용 | `namespace`는 stream label 아님 → `| json` 후 post-extraction 필터로 사용 |
+| ServiceMonitor에 `release` 라벨 누락 | Alloy selector 매칭 불가 → 메트릭 수집 안 됨 |

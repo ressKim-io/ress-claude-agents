@@ -1,3 +1,10 @@
+---
+paths:
+  - "**/.github/**"
+  - "**/review*"
+  - "**/docs/review*"
+---
+
 # Code Review Rules
 
 PR 코드 리뷰 시 반드시 이 양식과 프로세스를 따른다.

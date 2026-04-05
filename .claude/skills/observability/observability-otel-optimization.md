@@ -37,7 +37,7 @@ config:
       initial_offset: latest
 ```
 
-### Kafka 토픽 설정
+### Kafka 토픽 설정 (CLI)
 
 ```bash
 # 토픽 생성 (파티션 수 = Gateway 인스턴스 수의 배수)
@@ -48,6 +48,154 @@ kafka-topics.sh --create \
   --config retention.ms=3600000 \
   --config compression.type=zstd \
   --config max.message.bytes=10485760
+```
+
+### Strimzi KafkaTopic CRD (Kubernetes 환경)
+
+CLI 대신 Strimzi KafkaTopic CRD로 GitOps 관리.
+
+```yaml
+# observability.traces.v1
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: observability.traces.v1
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: goti-kafka
+spec:
+  partitions: 6            # Back Collector replicas 이하
+  replicas: 3
+  config:
+    retention.ms: "3600000"          # 1시간 버퍼
+    retention.bytes: "5368709120"    # 5GB/partition
+    cleanup.policy: delete
+    compression.type: zstd           # traces: 구조 복잡, zstd가 효율적
+    max.message.bytes: "2097152"     # 2MB
+    segment.bytes: "536870912"       # 512MB
+    min.insync.replicas: "2"
+---
+# observability.logs.v1
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: observability.logs.v1
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: goti-kafka
+spec:
+  partitions: 12           # logs는 traces보다 고볼륨
+  replicas: 3
+  config:
+    retention.ms: "7200000"          # 2시간 (Loki 장애 대비 여유)
+    retention.bytes: "10737418240"   # 10GB/partition
+    cleanup.policy: delete
+    compression.type: lz4            # logs: 고처리량, lz4가 CPU 효율적
+    max.message.bytes: "1048576"     # 1MB
+    segment.bytes: "536870912"
+    min.insync.replicas: "2"
+```
+
+#### 파티션 수 가이드
+
+| 신호 | 권장 파티션 | 근거 |
+|------|-----------|------|
+| traces | 6 | Back Collector replica 수 이하 (idle 방지) |
+| logs | 12 | 볼륨 높음, 병렬 소비 필요 |
+| metrics | 불필요 | Mimir 직접 전송 (Kafka 미경유) |
+
+**핵심**: partitions >= Back Collector replicas. 초과하면 일부 pod idle.
+
+#### 압축 선택 기준
+
+| | zstd | lz4 |
+|---|---|---|
+| 압축률 | **30-40% 더 작음** | 보통 |
+| CPU (압축) | 높음 | **낮음** |
+| CPU (해제) | 보통 | **매우 낮음** |
+| 적합 | **traces** (복잡 구조) | **logs** (고처리량) |
+
+#### Strimzi KafkaUser (prod SCRAM-SHA-512)
+
+```yaml
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: otel-collector
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: goti-kafka
+spec:
+  authentication:
+    type: scram-sha-512
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: observability.
+          patternType: prefix    # observability.* 전체
+        operations: [Write, Describe]
+        host: "*"
+      - resource:
+          type: cluster
+          name: kafka-cluster
+          patternType: literal
+        operations: [IdempotentWrite]
+        host: "*"
+---
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: otel-backend-consumer
+  namespace: kafka
+  labels:
+    strimzi.io/cluster: goti-kafka
+spec:
+  authentication:
+    type: scram-sha-512
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: observability.
+          patternType: prefix
+        operations: [Read, Describe]
+        host: "*"
+      - resource:
+          type: group
+          name: otel-backend-
+          patternType: prefix
+        operations: [Read]
+        host: "*"
+```
+
+Strimzi가 자동으로 Secret 생성 (`otel-collector`, `otel-backend-consumer`). OTel Collector pod에서 환경변수로 주입.
+
+#### NetworkPolicy (monitoring → kafka)
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-monitoring-to-kafka
+  namespace: kafka
+spec:
+  podSelector:
+    matchLabels:
+      strimzi.io/cluster: goti-kafka
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: monitoring
+      ports:
+        - port: 9092    # dev plaintext
+          protocol: TCP
+        - port: 9093    # prod TLS+SASL
+          protocol: TCP
 ```
 
 ---
