@@ -29,6 +29,20 @@
 
 ---
 
+## Opus 4.7 프롬프팅 주의사항 (2026-04)
+
+Claude Opus 4.7은 이전 버전과 몇 가지 중요한 해석 차이가 있다.
+
+- **Literal interpretation** — 느슨한 해석을 하지 않음. 의도·제약·수락 기준을 첫 턴에 완전 명세
+- **Positive framing 선호** — `"Don't do X"`보다 `"Do Y"`가 더 효과적. 부정형 지시는 예시와 함께 사용
+- **Scaffolding 제거** — `"double-check before returning"`, `"N회마다 진행 보고"` 같은 강제 지시는 제거. 4.7은 자체 검증과 progress update를 내장
+- **응답 길이 자동 calibration** — 고정 verbosity 지시 대신 예시로 원하는 톤 제시
+- **더 direct한 tone** — emoji/validation phrasing 감소. 따뜻한 스타일이 필요하면 명시적 예시 제공
+
+세부: `rules/token-budget.md` · Anthropic Migration Guide 참조
+
+---
+
 ## Core Techniques
 
 ### Zero-shot

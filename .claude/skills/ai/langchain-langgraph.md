@@ -100,7 +100,7 @@ from langchain_anthropic import ChatAnthropic
 gpt = ChatOpenAI(model="gpt-4o", temperature=0, max_tokens=1000)
 
 # Anthropic
-claude = ChatAnthropic(model="claude-sonnet-4-20250514", temperature=0)
+claude = ChatAnthropic(model="claude-sonnet-4-6", temperature=0)
 
 # 공통 인터페이스
 response = gpt.invoke("안녕하세요")

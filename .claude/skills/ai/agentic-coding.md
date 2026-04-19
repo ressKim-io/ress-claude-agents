@@ -278,6 +278,20 @@ Level 2 (Agent 주도) 권장: 대부분 자율 실행하되 전략적 지점에
 
 ---
 
+## Opus 4.7 Behavior Changes (2026-04)
+
+Claude Opus 4.7은 agentic 작업에 맞게 기본 행동이 조정되었다. 기존 패턴에서 조정 필요.
+
+- **Subagent 덜 spawn** — Orchestrator 모드에서 병렬 fan-out이 필요하면 명시 ("Use subagents for each of: frontend, backend, database")
+- **Literal instruction following** — 한 항목에 대한 지시를 다른 항목에 자동 일반화하지 않음. 필요하면 "유사 케이스에도 적용" 명시
+- **자체 검증 내장** — Evaluator-Optimizer Loop에서 "반드시 재확인" 같은 scaffolding 제거 권장
+- **Progress update 내장** — "N개마다 요약" 같은 강제 지시 제거, 필요한 형식만 예시로 제공
+- **Effort level `xhigh` 기본** — 코딩·agentic 기본값. frontier 문제만 `max`, 단순·속도 우선만 `low`
+
+세부: `/token-budget` · `rules/token-budget.md`
+
+---
+
 ## 참조 스킬
 
 - `dx-ai-agents.md` — AI 에이전트 거버넌스, 엔터프라이즈 정책
