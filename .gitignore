@@ -24,3 +24,6 @@
 
 # Claude local settings (user-specific)
 .claude/settings.local.json
+
+# Temporary working files (session safety net for in-progress work)
+tmp/
