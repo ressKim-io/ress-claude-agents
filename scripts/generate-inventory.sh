@@ -82,10 +82,20 @@ extract_skill_meta() {
   local file="$1"
   local lines
   lines=$(wc -l < "$file" | tr -d ' ')
-  local title
-  title=$(head -1 "$file" | sed 's/^# //')
-  local desc
-  desc=$(sed -n '3p' "$file")
+  local first_line
+  first_line=$(head -1 "$file")
+
+  local title desc
+  if [ "$first_line" = "---" ]; then
+    # YAML front matter: title from first # heading after closing ---,
+    # desc from front matter `description:` field
+    title=$(awk '/^---$/{n++; next} n>=2 && /^# /{sub(/^# /,""); print; exit}' "$file")
+    desc=$(awk '/^---$/{n++; next} n==1 && /^description:/{sub(/^description: *"?/,""); sub(/"$/,""); print; exit}' "$file")
+  else
+    # Plain markdown: # Title on line 1, description on line 3
+    title=$(head -1 "$file" | sed 's/^# //')
+    desc=$(sed -n '3p' "$file")
+  fi
   echo "$lines|$title|$desc"
 }
 
