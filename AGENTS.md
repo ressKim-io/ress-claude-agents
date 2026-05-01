@@ -13,10 +13,10 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 
 | 자산 | 위치 | 개수 |
 |---|---|---|
-| Skills (도메인 패턴) | `.claude/skills/` | 220개 (Go, Java/Spring, K8s, MSA, observability, business 등 18 카테고리) |
+| Skills (도메인 패턴) | `.claude/skills/` | 233개 (Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등 20 카테고리) |
 | Agents (전문 에이전트) | `.claude/agents/` | 46개 (database-expert, k8s-troubleshooter, saga-agent 등) |
 | Rules (코딩/보안/워크플로우) | `.claude/rules/` | 14개 (이 AGENTS.md의 상세판) |
-| Plugins (역할별 번들) | `plugins/*.yml` | 10 bundles |
+| Plugins (역할별 번들) | `plugins/*.yml` | 12 bundles |
 | Workflows (시나리오 번들) | `.claude/workflows/*.yml` | 7 scenarios |
 
 **중요**: K8s/Cloud/Monitoring 섹션의 룰은 **install된 프로젝트**에 적용된다 (이 메타 레포 자체엔 K8s 없음).

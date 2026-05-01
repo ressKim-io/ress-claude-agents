@@ -48,11 +48,11 @@
 | **Plugins** | `plugins/*.yml` | `install.sh --plugin <name>` |
 | **Workflows** | `.claude/workflows/*.yml` | `install.sh --workflow <name>` |
 
-**현재 자산** (2026-04-19 기준):
-- Skills: 216개 (~83K줄), 17 카테고리
+**현재 자산** (2026-05-01 기준):
+- Skills: 233개 (~89K줄), 20 카테고리 (+ legal, operations 신설)
 - Agents: 46개 (~18K줄)
 - Commands: 43개
-- Plugins: 10 bundles
+- Plugins: 12 bundles (+ compliance, ops)
 - Workflows: 7 scenarios + `_base`
 
 상세 인덱스: [.claude/inventory.yml](.claude/inventory.yml)

@@ -1,0 +1,14 @@
+name: compliance
+description: "법적·컴플라이언스 운영 — 한국 위치정보법/PIPA/아동 보호, 글로벌 GDPR/SOC2/HIPAA, DSR 자동화, audit log"
+agents:
+  - compliance-auditor
+  - security-scanner
+  - tech-lead
+skills:
+  categories:
+    - legal
+    - security
+  individual:
+    - business/audit-log
+    - business/multi-tenancy
+    - observability/logging-compliance

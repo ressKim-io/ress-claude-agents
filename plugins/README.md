@@ -23,7 +23,12 @@
 | backend-python | Python 백엔드 | 3 | 2 |
 | sre-full | SRE 전체 툴킷 | 6 | 4 |
 | ai-ml | AI/ML 번들 | 2 | 2 |
+| ai-engineering | AI-First 엔지니어링 (agentic, SDD, GenAI 관측) | 3 | 2 |
 | messaging | 메시징 시스템 | 2 | 1 |
+| frontend | 프론트엔드 (React/Next.js/디자인 시스템) | 1 | 1 |
+| strategy | 기술 전략 (RFC/ADR, migration, product thinking) | 3 | 1 |
+| **compliance** | **법적·컴플라이언스 (KR PIPA/위치정보법/아동, GDPR, DSR, audit)** | **3** | **2 + 3 individual** |
+| **ops** | **운영 표준화 (Runbook, 회고, 인시던트, on-call, SRE)** | **4** | **2 + 3 individual** |
 
 ## Plugin Manifest 형식
 
