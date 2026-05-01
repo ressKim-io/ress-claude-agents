@@ -1,0 +1,15 @@
+name: ops
+description: "운영 표준화 번들 — Runbook 표준/실행 자동화, Blameless 회고, 인시던트 playbook, on-call, SRE 도구"
+agents:
+  - incident-responder
+  - k8s-troubleshooter
+  - debugging-expert
+  - tech-lead
+skills:
+  categories:
+    - operations
+    - sre
+  individual:
+    - observability/observability-incident-playbook
+    - observability/alerting-discord
+    - observability/aiops-remediation
