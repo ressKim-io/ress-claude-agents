@@ -1,0 +1,128 @@
+name: new-domain
+type: handoff-flow
+description: "신규 도메인 발굴 → 경계 정의 → API 계약 → 도메인 expert 구현 → 통합 테스트. SaaS에서 새 비즈니스 도메인을 0에서 시작할 때 흐름. business/ skill 카테고리와 짝."
+
+external_inputs: [idea]
+
+stages:
+  - name: discovery
+    agent: product-engineer
+    inputs: [idea]
+    outputs: [user-story, mvp-scope, acceptance-criteria]
+    skills: [dx/spec-driven-development]
+    description: "Event Storming, User Story Mapping, MVP 정의"
+
+  - name: bounded-context
+    agent: architect-agent
+    inputs: [user-story, mvp-scope, acceptance-criteria]
+    outputs: [bounded-context, service-boundary, data-model]
+    skills: [msa/msa-ddd, architecture/hexagonal-clean-architecture, architecture/modular-monolith]
+    description: "DDD bounded context, ubiquitous language, 데이터 소유권"
+
+  - name: api-design
+    agent: architect-agent
+    inputs: [bounded-context, service-boundary]
+    outputs: [api-contract]
+    skills: [msa/contract-first, msa/api-design, msa/grpc]
+    description: "OpenAPI 또는 protobuf 우선 설계 (contract-first)"
+
+  - name: cost-decision
+    agent: tech-lead
+    inputs: [bounded-context, mvp-scope, api-contract]
+    outputs: [adr]
+    skills: [dx/rfc-adr, dx/engineering-strategy]
+    description: "Build vs Buy, Provider 선택, 데이터 저장 결정"
+
+  # 비즈니스 도메인별 expert 분기 (선택 사항)
+  - name: domain-expert-billing
+    agent: tech-lead   # subscription/credit 관련 결정 시
+    inputs: [bounded-context, api-contract]
+    outputs: [adr]
+    skills: [business/subscription-billing, business/credit-system, business/payment-integration]
+    optional: true
+    description: "결제/구독/Credit 도메인이면 business/* skill 적용"
+
+  - name: domain-expert-search
+    agent: tech-lead
+    inputs: [bounded-context, api-contract]
+    outputs: [adr]
+    skills: [business/search-recommend, ai/vector-db]
+    optional: true
+    description: "검색/추천 도메인이면 적용"
+
+  - name: domain-expert-ticketing
+    agent: ticketing-expert
+    inputs: [user-story, mvp-scope]
+    outputs: [bounded-context, api-contract, runbook]
+    optional: true
+    description: "대규모 티켓팅 (Virtual Waiting Room, 좌석 잠금)"
+
+  - name: implementation
+    agent: go-expert
+    inputs: [api-contract, adr, acceptance-criteria]
+    outputs: [code, unit-test, integration-test]
+    alternatives: [java-expert, python-expert]
+    skills: [msa/contract-first, msa/msa-saga, msa/idempotent-consumer]
+
+  # 메시징 도메인 (event-driven)
+  - name: messaging-design
+    agent: messaging-expert
+    inputs: [bounded-context, api-contract]
+    outputs: [code, runbook]
+    skills: [messaging/kafka-streams, messaging/outbox-pattern, msa/msa-event-driven]
+    optional: true
+
+  # 분산 트랜잭션
+  - name: saga-design
+    agent: saga-agent
+    inputs: [bounded-context, api-contract]
+    outputs: [code, runbook]
+    skills: [msa/msa-saga, msa/distributed-tracing-trouble]
+    optional: true
+
+  # 데이터베이스 설계
+  - name: data-design
+    agent: database-expert   # 또는 database-expert-mysql
+    inputs: [data-model, code]
+    outputs: [code-review-comment, migration-plan, runbook]
+    alternatives: [database-expert-mysql]
+    skills: [infrastructure/database-postgres, msa/database-sharding]
+
+  # 멀티테넌시 적용
+  - name: multi-tenancy-decision
+    agent: tech-lead
+    inputs: [bounded-context]
+    outputs: [adr]
+    skills: [business/multi-tenancy]
+    description: "격리 모델: row / schema / db (가장 비싼 결정 — 변경 비용 높음)"
+
+  - name: integration-test
+    agent: load-tester
+    inputs: [api-contract, code]
+    outputs: [load-test-report]
+    skills: [sre/load-testing-strategy]
+
+  - name: code-review
+    agent: code-reviewer
+    inputs: [code]
+    outputs: [code-review-comment]
+
+  - name: security-baseline
+    agent: security-scanner
+    inputs: [code]
+    outputs: [security-finding]
+    skills: [security/secure-coding-2026, security/owasp-top-10]
+    parallel_with: code-review
+
+# 신규 도메인 시작 시 ADR 작성 권장 순서 (business/ 패턴):
+#   1. multi-tenancy 격리 모델 (가장 비싼 결정)
+#   2. 인증 Provider (Kakao/Google/Apple)
+#   3. 결제 Provider (PortOne/Toss/Stripe)
+#   4. 알림 채널 + Provider
+#   → AGENTS.md §Business Patterns 참조
+
+# 핸드오프 의도:
+#   discovery → bounded-context → api-design → cost-decision
+#   cost-decision + api-design → implementation
+#   implementation → integration-test + code-review (병렬)
+#   domain-expert-* (optional) — 도메인별 분기

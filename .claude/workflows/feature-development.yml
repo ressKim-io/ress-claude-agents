@@ -1,0 +1,77 @@
+name: feature-development
+type: handoff-flow
+description: "신규 기능 개발 흐름 — 요구사항 → 설계 → ADR → 구현 → 리뷰 → 모니터링. 각 단계의 산출물이 다음 단계의 입력이 되도록 강제 (validate-agent-handoff.sh로 검증)."
+
+# handoff-flow 형식:
+#   external_inputs: 워크플로우 시작 전부터 존재하는 입력 (vocabulary 외 + 기존 자산)
+#   stages: 단계별 agent + 입출력 artifact
+#   각 stage의 inputs는 (a) external_inputs 또는 (b) 직전 stages의 outputs에 포함되어야 한다.
+
+external_inputs: [idea]
+
+stages:
+  - name: requirements
+    agent: product-engineer
+    inputs: [idea]   # external
+    outputs: [user-story, acceptance-criteria, mvp-scope]
+    skills: [dx/spec-driven-development, dx/rfc-adr]
+
+  - name: design
+    agent: architect-agent
+    inputs: [user-story, acceptance-criteria, mvp-scope]
+    outputs: [bounded-context, service-boundary, api-contract]
+    skills: [msa/contract-first, msa/msa-ddd, architecture/hexagonal-clean-architecture]
+
+  - name: decision
+    agent: tech-lead
+    inputs: [user-story, bounded-context, mvp-scope]
+    outputs: [adr]
+    skills: [dx/rfc-adr, dx/adr-retrospective, dx/engineering-strategy]
+
+  - name: implementation
+    agent: go-expert   # 또는 java-expert / python-expert / frontend-expert
+    inputs: [api-contract, adr, acceptance-criteria]
+    outputs: [code, unit-test, integration-test]
+    alternatives: [java-expert, python-expert, frontend-expert]
+    skills: [go/effective-go, msa/contract-first, msa/msa-saga]
+
+  - name: code-review
+    agent: code-reviewer
+    inputs: [code]
+    outputs: [code-review-comment]
+    skills: [dx/clean-code]
+
+  - name: security-review
+    agent: security-scanner
+    inputs: [code]
+    outputs: [security-finding]
+    skills: [security/secure-coding-2026, security/owasp-top-10]
+    parallel_with: code-review
+
+  - name: monitoring
+    agent: otel-expert
+    inputs: [code]
+    outputs: [dashboard, alert-rule, slo-definition]
+    skills: [observability/observability-otel, sre/sli-slo-design, observability/observability-incident-playbook]
+
+  - name: load-test
+    agent: load-tester
+    inputs: [api-contract, code]
+    outputs: [load-test-report]
+    skills: [sre/load-testing-strategy]
+
+  - name: record
+    agent: dev-logger
+    inputs: [adr, code-review-comment]
+    outputs: [dev-log]
+
+# 핸드오프 의도:
+#   requirements → design        : user-story 전달
+#   design → decision            : bounded-context, mvp-scope 전달
+#   design → implementation       : api-contract 전달
+#   decision → implementation    : adr 전달
+#   implementation → code-review : code, pr 전달
+#   implementation → security-review (병렬)
+#   implementation → monitoring   : code 전달
+#   implementation → load-test    : api-contract, code 전달
+#   decision + code-review → record : adr, code-review-comment 전달

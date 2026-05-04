@@ -1,0 +1,73 @@
+name: incident-to-action
+type: handoff-flow
+description: "장애 → RCA → 포스트모템 → 재발방지 ADR → 모니터링 강화. SEV1/SEV2 인시던트 발생 시 표준 흐름. 각 단계의 산출물이 다음 단계로 핸드오프된다."
+
+# 인시던트 워크플로우는 기존 시스템(code/k8s-manifest)을 디버깅하므로 external로 받는다.
+external_inputs: [alert, code, k8s-manifest]
+
+stages:
+  - name: triage
+    agent: incident-responder
+    inputs: [alert]   # external (Prometheus alert / on-call page)
+    outputs: [incident-report]
+    skills: [observability/observability-incident-playbook, observability/aiops-remediation]
+
+  - name: rca
+    agent: debugging-expert
+    inputs: [incident-report, code, alert]
+    outputs: [root-cause-analysis]
+    skills: [observability/observability-incident-playbook]
+    description: "Cross-service 디버깅, blast radius 추적, 5 Whys"
+
+  # K8s 인시던트인 경우 병렬 트리아지
+  - name: k8s-triage
+    agent: k8s-troubleshooter
+    inputs: [k8s-manifest, alert]
+    outputs: [root-cause-analysis, runbook]
+    skills: [kubernetes/k8s-troubleshooting]
+    parallel_with: rca
+    optional: true
+
+  - name: postmortem
+    agent: dev-logger
+    inputs: [incident-report, root-cause-analysis]
+    outputs: [postmortem]
+    skills: [operations/incident-postmortem]
+    description: "Blameless 회고, 5 Whys, Action items P0/P1/P2"
+
+  - name: prevent-decision
+    agent: tech-lead
+    inputs: [postmortem]
+    outputs: [adr]
+    skills: [dx/rfc-adr, dx/adr-retrospective]
+    description: "재발 방지 결정 — 새 ADR 또는 기존 ADR 재평가"
+
+  - name: monitoring-strengthen
+    agent: otel-expert
+    inputs: [root-cause-analysis, adr]
+    outputs: [alert-rule, dashboard, slo-definition]
+    skills: [observability/observability-otel, sre/sli-slo-design]
+    description: "감지 못 한 신호를 alert rule로 변환, SLO 재산정"
+
+  - name: runbook-update
+    agent: incident-responder
+    inputs: [postmortem, root-cause-analysis]
+    outputs: [runbook]
+    skills: [operations/runbook-driven-ops]
+
+  - name: action-tracking
+    agent: dev-logger
+    inputs: [postmortem]
+    outputs: [action-items, dev-log]
+
+# 한국 시장 hook:
+#   PIPA / 위치정보법 24시간 신고 의무 → operations/incident-postmortem 외부 통신 § 참조
+#   금감원 사고 보고 (금융권) → 별도 컴플라이언스 흐름
+
+# 핸드오프 의도:
+#   triage → rca               : incident-report 전달
+#   rca → postmortem            : root-cause-analysis 전달
+#   postmortem → prevent-decision : 재발 방지 결정
+#   prevent-decision + rca → monitoring-strengthen : alert/dashboard 강화
+#   postmortem → runbook-update : runbook 보강
+#   postmortem → action-tracking : 후속 조치 추적

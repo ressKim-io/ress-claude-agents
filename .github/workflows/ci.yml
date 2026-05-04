@@ -92,3 +92,6 @@ jobs:
 
       - name: Validate inventory labels freshness
         run: ./scripts/generate-inventory-labels.sh validate
+
+      - name: Validate agent handoff (P3 위계)
+        run: ./scripts/validate-agent-handoff.sh all
