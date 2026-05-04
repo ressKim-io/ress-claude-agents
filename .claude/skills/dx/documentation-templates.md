@@ -1,4 +1,5 @@
 ---
+name: documentation-templates
 description: 프로젝트 문서 템플릿 모음 — ADR, 부하테스트, 포스트모템, 마이그레이션, CI/CD, SLI/SLO 등 14종
 ---
 

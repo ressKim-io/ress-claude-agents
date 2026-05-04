@@ -73,3 +73,22 @@ jobs:
 
       - name: Run shellcheck on scripts
         run: shellcheck scripts/*.sh
+
+  drift:
+    name: Rules / Frontmatter Drift
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate AGENTS.md ↔ rules drift
+        run: ./scripts/validate-rules-drift.sh all
+
+      - name: Validate skill/agent frontmatter
+        run: ./scripts/validate-skill-frontmatter.sh all
+
+      - name: Validate inventory labels freshness
+        run: ./scripts/generate-inventory-labels.sh validate
