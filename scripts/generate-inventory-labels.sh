@@ -10,7 +10,6 @@
 #                      → Slash command, Subagent, .claude/agents 직접 의존이면 claude-only
 #   domain_specificity : project-specific | general
 #                        → business/legal/operations 카테고리는 project-specific
-#   last_modified    : git log 기반 (YYYY-MM-DD)
 #
 # 사용:
 #   ./scripts/generate-inventory-labels.sh           # 생성 + 리포트
@@ -87,14 +86,6 @@ classify_domain_specificity() {
 }
 
 # ---------------------------------------------------------------------------
-# git log 기반 last_modified
-# ---------------------------------------------------------------------------
-get_last_modified() {
-    local file="$1"
-    git log -1 --format='%aI' -- "$file" 2>/dev/null | cut -d'T' -f1 || echo "unknown"
-}
-
-# ---------------------------------------------------------------------------
 # Main: skills/agents 순회하며 라벨 부여
 # ---------------------------------------------------------------------------
 generate_labels() {
@@ -113,11 +104,11 @@ generate_labels() {
         echo "#   model_dependency  : high(시간 가변) / low(안정적)"
         echo "#   portability       : universal(모든 도구) / claude-only"
         echo "#   domain_specificity: project-specific / general"
-        echo "#   last_modified     : git log 기반 (YYYY-MM-DD)"
+        echo "# (last_modified는 git log -1 --format='%aI' -- <path>로 조회)"
         echo ""
         echo "skills:"
 
-        # category | name | model_dep | portability | domain_spec | last_mod
+        # category | name | model_dep | portability | domain_spec
         local entries=()
         while IFS= read -r file; do
             local rel="${file#"$SKILLS_DIR"/}"
@@ -126,17 +117,16 @@ generate_labels() {
             local name
             name=$(basename "$file" .md)
 
-            local md po ds lm
+            local md po ds
             md=$(classify_model_dependency "$file" "$category")
             po=$(classify_portability "$file")
             ds=$(classify_domain_specificity "$category")
-            lm=$(get_last_modified "$file")
 
-            entries+=("${category}|${name}|${md}|${po}|${ds}|${lm}")
+            entries+=("${category}|${name}|${md}|${po}|${ds}")
         done < <(find "$SKILLS_DIR" -type f -name "*.md" | sort)
 
         local prev_cat=""
-        printf '%s\n' "${entries[@]}" | sort -t'|' -k1,1 -k2,2 | while IFS='|' read -r cat name md po ds lm; do
+        printf '%s\n' "${entries[@]}" | sort -t'|' -k1,1 -k2,2 | while IFS='|' read -r cat name md po ds; do
             if [[ "$cat" != "$prev_cat" ]]; then
                 echo "  $cat:"
                 prev_cat="$cat"
@@ -145,34 +135,27 @@ generate_labels() {
             echo "      model_dependency: $md"
             echo "      portability: $po"
             echo "      domain_specificity: $ds"
-            echo "      last_modified: \"$lm\""
         done
 
         echo ""
         echo "agents:"
 
-        # agents는 카테고리 분류는 generate-inventory.sh와 동일하지 않게 단순화
         local agent_entries=()
         for file in "$AGENTS_DIR"/*.md; do
             [[ -f "$file" ]] || continue
             local name
             name=$(basename "$file" .md)
-            # category는 inventory.yml과 일관성을 위해 단순 추론 (필요 시 generate-inventory.sh 호출 가능)
             local category="agent"
-            local md po lm
+            local md
             md=$(classify_model_dependency "$file" "$category")
-            po=$(classify_portability "$file")
-            lm=$(get_last_modified "$file")
             # agents는 모두 claude-only로 단정 (Subagent는 Claude 고유 메커니즘)
-            po="claude-only"
-            agent_entries+=("${name}|${md}|${po}|${lm}")
+            agent_entries+=("${name}|${md}|claude-only")
         done
 
-        printf '%s\n' "${agent_entries[@]}" | sort -t'|' -k1,1 | while IFS='|' read -r name md po lm; do
+        printf '%s\n' "${agent_entries[@]}" | sort -t'|' -k1,1 | while IFS='|' read -r name md po; do
             echo "  - name: $name"
             echo "    model_dependency: $md"
             echo "    portability: $po"
-            echo "    last_modified: \"$lm\""
         done
     } > "$tmp"
 
