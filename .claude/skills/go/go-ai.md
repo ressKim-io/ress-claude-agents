@@ -275,7 +275,7 @@ func setupRAG(ctx context.Context) error {
     // 4. 유사 검색 + LLM 응답
     results, _ := store.SimilaritySearch(ctx, "Go 동시성", 3)
 
-    llm, _ := anthropic.New(anthropic.WithModel("claude-sonnet-4-20250514"))
+    llm, _ := anthropic.New(anthropic.WithModel("claude-sonnet-4-6"))
     // results를 컨텍스트로 주입하여 LLM 호출
     // ...
     return nil

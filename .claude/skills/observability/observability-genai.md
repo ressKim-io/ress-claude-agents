@@ -45,10 +45,10 @@ GenAI 관측 대상?
 ```
 gen_ai.*                         ← 최상위 namespace
 ├── gen_ai.system               = "anthropic" | "openai" | "ollama"
-├── gen_ai.request.model        = "claude-sonnet-4-20250514"
+├── gen_ai.request.model        = "claude-opus-4-7"
 ├── gen_ai.request.temperature  = 0.7
 ├── gen_ai.request.max_tokens   = 4096
-├── gen_ai.response.model       = "claude-sonnet-4-20250514"
+├── gen_ai.response.model       = "claude-opus-4-7"
 ├── gen_ai.response.finish_reason = "stop" | "max_tokens" | "tool_use"
 ├── gen_ai.usage.input_tokens   = 1523
 ├── gen_ai.usage.output_tokens  = 847
@@ -73,7 +73,7 @@ gen_ai.agent.*
 [HTTP Request Span]
   └── [gen_ai chat Span]          ← gen_ai.operation.name = "chat"
         ├── gen_ai.system = "anthropic"
-        ├── gen_ai.request.model = "claude-sonnet-4-20250514"
+        ├── gen_ai.request.model = "claude-opus-4-7"
         ├── gen_ai.usage.input_tokens = 1523
         ├── gen_ai.usage.output_tokens = 847
         │

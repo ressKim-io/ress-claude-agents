@@ -171,7 +171,7 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           # 선택: 특정 모델 지정
-          # model: claude-sonnet-4-20250514
+          # model: claude-opus-4-7
 ```
 
 ### PR 자동 리뷰 + 멘션 응답
@@ -327,7 +327,7 @@ add_original_user_description = true
 [config]
 model = "gpt-4"
 # 또는 Claude 사용
-# model = "claude-3-sonnet"
+# model = "claude-sonnet-4-6"
 ```
 
 ## 추천 설정 조합
@@ -450,7 +450,7 @@ actionlint .github/workflows/claude-review.yml
     anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
     allowed_tools: "View,GlobTool,GrepTool"  # 수정 도구 제외
     # 작은 모델 사용
-    model: claude-haiku-3-20250522
+    model: claude-haiku-4-5
 ```
 
 ### 조건부 실행

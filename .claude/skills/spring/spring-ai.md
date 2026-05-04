@@ -107,7 +107,7 @@ spring:
       api-key: ${ANTHROPIC_API_KEY}
       chat:
         options:
-          model: claude-sonnet-4-20250514
+          model: claude-sonnet-4-6
           temperature: 0.7
           max-tokens: 4096
 
