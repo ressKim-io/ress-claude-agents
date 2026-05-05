@@ -18,8 +18,8 @@ git log --oneline -20                                          # 최근 commit
 
 | Phase | Status | Started | Completed | Branch / PR | Notes |
 |---|---|---|---|---|---|
-| P0. 영구 기록 + commit | **in_progress** | 2026-05-05 | — | main | 본 문서 + 0002 본문 + dev log 생성 중 |
-| P1. Schema 동결 | pending | — | — | — | `schemas/skill-manifest.v1.json` + `project-profile.v1.json` + `agent-manifest.v1.json`. JSON Schema lint + `source-command-log-summary` validate 통과 |
+| P0. 영구 기록 + commit | **completed** | 2026-05-05 | 2026-05-05 | main | 0002 본문(`f6fb2fe`) + dev-log(`0043b12`, `e3e32ec`) + progress 트래커 |
+| P1. Schema 동결 | **in_progress** | 2026-05-05 | — | main | `schemas/skill-manifest.v1.json` + `project-profile.v1.json` + `agent-manifest.v1.json`. JSON Schema lint + `source-command-log-summary` validate 통과 |
 | P2. PoC 10개 변환 | pending | — | — | — | k8s 5 + go 5. 후보: k8s-autoscaling, k8s-helm, k8s-security, k8s-scheduling, k8s-traffic / go-testing, go-database, go-microservice, go-errors, go-gin |
 | P3. Control plane PoC | pending | — | — | — | `@ress/claude-agents` CLI 4 subcommand (probe/match/init/lint), TS+Node 18+ ESM. tsup ESM 번들 |
 | P4. Multi-AI adapter | pending | — | — | — | `.cursor/rules/` 자동 생성, AGENTS.md primary 승격, CLAUDE.md→symlink. 기존 `.codex/agents/*.toml` 변환 로직 흡수 |
