@@ -19,8 +19,8 @@ git log --oneline -20                                          # 최근 commit
 | Phase | Status | Started | Completed | Branch / PR | Notes |
 |---|---|---|---|---|---|
 | P0. 영구 기록 + commit | **completed** | 2026-05-05 | 2026-05-05 | main | 0002 본문(`f6fb2fe`) + dev-log(`0043b12`, `e3e32ec`) + progress 트래커 |
-| P1. Schema 동결 | **in_progress** | 2026-05-05 | — | main | `schemas/skill-manifest.v1.json` + `project-profile.v1.json` + `agent-manifest.v1.json`. JSON Schema lint + `source-command-log-summary` validate 통과 |
-| P2. PoC 10개 변환 | pending | — | — | — | k8s 5 + go 5. 후보: k8s-autoscaling, k8s-helm, k8s-security, k8s-scheduling, k8s-traffic / go-testing, go-database, go-microservice, go-errors, go-gin |
+| P1. Schema 동결 | **completed** | 2026-05-05 | 2026-05-05 | main | 3 schema + `scripts/validate-schemas.sh` + README. ajv-cli@5 Draft 2020-12 compile + sample validate 통과 (source-command-log-summary, code-reviewer) |
+| P2. PoC 10개 변환 | **in_progress** | — | — | — | k8s 5 + go 5. 후보: k8s-autoscaling, k8s-helm, k8s-security, k8s-scheduling, k8s-traffic / go-testing, go-database, go-microservice, go-errors, go-gin. 진입 시 P2 strict 모드(description ≥40) lint script flag 추가 |
 | P3. Control plane PoC | pending | — | — | — | `@ress/claude-agents` CLI 4 subcommand (probe/match/init/lint), TS+Node 18+ ESM. tsup ESM 번들 |
 | P4. Multi-AI adapter | pending | — | — | — | `.cursor/rules/` 자동 생성, AGENTS.md primary 승격, CLAUDE.md→symlink. 기존 `.codex/agents/*.toml` 변환 로직 흡수 |
 | P5. Enforcement hook | pending | — | — | — | PreToolUse `admit` 1개. 초기 warning 모드(exit 0 + stderr) |
@@ -55,6 +55,10 @@ git log --oneline -20                                          # 최근 commit
 | 2026-05-05 | P0 | `.cursor/rules/` P4에서 동시 (Q4) | 사용자 multi-AI 우선순위에 cursor 포함 |
 | 2026-05-05 | P0 | PreToolUse hook 초기 warning 모드 (Q5) | activation baseline 잡힌 후 deny 전환 |
 | 2026-05-05 | P0 | inventory.yml에 manifest 메타 흡수 (Q7) | generate-inventory.sh가 frontmatter 직접 파싱 |
+| 2026-05-05 | P1 | JSON Schema Draft 2020-12 채택 (`$schema` 명시) | ajv-cli `--spec=draft2020` 1 옵션으로 작동, 미래 호환성 우위 |
+| 2026-05-05 | P1 | `format: date-time` 대신 ISO 8601 정규식 pattern | `ajv-formats` 추가 의존성 회피, lint 환경 단순화 |
+| 2026-05-05 | P1 | `description.minLength: 1` (P1) → strict 40은 P2 lint script flag로 운영 | schema는 영구 SSOT, 단계적 strict는 lint runner의 책임 (schema-drift 차단) |
+| 2026-05-05 | P1 | produces/consumes 어휘 enum은 schema에 박지 않음 | `_handoff.yml` 변경 시 schema MAJOR bump 강제 회피, 어휘 검증은 `validate-agent-handoff.sh`가 전담 |
 
 ## 알려진 위험 (해소되면 줄긋기)
 

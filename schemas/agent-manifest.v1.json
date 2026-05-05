@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ressKim/ress-claude-agents/schemas/agent-manifest.v1.json",
+  "title": "Agent Manifest v1",
+  "description": "SSOT for agent (.claude/agents/<name>.md, AGENT.md) frontmatter. Mirrors Anthropic agent spec + portability + handoff. Agents have no applies_when (LLM-routed) — they activate via directive description and tool matchers. Refs: docs/migration/0002.",
+  "type": "object",
+  "required": ["name", "description"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$",
+      "description": "kebab-case identifier. Must equal agent file name (without .md)."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "$comment": "P1: minLength 1 (PoC tolerant). P2~ strict requires >=40 chars + directive style ('Use PROACTIVELY when ...') for LLM router accuracy. Validated by validate-skill-frontmatter.sh."
+    },
+    "model": {
+      "type": "string",
+      "$comment": "Anthropic model id (e.g. opus-4-7, sonnet-4-6, haiku-4-5) or alias (opus, sonnet, haiku, inherit). Optional; harness default applies when absent."
+    },
+    "tools": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "Allowed tool names. Empty array = no tools (analysis-only). Absent = inherit harness default."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$",
+      "description": "Semantic version. Optional in P1, required at P8 (registry-ready)."
+    },
+    "license": {
+      "type": "string",
+      "description": "SPDX identifier (e.g. MIT, Apache-2.0)."
+    },
+    "portability": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Cross-tool compatibility metadata. Mirrors .claude/inventory-labels.yml.",
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["universal", "claude-only", "codex-incompat"]
+        },
+        "tested_on": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "model_dependency": {
+          "type": "string",
+          "enum": ["none", "claude-features", "tool-use"]
+        },
+        "domain_specificity": {
+          "type": "string",
+          "enum": ["focused", "general"]
+        }
+      }
+    },
+    "produces": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "Artifact types this agent outputs. Vocabulary defined in .claude/agents/_handoff.yml; enforced by scripts/validate-agent-handoff.sh."
+    },
+    "consumes": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "Artifact types this agent expects. Vocabulary defined in .claude/agents/_handoff.yml."
+    }
+  }
+}

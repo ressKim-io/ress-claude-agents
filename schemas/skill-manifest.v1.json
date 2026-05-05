@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ressKim/ress-claude-agents/schemas/skill-manifest.v1.json",
+  "title": "Skill Manifest v1",
+  "description": "SSOT for skill (SKILL.md) frontmatter. Mirrors Anthropic SKILL.md spec + applies_when (deterministic scheduler input) + portability + handoff + security. Refs: docs/migration/0002 §Manifest schema.",
+  "type": "object",
+  "required": ["name", "description"],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$",
+      "description": "kebab-case identifier. Must equal the skill directory name."
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "$comment": "P1: minLength 1 (PoC tolerant). P2~ strict via validate-skill-frontmatter.sh --strict requires >=40 chars and directive style ('Use when ...'). Passive voice discouraged."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z.-]+)?$",
+      "description": "Semantic version. Optional in P1, required at P8 (registry-ready)."
+    },
+    "license": {
+      "type": "string",
+      "description": "SPDX identifier (e.g. MIT, Apache-2.0)."
+    },
+    "applies_when": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Deterministic scheduler input. Refs: control-plane/src/match.ts. >=1 of files_present/files_contain/language/frameworks required (enforced via anyOf).",
+      "properties": {
+        "files_present": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "description": "Glob patterns. OR matching. Hits contribute up to 40 to score."
+        },
+        "files_contain": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "minLength": 1 },
+          "description": "{ glob: regex }. AND matching: all entries must match. Hits contribute up to 30 to score."
+        },
+        "language": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "description": "Primary language match contributes 20 to score."
+        },
+        "frameworks": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "description": "Framework intersection ratio contributes up to 15 to score."
+        },
+        "context_keywords": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "description": "Weak signal. Used at runtime hook only, not in static match score."
+        },
+        "exclude_when": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "If matched, score becomes -Infinity (skill excluded).",
+          "properties": {
+            "files_present": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "uniqueItems": true
+            }
+          }
+        }
+      },
+      "anyOf": [
+        { "required": ["files_present"] },
+        { "required": ["files_contain"] },
+        { "required": ["language"] },
+        { "required": ["frameworks"] }
+      ]
+    },
+    "portability": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Cross-tool compatibility metadata. Mirrors .claude/inventory-labels.yml.",
+      "properties": {
+        "level": {
+          "type": "string",
+          "enum": ["universal", "claude-only", "codex-incompat"]
+        },
+        "tested_on": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "description": "Tools the skill has been validated on (e.g. claude-code, codex, cursor)."
+        },
+        "model_dependency": {
+          "type": "string",
+          "enum": ["none", "claude-features", "tool-use"]
+        },
+        "domain_specificity": {
+          "type": "string",
+          "enum": ["focused", "general"]
+        }
+      }
+    },
+    "produces": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "Artifact types this skill outputs. Vocabulary defined in .claude/agents/_handoff.yml; enforced by scripts/validate-agent-handoff.sh, not this schema."
+    },
+    "consumes": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true,
+      "description": "Artifact types this skill expects as input. Vocabulary defined in .claude/agents/_handoff.yml."
+    },
+    "security": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Registry publish metadata. Optional in P1~P7, populated in P8.",
+      "properties": {
+        "signature": {
+          "type": "string",
+          "description": "P8: sigstore cosign or SLSA provenance reference. Empty string allowed in P1~P7."
+        },
+        "sandbox": {
+          "type": "string",
+          "enum": ["read-only", "exec-allowed"]
+        },
+        "network": {
+          "type": "string",
+          "enum": ["none", "egress-only", "full"]
+        },
+        "secrets_required": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        }
+      }
+    }
+  }
+}
