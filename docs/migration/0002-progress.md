@@ -20,8 +20,8 @@ git log --oneline -20                                          # 최근 commit
 |---|---|---|---|---|---|
 | P0. 영구 기록 + commit | **completed** | 2026-05-05 | 2026-05-05 | main | 0002 본문(`f6fb2fe`) + dev-log(`0043b12`, `e3e32ec`) + progress 트래커 |
 | P1. Schema 동결 | **completed** | 2026-05-05 | 2026-05-05 | main | 3 schema + `scripts/validate-schemas.sh` + README. ajv-cli@5 Draft 2020-12 compile + sample validate 통과 (source-command-log-summary, code-reviewer) |
-| P2. PoC 10개 변환 | **in_progress** | — | — | — | k8s 5 + go 5. 후보: k8s-autoscaling, k8s-helm, k8s-security, k8s-scheduling, k8s-traffic / go-testing, go-database, go-microservice, go-errors, go-gin. 진입 시 P2 strict 모드(description ≥40) lint script flag 추가 |
-| P3. Control plane PoC | pending | — | — | — | `@ress/claude-agents` CLI 4 subcommand (probe/match/init/lint), TS+Node 18+ ESM. tsup ESM 번들 |
+| P2. PoC 10개 변환 | **completed** | 2026-05-05 | 2026-05-05 | main | `assets/skills/{kubernetes,go}/<n>/SKILL.md` 10개 (commit `00128dd`). validate-schemas.sh PoC strict 게이트 + validate-skill-frontmatter.sh assets 섹션. 기존 5 lint 모두 green. 검증 게이트 (b) matching CLI dry-run은 P3 의존 |
+| P3. Control plane PoC | **next** | — | — | — | `@ress/claude-agents` CLI 4 subcommand (probe/match/init/lint), TS+Node 18+ ESM. tsup ESM 번들 |
 | P4. Multi-AI adapter | pending | — | — | — | `.cursor/rules/` 자동 생성, AGENTS.md primary 승격, CLAUDE.md→symlink. 기존 `.codex/agents/*.toml` 변환 로직 흡수 |
 | P5. Enforcement hook | pending | — | — | — | PreToolUse `admit` 1개. 초기 warning 모드(exit 0 + stderr) |
 | P6. Pilot 1 카테고리 | pending | — | — | — | kubernetes 카테고리 약 10개 전체 변환. activation rate / matching accuracy baseline 1주 수집 |
@@ -30,14 +30,14 @@ git log --oneline -20                                          # 최근 commit
 
 ## Verification 체크리스트 (PoC 10개 후)
 
-- [ ] Schema lint exit 0
-- [ ] Probe determinism (10회 hash 일치)
-- [ ] Matching accuracy precision ≥ 0.9, recall ≥ 0.85
-- [ ] Adapter parity (claude/codex/cursor diff 0)
-- [ ] Hook 동작 (deny 3건, allow 3건)
-- [ ] End-to-end init 빈 디렉토리에서 성공
-- [ ] CI drift green
-- [ ] Multi-AI 동시 사용 시뮬
+- [x] Schema lint exit 0 — 2026-05-05 (`validate-schemas.sh` 3 schema + 2 sample + 10 PoC strict)
+- [ ] Probe determinism (10회 hash 일치) — P3
+- [ ] Matching accuracy precision ≥ 0.9, recall ≥ 0.85 — P3
+- [ ] Adapter parity (claude/codex/cursor diff 0) — P4
+- [ ] Hook 동작 (deny 3건, allow 3건) — P5
+- [ ] End-to-end init 빈 디렉토리에서 성공 — P3
+- [ ] CI drift green — P3 (drift job에 validate-schemas.sh 통합)
+- [ ] Multi-AI 동시 사용 시뮬 — P4
 
 ## Decision Log (Phase 진행 중 발견되는 추가 결정)
 
@@ -59,6 +59,10 @@ git log --oneline -20                                          # 최근 commit
 | 2026-05-05 | P1 | `format: date-time` 대신 ISO 8601 정규식 pattern | `ajv-formats` 추가 의존성 회피, lint 환경 단순화 |
 | 2026-05-05 | P1 | `description.minLength: 1` (P1) → strict 40은 P2 lint script flag로 운영 | schema는 영구 SSOT, 단계적 strict는 lint runner의 책임 (schema-drift 차단) |
 | 2026-05-05 | P1 | produces/consumes 어휘 enum은 schema에 박지 않음 | `_handoff.yml` 변경 시 schema MAJOR bump 강제 회피, 어휘 검증은 `validate-agent-handoff.sh`가 전담 |
+| 2026-05-05 | P2 | PoC frontmatter는 영문 description (≥40 chars) | directive 활성화 사례가 영문 위주, 한국어 효과는 P3~P4 baseline에서 비교 |
+| 2026-05-05 | P2 | dual-tree 유지 — `assets/skills/` 신설 + `.claude/skills/` 보존 | P3 adapter 도입 전 호환성 유지. 10개 한정이라 sync 부담 작음 |
+| 2026-05-05 | P2 | 기존 본문의 `# H1`을 그대로 SKILL.md에 포함 | Anthropic 공식은 H1 미권장이지만 본문 손대지 않는 게 PoC 단순성 우선. P3 adapter가 view 생성 시 정책 재결정 |
+| 2026-05-05 | P2 | description 길이 strict는 lint script 단계별 flag로 운영 | schema는 `minLength: 1` 영구, `validate-schemas.sh`/`validate-skill-frontmatter.sh`에 P2 strict 함수 추가 → schema-drift 차단 |
 
 ## 알려진 위험 (해소되면 줄긋기)
 
