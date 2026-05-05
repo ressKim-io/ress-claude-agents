@@ -219,6 +219,76 @@ check_skills() {
 }
 
 # ---------------------------------------------------------------------------
+# Assets/skills PoC strict 검증 (Migration 0002 P2~)
+# ---------------------------------------------------------------------------
+# assets/skills/<cat>/<name>/SKILL.md 는 다음을 모두 만족해야 한다:
+#   - frontmatter 존재 (--- 시작)
+#   - name 필드 == 부모 디렉토리 이름
+#   - description >= 40 chars (directive 강제, P2 strict 모드)
+#   - applies_when 키 존재 (deterministic scheduler 입력)
+#
+# Schema 자체 검증은 scripts/validate-schemas.sh 가 담당. 본 함수는 shell-only fast lint.
+check_assets_skills() {
+    section "Assets PoC (assets/skills/) strict 검증"
+
+    if [[ ! -d assets/skills ]]; then
+        log_pass "assets/skills 없음 (P2 미진입) — skip"
+        return
+    fi
+
+    local total=0 pass=0 fail=0
+    local violations=()
+
+    while IFS= read -r file; do
+        total=$((total + 1))
+        local fm
+        if ! fm=$(extract_frontmatter "$file"); then
+            fail=$((fail + 1))
+            violations+=("$file|frontmatter 없음")
+            continue
+        fi
+
+        local issues=()
+        local name desc
+        name=$(get_field "$fm" "name")
+        desc=$(get_field "$fm" "description")
+
+        local expected
+        expected=$(basename "$(dirname "$file")")
+
+        [[ -z "$name" ]] && issues+=("name 누락")
+        [[ -n "$name" && "$name" != "$expected" ]] && issues+=("name='$name' != dir '$expected'")
+        [[ -z "$desc" ]] && issues+=("description 누락")
+        if [[ -n "$desc" ]]; then
+            local desc_len=${#desc}
+            (( desc_len < 40 )) && issues+=("description $desc_len chars < 40 (strict)")
+        fi
+        if ! printf '%s\n' "$fm" | grep -q '^applies_when:'; then
+            issues+=("applies_when 누락")
+        fi
+
+        if [[ ${#issues[@]} -gt 0 ]]; then
+            fail=$((fail + 1))
+            violations+=("$file|$(printf '%s\n' "${issues[@]}" | paste -sd';' -)")
+        else
+            pass=$((pass + 1))
+        fi
+    done < <(find assets/skills -mindepth 3 -name "SKILL.md" -type f | sort)
+
+    if [[ $fail -gt 0 ]]; then
+        log_fail "Assets PoC: ${fail}/${total} 위반"
+        for v in "${violations[@]}"; do
+            local f="${v%%|*}"
+            local i="${v#*|}"
+            printf '        %s\n' "$f"
+            printf '%s\n' "$i" | tr ';' '\n' | sed 's/^/          - /'
+        done
+    else
+        log_pass "Assets PoC: ${pass}/${total} strict OK"
+    fi
+}
+
+# ---------------------------------------------------------------------------
 # 통계 리포트 (마이그레이션 의사결정용)
 # ---------------------------------------------------------------------------
 report_stats() {
@@ -266,6 +336,9 @@ main() {
         skills)
             check_skills
             ;;
+        assets)
+            check_assets_skills
+            ;;
         report)
             report_stats
             exit 0
@@ -273,6 +346,7 @@ main() {
         all)
             check_agents
             check_skills
+            check_assets_skills
             report_stats
             ;;
         -h|--help|help)
@@ -280,7 +354,7 @@ main() {
             exit 0
             ;;
         *)
-            printf 'unknown: %s\n사용법: %s [all|agents|skills|report]\n' "$1" "$0" >&2
+            printf 'unknown: %s\n사용법: %s [all|agents|skills|assets|report]\n' "$1" "$0" >&2
             exit 2
             ;;
     esac
