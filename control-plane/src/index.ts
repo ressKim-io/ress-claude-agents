@@ -2,6 +2,11 @@ import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import kleur from "kleur";
 import { parse as parseYaml, stringify } from "yaml";
+import {
+  adapter,
+  type AdapterMode,
+  type AdapterTool,
+} from "./adapter.js";
 import { init, type InitOptions } from "./init.js";
 import { lint } from "./lint.js";
 import {
@@ -21,8 +26,9 @@ export { selectSkills, buildMatchContext };
 export { loadSkills };
 export { init };
 export { lint };
+export { adapter };
 
-const COMMANDS = ["probe", "match", "init", "lint"] as const;
+const COMMANDS = ["probe", "match", "init", "lint", "adapter"] as const;
 type Command = (typeof COMMANDS)[number];
 
 export interface RunOptions {
@@ -59,6 +65,8 @@ export async function run(argv: string[], opts: RunOptions = {}): Promise<number
       return runInit(rest, out, err);
     case "lint":
       return runLint(rest, out, err);
+    case "adapter":
+      return runAdapter(rest, out, err);
   }
 }
 
@@ -451,14 +459,120 @@ function isCommand(value: string): value is Command {
   return (COMMANDS as readonly string[]).includes(value);
 }
 
-function stub(
-  name: Command,
-  todo: string,
-  _rest: string[],
+interface AdapterCliOpts {
+  tool: AdapterTool;
+  root: string;
+  assets: string;
+  mode: AdapterMode;
+}
+
+async function runAdapter(
+  args: string[],
+  out: NodeJS.WritableStream,
   err: NodeJS.WritableStream,
-): number {
-  err.write(kleur.yellow(`[${name}] not implemented (${todo})\n`));
-  return 1;
+): Promise<number> {
+  const parsed = parseAdapterArgs(args, err);
+  if (!parsed) return 2;
+
+  try {
+    const result = await adapter({
+      tool: parsed.tool,
+      root: parsed.root,
+      assets: parsed.assets,
+      mode: parsed.mode,
+    });
+
+    let createCount = 0;
+    let updateCount = 0;
+    let unchangedCount = 0;
+    for (const c of result.changes) {
+      if (c.status === "create") createCount++;
+      else if (c.status === "update") updateCount++;
+      else unchangedCount++;
+      const tag =
+        c.status === "create"
+          ? kleur.green("+")
+          : c.status === "update"
+            ? kleur.yellow("~")
+            : kleur.gray("=");
+      out.write(`${tag} ${c.path} (${c.status})\n`);
+    }
+
+    if (result.issues.length > 0) {
+      err.write(
+        kleur.yellow(
+          `adapter: ${result.issues.length} issue(s)\n`,
+        ),
+      );
+      for (const i of result.issues) {
+        err.write(kleur.yellow(`  - ${i}\n`));
+      }
+    }
+
+    out.write(
+      `\nadapter --tool=${parsed.tool} (${parsed.mode}): ${createCount} create, ${updateCount} update, ${unchangedCount} unchanged\n`,
+    );
+    return 0;
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : String(e);
+    err.write(kleur.red(`adapter failed: ${message}\n`));
+    return 1;
+  }
+}
+
+function parseAdapterArgs(
+  args: string[],
+  err: NodeJS.WritableStream,
+): AdapterCliOpts | null {
+  const queue = [...args];
+  const opts: Partial<AdapterCliOpts> = {
+    root: process.cwd(),
+    assets: process.cwd(),
+    mode: "write",
+  };
+  while (queue.length > 0) {
+    const raw = queue.shift();
+    if (raw === undefined) break;
+    if (raw === "--dry-run") {
+      opts.mode = "dry-run";
+      continue;
+    }
+    if (raw === "--diff") {
+      opts.mode = "diff";
+      continue;
+    }
+    const eqIdx = raw.indexOf("=");
+    const flag = eqIdx === -1 ? raw : raw.slice(0, eqIdx);
+    const inlineValue = eqIdx === -1 ? undefined : raw.slice(eqIdx + 1);
+    if (flag === "--tool" || flag === "--root" || flag === "--assets") {
+      const value = inlineValue ?? queue.shift();
+      if (value === undefined) {
+        err.write(kleur.red(`${flag} requires a value\n`));
+        return null;
+      }
+      if (flag === "--root") opts.root = value;
+      else if (flag === "--assets") opts.assets = value;
+      else if (flag === "--tool") {
+        if (value !== "claude" && value !== "codex" && value !== "cursor") {
+          err.write(
+            kleur.red(
+              `--tool must be one of: claude, codex, cursor (got: ${value})\n`,
+            ),
+          );
+          return null;
+        }
+        opts.tool = value;
+      }
+    } else {
+      err.write(kleur.red(`unknown adapter flag: ${raw}\n`));
+      return null;
+    }
+  }
+  if (opts.tool === undefined) {
+    err.write(kleur.red(`adapter requires --tool=<claude|codex|cursor>\n`));
+    return null;
+  }
+  return opts as AdapterCliOpts;
 }
 
 function helpText(): string {
@@ -468,10 +582,11 @@ function helpText(): string {
     `Usage: claude-agents <command> [options]`,
     ``,
     `Commands:`,
-    `  probe   Generate project-profile.yml (deterministic, no LLM)`,
-    `  match   Score skills against profile (threshold 50)`,
-    `  init    Bootstrap project: probe → match → confirm → adapter → hook`,
-    `  lint    Run all repo validators`,
+    `  probe    Generate project-profile.yml (deterministic, no LLM)`,
+    `  match    Score skills against profile (threshold 50)`,
+    `  init     Bootstrap project: probe → match → confirm → adapter → hook`,
+    `  lint     Run all repo validators`,
+    `  adapter  Generate per-tool view (--tool=claude|codex|cursor)`,
     ``,
     `Flags:`,
     `  -h, --help     Show this help`,
