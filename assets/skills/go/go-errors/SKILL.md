@@ -4,9 +4,6 @@ description: "Use when handling errors in Go: errors.Is, errors.As, error wrappi
 version: 1.0.0
 license: MIT
 applies_when:
-  files_present:
-    - "**/*.go"
-    - "**/go.mod"
   files_contain:
     "**/*.go": '(errors\.(Is|As|New|Unwrap)|fmt\.Errorf.*%w)'
   language:

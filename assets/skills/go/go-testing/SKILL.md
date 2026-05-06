@@ -6,9 +6,8 @@ license: MIT
 applies_when:
   files_present:
     - "**/*_test.go"
-    - "**/go.mod"
   files_contain:
-    "**/go.mod": '^module\s'
+    "**/*_test.go": '(testing\.[TBM]|stretchr/testify|testcontainers|^func Test[A-Z])'
   language:
     - go
   frameworks:
