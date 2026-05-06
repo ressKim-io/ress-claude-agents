@@ -57,6 +57,8 @@ extract_frontmatter() {
 # YAML → JSON. node 내장만 사용. nested map / array / inline array 지원.
 # 복잡한 YAML 케이스는 P3 control-plane의 yaml 패키지에 위임.
 yaml_to_json_stdin() {
+    # shellcheck disable=SC2016
+    # JS literal — single quotes are intentional, no shell expansion expected
     node -e '
         const fs = require("fs");
         const txt = fs.readFileSync(0, "utf8");
@@ -138,7 +140,8 @@ validate_against_schema() {
     fi
 
     json="$(printf '%s' "$fm" | yaml_to_json_stdin)"
-    local out="$TMPDIR/$(printf '%s' "$file" | tr '/' '_').json"
+    local out
+    out="$TMPDIR/$(printf '%s' "$file" | tr '/' '_').json"
     printf '%s\n' "$json" >"$out"
 
     if ! npx --yes ajv-cli@5 validate --spec=draft2020 -s "$schema" -d "$out" >/dev/null 2>&1; then
