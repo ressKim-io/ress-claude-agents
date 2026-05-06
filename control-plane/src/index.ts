@@ -7,6 +7,7 @@ import {
   type AdapterMode,
   type AdapterTool,
 } from "./adapter.js";
+import { admit, type AdmitMode } from "./admit.js";
 import { init, type InitOptions } from "./init.js";
 import { lint } from "./lint.js";
 import {
@@ -27,8 +28,9 @@ export { loadSkills };
 export { init };
 export { lint };
 export { adapter };
+export { admit };
 
-const COMMANDS = ["probe", "match", "init", "lint", "adapter"] as const;
+const COMMANDS = ["probe", "match", "init", "lint", "adapter", "admit"] as const;
 type Command = (typeof COMMANDS)[number];
 
 export interface RunOptions {
@@ -67,6 +69,8 @@ export async function run(argv: string[], opts: RunOptions = {}): Promise<number
       return runLint(rest, out, err);
     case "adapter":
       return runAdapter(rest, out, err);
+    case "admit":
+      return runAdmit(rest, out, err);
   }
 }
 
@@ -575,6 +579,110 @@ function parseAdapterArgs(
   return opts as AdapterCliOpts;
 }
 
+interface AdmitCliOpts {
+  tool: string;
+  path?: string;
+  skill?: string;
+  root: string;
+  assets: string;
+  mode: AdmitMode;
+}
+
+async function runAdmit(
+  args: string[],
+  out: NodeJS.WritableStream,
+  err: NodeJS.WritableStream,
+): Promise<number> {
+  const parsed = parseAdmitArgs(args, err);
+  if (!parsed) return 2;
+
+  try {
+    const decisionInput: Parameters<typeof admit>[0] = {
+      tool: parsed.tool,
+      root: parsed.root,
+      assets: parsed.assets,
+      mode: parsed.mode,
+    };
+    if (parsed.path !== undefined) decisionInput.path = parsed.path;
+    if (parsed.skill !== undefined) decisionInput.skill = parsed.skill;
+
+    const decision = await admit(decisionInput);
+    if (decision.allow) {
+      out.write(kleur.green(`admit: allow — ${decision.reason}\n`));
+      return 0;
+    }
+    if (parsed.mode === "warn") {
+      err.write(
+        kleur.yellow(
+          `[claude-agents admit] WARN: ${decision.reason}\n`,
+        ),
+      );
+      return 0;
+    }
+    err.write(kleur.red(`[claude-agents admit] DENY: ${decision.reason}\n`));
+    return 2;
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : String(e);
+    err.write(kleur.red(`admit failed: ${message}\n`));
+    return 1;
+  }
+}
+
+function parseAdmitArgs(
+  args: string[],
+  err: NodeJS.WritableStream,
+): AdmitCliOpts | null {
+  const queue = [...args];
+  const opts: Partial<AdmitCliOpts> = {
+    root: process.cwd(),
+    assets: process.cwd(),
+    mode: "warn",
+  };
+  while (queue.length > 0) {
+    const raw = queue.shift();
+    if (raw === undefined) break;
+    const eqIdx = raw.indexOf("=");
+    const flag = eqIdx === -1 ? raw : raw.slice(0, eqIdx);
+    const inline = eqIdx === -1 ? undefined : raw.slice(eqIdx + 1);
+    if (
+      flag === "--tool" ||
+      flag === "--path" ||
+      flag === "--skill" ||
+      flag === "--root" ||
+      flag === "--assets" ||
+      flag === "--mode"
+    ) {
+      const value = inline ?? queue.shift();
+      if (value === undefined) {
+        err.write(kleur.red(`${flag} requires a value\n`));
+        return null;
+      }
+      if (flag === "--tool") opts.tool = value;
+      else if (flag === "--path") opts.path = value;
+      else if (flag === "--skill") opts.skill = value;
+      else if (flag === "--root") opts.root = value;
+      else if (flag === "--assets") opts.assets = value;
+      else if (flag === "--mode") {
+        if (value !== "warn" && value !== "deny") {
+          err.write(
+            kleur.red(`--mode must be 'warn' or 'deny' (got: ${value})\n`),
+          );
+          return null;
+        }
+        opts.mode = value;
+      }
+    } else {
+      err.write(kleur.red(`unknown admit flag: ${raw}\n`));
+      return null;
+    }
+  }
+  if (opts.tool === undefined) {
+    err.write(kleur.red(`admit requires --tool=<name>\n`));
+    return null;
+  }
+  return opts as AdmitCliOpts;
+}
+
 function helpText(): string {
   return [
     `@ress/claude-agents v${VERSION}`,
@@ -587,6 +695,7 @@ function helpText(): string {
     `  init     Bootstrap project: probe → match → confirm → adapter → hook`,
     `  lint     Run all repo validators`,
     `  adapter  Generate per-tool view (--tool=claude|codex|cursor)`,
+    `  admit    PreToolUse admission check (--tool/--path/--skill/--mode warn|deny)`,
     ``,
     `Flags:`,
     `  -h, --help     Show this help`,
