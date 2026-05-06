@@ -21,7 +21,7 @@ git log --oneline -20                                          # 최근 commit
 | P0. 영구 기록 + commit | **completed** | 2026-05-05 | 2026-05-05 | main | 0002 본문(`f6fb2fe`) + dev-log(`0043b12`, `e3e32ec`) + progress 트래커 |
 | P1. Schema 동결 | **completed** | 2026-05-05 | 2026-05-05 | main | 3 schema + `scripts/validate-schemas.sh` + README. ajv-cli@5 Draft 2020-12 compile + sample validate 통과 (source-command-log-summary, code-reviewer) |
 | P2. PoC 10개 변환 | **completed** | 2026-05-05 | 2026-05-05 | main | `assets/skills/{kubernetes,go}/<n>/SKILL.md` 10개 (commit `00128dd`). validate-schemas.sh PoC strict 게이트 + validate-skill-frontmatter.sh assets 섹션. 기존 5 lint 모두 green. 검증 게이트 (b) matching CLI dry-run은 P3 의존 |
-| P3. Control plane PoC | **in_progress** | 2026-05-05 | — | main | Step 1+2/6 완료. step 1 (`f0b0c83`→`daced4c`): scaffold + CLI router. step 2 (`9966bd3`→`9f2bd24`): zod schema + round-trip + probe (repo/lang/build/framework/signatures/domain_hints) + 3 fixtures (empty/go-gin/k8s-only) + 10x hash 결정성 + CLI wire. **36/36 vitest**. Steps 3-6 (match/init/lint/gold dataset) pending |
+| P3. Control plane PoC | **in_progress** | 2026-05-05 | — | main | Step 1+2+3/6 완료. step 1: scaffold + CLI router. step 2: probe + 10x hash + 3 fixture. step 3 (`541d005`→`1b8f04e`): skill-manifest zod + round-trip + skill-loader + match algorithm (가중치 105) + match CLI + gold dataset accuracy **precision=1.0 / recall=1.0** (게이트 0.9/0.85). **69/69 vitest**. Steps 4-6 (init/lint/end-to-end snapshot) pending |
 | P4. Multi-AI adapter | pending | — | — | — | `.cursor/rules/` 자동 생성, AGENTS.md primary 승격, CLAUDE.md→symlink. 기존 `.codex/agents/*.toml` 변환 로직 흡수 |
 | P5. Enforcement hook | pending | — | — | — | PreToolUse `admit` 1개. 초기 warning 모드(exit 0 + stderr) |
 | P6. Pilot 1 카테고리 | pending | — | — | — | kubernetes 카테고리 약 10개 전체 변환. activation rate / matching accuracy baseline 1주 수집 |
@@ -32,7 +32,7 @@ git log --oneline -20                                          # 최근 commit
 
 - [x] Schema lint exit 0 — 2026-05-05 (`validate-schemas.sh` 3 schema + 2 sample + 10 PoC strict)
 - [x] Probe determinism (10회 hash 일치) — 2026-05-06 (`probe-fixtures.test.ts` 10x SHA-256)
-- [ ] Matching accuracy precision ≥ 0.9, recall ≥ 0.85 — P3
+- [x] Matching accuracy precision ≥ 0.9, recall ≥ 0.85 — 2026-05-06 (precision=1.0, recall=1.0 across 3 fixture, `match-fixtures.test.ts`)
 - [ ] Adapter parity (claude/codex/cursor diff 0) — P4
 - [ ] Hook 동작 (deny 3건, allow 3건) — P5
 - [ ] End-to-end init 빈 디렉토리에서 성공 — P3
@@ -73,6 +73,10 @@ git log --oneline -20                                          # 최근 commit
 | 2026-05-06 | P3 | Zod ↔ JSON Schema round-trip 테스트로 drift 차단 | `zod-to-json-schema` 의존성 회피. 동일 valid/invalid sample을 양쪽이 동일하게 판정해야 통과 |
 | 2026-05-06 | P3 | yaml stringify에 `sortMapEntries:true` 강제 | probe() 객체 리터럴이 이미 결정적 순서지만 yaml 직렬화 단계 안전망 추가. 10x hash 일치 보장 |
 | 2026-05-06 | P3 | `.git/HEAD` 파일을 직접 읽어 default_branch 추출 | git CLI 비의존, 결정성 + Node-only. 정확한 origin/HEAD 추적은 over-engineering으로 보고 현재 branch 사용 |
+| 2026-05-06 | P3 | match는 fast-glob 패턴별 재호출, micromatch 직접 import 회피 | fast-glob의 transitive dep을 직접 사용하면 fragile. PoC 비용 (skill 10 × 패턴 ~5 = 50 호출) 충분히 빠름. 정확성은 fast-glob 자체 보증 |
+| 2026-05-06 | P3 | `bucketScores` export로 selectSkills 분류 로직 단위 테스트 | score 함수는 fast-glob 의존 → 통합 테스트, 분류·정렬은 순수 함수로 분리해 단위 검증 |
+| 2026-05-06 | P3 | gold dataset은 `tests/expected/<n>.yml` 별도 디렉토리 | fixture 안에 두면 'empty' fixture에 yaml이 카운트되어 probe 결과 오염 — 별도 위치로 격리 |
+| 2026-05-06 | P3 | go-testing / go-errors PoC manifest 보강 (description 의도와 align) | step 3-C sanity 결과 false positive 2건 (`commit 6aab47c`). manifest는 living document, P3 검증 단계에서 보정은 본문 §검증 전략의 자연스러운 일부 |
 
 ## 알려진 위험 (해소되면 줄긋기)
 
