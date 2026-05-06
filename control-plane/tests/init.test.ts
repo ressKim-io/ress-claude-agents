@@ -76,7 +76,7 @@ interface ParsedLock {
   skills: { install: { name: string }[]; skip_count: number };
   threshold: number;
   adapters: { detected: string[]; status: string };
-  hook: { status: string };
+  hook: { status: string; installed: boolean; mode?: string };
 }
 
 describe.each(FIXTURES)("init on fixture: $name", (fixture) => {
@@ -96,15 +96,16 @@ describe.each(FIXTURES)("init on fixture: $name", (fixture) => {
     expect(installNames).toEqual(fixture.expectedInstall.slice().sort());
   });
 
-  it("lock carries P4 skipped + P5 stub markers + threshold default 50", async () => {
+  it("lock carries P4/P5 skipped markers + threshold default 50", async () => {
     const out = await runOnce(fixture);
     const lock = parseYaml(out.lock) as ParsedLock;
     expect(lock.schema_version).toBe(1);
     expect(lock.threshold).toBe(50);
-    // fixtures have no .claude/.codex/.cursor → adapter step is skipped, detected=[]
+    // fixtures have no .claude/.codex/.cursor → adapter + hook steps skipped
     expect(lock.adapters.detected).toEqual([]);
     expect(lock.adapters.status).toBe("p4-skipped");
-    expect(lock.hook.status).toBe("p5-stub");
+    expect(lock.hook.status).toBe("p5-skipped");
+    expect(lock.hook.installed).toBe(false);
   });
 
   it("produces deterministic outputs across 10 runs (P3 gate)", async () => {
@@ -143,6 +144,108 @@ describe("init step 4 adapter wiring (P4)", () => {
       expect(result.lock.adapters.detected).toContain("codex");
       expect(result.lock.adapters.detected).not.toContain("cursor");
       expect(result.lock.adapters.runs?.length ?? 0).toBeGreaterThan(0);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("init step 5 hook wiring (P5)", () => {
+  it("installs warn-mode admit hook into .claude/settings.local.json", async () => {
+    const root = mkdtempSync(path.join(os.tmpdir(), "init-hook-"));
+    try {
+      const { mkdirSync, readFileSync, existsSync } = await import("node:fs");
+      mkdirSync(path.join(root, ".claude"), { recursive: true });
+
+      const result = await init({
+        root,
+        assets: ASSETS_ROOT,
+        frozenTime: FROZEN_TIME,
+        yes: true,
+      });
+
+      expect(result.lock.hook.status).toBe("p5-active");
+      expect(result.lock.hook.installed).toBe(true);
+      expect(result.lock.hook.mode).toBe("warn");
+
+      const settingsPath = path.join(root, ".claude", "settings.local.json");
+      expect(existsSync(settingsPath)).toBe(true);
+      const parsed = JSON.parse(readFileSync(settingsPath, "utf8")) as {
+        hooks?: {
+          PreToolUse?: { matcher?: string; hooks?: { command?: string }[] }[];
+        };
+      };
+      const hookCmd = parsed.hooks?.PreToolUse?.[0]?.hooks?.[0]?.command ?? "";
+      expect(hookCmd).toContain("@ress/claude-agents admit");
+      expect(hookCmd).toContain("--mode=warn");
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it("is idempotent: re-running init does not duplicate hook entry", async () => {
+    const root = mkdtempSync(path.join(os.tmpdir(), "init-hook-idem-"));
+    try {
+      const { mkdirSync, readFileSync } = await import("node:fs");
+      mkdirSync(path.join(root, ".claude"), { recursive: true });
+
+      const first = await init({
+        root,
+        assets: ASSETS_ROOT,
+        frozenTime: FROZEN_TIME,
+        yes: true,
+      });
+      expect(first.lock.hook.status).toBe("p5-active");
+
+      const second = await init({
+        root,
+        assets: ASSETS_ROOT,
+        frozenTime: FROZEN_TIME,
+        yes: true,
+      });
+      expect(second.lock.hook.status).toBe("p5-already-present");
+      expect(second.lock.hook.installed).toBe(false);
+
+      const settingsPath = path.join(root, ".claude", "settings.local.json");
+      const parsed = JSON.parse(readFileSync(settingsPath, "utf8")) as {
+        hooks?: { PreToolUse?: unknown[] };
+      };
+      expect(parsed.hooks?.PreToolUse?.length).toBe(1);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
+  it("merges into existing settings.local.json without losing other keys", async () => {
+    const root = mkdtempSync(path.join(os.tmpdir(), "init-hook-merge-"));
+    try {
+      const { mkdirSync, writeFileSync, readFileSync } = await import(
+        "node:fs"
+      );
+      mkdirSync(path.join(root, ".claude"), { recursive: true });
+      const existing = {
+        permissions: { allow: ["Bash(ls:*)"] },
+      };
+      writeFileSync(
+        path.join(root, ".claude", "settings.local.json"),
+        JSON.stringify(existing, null, 2),
+      );
+
+      await init({
+        root,
+        assets: ASSETS_ROOT,
+        frozenTime: FROZEN_TIME,
+        yes: true,
+      });
+
+      const merged = JSON.parse(
+        readFileSync(
+          path.join(root, ".claude", "settings.local.json"),
+          "utf8",
+        ),
+      ) as { permissions?: { allow?: string[] }; hooks?: unknown };
+      expect(merged.permissions?.allow).toEqual(["Bash(ls:*)"]);
+      expect(merged.hooks).toBeDefined();
     } finally {
       rmSync(root, { recursive: true, force: true });
     }
