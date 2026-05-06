@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   countLanguages,
   detectBuildSystems,
+  detectCiProvider,
 } from "../src/probe.js";
 
 describe("countLanguages", () => {
@@ -72,5 +73,35 @@ describe("detectBuildSystems", () => {
 
   it("detects terraform from any .tf file", () => {
     expect(detectBuildSystems(["infra/networking.tf"])).toEqual(["terraform"]);
+  });
+});
+
+describe("detectCiProvider", () => {
+  it("returns none when no CI config is present", () => {
+    expect(detectCiProvider(["src/main.go", "README.md"])).toBe("none");
+  });
+
+  it("returns github-actions for any .github/workflows/*.yml", () => {
+    expect(detectCiProvider([".github/workflows/ci.yml"])).toBe(
+      "github-actions",
+    );
+  });
+
+  it("returns the first matching provider in scan order", () => {
+    // github-actions wins over gitlab-ci because it appears first in CI_RULES
+    expect(
+      detectCiProvider([".github/workflows/ci.yml", ".gitlab-ci.yml"]),
+    ).toBe("github-actions");
+  });
+
+  it("detects gitlab-ci, circleci, jenkins, drone, azure", () => {
+    expect(detectCiProvider([".gitlab-ci.yml"])).toBe("gitlab-ci");
+    expect(detectCiProvider([".circleci/config.yml"])).toBe("circleci");
+    expect(detectCiProvider(["Jenkinsfile"])).toBe("jenkins");
+    expect(detectCiProvider([".drone.yml"])).toBe("drone");
+    expect(detectCiProvider(["azure-pipelines.yml"])).toBe("azure-pipelines");
+    expect(detectCiProvider(["bitbucket-pipelines.yml"])).toBe(
+      "bitbucket-pipelines",
+    );
   });
 });

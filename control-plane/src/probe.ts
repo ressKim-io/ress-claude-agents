@@ -2,6 +2,8 @@ import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import fg from "fast-glob";
 import type {
+  CiProvider,
+  FilesSignatures,
   Language,
   ProjectProfile,
   Repo,
@@ -39,6 +41,8 @@ export async function probe(opts: ProbeOptions): Promise<ProjectProfile> {
   const languages = countLanguages(files);
   const build_systems = detectBuildSystems(files);
   const frameworks = detectFrameworks(root, files);
+  const files_signatures = detectFilesSignatures(root, files);
+  const domain_hints = detectDomainHints(root, files);
 
   const generated_at = opts.frozenTime ?? new Date().toISOString();
   const generator = opts.generator ?? `@ress/claude-agents@${VERSION}`;
@@ -51,7 +55,8 @@ export async function probe(opts: ProbeOptions): Promise<ProjectProfile> {
     languages,
     frameworks,
     build_systems,
-    files_signatures: {},
+    files_signatures,
+    domain_hints,
   };
 }
 
@@ -264,4 +269,173 @@ export function detectFrameworks(root: string, files: string[]): string[] {
   }
 
   return [...out].sort();
+}
+
+const CI_RULES: ReadonlyArray<{
+  match: (file: string) => boolean;
+  provider: CiProvider;
+}> = [
+  {
+    match: (f) =>
+      f.startsWith(".github/workflows/") &&
+      (f.endsWith(".yml") || f.endsWith(".yaml")),
+    provider: "github-actions",
+  },
+  { match: (f) => f === ".gitlab-ci.yml", provider: "gitlab-ci" },
+  { match: (f) => f === ".circleci/config.yml", provider: "circleci" },
+  { match: (f) => f === "Jenkinsfile", provider: "jenkins" },
+  {
+    match: (f) =>
+      f.startsWith(".buildkite/") &&
+      (f.endsWith(".yml") || f.endsWith(".yaml")),
+    provider: "buildkite",
+  },
+  { match: (f) => f === ".drone.yml", provider: "drone" },
+  { match: (f) => f === "azure-pipelines.yml", provider: "azure-pipelines" },
+  {
+    match: (f) => f === "bitbucket-pipelines.yml",
+    provider: "bitbucket-pipelines",
+  },
+];
+
+export function detectCiProvider(files: string[]): CiProvider {
+  for (const f of files) {
+    for (const rule of CI_RULES) {
+      if (rule.match(f)) return rule.provider;
+    }
+  }
+  return "none";
+}
+
+const K8S_SCAN_LIMIT = 50;
+
+function detectK8sManifest(root: string, files: string[]): boolean {
+  const yamlFiles = files
+    .filter((f) => f.endsWith(".yaml") || f.endsWith(".yml"))
+    .slice(0, K8S_SCAN_LIMIT);
+  for (const rel of yamlFiles) {
+    try {
+      const content = readFileSync(path.join(root, rel), "utf8");
+      if (/^apiVersion:/m.test(content) && /^kind:/m.test(content)) return true;
+    } catch {
+      /* skip unreadable file */
+    }
+  }
+  return false;
+}
+
+function detectTestFramework(root: string, files: string[]): string | undefined {
+  if (files.some((f) => f.endsWith("_test.go"))) return "go-test";
+  if (
+    files.includes("pytest.ini") ||
+    files.some((f) => path.basename(f) === "conftest.py")
+  ) {
+    return "pytest";
+  }
+
+  const pkgPath = path.join(root, "package.json");
+  if (existsSync(pkgPath)) {
+    try {
+      const pkg = JSON.parse(readFileSync(pkgPath, "utf8")) as {
+        dependencies?: Record<string, string>;
+        devDependencies?: Record<string, string>;
+      };
+      const deps = {
+        ...(pkg.dependencies ?? {}),
+        ...(pkg.devDependencies ?? {}),
+      };
+      if (deps.vitest) return "vitest";
+      if (deps.jest) return "jest";
+      if (deps.mocha) return "mocha";
+    } catch {
+      /* malformed */
+    }
+  }
+
+  return undefined;
+}
+
+export function detectFilesSignatures(
+  root: string,
+  files: string[],
+): FilesSignatures {
+  const helm = files.some((f) => path.basename(f) === "Chart.yaml");
+  const dockerfile = files.some((f) => path.basename(f) === "Dockerfile");
+  const k8s = detectK8sManifest(root, files);
+  const ci_provider = detectCiProvider(files);
+  const test_framework = detectTestFramework(root, files);
+
+  const out: FilesSignatures = {
+    ci_provider,
+    dockerfile_present: dockerfile,
+    helm_chart_present: helm,
+    k8s_manifest_present: k8s,
+  };
+  if (test_framework !== undefined) {
+    out.test_framework = test_framework;
+  }
+  return out;
+}
+
+const COMMON_HEADINGS = new Set([
+  "introduction",
+  "getting-started",
+  "installation",
+  "install",
+  "usage",
+  "license",
+  "contributing",
+  "overview",
+  "docs",
+  "documentation",
+  "table-of-contents",
+  "features",
+  "requirements",
+  "prerequisites",
+  "todo",
+  "changelog",
+  "credits",
+  "authors",
+  "support",
+  "faq",
+  "readme",
+  "summary",
+]);
+
+const DOMAIN_HINT_LIMIT = 12;
+
+export function detectDomainHints(root: string, files: string[]): string[] {
+  const candidates = ["AGENTS.md", "README.md", "README"].filter((c) =>
+    files.includes(c),
+  );
+  const hints = new Set<string>();
+  for (const candidate of candidates) {
+    try {
+      const content = readFileSync(path.join(root, candidate), "utf8");
+      for (const heading of extractMarkdownHeadings(content)) {
+        const slug = slugify(heading);
+        if (!slug || COMMON_HEADINGS.has(slug)) continue;
+        hints.add(slug);
+      }
+    } catch {
+      /* skip */
+    }
+  }
+  return [...hints].sort().slice(0, DOMAIN_HINT_LIMIT);
+}
+
+function extractMarkdownHeadings(markdown: string): string[] {
+  const out: string[] = [];
+  for (const line of markdown.split("\n")) {
+    const match = /^(#{1,2})\s+(.+?)\s*$/.exec(line);
+    if (match && match[2]) out.push(match[2]);
+  }
+  return out;
+}
+
+function slugify(input: string): string {
+  return input
+    .toLowerCase()
+    .replace(/[^a-z0-9가-힣]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
