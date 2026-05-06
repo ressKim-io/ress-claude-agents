@@ -1,6 +1,7 @@
 import kleur from "kleur";
+import { VERSION } from "./version.js";
 
-export const VERSION = "0.1.0";
+export { VERSION };
 
 const COMMANDS = ["probe", "match", "init", "lint"] as const;
 type Command = (typeof COMMANDS)[number];
