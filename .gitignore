@@ -28,7 +28,7 @@
 # Temporary working files (session safety net for in-progress work)
 tmp/
 
-# Auto-generated tool caches (codex CLI / AGENTS.md spec mirror)
-# 우리 .claude/agents/*.md를 다른 도구 형식으로 변환한 자동 캐시
+# Auto-generated tool caches
+# .agents/는 P7까지 deprecate 예정 (assets/skills/ SSOT로 이동), 그동안 ignore.
+# .codex/는 P4 adapter SSoT view → commit 대상 (0002 plan §86-89, decision log P4-C).
 .agents/
-.codex/

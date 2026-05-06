@@ -3,7 +3,7 @@
 이 레포에서 작업하는 모든 AI 코딩 에이전트를 위한 가이드라인.
 Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foundation AGENTS.md 표준](https://agents.md/)을 지원하는 모든 도구에 적용된다.
 
-상세 룰은 `.claude/rules/` 참조 (Claude Code 자동 로딩). Claude 전용 최적화는 [CLAUDE.md](CLAUDE.md) 참조.
+상세 룰은 `.claude/rules/` 참조 (Claude Code 자동 로딩). Claude Code 전용 최적화는 본 파일 §Claude Code-Specific 참조. `CLAUDE.md`는 본 파일의 symlink (다도구 호환성 유지).
 
 ---
 
@@ -231,10 +231,66 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 | 도구 | 추가 설정 |
 |---|---|
-| **Claude Code** | [CLAUDE.md](CLAUDE.md) + `.claude/rules/`, `.claude/skills/`, `.claude/agents/` 자동 로딩 |
-| **Cursor / Codex / Copilot / Gemini CLI / Windsurf** | 이 AGENTS.md 자동 인식 — 추가 설정 불필요 |
+| **Claude Code** | 본 파일 §Claude Code-Specific + `.claude/rules/`, `.claude/skills/`, `.claude/agents/` 자동 로딩 |
+| **Codex** | `.codex/AGENTS.md` (본 파일의 symlink) + `.codex/agents/`, `.codex/skills/` (P4 adapter 산출물) |
+| **Cursor** | 본 파일 자동 인식 + `.cursor/rules/*.mdc` (P4 adapter 산출물) |
+| **Copilot / Gemini CLI / Windsurf** | 본 파일 자동 인식 — 추가 설정 불필요 |
 
-도구별 최적화는 선택. 핵심 룰은 모두 이 파일에 있다.
+도구별 최적화는 선택. 핵심 룰은 모두 본 파일에 있다.
+
+---
+
+## Claude Code-Specific
+
+> Claude Code가 본 파일을 읽는다 (Linux Foundation AGENTS.md 표준). `CLAUDE.md`는 본 파일의 symlink — 동일 내용을 본다. 다른 도구는 자기에게 무관한 본 섹션을 무시.
+
+### Auto-Loaded Rules
+
+`.claude/rules/*.md`는 Claude Code 세션 시작 시 자동 로딩 (다른 도구는 자동 로드하지 않으므로 핵심은 본 파일에 요약).
+
+| Rule | 역할 | 본 파일 대응 섹션 |
+|---|---|---|
+| `clean-code.md` | 가독성 원칙 | Code Style |
+| `workflow.md` | EXPLORE→PLAN→IMPLEMENT→VERIFY→COMMIT | Workflow |
+| `git.md`, `code-review.md` | git/PR | Git & Commits, PRs |
+| `security.md` | 시크릿/입력검증/인증 | Security |
+| `testing.md` | TDD, 커버리지 | Testing |
+| `debugging.md` | 4단계 프로토콜 | Debugging |
+| `monitoring.md` | PromQL/OTel | Monitoring |
+| `documentation.md` | 11종 템플릿 | Documentation |
+| `user-approval.md` | 외부 작업 승인 | User Approval |
+| `cloud-cli-safety.md` | AWS/GCP 위험 명령 | Cloud CLI Safety |
+| `go.md`, `java.md`, `spring.md` | 언어별 | Language-Specific |
+| `token-budget.md` | Opus 4.7 전용 | (아래) |
+
+### Token Budget (Opus 4.7)
+
+- Context **80% 초과 → 세션 종료**, 무관 태스크 전환 시 `/clear`
+- Effort 기본 `xhigh` (Claude Code 기본값), 단순 조회 `low`, frontier 문제만 `max`
+- Tokenizer 4.6 → 4.7: `max_tokens` **35% headroom**, prompt cache 재빌드 가정
+- Subagent는 명시 spawn (Opus 4.7은 기본적으로 덜 spawn함). 10+ 파일 탐색은 subagent 위임
+- 상세: `.claude/rules/token-budget.md`, 코드 예시·비용 계산은 `/token-budget` skill
+
+### Claude-Only Features
+
+| Feature | 위치 | 호출 |
+|---|---|---|
+| Skills | `.claude/skills/` | 자동 발견 (description 매칭) |
+| Subagents | `.claude/agents/` | `Agent` 도구 (`subagent_type=...`) |
+| Slash Commands | `.claude/commands/` | `/command-name` |
+| Plugins | `plugins/*.yml` | `install.sh --plugin <name>` |
+| Workflows | `.claude/workflows/*.yml` | `install.sh --workflow <name>` |
+
+자산 통계: [.claude/inventory.yml](.claude/inventory.yml). 현재 ~239 skills / 46 agents / 43 commands / 12 plugins / 10 workflows.
+
+### Opus 4.7 Behavioral Notes
+
+기존 프롬프트 재조정 포인트:
+- **Literal interpretation** — 의도·제약·수락 기준 첫 턴 완전 명세
+- **Subagent 명시 spawn** — fan-out 필요 시 "Use subagents to investigate X in parallel"
+- **자체 검증 내장** — "double-check before returning" 같은 scaffolding 제거
+- **응답 길이 자동 calibration** — 고정 verbosity 지시 재검토
+- **Rules 100~150줄이 sweet spot** — 매 대화 자동 로딩이라 길면 묻힘. 상세는 skill로 분리
 
 ---
 
@@ -242,13 +298,15 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 **Source of Truth 계층** (충돌 시 위에서 아래로 우선):
 
-1. **AGENTS.md** (이 파일) — 모든 도구 적용 보편 룰. **Single source of truth.**
-2. **CLAUDE.md** — Claude Code 전용 메커니즘 (token budget, plugins, subagents).
-3. **`.claude/rules/*.md`** — Claude Code 자동 로딩 상세 룰. AGENTS.md와 **반드시 일관**.
+1. **AGENTS.md** (본 파일) — 모든 도구 적용 보편 룰 + §Claude Code-Specific. **Single source of truth.**
+2. **`.claude/rules/*.md`** — Claude Code 자동 로딩 상세 룰. 본 파일과 **반드시 일관**.
+3. **Mirrors**:
+   - `CLAUDE.md` → 본 파일 symlink (Claude Code 호환)
+   - `.codex/AGENTS.md` → 본 파일 symlink (Codex 호환)
 
 **룰 변경 절차**:
-- **보편 룰** → AGENTS.md 먼저 수정 → 관련 `.claude/rules/`로 propagate
-- **Claude 전용** → CLAUDE.md 또는 `.claude/rules/token-budget.md`만 수정
-- **충돌 발견 시** → AGENTS.md 기준으로 다른 파일 정정
+- **보편 룰 또는 Claude Code-Specific** → 본 파일 수정 → 관련 `.claude/rules/`로 propagate
+- **충돌 발견 시** → 본 파일 기준으로 다른 파일 정정
+- mirror symlink는 직접 편집 금지 (실제 파일 = AGENTS.md)
 
-**드리프트 점검**: 룰 추가/변경 PR에서 양쪽 일관성 리뷰 필수.
+**드리프트 점검**: `scripts/validate-rules-drift.sh`가 AGENTS.md ↔ `.claude/rules/` 양방향 참조 자동 검증. CI drift job 통합.
