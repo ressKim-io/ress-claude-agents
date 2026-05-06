@@ -23,8 +23,8 @@ git log --oneline -20                                          # 최근 commit
 | P2. PoC 10개 변환 | **completed** | 2026-05-05 | 2026-05-05 | main | `assets/skills/{kubernetes,go}/<n>/SKILL.md` 10개 (commit `00128dd`). validate-schemas.sh PoC strict 게이트 + validate-skill-frontmatter.sh assets 섹션. 기존 5 lint 모두 green. 검증 게이트 (b) matching CLI dry-run은 P3 의존 |
 | P3. Control plane PoC | **completed** | 2026-05-05 | 2026-05-06 | main | Step 1: scaffold. Step 2: probe. Step 3: match (precision=recall=1.0). Step 4: init (10x hash × 3 fixture). Step 5 (`810ac58`): lint shell delegation (validate-*.sh auto-discover, exit code aggregate). **모든 4 subcommand (probe/match/init/lint) 구현 완료**. **87/87 vitest**. CI drift green은 push 후 GitHub Actions가 step 6에서 검증 |
 | P4. Multi-AI adapter | **completed** | 2026-05-06 | 2026-05-06 | main | Step A: codex spike (.codex/agents schema 3 키 동질성 확인). Step B: `control-plane/src/adapter.ts` 신설 (claude/codex/cursor 3 tool × write/dry-run/diff 3 mode, codex skills `manifest_yaml=''…''`로 9 키 보존). Step C: AGENTS.md primary 승격(254→312줄, §Claude Code-Specific 흡수), `CLAUDE.md→AGENTS.md` symlink, `.codex/AGENTS.md→../AGENTS.md` symlink, `.gitignore` `.codex/` ignore 해제. Step D: `init.ts` step 4 stub → 실제 adapter 호출 wiring (detection + LockFile.adapters.status p4-active/p4-skipped + runs[]). Step E: CI drift job에 adapter parity step (codex+cursor write + git diff 게이트), .claude/skills SKILL.md 디렉토리 형식은 dual-tree 충돌 회피로 gitignore. CLI parser `--tool=value` 형식 추가. **96/96 vitest** (87→96, +9), typecheck 0, build OK, **5 lint green** |
-| P5. Enforcement hook | **next** | — | — | — | PreToolUse `admit` 1개. 초기 warning 모드(exit 0 + stderr). LockFile.hook.status `p5-stub` → `p5-active` |
-| P6. Pilot 1 카테고리 | pending | — | — | — | kubernetes 카테고리 약 10개 전체 변환. activation rate / matching accuracy baseline 1주 수집 |
+| P5. Enforcement hook | **completed** | 2026-05-06 | 2026-05-06 | main | Step A: admit.ts + 9 vitest (3 deny / 3 allow / 3 globToRegex unit). 매칭 = `applies_when.files_present` glob + `files_contain` regex + `security.sandbox: read-only` 가드. 단일 path glob→regex 매처(50줄, deps 추가 X). CLI `admit --tool/--path/--skill/--mode warn|deny`, warn=exit 0 + stderr / deny=exit 2 + stderr. Step B: install-hook.ts (settings.local.json idempotent merge), init.ts step 5 wiring (.claude 있을 때만 hook install, hookMode default 'warn'), LockFile.hook 확장 `{installed, status: p5-active|p5-skipped|p5-already-present, mode, settings_path}`. 기존/idempotent/merge 3 init 테스트 추가. **108/108 vitest** (96→108, +12), 5 lint green |
+| P6. Pilot 1 카테고리 | **next** | — | — | — | kubernetes 카테고리 약 10개 전체 변환. activation rate / matching accuracy baseline 1주 수집. P5 hook이 warn 모드로 베이스라인 데이터 수집 → P6 종료 시점 deny 전환 결정 |
 | P7. 전체 마이그레이션 | pending | — | — | — | 239개 모두 변환. 2 카테고리/주 페이스. 카테고리 PR 단독 revert 가능 |
 | P8. Registry-ready 동결 | pending | — | — | — | signature/sandbox 메타 채움. skills.sh 포맷 export script. **Q8 결정**: sigstore cosign vs SLSA provenance |
 
@@ -39,7 +39,7 @@ git log --oneline -20                                          # 최근 commit
 - [x] Adapter parity (claude/codex/cursor diff 0) — 2026-05-06 P4-E (`tests/adapter.test.ts` 8 케이스 + CI drift step)
 - [ ] CI drift green — P4 push 후 GitHub Actions가 검증 (drift job에 adapter parity step 통합 완료)
 - [x] Multi-AI 동시 사용 시뮬 — 2026-05-06 P4-D (`init.test.ts` "detects .claude/.codex/.cursor and records p4-active in lock")
-- [ ] Hook 동작 (deny 3건, allow 3건) — P5
+- [x] Hook 동작 (deny 3건, allow 3건) — 2026-05-06 P5 (`tests/admit.test.ts` 3 deny + 3 allow + 3 globToRegex unit)
 
 ## Decision Log (Phase 진행 중 발견되는 추가 결정)
 
@@ -93,6 +93,10 @@ git log --oneline -20                                          # 최근 commit
 | 2026-05-06 | P4-D | `init.ts` step 4 stub → 실제 adapter 호출 wiring | `existsSync(.claude/.codex/.cursor)` 자동 detection, detected 도구마다 adapter() 호출(dryRun 모드 전파). LockFile schema: `adapters.status: p4-stub` → `p4-active|p4-skipped`, `runs?: AdapterRunSummary[]` 추가. init.test.ts L99-106 갱신 + 신규 detection 테스트 1건 |
 | 2026-05-06 | P4-E | CI drift job에 adapter parity step 추가 | `.github/workflows/ci.yml` drift job에 Node setup + control-plane build + adapter --tool=codex/cursor write + `git diff --quiet` 게이트. cursor/codex view 변경 시 commit 강제. .claude/skills SKILL.md는 P4-D gitignore로 검증 대상에서 제외 |
 | 2026-05-06 | P4-E | adapter CLI parser `--flag=value` 형식 지원 추가 | 기존엔 `--tool claude` 띄어쓰기만 가능. `--tool=claude`도 받아 표준 GNU long-opt 컨벤션 충족. 토큰 분리는 첫 `=` 위치 기준 |
+| 2026-05-06 | P5 | admit 매칭 = `applies_when.files_present` (glob) + `files_contain` (glob+regex) + `security.sandbox=read-only` 가드 | match.ts의 score 시맨틱은 admit과 다름(score=전체 enumerate, admit=단일 path boolean). admit 전용 매처를 50줄 inline glob→regex로 작성. `**/`은 `(?:.*/)?`, `*`은 `[^/]*`로 변환. picomatch 같은 dep 추가 회피 — 실제 patterns(`**/Chart.yaml`, `**/*.yaml`)에 충분 |
+| 2026-05-06 | P5 | admit fallback 3건 → allow (skill 미지정 / path 미지정 / read-only tool) | skill-aware admission은 P6+ pilot 단계. P5는 초기 warning 데이터 수집이 목적이라 fallback 관대. read-only tool(Read/Glob/Grep/Bash)은 admission 범위 외 |
+| 2026-05-06 | P5 | hook 설치 = `.claude/settings.local.json` idempotent JSON merge, `HOOK_MARKER='@ress/claude-agents admit'`로 detection | git-tracked `settings.json`(공유)이 아닌 `settings.local.json`(개인) 사용 — 사용자 환경 격리. 마커 substring 검색으로 idempotent. 기존 hooks/permissions 키 보존 |
+| 2026-05-06 | P5 | hookMode 디폴트 'warn', deny 전환은 P6 baseline 후 결정 | plan §224 + P0 결정 Q5 정합. baseline 1주 = activation rate / false positive 패턴 데이터. deny 전환 시 별도 ADR 작성 권고 |
 | 2026-05-06 | P4-A | `tomlify` 의존성 미추가, 직접 stringify (50줄 미만) | 처리 대상이 3 string 키뿐이고 literal-string 디폴트라 escape 로직 단순. P3 정책 runtime deps ≤ 5 유지 (현재 4/5: zod·kleur·fast-glob·yaml). 의존성 1개 절약 + 변환 결정성 직접 통제 |
 | 2026-05-06 | P4-A | `assets/skills/<cat>/<n>/SKILL.md` → `.codex/skills/<cat>/<n>.toml` 변환 시 부가 메타 9 키(`applies_when`/`portability`/`produces`/`consumes`/`security`/`version`/`license`) 그대로 toml에 부착 | 옵션 B(body 헤더 prepend)·C(drop)와 비교 후 채택. round-trip 손실 0 우선. Codex가 unknown 키 무시하는 관대한 reader 가정 — 문제 시 P5 hook 단계에서 회귀 |
 
