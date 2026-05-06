@@ -1,6 +1,7 @@
-import { writeFileSync } from "node:fs";
+import { existsSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { stringify } from "yaml";
+import { adapter, type AdapterTool } from "./adapter.js";
 import { buildMatchContext, selectSkills, type ScoreResult } from "./match.js";
 import { probe } from "./probe.js";
 import type { ProjectProfile } from "./schema/project-profile.js";
@@ -32,6 +33,13 @@ export interface LockSkillEntry {
   version?: string;
 }
 
+export interface AdapterRunSummary {
+  tool: AdapterTool;
+  create: number;
+  update: number;
+  unchanged: number;
+}
+
 export interface LockFile {
   schema_version: 1;
   generated_at: string;
@@ -42,7 +50,11 @@ export interface LockFile {
     suggest: LockSkillEntry[];
     skip_count: number;
   };
-  adapters: { detected: string[]; status: "p4-stub" };
+  adapters: {
+    detected: AdapterTool[];
+    status: "p4-active" | "p4-skipped";
+    runs?: AdapterRunSummary[];
+  };
   hook: { installed: boolean; status: "p5-stub" };
 }
 
@@ -97,11 +109,36 @@ export async function init(opts: InitOptions): Promise<InitOutput> {
         : "auto-accepted (interactive prompt is P5+)",
   });
 
+  const detected = detectTools(opts.root);
+  const adapterRuns: AdapterRunSummary[] = [];
+  for (const tool of detected) {
+    const r = await adapter({
+      tool,
+      root: opts.root,
+      assets: opts.assets,
+      mode: opts.dryRun ? "dry-run" : "write",
+    });
+    const summary: AdapterRunSummary = {
+      tool,
+      create: r.changes.filter((c) => c.status === "create").length,
+      update: r.changes.filter((c) => c.status === "update").length,
+      unchanged: r.changes.filter((c) => c.status === "unchanged").length,
+    };
+    adapterRuns.push(summary);
+  }
   logs.push({
     step: 4,
     name: "adapter",
-    status: "stub",
-    detail: "tool detection (.claude/, .codex/, .cursor/) deferred to P4",
+    status: detected.length > 0 ? "ok" : "skipped",
+    detail:
+      detected.length > 0
+        ? `detected ${detected.join(", ")} (${adapterRuns
+            .map(
+              (s) =>
+                `${s.tool}: ${s.create}c/${s.update}u/${s.unchanged}=`,
+            )
+            .join(", ")})`
+        : "no .claude/.codex/.cursor directories detected",
   });
 
   logs.push({
@@ -113,6 +150,11 @@ export async function init(opts: InitOptions): Promise<InitOutput> {
 
   const generated_at = opts.frozenTime ?? new Date().toISOString();
   const generator = `@ress/claude-agents@${VERSION}`;
+  const adaptersField: LockFile["adapters"] = {
+    detected,
+    status: detected.length > 0 ? "p4-active" : "p4-skipped",
+  };
+  if (adapterRuns.length > 0) adaptersField.runs = adapterRuns;
   const lock: LockFile = {
     schema_version: 1,
     generated_at,
@@ -123,7 +165,7 @@ export async function init(opts: InitOptions): Promise<InitOutput> {
       suggest: result.suggest.map(toLockEntry),
       skip_count: result.skip.length,
     },
-    adapters: { detected: [], status: "p4-stub" },
+    adapters: adaptersField,
     hook: { installed: false, status: "p5-stub" },
   };
 
@@ -160,4 +202,12 @@ function toLockEntry(r: ScoreResult): LockSkillEntry {
 function round2(n: number): number {
   if (!Number.isFinite(n)) return n;
   return Math.round(n * 100) / 100;
+}
+
+function detectTools(root: string): AdapterTool[] {
+  const detected: AdapterTool[] = [];
+  if (existsSync(path.join(root, ".claude"))) detected.push("claude");
+  if (existsSync(path.join(root, ".codex"))) detected.push("codex");
+  if (existsSync(path.join(root, ".cursor"))) detected.push("cursor");
+  return detected;
 }

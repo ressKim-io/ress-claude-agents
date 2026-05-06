@@ -75,7 +75,7 @@ jobs:
         run: shellcheck scripts/*.sh
 
   drift:
-    name: Rules / Frontmatter Drift
+    name: Rules / Frontmatter / Adapter Drift
     runs-on: ubuntu-latest
 
     steps:
@@ -95,3 +95,36 @@ jobs:
 
       - name: Validate agent handoff (P3 위계)
         run: ./scripts/validate-agent-handoff.sh all
+
+      - name: Setup Node (for control-plane adapter)
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: control-plane/package-lock.json
+
+      - name: Install control-plane dependencies
+        working-directory: control-plane
+        run: npm ci
+
+      - name: Build control-plane
+        working-directory: control-plane
+        run: npm run build
+
+      - name: Adapter parity drift (P4 — codex + cursor only; .claude/skills SKILL.md is gitignored until P7)
+        run: |
+          for tool in codex cursor; do
+            echo "=== adapter --tool=$tool ==="
+            node control-plane/dist/cli.js adapter \
+              --tool="$tool" \
+              --root="$PWD" \
+              --assets="$PWD/assets"
+          done
+          if ! git diff --quiet -- .codex/skills/ .codex/agents/ .cursor/; then
+            echo "::error::adapter parity drift detected. Run locally:"
+            echo "  cd control-plane && npm run build && cd .."
+            echo "  for t in codex cursor; do node control-plane/dist/cli.js adapter --tool=\$t --root=. --assets=./assets; done"
+            echo "Then commit the regenerated view files."
+            git diff --stat -- .codex/skills/ .codex/agents/ .cursor/
+            exit 1
+          fi

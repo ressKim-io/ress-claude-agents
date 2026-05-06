@@ -75,7 +75,7 @@ interface ParsedLock {
   schema_version: number;
   skills: { install: { name: string }[]; skip_count: number };
   threshold: number;
-  adapters: { status: string };
+  adapters: { detected: string[]; status: string };
   hook: { status: string };
 }
 
@@ -96,12 +96,14 @@ describe.each(FIXTURES)("init on fixture: $name", (fixture) => {
     expect(installNames).toEqual(fixture.expectedInstall.slice().sort());
   });
 
-  it("lock carries P4/P5 stub markers + threshold default 50", async () => {
+  it("lock carries P4 skipped + P5 stub markers + threshold default 50", async () => {
     const out = await runOnce(fixture);
     const lock = parseYaml(out.lock) as ParsedLock;
     expect(lock.schema_version).toBe(1);
     expect(lock.threshold).toBe(50);
-    expect(lock.adapters.status).toBe("p4-stub");
+    // fixtures have no .claude/.codex/.cursor → adapter step is skipped, detected=[]
+    expect(lock.adapters.detected).toEqual([]);
+    expect(lock.adapters.status).toBe("p4-skipped");
     expect(lock.hook.status).toBe("p5-stub");
   });
 
@@ -115,6 +117,35 @@ describe.each(FIXTURES)("init on fixture: $name", (fixture) => {
     }
     expect(profileHashes.size).toBe(1);
     expect(lockHashes.size).toBe(1);
+  });
+});
+
+describe("init step 4 adapter wiring (P4)", () => {
+  it("detects .claude/.codex/.cursor and records p4-active in lock", async () => {
+    const root = mkdtempSync(path.join(os.tmpdir(), "init-detect-"));
+    try {
+      // Given: fixture with .claude and .codex stubs
+      const { mkdirSync } = await import("node:fs");
+      mkdirSync(path.join(root, ".claude"), { recursive: true });
+      mkdirSync(path.join(root, ".codex"), { recursive: true });
+
+      // When
+      const result = await init({
+        root,
+        assets: ASSETS_ROOT,
+        frozenTime: FROZEN_TIME,
+        yes: true,
+      });
+
+      // Then
+      expect(result.lock.adapters.status).toBe("p4-active");
+      expect(result.lock.adapters.detected).toContain("claude");
+      expect(result.lock.adapters.detected).toContain("codex");
+      expect(result.lock.adapters.detected).not.toContain("cursor");
+      expect(result.lock.adapters.runs?.length ?? 0).toBeGreaterThan(0);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 });
 

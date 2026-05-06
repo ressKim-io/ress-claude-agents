@@ -32,3 +32,10 @@ tmp/
 # .agents/는 P7까지 deprecate 예정 (assets/skills/ SSOT로 이동), 그동안 ignore.
 # .codex/는 P4 adapter SSoT view → commit 대상 (0002 plan §86-89, decision log P4-C).
 .agents/
+
+# .claude/skills/<cat>/<n>/SKILL.md (디렉토리 형식)는 P4 adapter --tool=claude 산출물이지만
+# P7까지는 단일 파일 형식(.claude/skills/<cat>/<n>.md)이 SSOT view. dual-tree 충돌 회피로
+# SKILL.md 디렉토리는 commit 안 함 (decision log P4-D, plan §86-89). codex/cursor view는 commit.
+.claude/skills/*/*/SKILL.md
+.claude/skills/*/*/resources/
+.claude/skills/*/*/scripts/
