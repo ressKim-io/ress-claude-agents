@@ -21,7 +21,7 @@ git log --oneline -20                                          # 최근 commit
 | P0. 영구 기록 + commit | **completed** | 2026-05-05 | 2026-05-05 | main | 0002 본문(`f6fb2fe`) + dev-log(`0043b12`, `e3e32ec`) + progress 트래커 |
 | P1. Schema 동결 | **completed** | 2026-05-05 | 2026-05-05 | main | 3 schema + `scripts/validate-schemas.sh` + README. ajv-cli@5 Draft 2020-12 compile + sample validate 통과 (source-command-log-summary, code-reviewer) |
 | P2. PoC 10개 변환 | **completed** | 2026-05-05 | 2026-05-05 | main | `assets/skills/{kubernetes,go}/<n>/SKILL.md` 10개 (commit `00128dd`). validate-schemas.sh PoC strict 게이트 + validate-skill-frontmatter.sh assets 섹션. 기존 5 lint 모두 green. 검증 게이트 (b) matching CLI dry-run은 P3 의존 |
-| P3. Control plane PoC | **in_progress** | 2026-05-05 | — | main | Step 1/6 완료 (`f0b0c83`→`daced4c`): `@ress/claude-agents` scaffold + CLI router 4 subcommand stub + 8 vitest. Steps 2-6 (probe/match/init/lint/gold dataset) pending |
+| P3. Control plane PoC | **in_progress** | 2026-05-05 | — | main | Step 1+2/6 완료. step 1 (`f0b0c83`→`daced4c`): scaffold + CLI router. step 2 (`9966bd3`→`9f2bd24`): zod schema + round-trip + probe (repo/lang/build/framework/signatures/domain_hints) + 3 fixtures (empty/go-gin/k8s-only) + 10x hash 결정성 + CLI wire. **36/36 vitest**. Steps 3-6 (match/init/lint/gold dataset) pending |
 | P4. Multi-AI adapter | pending | — | — | — | `.cursor/rules/` 자동 생성, AGENTS.md primary 승격, CLAUDE.md→symlink. 기존 `.codex/agents/*.toml` 변환 로직 흡수 |
 | P5. Enforcement hook | pending | — | — | — | PreToolUse `admit` 1개. 초기 warning 모드(exit 0 + stderr) |
 | P6. Pilot 1 카테고리 | pending | — | — | — | kubernetes 카테고리 약 10개 전체 변환. activation rate / matching accuracy baseline 1주 수집 |
@@ -31,7 +31,7 @@ git log --oneline -20                                          # 최근 commit
 ## Verification 체크리스트 (PoC 10개 후)
 
 - [x] Schema lint exit 0 — 2026-05-05 (`validate-schemas.sh` 3 schema + 2 sample + 10 PoC strict)
-- [ ] Probe determinism (10회 hash 일치) — P3
+- [x] Probe determinism (10회 hash 일치) — 2026-05-06 (`probe-fixtures.test.ts` 10x SHA-256)
 - [ ] Matching accuracy precision ≥ 0.9, recall ≥ 0.85 — P3
 - [ ] Adapter parity (claude/codex/cursor diff 0) — P4
 - [ ] Hook 동작 (deny 3건, allow 3건) — P5
@@ -67,6 +67,12 @@ git log --oneline -20                                          # 최근 commit
 | 2026-05-05 | P3 | `run(argv, opts)` 시그니처에 stdout/stderr 주입 | 테스트 capture 깔끔 + future JSON-RPC hook(P5)에서 같은 함수 재사용. `process.stdout` 직접 호출 회피 |
 | 2026-05-05 | P3 | commander/yargs 미도입, switch 라우팅 | 4 subcommand 한정이라 의존성 1개 절약. CLI 파서 필요해지면 step 5(`init` confirm flow)에서 재평가 |
 | 2026-05-05 | P3 | tsconfig `noUncheckedIndexedAccess: true` | probe/match가 array indexing 다수 사용 예정 → 컴파일러 강제로 결정성·boundary 안전성 확보 |
+| 2026-05-06 | P3 | profile에 file list 미포함, match가 fast-glob으로 재스캔 | 큰 monorepo에서 yaml 출력 폭발 회피. profile은 metadata only, match는 profile + filesystem 조합 |
+| 2026-05-06 | P3 | `--frozen-time <ISO>` flag로 generated_at 결정성 보장 | schema required 필드라 제거 불가. frozen-time을 결정성 테스트와 CI fixture 비교에서 강제 |
+| 2026-05-06 | P3 | fixture 위치: `control-plane/tests/profiles/<n>/` | 본문 §검증 전략 명세 따름. step 4 gold expected.yml도 같은 위치에 추가 예정 |
+| 2026-05-06 | P3 | Zod ↔ JSON Schema round-trip 테스트로 drift 차단 | `zod-to-json-schema` 의존성 회피. 동일 valid/invalid sample을 양쪽이 동일하게 판정해야 통과 |
+| 2026-05-06 | P3 | yaml stringify에 `sortMapEntries:true` 강제 | probe() 객체 리터럴이 이미 결정적 순서지만 yaml 직렬화 단계 안전망 추가. 10x hash 일치 보장 |
+| 2026-05-06 | P3 | `.git/HEAD` 파일을 직접 읽어 default_branch 추출 | git CLI 비의존, 결정성 + Node-only. 정확한 origin/HEAD 추적은 over-engineering으로 보고 현재 branch 사용 |
 
 ## 알려진 위험 (해소되면 줄긋기)
 
