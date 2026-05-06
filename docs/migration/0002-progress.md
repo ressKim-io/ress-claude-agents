@@ -21,7 +21,7 @@ git log --oneline -20                                          # 최근 commit
 | P0. 영구 기록 + commit | **completed** | 2026-05-05 | 2026-05-05 | main | 0002 본문(`f6fb2fe`) + dev-log(`0043b12`, `e3e32ec`) + progress 트래커 |
 | P1. Schema 동결 | **completed** | 2026-05-05 | 2026-05-05 | main | 3 schema + `scripts/validate-schemas.sh` + README. ajv-cli@5 Draft 2020-12 compile + sample validate 통과 (source-command-log-summary, code-reviewer) |
 | P2. PoC 10개 변환 | **completed** | 2026-05-05 | 2026-05-05 | main | `assets/skills/{kubernetes,go}/<n>/SKILL.md` 10개 (commit `00128dd`). validate-schemas.sh PoC strict 게이트 + validate-skill-frontmatter.sh assets 섹션. 기존 5 lint 모두 green. 검증 게이트 (b) matching CLI dry-run은 P3 의존 |
-| P3. Control plane PoC | **next** | — | — | — | `@ress/claude-agents` CLI 4 subcommand (probe/match/init/lint), TS+Node 18+ ESM. tsup ESM 번들 |
+| P3. Control plane PoC | **in_progress** | 2026-05-05 | — | main | Step 1/6 완료 (`f0b0c83`→`daced4c`): `@ress/claude-agents` scaffold + CLI router 4 subcommand stub + 8 vitest. Steps 2-6 (probe/match/init/lint/gold dataset) pending |
 | P4. Multi-AI adapter | pending | — | — | — | `.cursor/rules/` 자동 생성, AGENTS.md primary 승격, CLAUDE.md→symlink. 기존 `.codex/agents/*.toml` 변환 로직 흡수 |
 | P5. Enforcement hook | pending | — | — | — | PreToolUse `admit` 1개. 초기 warning 모드(exit 0 + stderr) |
 | P6. Pilot 1 카테고리 | pending | — | — | — | kubernetes 카테고리 약 10개 전체 변환. activation rate / matching accuracy baseline 1주 수집 |
@@ -63,6 +63,10 @@ git log --oneline -20                                          # 최근 commit
 | 2026-05-05 | P2 | dual-tree 유지 — `assets/skills/` 신설 + `.claude/skills/` 보존 | P3 adapter 도입 전 호환성 유지. 10개 한정이라 sync 부담 작음 |
 | 2026-05-05 | P2 | 기존 본문의 `# H1`을 그대로 SKILL.md에 포함 | Anthropic 공식은 H1 미권장이지만 본문 손대지 않는 게 PoC 단순성 우선. P3 adapter가 view 생성 시 정책 재결정 |
 | 2026-05-05 | P2 | description 길이 strict는 lint script 단계별 flag로 운영 | schema는 `minLength: 1` 영구, `validate-schemas.sh`/`validate-skill-frontmatter.sh`에 P2 strict 함수 추가 → schema-drift 차단 |
+| 2026-05-05 | P3 | runtime deps 2/5로 시작, lazy add | step 1엔 `zod`/`kleur`만 필요. `fast-glob`/`yaml`/`tomlify`는 step 2/3/4가 import할 때 추가 — 의존 그래프 최소화 |
+| 2026-05-05 | P3 | `run(argv, opts)` 시그니처에 stdout/stderr 주입 | 테스트 capture 깔끔 + future JSON-RPC hook(P5)에서 같은 함수 재사용. `process.stdout` 직접 호출 회피 |
+| 2026-05-05 | P3 | commander/yargs 미도입, switch 라우팅 | 4 subcommand 한정이라 의존성 1개 절약. CLI 파서 필요해지면 step 5(`init` confirm flow)에서 재평가 |
+| 2026-05-05 | P3 | tsconfig `noUncheckedIndexedAccess: true` | probe/match가 array indexing 다수 사용 예정 → 컴파일러 강제로 결정성·boundary 안전성 확보 |
 
 ## 알려진 위험 (해소되면 줄긋기)
 
