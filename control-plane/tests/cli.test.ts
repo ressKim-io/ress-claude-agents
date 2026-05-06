@@ -49,16 +49,6 @@ describe("cli routing", () => {
     expect(stderr.join("")).toContain("Unknown command");
   });
 
-  it.each(["lint"] as const)(
-    "stub %s returns non-zero with TODO message",
-    async (cmd) => {
-      const { stderr, opts } = captureStreams();
-      const code = await run([cmd], opts);
-      expect(code).toBeGreaterThan(0);
-      expect(stderr.join("")).toContain("not implemented");
-    },
-  );
-
   it("probe with non-existent --root returns 1 (probe failed)", async () => {
     const { stderr, opts } = captureStreams();
     const code = await run(
@@ -119,5 +109,12 @@ describe("cli routing", () => {
     );
     expect(code).toBe(1);
     expect(stderr.join("")).toContain("init failed");
+  });
+
+  it("lint with unknown flag returns 2", async () => {
+    const { stderr, opts } = captureStreams();
+    const code = await run(["lint", "--no-such-flag"], opts);
+    expect(code).toBe(2);
+    expect(stderr.join("")).toContain("unknown lint flag");
   });
 });

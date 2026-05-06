@@ -3,6 +3,7 @@ import path from "node:path";
 import kleur from "kleur";
 import { parse as parseYaml, stringify } from "yaml";
 import { init, type InitOptions } from "./init.js";
+import { lint } from "./lint.js";
 import {
   buildMatchContext,
   DEFAULT_INSTALL_THRESHOLD,
@@ -19,6 +20,7 @@ export { probe };
 export { selectSkills, buildMatchContext };
 export { loadSkills };
 export { init };
+export { lint };
 
 const COMMANDS = ["probe", "match", "init", "lint"] as const;
 type Command = (typeof COMMANDS)[number];
@@ -56,7 +58,7 @@ export async function run(argv: string[], opts: RunOptions = {}): Promise<number
     case "init":
       return runInit(rest, out, err);
     case "lint":
-      return stub("lint", "P3 step 6 — delegate to repo lint scripts", rest, err);
+      return runLint(rest, out, err);
   }
 }
 
@@ -321,6 +323,76 @@ async function runInit(
     err.write(kleur.red(`init failed: ${message}\n`));
     return 1;
   }
+}
+
+interface LintCliOpts {
+  root: string;
+  verbose: boolean;
+}
+
+async function runLint(
+  args: string[],
+  out: NodeJS.WritableStream,
+  err: NodeJS.WritableStream,
+): Promise<number> {
+  const parsed = parseLintArgs(args, err);
+  if (!parsed) return 2;
+
+  try {
+    const result = await lint({ root: parsed.root });
+
+    if (result.results.length === 0) {
+      err.write(
+        kleur.yellow(
+          `lint: no scripts/validate-*.sh under ${parsed.root}\n`,
+        ),
+      );
+      return 0;
+    }
+
+    for (const r of result.results) {
+      const tag = r.exitCode === 0 ? kleur.green("✓") : kleur.red("✗");
+      out.write(`${tag} ${r.script} (exit ${r.exitCode})\n`);
+      if (parsed.verbose || r.exitCode !== 0) {
+        if (r.stdout) out.write(r.stdout);
+        if (r.stderr) err.write(r.stderr);
+      }
+    }
+
+    return result.allGreen ? 0 : 1;
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : String(e);
+    err.write(kleur.red(`lint failed: ${message}\n`));
+    return 1;
+  }
+}
+
+function parseLintArgs(
+  args: string[],
+  err: NodeJS.WritableStream,
+): LintCliOpts | null {
+  const queue = [...args];
+  const opts: LintCliOpts = { root: process.cwd(), verbose: false };
+  while (queue.length > 0) {
+    const flag = queue.shift();
+    if (flag === undefined) break;
+    if (flag === "--verbose" || flag === "-v") {
+      opts.verbose = true;
+      continue;
+    }
+    if (flag === "--root") {
+      const value = queue.shift();
+      if (value === undefined) {
+        err.write(kleur.red(`${flag} requires a value\n`));
+        return null;
+      }
+      opts.root = value;
+    } else {
+      err.write(kleur.red(`unknown lint flag: ${flag}\n`));
+      return null;
+    }
+  }
+  return opts;
 }
 
 function parseInitArgs(
