@@ -1,7 +1,11 @@
+import { writeFileSync } from "node:fs";
 import kleur from "kleur";
+import { stringify } from "yaml";
+import { probe, type ProbeOptions } from "./probe.js";
 import { VERSION } from "./version.js";
 
 export { VERSION };
+export { probe };
 
 const COMMANDS = ["probe", "match", "init", "lint"] as const;
 type Command = (typeof COMMANDS)[number];
@@ -33,7 +37,7 @@ export async function run(argv: string[], opts: RunOptions = {}): Promise<number
 
   switch (cmd) {
     case "probe":
-      return stub("probe", "P3 step 2 — generate project-profile.yml", rest, err);
+      return runProbe(rest, out, err);
     case "match":
       return stub("match", "P3 step 3 — score skills against profile", rest, err);
     case "init":
@@ -41,6 +45,60 @@ export async function run(argv: string[], opts: RunOptions = {}): Promise<number
     case "lint":
       return stub("lint", "P3 step 6 — delegate to repo lint scripts", rest, err);
   }
+}
+
+interface ProbeCliOpts extends ProbeOptions {
+  outFile?: string;
+}
+
+async function runProbe(
+  args: string[],
+  out: NodeJS.WritableStream,
+  err: NodeJS.WritableStream,
+): Promise<number> {
+  const parsed = parseProbeArgs(args, err);
+  if (!parsed) return 2;
+
+  try {
+    const profile = await probe(parsed);
+    const yaml = stringify(profile, { sortMapEntries: true });
+    if (parsed.outFile) {
+      writeFileSync(parsed.outFile, yaml);
+    } else {
+      out.write(yaml);
+    }
+    return 0;
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : String(e);
+    err.write(kleur.red(`probe failed: ${message}\n`));
+    return 1;
+  }
+}
+
+function parseProbeArgs(
+  args: string[],
+  err: NodeJS.WritableStream,
+): ProbeCliOpts | null {
+  const queue = [...args];
+  const opts: ProbeCliOpts = { root: process.cwd() };
+  while (queue.length > 0) {
+    const flag = queue.shift();
+    if (flag === undefined) break;
+    if (flag === "--root" || flag === "--out" || flag === "--frozen-time") {
+      const value = queue.shift();
+      if (value === undefined) {
+        err.write(kleur.red(`${flag} requires a value\n`));
+        return null;
+      }
+      if (flag === "--root") opts.root = value;
+      else if (flag === "--out") opts.outFile = value;
+      else opts.frozenTime = value;
+    } else {
+      err.write(kleur.red(`unknown probe flag: ${flag}\n`));
+      return null;
+    }
+  }
+  return opts;
 }
 
 function isCommand(value: string): value is Command {
