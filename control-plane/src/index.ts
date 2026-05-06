@@ -1,6 +1,8 @@
 import { readFileSync, writeFileSync } from "node:fs";
+import path from "node:path";
 import kleur from "kleur";
 import { parse as parseYaml, stringify } from "yaml";
+import { init, type InitOptions } from "./init.js";
 import {
   buildMatchContext,
   DEFAULT_INSTALL_THRESHOLD,
@@ -16,6 +18,7 @@ export { VERSION };
 export { probe };
 export { selectSkills, buildMatchContext };
 export { loadSkills };
+export { init };
 
 const COMMANDS = ["probe", "match", "init", "lint"] as const;
 type Command = (typeof COMMANDS)[number];
@@ -51,7 +54,7 @@ export async function run(argv: string[], opts: RunOptions = {}): Promise<number
     case "match":
       return runMatch(rest, out, err);
     case "init":
-      return stub("init", "P3 step 5 — bootstrap project (5 step orchestration)", rest, err);
+      return runInit(rest, out, err);
     case "lint":
       return stub("lint", "P3 step 6 — delegate to repo lint scripts", rest, err);
   }
@@ -250,6 +253,122 @@ function parseMatchArgs(
       }
     } else {
       err.write(kleur.red(`unknown match flag: ${flag}\n`));
+      return null;
+    }
+  }
+  return opts;
+}
+
+interface InitCliOpts {
+  root: string;
+  assets: string;
+  threshold?: number;
+  frozenTime?: string;
+  yes: boolean;
+  dryRun: boolean;
+}
+
+async function runInit(
+  args: string[],
+  out: NodeJS.WritableStream,
+  err: NodeJS.WritableStream,
+): Promise<number> {
+  const parsed = parseInitArgs(args, err);
+  if (!parsed) return 2;
+
+  try {
+    const initOpts: InitOptions = {
+      root: parsed.root,
+      assets: parsed.assets,
+      yes: parsed.yes,
+      dryRun: parsed.dryRun,
+    };
+    if (parsed.threshold !== undefined) initOpts.threshold = parsed.threshold;
+    if (parsed.frozenTime !== undefined) initOpts.frozenTime = parsed.frozenTime;
+
+    const result = await init(initOpts);
+
+    for (const log of result.logs) {
+      const tag =
+        log.status === "ok"
+          ? kleur.green("✓")
+          : log.status === "stub"
+            ? kleur.yellow("·")
+            : kleur.gray("-");
+      out.write(`${tag} [${log.step}/5] ${log.name}: ${log.detail}\n`);
+    }
+
+    if (result.issues.length > 0) {
+      err.write(
+        kleur.yellow(
+          `init: skipped ${result.issues.length} broken skill(s)\n`,
+        ),
+      );
+    }
+
+    if (parsed.dryRun) {
+      out.write("\n--- .claude-agents.yml (dry-run preview) ---\n");
+      out.write(stringify(result.lock, { sortMapEntries: true }));
+    } else if (result.paths.profile && result.paths.lock) {
+      out.write(
+        `\nWrote: ${path.relative(parsed.root, result.paths.profile)}, ${path.relative(parsed.root, result.paths.lock)}\n`,
+      );
+    }
+
+    return 0;
+  } catch (e: unknown) {
+    const message = e instanceof Error ? e.message : String(e);
+    err.write(kleur.red(`init failed: ${message}\n`));
+    return 1;
+  }
+}
+
+function parseInitArgs(
+  args: string[],
+  err: NodeJS.WritableStream,
+): InitCliOpts | null {
+  const queue = [...args];
+  const opts: InitCliOpts = {
+    root: process.cwd(),
+    assets: process.cwd(),
+    yes: false,
+    dryRun: false,
+  };
+  while (queue.length > 0) {
+    const flag = queue.shift();
+    if (flag === undefined) break;
+    if (flag === "--yes") {
+      opts.yes = true;
+      continue;
+    }
+    if (flag === "--dry-run") {
+      opts.dryRun = true;
+      continue;
+    }
+    if (
+      flag === "--root" ||
+      flag === "--assets" ||
+      flag === "--threshold" ||
+      flag === "--frozen-time"
+    ) {
+      const value = queue.shift();
+      if (value === undefined) {
+        err.write(kleur.red(`${flag} requires a value\n`));
+        return null;
+      }
+      if (flag === "--root") opts.root = value;
+      else if (flag === "--assets") opts.assets = value;
+      else if (flag === "--frozen-time") opts.frozenTime = value;
+      else if (flag === "--threshold") {
+        const parsedNum = Number.parseInt(value, 10);
+        if (!Number.isFinite(parsedNum)) {
+          err.write(kleur.red(`--threshold requires an integer\n`));
+          return null;
+        }
+        opts.threshold = parsedNum;
+      }
+    } else {
+      err.write(kleur.red(`unknown init flag: ${flag}\n`));
       return null;
     }
   }
