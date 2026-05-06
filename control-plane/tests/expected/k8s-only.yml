@@ -1,0 +1,11 @@
+# Expected match outcome for tests/profiles/k8s-only (Helm chart fixture).
+# - k8s-helm: Chart.yaml + templates/*.yaml + framework helm.
+# Other k8s-* skills should NOT activate:
+#   k8s-autoscaling: no hpa/vpa/scaledobject manifests
+#   k8s-scheduling : deployment.yaml present but no scheduling fields
+#                    (nodeSelector/affinity/tolerations) in *.yaml
+#   k8s-security   : no NetworkPolicy/Role/securityContext in *.yaml
+#   k8s-traffic    : no Ingress/Gateway/HTTPRoute manifests
+install:
+  - k8s-helm
+suggest: []

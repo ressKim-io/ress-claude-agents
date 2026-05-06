@@ -1,0 +1,5 @@
+# Expected match outcome for tests/profiles/empty (an empty directory).
+# No skill should activate when there are no language, framework, or
+# manifest signals.
+install: []
+suggest: []

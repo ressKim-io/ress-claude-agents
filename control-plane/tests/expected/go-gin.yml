@@ -1,0 +1,12 @@
+# Expected match outcome for tests/profiles/go-gin (Gin HTTP server fixture).
+# - go-gin       : direct match (gin in go.mod, language go, framework gin).
+# - go-microservice: gin counts as a microservice framework per its
+#                    "Apply when go.mod imports gin" wording.
+# Other go-* skills should NOT activate:
+#   go-database  : no DB driver in go.mod
+#   go-errors    : no errors.X usage in *.go
+#   go-testing   : no *_test.go files
+install:
+  - go-gin
+  - go-microservice
+suggest: []
