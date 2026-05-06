@@ -49,7 +49,7 @@ describe("cli routing", () => {
     expect(stderr.join("")).toContain("Unknown command");
   });
 
-  it.each(["match", "init", "lint"] as const)(
+  it.each(["init", "lint"] as const)(
     "stub %s returns non-zero with TODO message",
     async (cmd) => {
       const { stderr, opts } = captureStreams();
@@ -81,5 +81,19 @@ describe("cli routing", () => {
     const code = await run(["probe", "--root"], opts);
     expect(code).toBe(2);
     expect(stderr.join("")).toContain("--root requires a value");
+  });
+
+  it("match with unknown flag returns 2", async () => {
+    const { stderr, opts } = captureStreams();
+    const code = await run(["match", "--no-such-flag"], opts);
+    expect(code).toBe(2);
+    expect(stderr.join("")).toContain("unknown match flag");
+  });
+
+  it("match with non-integer threshold returns 2", async () => {
+    const { stderr, opts } = captureStreams();
+    const code = await run(["match", "--threshold", "abc"], opts);
+    expect(code).toBe(2);
+    expect(stderr.join("")).toContain("--threshold requires an integer");
   });
 });

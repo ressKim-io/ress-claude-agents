@@ -1,11 +1,21 @@
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import kleur from "kleur";
-import { stringify } from "yaml";
+import { parse as parseYaml, stringify } from "yaml";
+import {
+  buildMatchContext,
+  DEFAULT_INSTALL_THRESHOLD,
+  selectSkills,
+  type ScoreResult,
+} from "./match.js";
 import { probe, type ProbeOptions } from "./probe.js";
+import { ProjectProfile } from "./schema/project-profile.js";
+import { loadSkills } from "./skill-loader.js";
 import { VERSION } from "./version.js";
 
 export { VERSION };
 export { probe };
+export { selectSkills, buildMatchContext };
+export { loadSkills };
 
 const COMMANDS = ["probe", "match", "init", "lint"] as const;
 type Command = (typeof COMMANDS)[number];
@@ -39,7 +49,7 @@ export async function run(argv: string[], opts: RunOptions = {}): Promise<number
     case "probe":
       return runProbe(rest, out, err);
     case "match":
-      return stub("match", "P3 step 3 — score skills against profile", rest, err);
+      return runMatch(rest, out, err);
     case "init":
       return stub("init", "P3 step 5 — bootstrap project (5 step orchestration)", rest, err);
     case "lint":
@@ -95,6 +105,151 @@ function parseProbeArgs(
       else opts.frozenTime = value;
     } else {
       err.write(kleur.red(`unknown probe flag: ${flag}\n`));
+      return null;
+    }
+  }
+  return opts;
+}
+
+interface MatchCliOpts {
+  root: string;
+  assets: string;
+  profilePath?: string;
+  outFile?: string;
+  threshold: number;
+  frozenTime?: string;
+}
+
+async function runMatch(
+  args: string[],
+  out: NodeJS.WritableStream,
+  err: NodeJS.WritableStream,
+): Promise<number> {
+  const parsed = parseMatchArgs(args, err);
+  if (!parsed) return 2;
+
+  let profile: ProjectProfile;
+  if (parsed.profilePath) {
+    try {
+      const raw = readFileSync(parsed.profilePath, "utf8");
+      const obj = parseYaml(raw) as unknown;
+      const result = ProjectProfile.safeParse(obj);
+      if (!result.success) {
+        err.write(
+          kleur.red(`profile invalid: ${result.error.issues[0]?.message ?? "unknown"}\n`),
+        );
+        return 1;
+      }
+      profile = result.data;
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : String(e);
+      err.write(kleur.red(`profile load failed: ${message}\n`));
+      return 1;
+    }
+  } else {
+    try {
+      profile = await probe({
+        root: parsed.root,
+        ...(parsed.frozenTime !== undefined
+          ? { frozenTime: parsed.frozenTime }
+          : {}),
+      });
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : String(e);
+      err.write(kleur.red(`probe failed: ${message}\n`));
+      return 1;
+    }
+  }
+
+  const { skills, issues } = await loadSkills(parsed.assets);
+  if (issues.length > 0) {
+    err.write(
+      kleur.yellow(
+        `match: skipped ${issues.length} broken skill(s) — first: ${issues[0]?.reason ?? ""}\n`,
+      ),
+    );
+  }
+
+  const ctx = await buildMatchContext(parsed.root);
+  const result = await selectSkills(skills, profile, ctx, {
+    installThreshold: parsed.threshold,
+  });
+
+  const output = {
+    install: result.install.map(formatScored),
+    suggest: result.suggest.map(formatScored),
+    skip: result.skip.map(formatScored),
+  };
+  const yamlOut = stringify(output, { sortMapEntries: true });
+  if (parsed.outFile) {
+    writeFileSync(parsed.outFile, yamlOut);
+  } else {
+    out.write(yamlOut);
+  }
+  return 0;
+}
+
+function formatScored(r: ScoreResult): Record<string, unknown> {
+  return {
+    name: r.skill.manifest.name,
+    category: r.skill.category,
+    score: round2(r.score),
+    components: {
+      files_present: round2(r.components.files_present),
+      files_contain: round2(r.components.files_contain),
+      language: r.components.language,
+      frameworks: round2(r.components.frameworks),
+      excluded: r.components.excluded,
+    },
+  };
+}
+
+function round2(n: number): number {
+  if (!Number.isFinite(n)) return n;
+  return Math.round(n * 100) / 100;
+}
+
+function parseMatchArgs(
+  args: string[],
+  err: NodeJS.WritableStream,
+): MatchCliOpts | null {
+  const queue = [...args];
+  const opts: MatchCliOpts = {
+    root: process.cwd(),
+    assets: process.cwd(),
+    threshold: DEFAULT_INSTALL_THRESHOLD,
+  };
+  while (queue.length > 0) {
+    const flag = queue.shift();
+    if (flag === undefined) break;
+    if (
+      flag === "--root" ||
+      flag === "--assets" ||
+      flag === "--profile" ||
+      flag === "--out" ||
+      flag === "--threshold" ||
+      flag === "--frozen-time"
+    ) {
+      const value = queue.shift();
+      if (value === undefined) {
+        err.write(kleur.red(`${flag} requires a value\n`));
+        return null;
+      }
+      if (flag === "--root") opts.root = value;
+      else if (flag === "--assets") opts.assets = value;
+      else if (flag === "--profile") opts.profilePath = value;
+      else if (flag === "--out") opts.outFile = value;
+      else if (flag === "--frozen-time") opts.frozenTime = value;
+      else if (flag === "--threshold") {
+        const parsedNum = Number.parseInt(value, 10);
+        if (!Number.isFinite(parsedNum)) {
+          err.write(kleur.red(`--threshold requires an integer\n`));
+          return null;
+        }
+        opts.threshold = parsedNum;
+      }
+    } else {
+      err.write(kleur.red(`unknown match flag: ${flag}\n`));
       return null;
     }
   }
