@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import fg from "fast-glob";
+import { PROBE_IGNORES } from "./ignores.js";
 import type {
   CiProvider,
   FilesSignatures,
@@ -15,20 +16,6 @@ export interface ProbeOptions {
   frozenTime?: string;
   generator?: string;
 }
-
-const VENDOR_IGNORES = [
-  "**/node_modules/**",
-  "**/.git/**",
-  "**/dist/**",
-  "**/build/**",
-  "**/.cache/**",
-  "**/.next/**",
-  "**/.turbo/**",
-  "**/coverage/**",
-  "**/vendor/**",
-  "**/target/**",
-  "**/__pycache__/**",
-];
 
 export async function probe(opts: ProbeOptions): Promise<ProjectProfile> {
   const root = path.resolve(opts.root);
@@ -64,7 +51,7 @@ export async function listFiles(root: string): Promise<string[]> {
   const files = await fg("**/*", {
     cwd: root,
     dot: true,
-    ignore: VENDOR_IGNORES,
+    ignore: [...PROBE_IGNORES],
     onlyFiles: true,
     suppressErrors: true,
   });

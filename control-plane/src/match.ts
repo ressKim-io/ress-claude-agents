@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import fg from "fast-glob";
+import { PROBE_IGNORES } from "./ignores.js";
 import type { ProjectProfile } from "./schema/project-profile.js";
 import type { LoadedSkill } from "./skill-loader.js";
 
@@ -10,18 +11,6 @@ export interface MatchContext {
   readFile(rel: string): string;
 }
 
-const VENDOR_IGNORES = [
-  "**/node_modules/**",
-  "**/.git/**",
-  "**/dist/**",
-  "**/build/**",
-  "**/.cache/**",
-  "**/.next/**",
-  "**/coverage/**",
-  "**/vendor/**",
-  "**/target/**",
-];
-
 export async function buildMatchContext(root: string): Promise<MatchContext> {
   const absRoot = path.resolve(root);
   const files = await fg("**/*", {
@@ -29,7 +18,7 @@ export async function buildMatchContext(root: string): Promise<MatchContext> {
     dot: true,
     onlyFiles: true,
     suppressErrors: true,
-    ignore: VENDOR_IGNORES,
+    ignore: [...PROBE_IGNORES],
   });
   files.sort();
 
@@ -129,7 +118,7 @@ async function scoreFilesPresent(
       cwd: ctx.root,
       onlyFiles: true,
       suppressErrors: true,
-      ignore: VENDOR_IGNORES,
+      ignore: [...PROBE_IGNORES],
     });
     if (matched.length > 0) hits++;
   }
@@ -148,7 +137,7 @@ async function scoreFilesContain(
       cwd: ctx.root,
       onlyFiles: true,
       suppressErrors: true,
-      ignore: VENDOR_IGNORES,
+      ignore: [...PROBE_IGNORES],
     });
     if (matched.length === 0) continue;
     let regex: RegExp;
@@ -204,7 +193,7 @@ async function isExcluded(
       cwd: ctx.root,
       onlyFiles: true,
       suppressErrors: true,
-      ignore: VENDOR_IGNORES,
+      ignore: [...PROBE_IGNORES],
     });
     if (matched.length > 0) return true;
   }
