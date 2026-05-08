@@ -401,8 +401,10 @@ async def safe_process(item: str) -> dict | Exception:
 
 ## uvloop Optimization
 
+> **언제 사용?** CPython + Linux/macOS + I/O bound 워크로드에서만. PyPy는 자체 asyncio가 종종 더 빠르고, Python 3.12+ asyncio도 큰 폭 개선되어 격차가 좁아졌다. Windows 미지원. 도입 전 반드시 자기 워크로드 벤치마크 후 결정.
+
 ```python
-# uvloop: libuv 기반 이벤트 루프 (2-4x faster)
+# uvloop: libuv 기반 이벤트 루프 (CPython에서 2-4x faster — 워크로드별 편차 큼)
 # pip install uvloop
 
 # Option 1: Global replacement

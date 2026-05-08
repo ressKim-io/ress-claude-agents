@@ -184,7 +184,7 @@ public class RedisService {
 |------|------------|
 | TTL 없이 캐싱 | 항상 적절한 TTL 설정 |
 | 대용량 객체 캐싱 | 필요한 필드만 DTO로 |
-| Serializable 누락 | Entity에 Serializable 구현 |
+| JPA Entity 직접 캐싱 (Serializable 구현 포함) | DTO 변환 후 캐싱. Spring Data Redis는 `GenericJackson2JsonRedisSerializer`(JSON) 사용. Entity Serializable은 lazy proxy / version 결합 / 캐시-DB 결합 문제 유발하는 안티패턴 |
 | 캐시 키 충돌 | 명확한 네이밍 (prefix:entity:id) |
 | 캐시-DB 불일치 | @CachePut/@CacheEvict 동기화 |
 
