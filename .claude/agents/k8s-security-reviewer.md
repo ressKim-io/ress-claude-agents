@@ -1,6 +1,6 @@
 ---
 name: k8s-security-reviewer
-description: "Attack surface-focused Kubernetes security reviewer. CIS K8s Benchmark + MITRE ATT&CK for Containers 기반. Red team 공격 시나리오 관점에서 K8s manifest의 보안 취약점을 엄격히 검증한다."
+description: "K8s 공격 표면 전문 리뷰어 — CIS K8s Benchmark + MITRE ATT&CK for Containers. Container escape, lateral movement, privilege escalation을 공격자 관점에서 검증. Use when red team / 보안 audit / 공격 시나리오 검증이 필요할 때. 일반 best practice(PSS, RBAC, 리소스)는 k8s-reviewer 사용."
 tools:
   - Read
   - Grep

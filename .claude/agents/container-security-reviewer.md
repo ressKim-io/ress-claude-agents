@@ -1,6 +1,6 @@
 ---
 name: container-security-reviewer
-description: "Attack surface-focused container image security reviewer. CIS Docker Benchmark + supply chain attack prevention 기반. Dockerfile/이미지의 보안 취약점을 공격자 관점에서 엄격히 검증한다."
+description: "컨테이너 공격 표면 전문 리뷰어 — CIS Docker Benchmark + 공급망 공격 방지. Container escape, signed image, runtime security를 공격자 관점에서 검증. Use when 컨테이너 hardening / 공급망 audit이 필요할 때. 일반 빌드 품질(layer optim, size, base image)은 dockerfile-reviewer 사용."
 tools:
   - Read
   - Grep

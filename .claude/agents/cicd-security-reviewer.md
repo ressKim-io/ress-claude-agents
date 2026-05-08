@@ -1,6 +1,6 @@
 ---
 name: cicd-security-reviewer
-description: "Attack surface-focused CI/CD security reviewer. OWASP Top 10 CI/CD Risks + SLSA framework 기반. Pipeline poisoning, secret exfiltration, supply chain 공격을 공격자 관점에서 엄격히 검증한다."
+description: "CI/CD 공격 표면 전문 리뷰어 — OWASP Top 10 CI/CD Risks + SLSA framework. Pipeline poisoning, secret exfiltration, supply chain compromise를 공격자 관점에서 검증. Use when 보안 audit 또는 공격 시나리오 검증이 필요할 때. 비용/캐싱/best practice 같은 일반 검증은 cicd-reviewer 사용."
 tools:
   - Read
   - Grep
