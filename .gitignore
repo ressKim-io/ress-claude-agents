@@ -39,3 +39,9 @@ tmp/
 .claude/skills/*/*/SKILL.md
 .claude/skills/*/*/resources/
 .claude/skills/*/*/scripts/
+
+# control-plane init 산출물은 self-bootstrap 결과 — 메타 레포 fork/clone 시 각자 init 재실행이
+# 의도된 흐름. install 받은 프로젝트에서는 사용자 가시성 위해 commit 가능하지만, SSOT 메타
+# 레포에선 충돌 회피로 ignore (P6.5 baseline 진입 시 hook 설치 후 발견된 결정).
+.claude-agents.yml
+project-profile.yml
