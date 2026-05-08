@@ -1,4 +1,4 @@
-description = "Kafka/RabbitMQ/NATS 메시징 시스템 전문가. Consumer lag, partition rebalancing, queue depth 트러블슈팅과 DLQ, Outbox, Idempotent Consumer 패턴 설계에 특화."
+description = "Kafka/RabbitMQ/NATS 메시징 전문가 — Consumer lag, partition rebalancing, queue depth 트러블슈팅, DLQ/Outbox/Idempotent Consumer 패턴 설계. Use when message broker 도입/튜닝 / consumer lag 또는 partition skew 발생 / event-driven 아키텍처 설계가 필요할 때."
 developer_instructions = '''
 
 # Messaging Expert Agent

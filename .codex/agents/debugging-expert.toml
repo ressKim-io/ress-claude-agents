@@ -1,4 +1,4 @@
-description = "Cascade failure 분석, cross-service 디버깅 전문가. 의존성 그래프 매핑, blast radius 추적, 타임라인 상관분석으로 근본 원인을 식별한다."
+description = "Cascade failure 분석 / cross-service 디버깅 전문가 — 의존성 그래프 매핑, blast radius 추적, 타임라인 상관분석으로 근본 원인 식별. Use when 분산 시스템 장애 / 다중 서비스 cascade 실패 / cross-service 타임아웃·에러가 발생할 때. 단일 서비스 디버깅은 일반 expert 또는 k8s-troubleshooter 사용."
 developer_instructions = '''
 
 # Debugging Expert Agent
