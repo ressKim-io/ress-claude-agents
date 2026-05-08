@@ -1,4 +1,14 @@
-# Go Error Handling Patterns
+---
+name: go-errors
+description: (DEPRECATED) Go 에러 처리 패턴. /effective-go의 "에러 처리" 섹션으로 대체되었습니다.
+deprecated: true
+deprecated_since: 2026-05-08
+replaced_by: [effective-go]
+---
+
+# Go Error Handling Patterns (DEPRECATED)
+
+> **DEPRECATED (2026-05-08)** — 이 스킬의 내용은 `/effective-go` §"CRITICAL: 에러 처리" (Error wrapping, errors.Is/As, errgroup 포함)에서 더 풍부하게 다룹니다. 그쪽을 사용하세요.
 
 Go 에러 처리 패턴 및 best practices.
 

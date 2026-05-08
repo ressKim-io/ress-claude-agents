@@ -1,4 +1,14 @@
-# Istio Kiali Dashboard
+---
+name: istio-kiali
+description: (DEPRECATED) Istio Kiali 단독 스킬. /istio-observability에 흡수 권장.
+deprecated: true
+deprecated_since: 2026-05-08
+replaced_by: [istio-observability]
+---
+
+# Istio Kiali Dashboard (DEPRECATED)
+
+> **DEPRECATED (2026-05-08)** — Kiali 단독 스킬은 깊이 부족(93줄). `/istio-observability` 통합 가이드를 사용하고, Kiali 단독 가이드가 필요하면 본 파일 본문을 참고하세요.
 
 Kiali 설치/설정, 서비스 토폴로지 시각화
 
