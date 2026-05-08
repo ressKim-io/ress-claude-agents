@@ -306,9 +306,10 @@ Options:
                     Available: $modules_list
   --with-skills     Include skills (on-demand knowledge)
   --with-mcp        Include MCP server configs
-  --plugin NAME     Install a plugin bundle (see --list-plugins)
+  --plugin NAME     Install plugin bundle(s). Repeatable: --plugin A --plugin B
+                    Or comma-separated: --plugin A,B,C
   --list-plugins    List available plugin bundles
-  --workflow NAME   Install a scenario workflow (see --list-workflows)
+  --workflow NAME   Install scenario workflow(s). Repeatable or comma-separated.
   --list-workflows  List available scenario workflows
   -h, --help        Show this help
 
@@ -318,8 +319,11 @@ Examples:
   $0 --global --all         # Global install, all modules
   $0 --local --modules go,k8s --with-skills
   $0 --global --plugin k8s-ops --with-skills  # K8s operations bundle
+  $0 --global --plugin k8s-ops --plugin sre-full   # Multiple plugins
+  $0 --global --plugin backend-go,messaging        # Or comma-separated
   $0 --list-plugins                            # Show available bundles
   $0 --global --workflow compose-to-k8s        # Scenario workflow
+  $0 --global --workflow eks-gitops-setup --workflow observability-full
   $0 --list-workflows                          # Show available workflows
 
 EOF
@@ -332,9 +336,9 @@ SELECTED_MODULES=()
 WITH_SKILLS=false
 WITH_MCP=false
 HAS_ARGS=false
-PLUGIN_NAME=""
+PLUGIN_NAMES=()       # supports multiple --plugin or --plugin A,B,C
 LIST_PLUGINS=false
-WORKFLOW_NAME=""
+WORKFLOW_NAMES=()     # supports multiple --workflow or --workflow A,B,C
 LIST_WORKFLOWS=false
 
 while [[ $# -gt 0 ]]; do
@@ -381,7 +385,11 @@ while [[ $# -gt 0 ]]; do
                 log_error "Missing argument for --plugin"
                 exit 1
             fi
-            PLUGIN_NAME="$2"
+            # Support both --plugin A,B,C (comma) and repeated --plugin A --plugin B
+            IFS=',' read -ra _NEW_PLUGINS <<< "$2"
+            for _p in "${_NEW_PLUGINS[@]}"; do
+                [[ -n "$_p" ]] && PLUGIN_NAMES+=("$_p")
+            done
             shift 2
             ;;
         --list-plugins)
@@ -393,7 +401,11 @@ while [[ $# -gt 0 ]]; do
                 log_error "Missing argument for --workflow"
                 exit 1
             fi
-            WORKFLOW_NAME="$2"
+            # Support both --workflow A,B,C (comma) and repeated --workflow A --workflow B
+            IFS=',' read -ra _NEW_WORKFLOWS <<< "$2"
+            for _w in "${_NEW_WORKFLOWS[@]}"; do
+                [[ -n "$_w" ]] && WORKFLOW_NAMES+=("$_w")
+            done
             shift 2
             ;;
         --list-workflows)
@@ -473,7 +485,7 @@ else
 fi
 
 # Interactive module selection if not specified (skip if plugin or workflow mode)
-if [[ "$INSTALL_ALL" == false && ${#SELECTED_MODULES[@]} -eq 0 && -z "$PLUGIN_NAME" && -z "$WORKFLOW_NAME" ]]; then
+if [[ "$INSTALL_ALL" == false && ${#SELECTED_MODULES[@]} -eq 0 && ${#PLUGIN_NAMES[@]} -eq 0 && ${#WORKFLOW_NAMES[@]} -eq 0 ]]; then
     echo ""
     log_warn "Select modules to install:"
     echo "  0) Core only (CLAUDE.md + session)"
@@ -572,8 +584,8 @@ for mod in "${SELECTED_MODULES[@]}"; do
     fi
 done
 
-# Install plugin agents
-if [[ -n "$PLUGIN_NAME" ]]; then
+# Install plugin agents (supports multiple --plugin)
+for PLUGIN_NAME in "${PLUGIN_NAMES[@]}"; do
     resolve_plugin "$PLUGIN_NAME"
 
     log_info "[plugin:$PLUGIN_NAME] Installing agents..."
@@ -627,12 +639,12 @@ if [[ -n "$PLUGIN_NAME" ]]; then
                 log_warn "    Skill category not found: $category"
             fi
         done
-        INSTALLED_COMPONENTS+=("Plugin skills: ${PLUGIN_SKILL_CATEGORIES[*]}")
+        INSTALLED_COMPONENTS+=("Plugin skills [$PLUGIN_NAME]: ${PLUGIN_SKILL_CATEGORIES[*]}")
     fi
-fi
+done
 
-# Install workflow
-if [[ -n "$WORKFLOW_NAME" ]]; then
+# Install workflow (supports multiple --workflow)
+for WORKFLOW_NAME in "${WORKFLOW_NAMES[@]}"; do
     resolve_workflow "$WORKFLOW_NAME"
 
     # Install workflow agents
@@ -743,9 +755,9 @@ if [[ -n "$WORKFLOW_NAME" ]]; then
                 log_warn "    Skill not found: $skill_path"
             fi
         done
-        INSTALLED_COMPONENTS+=("Workflow skills: ${#WORKFLOW_SKILL_CATEGORIES[@]} categories, ${#WORKFLOW_SKILL_INDIVIDUAL[@]} individual")
+        INSTALLED_COMPONENTS+=("Workflow skills [$WORKFLOW_NAME]: ${#WORKFLOW_SKILL_CATEGORIES[@]} categories, ${#WORKFLOW_SKILL_INDIVIDUAL[@]} individual")
     fi
-fi
+done
 
 # Install skills
 if [[ "$WITH_SKILLS" == true ]]; then
