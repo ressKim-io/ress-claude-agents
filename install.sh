@@ -16,6 +16,20 @@ declare -a INSTALLED_COMPONENTS=()
 declare -a BACKUP_FILES=()
 INSTALL_SUCCESS=true
 
+# Track installed target paths to dedup across plugin + workflow + flatten passes
+# (bash 3.2 compat: space-separated string, sentinel space-padded)
+INSTALLED_PATHS=" "
+
+# Returns 0 (already installed → caller skips), 1 (newly marked → caller proceeds)
+_check_and_mark_installed() {
+    local target="$1"
+    if [[ "$INSTALLED_PATHS" == *" $target "* ]]; then
+        return 0
+    fi
+    INSTALLED_PATHS="$INSTALLED_PATHS$target "
+    return 1
+}
+
 # Discover available modules from commands directory (excluding session and help)
 discover_modules() {
     local modules=()
@@ -260,11 +274,21 @@ resolve_workflow() {
     # Then merge scenario workflow
     _parse_workflow_yaml "$workflow_file"
 
-    # Deduplicate arrays
-    mapfile -t WORKFLOW_AGENTS < <(printf '%s\n' "${WORKFLOW_AGENTS[@]}" | sort -u)
-    mapfile -t WORKFLOW_SKILL_CATEGORIES < <(printf '%s\n' "${WORKFLOW_SKILL_CATEGORIES[@]}" | sort -u)
-    mapfile -t WORKFLOW_SKILL_INDIVIDUAL < <(printf '%s\n' "${WORKFLOW_SKILL_INDIVIDUAL[@]}" | sort -u)
-    mapfile -t WORKFLOW_RULES < <(printf '%s\n' "${WORKFLOW_RULES[@]}" | sort -u)
+    # Deduplicate arrays (bash 3.2 compat — macOS /bin/bash is 3.2, mapfile is bash 4+)
+    _dedup_workflow_array() {
+        local arr_name="$1"
+        local sorted
+        eval "sorted=\$(printf '%s\n' \"\${${arr_name}[@]}\" | sort -u)"
+        eval "$arr_name=()"
+        local line
+        while IFS= read -r line; do
+            [[ -n "$line" ]] && eval "$arr_name+=(\"\$line\")"
+        done <<< "$sorted"
+    }
+    _dedup_workflow_array WORKFLOW_AGENTS
+    _dedup_workflow_array WORKFLOW_SKILL_CATEGORIES
+    _dedup_workflow_array WORKFLOW_SKILL_INDIVIDUAL
+    _dedup_workflow_array WORKFLOW_RULES
 }
 
 print_usage() {
@@ -559,8 +583,12 @@ if [[ -n "$PLUGIN_NAME" ]]; then
 
     for agent in "${PLUGIN_AGENTS[@]}"; do
         agent_file="$AGENTS_SOURCE/${agent}.md"
+        agent_target="$AGENTS_TARGET/${agent}.md"
+        if _check_and_mark_installed "$agent_target"; then
+            continue
+        fi
         if [[ -f "$agent_file" ]]; then
-            if backup_and_link "$agent_file" "$AGENTS_TARGET/${agent}.md" "$INSTALL_SCOPE" "file"; then
+            if backup_and_link "$agent_file" "$agent_target" "$INSTALL_SCOPE" "file"; then
                 echo "    + Agent: $agent"
             fi
         else
@@ -583,7 +611,11 @@ if [[ -n "$PLUGIN_NAME" ]]; then
                 for skill_file in "$cat_dir"/*.md; do
                     [[ -f "$skill_file" ]] || continue
                     skill_name=$(basename "$skill_file")
-                    if backup_and_link "$skill_file" "$SKILLS_TARGET/$category/$skill_name" "$INSTALL_SCOPE" "file"; then
+                    skill_target="$SKILLS_TARGET/$category/$skill_name"
+                    if _check_and_mark_installed "$skill_target"; then
+                        continue
+                    fi
+                    if backup_and_link "$skill_file" "$skill_target" "$INSTALL_SCOPE" "file"; then
                         echo "    + Skill: $category/$skill_name"
                     fi
                     # Also flatten to root for backward compat
@@ -612,8 +644,12 @@ if [[ -n "$WORKFLOW_NAME" ]]; then
 
         for agent in "${WORKFLOW_AGENTS[@]}"; do
             agent_file="$AGENTS_SOURCE/${agent}.md"
+            agent_target="$AGENTS_TARGET/${agent}.md"
+            if _check_and_mark_installed "$agent_target"; then
+                continue
+            fi
             if [[ -f "$agent_file" ]]; then
-                if backup_and_link "$agent_file" "$AGENTS_TARGET/${agent}.md" "$INSTALL_SCOPE" "file"; then
+                if backup_and_link "$agent_file" "$agent_target" "$INSTALL_SCOPE" "file"; then
                     echo "    + Agent: $agent"
                 fi
             else
@@ -632,8 +668,12 @@ if [[ -n "$WORKFLOW_NAME" ]]; then
 
         for rule in "${WORKFLOW_RULES[@]}"; do
             rule_file="$RULES_SOURCE/${rule}.md"
+            rule_target="$RULES_TARGET/${rule}.md"
+            if _check_and_mark_installed "$rule_target"; then
+                continue
+            fi
             if [[ -f "$rule_file" ]]; then
-                if backup_and_link "$rule_file" "$RULES_TARGET/${rule}.md" "$INSTALL_SCOPE" "file"; then
+                if backup_and_link "$rule_file" "$rule_target" "$INSTALL_SCOPE" "file"; then
                     echo "    + Rule: $rule"
                 fi
             else
@@ -657,7 +697,11 @@ if [[ -n "$WORKFLOW_NAME" ]]; then
                 for skill_file in "$cat_dir"/*.md; do
                     [[ -f "$skill_file" ]] || continue
                     skill_name=$(basename "$skill_file")
-                    if backup_and_link "$skill_file" "$SKILLS_TARGET/$category/$skill_name" "$INSTALL_SCOPE" "file"; then
+                    skill_target="$SKILLS_TARGET/$category/$skill_name"
+                    if _check_and_mark_installed "$skill_target"; then
+                        continue
+                    fi
+                    if backup_and_link "$skill_file" "$skill_target" "$INSTALL_SCOPE" "file"; then
                         echo "    + Skill: $category/$skill_name"
                     fi
                     if [[ ! -e "$SKILLS_TARGET/$skill_name" ]]; then
@@ -682,10 +726,14 @@ if [[ -n "$WORKFLOW_NAME" ]]; then
             skill_dir=$(dirname "$skill_path")
             skill_base=$(basename "$skill_path")
             source_file="$SKILLS_SOURCE/${skill_path}.md"
+            skill_target="$SKILLS_TARGET/${skill_path}.md"
+            if _check_and_mark_installed "$skill_target"; then
+                continue
+            fi
 
             if [[ -f "$source_file" ]]; then
                 create_dir "$SKILLS_TARGET/$skill_dir"
-                if backup_and_link "$source_file" "$SKILLS_TARGET/${skill_path}.md" "$INSTALL_SCOPE" "file"; then
+                if backup_and_link "$source_file" "$skill_target" "$INSTALL_SCOPE" "file"; then
                     echo "    + Skill: ${skill_path}"
                 fi
                 if [[ ! -e "$SKILLS_TARGET/${skill_base}.md" ]]; then
