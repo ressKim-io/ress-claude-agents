@@ -24,7 +24,8 @@ git log --oneline -20                                          # 최근 commit
 | P3. Control plane PoC | **completed** | 2026-05-05 | 2026-05-06 | main | Step 1: scaffold. Step 2: probe. Step 3: match (precision=recall=1.0). Step 4: init (10x hash × 3 fixture). Step 5 (`810ac58`): lint shell delegation (validate-*.sh auto-discover, exit code aggregate). **모든 4 subcommand (probe/match/init/lint) 구현 완료**. **87/87 vitest**. CI drift green은 push 후 GitHub Actions가 step 6에서 검증 |
 | P4. Multi-AI adapter | **completed** | 2026-05-06 | 2026-05-06 | main | Step A: codex spike (.codex/agents schema 3 키 동질성 확인). Step B: `control-plane/src/adapter.ts` 신설 (claude/codex/cursor 3 tool × write/dry-run/diff 3 mode, codex skills `manifest_yaml=''…''`로 9 키 보존). Step C: AGENTS.md primary 승격(254→312줄, §Claude Code-Specific 흡수), `CLAUDE.md→AGENTS.md` symlink, `.codex/AGENTS.md→../AGENTS.md` symlink, `.gitignore` `.codex/` ignore 해제. Step D: `init.ts` step 4 stub → 실제 adapter 호출 wiring (detection + LockFile.adapters.status p4-active/p4-skipped + runs[]). Step E: CI drift job에 adapter parity step (codex+cursor write + git diff 게이트), .claude/skills SKILL.md 디렉토리 형식은 dual-tree 충돌 회피로 gitignore. CLI parser `--tool=value` 형식 추가. **96/96 vitest** (87→96, +9), typecheck 0, build OK, **5 lint green** |
 | P5. Enforcement hook | **completed** | 2026-05-06 | 2026-05-06 | main | Step A: admit.ts + 9 vitest (3 deny / 3 allow / 3 globToRegex unit). 매칭 = `applies_when.files_present` glob + `files_contain` regex + `security.sandbox: read-only` 가드. 단일 path glob→regex 매처(50줄, deps 추가 X). CLI `admit --tool/--path/--skill/--mode warn|deny`, warn=exit 0 + stderr / deny=exit 2 + stderr. Step B: install-hook.ts (settings.local.json idempotent merge), init.ts step 5 wiring (.claude 있을 때만 hook install, hookMode default 'warn'), LockFile.hook 확장 `{installed, status: p5-active|p5-skipped|p5-already-present, mode, settings_path}`. 기존/idempotent/merge 3 init 테스트 추가. **108/108 vitest** (96→108, +12), 5 lint green |
-| P6. Pilot 1 카테고리 | **next** | — | — | — | kubernetes 카테고리 약 10개 전체 변환. activation rate / matching accuracy baseline 1주 수집. P5 hook이 warn 모드로 베이스라인 데이터 수집 → P6 종료 시점 deny 전환 결정 |
+| P6. Pilot 1 카테고리 | **completed** | 2026-05-08 | 2026-05-08 | main | kubernetes 카테고리 5 신규 변환(gateway-api / gateway-api-migration / k8s-autoscaling-advanced / k8s-scheduling-advanced / k8s-traffic-ingress) + 기존 5 = 10/10. 모두 schema strict 통과, k8s-only fixture에서 false positive 0건. validate-schemas.sh를 glob 기반(MIN=15)으로 확장. ADR 0004 (baseline sink + 메트릭 정의) + ADR 0005 (deny 전환 placeholder, 1주 후 채움). admit handler에 `CLAUDE_AGENTS_ADMIT_LOG` 환경변수 옵트인 JSONL sink 추가. **111/111 vitest** (108→111, +3 = 5 신규 P6 회귀 단언 1 + sink test 2). 5 lint green |
+| P6.5. baseline 수집 | **next** | 2026-05-08 | — | — | 1주 wall-clock baseline (사용자가 `export CLAUDE_AGENTS_ADMIT_LOG=~/.claude-agents-admit.jsonl` setup 후 일상 작업). 메트릭 = total ≥ 50 / activation rate ≥ 70% / allow rate ≥ 90% / per-skill warn < 15%. 1주 후 ADR 0005 본문 채워서 deny 전환 또는 매처 튜닝 결정 |
 | P7. 전체 마이그레이션 | pending | — | — | — | 239개 모두 변환. 2 카테고리/주 페이스. 카테고리 PR 단독 revert 가능 |
 | P8. Registry-ready 동결 | pending | — | — | — | signature/sandbox 메타 채움. skills.sh 포맷 export script. **Q8 결정**: sigstore cosign vs SLSA provenance |
 
@@ -40,6 +41,9 @@ git log --oneline -20                                          # 최근 commit
 - [ ] CI drift green — P4 push 후 GitHub Actions가 검증 (drift job에 adapter parity step 통합 완료)
 - [x] Multi-AI 동시 사용 시뮬 — 2026-05-06 P4-D (`init.test.ts` "detects .claude/.codex/.cursor and records p4-active in lock")
 - [x] Hook 동작 (deny 3건, allow 3건) — 2026-05-06 P5 (`tests/admit.test.ts` 3 deny + 3 allow + 3 globToRegex unit)
+- [x] kubernetes 카테고리 100% 변환 — 2026-05-08 P6 (5 신규 + 5 기존 = 10, validate-schemas.sh strict 통과)
+- [x] baseline sink 동작 — 2026-05-08 P6 (cli.test.ts 2건: env unset no-op + env set JSONL append schema 검증)
+- [ ] Activation rate ≥ 70% (1주 baseline) — P6.5 (사용자 일상 작업으로 수집, ADR 0005에서 결과 본문 인용)
 
 ## Decision Log (Phase 진행 중 발견되는 추가 결정)
 
@@ -99,6 +103,45 @@ git log --oneline -20                                          # 최근 commit
 | 2026-05-06 | P5 | hookMode 디폴트 'warn', deny 전환은 P6 baseline 후 결정 | plan §224 + P0 결정 Q5 정합. baseline 1주 = activation rate / false positive 패턴 데이터. deny 전환 시 별도 ADR 작성 권고 |
 | 2026-05-06 | P4-A | `tomlify` 의존성 미추가, 직접 stringify (50줄 미만) | 처리 대상이 3 string 키뿐이고 literal-string 디폴트라 escape 로직 단순. P3 정책 runtime deps ≤ 5 유지 (현재 4/5: zod·kleur·fast-glob·yaml). 의존성 1개 절약 + 변환 결정성 직접 통제 |
 | 2026-05-06 | P4-A | `assets/skills/<cat>/<n>/SKILL.md` → `.codex/skills/<cat>/<n>.toml` 변환 시 부가 메타 9 키(`applies_when`/`portability`/`produces`/`consumes`/`security`/`version`/`license`) 그대로 toml에 부착 | 옵션 B(body 헤더 prepend)·C(drop)와 비교 후 채택. round-trip 손실 0 우선. Codex가 unknown 키 무시하는 관대한 reader 가정 — 문제 시 P5 hook 단계에서 회귀 |
+| 2026-05-08 | P6 | kubernetes 5 신규 변환은 본문 손대지 않음 — frontmatter만 prepend (P2와 동일 정책) | P2 결정 "기존 본문의 # H1을 그대로 SKILL.md에 포함"의 자연스러운 연장. P6 변경 폭 = frontmatter 35줄 × 5 + lint 갱신만. 본문 손대면 회귀 위험 + diff 폭 폭발 |
+| 2026-05-08 | P6 | base ↔ advanced/specific variant applies_when overlap 의도적 인정 — Skip when 정성 표현 + Claude selection으로 차별화 | exclude_when 강제 분리는 마이그레이션 진행 중(둘 다 존재)에 advanced가 누락될 위험. matching false positive는 P6.5 baseline에서 per-skill warn rate ≥ 15% 임계로 측정 → 임계 초과 skill만 매처 정밀화. Recommended (사용자 결정) |
+| 2026-05-08 | P6 | gateway-api-migration의 'Ingress AND Gateway 동시' 의미 매처는 OR-매처 + description 정성 표현으로 처리 | match.ts AND-매칭 미지원 → schema MAJOR bump 회피 + P3 정책 정합. baseline에서 description 기반 selection 정확도 측정. AND schema 확장은 P6 범위 외 (별도 ADR 필요 시) |
+| 2026-05-08 | P6 | validate-schemas.sh를 hardcoded 10개 → glob auto-enumerate + 최소 카운트 게이트(MIN_POC_COUNT=15)로 변경 | 회귀 차단(파일 줄어들면 fail) + P7 진입 시 hardcoded 갱신 부담 ↓. P7에선 MIN 다시 갱신해야 함(점진 증가). |
+| 2026-05-08 | P6 | skill-loader.test.ts 카운트 단언 P2(10) → P6(15)로 명시 + 신규 5개 회귀 단언 1건 추가 | validate-schemas.sh와 동일 정신, vitest layer에서도 expected 카운트 명시. 새 단언이 신규 5개 누락(파일은 있어도 metadata 깨짐) catch |
+| 2026-05-08 | P6 | warn-mode baseline sink = 환경변수 옵트인 (`CLAUDE_AGENTS_ADMIT_LOG=<path>`) JSONL append, schema {ts,tool,path,skill,mode,decision,reason,version} | ADR 0004. 옵션 B(default sink ~/.claude/) 거부 = 사용자 결정 4(Registry publish 미래) 정신 위반, 옵션 C(외부 텔레메트리) 거부 = LLM-free 정책. admit.ts pure function 보존, side-effect는 cli layer만 |
+| 2026-05-08 | P6 | deny 전환 ADR 0005 = placeholder. 1주 후 baseline 메트릭 임계로 결정 (per-skill warn rate ≥ 15%면 Option B 매처 튜닝) | P5 결정 Q5 정합. 정성 판단 의존 최소화 — jq 분석 명령 + 임계값으로 체크리스트화. 임계 미통과 시 baseline 추가 1주 재수집 (Option B) 또는 영구 warn (Option C) |
+| 2026-05-08 | P6 | sink는 silently swallow append error (logging이 admit 자체를 깨뜨리면 안 됨) | PreToolUse hook context에서 FS 권한 제한 가능. baseline 수집 실패 시 line count 0으로 사용자가 sanity check (`wc -l $CLAUDE_AGENTS_ADMIT_LOG > 0`) — `progress.md` setup 가이드에 명시 |
+
+## P6.5 Baseline 수집 setup (사용자 작업)
+
+P6 종료 후 1주 baseline 수집을 위해 다음 setup을 1회 수행:
+
+```bash
+# 1. 환경변수 set (~/.zshrc 또는 세션마다)
+export CLAUDE_AGENTS_ADMIT_LOG=~/.claude-agents-admit.jsonl
+
+# 2. (선택) install-hook 다시 실행 — hook이 이미 P5에서 깔린 상태라 보통 불필요
+# node control-plane/dist/cli.js init --root . --assets ./assets
+
+# 3. 1주 일상 작업 후 sanity check
+wc -l "$CLAUDE_AGENTS_ADMIT_LOG"   # > 0 이어야 함, 0이면 hook 호출 안 되거나 sink 권한 문제
+
+# 4. 메트릭 분석 (ADR 0004 §"분석 명령 예시")
+jq -r '.skill' "$CLAUDE_AGENTS_ADMIT_LOG" | sort | uniq -c | sort -rn | head -10
+jq -s 'group_by(.skill) | map({skill:.[0].skill, total:length, warn:(map(select(.decision=="warn"))|length)/(.|length)})' "$CLAUDE_AGENTS_ADMIT_LOG"
+
+# 5. 1주 후 ADR 0005에 결과 인용 + Decision 채움
+```
+
+**임계** (ADR 0004):
+- Total ≥ 50 events
+- Activation rate ≥ 70%
+- Allow rate ≥ 90%
+- Per-skill warn rate (max) < 15%
+
+전부 통과 → ADR 0005 Option A (deny 전환). 미통과 → Option B (매처 튜닝 후 재baseline).
+
+---
 
 ## 알려진 위험 (해소되면 줄긋기)
 

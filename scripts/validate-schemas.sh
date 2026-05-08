@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
-# Migration 0002 P1+P2 검증 게이트
+# Migration 0002 P1+P2+P6 검증 게이트
 #
 # 1. schemas/*.v1.json 자체 compile (JSON Schema Draft 2020-12 meta-schema 통과)
 # 2. P1 sample frontmatter validate
 #    - .agents/skills/source-command-log-summary/SKILL.md → skill-manifest.v1.json
 #    - .claude/agents/code-reviewer.md                    → agent-manifest.v1.json
-# 3. P2 PoC 10개 (assets/skills/{kubernetes,go}/*/SKILL.md) → skill-manifest.v1.json
+# 3. 모든 변환된 SKILL.md (assets/skills/*/*/SKILL.md) → skill-manifest.v1.json
 #    + strict 모드 (description >=40 chars + applies_when 존재)
+#    + 최소 카운트 게이트 (P2=10, P6=15, P7=점진 증가)
 #
 # 의존성: npx (ajv-cli 5는 npx 캐시 실행, 추가 설치 불필요), node (내장 YAML 파서)
 # Exit code: 0 통과, 1 실패
@@ -184,26 +185,26 @@ validate_against_schema \
     "code-reviewer → agent-manifest.v1"
 
 # ---------------------------------------------------------------------------
-# 4. P2 PoC 10개 strict 검증
+# 4. 변환된 SKILL.md 전체 strict 검증 (P2=10 게이트 / P6=15 게이트 / 이후 증가)
 # ---------------------------------------------------------------------------
-section "P2 PoC 10개 (strict: description >=40 + applies_when 필수)"
+# Phase 진입 시점의 최소 카운트:
+#   P2 (kubernetes 5 + go 5)        = 10
+#   P6 (P2 + kubernetes advanced 5) = 15
+#   P7 (전체 마이그레이션)          = 점진 증가
+# 회귀 차단(파일이 줄어들면 fail) + glob 자동 enumerate.
+MIN_POC_COUNT=15
 
-POC_FILES=(
-    "assets/skills/kubernetes/k8s-helm/SKILL.md"
-    "assets/skills/kubernetes/k8s-autoscaling/SKILL.md"
-    "assets/skills/kubernetes/k8s-security/SKILL.md"
-    "assets/skills/kubernetes/k8s-scheduling/SKILL.md"
-    "assets/skills/kubernetes/k8s-traffic/SKILL.md"
-    "assets/skills/go/go-testing/SKILL.md"
-    "assets/skills/go/go-database/SKILL.md"
-    "assets/skills/go/go-microservice/SKILL.md"
-    "assets/skills/go/go-errors/SKILL.md"
-    "assets/skills/go/go-gin/SKILL.md"
-)
+# sort로 결정성 확보 (find 출력 순서 OS 의존성 회피).
+POC_FILES=()
+while IFS= read -r f; do
+    POC_FILES+=("$f")
+done < <(find assets/skills -mindepth 3 -name "SKILL.md" -type f | sort)
 
 POC_COUNT=${#POC_FILES[@]}
-if [[ $POC_COUNT -ne 10 ]]; then
-    log_fail "P2 게이트: PoC 파일 수 $POC_COUNT (expected 10)"
+section "변환된 SKILL.md ${POC_COUNT}개 (strict: description >=40 + applies_when 필수, 최소 ${MIN_POC_COUNT})"
+
+if (( POC_COUNT < MIN_POC_COUNT )); then
+    log_fail "Phase 게이트: 변환 파일 수 $POC_COUNT < $MIN_POC_COUNT (회귀)"
 fi
 
 for f in "${POC_FILES[@]}"; do

@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import kleur from "kleur";
 import { parse as parseYaml, stringify } from "yaml";
@@ -607,6 +607,19 @@ async function runAdmit(
     if (parsed.skill !== undefined) decisionInput.skill = parsed.skill;
 
     const decision = await admit(decisionInput);
+    const outcome: "allow" | "warn" | "deny" = decision.allow
+      ? "allow"
+      : parsed.mode === "warn"
+        ? "warn"
+        : "deny";
+    appendBaselineRecord({
+      tool: parsed.tool,
+      pathArg: parsed.path,
+      skill: parsed.skill,
+      mode: parsed.mode,
+      outcome,
+      reason: decision.reason,
+    });
     if (decision.allow) {
       out.write(kleur.green(`admit: allow — ${decision.reason}\n`));
       return 0;
@@ -625,6 +638,42 @@ async function runAdmit(
     const message = e instanceof Error ? e.message : String(e);
     err.write(kleur.red(`admit failed: ${message}\n`));
     return 1;
+  }
+}
+
+interface BaselineRecord {
+  tool: string;
+  pathArg: string | undefined;
+  skill: string | undefined;
+  mode: AdmitMode;
+  outcome: "allow" | "warn" | "deny";
+  reason: string;
+}
+
+// ADR 0004: warn-mode baseline sink.
+// Opt-in via CLAUDE_AGENTS_ADMIT_LOG. Errors are silently swallowed so logging
+// never breaks the admission flow itself (PreToolUse hook context).
+function appendBaselineRecord(record: BaselineRecord): void {
+  const sinkPath = process.env.CLAUDE_AGENTS_ADMIT_LOG;
+  if (!sinkPath) return;
+  try {
+    const dir = path.dirname(sinkPath);
+    if (dir && dir !== "." && dir !== "/") {
+      mkdirSync(dir, { recursive: true });
+    }
+    const line = JSON.stringify({
+      ts: new Date().toISOString(),
+      tool: record.tool,
+      path: record.pathArg ?? null,
+      skill: record.skill ?? null,
+      mode: record.mode,
+      decision: record.outcome,
+      reason: record.reason,
+      version: VERSION,
+    });
+    appendFileSync(sinkPath, line + "\n", "utf8");
+  } catch {
+    // Silent: hook context may run with restricted FS permissions.
   }
 }
 

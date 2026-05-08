@@ -30,11 +30,29 @@ describe("extractFrontmatter", () => {
   });
 });
 
-describe("loadSkills (PoC assets)", () => {
-  it("loads all 10 PoC skills with no issues", async () => {
+describe("loadSkills (transformed assets — P2 PoC + P6 kubernetes pilot)", () => {
+  // Expected count by phase:
+  //   P2 = 10 (kubernetes 5 + go 5)
+  //   P6 = 15 (P2 + kubernetes advanced/migration/ingress 5)
+  //   P7 = will grow per-category; bump this constant on category PR.
+  it("loads all 15 transformed skills with no issues", async () => {
     const result = await loadSkills(ASSETS_ROOT);
     expect(result.issues).toEqual([]);
-    expect(result.skills).toHaveLength(10);
+    expect(result.skills).toHaveLength(15);
+  });
+
+  it("includes the P6 kubernetes pilot skills", async () => {
+    const { skills } = await loadSkills(ASSETS_ROOT);
+    const names = new Set(skills.map((s) => s.manifest.name));
+    for (const required of [
+      "gateway-api",
+      "gateway-api-migration",
+      "k8s-autoscaling-advanced",
+      "k8s-scheduling-advanced",
+      "k8s-traffic-ingress",
+    ]) {
+      expect(names.has(required)).toBe(true);
+    }
   });
 
   it("each skill's manifest.name matches its directory name", async () => {
