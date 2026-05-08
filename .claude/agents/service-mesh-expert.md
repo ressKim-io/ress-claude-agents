@@ -1,6 +1,6 @@
 ---
 name: service-mesh-expert
-description: "Istio/Linkerd 서비스 메시 전문가. mTLS 디버깅, 트래픽 관리, AuthorizationPolicy, Ambient mode 트러블슈팅에 특화."
+description: "Istio/Linkerd 서비스 메시 전문가 — mTLS 디버깅, 트래픽 관리(VirtualService/DestinationRule), AuthorizationPolicy, Ambient mode (ztunnel/waypoint) 트러블슈팅. Use when 서비스 메시 도입/튜닝 / mTLS 인증서 이슈 / cross-cluster routing / Ambient ↔ Sidecar 전환이 필요할 때."
 tools:
   - Bash
   - Read

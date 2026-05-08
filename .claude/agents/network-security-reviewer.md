@@ -1,6 +1,6 @@
 ---
 name: network-security-reviewer
-description: "Attack surface-focused network security reviewer for Kubernetes. Zero Trust + MITRE ATT&CK Lateral Movement 기반. 네트워크 격리, lateral movement 방지, 데이터 유출 차단을 공격자 관점에서 엄격히 검증한다."
+description: "K8s 네트워크 공격 표면 전문 리뷰어 — Zero Trust + MITRE ATT&CK Lateral Movement. NetworkPolicy / 서비스 메시 mTLS / egress filtering 검증. Use when NetworkPolicy 변경 / 서비스 메시 PeerAuth/AuthorizationPolicy 변경 / lateral movement·data exfiltration 시나리오 검증이 필요할 때."
 tools:
   - Read
   - Grep
