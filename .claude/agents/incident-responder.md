@@ -7,7 +7,7 @@ tools:
   - Grep
   - Glob
   - WebFetch
-model: inherit
+model: sonnet
 ---
 
 # Incident Responder Agent

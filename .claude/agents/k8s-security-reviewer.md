@@ -6,7 +6,7 @@ tools:
   - Grep
   - Glob
   - Bash
-model: inherit
+model: sonnet
 ---
 
 # Kubernetes Security Reviewer (Attack Surface Focus)

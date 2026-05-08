@@ -6,7 +6,7 @@ tools:
   - Grep
   - Glob
   - Bash
-model: inherit
+model: sonnet
 ---
 
 # Java Expert Agent

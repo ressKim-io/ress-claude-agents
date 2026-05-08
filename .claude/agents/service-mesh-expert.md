@@ -6,7 +6,7 @@ tools:
   - Read
   - Grep
   - Glob
-model: inherit
+model: sonnet
 ---
 
 # Service Mesh Expert Agent

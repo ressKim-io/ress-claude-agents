@@ -7,7 +7,7 @@ tools:
   - Bash
   - Grep
   - Glob
-model: inherit
+model: haiku
 ---
 
 # PR Review Bot Agent

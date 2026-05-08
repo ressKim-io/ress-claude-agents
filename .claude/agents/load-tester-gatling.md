@@ -7,7 +7,7 @@ tools:
   - Grep
   - Glob
   - Bash
-model: inherit
+model: sonnet
 ---
 
 # Gatling Load Tester Agent

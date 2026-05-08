@@ -6,7 +6,7 @@ tools:
   - Grep
   - Glob
   - Bash
-model: inherit
+model: haiku
 ---
 
 # Dev Logger Agent

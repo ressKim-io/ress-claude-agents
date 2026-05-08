@@ -7,7 +7,7 @@ tools:
   - Grep
   - Glob
   - Bash
-model: inherit
+model: sonnet
 ---
 
 # nGrinder Load Tester Agent

@@ -7,7 +7,7 @@ tools:
   - Grep
   - Glob
   - Bash
-model: inherit
+model: sonnet
 ---
 
 # Load Tester Agent (Hub)

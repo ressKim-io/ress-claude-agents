@@ -7,7 +7,7 @@ tools:
   - Grep
   - Glob
   - Bash
-model: inherit
+model: sonnet
 ---
 
 # K6 Load Tester Agent
