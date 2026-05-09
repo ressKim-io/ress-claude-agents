@@ -5,9 +5,9 @@
 # ress-claude-agents
 
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
-![Skills](https://img.shields.io/badge/Skills-205-2563EB?style=for-the-badge)
+![Skills](https://img.shields.io/badge/Skills-254-2563EB?style=for-the-badge)
 ![Agents](https://img.shields.io/badge/Agents-46-F97316?style=for-the-badge)
-![Lines](https://img.shields.io/badge/104K+_Lines-4F46E5?style=for-the-badge)
+![Lines](https://img.shields.io/badge/122K+_Lines-4F46E5?style=for-the-badge)
 
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -29,14 +29,14 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 > *이 반복 루프를 끊을 수 있다면?*
 
 저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
-205개의 Skills에 각 분야의 Best Practices를 구조화하고, 46개의 Agents가 자율적으로 판단하고 실행합니다.
+254개의 Skills에 각 분야의 Best Practices를 구조화하고, 46개의 Agents가 자율적으로 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
 ──────────────────                    ──────────────────
 Google/StackOverflow 검색              → /k8s-security 로 즉시 패턴 적용
 Runbook 찾아서 수동 실행               → incident-responder 가 자동 진단
-"이거 어떻게 해요?" 반복 질문          → 104,000줄의 지식 베이스가 즉시 답변
+"이거 어떻게 해요?" 반복 질문          → 122,000줄의 지식 베이스가 즉시 답변
 100만 VU 테스트 시나리오 수동 작성     → load-tester-k6 가 템플릿 제공
 ```
 
@@ -55,13 +55,13 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 | | Metric | Value | Description |
 |---|--------|-------|-------------|
 | 🤖 | **Agents** | 46 (~18,800줄) | 전략, 프론트엔드, 보안, SRE, MLOps 등 자율 실행 전문가 |
-| 💡 | **Skills** | 205 (~79,100줄) | Go, Spring, Python, React/Next.js, K8s, MSA, AI/LLM 등 온디맨드 도메인 지식 |
-| 📏 | **Rules** | 13 (~2,200줄) | Git, 테스트, 보안, 클라우드 CLI, 모니터링, 코드리뷰, 문서화 등 자동 적용 규칙 |
-| ⚡ | **Commands** | 43 | `/go review`, `/java lint`, `/review-pr` 등 자동화 워크플로우 |
-| 📦 | **Plugins** | 9 bundles | 역할 기반 에이전트+스킬 번들 설치 |
-| 🔄 | **Workflows** | 7 scenarios | 시나리오 기반 전체 스택 설치 (EKS, MSA, K8s 등) |
+| 💡 | **Skills** | 254 (~97,500줄) | Go, Spring, Python, React/Next.js, K8s, MSA, AI/LLM, 비즈니스/법무/운영 등 온디맨드 도메인 지식 |
+| 📏 | **Rules** | 15 (~1,840줄) | Git, 테스트, 보안, 클라우드 CLI, 모니터링, 코드리뷰, 문서화, 토큰 예산 등 자동 적용 규칙 |
+| ⚡ | **Commands** | 43 (~4,000줄) | `/go review`, `/java lint`, `/review-pr` 등 자동화 워크플로우 |
+| 📦 | **Plugins** | 12 bundles | 역할 기반 에이전트+스킬 번들 설치 |
+| 🔄 | **Workflows** | 10 scenarios | 시나리오 기반 전체 스택 설치 + handoff-flow (요구사항→설계→구현→리뷰) |
 | 🧪 | **Tests** | 51 cases | BATS 테스트 + CI 검증으로 100% 자동화 |
-| 📏 | **Total** | **104,000+ lines** | 17개 카테고리로 체계화된 AI 지식 체계 |
+| 📏 | **Total** | **122,000+ lines** | 20개 카테고리로 체계화된 AI 지식 체계 |
 
 </div>
 
@@ -102,7 +102,7 @@ cd ress-claude-agents
 
 ## 📖 사용 가이드
 
-> "205개 스킬 중 내 상황에 뭘 써야 하지?" — 페르소나별 추천 조합 + 실전 시나리오
+> "254개 스킬 중 내 상황에 뭘 써야 하지?" — 페르소나별 추천 조합 + 실전 시나리오
 
 | 페르소나 | 가이드 | 핵심 도구 |
 |----------|--------|----------|
@@ -122,7 +122,7 @@ cd ress-claude-agents
 
 ## 🤖 Agents
 
-Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (46 files, ~18,700줄).
+Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (46 files, ~18,800줄).
 
 > **Skills**는 "지식"이고, **Agents**는 "전문가"입니다. 자율적으로 판단하고 작업을 수행합니다.
 
@@ -230,10 +230,10 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 💡 Skills
 
-필요할 때만 로드되는 도메인 지식 (205 files, ~79,100줄). 17개 카테고리 서브디렉토리로 체계화.
+필요할 때만 로드되는 도메인 지식 (254 files, ~97,500줄). 20개 카테고리 서브디렉토리로 체계화.
 
 <details>
-<summary><b>Go (8 files)</b></summary>
+<summary><b>Go (14 files)</b></summary>
 
 ```
 /go-errors          # Error handling patterns
@@ -241,14 +241,16 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /go-testing         # Table-driven testing
 /go-database        # pgx, sqlc, sqlx, ent, bun 패턴
 /go-microservice    # Go MSA 프로젝트 구조, 헥사고날 아키텍처, 미들웨어
+/go-ai              # Genkit Go, LangChainGo, Eino, mcp-go, Tool Calling, RAG
 /concurrency-go     # Mutex, Channel, Worker Pool
 /refactoring-go     # Go 리팩토링, 코드 개선
 /effective-go       # Go Proverbs, 패턴 결정 가이드, Modern Go (1.21+)
+# + 추가 패턴: streaming, observability, security 등
 ```
 </details>
 
 <details>
-<summary><b>Spring (11 files)</b></summary>
+<summary><b>Spring (12 files)</b></summary>
 
 ```
 /spring-data        # JPA, QueryDSL
@@ -262,6 +264,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /refactoring-spring # Spring 리팩토링, 코드 개선
 /effective-java     # Effective Java, Modern Java (Record, Sealed, VT)
 /spring-patterns    # Spring Boot 핵심 패턴 결정 가이드
+/spring-ai          # Spring AI 1.1, Advisors, Structured Output, MCP
 ```
 </details>
 
@@ -305,7 +308,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Kubernetes (10 files) — K8s Core & Gateway API</b></summary>
+<summary><b>Kubernetes (20 files) — K8s Core & Gateway API</b></summary>
 
 ```
 /k8s-security       # Pod Security, RBAC, Kyverno, Trivy
@@ -318,11 +321,12 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /k8s-traffic-ingress # Ingress 트래픽 관리
 /gateway-api        # Gateway API vs Ingress, Envoy, Kong
 /gateway-api-migration # Ingress NGINX 마이그레이션, Istio Gateway
+# + 10개 추가: 트러블슈팅, GitOps 정책, advanced workload, multi-cluster 등
 ```
 </details>
 
 <details>
-<summary><b>Service Mesh (16 files) — Istio & Linkerd</b></summary>
+<summary><b>Service Mesh (17 files) — Istio & Linkerd</b></summary>
 
 ```
 /istio-core         # Sidecar vs Ambient, mTLS
@@ -345,7 +349,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Monitoring & Observability (24 files)</b></summary>
+<summary><b>Monitoring & Observability (28 files)</b></summary>
 
 ```
 /observability      # 로깅, RED Method
@@ -372,11 +376,13 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /kube-prometheus-stack # kube-prometheus-stack Helm 설정
 /aiops              # AIOps, 이상 탐지, 자동 복구
 /aiops-remediation  # AIOps 자동 복구, Runbook 자동화
+/observability-genai # OTel GenAI Conventions, LLM Tracing
+# + 추가 3개: cardinality 관리, retention 전략, dashboard 운영
 ```
 </details>
 
 <details>
-<summary><b>CI/CD & GitOps (11 files) — 배포 파이프라인</b></summary>
+<summary><b>CI/CD & GitOps (12 files) — 배포 파이프라인</b></summary>
 
 ```
 /cicd-devsecops     # GitHub Actions, Trivy, SonarQube
@@ -394,7 +400,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>SRE (14 files) — 운영 안정성</b></summary>
+<summary><b>SRE (15 files) — 운영 안정성</b></summary>
 
 ```
 /sre-sli-slo        # SLI/SLO, 에러 버짓
@@ -411,6 +417,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /finops-tools       # OpenCost, Kubecost, Infracost, KEDA+Karpenter
 /finops-tools-advanced # Cast AI, Kubecost 고급, 4Rs Framework
 /finops-greenops    # 탄소 발자국, 지속가능성, SCI
+/finops-ai          # AI FinOps, Token Economics, Model Routing
 ```
 </details>
 
@@ -438,7 +445,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Developer Experience (20 files)</b></summary>
+<summary><b>Developer Experience (26 files)</b></summary>
 
 ```
 /spec-driven-development # SDD, PRD, Design Doc, Shape Up — 계획 방법론 비교 및 템플릿
@@ -446,6 +453,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /dx-ai-agents       # AI 에이전트 거버넌스, Copilot/Claude 통합
 /dx-ai-agents-orchestration # 멀티 에이전트, 가드레일, Self-Healing
 /dx-ai-security     # AI 보안, Prompt Injection 방어
+/ai-first-playbook  # AI-First 조직 전환, ROI 측정, Shopify 모델
 /dx-onboarding      # Time-to-First-Deploy
 /dx-onboarding-deploy # 배포 파이프라인 온보딩
 /dx-onboarding-environment # 개발 환경 자동화
@@ -453,11 +461,16 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /local-dev-makefile # make up으로 풀스택 실행, Hot Reload, Dockerfile.dev
 /docs-as-code       # MkDocs, Docusaurus, TechDocs
 /docs-as-code-automation # API 문서 자동화, CI/CD, 품질 측정
+/documentation-templates # 12종 문서 템플릿 (ADR, postmortem, migration 등)
 /conventional-commits # Conventional Commits, Changelog 자동화
 /git-workflow       # Git 브랜칭 전략, Trunk-based
 /refactoring-principles # 리팩토링 원칙, Code Smells
+/clean-code         # Composed Method, Cognitive Complexity, Guard Clause, 네이밍
 /token-efficiency   # 토큰 & 컨텍스트 효율화, 낭비 패턴 방지
+/token-budget       # Opus 4.7 effort/caching, Adaptive Thinking, 비용 계산
 /rfc-adr            # RFC/ADR 워크플로우, 템플릿, 라이프사이클
+/adr-retrospective  # 6/12개월 ADR 재평가, hit rate, supersede frequency
+/quarterly-review   # DORA SQL, SLO burn rate, FinOps unit economics, 회고 facilitation
 /engineering-strategy # Tech Radar, Build vs Buy, OKR, 로드맵
 /team-topologies    # Team Topologies, Conway's Law, 인터랙션 모드
 /product-thinking   # RICE, MoSCoW, Shape Up, JTBD, Story Mapping
@@ -465,7 +478,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>Infrastructure (11 files) — AWS, Terraform, Docker, IaC</b></summary>
+<summary><b>Infrastructure (16 files) — AWS, Terraform, Docker, IaC</b></summary>
 
 ```
 /aws-eks            # EKS Terraform, IRSA, Add-ons
@@ -479,11 +492,16 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /docker             # Dockerfile, 멀티스테이지 빌드
 /database           # 인덱스, N+1, 쿼리 최적화
 /database-migration # Flyway, Liquibase
+/ec2-cd-pipeline    # EC2 CD 파이프라인, GitHub Actions → SSM
+/compose-to-k8s     # Docker Compose → Kubernetes 전환 패턴
+/helm-environment-strategy # Helm values 환경 전략, multi-env
+/terraform-k8s-bootstrap # Terraform → K8s 부트스트랩 (EKS/GKE)
+/compatibility-matrix # 인프라 버전 호환성 매트릭스
 ```
 </details>
 
 <details>
-<summary><b>Messaging (8 files) — Kafka, RabbitMQ, NATS</b></summary>
+<summary><b>Messaging (9 files) — Kafka, RabbitMQ, NATS</b></summary>
 
 ```
 /kafka              # Strimzi, KEDA 연동
@@ -494,6 +512,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 /rabbitmq           # RabbitMQ v4.1, Quorum Queues, AMQP 1.0
 /nats-messaging     # NATS JetStream, KV Store, Consumer 패턴
 /redis-streams      # Redis Streams, Consumer Groups, PEL 관리
+/kafka-k8s-operations # Strimzi 운영, K8s에서의 Kafka 관리
 ```
 </details>
 
@@ -537,13 +556,56 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 </details>
 
 <details>
-<summary><b>AI/LLM (4 files) — RAG, 프롬프트 엔지니어링, 벡터 DB</b></summary>
+<summary><b>AI/LLM (5 files) — RAG, 프롬프트 엔지니어링, 벡터 DB</b></summary>
 
 ```
 /rag-patterns          # RAG 아키텍처, Chunking, Hybrid Search, 평가
-/prompt-engineering    # 프롬프트 엔지니어링, Chain-of-Thought, Few-Shot
+/prompt-engineering    # 프롬프트 엔지니어링, Chain-of-Thought, Few-Shot, Opus 4.7 주의사항
 /vector-db             # Pinecone, Weaviate, pgvector, 인덱스 전략
 /langchain-langgraph   # LangChain, LangGraph, 멀티 에이전트 워크플로우
+/agentic-coding        # Agentic Coding 4 모드, Agent Supervision, Code Review
+```
+</details>
+
+<details>
+<summary><b>Business (16 files) — 멀티테넌시, 결제, 인증, 알림 등 SaaS 비즈니스 패턴</b></summary>
+
+```
+/multi-tenancy            # Team/Org, 데이터 격리(Row/Schema/DB), RBAC, 초대
+/auth-oauth-social        # Google/Apple/Kakao, PKCE, Magic Link, 2FA
+/payment-integration      # Stripe/Toss/PortOne, Token-first, Webhook, Saga
+/notification-multichannel # Push/Email/SMS, Fallback, Notification Center
+/subscription-billing     # 구독 관리, 가격 정책, MRR/ARR
+/subscription-billing-metrics # MRR Movement, Churn, LTV/CAC SQL
+/credit-system            # 크레딧 시스템, 충전/소진, idempotency
+/storage-handling         # 파일 업로드/CDN, presigned URL
+/media-handling           # 이미지/영상 처리, AVIF, 정통망법 차단 의무
+/media-streaming          # LL-HLS/WebRTC/RTMP/SRT, DRM, Multi-CDN
+/search-recommend         # SearchGateway, 한국어 nori, Hybrid 검색, 추천
+/webhook-delivery         # 발신자 관점 webhook, HMAC, retry, SSRF 방지
+/audit-log                # PII/legal 감사 로그, Append-only, 보존 정책
+/feature-flag             # LaunchDarkly/Unleash, gradual rollout, A/B
+/rate-limiting            # Token bucket, sliding window, 분산 rate limit
+/admin-panel              # 어드민 패널 패턴, 권한 모델, audit
+```
+</details>
+
+<details>
+<summary><b>Legal (3 files) — 한국 PIPA/위치정보법, 글로벌 GDPR/SOC2</b></summary>
+
+```
+/korea-privacy-law      # 한국 개인정보보호법, 위치정보법, 정보통신망법
+/child-protection       # 아동·청소년 보호, 14세 미만 동의, 컨텐츠 필터
+/gdpr-soc2-mapping      # GDPR ↔ 한국 PIPA ↔ SOC2 매핑, DSR 자동화
+```
+</details>
+
+<details>
+<summary><b>Operations (2 files) — Runbook, Postmortem 운영 표준</b></summary>
+
+```
+/runbook-standard       # Runbook 표준 포맷, 실행 자동화
+/incident-postmortem    # Blameless 회고, 5 Whys, PIPA 24h 신고
 ```
 </details>
 
@@ -551,7 +613,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ## 📏 Rules
 
-파일 경로 기반으로 **자동 적용**되는 코드 규칙 (8 files, ~870줄). Skills와 달리 명시적 호출 없이 항상 활성화됩니다.
+파일 경로 기반으로 **자동 적용**되는 코드 규칙 (15 files, ~1,840줄). Skills와 달리 명시적 호출 없이 항상 활성화됩니다.
 
 ### Project Workflow (전체 적용)
 
@@ -562,6 +624,13 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | 🔄 `workflow` | 작업 순서 | Explore → Plan → Code → Verify → Commit (MANDATORY) |
 | 🔒 `security` | 보안 규칙 | 시크릿 하드코딩 금지, 입력 검증, PII 로깅 금지 |
 | 🐛 `debugging` | 디버깅 프로토콜 | Reproduce → Diagnose → Root Cause → Fix |
+| ✨ `clean-code` | Clean Code 원칙 | Composed Method, Cognitive Complexity, Guard Clause, 네이밍 |
+| 👀 `code-review` | 코드 리뷰 워크플로우 | 멀티 관점 리뷰, 심각도 매트릭스 |
+| 📡 `monitoring` | 모니터링 룰 | PromQL/LogQL/TraceQL 안티패턴, OTel 시맨틱 컨벤션 |
+| 📚 `documentation` | 문서 자동 트리거 | ADR/postmortem/migration/load-test 자동 작성 |
+| ☁️ `cloud-cli-safety` | 클라우드 CLI 안전 | AWS/GCP 위험 명령 차단 (사고 사례 기반) |
+| ✅ `user-approval` | 외부 작업 승인 | gh/git push, ArgoCD sync 등 사전 승인 |
+| 🪙 `token-budget` | Opus 4.7 토큰 운영 | context 80%, subagent 명시 spawn, effort 레벨 |
 
 ### Language-Specific (경로 자동 매칭)
 
@@ -638,11 +707,14 @@ GitHub Actions로 4개 Job이 매 커밋마다 실행됩니다:
 | `backend-java` | Java/Spring 백엔드 | 3 agents | spring, msa, architecture |
 | `backend-go` | Go 백엔드 | 3 agents | go, msa, architecture |
 | `backend-python` | Python 백엔드 | 3 agents | python, msa, architecture |
-| `sre-full` | SRE 전체 툴킷 | 6 agents | sre, observability, kubernetes |
+| `sre-full` | SRE 전체 툴킷 | 6 agents | sre, observability, cicd, infrastructure |
+| `ai-engineering` | AI-First 엔지니어링 | 3 agents | ai, dx |
 | `ai-ml` | AI/ML | 2 agents | ai, platform |
 | `messaging` | 메시징 시스템 | 2 agents | messaging |
 | `frontend` | Frontend 개발 | 2 agents | frontend |
 | `strategy` | 기술 전략/계획 | 3 agents | dx |
+| `compliance` | 컴플라이언스 (한국 PIPA + GDPR/SOC2) | 3 agents | legal, security |
+| `ops` | 운영 표준화 (Runbook + Postmortem) | 4 agents | operations, sre |
 
 ### Scenario Workflows (NEW)
 
@@ -669,8 +741,13 @@ GitHub Actions로 4개 Job이 매 커밋마다 실행됩니다:
 | `observability-full` | 전체 관측 스택 (Prometheus, OTel, Tracing) | 2 agents, 2 cat + 2 skills |
 | `kafka-event-driven` | Kafka 이벤트 기반 아키텍처 | 3 agents, 2 cat + 4 skills |
 | `full-platform` | 전체 플랫폼 구축 (인프라+MSA+관측+메시징) | 8 agents, 9 cat + 10 skills |
+| `feature-development` | **handoff-flow**: 요구사항 → 설계 → ADR → 구현 → 리뷰 → 모니터링 | 8 agents, multi-stage |
+| `incident-to-action` | **handoff-flow**: 장애 → RCA → 포스트모템 → 재발방지 ADR | 5 agents, parallel triage |
+| `new-domain` | **handoff-flow**: 신규 도메인 부트스트랩 (multi-tenancy, billing 분기) | 6+ agents, multi-stage |
 
 > **Plugin vs Workflow**: Plugin은 **역할 기반** ("나는 Java 개발자"), Workflow는 **시나리오 기반** ("EKS GitOps 환경을 구축하고 싶다")
+>
+> **Handoff-flow workflows** (`feature-development`, `incident-to-action`, `new-domain`): 각 단계의 산출물(`user-story`, `adr`, `code` 등 43개 vocabulary)이 다음 단계의 입력으로 강제 핸드오프되며 `validate-agent-handoff.sh`로 검증됩니다.
 
 ### Pre-commit Hooks & Quality Gates
 
@@ -755,7 +832,7 @@ make all           # 전체 검증 (validate + test)
          → 필요한 Skill만 로드 (<5,000 tokens)
 ```
 
-매 세션마다 102,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
+매 세션마다 122,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
 
 ### Token Efficiency
 
@@ -797,58 +874,75 @@ ress-claude-agents/
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder
 │   │   ├── dev-logger.md     # 개발 과정 기록
 │   │   └── ...
-│   ├── commands/              # 40 automation commands
+│   ├── commands/              # 43 automation commands
 │   │   ├── log-feedback.md   # AI 수정 요청 기록
 │   │   ├── log-decision.md   # 의사결정 기록
 │   │   ├── log-meta.md       # Rule/Skill 변경 기록
 │   │   ├── log-trouble.md    # 트러블슈팅 기록
 │   │   └── log-summary.md    # 세션 요약
-│   ├── skills/               # 198 on-demand knowledge files (17 categories)
-│   │   ├── go/               # Go patterns (8)
-│   │   ├── spring/           # Spring Boot (11)
+│   ├── skills/               # 254 on-demand knowledge files (20 categories)
+│   │   ├── go/               # Go patterns (14)
+│   │   ├── spring/           # Spring Boot (12)
 │   │   ├── python/           # Python/FastAPI/Django (6)
 │   │   ├── frontend/         # React, Next.js, TypeScript (7)
 │   │   ├── msa/              # MSA runtime patterns (15)
 │   │   ├── architecture/     # Architecture styles (10)
-│   │   ├── kubernetes/       # K8s core & Gateway API (10)
-│   │   ├── service-mesh/     # Istio & Linkerd (16)
-│   │   ├── observability/    # Monitoring & Observability (24)
-│   │   ├── cicd/             # CI/CD & GitOps (11)
-│   │   ├── sre/              # SRE & Operations (14)
+│   │   ├── kubernetes/       # K8s core & Gateway API (20)
+│   │   ├── service-mesh/     # Istio & Linkerd (17)
+│   │   ├── observability/    # Monitoring & Observability (28)
+│   │   ├── cicd/             # CI/CD & GitOps (12)
+│   │   ├── sre/              # SRE & Operations (15)
 │   │   ├── platform/         # Platform & MLOps (16)
-│   │   ├── dx/               # Developer Experience (20)
-│   │   ├── infrastructure/   # AWS, Terraform, Docker (11)
-│   │   ├── messaging/        # Kafka, RabbitMQ, NATS (8)
+│   │   ├── dx/               # Developer Experience (26)
+│   │   ├── infrastructure/   # AWS, Terraform, Docker (16)
+│   │   ├── messaging/        # Kafka, RabbitMQ, NATS (9)
 │   │   ├── security/         # Security & Compliance (5)
-│   │   └── ai/               # RAG, Prompt Engineering, Vector DB (4)
-│   ├── rules/                # 5 project workflow rules
+│   │   ├── ai/               # RAG, Prompt Engineering, Vector DB (5)
+│   │   ├── business/         # 멀티테넌시, 결제, 인증, 알림 (16)
+│   │   ├── legal/            # 한국 PIPA/위치정보법, GDPR (3)
+│   │   └── operations/       # Runbook, Postmortem (2)
+│   ├── rules/                # 15 auto-applied rules
 │   │   ├── git.md            # Conventional Commits, Branch, PR
 │   │   ├── testing.md        # TDD, Coverage, Given-When-Then
 │   │   ├── workflow.md       # Explore → Plan → Code → Commit
 │   │   ├── security.md       # 시크릿, 입력 검증, 인증/인가
-│   │   └── debugging.md      # 디버깅 프로토콜, 에러 분석
-│   ├── workflows/            # 7 scenario workflow bundles
+│   │   ├── debugging.md      # 디버깅 프로토콜, 에러 분석
+│   │   ├── clean-code.md     # Composed Method, Cognitive Complexity
+│   │   ├── code-review.md    # 멀티 관점 리뷰, 심각도 매트릭스
+│   │   ├── monitoring.md     # PromQL/LogQL 안티패턴, OTel
+│   │   ├── documentation.md  # ADR/postmortem 자동 트리거
+│   │   ├── cloud-cli-safety.md # AWS/GCP 위험 명령
+│   │   ├── user-approval.md  # gh/git push 승인
+│   │   ├── token-budget.md   # Opus 4.7 토큰 운영
+│   │   └── {go,java,spring}.md # 언어별 (3개)
+│   ├── workflows/            # 10 scenario workflows + _base
 │   │   ├── _base.yml         # 공통 계획 도구 (SDD, RFC/ADR)
 │   │   ├── eks-gitops-setup.yml
 │   │   ├── msa-migration.yml
 │   │   ├── compose-to-k8s.yml
+│   │   ├── feature-development.yml  # handoff-flow
+│   │   ├── incident-to-action.yml   # handoff-flow
+│   │   ├── new-domain.yml           # handoff-flow
 │   │   └── ...
 │   ├── inventory.yml         # Auto-generated skill/agent index
 │   └── standards.yml         # Code quality standards
 ├── docs/
-│   └── dev-logs/             # 개발 과정 기록 저장소
-│       └── sessions/         # 세션 요약
-├── plugins/                  # 9 plugin bundle manifests
-│   ├── k8s-ops.yml           # K8s 운영 번들
-│   ├── backend-java.yml      # Java/Spring 백엔드 번들
-│   ├── backend-go.yml        # Go 백엔드 번들
-│   ├── backend-python.yml    # Python 백엔드 번들
-│   ├── sre-full.yml          # SRE 전체 툴킷
-│   ├── ai-ml.yml             # AI/ML 번들
-│   ├── messaging.yml         # 메시징 시스템 번들
-│   ├── frontend.yml          # Frontend 개발 번들
-│   └── strategy.yml          # 기술 전략/계획 번들
-├── commands/                 # 35 automation commands (legacy)
+│   ├── adr/                  # Architecture Decision Records
+│   ├── migration/            # 마이그레이션 기록
+│   ├── retrospective/        # 회고
+│   └── dev-logs/             # 개발 과정 기록
+├── plugins/                  # 12 plugin bundle manifests
+│   ├── k8s-ops.yml
+│   ├── backend-{java,go,python}.yml
+│   ├── sre-full.yml
+│   ├── ai-engineering.yml    # AI-First 엔지니어링
+│   ├── ai-ml.yml
+│   ├── messaging.yml
+│   ├── frontend.yml
+│   ├── strategy.yml
+│   ├── compliance.yml        # 한국 PIPA + GDPR/SOC2
+│   └── ops.yml               # Runbook + Postmortem
+├── commands/                 # 43 automation commands
 ├── project-templates/        # Go, Java, K8s, Terraform
 ├── scripts/
 │   ├── generate-docs.sh      # Documentation generator
@@ -915,7 +1009,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Built with Claude Code**
 
-*AI를 도구가 아닌 동료로 — 102,000줄의 AI 지식 체계*
+*AI를 도구가 아닌 동료로 — 122,000줄의 AI 지식 체계*
 
 [![GitHub Stars](https://img.shields.io/github/stars/ressKim-io/ress-claude-agents?style=for-the-badge&color=yellow)](https://github.com/ressKim-io/ress-claude-agents)
 

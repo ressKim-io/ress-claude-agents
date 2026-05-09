@@ -28,13 +28,13 @@ cd ress-claude-agents
 | | Count | Lines |
 |---|---|---|
 | Agents | 46 | ~18,800 |
-| Skills | 205 | ~79,100 |
-| Rules | 13 | ~2,200 |
+| Skills | 254 | ~97,500 |
+| Rules | 15 | ~1,840 |
 | Commands | 43 | ~4,000 |
 | Tests | 51 cases | - |
-| Plugins | 9 bundles | - |
-| Workflows | 7 scenarios | - |
-| **Total** | | **104,000+** |
+| Plugins | 12 bundles | - |
+| Workflows | 10 scenarios | - |
+| **Total** | | **122,000+** |
 
 ## Agents
 
@@ -56,27 +56,30 @@ cd ress-claude-agents
 
 ## Skills
 
-205 on-demand knowledge files organized in 17 categories.
+254 on-demand knowledge files organized in 20 categories.
 
 | Category | Count | Topics |
 |---|---|---|
-| Go | 8 | Error handling, Gin, testing, microservice patterns |
-| Spring | 11 | JPA, Security, OAuth2, testing, Effective Java |
+| Go | 14 | Error handling, Gin, testing, microservice, AI integration, Effective Go |
+| Spring | 12 | JPA, Security, OAuth2, Spring AI, testing, Effective Java |
 | Python | 6 | FastAPI, Django, pytest, asyncio |
 | Frontend | 7 | React 19, Next.js 15, TypeScript, Vitest, Tailwind |
 | MSA | 15 | DDD, Saga, CQRS, Event Sourcing, gRPC, Contract-First |
 | Architecture | 10 | Hexagonal, Cell-based, Modular Monolith, Data Mesh |
-| Kubernetes | 10 | Security, Helm, HPA/VPA/KEDA, Gateway API |
-| Service Mesh | 16 | Istio (Ambient, mTLS, multi-cluster), Linkerd |
-| Observability | 24 | OpenTelemetry, eBPF, Prometheus, Grafana, Pyroscope, AIOps |
-| CI/CD | 11 | GitHub Actions, ArgoCD, Canary, Supply Chain |
-| SRE | 14 | SLI/SLO, Chaos Engineering, DR, FinOps |
+| Kubernetes | 20 | Security, Helm, HPA/VPA/KEDA, Gateway API, scheduling, autoscaling |
+| Service Mesh | 17 | Istio (Ambient, mTLS, multi-cluster), Linkerd |
+| Observability | 28 | OpenTelemetry, eBPF, Prometheus, Grafana, Pyroscope, AIOps |
+| CI/CD | 12 | GitHub Actions, ArgoCD, Canary, Supply Chain |
+| SRE | 15 | SLI/SLO, Chaos Engineering, DR, FinOps, GreenOps |
 | Platform | 16 | Backstage, MLOps, WASM, GPU scheduling |
-| DX | 20 | DORA metrics, onboarding, RFC/ADR, SDD, Team Topologies |
-| Infrastructure | 12 | AWS EKS, Terraform, Crossplane, Docker, EC2 CD |
-| Messaging | 8 | Kafka, RabbitMQ, NATS, Redis Streams |
+| DX | 26 | DORA, onboarding, RFC/ADR, SDD, Team Topologies, AI agents, token budget |
+| Infrastructure | 16 | AWS EKS, Terraform, Crossplane, Docker, EC2 CD |
+| Messaging | 9 | Kafka, RabbitMQ, NATS, Redis Streams |
 | Security | 5 | OWASP, auth patterns, compliance frameworks |
-| AI | 4 | RAG, prompt engineering, vector DB, LangChain |
+| AI | 5 | RAG, prompt engineering, vector DB, LangChain, agentic coding |
+| Business | 16 | Multi-tenancy, payment, auth, notifications, search/recommend, webhook, streaming |
+| Legal | 3 | 한국 위치정보법/PIPA, 아동 보호, 글로벌 GDPR/SOC2 매핑 |
+| Operations | 2 | Runbook 표준, Blameless postmortem |
 
 ## Plugin Bundles
 
@@ -94,10 +97,13 @@ Install agents and skills by role:
 | `backend-go` | 3 | Go, MSA, architecture |
 | `backend-python` | 3 | FastAPI/Django, MSA, architecture |
 | `sre-full` | 6 | SRE, observability, Kubernetes |
+| `ai-engineering` | 3 | Agentic coding, SDD, AI cost, GenAI observability |
 | `ai-ml` | 2 | Kubeflow, KServe, RAG |
 | `messaging` | 2 | Kafka, RabbitMQ, NATS |
 | `frontend` | 2 | React, Next.js, TypeScript |
 | `strategy` | 3 | Tech strategy, product engineering |
+| `compliance` | 3 | 한국 PIPA/위치정보법, GDPR/SOC2/HIPAA, DSR 자동화 |
+| `ops` | 4 | Runbook 표준, blameless postmortem, on-call, SRE 도구 |
 
 ## Scenario Workflows
 
@@ -117,8 +123,11 @@ Install everything needed for a specific scenario. Every workflow auto-includes 
 | `observability-full` | Full observability stack (Prometheus, OTel) | 2 agents, 2 cat + 2 skills |
 | `kafka-event-driven` | Kafka event-driven architecture | 3 agents, 2 cat + 4 skills |
 | `full-platform` | Complete platform setup (all combined) | 8 agents, 9 cat + 10 skills |
+| `feature-development` | Handoff flow: 요구사항 → 설계 → ADR → 구현 → 리뷰 → 모니터링 | 8 agents, multi-stage |
+| `incident-to-action` | Handoff flow: 장애 → RCA → 포스트모템 → 재발방지 ADR | 5 agents, parallel triage |
+| `new-domain` | Handoff flow: 신규 도메인 부트스트랩 (multi-tenancy 포함) | 6+ agents, multi-stage |
 
-> **Plugin vs Workflow**: Plugins are role-based ("I'm a Java developer"), Workflows are scenario-based ("I want to set up EKS GitOps").
+> **Plugin vs Workflow**: Plugins are role-based ("I'm a Java developer"), Workflows are scenario-based ("I want to set up EKS GitOps"). Handoff workflows (`feature-development`, `incident-to-action`, `new-domain`) enforce artifact handoff between stages via `validate-agent-handoff.sh`.
 
 ## Development
 
