@@ -63,10 +63,22 @@ release/v<major>.<minor>.<patch>
 ## Commit Discipline
 
 - MUST commit in logical units: 하나의 목적 = 하나의 커밋
+- **PREFER 4~5 파일 이내** — 단일 커밋이 그 이상이면 리뷰 부담이 급증한다. 성격이 다른 변경(코드/문서/설정)은 분리한다.
 - NEVER commit WIP (work-in-progress) directly; squash before push
 - NEVER commit `.env`, credentials, API keys, or any secret files
 - NEVER include unrelated changes in a single commit
 - `git add .` 대신 파일을 명시적으로 지정하여 스테이징
+- 큰 변경은 PR 자체를 분할하거나, 의미 단위로 여러 커밋으로 쪼개 push
+
+---
+
+## Co-Authored-By Trailer 금지 (MANDATORY)
+
+NEVER add `Co-Authored-By: Claude ...` (또는 다른 AI 어시스턴트) trailer to commit messages **unless the user has explicitly requested it.**
+
+- 모든 경로에서 금지: `git commit`, slash command, amend, rebase, squash merge 시 commit message 재작성 포함
+- Claude Code CLI / Codex / Cursor 기본 commit template 사용 시에도 동일
+- 예외: 사용자가 명시적으로 "Co-Authored-By 넣어줘"라고 요청한 경우만
 
 ---
 

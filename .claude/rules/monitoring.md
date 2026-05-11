@@ -20,6 +20,48 @@ Grafana 대시보드 JSON, Tempo/Loki/Mimir/Alloy/Pyroscope 설정, PromQL/LogQL
 
 ---
 
+## 모니터링 최우선 원칙 (MANDATORY)
+
+모든 코드/인프라 작업에서 모니터링은 사후 추가가 아닌 **기본 요구사항**으로 다룬다.
+
+- 새 서비스/엔드포인트 추가 시 메트릭 + 로그 + 추적 동시 설계
+- 새 의존성 도입(외부 API, DB, 캐시) 시 SLI/SLO 우선 정의
+- 인프라 변경(스케일링, 노드그룹, NetworkPolicy 등)은 관련 대시보드/알림 영향 동시 확인
+- "기능 동작 확인됨" ≠ "관찰 가능". 관찰 불가능한 기능은 production-ready 아님
+
+---
+
+## 라벨 변경 시 일괄 영향 검사 (MANDATORY)
+
+대시보드/쿼리에서 사용하는 label을 변경하면 **반드시 아래 항목을 일괄 검사**한다:
+
+- [ ] alerting rules (`PrometheusRule`) 전체 — label 매처 일치 여부
+- [ ] recording rules — `by ()` 절 변경 여부
+- [ ] Grafana 대시보드 JSON 전체 — variable / panel 쿼리
+- [ ] ServiceMonitor / PodMonitor selector
+- [ ] cross-service join 쿼리 (`*_info` metric의 label join)
+
+단일 label 변경 누락이 alert 미발화 / 대시보드 No data / SLO 미산정으로 이어진다.
+
+---
+
+## OTel → Prometheus job label 매핑 스펙 (MANDATORY)
+
+OTel Collector/Alloy로 수집한 메트릭이 Prometheus의 `job` label로 매핑될 때 다음 spec을 따른다:
+
+```
+job="<namespace>/<service.name>"
+```
+
+- `service.name` (resource attribute) → job 의 후반부
+- namespace (K8s) → 전반부
+- 대시보드/recording rule은 이 형식을 가정해서 작성 (`job=~"<ns>/.+"`)
+- OTel SDK에서 `service.namespace` 별도 설정해도 Prometheus `job` 라벨로는 위 형식 유지
+
+매핑이 깨지면(예: `job="service.name"`만) ServiceMap, app dashboard 전체에서 No data.
+
+---
+
 ## 필수 참조 (MANDATORY)
 
 모니터링 관련 코드를 작성하거나 수정하기 전, 반드시 `docs/monitoring-pitfalls.md`를 읽고 해당 섹션을 확인하라.

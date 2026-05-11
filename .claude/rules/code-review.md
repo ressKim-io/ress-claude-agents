@@ -70,6 +70,37 @@ Gemini가 발견했지만 Claude가 놓친 항목은 **반드시** `docs/review-
 
 ---
 
+## 리뷰 본문 한국어 작성 (MANDATORY)
+
+PR 코멘트, 리뷰 본문, 갭 기록 모두 **한국어**로 작성한다.
+
+- 기술 용어/식별자는 원문 유지 (`p99`, `HikariCP`, `NetworkPolicy`, `kubectl`)
+- 코드 스니펫, 변수명, 명령어는 영어 그대로
+- 설명 문장, 권장 사항, 트레이드오프 분석은 한국어
+- 표/체크리스트의 헤더와 항목 텍스트는 한국어
+
+이유: 리뷰의 1차 독자는 한국어 사용자(본인+팀)이며, 영어 본문은 자동 번역 단계를 거치며 미묘한 뉘앙스 손실이 발생한다.
+
+---
+
+## 자주 놓치는 패턴 체크리스트
+
+Gemini 리뷰 갭 학습 누적으로 도출된 Claude가 빈번히 놓치는 패턴. **리뷰 시 의식적으로 확인**한다:
+
+| 카테고리 | 패턴 | 검증 방법 |
+|---------|------|----------|
+| 네이밍 일관성 | FQDN vs short name 혼용 (`service.namespace.svc.cluster.local` vs `service`) | manifest/config 전체에서 동일 host 표기 일치 |
+| Shell 변수 인용 | `$VAR` vs `"$VAR"` 차이 (공백/특수문자 포함 시) | shell script 내 변수 사용 — quoting 누락 위치 |
+| Helm template 이스케이프 | recording rule 안의 `{{ $labels.x }}` (Helm이 먼저 평가) | `{{ "{{" }} $labels.x {{ "}}" }}` 형태 |
+| label/selector 일치 | Service selector vs Deployment label, NetworkPolicy podSelector vs Pod label | matchLabels 양방향 검증 |
+| env 변수 expand | `${VAR}` 리터럴 (K8s manifest에서 expand 안 됨) | shell script 또는 init container에서 처리 여부 |
+| API version | beta API 잔재 (`networking.k8s.io/v1beta1` 등) | manifest 전수 grep |
+| Idempotency | 비멱등 메서드(POST)의 retry 설정 | Istio VirtualService / 클라이언트 retry policy |
+
+매 PR에서 위 항목 통과 여부를 mental check 후 코멘트 작성.
+
+---
+
 ## PR 코멘트 양식
 
 코드 리뷰 결과는 아래 양식으로 PR에 코멘트를 남긴다.

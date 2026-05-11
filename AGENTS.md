@@ -15,7 +15,7 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 |---|---|---|
 | Skills (도메인 패턴) | `.claude/skills/` | 233개 (Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등 20 카테고리) |
 | Agents (전문 에이전트) | `.claude/agents/` | 49개 (database-expert, k8s-troubleshooter, saga-agent, business-decision-agent 등) |
-| Rules (코딩/보안/워크플로우) | `.claude/rules/` | 14개 (이 AGENTS.md의 상세판) |
+| Rules (코딩/보안/워크플로우) | `.claude/rules/` | 18개 (이 AGENTS.md의 상세판) |
 | Plugins (역할별 번들) | `plugins/*.yml` | 12 bundles |
 | Workflows (시나리오 번들) | `.claude/workflows/*.yml` | 11 scenarios |
 
@@ -261,6 +261,9 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | `user-approval.md` | 외부 작업 승인 | User Approval |
 | `cloud-cli-safety.md` | AWS/GCP 위험 명령 | Cloud CLI Safety |
 | `go.md`, `java.md`, `spring.md` | 언어별 | Language-Specific |
+| `version-compatibility.md` | 의존성 매트릭스 관리 (K8s/Istio/ArgoCD/OTel) | (path-scoped: Chart.yaml, values, build.gradle 등) |
+| `config-contract-audit.md` | 명시값+기본값+환경별 override 3단계 검증 | (universal — 모든 config 작업) |
+| `professional-writing.md` | 포트폴리오/슬라이드 카피 원칙 | (rare — 자기 어필 글쓰기 시) |
 | `token-budget.md` | Opus 4.7 전용 | (아래) |
 
 ### Token Budget (Opus 4.7)
