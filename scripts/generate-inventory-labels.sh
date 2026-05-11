@@ -123,7 +123,9 @@ generate_labels() {
             ds=$(classify_domain_specificity "$category")
 
             entries+=("${category}|${name}|${md}|${po}|${ds}")
-        done < <(find "$SKILLS_DIR" -type f -name "*.md" | sort)
+        done < <(find "$SKILLS_DIR" -type f -name "*.md" -not -name "SKILL.md" | sort)
+        # SKILL.md (.claude/skills/<cat>/<name>/SKILL.md, gitignored)는 P4 adapter --tool=claude
+        # 산출물 — 같은 내용이 부모 단일 파일(.claude/skills/<cat>/<name>.md)에 존재하므로 skip.
 
         local prev_cat=""
         printf '%s\n' "${entries[@]}" | sort -t'|' -k1,1 -k2,2 | while IFS='|' read -r cat name md po ds; do

@@ -145,7 +145,9 @@ generate() {
     skill_entries+=("$category|$basename|$lines|$title|$desc")
     total_skill_lines=$((total_skill_lines + lines))
     skill_count=$((skill_count + 1))
-  done < <(find "$SKILLS_DIR" -name "*.md" -type f | sort)
+  done < <(find "$SKILLS_DIR" -name "*.md" -type f -not -name "SKILL.md" | sort)
+  # SKILL.md (.claude/skills/<cat>/<name>/SKILL.md, gitignored)는 P4 adapter --tool=claude
+  # 산출물 — 같은 내용이 부모 단일 파일(.claude/skills/<cat>/<name>.md)에 존재하므로 skip.
 
   # Duplicate name check
   local all_names dupes
