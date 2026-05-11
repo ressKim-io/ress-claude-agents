@@ -486,7 +486,7 @@ ENTRYPOINT ["/myservice"]
 
 ## 관련 Skills
 
-- `/go-errors`, `/go-gin`, `/go-testing` -- Go 에러/프레임워크/테스트
+- `/effective-go`, `/go-gin`, `/go-testing` -- Go 관용 패턴(에러 포함)/프레임워크/테스트
 - `/grpc` -- gRPC, Protocol Buffers
 - `/msa-resilience` -- Circuit Breaker, Retry
 - `/msa-observability` -- 분산 추적, 메트릭
