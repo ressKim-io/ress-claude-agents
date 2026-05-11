@@ -136,6 +136,35 @@ func process(u *User) error {
 }
 ```
 
+## 설정 바인딩 (Viper)
+
+Viper로 환경변수 / 설정 파일을 바인딩할 때 **반드시 `SetDefault`를 등록**한다.
+
+- MUST `viper.SetDefault("foo.bar", ...)` 등록한 key만 `Unmarshal` + `AutomaticEnv`가 인식한다
+- MUST 환경변수 → 구조체 필드 매핑은 SetDefault에 등록되지 않은 key에서 silent skip 발생
+- PREFER mapstructure tag 명시: `mapstructure:"foo_bar"`
+- 신규 config 필드 추가 시 **반드시 ① 구조체 필드 ② SetDefault ③ env var 명세** 3곳 동시 갱신
+
+```go
+// BAD: SetDefault 없이 Unmarshal — 일부 env 미바인딩
+viper.AutomaticEnv()
+viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+var cfg Config
+viper.Unmarshal(&cfg) // JWT_PRIVATE_KEY 안 들어옴
+
+// GOOD: SetDefault 등록 후 Unmarshal
+viper.SetDefault("jwt.private_key", "")
+viper.SetDefault("ticketing.event_id", "")
+viper.AutomaticEnv()
+viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+var cfg Config
+viper.Unmarshal(&cfg)
+```
+
+신규 환경변수가 dev에선 동작하다가 prod에서 zero value로 나오는 사고는 거의 SetDefault 누락이 원인이다.
+
+---
+
 ## 참조
 
 상세 가이드: `/effective-go` 스킬 참조

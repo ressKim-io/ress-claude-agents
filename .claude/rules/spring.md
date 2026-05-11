@@ -37,6 +37,79 @@ public class OrderService {
 NEVER `private` 메서드에 `@Transactional` — AOP 프록시가 미작동.
 NEVER 같은 클래스 내에서 `@Transactional` 메서드를 직접 호출 — self-invocation은 트랜잭션을 무시.
 
+**NEVER `@Transactional` 메서드 내에서 외부 시스템 호출 (HTTP, 결제, 메시지 큐 등).**
+- DB 락이 외부 latency 동안 유지 → connection pool 고갈
+- 메시 retry (Istio 5xx retry 등)와 결합 시 **중복 결제 / 중복 발송** 사고 발생 (실제 사례: 비멱등 POST + Istio retry → 중복 결제)
+- 외부 호출은 트랜잭션 커밋 후 또는 Outbox / SAGA 패턴으로 분리
+
+```java
+// BAD: @Tx 안에 HTTP 호출
+@Transactional
+public void pay(Order o) {
+    paymentClient.charge(o);  // 외부 latency 동안 DB lock 점유
+    o.markPaid();
+}
+
+// GOOD: Outbox 패턴
+@Transactional
+public void pay(Order o) {
+    o.markPaid();
+    outbox.save(new PaymentRequested(o.id));  // 동일 트랜잭션
+}
+// 별도 worker가 outbox → paymentClient 호출 + 멱등성 키 사용
+```
+
+---
+
+## BeanPostProcessor / BeanInitialization 순서
+
+`BeanPostProcessor` (BPP) 안에서 다른 빈을 참조할 때 **반드시 lazy resolution 패턴** 사용:
+
+- MUST `ObjectProvider<T>` 또는 `@Lazy`로 늦은 주입
+- MUST `postProcessAfterInitialization`에서 처리 — `postProcessBeforeInitialization`은 빈이 미완성
+- NEVER 생성자에서 다른 빈 직접 주입 (BPP는 다른 BPP보다 먼저 초기화될 수 있음)
+
+```java
+// BAD: 순환 초기화 가능
+public class OtelInstrumentation implements BeanPostProcessor {
+    private final MeterRegistry registry;  // 다른 BPP일 수 있음
+    public OtelInstrumentation(MeterRegistry r) { this.registry = r; }
+}
+
+// GOOD: 지연 해석
+public class OtelInstrumentation implements BeanPostProcessor {
+    private final ObjectProvider<MeterRegistry> registry;
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String name) {
+        if (bean instanceof DataSource ds) {
+            registry.getIfAvailable(); // 이 시점엔 다른 빈 완성됨
+        }
+        return bean;
+    }
+}
+```
+
+실제 사례: HikariCP + OTel 자동 계측 BPP 순서 문제로 DataSource 가 instrumented 되지 않음.
+
+---
+
+## OTel 의존성 관리
+
+Spring Boot의 `dependency-management`가 OTel BOM 버전을 덮어쓸 수 있다.
+
+- MUST OTel 의존성은 instrumentation BOM 으로 일괄 관리: `io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom`
+- NEVER 개별 OTel 모듈 버전을 따로 지정 — Spring BOM에 의해 다운그레이드되어 spec 위반 발생
+- NEVER OTel Java Agent + Spring Boot Starter 동시 사용 — 이중 계측 발생
+
+```kotlin
+// build.gradle.kts
+dependencies {
+    implementation(platform("io.opentelemetry.instrumentation:opentelemetry-instrumentation-bom:${otelVersion}"))
+    implementation("io.opentelemetry.instrumentation:opentelemetry-spring-boot-starter")
+}
+```
+
 ## DTO vs Entity
 
 NEVER Controller 응답에 Entity 직접 노출 — 스키마 변경이 API 변경으로 전파됨.
