@@ -1,6 +1,6 @@
 ---
 name: compliance-auditor
-description: "SOC2/HIPAA/GDPR/PCI-DSS 컴플라이언스 감사 에이전트 — 자동화된 보안 체크, 증거 수집, 감사 보고서 생성. Use for 정기 컴플라이언스 audit / 규제 요구사항 변경 영향 분석 / SOC2 Type II evidence 자동 수집 / GDPR DPIA 작성."
+description: "SOC2/HIPAA/GDPR/PCI-DSS 컴플라이언스 *사후* 감사 에이전트 — 자동화된 보안 체크, 증거 수집, 감사 보고서 생성. Use for 정기 컴플라이언스 audit / 규제 요구사항 변경 영향 분석 / SOC2 Type II evidence 자동 수집 / GDPR DPIA 작성. 신규 프로젝트의 *설계 단계* compliance 결정(PIPA built-in / GDPR Art.25 Privacy by Design)은 compliance-strategy-agent로 위임."
 tools:
   - Bash
   - Read

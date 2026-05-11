@@ -23,6 +23,7 @@ artifacts:
   requirement-change: "기존 요구사항 변경 트리거"
   alert: "Prometheus/모니터링 알림 발화"
   ci-failure: "CI/CD 파이프라인 실패 신호"
+  geo-target: "1차 출시 시장 (kr / eu / us / global / hybrid). compliance-strategy 진입점"
 
   # 기획/요구사항 단계
   user-story: "사용자 스토리 (As a / I want / So that)"
@@ -39,6 +40,8 @@ artifacts:
   rfc: "Request for Comments (설계 제안 + 합의)"
   adr: "Architecture Decision Record (결정 + 트레이드오프)"
   tech-radar-entry: "Tech Radar Adopt/Trial/Assess/Hold 항목"
+  compliance-blueprint: "geo별 사전 컴플라이언스 설계 (PIPA/GDPR/CCPA built-in 요구사항)"
+  platform-blueprint: "Golden Path 명세 + Component 매트릭스 (IDP/MLOps/GPU 도입 결정)"
 
   # 구현 단계
   code: "소스 코드 + 변경 (PR 형태)"
@@ -104,9 +107,21 @@ agents:
     consumes: [user-story, bounded-context, mvp-scope]
     produces: [rfc, adr, tech-radar-entry]
 
+  business-decision-agent:
+    consumes: [user-story, mvp-scope, bounded-context, geo-target, compliance-blueprint]
+    produces: [adr, tech-radar-entry]
+
+  platform-strategy-agent:
+    consumes: [mvp-scope, bounded-context]
+    produces: [adr, platform-blueprint, tech-radar-entry]
+
+  compliance-strategy-agent:
+    consumes: [mvp-scope, geo-target]
+    produces: [adr, compliance-blueprint]
+
   # === 설계 ===
   architect-agent:
-    consumes: [user-story, acceptance-criteria, mvp-scope]
+    consumes: [user-story, acceptance-criteria, mvp-scope, compliance-blueprint]
     produces: [bounded-context, service-boundary, api-contract, data-model]
 
   ticketing-expert:
@@ -118,7 +133,7 @@ agents:
     produces: [code, runbook]
 
   infra-roadmap-planner:
-    consumes: [bounded-context, mvp-scope]
+    consumes: [bounded-context, mvp-scope, adr]
     produces: [migration-plan, upgrade-plan]
 
   # === 언어별 구현 ===
@@ -156,7 +171,7 @@ agents:
     produces: [code, runbook, code-review-comment]
 
   otel-expert:
-    consumes: [code, k8s-manifest]
+    consumes: [code, k8s-manifest, mvp-scope, bounded-context, adr]
     produces: [dashboard, alert-rule, slo-definition]
 
   database-expert:
@@ -282,7 +297,7 @@ agents:
     produces: [cost-report]
 
   finops-advisor:
-    consumes: [cost-report]
+    consumes: [cost-report, mvp-scope, adr, platform-blueprint]
     produces: [adr, action-items, tech-radar-entry]
 
   # === 마이그레이션 ===

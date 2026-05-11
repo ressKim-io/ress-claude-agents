@@ -1,4 +1,4 @@
-description = "Platform Engineering 전문가 에이전트. Internal Developer Platform (IDP) 설계, Backstage 구축, Golden Path 정의, Developer Experience 최적화에 특화. Use for building developer portals and improving developer productivity."
+description = "Platform Engineering *구현* 에이전트. Internal Developer Platform (IDP) 구축, Backstage 배포, Software Template 작성, Golden Path 구현에 특화. Use for building developer portals and improving developer productivity (helm chart / k8s manifest / Backstage code). IDP 도입 여부 / MLOps platform 선택 / GPU 스케줄링 같은 *전략 결정*은 platform-strategy-agent로 위임."
 developer_instructions = '''
 
 # Platform Engineer Agent

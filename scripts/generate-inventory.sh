@@ -50,12 +50,12 @@ categorize_agent() {
     python-expert) echo "python" ;;
     architect-agent|saga-agent) echo "architecture" ;;
     k8s-*) echo "kubernetes" ;;
-    platform-engineer) echo "platform" ;;
+    platform-engineer|platform-strategy-agent) echo "platform" ;;
     otel-expert|observability-reviewer) echo "observability" ;;
-    security-scanner|anti-bot|terraform-reviewer|compliance-auditor|dockerfile-reviewer|container-security-reviewer|network-security-reviewer) echo "security" ;;
+    security-scanner|anti-bot|terraform-reviewer|compliance-auditor|compliance-strategy-agent|dockerfile-reviewer|container-security-reviewer|network-security-reviewer) echo "security" ;;
     ci-optimizer|git-workflow|pr-review-bot|cicd-reviewer|gitops-reviewer|cicd-security-reviewer) echo "cicd" ;;
     code-reviewer|ticketing-expert|dev-logger|debugging-expert) echo "devops" ;;
-    tech-lead|product-engineer|migration-expert) echo "devops" ;;
+    tech-lead|product-engineer|migration-expert|business-decision-agent) echo "devops" ;;
     frontend-expert) echo "frontend" ;;
     incident-responder) echo "sre" ;;
     load-tester*) echo "testing" ;;

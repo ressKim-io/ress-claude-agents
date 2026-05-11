@@ -4,7 +4,7 @@ generated: "2026-05-08T04:53:11Z"
 
 summary:
   skills: { count: 239, total_lines: 92598 }
-  agents: { count: 46, total_lines: 18844 }
+  agents: { count: 49, total_lines: 19773 }
 
 skills:
   ai:
@@ -1033,6 +1033,10 @@ agents:
       title: "Redis Expert Agent"
       desc: "Redis 전문가 에이전트. Redis Cluster, Sentinel HA, 캐싱 전략, Lua 스크립트, Kubernetes Redis 운영에 특화. Use for Redis optimization, cluster design, and caching patterns."
   devops:
+    - name: business-decision-agent
+      lines: 319
+      title: "Business Decision Agent"
+      desc: "신규 SaaS 부트스트랩의 4 ADR 일관성 orchestration 에이전트 — 멀티테넌시, 인증 Provider, 결제 Provider, 알림 채널 결정을 순서대로 수행해 일관된 ADR set을 produce. 한국 B2C 시장(Kakao 로그인 / PortOne·Toss 결제 / 카카오톡 알림톡 / PIPA) 가중치 내장. Use when 새 프로젝트 0→1 단계의 비즈니스 도메인 결정 / 신규 도메인의 격리·인증·결제·알림 ADR 작성이 필요할 때. 전사 RFC governance나 Tech Radar는 tech-lead 사용."
     - name: code-reviewer
       lines: 416
       title: "Code Reviewer Agent"
@@ -1120,7 +1124,11 @@ agents:
     - name: platform-engineer
       lines: 430
       title: "Platform Engineer Agent"
-      desc: "Platform Engineering 전문가 에이전트. Internal Developer Platform (IDP) 설계, Backstage 구축, Golden Path 정의, Developer Experience 최적화에 특화. Use for building developer portals and improving developer productivity."
+      desc: "Platform Engineering *구현* 에이전트. Internal Developer Platform (IDP) 구축, Backstage 배포, Software Template 작성, Golden Path 구현에 특화. Use for building developer portals and improving developer productivity (helm chart / k8s manifest / Backstage code). IDP 도입 여부 / MLOps platform 선택 / GPU 스케줄링 같은 *전략 결정*은 platform-strategy-agent로 위임."
+    - name: platform-strategy-agent
+      lines: 314
+      title: "Platform Strategy Agent"
+      desc: "Internal Developer Platform(IDP) 전략 결정 에이전트 — Backstage 도입 여부, Golden Path 정의, MLOps/GPU 스케줄링/WASM Edge 등 platform layer 도입 ADR 작성. Use when 신규 조직의 platform layer 설계 / 기존 인프라에 IDP 도입 검토 / MLOps·GPU·Edge workload 통합 결정이 필요할 때. helm/k8s 구현은 platform-engineer 사용."
   python:
     - name: python-expert
       lines: 504
@@ -1134,7 +1142,11 @@ agents:
     - name: compliance-auditor
       lines: 477
       title: "Compliance Auditor Agent"
-      desc: "SOC2/HIPAA/GDPR/PCI-DSS 컴플라이언스 감사 에이전트 — 자동화된 보안 체크, 증거 수집, 감사 보고서 생성. Use for 정기 컴플라이언스 audit / 규제 요구사항 변경 영향 분석 / SOC2 Type II evidence 자동 수집 / GDPR DPIA 작성."
+      desc: "SOC2/HIPAA/GDPR/PCI-DSS 컴플라이언스 *사후* 감사 에이전트 — 자동화된 보안 체크, 증거 수집, 감사 보고서 생성. Use for 정기 컴플라이언스 audit / 규제 요구사항 변경 영향 분석 / SOC2 Type II evidence 자동 수집 / GDPR DPIA 작성. 신규 프로젝트의 *설계 단계* compliance 결정(PIPA built-in / GDPR Art.25 Privacy by Design)은 compliance-strategy-agent로 위임."
+    - name: compliance-strategy-agent
+      lines: 296
+      title: "Compliance Strategy Agent"
+      desc: "설계 단계 컴플라이언스 결정 에이전트 — 한국 PIPA(개인정보 보호법) / 위치정보법 / GDPR / CCPA / PCI-DSS를 built-in design으로 통합. 새 프로젝트의 geo-target에 따라 사전 컴플라이언스 요구사항을 ADR + blueprint로 produce. Use when 신규 프로젝트의 geo-target이 확정된 직후 / 데이터 모델·인증·결제 ADR 작성 전 / EU·미국·한국 시장 진출 의사결정 직후. 사후 audit·evidence collection은 compliance-auditor 사용."
     - name: container-security-reviewer
       lines: 404
       title: "Container Security Reviewer (Attack Surface Focus)"
