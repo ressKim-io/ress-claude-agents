@@ -70,7 +70,7 @@ spec:
         drop: [ALL]
 ```
 
-### K02: Supply chain vulnerabilities
+### K04: Lack Of Cluster Level Policy Enforcement (Supply chain)
 
 ```yaml
 # ❌ unsigned image
@@ -98,7 +98,7 @@ spec:
         - keys: {publicKeys: "..."}
 ```
 
-### K03: Overly permissive RBAC
+### K02: Overly Permissive Authorization Configurations
 
 ```yaml
 # ❌ cluster-admin 부여
@@ -113,7 +113,7 @@ spec:
   verbs: ["get", "list", "watch"]
 ```
 
-### K06: Broken authentication
+### K09: Broken Authentication Mechanisms
 
 `ServiceAccount` token 자동 mount 비활성화:
 
@@ -122,9 +122,9 @@ spec:
   automountServiceAccountToken: false   # 명시적으로 필요한 Pod 만 mount
 ```
 
-### K08: Network segmentation
+### K05: Missing Network Segmentation Controls
 
-NetworkPolicy 3중 체크 (Goti 실사례에서 가장 빈도 높음):
+NetworkPolicy 3중 체크 (운영 환경에서 빈도 높음):
 
 ```yaml
 # ✅ 1. default deny ingress
