@@ -79,7 +79,7 @@ Istio 모니터링 통합 허브: 메트릭, 트레이싱, Kiali 가이드
 |------|-------|------|
 | Prometheus 연동 | `/istio-metrics` | ServiceMonitor, RED 쿼리, Grafana |
 | 분산 트레이싱 | `/istio-tracing` | Jaeger/Tempo, Access Logging, OTel |
-| 시각화 | `/istio-kiali` | Kiali 설정, 서비스 토폴로지 |
+| 시각화 (Kiali) | 본 skill 내 §Kiali | 설정, 서비스 토폴로지 (흡수 예정) |
 
 ---
 
@@ -103,4 +103,4 @@ Istio 모니터링 통합 허브: 메트릭, 트레이싱, Kiali 가이드
 - [ ] waypoint 메트릭 추가 (L7용)
 - [ ] Kiali 버전 확인 (1.80+)
 
-**관련 skill**: `/istio-metrics`, `/istio-tracing`, `/istio-kiali`, `/istio-core`, `/istio-gateway`, `/observability-otel`
+**관련 skill**: `/istio-metrics`, `/istio-tracing`, `/istio-core`, `/istio-gateway`, `/observability-otel`

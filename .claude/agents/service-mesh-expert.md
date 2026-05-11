@@ -540,8 +540,7 @@ spec:
 | `service-mesh/istio-gateway-classic` | 클래식 Ingress Gateway |
 | `service-mesh/istio-metrics` | Istio 메트릭 수집 |
 | `service-mesh/istio-tracing` | 분산 트레이싱 |
-| `service-mesh/istio-kiali` | Kiali 대시보드 |
-| `service-mesh/istio-observability` | Istio 옵저버빌리티 |
+| `service-mesh/istio-observability` | Istio 옵저버빌리티 (Kiali 포함) |
 | `service-mesh/k8s-traffic-istio` | K8s 트래픽 관리 |
 | `kubernetes/k8s-traffic` | K8s 네트워크 기본 |
 | `kubernetes/k8s-traffic-ingress` | Ingress 컨트롤러 |
