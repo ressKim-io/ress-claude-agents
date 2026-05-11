@@ -15,7 +15,7 @@ Go 백엔드 개발을 위한 명령어입니다.
 
 | Skill | 내용 |
 |-------|------|
-| `/go-errors` | 에러 처리 패턴 |
+| `/effective-go` | 에러 처리 포함 Go 관용 패턴 |
 | `/go-gin` | Gin 프레임워크 |
 | `/go-testing` | 테스트 패턴 |
 | `/concurrency-go` | 동시성 패턴 |

@@ -26,7 +26,7 @@ commands:
     category: go
     title: Go Code Review
     description: Go 코드를 리뷰하고 개선점을 제안합니다
-    skills: [go-errors, go-gin, go-testing, concurrency-go]
+    skills: [effective-go, go-gin, go-testing, concurrency-go]
     related: [go-lint, go-refactor]
 
   - id: go-test-gen
