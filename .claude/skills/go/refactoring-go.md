@@ -454,4 +454,4 @@ userMap := make(map[int]*User, len(users))
 
 ---
 
-**관련 skill**: `/refactoring-principles`, `/go-errors`, `/concurrency-go`
+**관련 skill**: `/refactoring-principles`, `/effective-go`, `/concurrency-go`
