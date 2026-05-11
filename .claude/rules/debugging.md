@@ -97,6 +97,78 @@ OOM (Out of Memory)
 
 ---
 
+## 패턴 전수 스캔 (MANDATORY)
+
+버그를 한 곳에서 발견하면 동일 패턴이 다른 위치에도 존재한다고 가정한다.
+
+- MUST `grep -r` / `rg` 로 동일 패턴 전수 검색 — 단일 수정으로 끝내지 않는다
+- 발견된 모든 위치를 점검/수정한 후 회귀 테스트 또는 lint rule 추가
+- 자주 반복되는 패턴은 검증 스크립트로 자동화
+
+```bash
+# 예: env 변수 expand 안 됨 (${VAR} 리터럴) 한 곳 발견 시
+rg '\$\{[A-Z_]+\}' --type yaml
+
+# 예: 비멱등 메서드의 retry 설정 전수 검색
+rg 'retries:|maxAttempts' --type yaml
+```
+
+---
+
+## K8s Pod 디버깅 트리아지 (CrashLoopBackOff)
+
+K8s pod가 CrashLoopBackOff일 때 **반드시 아래 순서로** 진단한다 — `kubectl logs` 단독으로 결론 내리지 않는다.
+
+```bash
+# 1. 종료 사유 우선 확인 (OOMKilled / Error / Completed 구분)
+kubectl get pod <pod> -n <ns> -o jsonpath='{.status.containerStatuses[*].lastState.terminated}{"\n"}'
+
+# 2. 이전 컨테이너 로그
+kubectl logs <pod> -n <ns> --previous --all-containers
+
+# 3. 이벤트 (스케줄링/이미지 풀/볼륨 마운트 실패)
+kubectl describe pod <pod> -n <ns>
+
+# 4. 네임스페이스 전체 이벤트 (선후 관계 확인용)
+kubectl get events -n <ns> --sort-by=.lastTimestamp
+```
+
+**금지**: lastState.terminated.reason 미확인 상태에서 "로그만 보고" 메모리 부족/exit code/정상 종료를 추정.
+
+---
+
+## Pod 간 TCP 연결 디버깅 (bash 명시)
+
+Pod 내부에서 TCP 연결을 테스트할 때 **반드시 `bash`로 실행**한다.
+
+```bash
+# 올바름: bash /dev/tcp 사용
+kubectl exec <pod> -- bash -c 'echo > /dev/tcp/<host>/<port>'
+
+# 금지: sh/busybox는 /dev/tcp 미지원
+kubectl exec <pod> -- sh -c 'echo > /dev/tcp/<host>/<port>'   # 실패
+```
+
+대안:
+- `nc -zv <host> <port>` — nc 설치된 이미지만
+- `curl http://<host>:<port>` — HTTP/HTTPS 한정
+
+---
+
+## 사전 리소스 계산 (replica 증가 전)
+
+워크로드 스케일링 전 다운스트림 리소스 contract를 사전 계산한다. 특히 DB connection pool은 production 사고의 단골 원인.
+
+```
+DB max_connections >= replicas × app_pool_size × safety_factor (≥ 1.2)
+```
+
+- replica 증가 시 RDS/Cloud SQL `max_connections` reservation 한도 사전 확인
+- HikariCP / pgxpool 등 application pool size × replica count = 전체 connection 요청
+- 부족 시 `connection refused` → CrashLoop 연쇄 발생
+
+---
+
 ## 로깅 원칙
 
 에러 발생 시 원본 에러와 컨텍스트를 함께 로깅하라:
