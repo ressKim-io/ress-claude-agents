@@ -1,0 +1,164 @@
+name: bootstrap-new-saas
+type: handoff-flow
+description: "신규 SaaS 0→1 부트스트랩 — 아이디어 + 시장(geo) → 사전 컴플라이언스 → 도메인 모델 → 4 비즈니스 ADR (tenancy/auth/payment/notification) → platform 전략 (optional) → 인프라 로드맵 → 사전 SLO/FinOps → API 계약 → 구현. 한국 B2C SaaS / 내부 플랫폼 시나리오 가중치. 기존 `new-domain.yml`은 *기존 SaaS에 신규 도메인 추가*용이고, 본 workflow는 *0에서 시작*하는 새 프로젝트용."
+
+# handoff-flow 형식:
+#   external_inputs: 워크플로우 시작 전부터 존재하는 입력 (vocabulary 외 + 기존 자산)
+#   stages: 단계별 agent + 입출력 artifact
+#   각 stage의 inputs는 (a) external_inputs 또는 (b) 직전 stages의 outputs에 포함되어야 한다.
+
+external_inputs: [idea, geo-target]
+
+stages:
+  - name: requirements
+    agent: product-engineer
+    inputs: [idea]
+    outputs: [user-story, acceptance-criteria, mvp-scope]
+    skills: [dx/spec-driven-development, dx/rfc-adr, dx/product-thinking]
+    description: "JTBD, Story Mapping, MVP 정의. 한국 B2C이면 카카오 생태계 고려"
+
+  - name: compliance-baseline
+    agent: compliance-strategy-agent
+    inputs: [mvp-scope, geo-target]
+    outputs: [adr, compliance-blueprint]
+    skills:
+      - legal/kr-location-info-act
+      - legal/data-subject-rights
+      - legal/child-data-protection
+      - security/compliance-frameworks
+    description: "geo에 따른 PIPA/GDPR/CCPA 사전 매핑. data 모델 결정 전 *필수* 선행"
+
+  - name: bounded-context
+    agent: architect-agent
+    inputs: [user-story, acceptance-criteria, mvp-scope, compliance-blueprint]
+    outputs: [bounded-context, service-boundary, data-model]
+    skills:
+      - msa/msa-ddd
+      - architecture/hexagonal-clean-architecture
+      - architecture/modular-monolith
+    description: "DDD bounded context. compliance-blueprint의 data 제약을 data-model에 반영"
+
+  - name: business-adr-chain
+    agent: business-decision-agent
+    inputs: [user-story, mvp-scope, bounded-context, compliance-blueprint]
+    outputs: [adr, tech-radar-entry]
+    skills:
+      - business/multi-tenancy
+      - business/auth-oauth-social
+      - business/payment-integration
+      - business/notification-multichannel
+      - business/subscription-billing
+      - business/webhook-delivery
+      - business/admin-api-keys
+      - business/audit-log
+      - business/rate-limiting
+      - business/feature-flags
+    description: "4 ADR 순서대로: tenancy → auth → payment → notification. AGENTS.md §220-226 chain"
+
+  - name: platform-strategy
+    agent: platform-strategy-agent
+    inputs: [mvp-scope, bounded-context]
+    outputs: [adr, platform-blueprint, tech-radar-entry]
+    skills:
+      - platform/backstage
+      - platform/golden-paths
+      - platform/developer-self-service
+      - platform/secrets-management
+      - platform/mlops
+      - platform/k8s-gpu-scheduling
+    optional: true
+    description: "내부 IDP / Backstage / MLOps / GPU 도입 결정. 조직 규모 ≥ 5 서비스 시 권장"
+
+  - name: infra-roadmap
+    agent: infra-roadmap-planner
+    inputs: [bounded-context, mvp-scope, adr]
+    outputs: [migration-plan, upgrade-plan]
+    skills:
+      - infrastructure/ec2-cd-pipeline
+      - kubernetes/k8s-cluster-evolution
+    description: "Phase 0(EC2/compose) → Phase 1(kind/k3s) → Phase 2(EKS/GKE) → Phase 3(multi-cluster). ADR의 Provider 결정 반영"
+
+  - name: slo-design
+    agent: otel-expert
+    inputs: [mvp-scope, bounded-context, adr]
+    outputs: [slo-definition]
+    skills:
+      - sre/sli-slo-design
+      - observability/observability-otel
+    description: "사전 SLI/SLO 정의 — 가용성 목표가 아키텍처/인프라 비용에 영향 (99.95% vs 99% = 3배 비용)"
+
+  - name: finops-estimate
+    agent: finops-advisor
+    inputs: [mvp-scope, adr, platform-blueprint]
+    outputs: [adr, action-items, tech-radar-entry]
+    skills:
+      - sre/finops-fundamentals
+      - sre/finops-unit-economics
+      - sre/finops-ai
+    description: "Provider별 수수료 + 인프라 비용 + Unit Economics 사전 추정. Crawl/Walk/Run 단계별 비용 plan"
+
+  - name: api-design
+    agent: architect-agent
+    inputs: [bounded-context, service-boundary, adr, compliance-blueprint]
+    outputs: [api-contract]
+    skills:
+      - msa/contract-first
+      - msa/api-design
+      - msa/grpc
+    description: "OpenAPI / protobuf 계약. ADR (auth/payment) + compliance (Data Subject Rights API) 반영"
+
+  - name: implementation
+    agent: go-expert
+    inputs: [api-contract, adr, acceptance-criteria]
+    outputs: [code, unit-test, integration-test]
+    alternatives: [java-expert, python-expert, frontend-expert]
+    skills:
+      - go/effective-go
+      - msa/contract-first
+      - msa/msa-saga
+      - msa/idempotent-consumer
+
+  - name: code-review
+    agent: code-reviewer
+    inputs: [code]
+    outputs: [code-review-comment]
+    skills: [dx/clean-code]
+
+  - name: security-baseline
+    agent: security-scanner
+    inputs: [code]
+    outputs: [security-finding]
+    skills:
+      - security/secure-coding-2026
+      - security/owasp-top-10
+    parallel_with: code-review
+
+# 핸드오프 의도:
+#   requirements (idea) → compliance-baseline (geo-target external)
+#   compliance-baseline → bounded-context (compliance-blueprint가 data-model 제약)
+#   bounded-context → business-adr-chain (4 ADR 일관성)
+#   compliance-blueprint → business-adr-chain (auth 동의 흐름 강제)
+#   bounded-context → platform-strategy (optional, IDP 도입 판단)
+#   adr 모두 → infra-roadmap (Provider 결정 반영)
+#   mvp-scope+adr → slo-design + finops-estimate (병렬 가능)
+#   bounded-context + adr + compliance → api-design (최종 API 계약)
+#   api-contract → implementation
+#   implementation → code-review + security-baseline (병렬)
+
+# 신규 SaaS ADR 작성 순서 (강제):
+#   1. compliance-blueprint (PIPA/GDPR 사전 매핑)         ← stage 2
+#   2. multi-tenancy 격리 모델 (가장 비싼 결정)            ← stage 4-1
+#   3. 인증 Provider (Kakao/Google/Apple)                  ← stage 4-2
+#   4. 결제 Provider (PortOne/Toss/Stripe)                 ← stage 4-3
+#   5. 알림 채널 + Provider (카카오톡 알림톡/Twilio)        ← stage 4-4
+#   → AGENTS.md §Business Patterns 참조
+
+# 시나리오별 가중치:
+#   - 한국 B2C SaaS: stage 2(PIPA) + stage 4(Kakao/PortOne/카카오톡) + stage 5 skip 가능
+#   - 글로벌 B2B SaaS: stage 2(GDPR + CCPA) + stage 4(Google/Stripe) + stage 5(Backstage)
+#   - 내부 플랫폼: stage 4 skip + stage 5(Full IDP)
+#   - AI/MLOps 제품: stage 5에서 platform-strategy의 MLOps/GPU 분기
+
+# 기존 new-domain.yml과 차이:
+#   - new-domain.yml: 기존 SaaS에 *추가* 도메인 (multi-tenancy/auth/payment는 이미 결정됨)
+#   - bootstrap-new-saas.yml: 0에서 시작 (모든 ADR 신규 작성)

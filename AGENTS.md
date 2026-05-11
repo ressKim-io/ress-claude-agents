@@ -14,10 +14,10 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 | 자산 | 위치 | 개수 |
 |---|---|---|
 | Skills (도메인 패턴) | `.claude/skills/` | 233개 (Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등 20 카테고리) |
-| Agents (전문 에이전트) | `.claude/agents/` | 46개 (database-expert, k8s-troubleshooter, saga-agent 등) |
+| Agents (전문 에이전트) | `.claude/agents/` | 49개 (database-expert, k8s-troubleshooter, saga-agent, business-decision-agent 등) |
 | Rules (코딩/보안/워크플로우) | `.claude/rules/` | 14개 (이 AGENTS.md의 상세판) |
 | Plugins (역할별 번들) | `plugins/*.yml` | 12 bundles |
-| Workflows (시나리오 번들) | `.claude/workflows/*.yml` | 7 scenarios |
+| Workflows (시나리오 번들) | `.claude/workflows/*.yml` | 11 scenarios |
 
 **중요**: K8s/Cloud/Monitoring 섹션의 룰은 **install된 프로젝트**에 적용된다 (이 메타 레포 자체엔 K8s 없음).
 
@@ -223,7 +223,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 3. 결제 Provider (한국=PortOne/Toss, 글로벌=Stripe)
 4. 알림 채널 + Provider
 
-각 skill에 ADR 템플릿 포함. `agents/tech-lead`로 위임 가능.
+각 skill에 ADR 템플릿 포함. **0→1 신규 프로젝트는 [`bootstrap-new-saas`](.claude/workflows/bootstrap-new-saas.yml) workflow가 `agents/business-decision-agent`로 4 ADR을 자동 orchestration**한다 (compliance-strategy-agent / platform-strategy-agent와 함께). 기존 프로젝트에 새 도메인 추가만 필요하면 [`new-domain`](.claude/workflows/new-domain.yml) workflow 사용.
 
 ---
 
@@ -281,7 +281,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | Plugins | `plugins/*.yml` | `install.sh --plugin <name>` |
 | Workflows | `.claude/workflows/*.yml` | `install.sh --workflow <name>` |
 
-자산 통계: [.claude/inventory.yml](.claude/inventory.yml). 현재 ~239 skills / 46 agents / 43 commands / 12 plugins / 10 workflows.
+자산 통계: [.claude/inventory.yml](.claude/inventory.yml). 현재 ~239 skills / 49 agents / 43 commands / 12 plugins / 11 workflows.
 
 ### Opus 4.7 Behavioral Notes
 

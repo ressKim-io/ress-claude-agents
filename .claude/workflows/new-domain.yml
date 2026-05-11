@@ -1,6 +1,6 @@
 name: new-domain
 type: handoff-flow
-description: "신규 도메인 발굴 → 경계 정의 → API 계약 → 도메인 expert 구현 → 통합 테스트. SaaS에서 새 비즈니스 도메인을 0에서 시작할 때 흐름. business/ skill 카테고리와 짝."
+description: "기존 SaaS에 *신규 도메인 추가* — 이미 결정된 tenancy/auth/payment 모델 위에 새 비즈니스 도메인을 얹는 흐름. 0→1 부트스트랩(모든 ADR 신규)은 `bootstrap-new-saas` workflow 사용. business/ skill 카테고리와 짝."
 
 external_inputs: [idea]
 
@@ -114,15 +114,15 @@ stages:
     skills: [security/secure-coding-2026, security/owasp-top-10]
     parallel_with: code-review
 
-# 신규 도메인 시작 시 ADR 작성 권장 순서 (business/ 패턴):
-#   1. multi-tenancy 격리 모델 (가장 비싼 결정)
-#   2. 인증 Provider (Kakao/Google/Apple)
-#   3. 결제 Provider (PortOne/Toss/Stripe)
-#   4. 알림 채널 + Provider
-#   → AGENTS.md §Business Patterns 참조
-
 # 핸드오프 의도:
 #   discovery → bounded-context → api-design → cost-decision
 #   cost-decision + api-design → implementation
 #   implementation → integration-test + code-review (병렬)
 #   domain-expert-* (optional) — 도메인별 분기
+
+# 부트스트랩 vs 추가 도메인:
+#   - 0→1 신규 프로젝트 (멀티테넌시 / 인증 / 결제 / 알림 ADR 모두 신규):
+#       → `bootstrap-new-saas` workflow 사용 (business-decision-agent가 4 ADR orchestration)
+#   - 기존 SaaS에 새 도메인 추가 (이미 결정된 모델 재사용):
+#       → 본 workflow. multi-tenancy-decision stage는 *기존 격리 모델 안에서* 새 도메인 매핑.
+#   - AGENTS.md §220-226 "신규 프로젝트 4단계 ADR" 참조
