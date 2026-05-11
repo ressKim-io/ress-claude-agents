@@ -15,7 +15,7 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 |---|---|---|
 | Skills (도메인 패턴) | `.claude/skills/` | 233개 (Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등 20 카테고리) |
 | Agents (전문 에이전트) | `.claude/agents/` | 49개 (database-expert, k8s-troubleshooter, saga-agent, business-decision-agent 등) |
-| Rules (코딩/보안/워크플로우) | `.claude/rules/` | 21개 (이 AGENTS.md의 상세판) |
+| Rules (코딩/보안/워크플로우) | `.claude/rules/` | 23개 (이 AGENTS.md의 상세판) |
 | Plugins (역할별 번들) | `plugins/*.yml` | 12 bundles |
 | Workflows (시나리오 번들) | `.claude/workflows/*.yml` | 11 scenarios |
 
@@ -267,6 +267,8 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | `istio.md` | VirtualService/AuthZ/PeerAuth/Gateway FQDN 규칙 | (path-scoped: istio/, virtualservice, authorizationpolicy 등) |
 | `k8s-manifest.md` | ArgoCD Application/AppProject/NetworkPolicy/RBAC | (path-scoped: application, networkpolicy, clusterrole 등) |
 | `terraform.md` | SG/IAM/state/secret 운영 규칙 | (path-scoped: *.tf, *.tfvars) |
+| `devlog-lifecycle.md` | dev-logs 4-Tier 정책 + frontmatter 표준 | (path-scoped: docs/dev-logs/*) |
+| `phase-workflow.md` | SDD Phase 게이트 워크플로우 | (path-scoped: sdd-*.md, phase-start*) |
 | `token-budget.md` | Opus 4.7 전용 | (아래) |
 
 ### Token Budget (Opus 4.7)
