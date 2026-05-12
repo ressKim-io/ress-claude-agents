@@ -44,7 +44,7 @@ Phase 기반 작업 시 반드시 따라야 할 게이트 규칙.
 ## Gate 1: SDD 작성 (MANDATORY)
 
 - SDD(Software Design Document)를 먼저 작성한다
-- 템플릿: `docs/templates/sdd-template.md` (범용) 또는 도메인 특화 템플릿
+- 템플릿: `.claude/templates/sdd.md.template` (범용) 또는 도메인 특화 템플릿
 - SDD에 "구현 순서" 섹션이 명확해야 한다 (Step별 의존성 포함)
 - SDD에 "테스트 전략" 섹션이 있어야 한다
 
@@ -124,7 +124,7 @@ Phase 진행 중 문제 발생 시:
 
 ## 관련 파일
 
-- 범용 SDD 템플릿: `docs/templates/sdd-template.md`
+- 범용 SDD 템플릿: `.claude/templates/sdd.md.template`
 - 일반 작업 순서: `.claude/rules/workflow.md`
 - 디버깅 프로토콜: `.claude/rules/debugging.md`
 - PR 리뷰 프로세스: `.claude/rules/code-review.md`
