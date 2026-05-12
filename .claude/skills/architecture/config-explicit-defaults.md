@@ -177,7 +177,7 @@ kubectl get deployment X -o jsonpath='{.spec.template.spec.containers[0].env}'
 ## 외부 근거
 
 - [12factor.net III: Config](https://12factor.net/config) — config 는 env 에 저장, code 와 분리
-- [Twelve-Factor Config: Misunderstandings and Advice — Kristian Glass](https://blog.doismellburning.co.uk/twelve-factor-config-misunderstandings-and-advice/) — "config sprawl" 명명
+- [Twelve-Factor Config: Misunderstandings and Advice — Kristian Glass](https://blog.doismellburning.co.uk/twelve-factor-config-misunderstandings-and-advice/) — 12-factor config 함정 정리
 - [OpenTelemetry SDK Configuration Spec](https://opentelemetry.io/docs/specs/otel/configuration/sdk-environment-variables/)
 - [Viper docs — Working with environment variables](https://github.com/spf13/viper#working-with-environment-variables) — AutomaticEnv + SetDefault 의존 관계
 
