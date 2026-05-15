@@ -1,3 +1,10 @@
+---
+name: msa-event-driven
+description: "이벤트 드리븐 아키텍처 가이드 — 서비스 간 비동기 통신, 이벤트 스키마 설계, 발행/수신 패턴, Kubernetes 통합 Use when working with msa 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # 이벤트 드리븐 아키텍처 가이드
 
 서비스 간 비동기 통신, 이벤트 스키마 설계, 발행/수신 패턴, Kubernetes 통합

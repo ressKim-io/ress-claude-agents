@@ -1,3 +1,10 @@
+---
+name: aws-eks
+description: "AWS EKS 가이드 — EKS 클러스터 구성, VPC 설계, IRSA, Add-ons 관리 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # AWS EKS 가이드
 
 EKS 클러스터 구성, VPC 설계, IRSA, Add-ons 관리

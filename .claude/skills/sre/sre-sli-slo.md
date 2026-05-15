@@ -1,3 +1,10 @@
+---
+name: sre-sli-slo
+description: "SRE: SLI/SLO/SLA 정의 가이드 — 서비스 신뢰성 목표 설정 및 에러 버짓 관리 Use when working with sre 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # SRE: SLI/SLO/SLA 정의 가이드
 
 서비스 신뢰성 목표 설정 및 에러 버짓 관리

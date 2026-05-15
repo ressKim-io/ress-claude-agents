@@ -1,3 +1,10 @@
+---
+name: python-patterns
+description: "Python Design Patterns — 타입 힌트, 디자인 패턴, Clean Architecture, SOLID 원칙의 Python 구현 가이드. Use when working with python 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Python Design Patterns
 
 타입 힌트, 디자인 패턴, Clean Architecture, SOLID 원칙의 Python 구현 가이드.

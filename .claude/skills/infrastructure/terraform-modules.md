@@ -1,3 +1,10 @@
+---
+name: terraform-modules
+description: "Terraform Module Patterns — Terraform 모듈 개발 패턴 및 best practices. Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Terraform Module Patterns
 
 Terraform 모듈 개발 패턴 및 best practices.

@@ -1,3 +1,10 @@
+---
+name: terraform-pitfalls
+description: "Terraform 실전 Pitfalls — Terraform/OpenTofu 운영 중 발생하는 실전 함정. state 관리/모듈 설계/순환 의존/secret 노출. Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Terraform 실전 Pitfalls
 
 Terraform/OpenTofu 운영 중 발생하는 실전 함정. state 관리/모듈 설계/순환 의존/secret 노출.

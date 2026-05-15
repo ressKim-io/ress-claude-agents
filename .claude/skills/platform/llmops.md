@@ -1,3 +1,10 @@
+---
+name: llmops
+description: "LLMOps 가이드 — RAG 운영, 프롬프트 버전 관리, LLM 평가(Ragas), 가드레일(NeMo) Use when working with platform 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # LLMOps 가이드
 
 RAG 운영, 프롬프트 버전 관리, LLM 평가(Ragas), 가드레일(NeMo)

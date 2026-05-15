@@ -1,3 +1,10 @@
+---
+name: css-design-system
+description: "CSS & Design System 가이드 — Tailwind CSS, Design System 구축, Radix UI, Shadcn/ui, 접근성 종합 가이드. Use when working with frontend 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # CSS & Design System 가이드
 
 Tailwind CSS, Design System 구축, Radix UI, Shadcn/ui, 접근성 종합 가이드.

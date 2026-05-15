@@ -1,3 +1,10 @@
+---
+name: chaos-engineering
+description: "Chaos Engineering 가이드 — LitmusChaos를 활용한 시스템 복원력 테스트 및 GameDay 운영 Use when working with sre 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Chaos Engineering 가이드
 
 LitmusChaos를 활용한 시스템 복원력 테스트 및 GameDay 운영

@@ -1,3 +1,10 @@
+---
+name: spring-security
+description: "Spring Security Patterns — Spring Security 기본 설정 및 Method Security 패턴 Use when working with spring 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Spring Security Patterns
 
 Spring Security 기본 설정 및 Method Security 패턴

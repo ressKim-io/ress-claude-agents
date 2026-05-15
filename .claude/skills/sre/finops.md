@@ -1,3 +1,10 @@
+---
+name: finops
+description: "FinOps 가이드 — 클라우드 비용 최적화, Right-sizing, Spot Instance 활용 Use when working with sre 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # FinOps 가이드
 
 클라우드 비용 최적화, Right-sizing, Spot Instance 활용

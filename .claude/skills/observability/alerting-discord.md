@@ -1,3 +1,10 @@
+---
+name: alerting-discord
+description: "Alerting & Discord 가이드 — Prometheus AlertManager 설정 및 Discord 웹훅 연동 Use when working with observability 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Alerting & Discord 가이드
 
 Prometheus AlertManager 설정 및 Discord 웹훅 연동

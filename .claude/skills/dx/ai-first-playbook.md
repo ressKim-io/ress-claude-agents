@@ -1,3 +1,10 @@
+---
+name: ai-first-playbook
+description: "AI-First Engineering Playbook — AI-First 조직 전환, 워크플로우 재설계, ROI 측정, Claude Code 운영 전략 Use when working with dx 도메인의 패턴 / 구현 선택."
+effort: low
+deprecated: false
+---
+
 # AI-First Engineering Playbook
 
 AI-First 조직 전환, 워크플로우 재설계, ROI 측정, Claude Code 운영 전략

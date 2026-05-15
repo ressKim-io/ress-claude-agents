@@ -1,3 +1,10 @@
+---
+name: observability-otel-collector-helm
+description: "OTel Collector Helm Chart 패턴 — Kubernetes 환경별 OTel Collector 배포, ArgoCD 통합, TLS/인증 설정 Use when working with observability 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # OTel Collector Helm Chart 패턴
 
 Kubernetes 환경별 OTel Collector 배포, ArgoCD 통합, TLS/인증 설정

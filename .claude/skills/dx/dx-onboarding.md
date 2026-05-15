@@ -1,3 +1,10 @@
+---
+name: dx-onboarding
+description: "Developer Onboarding 자동화 가이드 — 개발자 온보딩 자동화, Time-to-First-Deploy 최적화, 셀프서비스 환경 구축 Use when working with dx 도메인의 패턴 / 구현 선택."
+effort: low
+deprecated: false
+---
+
 # Developer Onboarding 자동화 가이드
 
 개발자 온보딩 자동화, Time-to-First-Deploy 최적화, 셀프서비스 환경 구축

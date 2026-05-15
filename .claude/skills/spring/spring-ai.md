@@ -1,3 +1,10 @@
+---
+name: spring-ai
+description: "Spring AI Patterns — Spring AI 1.1 기반 LLM 통합, ChatClient, Advisors API, Structured Output, Function Calling, RAG, MCP Use when working with spring 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Spring AI Patterns
 
 Spring AI 1.1 기반 LLM 통합, ChatClient, Advisors API, Structured Output, Function Calling, RAG, MCP

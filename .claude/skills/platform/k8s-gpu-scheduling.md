@@ -1,3 +1,10 @@
+---
+name: k8s-gpu-scheduling
+description: "Kubernetes GPU 스케줄링 & 모니터링 — Kueue 큐 관리, Volcano Gang 스케줄링, GPU 모니터링 Use when working with platform 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Kubernetes GPU 스케줄링 & 모니터링
 
 Kueue 큐 관리, Volcano Gang 스케줄링, GPU 모니터링

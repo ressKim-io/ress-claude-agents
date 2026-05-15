@@ -1,3 +1,10 @@
+---
+name: monitoring-grafana
+description: "Grafana Monitoring Patterns — Grafana 대시보드, 알림, RBAC 설정 가이드 Use when working with observability 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Grafana Monitoring Patterns
 
 Grafana 대시보드, 알림, RBAC 설정 가이드

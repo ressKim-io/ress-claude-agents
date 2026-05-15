@@ -1,3 +1,10 @@
+---
+name: kafka
+description: "Apache Kafka 가이드 — Kafka 클러스터, Strimzi Operator, 핵심 개념 Use when working with messaging 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Apache Kafka 가이드
 
 Kafka 클러스터, Strimzi Operator, 핵심 개념

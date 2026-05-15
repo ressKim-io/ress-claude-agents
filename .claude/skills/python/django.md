@@ -1,3 +1,10 @@
+---
+name: django
+description: "Django Production Patterns — Django + DRF + Celery 기반 풀스택 웹 애플리케이션 구축 가이드. Use when working with python 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Django Production Patterns
 
 Django + DRF + Celery 기반 풀스택 웹 애플리케이션 구축 가이드.

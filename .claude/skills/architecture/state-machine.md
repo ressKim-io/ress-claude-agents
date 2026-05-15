@@ -1,3 +1,10 @@
+---
+name: state-machine
+description: "도메인 상태머신 가이드 — 도메인 엔티티의 상태 전이 관리, FSM 구현 패턴, 이벤트 기반 상태 변경, 감사 추적 Use when working with architecture 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # 도메인 상태머신 가이드
 
 도메인 엔티티의 상태 전이 관리, FSM 구현 패턴, 이벤트 기반 상태 변경, 감사 추적

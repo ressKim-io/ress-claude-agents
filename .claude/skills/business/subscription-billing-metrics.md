@@ -1,3 +1,10 @@
+---
+name: subscription-billing-metrics
+description: "Subscription Billing — Metrics & Dashboards — 구독 비즈니스 메트릭 — MRR/ARR/Churn/Cohort SQL + Grafana 대시보드 + 외부 도구. `subscription-billing.md`(메인 hub)의 회고/운영 분석 단계 분리. Use when working with business 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Subscription Billing — Metrics & Dashboards
 
 구독 비즈니스 메트릭 — MRR/ARR/Churn/Cohort SQL + Grafana 대시보드 + 외부 도구. `subscription-billing.md`(메인 hub)의 회고/운영 분석 단계 분리.

@@ -1,3 +1,10 @@
+---
+name: load-testing
+description: "부하 테스트 가이드 — K6, nGrinder를 활용한 성능 테스트 및 결과 분석 Use when working with sre 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # 부하 테스트 가이드
 
 K6, nGrinder를 활용한 성능 테스트 및 결과 분석

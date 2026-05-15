@@ -1,3 +1,10 @@
+---
+name: load-testing-analysis
+description: "부하 테스트 분석 가이드 — nGrinder, 결과 분석, SLO 기반 Threshold Use when working with sre 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # 부하 테스트 분석 가이드
 
 nGrinder, 결과 분석, SLO 기반 Threshold

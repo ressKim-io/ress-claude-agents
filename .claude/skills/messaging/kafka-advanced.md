@@ -1,3 +1,10 @@
+---
+name: kafka-advanced
+description: "Kafka 고급 Producer/Consumer 가이드 — Transactional API, Exactly-Once, KIP-848 리밸런싱, Offset 전략, Inbox 패턴 Use when working with messaging 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Kafka 고급 Producer/Consumer 가이드
 
 Transactional API, Exactly-Once, KIP-848 리밸런싱, Offset 전략, Inbox 패턴

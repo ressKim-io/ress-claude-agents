@@ -1,3 +1,10 @@
+---
+name: finops-tools
+description: "FinOps Tools 가이드 — Kubecost, OpenCost, Infracost 비교 및 설정, KEDA+Karpenter 통합 Use when working with sre 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # FinOps Tools 가이드
 
 Kubecost, OpenCost, Infracost 비교 및 설정, KEDA+Karpenter 통합

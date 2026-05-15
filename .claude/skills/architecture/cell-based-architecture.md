@@ -1,3 +1,10 @@
+---
+name: cell-based-architecture
+description: "Cell-Based Architecture 가이드 — 대규모 장애 격리를 위한 Cell 기반 아키텍처: Bulkhead 패턴, 블라스트 반경 제한, Horizontal Isolation Use when working with architecture 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Cell-Based Architecture 가이드
 
 대규모 장애 격리를 위한 Cell 기반 아키텍처: Bulkhead 패턴, 블라스트 반경 제한, Horizontal Isolation

@@ -1,3 +1,10 @@
+---
+name: gateway-api-migration
+description: "Gateway API 마이그레이션 가이드 — Ingress NGINX -> Gateway API 전환, Istio Gateway API 통합, Annotation 매핑 Use when working with kubernetes 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Gateway API 마이그레이션 가이드
 
 Ingress NGINX -> Gateway API 전환, Istio Gateway API 통합, Annotation 매핑

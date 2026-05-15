@@ -1,3 +1,10 @@
+---
+name: k8s-troubleshoot-trees
+description: "K8s Troubleshooting Decision Trees — 실전 트러블슈팅 기록 기반 K8s 디버깅 의사결정 트리. CrashLoopBackOff / ImagePullBackOff / 503 / DNS / NetworkPolicy / Istio AuthZ. Use when working with kubernetes 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # K8s Troubleshooting Decision Trees
 
 실전 트러블슈팅 기록 기반 K8s 디버깅 의사결정 트리. CrashLoopBackOff / ImagePullBackOff / 503 / DNS / NetworkPolicy / Istio AuthZ.

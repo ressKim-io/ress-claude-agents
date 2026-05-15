@@ -1,3 +1,10 @@
+---
+name: effective-go
+description: "Effective Go — 패턴 결정 가이드 — Rob Pike의 Go Proverbs + Modern Go (1.21+) 기반 실전 결정 가이드. Use when working with go 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Effective Go — 패턴 결정 가이드
 
 Rob Pike의 Go Proverbs + Modern Go (1.21+) 기반 실전 결정 가이드.

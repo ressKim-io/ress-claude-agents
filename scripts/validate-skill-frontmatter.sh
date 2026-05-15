@@ -153,6 +153,10 @@ validate_skill() {
 
         local expected
         expected=$(basename "$file" .md)
+        # 폴더형 SKILL.md (Anthropic 공식 패턴) — name 은 폴더명과 비교
+        if [[ "$expected" == "SKILL" ]]; then
+            expected=$(basename "$(dirname "$file")")
+        fi
         if [[ -n "$name" && "$name" != "$expected" ]]; then
             issues+=("frontmatter: name='$name' != 파일명 '$expected'")
         fi

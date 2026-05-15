@@ -1,3 +1,10 @@
+---
+name: conventional-commits
+description: "Conventional Commits — 커밋 메시지 규칙 및 자동화 패턴 Use when working with dx 도메인의 패턴 / 구현 선택."
+effort: low
+deprecated: false
+---
+
 # Conventional Commits
 
 커밋 메시지 규칙 및 자동화 패턴

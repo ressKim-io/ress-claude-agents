@@ -1,3 +1,10 @@
+---
+name: database-migration
+description: "Database Migration Patterns — Flyway, Liquibase, golang-migrate, 안전한 스키마 변경 패턴 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Database Migration Patterns
 
 Flyway, Liquibase, golang-migrate, 안전한 스키마 변경 패턴

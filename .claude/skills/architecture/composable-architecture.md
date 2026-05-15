@@ -1,3 +1,10 @@
+---
+name: composable-architecture
+description: "Composable Architecture (MACH) — MACH Alliance 기반 조합형 아키텍처 — Packaged Business Capabilities(PBC)를 교체·조합하여 비즈니스 민첩성을 극대화하는 설계 패턴 Use when working with architecture 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Composable Architecture (MACH)
 
 MACH Alliance 기반 조합형 아키텍처 — Packaged Business Capabilities(PBC)를 교체·조합하여 비즈니스 민첩성을 극대화하는 설계 패턴

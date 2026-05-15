@@ -1,3 +1,10 @@
+---
+name: disaster-recovery-advanced
+description: "Disaster Recovery 고급 가이드 — 멀티 클러스터 DR, 데이터베이스 DR, 테스트 Use when working with sre 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Disaster Recovery 고급 가이드
 
 멀티 클러스터 DR, 데이터베이스 DR, 테스트

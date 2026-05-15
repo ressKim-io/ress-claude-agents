@@ -1,3 +1,10 @@
+---
+name: msa-ddd
+description: "DDD 마이크로서비스 설계 가이드 — Bounded Context, Aggregate, Domain Event, Context Mapping, 서비스 경계 설계 Use when working with msa 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # DDD 마이크로서비스 설계 가이드
 
 Bounded Context, Aggregate, Domain Event, Context Mapping, 서비스 경계 설계

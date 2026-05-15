@@ -1,3 +1,10 @@
+---
+name: modular-monolith
+description: "Modular Monolith Architecture — 단일 배포 단위 내에서 모듈 경계를 강제하여 확장성과 단순성의 균형을 달성하는 아키텍처 패턴 Use when working with architecture 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Modular Monolith Architecture
 
 단일 배포 단위 내에서 모듈 경계를 강제하여 확장성과 단순성의 균형을 달성하는 아키텍처 패턴

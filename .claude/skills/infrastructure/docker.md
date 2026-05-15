@@ -1,3 +1,10 @@
+---
+name: docker
+description: "Docker & Dockerfile Patterns — Dockerfile 최적화, 멀티스테이지 빌드, Go/Java 컨테이너 패턴 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Docker & Dockerfile Patterns
 
 Dockerfile 최적화, 멀티스테이지 빌드, Go/Java 컨테이너 패턴

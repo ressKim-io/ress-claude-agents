@@ -1,3 +1,10 @@
+---
+name: subscription-billing-flows
+description: "Subscription Billing — Flows (운영 흐름) — 구독 운영 흐름 전용 — Proration, Dunning, Plan Change(+미리보기 의사코드), Invoice + Multi-currency, Metered, Trial 어뷰즈, Multi-tenancy seat. `subscription-billing.md`(메인 hu Use when working with business 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Subscription Billing — Flows (운영 흐름)
 
 구독 운영 흐름 전용 — Proration, Dunning, Plan Change(+미리보기 의사코드), Invoice + Multi-currency, Metered, Trial 어뷰즈, Multi-tenancy seat. `subscription-billing.md`(메인 hub)의 운영 단계 깊이 분리.

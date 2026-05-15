@@ -1,3 +1,10 @@
+---
+name: ephemeral-environments
+description: "Ephemeral Environments 가이드 — PR별 프리뷰 환경: Argo CD ApplicationSet, Qovery, Namespace 격리 패턴 Use when working with cicd 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Ephemeral Environments 가이드
 
 PR별 프리뷰 환경: Argo CD ApplicationSet, Qovery, Namespace 격리 패턴

@@ -1,3 +1,10 @@
+---
+name: database
+description: "Database Patterns — 인덱스 최적화, N+1 해결, 쿼리 성능, 마이그레이션 패턴 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Database Patterns
 
 인덱스 최적화, N+1 해결, 쿼리 성능, 마이그레이션 패턴

@@ -1,3 +1,10 @@
+---
+name: secrets-management
+description: "시크릿 관리 가이드 — K8s 시크릿 자동 주입, External Secrets Operator, Vault, Infisical, SOPS — 개발자가 .env 없이 개발하는 환경 Use when working with platform 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # 시크릿 관리 가이드
 
 K8s 시크릿 자동 주입, External Secrets Operator, Vault, Infisical, SOPS — 개발자가 .env 없이 개발하는 환경
