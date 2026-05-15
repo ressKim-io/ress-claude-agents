@@ -1,3 +1,10 @@
+---
+name: go-database
+description: "Go Database Access Patterns — Go DB 라이브러리 선택 가이드 및 production-ready 패턴. ORM 없이 SQL 중심 개발. Use when working with go 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Go Database Access Patterns
 
 Go DB 라이브러리 선택 가이드 및 production-ready 패턴. ORM 없이 SQL 중심 개발.

@@ -1,3 +1,10 @@
+---
+name: finops-greenops
+description: "GreenOps 가이드 — 클라우드 탄소 발자국 측정, 지속가능성 최적화, FinOps + GreenOps 통합 Use when working with sre 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # GreenOps 가이드
 
 클라우드 탄소 발자국 측정, 지속가능성 최적화, FinOps + GreenOps 통합

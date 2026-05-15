@@ -1,3 +1,10 @@
+---
+name: kafka-k8s-operations
+description: "Kafka on Kubernetes 운영 가이드 — Strimzi+ArgoCD 통합, kind→EKS(MSK)/GKE 전환, JMX 모니터링, Schema Registry K8s 배포 Use when working with messaging 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Kafka on Kubernetes 운영 가이드
 
 Strimzi+ArgoCD 통합, kind→EKS(MSK)/GKE 전환, JMX 모니터링, Schema Registry K8s 배포

@@ -1,3 +1,10 @@
+---
+name: aws-eks-advanced
+description: "AWS EKS 고급 가이드 — Karpenter 설정, 보안 강화, 운영 최적화 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # AWS EKS 고급 가이드
 
 Karpenter 설정, 보안 강화, 운영 최적화

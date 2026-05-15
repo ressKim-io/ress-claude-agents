@@ -1,3 +1,10 @@
+---
+name: nats-messaging
+description: "NATS 메시징 가이드 — NATS v2.10+ Core NATS, JetStream, Key-Value Store, Object Store, K8s 운영 Use when working with messaging 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # NATS 메시징 가이드
 
 NATS v2.10+ Core NATS, JetStream, Key-Value Store, Object Store, K8s 운영

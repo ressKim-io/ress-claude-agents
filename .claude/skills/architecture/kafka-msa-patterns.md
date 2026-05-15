@@ -1,3 +1,10 @@
+---
+name: kafka-msa-patterns
+description: "Kafka MSA 실전 패턴 — MSA에서 Kafka를 올바르게 사용하기 위한 실전 패턴. Idempotency, DLQ, Retry, Outbox, Schema Evolution. Use when cross-service event 일관성 / 트레이드오프 cascade 분석이 필요할 때."
+effort: max
+deprecated: false
+---
+
 # Kafka MSA 실전 패턴
 
 MSA에서 Kafka를 올바르게 사용하기 위한 실전 패턴. Idempotency, DLQ, Retry, Outbox, Schema Evolution 등.

@@ -1,3 +1,10 @@
+---
+name: kube-prometheus-stack
+description: "kube-prometheus-stack 가이드 — Helm chart 설치, values 커스터마이징, Phase별 환경 overlay, ArgoCD 통합 Use when working with observability 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # kube-prometheus-stack 가이드
 
 Helm chart 설치, values 커스터마이징, Phase별 환경 overlay, ArgoCD 통합

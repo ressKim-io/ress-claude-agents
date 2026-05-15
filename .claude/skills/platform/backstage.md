@@ -1,3 +1,10 @@
+---
+name: backstage
+description: "Backstage 가이드 — Developer Portal 구축, Software Catalog, 기본 설치 및 설정 Use when working with platform 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Backstage 가이드
 
 Developer Portal 구축, Software Catalog, 기본 설치 및 설정

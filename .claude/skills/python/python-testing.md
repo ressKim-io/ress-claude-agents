@@ -1,3 +1,10 @@
+---
+name: python-testing
+description: "Python Testing Patterns — pytest 기반 테스트 전략. 단위/통합/E2E 테스트와 async 테스트 패턴. Use when working with python 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Python Testing Patterns
 
 pytest 기반 테스트 전략. 단위/통합/E2E 테스트와 async 테스트 패턴.

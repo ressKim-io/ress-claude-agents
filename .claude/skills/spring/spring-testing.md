@@ -1,3 +1,10 @@
+---
+name: spring-testing
+description: "Spring Testing Patterns — JUnit 5, Mockito를 활용한 테스트 패턴 Use when working with spring 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Spring Testing Patterns
 
 JUnit 5, Mockito를 활용한 테스트 패턴

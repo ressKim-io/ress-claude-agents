@@ -1,3 +1,10 @@
+---
+name: rabbitmq
+description: "RabbitMQ 가이드 — RabbitMQ v4.1 Quorum Queues, AMQP 1.0, Exchange 패턴, Publisher Confirms, DLX, K8s 운영 Use when working with messaging 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # RabbitMQ 가이드
 
 RabbitMQ v4.1 Quorum Queues, AMQP 1.0, Exchange 패턴, Publisher Confirms, DLX, K8s 운영

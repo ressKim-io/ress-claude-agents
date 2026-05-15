@@ -1,3 +1,10 @@
+---
+name: logging-security
+description: "Security & Bot Detection Logging — 보안 감사, 봇/매크로 탐지, AI 공격 방어를 위한 로그 패턴 Use when working with observability 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Security & Bot Detection Logging
 
 보안 감사, 봇/매크로 탐지, AI 공격 방어를 위한 로그 패턴

@@ -1,3 +1,10 @@
+---
+name: rate-limiting
+description: "Rate Limiting — API 요청 제한. Token Bucket / Sliding Window / Leaky Bucket / Fixed Window 알고리즘, Redis 구현, 429 응답. Use when working with business 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Rate Limiting
 
 API 요청 제한 — 알고리즘 (Token Bucket / Sliding Window / Leaky Bucket / Fixed Window), Redis/메모리 구현, per-user/per-tenant/per-IP 다층 키, 429 응답·헤더, 분산 환경 동기화. SaaS 부트스트랩 필수.

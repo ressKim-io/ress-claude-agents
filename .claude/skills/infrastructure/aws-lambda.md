@@ -1,3 +1,10 @@
+---
+name: aws-lambda
+description: "AWS Lambda & Serverless Patterns — AWS Lambda 기반 서버리스 아키텍처 설계, 콜드 스타트 최적화, 이벤트 소스 통합 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # AWS Lambda & Serverless Patterns
 
 AWS Lambda 기반 서버리스 아키텍처 설계, 콜드 스타트 최적화, 이벤트 소스 통합

@@ -1,3 +1,10 @@
+---
+name: monitoring-troubleshoot
+description: "Monitoring Troubleshooting Guide — 알림 대응, 역할별 가이드, 트러블슈팅 패턴 Use when working with observability 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Monitoring Troubleshooting Guide
 
 알림 대응, 역할별 가이드, 트러블슈팅 패턴

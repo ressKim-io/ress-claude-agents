@@ -1,3 +1,10 @@
+---
+name: react-patterns
+description: "React Patterns 가이드 — React 19+, Server Components, Suspense, 상태관리, 컴포넌트 설계 패턴 종합 가이드. Use when working with frontend 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # React Patterns 가이드
 
 React 19+, Server Components, Suspense, 상태관리, 컴포넌트 설계 패턴 종합 가이드.

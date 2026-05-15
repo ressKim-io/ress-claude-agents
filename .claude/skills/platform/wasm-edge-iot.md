@@ -1,3 +1,10 @@
+---
+name: wasm-edge-iot
+description: "WASM Edge/IoT 활용 가이드 — Edge Computing, IoT 배포, 성능 최적화 Use when working with platform 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # WASM Edge/IoT 활용 가이드
 
 Edge Computing, IoT 배포, 성능 최적화

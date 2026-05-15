@@ -1,3 +1,10 @@
+---
+name: go-testing
+description: "Go Testing Patterns — Go 테스트 패턴 및 best practices. Use when working with go 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Go Testing Patterns
 
 Go 테스트 패턴 및 best practices.

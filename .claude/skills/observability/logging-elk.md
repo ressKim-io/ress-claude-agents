@@ -1,3 +1,10 @@
+---
+name: logging-elk
+description: "ELK Stack Log Analysis Guide — Elasticsearch + Kibana를 활용한 로그 검색/분석 가이드 (보안팀/개발팀용) Use when working with observability 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # ELK Stack Log Analysis Guide
 
 Elasticsearch + Kibana를 활용한 로그 검색/분석 가이드 (보안팀/개발팀용)

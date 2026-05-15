@@ -1,3 +1,10 @@
+---
+name: dx-onboarding-environment
+description: "Developer Onboarding: 개발 환경 자동화 — Dev Container를 활용한 개발 환경 자동화 Use when working with dx 도메인의 패턴 / 구현 선택."
+effort: low
+deprecated: false
+---
+
 # Developer Onboarding: 개발 환경 자동화
 
 Dev Container를 활용한 개발 환경 자동화

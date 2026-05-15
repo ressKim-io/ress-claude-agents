@@ -1,3 +1,10 @@
+---
+name: token-efficiency
+description: "Token & Context Efficiency — Claude Code 세션에서 토큰 낭비를 줄이고 컨텍스트 윈도우를 효율적으로 사용하는 패턴 Use when working with dx 도메인의 패턴 / 구현 선택."
+effort: low
+deprecated: false
+---
+
 # Token & Context Efficiency
 
 Claude Code 세션에서 토큰 낭비를 줄이고 컨텍스트 윈도우를 효율적으로 사용하는 패턴

@@ -1,3 +1,10 @@
+---
+name: k8s-scheduling-advanced
+description: "Kubernetes Scheduling 고급 가이드 — 실전 시나리오, Topology Spread, 디버깅 Use when working with kubernetes 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Kubernetes Scheduling 고급 가이드
 
 실전 시나리오, Topology Spread, 디버깅

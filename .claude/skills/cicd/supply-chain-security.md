@@ -1,3 +1,10 @@
+---
+name: supply-chain-security
+description: "Supply Chain Security 가이드 — SBOM, SLSA, Sigstore를 활용한 소프트웨어 공급망 보안 Use when working with cicd 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Supply Chain Security 가이드
 
 SBOM, SLSA, Sigstore를 활용한 소프트웨어 공급망 보안

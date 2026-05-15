@@ -1,3 +1,10 @@
+---
+name: graphql-federation
+description: "GraphQL Federation 가이드 — Apollo Federation v2 기반 Supergraph 설계, Subgraph 구현 (Go gqlgen / Spring DGS), Router 배포, Schema CI Use when working with msa 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # GraphQL Federation 가이드
 
 Apollo Federation v2 기반 Supergraph 설계, Subgraph 구현 (Go gqlgen / Spring DGS), Router 배포, Schema CI

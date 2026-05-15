@@ -1,3 +1,10 @@
+---
+name: kafka-patterns
+description: "Kafka Producer/Consumer 패턴 — Producer/Consumer 구현, KEDA 오토스케일링, 모니터링 Use when working with messaging 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Kafka Producer/Consumer 패턴
 
 Producer/Consumer 구현, KEDA 오토스케일링, 모니터링

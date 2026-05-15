@@ -1,3 +1,10 @@
+---
+name: spring-testcontainers
+description: "Spring Testcontainers Patterns — Testcontainers, REST Assured를 활용한 통합 테스트 패턴 Use when working with spring 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Spring Testcontainers Patterns
 
 Testcontainers, REST Assured를 활용한 통합 테스트 패턴

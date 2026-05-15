@@ -1,3 +1,10 @@
+---
+name: rfc-adr
+description: "RFC/ADR 워크플로우 — RFC(Request for Comments)와 ADR(Architecture Decision Record) 작성, 리뷰, 관리 프로세스 가이드 Use when working with dx 도메인의 패턴 / 구현 선택."
+effort: low
+deprecated: false
+---
+
 # RFC/ADR 워크플로우
 
 RFC(Request for Comments)와 ADR(Architecture Decision Record) 작성, 리뷰, 관리 프로세스 가이드

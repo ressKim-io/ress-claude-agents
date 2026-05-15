@@ -1,3 +1,10 @@
+---
+name: finops-tools-advanced
+description: "FinOps Tools 고급 최적화 가이드 — Cast AI 자동 최적화, Kubecost 고급 설정, 4Rs Framework, Right-sizing 자동화 Use when working with sre 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # FinOps Tools 고급 최적화 가이드
 
 Cast AI 자동 최적화, Kubecost 고급 설정, 4Rs Framework, Right-sizing 자동화

@@ -1,3 +1,10 @@
+---
+name: nextjs
+description: "Next.js 가이드 — Next.js 15 App Router, React Server Components, ISR, Middleware, 라우팅 전략 종합 가이드. Use when working with frontend 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Next.js 가이드
 
 Next.js 15 App Router, React Server Components, ISR, Middleware, 라우팅 전략 종합 가이드.

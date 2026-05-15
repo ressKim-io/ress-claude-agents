@@ -1,3 +1,10 @@
+---
+name: gateway-api
+description: "Kubernetes Gateway API 가이드 — Ingress NGINX 지원 종료 대응: Gateway API, Envoy Gateway, Kong 마이그레이션 Use when working with kubernetes 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Kubernetes Gateway API 가이드
 
 Ingress NGINX 지원 종료 대응: Gateway API, Envoy Gateway, Kong 마이그레이션

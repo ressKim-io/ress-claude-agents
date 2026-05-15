@@ -1,3 +1,10 @@
+---
+name: istio-observability
+description: "Istio Observability Patterns — Istio 모니터링 통합 허브: 메트릭, 트레이싱, Kiali 가이드 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Istio Observability Patterns
 
 Istio 모니터링 통합 허브: 메트릭, 트레이싱, Kiali 가이드

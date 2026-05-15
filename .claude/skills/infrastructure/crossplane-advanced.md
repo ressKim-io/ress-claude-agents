@@ -1,3 +1,10 @@
+---
+name: crossplane-advanced
+description: "Crossplane 고급 패턴 가이드 — 멀티클라우드 패턴, GitOps 통합, Drift Detection, Crossplane v2 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Crossplane 고급 패턴 가이드
 
 멀티클라우드 패턴, GitOps 통합, Drift Detection, Crossplane v2

@@ -1,3 +1,10 @@
+---
+name: prompt-engineering
+description: "Prompt Engineering — 프롬프트 설계 기법, 시스템 프롬프트, 가드레일, 평가 방법론 Use when working with ai 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Prompt Engineering
 
 프롬프트 설계 기법, 시스템 프롬프트, 가드레일, 평가 방법론

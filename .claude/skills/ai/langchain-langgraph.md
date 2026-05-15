@@ -1,3 +1,10 @@
+---
+name: langchain-langgraph
+description: "LangChain & LangGraph — LangChain v0.3 LCEL, LangGraph 에이전트, 멀티 에이전트 오케스트레이션 Use when working with ai 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # LangChain & LangGraph
 
 LangChain v0.3 LCEL, LangGraph 에이전트, 멀티 에이전트 오케스트레이션

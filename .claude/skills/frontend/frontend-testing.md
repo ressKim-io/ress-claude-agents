@@ -1,3 +1,10 @@
+---
+name: frontend-testing
+description: "Frontend Testing 가이드 — Vitest, Playwright, Testing Library, MSW를 활용한 프론트엔드 테스트 전략 종합 가이드. Use when working with frontend 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Frontend Testing 가이드
 
 Vitest, Playwright, Testing Library, MSW를 활용한 프론트엔드 테스트 전략 종합 가이드.

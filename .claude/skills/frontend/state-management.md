@@ -1,3 +1,10 @@
+---
+name: state-management
+description: "State Management 가이드 — Zustand, Jotai, TanStack Query, React Context 기반 상태관리 선택 및 패턴 Use when working with frontend 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # State Management 가이드
 
 Zustand, Jotai, TanStack Query, React Context 기반 상태관리 선택 및 패턴

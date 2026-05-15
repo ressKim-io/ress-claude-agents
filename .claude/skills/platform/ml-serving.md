@@ -1,3 +1,10 @@
+---
+name: ml-serving
+description: "ML Model Serving 가이드 — Kubernetes 기반 ML/LLM 모델 서빙, KServe, vLLM, TensorRT-LLM 최적화 Use when working with platform 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # ML Model Serving 가이드
 
 Kubernetes 기반 ML/LLM 모델 서빙, KServe, vLLM, TensorRT-LLM 최적화

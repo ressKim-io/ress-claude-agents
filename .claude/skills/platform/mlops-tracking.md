@@ -1,3 +1,10 @@
+---
+name: mlops-tracking
+description: "MLflow 실험 추적 가이드 — MLflow 설치, 실험 추적, 모델 레지스트리, KServe 연동 Use when working with platform 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # MLflow 실험 추적 가이드
 
 MLflow 설치, 실험 추적, 모델 레지스트리, KServe 연동
