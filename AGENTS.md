@@ -16,6 +16,7 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 | Skills (도메인 패턴) | `.claude/skills/` | 273개 = 독립 `.md` 259 + 폴더형 `SKILL.md` 14 (Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등 22 카테고리) |
 | Agents (전문 에이전트) | `.claude/agents/` | 49개 (database-expert, k8s-troubleshooter, saga-agent, business-decision-agent 등) |
 | Rules (코딩/보안/워크플로우) | `.claude/rules/` | 24개 (이 AGENTS.md의 상세판, effort-guide 포함) |
+| Templates (작성 표준) | `.claude/templates/` | SKILL-SPEC, AGENT-SPEC + 7개 template (신규 자산 작성 spec) |
 | Plugins (역할별 번들) | `plugins/*.yml` | 12 bundles |
 | Workflows (시나리오 번들) | `.claude/workflows/*.yml` | 11 scenarios |
 
@@ -292,6 +293,8 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | Workflows | `.claude/workflows/*.yml` | `install.sh --workflow <name>` |
 
 자산 통계: [.claude/inventory.yml](.claude/inventory.yml). 현재 273 skills (inventory.yml 의 259 + 폴더형 SKILL.md 14 — script 카운트 차이) / 49 agents / 43 commands / 12 plugins / 11 workflows. `scripts/generate-inventory.sh` 로 자동 재생성.
+
+**신규 skill / agent 작성 표준**: [`.claude/templates/SKILL-SPEC.md`](.claude/templates/SKILL-SPEC.md) / [`AGENT-SPEC.md`](.claude/templates/AGENT-SPEC.md). frontmatter / description 패턴 / Verification Criteria 섹션 강제.
 
 ### Opus 4.7 Behavioral Notes
 
