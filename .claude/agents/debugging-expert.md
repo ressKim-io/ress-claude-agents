@@ -7,6 +7,7 @@ tools:
   - Grep
   - Glob
 model: opus
+effort: max
 ---
 
 # Debugging Expert Agent

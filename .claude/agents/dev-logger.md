@@ -7,6 +7,7 @@ tools:
   - Glob
   - Bash
 model: haiku
+effort: low
 ---
 
 # Dev Logger Agent
