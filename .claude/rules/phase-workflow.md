@@ -64,7 +64,7 @@ Phase 기반 작업 시 반드시 따라야 할 게이트 규칙.
 
 ## Gate 3: 코드 리뷰 (MANDATORY)
 
-- SDD 기반으로 구현 완료 후 코드 리뷰를 실행한다
+- SDD 기반으로 구현 완료 후 코드 리뷰를 받는다
 - 사용 커맨드: 기술 스택에 맞는 리뷰 (`/go:review`, `/java:review`, `/backend:review` 등)
 - 리뷰 피드백을 반영한다
 
