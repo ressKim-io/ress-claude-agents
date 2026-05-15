@@ -145,7 +145,7 @@ ORDER BY 1 DESC, 2;
 - Webhook 처리 지연 p99 > 5s: PagerDuty (incident)
 - Reconciliation drift > 10건: #billing-ops (즉시)
 
-→ cardinality 주의: tenant_id, customer_id를 라벨로 직접 박지 말 것 (`observability/observability-cost.md`).
+→ cardinality 주의: tenant_id, customer_id를 라벨로 직접 넣지 말 것 (`observability/observability-cost.md`).
 
 ---
 

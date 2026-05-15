@@ -125,7 +125,7 @@ UsageRecord (metered)
 - **Subscription = 상태 머신**: 임의로 status 바꾸지 말고 transition 메서드만 노출.
 - **Invoice는 immutable이 원칙**: 발행 후 수정 금지. 오류 시 credit note(환불 invoice) 발행.
 - **`current_period_*`은 PG에서 받는다**: 자체 계산 시 timezone/leap year/부분 환불로 drift 발생.
-- **`tenant_id` 일찍 박는다**: B2B는 거의 항상 multi-tenant. 후행 추가 시 backfill 지옥. → `multi-tenancy.md`
+- **`tenant_id` 일찍 결정한다**: B2B는 거의 항상 multi-tenant. 후행 추가 시 backfill 지옥. → `multi-tenancy.md`
 
 ---
 

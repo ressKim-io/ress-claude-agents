@@ -118,10 +118,10 @@ PriceBook (시간 가변, immutable version)
 **핵심 원칙**:
 - **Ledger는 immutable + append-only**: 잔액은 계산값 (sum). 직접 update 절대 금지. 오류 → adjustment entry 추가.
 - **balance_available은 캐시**: source of truth는 `SUM(amount) FROM ledger WHERE account_id=...`. 정기 reconciliation으로 검증.
-- **PriceBook = PlanVersion 패턴 재사용**: provider 원가 변동, 자체 마진 변경, 환율 변동을 시간축에 immutable 박제. UsageEvent에는 **그 시점 unit_cost를 snapshot**으로 저장 (소급 계산 금지).
+- **PriceBook = PlanVersion 패턴 재사용**: provider 원가 변동, 자체 마진 변경, 환율 변동을 시간축에 immutable 로 기록. UsageEvent에는 **그 시점 unit_cost를 snapshot**으로 저장 (소급 계산 금지).
 - **idempotency_key는 두 곳에**: UsageEvent 발생 시(중복 기록 차단) + LedgerEntry 차감 시(중복 차감 차단). 둘은 다른 키.
 - **late event 처리 정책 ADR**: occurred_at < 현재 주기 시작 시점인 이벤트가 도착하면 어떻게? (다음 주기 / 거절 / 강제 차감). `subscription-billing-flows.md` §5와 동일 함정.
-- **`tenant_id` 일찍 박는다**: `multi-tenancy.md` 결합 — 잔액은 tenant 단위가 보통.
+- **`tenant_id` 일찍 결정한다**: `multi-tenancy.md` 결합 — 잔액은 tenant 단위가 보통.
 
 ---
 
@@ -268,7 +268,7 @@ LLM 사용량 가격 = **provider 원가 + 마진(markup)**. provider 가격이 
 | **Markup %** | 보통 30~200% (prompt 가공 + 인프라 + 마진) | 너무 낮으면 운영 적자, 너무 높으면 사용자가 직접 OpenAI 가입 |
 | **표시 단위** | 사용자 친화 단위 ("크레딧" / "토큰") | provider raw 토큰을 그대로 노출하면 모델 변경 시 사용자 혼란 |
 | **모델별 가격** | Opus = Sonnet × 5, Haiku = Sonnet ÷ 3 등 비례 | 모델 라우팅(downgrade) 시 사용자 경험 통일 |
-| **Cache hit 처리** | 할인 (예: 90% 절감) 사용자에게 일부 환원 / 자체 마진 흡수 | 회계 분리 (cost_basis 기록) 필수 |
+| **Cache hit 처리** | 할인 (예: 90% 절감) 사용자에게 일부 환급 / 자체 마진 흡수 | 회계 분리 (cost_basis 기록) 필수 |
 | **Batch API 할인** | 50% 할인 (Anthropic/OpenAI batch). 사용자가 비동기 동의 시 적용 | UX: 동기/배치 옵션 명시 |
 
 ### Multi-currency / 통화별 토큰 가격 ADR
@@ -362,7 +362,7 @@ audit-log + 사용자 알림
 - ❌ **클라이언트가 사용량 self-report**: 위변조 즉시. 항상 서버 측 record (LLM proxy/gateway에서).
 - ❌ **잔액을 클라이언트에서 캐시**: 차감 race로 사용자가 음수 잔액으로 호출.
 - ❌ **balance를 SELECT FOR UPDATE 없이 차감**: race로 이중 차감 / 음수 잔액. 트랜잭션 + 잠금 또는 atomic decrement (Redis) 필수.
-- ❌ **PriceBook 변경 시 기존 UsageEvent 소급 재계산**: 사용자 신뢰 파괴. 그 시점 단가 snapshot 박제.
+- ❌ **PriceBook 변경 시 기존 UsageEvent 소급 재계산**: 사용자 신뢰 파괴. 그 시점 단가 snapshot 고정 원칙.
 - ❌ **알림 실패가 차감 롤백시키게**: outbox 패턴 (`audit-log.md`)으로 분리.
 - ❌ **Hard cap 없이 PG에 자동 청구**: 청구 폭탄 사고. spend_limit 기본값 + soft overage opt-in.
 - ❌ **무료 tier도 PG customer 안 만듦**: subscription-billing 동일 함정. 가입 시점에 customer + free CreditAccount 생성.
