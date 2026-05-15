@@ -13,9 +13,9 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 
 | 자산 | 위치 | 개수 |
 |---|---|---|
-| Skills (도메인 패턴) | `.claude/skills/` | 233개 (Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등 20 카테고리) |
+| Skills (도메인 패턴) | `.claude/skills/` | 273개 = 독립 `.md` 259 + 폴더형 `SKILL.md` 14 (Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등 22 카테고리) |
 | Agents (전문 에이전트) | `.claude/agents/` | 49개 (database-expert, k8s-troubleshooter, saga-agent, business-decision-agent 등) |
-| Rules (코딩/보안/워크플로우) | `.claude/rules/` | 23개 (이 AGENTS.md의 상세판) |
+| Rules (코딩/보안/워크플로우) | `.claude/rules/` | 24개 (이 AGENTS.md의 상세판, effort-guide 포함) |
 | Plugins (역할별 번들) | `plugins/*.yml` | 12 bundles |
 | Workflows (시나리오 번들) | `.claude/workflows/*.yml` | 11 scenarios |
 
@@ -270,14 +270,16 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | `devlog-lifecycle.md` | dev-logs 4-Tier 정책 + frontmatter 표준 | (path-scoped: docs/dev-logs/*) |
 | `phase-workflow.md` | SDD Phase 게이트 워크플로우 | (path-scoped: sdd-*.md, phase-start*) |
 | `token-budget.md` | Opus 4.7 전용 | (아래) |
+| `effort-guide.md` | low/medium/xhigh/max 단계별 사용 가이드 + 49 agents / 273 skills 카테고리별 매핑 | (universal — 모든 작업) |
+| `deep-thinking.md` | 얕은 추측 / 추정 명시 금지, WebFetch 검증 의무, ⚠️ unverified 마킹 | (universal — 모든 작업) |
 
 ### Token Budget (Opus 4.7)
 
 - Context **80% 초과 → 세션 종료**, 무관 태스크 전환 시 `/clear`
 - Effort 기본 `xhigh` (Claude Code 기본값), 단순 조회 `low`, frontier 문제만 `max`
-- Tokenizer 4.6 → 4.7: `max_tokens` **35% headroom**, prompt cache 재빌드 가정
+- Tokenizer 4.6 → 4.7: `max_tokens` **35% headroom**, prompt cache 재빌드 가정 (최소 4096 tokens)
 - Subagent는 명시 spawn (Opus 4.7은 기본적으로 덜 spawn함). 10+ 파일 탐색은 subagent 위임
-- 상세: `.claude/rules/token-budget.md`, 코드 예시·비용 계산은 `/token-budget` skill
+- 상세: `.claude/rules/token-budget.md` + 카테고리별 매핑 `.claude/rules/effort-guide.md`, 코드 예시·비용 계산은 `/token-budget` skill
 
 ### Claude-Only Features
 
@@ -289,7 +291,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | Plugins | `plugins/*.yml` | `install.sh --plugin <name>` |
 | Workflows | `.claude/workflows/*.yml` | `install.sh --workflow <name>` |
 
-자산 통계: [.claude/inventory.yml](.claude/inventory.yml). 현재 ~239 skills / 49 agents / 43 commands / 12 plugins / 11 workflows.
+자산 통계: [.claude/inventory.yml](.claude/inventory.yml). 현재 273 skills (inventory.yml 의 259 + 폴더형 SKILL.md 14 — script 카운트 차이) / 49 agents / 43 commands / 12 plugins / 11 workflows. `scripts/generate-inventory.sh` 로 자동 재생성.
 
 ### Opus 4.7 Behavioral Notes
 
