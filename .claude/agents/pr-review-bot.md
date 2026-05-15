@@ -8,6 +8,7 @@ tools:
   - Grep
   - Glob
 model: haiku
+effort: low
 ---
 
 # PR Review Bot Agent

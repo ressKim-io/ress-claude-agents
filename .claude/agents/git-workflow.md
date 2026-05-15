@@ -7,6 +7,7 @@ tools:
   - Grep
   - Glob
 model: haiku
+effort: low
 ---
 
 # Git Workflow Agent
