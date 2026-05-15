@@ -1,3 +1,10 @@
+---
+name: owasp-top10
+description: "OWASP Top 10 방어 가이드 — OWASP Top 10 (2021) 취약점 상세 설명과 언어별 실전 방어 패턴 Use when working with security 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # OWASP Top 10 방어 가이드
 
 OWASP Top 10 (2021) 취약점 상세 설명과 언어별 실전 방어 패턴

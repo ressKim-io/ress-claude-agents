@@ -1,3 +1,10 @@
+---
+name: hexagonal-clean-architecture
+description: "Hexagonal Architecture (Clean Architecture) — Ports & Adapters 패턴, 의존성 역전, 도메인 중심 설계로 테스트 가능하고 유연한 시스템 구축 Use when working with architecture 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Hexagonal Architecture (Clean Architecture)
 Ports & Adapters 패턴, 의존성 역전, 도메인 중심 설계로 테스트 가능하고 유연한 시스템 구축
 

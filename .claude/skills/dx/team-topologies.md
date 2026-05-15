@@ -1,3 +1,10 @@
+---
+name: team-topologies
+description: "Team Topologies 가이드 — Team Topologies, Conway's Law, 팀 구조 설계, 인터랙션 모드 Use when working with dx 도메인의 패턴 / 구현 선택."
+effort: low
+deprecated: false
+---
+
 # Team Topologies 가이드
 
 Team Topologies, Conway's Law, 팀 구조 설계, 인터랙션 모드

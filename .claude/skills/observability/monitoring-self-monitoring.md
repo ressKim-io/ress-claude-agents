@@ -1,3 +1,10 @@
+---
+name: monitoring-self-monitoring
+description: "Observability Stack Self-Monitoring — Who watches the watchmen? — 모니터링 스택 자체의 건강 상태를 감시하는 전략과 패턴 Use when working with observability 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Observability Stack Self-Monitoring
 
 Who watches the watchmen? — 모니터링 스택 자체의 건강 상태를 감시하는 전략과 패턴

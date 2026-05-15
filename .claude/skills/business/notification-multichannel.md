@@ -1,3 +1,10 @@
+---
+name: notification-multichannel
+description: "Multi-Channel Notification — 멀티채널 알림 시스템 — Push/Email/SMS/Slack/In-App. User Preferences, Fallback chain, Notification Center, Digest. 채널 추가에 강한 추상화. 신규 SaaS 알림 부트스트랩. Use when working with business 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Multi-Channel Notification
 
 멀티채널 알림 시스템 — Push/Email/SMS/Slack/In-App. User Preferences, Fallback chain, Notification Center, Digest. 채널 추가에 강한 추상화. 신규 SaaS 알림 부트스트랩.

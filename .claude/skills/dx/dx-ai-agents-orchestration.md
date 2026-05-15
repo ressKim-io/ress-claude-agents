@@ -1,3 +1,10 @@
+---
+name: dx-ai-agents-orchestration
+description: "AI Agent 오케스트레이션 가이드 — 멀티 에이전트 협업, 가드레일, Self-Healing 인프라, 메트릭 수집 Use when working with dx 도메인의 패턴 / 구현 선택."
+effort: low
+deprecated: false
+---
+
 # AI Agent 오케스트레이션 가이드
 
 멀티 에이전트 협업, 가드레일, Self-Healing 인프라, 메트릭 수집

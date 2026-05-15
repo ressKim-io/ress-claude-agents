@@ -1,3 +1,10 @@
+---
+name: istio-security
+description: "Istio Security 가이드 — mTLS, PeerAuthentication, AuthorizationPolicy, JWT 인증 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Istio Security 가이드
 
 mTLS, PeerAuthentication, AuthorizationPolicy, JWT 인증

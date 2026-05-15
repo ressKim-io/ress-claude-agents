@@ -1,3 +1,10 @@
+---
+name: distributed-lock
+description: "Distributed Lock Patterns — MSA/다중 서버 환경에서의 분산 락 패턴 Use when working with msa 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Distributed Lock Patterns
 
 MSA/다중 서버 환경에서의 분산 락 패턴

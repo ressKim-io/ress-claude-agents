@@ -1,3 +1,10 @@
+---
+name: k8s-traffic-ingress
+description: "Ingress Rate Limiting — NGINX Ingress, Kong 기반 Rate Limiting Use when working with kubernetes 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Ingress Rate Limiting
 
 NGINX Ingress, Kong 기반 Rate Limiting

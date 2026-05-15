@@ -1,3 +1,10 @@
+---
+name: monitoring-prometheus-operator
+description: "Prometheus Operator CRD 패턴 가이드 — ServiceMonitor, PodMonitor, PrometheusRule CRD 패턴 및 앱 Helm chart 통합 Use when working with observability 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Prometheus Operator CRD 패턴 가이드
 
 ServiceMonitor, PodMonitor, PrometheusRule CRD 패턴 및 앱 Helm chart 통합

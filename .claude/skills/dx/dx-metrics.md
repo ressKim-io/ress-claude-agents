@@ -1,3 +1,10 @@
+---
+name: dx-metrics
+description: "Developer Experience Metrics 가이드 — DORA, SPACE, DevEx, DX Core 4 프레임워크를 활용한 개발자 생산성 측정 Use when working with dx 도메인의 패턴 / 구현 선택."
+effort: low
+deprecated: false
+---
+
 # Developer Experience Metrics 가이드
 
 DORA, SPACE, DevEx, DX Core 4 프레임워크를 활용한 개발자 생산성 측정

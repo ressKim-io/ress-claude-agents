@@ -1,3 +1,10 @@
+---
+name: typescript
+description: "TypeScript 심화 가이드 — TypeScript 5.x 타입 시스템 심화, 제네릭 패턴, Utility Types, 타입 안전성 종합 가이드. Use when working with frontend 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # TypeScript 심화 가이드
 
 TypeScript 5.x 타입 시스템 심화, 제네릭 패턴, Utility Types, 타입 안전성 종합 가이드.

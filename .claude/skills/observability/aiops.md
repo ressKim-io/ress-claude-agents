@@ -1,3 +1,10 @@
+---
+name: aiops
+description: "AIOps 가이드 — AI 기반 IT 운영: 이상 탐지, OpenTelemetry 통합 Use when working with observability 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # AIOps 가이드
 
 AI 기반 IT 운영: 이상 탐지, OpenTelemetry 통합

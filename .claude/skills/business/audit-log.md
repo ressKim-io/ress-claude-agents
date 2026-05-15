@@ -1,3 +1,10 @@
+---
+name: audit-log
+description: "Audit Log — Audit Log — 누가 언제 무엇을 어떻게 변경했는가. Append-only 이벤트 로그, tenant-scoped 격리, 규제 대응(GDPR/SOC2/HIPAA), 검색·필터·export. SaaS 부트스트랩 필수 Use when working with business 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Audit Log
 
 Audit Log — 누가 언제 무엇을 어떻게 변경했는가. Append-only 이벤트 로그, tenant-scoped 격리, 규제 대응(GDPR/SOC2/HIPAA), 검색·필터·export. SaaS 부트스트랩 필수.

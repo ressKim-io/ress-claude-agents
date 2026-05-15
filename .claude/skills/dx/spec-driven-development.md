@@ -1,3 +1,10 @@
+---
+name: spec-driven-development
+description: "Spec-Driven Development with Claude Code — Claude Code에서 명세 기반 개발 워크플로우. Research → Spec → Plan → Execute → Review Use when working with dx 도메인의 패턴 / 구현 선택."
+effort: low
+deprecated: false
+---
+
 # Spec-Driven Development with Claude Code
 
 Claude Code에서 명세 기반 개발 워크플로우. Research → Spec → Plan → Execute → Review

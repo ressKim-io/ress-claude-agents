@@ -1,3 +1,10 @@
+---
+name: task-queue
+description: "Task Queue 패턴 가이드 — 비동기 작업 분산 처리, 우선순위 큐, 재시도 전략, Worker 오토스케일링 패턴 Use when working with msa 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Task Queue 패턴 가이드
 
 비동기 작업 분산 처리, 우선순위 큐, 재시도 전략, Worker 오토스케일링 패턴

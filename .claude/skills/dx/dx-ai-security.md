@@ -1,3 +1,10 @@
+---
+name: dx-ai-security
+description: "AI 코드 보안 & 품질 보증 가이드 — AI 생성 코드 보안 검증, 품질 게이트, 비용 관리 Use when working with dx 도메인의 패턴 / 구현 선택."
+effort: low
+deprecated: false
+---
+
 # AI 코드 보안 & 품질 보증 가이드
 
 AI 생성 코드 보안 검증, 품질 게이트, 비용 관리

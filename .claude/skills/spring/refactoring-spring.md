@@ -1,3 +1,10 @@
+---
+name: refactoring-spring
+description: "Spring Refactoring Patterns — Spring Boot 코드 리팩토링 패턴 및 best practices. Use when working with spring 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Spring Refactoring Patterns
 
 Spring Boot 코드 리팩토링 패턴 및 best practices.

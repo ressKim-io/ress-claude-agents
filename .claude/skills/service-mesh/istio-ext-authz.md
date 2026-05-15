@@ -1,3 +1,10 @@
+---
+name: istio-ext-authz
+description: "Istio External Authorization (ext-authz) — CUSTOM AuthorizationPolicy, OPA/외부 인증 서버 연동, 다계층 정책 조합 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Istio External Authorization (ext-authz)
 
 CUSTOM AuthorizationPolicy, OPA/외부 인증 서버 연동, 다계층 정책 조합

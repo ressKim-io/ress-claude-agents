@@ -1,3 +1,10 @@
+---
+name: secure-coding
+description: "Secure Coding Practices 가이드 — 언어별 시큐어 코딩, 입력 검증, 암호화 패턴, 에러 처리, 보안 헤더 Use when working with security 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Secure Coding Practices 가이드
 
 언어별 시큐어 코딩, 입력 검증, 암호화 패턴, 에러 처리, 보안 헤더

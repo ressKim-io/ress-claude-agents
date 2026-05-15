@@ -1,3 +1,10 @@
+---
+name: istio-gateway
+description: "Istio Gateway Patterns — Gateway API vs Istio Gateway 비교 허브, 트래픽 라우팅 선택 가이드 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Istio Gateway Patterns
 
 Gateway API vs Istio Gateway 비교 허브, 트래픽 라우팅 선택 가이드

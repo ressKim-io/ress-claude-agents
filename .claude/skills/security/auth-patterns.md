@@ -1,3 +1,10 @@
+---
+name: auth-patterns
+description: "Authentication & Authorization Patterns 가이드 — OAuth2/OIDC, PKCE, JWT, Session, API Key 인증/인가 패턴 및 구현 가이드 Use when working with security 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Authentication & Authorization Patterns 가이드
 
 OAuth2/OIDC, PKCE, JWT, Session, API Key 인증/인가 패턴 및 구현 가이드

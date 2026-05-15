@@ -1,3 +1,10 @@
+---
+name: subscription-billing
+description: "Subscription Billing Hub — SaaS 구독 결제. Provider 매트릭스, 빌링 사이클 상태 머신, Webhook + idempotency, 보안. Use when working with business 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Subscription Billing — Hub
 
 SaaS 구독 결제 메인 hub — Provider 매트릭스(+SubscriptionGateway 추상화), 한국 정기결제, 도메인 모델, 빌링 사이클 상태 머신, Webhook+idempotency, 보안, 안티패턴, ADR, Quick Start. 일회성 결제(`payment-integration.md`)의 자연 연장. 신규 SaaS 정기 수익화 부트스트랩.

@@ -1,3 +1,10 @@
+---
+name: spring-patterns
+description: "Spring Boot Core Patterns — Spring Boot 프로젝트에서 반복되는 설계 결정 가이드. '이 상황에서는 이렇게 한다'. Use when working with spring 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Spring Boot Core Patterns
 
 Spring Boot 프로젝트에서 반복되는 설계 결정 가이드. "이 상황에서는 이렇게 한다".

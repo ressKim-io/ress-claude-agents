@@ -1,3 +1,10 @@
+---
+name: platform-backstage
+description: "Backstage Platform Engineering 가이드 — Golden Paths, Software Templates, 셀프서비스 인프라 프로비저닝 Use when working with platform 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Backstage Platform Engineering 가이드
 
 Golden Paths, Software Templates, 셀프서비스 인프라 프로비저닝

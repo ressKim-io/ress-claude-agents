@@ -1,3 +1,10 @@
+---
+name: product-thinking
+description: "Product Thinking 가이드 — RICE, MoSCoW, Shape Up, JTBD, Story Mapping 기반 프로덕트 사고 Use when working with dx 도메인의 패턴 / 구현 선택."
+effort: low
+deprecated: false
+---
+
 # Product Thinking 가이드
 
 RICE, MoSCoW, Shape Up, JTBD, Story Mapping 기반 프로덕트 사고

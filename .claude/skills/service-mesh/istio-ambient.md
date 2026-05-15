@@ -1,3 +1,10 @@
+---
+name: istio-ambient
+description: "Istio Ambient Mode 심화 가이드 — Ambient GA (Istio 1.24+), ztunnel, HBONE, Waypoint 고급 설정, targetRefs, Cilium 통합 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Istio Ambient Mode 심화 가이드
 
 Ambient GA (Istio 1.24+), ztunnel, HBONE, Waypoint 고급 설정, targetRefs, Cilium 통합

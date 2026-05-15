@@ -1,3 +1,10 @@
+---
+name: istio-metrics
+description: "Istio Metrics & Prometheus Integration — Istio Prometheus 연동, ServiceMonitor 설정, RED 메트릭 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Istio Metrics & Prometheus Integration
 
 Istio Prometheus 연동, ServiceMonitor 설정, RED 메트릭

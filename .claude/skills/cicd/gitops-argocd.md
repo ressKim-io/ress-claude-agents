@@ -1,3 +1,10 @@
+---
+name: gitops-argocd
+description: "GitOps & ArgoCD 가이드 — ArgoCD를 활용한 선언적 GitOps 배포 및 App of Apps 패턴 Use when working with cicd 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # GitOps & ArgoCD 가이드
 
 ArgoCD를 활용한 선언적 GitOps 배포 및 App of Apps 패턴

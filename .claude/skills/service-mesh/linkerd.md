@@ -1,3 +1,10 @@
+---
+name: linkerd
+description: "Linkerd Service Mesh 가이드 — Linkerd v2.17 핵심 운영 가이드: Rust micro-proxy 기반 경량 서비스 메시, 자동 mTLS, 멀티클러스터, Gateway API 통합 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Linkerd Service Mesh 가이드
 
 Linkerd v2.17 핵심 운영 가이드: Rust micro-proxy 기반 경량 서비스 메시, 자동 mTLS, 멀티클러스터, Gateway API 통합

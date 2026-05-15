@@ -1,3 +1,10 @@
+---
+name: frontend-performance
+description: "Frontend Performance 가이드 — Core Web Vitals 최적화, 번들 분석, Code Splitting, Image/Font 최적화 종합 가이드. Use when working with frontend 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Frontend Performance 가이드
 
 Core Web Vitals 최적화, 번들 분석, Code Splitting, Image/Font 최적화 종합 가이드.

@@ -1,3 +1,10 @@
+---
+name: chaos-engineering-gameday
+description: "Chaos Engineering GameDay 가이드 — GameDay 운영, 모니터링, 알림 Use when working with sre 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Chaos Engineering GameDay 가이드
 
 GameDay 운영, 모니터링, 알림

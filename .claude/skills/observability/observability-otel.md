@@ -1,3 +1,10 @@
+---
+name: observability-otel
+description: "OpenTelemetry Patterns — Spring Boot, Go를 위한 OpenTelemetry 설정 및 Collector 구성 Use when working with observability 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # OpenTelemetry Patterns
 
 Spring Boot, Go를 위한 OpenTelemetry 설정 및 Collector 구성

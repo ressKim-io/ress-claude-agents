@@ -1,3 +1,10 @@
+---
+name: database-sharding
+description: "데이터베이스 샤딩 가이드 — 대규모 트래픽 환경에서 수평 확장을 위한 샤딩 전략, Shard Key 선택, Citus/Vitess 구현, Read Replica 패턴 Use when working with msa 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # 데이터베이스 샤딩 가이드
 
 대규모 트래픽 환경에서 수평 확장을 위한 샤딩 전략, Shard Key 선택, Citus/Vitess 구현, Read Replica 패턴

@@ -1,3 +1,10 @@
+---
+name: finops-showback
+description: "FinOps: Showback & Chargeback 가이드 — 팀별 비용 가시화, Kubecost 대시보드, AWS CUR 기반 Chargeback Use when working with sre 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # FinOps: Showback & Chargeback 가이드
 
 팀별 비용 가시화, Kubecost 대시보드, AWS CUR 기반 Chargeback

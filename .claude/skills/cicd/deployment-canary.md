@@ -1,3 +1,10 @@
+---
+name: deployment-canary
+description: "Canary & A/B Testing 배포 가이드 — Argo Rollouts Canary, AnalysisTemplate, Istio 트래픽 라우팅 Use when working with cicd 도메인의 패턴 / 구현 선택."
+effort: xhigh
+deprecated: false
+---
+
 # Canary & A/B Testing 배포 가이드
 
 Argo Rollouts Canary, AnalysisTemplate, Istio 트래픽 라우팅
