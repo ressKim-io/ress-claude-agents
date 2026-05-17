@@ -2,7 +2,9 @@
 # SKILL.md / Agent frontmatter 검증
 #
 # 검증 대상:
-#   - .claude/agents/*.md      : 모든 agent는 frontmatter 필수 (현재 95% 보유)
+#   - .claude/agents/*.md      : frontmatter 필수 + 본문 H2 3섹션
+#                                (Permission Boundary / Escalation / Verification Criteria
+#                                 — 신규 agent hard fail, LEGACY 화이트리스트는 soft 경고)
 #   - .claude/skills/**/*.md   : frontmatter 있으면 형식 검증, 없으면 우리 컨벤션 검증
 #
 # Frontmatter 표준 (Anthropic SKILL.md):
@@ -33,6 +35,25 @@ cd "$ROOT"
 
 EXIT_CODE=0
 FAILED=()
+SOFT_WARNINGS=()
+
+# 본문 3섹션(Permission Boundary / Escalation / Verification Criteria)을 아직
+# 갖추지 못한 레거시 agent. 등재된 agent 는 섹션 누락이 soft 경고(CI 비차단),
+# 미등재(= 신규) agent 는 hard fail. 마이그레이션 완료 시 해당 줄을 제거하면
+# 자동으로 hard 검증으로 전환된다. git-workflow 는 본문 3섹션을 갖추므로 의도적으로 제외.
+LEGACY_AGENTS_NO_BODY_SPEC=(
+    anti-bot architect-agent business-decision-agent ci-optimizer cicd-reviewer
+    cicd-security-reviewer code-reviewer compliance-auditor compliance-strategy-agent
+    container-security-reviewer cost-analyzer database-expert database-expert-mysql
+    debugging-expert dev-logger dockerfile-reviewer finops-advisor frontend-expert
+    gitops-reviewer go-expert incident-responder infra-roadmap-planner java-expert
+    k8s-reviewer k8s-security-reviewer k8s-troubleshooter load-tester load-tester-gatling
+    load-tester-k6 load-tester-ngrinder messaging-expert migration-expert mlops-expert
+    network-security-reviewer observability-reviewer otel-expert platform-engineer
+    platform-strategy-agent pr-review-bot product-engineer python-expert redis-expert
+    saga-agent security-scanner service-mesh-expert tech-lead terraform-reviewer
+    ticketing-expert
+)
 
 log_pass() { printf '  PASS  %s\n' "$1"; }
 log_fail() { printf '  FAIL  %s\n' "$1"; EXIT_CODE=1; FAILED+=("$1"); }
@@ -69,8 +90,23 @@ get_field() {
     '
 }
 
+# 본문에 특정 H2/H3 섹션이 있는지 검사 — 0 = 있음
+# $1=파일경로  $2=ERE 패턴
+has_body_section() {
+    grep -qE "^#{2,}[[:space:]].*$2" "$1"
+}
+
+# agent 이름이 LEGACY 화이트리스트에 있는지 — 0 = 레거시(soft 대상)
+agent_in_legacy_list() {
+    local needle="$1" a
+    for a in "${LEGACY_AGENTS_NO_BODY_SPEC[@]}"; do
+        [[ "$a" == "$needle" ]] && return 0
+    done
+    return 1
+}
+
 # ---------------------------------------------------------------------------
-# Agent 검증: frontmatter 필수
+# Agent 검증: frontmatter 필수 + 본문 H2 3섹션
 # ---------------------------------------------------------------------------
 validate_agent() {
     local file="$1"
@@ -114,7 +150,32 @@ check_agents() {
         total=$((total + 1))
         local issues
         if issues=$(validate_agent "$file"); then
-            pass=$((pass + 1))
+            # frontmatter OK → 본문 H2 3섹션 검사 (G1)
+            # 이 while 본체는 process substitution 이라 부모 셸에서 실행 — 전역 SOFT_WARNINGS 영속
+            local aname legacy=0 sec label pattern
+            local hard_missing=()
+            aname=$(basename "$file" .md)
+            agent_in_legacy_list "$aname" && legacy=1
+            for sec in \
+                "Permission Boundary::(Permission Boundary|외부 작업 경계)" \
+                "Escalation::(Escalation|중단.이관)" \
+                "Verification Criteria::Verification Criteria"
+            do
+                label="${sec%%::*}"
+                pattern="${sec##*::}"
+                has_body_section "$file" "$pattern" && continue
+                if [[ $legacy -eq 1 ]]; then
+                    SOFT_WARNINGS+=("$file — 본문 '$label' 섹션 누락 (레거시, 마이그레이션 대상)")
+                else
+                    hard_missing+=("본문 '$label' 섹션 누락")
+                fi
+            done
+            if [[ ${#hard_missing[@]} -gt 0 ]]; then
+                fail=$((fail + 1))
+                violations+=("$file|$(printf '%s\n' "${hard_missing[@]}")")
+            else
+                pass=$((pass + 1))
+            fi
         else
             fail=$((fail + 1))
             violations+=("$file|$issues")
@@ -131,6 +192,11 @@ check_agents() {
         done
     else
         log_pass "Agents: ${pass}/${total} frontmatter OK"
+    fi
+
+    if [[ ${#SOFT_WARNINGS[@]} -gt 0 ]]; then
+        printf '  WARN  본문 3섹션 미보유 레거시 agent %d건 (CI 비차단, 점진 마이그레이션 대상):\n' "${#SOFT_WARNINGS[@]}"
+        printf '          - %s\n' "${SOFT_WARNINGS[@]}"
     fi
 }
 
