@@ -90,10 +90,12 @@ get_field() {
     '
 }
 
-# 본문에 특정 H2/H3 섹션이 있는지 검사 — 0 = 있음
-# $1=파일경로  $2=ERE 패턴
+# 본문에 특정 H2 섹션이 키워드로 시작하는지 검사 — 0 = 있음
+# $1=파일경로  $2=ERE 패턴 (스크립트 내 하드코딩 상수만 전달 — 외부 입력 직접 전달 금지)
 has_body_section() {
-    grep -qE "^#{2,}[[:space:]].*$2" "$1"
+    local file="$1" pattern="$2"
+    # H2(^## ) 한정 + 헤더가 키워드로 시작 — '### Escalation Path' 류 오매치 방지
+    grep -qE "^##[[:space:]]+${pattern}" "$file"
 }
 
 # agent 이름이 LEGACY 화이트리스트에 있는지 — 0 = 레거시(soft 대상)
@@ -153,7 +155,7 @@ check_agents() {
             # frontmatter OK → 본문 H2 3섹션 검사 (G1)
             # 이 while 본체는 process substitution 이라 부모 셸에서 실행 — 전역 SOFT_WARNINGS 영속
             local aname legacy=0 sec label pattern
-            local hard_missing=()
+            local hard_missing=()   # per-file reset (의도적) — SOFT_WARNINGS 와 달리 파일마다 초기화
             aname=$(basename "$file" .md)
             agent_in_legacy_list "$aname" && legacy=1
             for sec in \
@@ -195,8 +197,11 @@ check_agents() {
     fi
 
     if [[ ${#SOFT_WARNINGS[@]} -gt 0 ]]; then
-        printf '  WARN  본문 3섹션 미보유 레거시 agent %d건 (CI 비차단, 점진 마이그레이션 대상):\n' "${#SOFT_WARNINGS[@]}"
-        printf '          - %s\n' "${SOFT_WARNINGS[@]}"
+        printf '  WARN  본문 3섹션 미보유 레거시 %d건 (CI 비차단, 점진 마이그레이션 대상 — VERBOSE=1 로 상세 목록)\n' "${#SOFT_WARNINGS[@]}"
+        # 명시적 if — `[[ ]] && cmd` 는 조건 false 시 exit 1 이 함수 마지막 명령이 되어 set -e 를 트리거함
+        if [[ "${VERBOSE:-0}" == "1" ]]; then
+            printf '          - %s\n' "${SOFT_WARNINGS[@]}"
+        fi
     fi
 }
 
