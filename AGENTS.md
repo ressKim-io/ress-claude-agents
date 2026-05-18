@@ -292,7 +292,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | Plugins | `plugins/*.yml` | `install.sh --plugin <name>` |
 | Workflows | `.claude/workflows/*.yml` | `install.sh --workflow <name>` |
 
-자산 통계: [.claude/inventory.yml](.claude/inventory.yml). 현재 273 skills (inventory.yml 의 259 + 폴더형 SKILL.md 14 — script 카운트 차이) / 49 agents / 43 commands / 12 plugins / 11 workflows. `scripts/generate-inventory.sh` 로 자동 재생성.
+자산 통계: [.claude/inventory.yml](.claude/inventory.yml). 현재 274 skills (inventory.yml 의 260 + 폴더형 SKILL.md 14 — script 카운트 차이) / 49 agents / 43 commands / 12 plugins / 11 workflows. `scripts/generate-inventory.sh` 로 자동 재생성.
 
 **신규 skill / agent 작성 표준**: [`.claude/templates/SKILL-SPEC.md`](.claude/templates/SKILL-SPEC.md) / [`AGENT-SPEC.md`](.claude/templates/AGENT-SPEC.md). frontmatter / description 패턴 / Verification Criteria 섹션 강제.
 
