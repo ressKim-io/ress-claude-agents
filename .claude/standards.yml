@@ -6,11 +6,20 @@
 # ============================================
 code_quality:
   # Function/Method length limits
+  # 기준은 .claude/rules/clean-code.md §메서드/함수 길이 (AGENTS.md §Code Style 와 동일):
+  #   20-50줄 권장 / 50줄 초과 분할 검토 / 100줄 초과 금지.
+  # warn = 분할 검토 임계, max = 절대 금지 임계.
   max_function_lines:
-    default: 30
-    go: 30
-    java: 30
-    kotlin: 30
+    warn:
+      default: 50
+      go: 50
+      java: 50
+      kotlin: 50
+    max:
+      default: 100
+      go: 100
+      java: 100
+      kotlin: 100
 
   # Parameter count limits
   max_parameters:

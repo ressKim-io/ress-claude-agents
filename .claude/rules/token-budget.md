@@ -33,7 +33,7 @@ Opus 4.7은 기본적으로 subagent를 덜 spawn하므로 필요 시 **명시 �
 - NEVER 일반 코딩에 `max` 사용 — overthinking 위험, 비용 대비 효과 미미
 - PREFER Claude Code 기본값(`xhigh`) 유지 — 수동 설정 필요 시에만 조정
 
-> 49 agents / 273 skills 카테고리별 effort 매핑: [`effort-guide.md`](effort-guide.md)
+> 카테고리별 effort 매핑: [`effort-guide.md`](effort-guide.md)
 
 ## Tokenizer & Prompt Cache (4.6 → 4.7)
 

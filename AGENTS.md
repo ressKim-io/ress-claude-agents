@@ -13,7 +13,7 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 
 | 자산 | 위치 | 개수 |
 |---|---|---|
-| Skills (도메인 패턴) | `.claude/skills/` | 274개 = 독립 `.md` 260 + 폴더형 `SKILL.md` 14 (Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등 22 카테고리) |
+| Skills (도메인 패턴) | `.claude/skills/` | 22 카테고리 (Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등). 개수는 [inventory.yml](.claude/inventory.yml) `summary.skills` 참조 |
 | Agents (전문 에이전트) | `.claude/agents/` | 49개 (database-expert, k8s-troubleshooter, saga-agent, business-decision-agent 등) |
 | Rules (코딩/보안/워크플로우) | `.claude/rules/` | 25개 (이 AGENTS.md의 상세판, effort-guide 포함) |
 | Templates (작성 표준) | `.claude/templates/` | SKILL-SPEC, AGENT-SPEC + 7개 template (신규 자산 작성 spec) |
@@ -275,7 +275,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | `multi-tool-adapter.md` | 도구별 디렉토리=산출물 원칙, 자동/수동 변환 경계, 외부 사양 분기 재검증 | Tool-Specific Optimization |
 | `phase-workflow.md` | SDD Phase 게이트 워크플로우 | (path-scoped: sdd-*.md, phase-start*) |
 | `token-budget.md` | Opus 4.7 전용 | (아래) |
-| `effort-guide.md` | low/medium/xhigh/max 단계별 사용 가이드 + 49 agents / 273 skills 카테고리별 매핑 | (universal — 모든 작업) |
+| `effort-guide.md` | low/medium/xhigh/max 단계별 사용 가이드 + 카테고리별 effort 매핑 | (universal — 모든 작업) |
 | `deep-thinking.md` | 얕은 추측 / 추정 명시 금지, WebFetch 검증 의무, ⚠️ unverified 마킹 | (universal — 모든 작업) |
 
 ### Token Budget (Opus 4.7)
@@ -296,7 +296,9 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | Plugins | `plugins/*.yml` | `install.sh --plugin <name>` |
 | Workflows | `.claude/workflows/*.yml` | `install.sh --workflow <name>` |
 
-자산 통계: [.claude/inventory.yml](.claude/inventory.yml). 현재 274 skills (inventory.yml 의 260 + 폴더형 SKILL.md 14 — script 카운트 차이) / 49 agents / 43 commands / 12 plugins / 11 workflows. `scripts/generate-inventory.sh` 로 자동 재생성.
+자산 통계는 [.claude/inventory.yml](.claude/inventory.yml) 의 `summary` 가 유일한 출처다 (`scripts/generate-inventory.sh` 로 자동 재생성, CI `Inventory Freshness` job 이 신선도 검증).
+
+> **개수를 산문에 쓰지 않는다.** CI 는 inventory 신선도는 검사하지만 문서 본문에 박힌 숫자는 검사하지 않아 반드시 drift 한다. 실제로 이 문단의 이전 버전이 "274 skills / 43 commands" 로 3개월간 틀린 값을 유지했다 (실제 260 / 51). 근거: [2026-08-15 audit §2](docs/audit/2026-08-15-asset-tier-rebalance.md#2-사실-오류--drift-수정은-백로그).
 
 **신규 skill / agent 작성 표준**: [`.claude/templates/SKILL-SPEC.md`](.claude/templates/SKILL-SPEC.md) / [`AGENT-SPEC.md`](.claude/templates/AGENT-SPEC.md). frontmatter / description 패턴 / Verification Criteria 섹션 강제.
 
