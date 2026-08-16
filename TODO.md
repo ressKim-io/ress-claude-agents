@@ -1,5 +1,7 @@
 # TODO - ress-claude-agents 로드맵
 
+> ⚠️ **본 파일은 2026-02-07 기준으로 고정돼 있다** (당시 26 agents / 142 skills → 2026-08-16 실측 49 / 260). 현행 백로그는 [2026-08-15 audit §8](docs/audit/2026-08-15-asset-tier-rebalance.md#8-선행-백로그-인수-b-트랙) 이 단일 진입점이다. 아래 "높음/중간/낮음" 항목은 미검증 상태이며, `monitoring-expert` 추가 건은 audit §5 축2(observability-reviewer 분할)에 흡수됐다.
+
 ## 현재 상태 (2026-02-07)
 
 | 항목 | 수량 | 상태 |

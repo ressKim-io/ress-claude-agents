@@ -5,7 +5,8 @@
 - **Driver**: Kiro IDE 추가 운영 욕구 + ressKim 본인 자산 다도구 활용
 - **Depends on**: 없음 (신규 도구 합류 결정)
 - **Related**: ADR 0007 (install.sh 축소), `.claude/rules/multi-tool-adapter.md` (PR-3), `docs/architecture/multi-tool-mapping.md` (PR-2)
-- **관련 plan**: `/Users/ress/.claude/plans/install-sh-staged-blossom.md`
+- **관련 plan**: `/Users/ress/.claude/plans/install-sh-staged-blossom.md` ⚠️ 다른 머신 경로 — 현재 접근 불가. 본 ADR 본문이 유일한 SOT
+- **진행**: PR-1(본 ADR) 완료 → **PR-2·3·4 완료 (2026-08-16)** → PR-5~7 미착수. 백로그 추적은 [2026-08-15 audit §8 B트랙](../audit/2026-08-15-asset-tier-rebalance.md#84-b-트랙-정의)
 
 ## Context
 
@@ -96,14 +97,18 @@ ress-claude-agents 는 현재 4 도구 호환을 다음 SOT 구조로 운영한�
 
 PR 분할은 `/Users/ress/.claude/plans/install-sh-staged-blossom.md` 참조. 본 ADR 채택으로 다음 PR 실행:
 
-| PR | 산출물 | Stage |
-|---|---|---|
-| PR-2 | `docs/architecture/multi-tool-mapping.md` | P0 |
-| PR-3 | `.claude/rules/multi-tool-adapter.md` | P0 |
-| PR-4 | `AGENTS.md` §Tool-Specific Kiro 행 + §Governance | P1 |
-| PR-5 | `inventory-labels.yml` tools_supported 필드 | P1 |
-| PR-6 | `.agents/skills/dx/multi-tool-asset-port.md` | P2 |
-| PR-7 | `.claude/templates/kiro-spec/` 3 종 | P2 |
+| PR | 산출물 | Stage | 상태 (2026-08-16) |
+|---|---|---|---|
+| PR-2 | `docs/architecture/multi-tool-mapping.md` | P0 | ✅ 완료 |
+| PR-3 | `.claude/rules/multi-tool-adapter.md` | P0 | ✅ 완료 — **PR-4 와 단일 PR** (아래 주) |
+| PR-4 | `AGENTS.md` §Tool-Specific Kiro 행 + §Governance | P1 | ✅ 완료 |
+| PR-5 | `inventory-labels.yml` tools_supported 필드 | P1 | 대기 |
+| PR-6 | `.agents/skills/dx/multi-tool-asset-port.md` | P2 | ⛔ **블로커** (아래 주) |
+| PR-7 | `.claude/templates/kiro-spec/` 3 종 | P2 | 대기 |
+
+> **PR-3 + PR-4 는 단일 PR 이어야 한다** (2026-08-16 정정). `scripts/validate-rules-drift.sh` 가 `.claude/rules/*.md` → AGENTS.md 역참조를 강제하므로, rule 만 먼저 머지하면 CI drift job 이 fail 하고 main branch protection 의 required status check 에 걸려 머지가 차단된다. 최초 계획의 "sequential merge 강제" 표기를 정정함.
+>
+> **PR-6 블로커** — 대상 경로 `.agents/skills/` 가 `.gitignore` 에 등재돼 있고 주석에 "P7까지 deprecate 예정 (assets/skills/ SSOT 로 이동)" 으로 명시돼 있다. 커밋 자체가 불가하므로 **경로 재지정 결정이 선행**돼야 한다 — 후보: `.claude/skills/dx/` (현 SSOT view) 또는 `assets/skills/dx/` (Migration 0002 목표 SSOT).
 
 본 ADR 범위 외:
 - `control-plane/src/adapter.ts` Kiro 케이스 추가 — Option 1 결정으로 보류
@@ -134,6 +139,21 @@ Kiro 공식 docs (Verified-by: Claude WebFetch + WebSearch cross-check, 2026-05-
 - https://kiro.dev/changelog/ide/0-9/ — Kiro 0.9 Subagents / Skills / Hook trigger 추가
 
 ⚠️ Kiro 사양은 cutoff 이후 변경 가능. 본 ADR 결정 후 사양 변경 시 review schedule: **분기별** (2026-08, 2026-11, 2027-02).
+
+### 분기 review — 2026-08 회차 (수행일 2026-08-16, Claude WebFetch)
+
+| 항목 | 2026-05-20 기록 | 재검증 결과 |
+|---|---|---|
+| Steering 4 모드 | ✅ | ✅ 유지. `.kiro/steering/` (workspace) + `~/.kiro/steering/` (global) |
+| Skills 폴더 + SKILL.md | ✅ | ✅ 유지. `.kiro/skills/` + `~/.kiro/skills/`, 필수 `name`(≤64, kebab) + `description`(≤1024) |
+| MCP 경로 | ✅ | ✅ 유지. workspace 우선 merge 확인 |
+| **Subagents docs URL** | `/docs/chat/subagents/` | ⚠️ **이동** → https://kiro.dev/docs/custom-agents/subagents/ (구 URL 은 redirect stub) |
+| **Agent 파일 형식** | `.md` front-matter 4 키 | ⚠️ **확장**. `.kiro/agents/` 는 **JSON + Markdown 양쪽** 지원. 필드: `name` `description` `prompt` `model` `tools` `allowedTools` `permissions` `mcpServers` `toolAliases` `resources` `hooks` `includeMcpJson` `keyboardShortcut` `welcomeMessage`. **`toolsSettings` deprecated → `permissions`** (출처: https://kiro.dev/docs/custom-agents/configuration-reference/) |
+| Specs 경로 + EARS | ✅ | ⚠️ **미검증**. 3 파일 구성(requirements/design/tasks)은 확인했으나 `.kiro/specs/<feat>/` 디렉토리 경로와 EARS notation 은 `/docs/specs/` 본문에 미기재이고 `/docs/specs/concepts/` 는 HTTP 404. → PR-7(kiro-spec 템플릿) 착수 전 재확인 필요 |
+
+**결정 영향 없음** — Option 1(수동 매핑 가이드 only)은 유지. Kiro 가 여전히 AGENTS.md / SKILL.md 표준을 그대로 인식하므로 자동화 ROI 판단은 불변. 단 agent 필드 확장으로 **수동 port 시 매핑 표 갱신 필요** → `docs/architecture/multi-tool-mapping.md` 에 반영함.
+
+다음 회차: **2026-11**.
 
 ## References
 

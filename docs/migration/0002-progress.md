@@ -1,6 +1,8 @@
 # Migration 0002 — Phase Progress Tracker
 
 > 매 Phase 시작/완료 시 이 파일을 갱신. 세션 휘발 시 첫 명령은 본 파일 cat.
+>
+> ⚠️ **P6.5 정지 (2026-08-16 확인)**: baseline 수집 마감이 2026-05-15 였으나 3개월째 `in_progress (collecting)` 이다. [ADR 0008](../adr/0008-asset-tier-policy.md) 이 **description 재작성을 applies_when 변환보다 우선**하기로 결정했고, 본 migration 은 그 효과 측정 후 재평가(P4)로 유보됐다. 통합 추적은 [2026-08-15 audit §8](../audit/2026-08-15-asset-tier-rebalance.md#8-선행-백로그-인수-b-트랙).
 
 ## 재개 명령 (세션 끊겼을 때)
 

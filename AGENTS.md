@@ -230,14 +230,17 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 ## Tool-Specific Optimization
 
-| 도구 | 추가 설정 |
-|---|---|
-| **Claude Code** | 본 파일 §Claude Code-Specific + `.claude/rules/`, `.claude/skills/`, `.claude/agents/` 자동 로딩 |
-| **Codex** | `.codex/AGENTS.md` (본 파일의 symlink) + `.codex/agents/`, `.codex/skills/` (P4 adapter 산출물) |
-| **Cursor** | 본 파일 자동 인식 + `.cursor/rules/*.mdc` (P4 adapter 산출물) |
-| **Copilot / Gemini CLI / Windsurf** | 본 파일 자동 인식 — 추가 설정 불필요 |
+| 도구 | 추가 설정 | 변환 |
+|---|---|---|
+| **Claude Code** | 본 파일 §Claude Code-Specific + `.claude/rules/`, `.claude/skills/`, `.claude/agents/` 자동 로딩 | 원본 |
+| **Codex** | `.codex/AGENTS.md` (본 파일의 symlink) + `.codex/agents/*.toml`, `.codex/skills/<cat>/*.toml` | 자동 (adapter) |
+| **Cursor** | 본 파일 자동 인식 + `.cursor/rules/*.mdc` | 자동 (adapter) |
+| **Kiro** | 본 파일 루트 자동 인식 + `.kiro/{skills,agents,steering}/` | **수동** ([ADR 0006](docs/adr/0006-kiro-adapter-strategy.md) Option 1) |
+| **Copilot / Gemini CLI / Windsurf** | 본 파일 자동 인식 — 추가 설정 불필요 | 불필요 |
 
 도구별 최적화는 선택. 핵심 룰은 모두 본 파일에 있다.
+
+**도구별 디렉토리는 전부 산출물(view)이다 — 직접 편집 금지.** 원본을 고치고 변환을 재실행한다. 매핑 표·port 규칙은 [`docs/architecture/multi-tool-mapping.md`](docs/architecture/multi-tool-mapping.md), 거버넌스 원칙은 [`.claude/rules/multi-tool-adapter.md`](.claude/rules/multi-tool-adapter.md) 참조.
 
 ---
 
@@ -269,6 +272,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | `k8s-manifest.md` | ArgoCD Application/AppProject/NetworkPolicy/RBAC | (path-scoped: application, networkpolicy, clusterrole 등) |
 | `terraform.md` | SG/IAM/state/secret 운영 규칙 | (path-scoped: *.tf, *.tfvars) |
 | `devlog-lifecycle.md` | dev-logs 4-Tier 정책 + frontmatter 표준 | (path-scoped: docs/dev-logs/*) |
+| `multi-tool-adapter.md` | 도구별 디렉토리=산출물 원칙, 자동/수동 변환 경계, 외부 사양 분기 재검증 | Tool-Specific Optimization |
 | `phase-workflow.md` | SDD Phase 게이트 워크플로우 | (path-scoped: sdd-*.md, phase-start*) |
 | `token-budget.md` | Opus 4.7 전용 | (아래) |
 | `effort-guide.md` | low/medium/xhigh/max 단계별 사용 가이드 + 49 agents / 273 skills 카테고리별 매핑 | (universal — 모든 작업) |
@@ -316,6 +320,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 3. **Mirrors**:
    - `CLAUDE.md` → 본 파일 symlink (Claude Code 호환)
    - `.codex/AGENTS.md` → 본 파일 symlink (Codex 호환)
+4. **도구별 view** (`.codex/agents`, `.codex/skills`, `.cursor/rules`, `.kiro/**`) — **산출물. 직접 편집 금지.** Codex/Cursor 는 `control-plane/src/adapter.ts` 가 생성하고 CI drift job 이 게이트한다. Kiro 는 수동 port ([`multi-tool-adapter.md`](.claude/rules/multi-tool-adapter.md)).
 
 **룰 변경 절차**:
 - **보편 룰 또는 Claude Code-Specific** → 본 파일 수정 → 관련 `.claude/rules/`로 propagate

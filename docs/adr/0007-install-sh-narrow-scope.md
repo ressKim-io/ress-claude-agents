@@ -1,11 +1,14 @@
 # ADR 0007 — install.sh 축소: `--plugin` / `--workflow` deprecation + 자산 단위 정밀 옵션
 
 - **Status**: Accepted
-- **Date**: 2026-05-20
+- **Date**: 2026-05-20 (실제 커밋 `dbf5e73` 2026-05-26)
 - **Driver**: install.sh 광범위 묶음 불만 ("안 쓰는 것까지 다 깔린다") + 자산 picky 운영 욕구
 - **Depends on**: ADR 0006 (Kiro 어댑터 — 본 결정과 같은 picky 정신)
 - **Related**: PR-8 (`install.sh` 수정 + `docs/guides/cherry-pick-assets.md`)
-- **관련 plan**: `/Users/ress/.claude/plans/install-sh-staged-blossom.md`
+- **관련 plan**: `/Users/ress/.claude/plans/install-sh-staged-blossom.md` ⚠️ 다른 머신 경로 — 현재 접근 불가. 본 ADR 본문이 유일한 SOT
+- **진행**: PR-1(본 ADR) 완료. **PR-8 미착수** — 백로그 추적은 [2026-08-15 audit §8 B2](../audit/2026-08-15-asset-tier-rebalance.md#84-b-트랙-정의)
+
+> **2026-08-16 일정 정정**: 최초 절대 날짜(warn 2026-05-20 / error 06-20 / remove 07-20)는 deprecation 을 *구현하는* PR-8 이 없는 상태에서 흘러 **3단계 전부 시작된 적 없이 만료**했다. 아래 일정을 **PR-8 머지일 기준 상대 표기**로 교체한다. 결정 내용(Option 2 축소)은 불변.
 
 ## Context
 
@@ -46,12 +49,12 @@ ressKim 본인의 정확한 표현: **"install 자체를 좀 폐기할까도 고
    ```
    복수 지정 가능: `--skill go/concurrency --skill k8s/deployment-strategies`
 
-2. **기존 광범위 옵션 deprecation 3 단계**:
+2. **기존 광범위 옵션 deprecation 3 단계** (기준일 D0 = **PR-8 머지일**):
    | 단계 | 기간 | 동작 |
    |---|---|---|
-   | warn | 2026-05-20 ~ 2026-06-20 (1 개월) | `--plugin` / `--workflow` 사용 시 stderr 경고 + 작동 |
-   | error | 2026-06-20 ~ 2026-07-20 (1 개월) | stderr 에러 + exit 1 (작동 안 함). `--force-legacy-bundle` 플래그로 임시 우회 |
-   | remove | 2026-07-20 ~ | 옵션 자체 제거. plugins/ 디렉토리는 reference 용으로 유지 |
+   | warn | D0 ~ D+30 | `--plugin` / `--workflow` 사용 시 stderr 경고 + 작동 |
+   | error | D+30 ~ D+60 | stderr 에러 + exit 1 (작동 안 함). `--force-legacy-bundle` 플래그로 임시 우회 |
+   | remove | D+60 ~ | 옵션 자체 제거. plugins/ 디렉토리는 reference 용으로 유지 |
 
 3. **Migration path 표** — `docs/guides/cherry-pick-assets.md` 에 plugin/workflow → 자산 픽업 매핑 표 포함.
 
@@ -133,13 +136,17 @@ ressKim 본인의 정확한 표현: **"install 자체를 좀 폐기할까도 고
   - plugin/workflow → cherry-pick 매핑 표 (13 plugin + 11 workflow 분해)
 - `.github/` CI workflow 점검 — `--plugin` / `--workflow` 사용 부분 확인 후 마이그레이션
 
-### Deprecation 일정 (절대 날짜)
+### Deprecation 일정 (상대 표기 — D0 = PR-8 머지일)
 
 | 단계 | 시작 | 동작 |
 |---|---|---|
-| Warn | 2026-05-20 | stderr 경고 출력, 작동 |
-| Error | 2026-06-20 | exit 1, `--force-legacy-bundle` 로 우회 가능 |
-| Remove | 2026-07-20 | 옵션 자체 제거. plugins/*.yml YAML 은 보존 |
+| Warn | D0 | stderr 경고 출력, 작동 |
+| Error | D+30 | exit 1, `--force-legacy-bundle` 로 우회 가능 |
+| Remove | D+60 | 옵션 자체 제거. plugins/*.yml YAML 은 보존 |
+
+> 절대 날짜를 쓰지 않는 이유 — 최초 버전은 warn 을 ADR 작성일(2026-05-20)에 앵커했으나 구현 주체인 PR-8 이 착수되지 않아 3단계가 전부 사문화됐다. 선행 산출물 머지일 기준 상대 표기는 세션이 끊겨도 유효하다. 동일 사고가 ADR 0005("1주 baseline")에서도 발생했다.
+
+PR-8 머지 시 이 표의 D0 을 실제 날짜로 치환한 1줄을 본 ADR 에 append 한다.
 
 ### Migration path 표 (예시 — `docs/guides/cherry-pick-assets.md` 에 포함)
 
@@ -160,8 +167,9 @@ ressKim 본인의 정확한 표현: **"install 자체를 좀 폐기할까도 고
 - [ ] PR-8 머지 + `./install.sh --help` 에 신규 옵션 노출 확인
 - [ ] `./install.sh --skill dx/multi-tool-asset-port` 동작 검증 (단일 자산만 설치)
 - [ ] `./install.sh --plugin go-stack` 실행 시 stderr deprecation 경고 출력 확인
-- [ ] 2026-06-20 (Error 단계) 직전 외부 CI 사용처 점검 보고
-- [ ] 2026-08-20 회고 — 사용자 불만 해소 / picky 운영 정착 / 자산 단위 사용 빈도
+- [ ] `tests/install.bats` L409·460·505·511 의 `--plugin` / `--workflow` 단언 갱신 (PR-8 동시 수정 대상)
+- [ ] D+30 (Error 단계) 직전 외부 CI 사용처 점검 보고
+- [ ] D+90 회고 — 사용자 불만 해소 / picky 운영 정착 / 자산 단위 사용 빈도
 
 ## Sources
 
