@@ -278,6 +278,13 @@ resolve_workflow() {
     _dedup_workflow_array() {
         local arr_name="$1"
         local sorted
+        # bash 3.2 + set -u 에서는 빈 배열의 "${arr[@]}" 확장이 unbound 오류를 낸다.
+        # ${#arr[@]} 는 빈 배열에도 안전하므로 조기 반환으로 막는다 (중첩 eval 이스케이프
+        # 보다 읽기 쉽고, 정렬할 원소가 없으면 어차피 할 일이 없다).
+        local count
+        eval "count=\${#${arr_name}[@]}"
+        [[ "$count" -eq 0 ]] && return 0
+
         eval "sorted=\$(printf '%s\n' \"\${${arr_name}[@]}\" | sort -u)"
         eval "$arr_name=()"
         local line
@@ -581,6 +588,29 @@ _is_flattened_module() {
     return 1
 }
 
+# 재설치 시 소스에서 rename/삭제된 명령의 flatten 잔재를 제거한다.
+# 설치 가드는 "있으면 건드리지 않는다"만 하므로, 정리 단계가 없으면 옛 이름이
+# 영구히 남는다 (global 은 dangling symlink, local 은 stale 복사본).
+# 사용자가 직접 만든 파일을 지우지 않도록, 이 모듈이 만든 심볼릭 링크만 회수한다.
+_prune_stale_flat_links() {
+    local mod="$1" module_target="$2"
+    local flat base dest
+    for flat in "$TARGET_DIR/commands"/*.md; do
+        [[ -L "$flat" ]] || continue
+        base=$(basename "$flat")
+
+        # 이번 설치분이 여전히 제공하는 이름이면 유지
+        [[ -f "$module_target/$base" ]] && continue
+
+        dest=$(readlink "$flat")
+        case "$dest" in
+            */commands/"$mod"/*)
+                rm -f "$flat" && log_warn "  Pruned stale flatten link: $base"
+                ;;
+        esac
+    done
+}
+
 # Install selected command modules
 for mod in ${SELECTED_MODULES[@]+"${SELECTED_MODULES[@]}"}; do
     source_dir="$SCRIPT_DIR/commands/$mod"
@@ -596,11 +626,29 @@ for mod in ${SELECTED_MODULES[@]+"${SELECTED_MODULES[@]}"}; do
             # Also flatten meta modules to the commands root so bare-name
             # references in installed rules keep resolving.
             if _is_flattened_module "$mod"; then
-                for cmd_file in "$source_dir"/*.md; do
+                _prune_stale_flat_links "$mod" "$target"
+                for cmd_file in "$target"/*.md; do
                     [[ -f "$cmd_file" ]] || continue
                     cmd_name=$(basename "$cmd_file")
-                    if [[ ! -e "$TARGET_DIR/commands/$cmd_name" ]]; then
-                        ln -sf "$cmd_file" "$TARGET_DIR/commands/$cmd_name" 2>/dev/null || true
+                    flat_target="$TARGET_DIR/commands/$cmd_name"
+
+                    if [[ -e "$flat_target" || -L "$flat_target" ]]; then
+                        log_warn "  Skipped flatten (already exists): $cmd_name"
+                        continue
+                    fi
+
+                    # scope 분기는 backup_and_link 와 동일한 계약을 따른다:
+                    # global = 소스 심볼릭 링크(갱신 자동 반영), local = 자기완결 복사본.
+                    # local 에서 소스를 가리키는 링크를 만들면 설치 레포를 옮기거나
+                    # 지우는 순간 bare 명령이 전부 dangling 이 된다.
+                    if [[ "$INSTALL_SCOPE" == "global" ]]; then
+                        if ! ln -s "$cmd_file" "$flat_target" 2>/dev/null; then
+                            log_warn "  Failed to flatten link: $cmd_name"
+                        fi
+                    else
+                        if ! cp "$cmd_file" "$flat_target" 2>/dev/null; then
+                            log_warn "  Failed to flatten copy: $cmd_name"
+                        fi
                     fi
                 done
             fi
