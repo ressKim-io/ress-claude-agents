@@ -261,6 +261,89 @@ P1 완료 후 재측정해서 발견율이 충분하면 0002 는 P8(registry) �
 
 ---
 
+## 8. 선행 백로그 인수 (B 트랙)
+
+> **본 섹션이 레포 전체 미집행 항목의 단일 진입점이다.** 원본 문서 5곳이 여기를 가리킨다.
+
+### 8.1 왜 필요한가
+
+미집행 항목이 문서 6곳에 흩어져 있어 "다음에 뭘 해야 하는지" 를 한 곳에서 볼 수 없었다. 이것이 미집행의 구조적 원인이다 — 대조군으로 [2026-05-11 planning-agent-gap](2026-05-11-planning-agent-gap.md) 의 권장 4건은 단일 문서에 모여 있었고 **전부 집행됐다**.
+
+### 8.2 미집행 인벤토리 (2026-08-16 실측)
+
+| 출처 | 상태 | 승계 위치 |
+|---|---|---|
+| 본 문서 §6 (P0~P4) | 미착수 | P 트랙 (자산 구조조정) |
+| **ADR 0006·0007** | **PR-1 완료, PR-2~8 정지** | B1 / B2 |
+| [2026-05-08 audit](2026-05-08-asset-audit.md) §7 6건 | 5건 미집행 | §4 S3·S4 (skill 통합 3건) + B3 (plugin 2건) |
+| ADR 0001·0002·0003 | Proposed 3개월 | B3 |
+| ADR 0005 | placeholder (baseline 대기) | B3 |
+| [Migration 0002](../migration/0002-progress.md) | P6.5 collecting 3개월, P7·P8 pending | §6 P4 + B3 |
+| `TODO.md` | 2026-02-07 고정 (26 agents / 142 skills) | §2 D7 |
+
+### 8.3 ADR 0006/0007 은 "실패" 가 아니라 "일시정지"
+
+`docs/dev-logs/2026-05-20-kiro-adapter-and-install-sh-narrow-scope.md` 에 8-PR 시퀀스가 명시돼 있다:
+
+```
+PR-1 (ADR 2종)   ─ 완료
+  ↓
+PR-2 (매핑 문서)  ─ 다음 세션 시작점    ← 여기서 멈춤
+  ↓
+PR-3 (rule) + PR-4 (AGENTS.md) → PR-5 (inventory) → PR-6 ║ PR-7 → PR-8 (install.sh)
+```
+
+ADR 자체가 PR-1 의 **산출물**이었으므로 설계상 구현은 PR-2 부터다. "각 PR 단위로 사용자 GO 사인 의무" 라 GO 부재로 멈춘 것이다. Status(Accepted)는 유효하다.
+
+**단 날짜는 사문화됐다.** ADR frontmatter `Date: 2026-05-20` 이지만 실제 커밋은 `2026-05-26`(`dbf5e73`)이고, deprecation 을 *구현하는* 것이 PR-8 인데 PR-8 이 없으므로 warn(05-20) / error(06-20) / remove(07-20) 3단계가 **한 번도 시작되지 않은 채 전부 만료**했다. → B0 에서 상대 일정으로 교체.
+
+> **교훈**: 미실행 계획에 절대 날짜를 박으면 세션이 끊기는 순간 사문화된다. 같은 사고가 ADR 0005("1주 baseline", 3개월 미수집)에서도 발생했다. **일정은 선행 산출물 머지일 기준 상대 표기로 쓴다.**
+
+### 8.4 B 트랙 정의
+
+P 트랙(자산 구조조정, 측정 기반)과 성격이 다르므로 **독립 병렬 트랙**으로 둔다. B = 결정 부채 청산.
+
+| 트랙 | 내용 | 상태 |
+|---|---|---|
+| **B0** | ADR 위생 — 0007 일정 상대화, 0006/0007 진행 상태 명시, PR-6 블로커 기록, Kiro 사양 분기 review 반영 | ✅ 2026-08-16 완료 |
+| **B1** | PR-2(`docs/architecture/multi-tool-mapping.md`) + PR-3·4(rule + AGENTS.md) | ✅ 2026-08-16 완료 |
+| **B2** | PR-5(inventory `tools_supported`) · PR-6(port skill) · PR-7(kiro-spec 템플릿) · PR-8(install.sh 축소 + cherry-pick 가이드) | 대기 |
+| **B3** | 2026-05-08 audit plugin 2건 / ADR 0001~0003 Proposed 처리 / ADR 0005 placeholder / Migration 0002 P6.5 | 대기 |
+
+### 8.5 B2 블로커 및 의존관계
+
+| 항목 | 블로커 |
+|---|---|
+| **PR-6** | 대상 경로 `.agents/skills/dx/multi-tool-asset-port.md` 가 `.gitignore` 의 `.agents/` 안이고 "P7까지 deprecate 예정". **경로 재지정 없이 진행 불가** — `.claude/skills/dx/` 또는 `assets/skills/dx/` 로 결정 필요 |
+| **PR-8** | ① `tests/install.bats` L409·460·505·511 이 `--plugin` / `--workflow` 를 단언 → 동시 수정 필요<br>② §6 **P0(root `commands/` 16개 누락 복구)와 install.sh 를 동시에 건드림** → 두 작업 순서 조정 필수 |
+| **PR-3+4** | `validate-rules-drift.sh` 가 rules→AGENTS.md 역참조를 강제하므로 **반드시 단일 PR**. 원본 dev-log 의 "sequential merge" 표기를 정정함 |
+
+### 8.6 B3 상세 — 직전 §4 가 누락한 2건 포함
+
+| 항목 | 출처 | 비고 |
+|---|---|---|
+| `finops` plugin 신설 | 2026-05-08 §5.1 | ⚠️ **그대로 승계 금지** — `plugins/sre-full.yml` 이 이미 `cost-analyzer` + `finops-advisor` 를 포함. 중복 재검토 후 결정 |
+| `security-posture` plugin 신설 | 2026-05-08 §5.2 | 보안 reviewer 7개 묶음. §5 축3(terraform/gitops security twin) 결정 후 구성해야 정합 |
+| ADR 0001·0002·0003 Accept 여부 | 2026-05-08 deep-audit | Proposed 3개월. Accept / Superseded / 폐기 판단 필요 |
+| ADR 0005 baseline | ADR 0004 | Migration 0002 P4 재평가와 함께 처리 |
+
+### 8.7 Kiro 사양 분기별 review (2026-08분 — 본 세션 수행)
+
+ADR 0006 Sources 가 `분기별 (2026-08, 2026-11, 2027-02)` review 를 명시했고 **2026-08 회차가 도래**하여 수행했다. 6건 중 2건 변경 확인:
+
+| 항목 | 2026-05-20 기록 | 2026-08-16 재검증 |
+|---|---|---|
+| Steering 4 모드 | ✅ | ✅ 유지 (`.kiro/steering/` + `~/.kiro/steering/`) |
+| Skills 폴더+SKILL.md | ✅ | ✅ 유지 (`.kiro/skills/`, 필수 `name`+`description`) |
+| MCP 경로 | ✅ | ✅ 유지 (workspace 우선 merge 확인) |
+| **Subagents docs URL** | `/docs/chat/subagents/` | ⚠️ **이동** → `/docs/custom-agents/subagents/` |
+| **Agent 파일 형식** | `.md` front-matter (name/description/tools/model) | ⚠️ **확장** — JSON+Markdown 양쪽 지원, `permissions`/`resources`/`hooks` 등 추가. `toolsSettings` deprecated |
+| Specs 경로 + EARS | ✅ | ⚠️ **미검증** — 3파일 구성은 확인, 디렉토리 경로·EARS 는 `/docs/specs/` 에 미기재이고 `/docs/specs/concepts/` 는 404 |
+
+→ 상세 매핑은 [`docs/architecture/multi-tool-mapping.md`](../architecture/multi-tool-mapping.md) 참조.
+
+---
+
 ## 부록 A: 재측정 명령
 
 ```bash
