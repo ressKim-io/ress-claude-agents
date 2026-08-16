@@ -6,7 +6,7 @@ Migration 0002 P1 결과물. JSON Schema Draft 2020-12 기반.
 
 | Schema | 검증 대상 | Required 필드 |
 |---|---|---|
-| `skill-manifest.v1.json` | `assets/skills/<cat>/<name>/SKILL.md` (P2~), 현재 `.claude/skills/**/*.md`, `.agents/skills/**/SKILL.md` | `name`, `description` |
+| `skill-manifest.v1.json` | `assets/skills/<cat>/<name>/SKILL.md` (P2~), 현재 `.claude/skills/**/*.md` | `name`, `description` |
 | `project-profile.v1.json` | `claude-agents probe` 출력 (`project-profile.yml`) | 8개 (schema_version/generated_at/generator/repo/languages/frameworks/build_systems/files_signatures) |
 | `agent-manifest.v1.json` | `.claude/agents/*.md`, `assets/agents/<name>/AGENT.md` (P4~) | `name`, `description` |
 
@@ -26,8 +26,8 @@ npx --yes ajv-cli@5 compile -s schemas/agent-manifest.v1.json
 
 # 기존 frontmatter가 schema를 통과하는지 (P1 검증 게이트)
 #   source-command-log-summary는 minimal frontmatter (name, description) 만으로 통과해야 함
-yq -o=json '.' .agents/skills/source-command-log-summary/SKILL.md > /tmp/scls.json   # frontmatter만 추출 별도 변환 필요
-npx --yes ajv-cli@5 validate -s schemas/skill-manifest.v1.json -d /tmp/scls.json
+yq -o=json '.' assets/skills/go/go-errors/SKILL.md > /tmp/sample.json   # frontmatter만 추출 별도 변환 필요
+npx --yes ajv-cli@5 validate -s schemas/skill-manifest.v1.json -d /tmp/sample.json
 ```
 
 > Frontmatter → JSON 변환은 P3 control plane CLI가 자동화. P1에서는 수동 검증 + 스크립트 일회성.

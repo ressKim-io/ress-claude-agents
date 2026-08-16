@@ -12,6 +12,30 @@ readonly HELP_INDEX_FILE="${COMMANDS_DIR}/help/index.md"
 
 readonly REQUIRED_SECTIONS=("Contract" "Checklist" "Output Format" "Usage")
 
+# 섹션 별칭 — 이 레포는 documentation.md §공통 작성 규칙에 따라 문서를 한국어로
+# 쓴다. controller 에서 port 된 메타 명령(memory/review/workflow)은 같은 계약을
+# 한국어 제목으로 표현하므로, 영문 제목만 요구하면 실제로는 존재하는 섹션을
+# 누락으로 오탐한다. 아래는 의미가 1:1 대응하는 제목만 등록한다.
+section_aliases() {
+    case "$1" in
+        "Contract")      printf '%s\n' "입력" "수집할 정보" "대상 파일 패턴" ;;
+        "Checklist")     printf '%s\n' "실행 절차" "체크리스트" ;;
+        "Output Format") printf '%s\n' "출력 형식" ;;
+        "Usage")         printf '%s\n' "사용 예시" "사용법" ;;
+    esac
+}
+
+# 파일이 해당 섹션(또는 그 별칭)을 갖고 있으면 0
+has_required_section() {
+    local file="$1" section="$2" alias
+    grep -q "^## ${section}" "$file" && return 0
+    while IFS= read -r alias; do
+        [[ -z "$alias" ]] && continue
+        grep -q "^## ${alias}" "$file" && return 0
+    done < <(section_aliases "$section")
+    return 1
+}
+
 # Colors for output
 readonly RED='\033[0;31m'
 readonly GREEN='\033[0;32m'
@@ -76,6 +100,24 @@ get_category_icon() {
     yq -r ".categories.${category}.icon // \"\"" "${MANIFEST_FILE}"
 }
 
+# flatten: true 카테고리는 install.sh 가 commands 루트에도 심볼릭 링크를 만들어
+# bare 이름(/where)으로 호출된다. 네임스페이스 형태(/memory where)로 표기하면
+# 실제 호출법과 어긋나므로 help 출력에서 구분한다.
+is_flattened_category() {
+    local category="$1"
+    [[ "$(yq -r ".categories.${category}.flatten // false" "${MANIFEST_FILE}")" == "true" ]]
+}
+
+# 카테고리 + 명령 이름 → 사용자가 실제로 입력하는 호출 문자열
+format_command_invocation() {
+    local category="$1" cmd_name="$2"
+    if is_flattened_category "${category}"; then
+        printf '/%s' "${cmd_name}"
+    else
+        printf '/%s %s' "${category}" "${cmd_name}"
+    fi
+}
+
 get_commands_by_category() {
     local category="$1"
     yq -r ".commands[] | select(.category == \"${category}\") | .id" "${MANIFEST_FILE}"
@@ -128,7 +170,7 @@ generate_help_index() {
             cmd_name="${cmd_id#"${category}-"}"
             cmd_desc=$(get_command_description "${cmd_id}")
 
-            output+="| \`/${category} ${cmd_name}\` | ${cmd_desc} |\n"
+            output+="| \`$(format_command_invocation "${category}" "${cmd_name}")\` | ${cmd_desc} |\n"
         done
 
         output+="\n---\n\n"
@@ -191,7 +233,7 @@ validate_consistency() {
 
         # Check required sections
         for section in "${REQUIRED_SECTIONS[@]}"; do
-            if ! grep -q "^## ${section}" "${file_path}"; then
+            if ! has_required_section "${file_path}" "${section}"; then
                 log_warning "Missing section '${section}' in ${file_path}"
                 warnings=$((warnings + 1))
             fi

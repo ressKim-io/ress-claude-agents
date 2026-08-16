@@ -1,6 +1,6 @@
 # Effort Level Guide — Claude 4.x 단계별 사용 가이드
 
-이 레포의 49 agents / 273 skills 가 어떤 effort level 로 호출되어야 하는지의 카테고리별 매핑 표.
+이 레포의 agents / skills 가 어떤 effort level 로 호출되어야 하는지의 카테고리별 매핑 표. 자산 개수는 `.claude/inventory.yml` `summary` 참조 (산문에 박지 않는다 — drift 원인).
 사용자가 새 작업 / 새 agent / 새 skill 을 작성할 때 "이거 effort 뭘 줘야 하지?" 의 답.
 
 상세 룰 / Opus 4.7 전용 가이드는 [`token-budget.md`](token-budget.md) 참조. 이 문서는 매핑에 집중.
@@ -33,7 +33,7 @@
 
 ---
 
-## Agents 매핑 (49 개)
+## Agents 매핑
 
 | Effort | 카테고리 | 대상 (model) | 정당화 |
 |---|---|---|---|
@@ -46,7 +46,7 @@
 
 ---
 
-## Skills 매핑 (273 개, 카테고리 default)
+## Skills 매핑 (카테고리 default)
 
 | Effort | 카테고리 | 정당화 |
 |---|---|---|

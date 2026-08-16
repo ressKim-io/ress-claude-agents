@@ -88,18 +88,20 @@ AGENT-SPEC §5 가 정의한 필수 본문 섹션 준수율:
 
 ---
 
-## 2. 사실 오류 / drift (수정은 백로그)
+## 2. 사실 오류 / drift
 
-| # | 위치 | 기재 내용 | 실제 | 심각도 |
-|---|---|---|---|---|
-| D1 | root `commands/` (install.sh:36 이 읽는 **설치 소스**) | 8개 모듈 디렉토리 | **명령 16개 누락** — `.claude/commands/` 에만 존재 | 🔴 기능 결함 |
-| D2 | `AGENTS.md` L16, L295 | "274개 = 독립 `.md` 260 + 폴더형 `SKILL.md` 14" | 폴더형 14개 **부재**. `.gitignore` 가 `.claude/skills/*/*/SKILL.md` 를 P7까지 의도적 제외. **실제 260** | 🟡 |
-| D3 | `AGENTS.md` L295 | "43 commands" | 51 (`.claude/commands/`) / 35 (root) | 🟡 |
-| D4 | `rules/effort-guide.md` L3, `rules/token-budget.md` L36 | "273 skills" | 260 | 🟡 |
-| D5 | `docs/adr/0006`, `schemas/README.md` | `.agents/skills/` (21 카테고리) 를 SSOT 로 기술 | 디렉토리 **부재** (`.gitignore`: "P7까지 deprecate 예정") | 🟡 dangling ref |
-| D6 | `.claude/standards.yml` | `max_function_lines: 30` | `rules/clean-code.md` + AGENTS.md 는 "20–50줄 권장, 50줄 초과 분할 검토, 100줄 초과 금지" — **모순** | 🟡 |
-| D7 | `TODO.md` | 2026-02-07 / 26 agents / 142 skills | 49 / 260 (6개월 경과) | 🟢 |
-| D8 | `docs/migration/0002-progress.md` P6.5 | "Baseline due ≈ 2026-05-15" | **3개월 미수집**. P7·P8 pending. ADR 0005 는 placeholder 상태 | 🟡 |
+> **2026-08-16 P0 에서 D1~D6 수정 완료** (PR 링크는 §8.4 B트랙 표 참조). D7·D8 은 포인터만 추가하고 내용은 후속 트랙으로 남겼다.
+
+| # | 위치 | 기재 내용 | 실제 | 심각도 | 상태 |
+|---|---|---|---|---|---|
+| D1 | root `commands/` (install.sh:36 이 읽는 **설치 소스**) | 8개 모듈 디렉토리 | **명령 16개 누락** — `.claude/commands/` 에만 존재 | 🔴 기능 결함 | ✅ 수정 |
+| D2 | `AGENTS.md` L16, L295 | "274개 = 독립 `.md` 260 + 폴더형 `SKILL.md` 14" | 폴더형 14개 **부재**. `.gitignore` 가 `.claude/skills/*/*/SKILL.md` 를 P7까지 의도적 제외. **실제 260** | 🟡 | ✅ 수정 |
+| D3 | `AGENTS.md` L295 | "43 commands" | 51 (`.claude/commands/`) / 35 (root) | 🟡 | ✅ 수정 |
+| D4 | `rules/effort-guide.md` L3, `rules/token-budget.md` L36 | "273 skills" | 260 | 🟡 | ✅ 수정 |
+| D5 | `docs/adr/0006`, `schemas/README.md` | `.agents/skills/` (21 카테고리) 를 SSOT 로 기술 | 디렉토리 **부재** (`.gitignore`: "P7까지 deprecate 예정") | 🟡 dangling ref | ✅ 수정 |
+| D6 | `.claude/standards.yml` | `max_function_lines: 30` | `rules/clean-code.md` + AGENTS.md 는 "20–50줄 권장, 50줄 초과 분할 검토, 100줄 초과 금지" — **모순** | 🟡 | ✅ 수정 |
+| D7 | `TODO.md` | 2026-02-07 / 26 agents / 142 skills | 49 / 260 (6개월 경과) | 🟢 | ⏸ 포인터만 |
+| D8 | `docs/migration/0002-progress.md` P6.5 | "Baseline due ≈ 2026-05-15" | **3개월 미수집**. P7·P8 pending. ADR 0005 는 placeholder 상태 | 🟡 | ⏸ 포인터만 |
 
 ### D1 상세 — 미설치 명령 16개
 
@@ -226,13 +228,24 @@ terraform 은 IAM 와일드카드 / SG `0.0.0.0/0` / state 노출 같은 **가�
 
 ## 6. 실행 순서
 
-| 순위 | 작업 | 비용 | 효과 |
-|---|---|---|---|
-| **P0** | §2 drift 수정. **D1(명령 16개 미설치) 최우선** — 유일한 기능 결함 | 낮음 | 설치 사용자가 메타 워크플로우 명령 사용 가능 |
-| **P1** | **description 224개 재작성** — SKILL-SPEC 의 `What. Use when [구체 trigger].` 형식 | 중간 | **발견 문제 직격.** control-plane 없이 오늘 당장 효과 |
-| **P2** | §4 skill 티어 재배치 (S1→S7 순) | 큼 | 260 → 150 선 |
-| **P3** | §5 agent 분할 3축 | 중간 | spec 위반 해소 + 중복 제거 |
-| **P4** | Migration 0002 재평가 | — | P1 효과 측정 후 `applies_when` 필요성 판단 |
+| 순위 | 작업 | 비용 | 효과 | 상태 |
+|---|---|---|---|---|
+| **P0** | §2 drift 수정. **D1(명령 16개 미설치) 최우선** — 유일한 기능 결함 | 낮음 | 설치 사용자가 메타 워크플로우 명령 사용 가능 | ✅ **2026-08-16 완료** |
+| **P1** | **description 224개 재작성** — SKILL-SPEC 의 `What. Use when [구체 trigger].` 형식 | 중간 | **발견 문제 직격.** control-plane 없이 오늘 당장 효과 | 대기 ← 다음 |
+| **P2** | §4 skill 티어 재배치 (S1→S7 순) | 큼 | 260 → 150 선 | 대기 |
+| **P3** | §5 agent 분할 3축 | 중간 | spec 위반 해소 + 중복 제거 | 대기 |
+| **P4** | Migration 0002 재평가 | — | P1 효과 측정 후 `applies_when` 필요성 판단 | 대기 |
+
+### P0 완료 내역 (2026-08-16)
+
+| 항목 | 조치 |
+|---|---|
+| D1 | `commands/{memory,review,workflow}/` 3개 모듈 신설로 16개 설치 가능화. install.sh 에 flatten 도입해 bare 이름(`/where`)과 네임스페이스(`/memory:where`) 동시 제공 |
+| D2~D4 | 산문 자산 개수 제거 → `inventory.yml summary` 참조로 대체 |
+| D5 | `schemas/README.md` 의 부재 경로 `.agents/` 제거 |
+| D6 | `standards.yml` `max_function_lines` 를 clean-code 기준(warn 50 / max 100) 2단 구조로 교체 |
+| **신규 발견** | **install.sh 가 macOS bash 3.2 에서 완주 불가** — `set -u` + 빈 배열 `${arr[@]}` unbound. 20곳 교정, 8개 플래그 조합 검증. CI 가 ubuntu 전용이라 3개월간 미검출 |
+| 재발 방지 | `scripts/validate-commands-drift.sh` 4축 검증 + CI `install-macos` job(bash 3.2 스모크) 추가 |
 
 ### P1 을 먼저 하는 이유
 
@@ -310,6 +323,8 @@ P 트랙(자산 구조조정, 측정 기반)과 성격이 다르므로 **독립 
 | **B2** | PR-5(inventory `tools_supported`) · PR-6(port skill) · PR-7(kiro-spec 템플릿) · PR-8(install.sh 축소 + cherry-pick 가이드) | 대기 |
 | **B3** | 2026-05-08 audit plugin 2건 / ADR 0001~0003 Proposed 처리 / ADR 0005 placeholder / Migration 0002 P6.5 | 대기 |
 
+> **2026-08-16 P0 진행 중 확인된 의존관계 해소**: B2 의 PR-8 과 §6 P0 가 `install.sh` 를 동시에 건드리는 문제는, P0 가 먼저 착수되어 flatten 로직과 bash 3.2 호환 수정을 반영했다. PR-8 은 이제 그 위에 deprecation 로직만 얹으면 된다 (충돌 해소).
+
 ### 8.5 B2 블로커 및 의존관계
 
 | 항목 | 블로커 |
@@ -326,6 +341,7 @@ P 트랙(자산 구조조정, 측정 기반)과 성격이 다르므로 **독립 
 | `security-posture` plugin 신설 | 2026-05-08 §5.2 | 보안 reviewer 7개 묶음. §5 축3(terraform/gitops security twin) 결정 후 구성해야 정합 |
 | ADR 0001·0002·0003 Accept 여부 | 2026-05-08 deep-audit | Proposed 3개월. Accept / Superseded / 폐기 판단 필요 |
 | ADR 0005 baseline | ADR 0004 | Migration 0002 P4 재평가와 함께 처리 |
+| 메타 명령 16개의 문서 섹션 보강 | 2026-08-16 P0 | `generate-docs.sh validate` 경고 **18건** — `Output Format` 8 / `Usage` 8 / `Contract` 1 등 실제 누락. 한국어 별칭 인정으로 64→18 까지 줄였고 남은 것은 내용 작성이 필요하다. 경고는 CI 를 실패시키지 않음(exit 0) |
 
 ### 8.7 Kiro 사양 분기별 review (2026-08분 — 본 세션 수행)
 
