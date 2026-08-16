@@ -62,4 +62,13 @@ type: session-summary
 - 활동이 없는 카테고리는 생략한다
 - git diff 결과가 없으면 Key Changes 섹션을 "변경 없음"으로 표시한다
 
+## 사용법
+
+```
+/log-summary                          # 현재 세션 활동 자동 요약
+```
+
+인자를 받지 않는다. 세션 종료 전에 실행해 그 세션의 작업을 한 번에 정리한다.
+`git diff` 결과가 없으면 Key Changes 를 "변경 없음" 으로 표시한다.
+
 오늘 날짜: $CURRENT_DATE

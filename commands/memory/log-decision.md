@@ -62,5 +62,15 @@ tags: [{tag1}, {tag2}]
 - path/to/file
 ```
 
+## 사용법
+
+```
+/log-decision                         # 현재 대화의 결정 내용 자동 추출
+/log-decision Kafka vs RabbitMQ       # 결정 주제 전달
+```
+
+ADR 수준의 큰 결정은 `docs/adr/` 로, 그보다 가벼운 결정은 본 명령으로 기록한다.
+산출물: `docs/dev-logs/YYYY-MM-DD-{slug}.md` (`category: decision`).
+
 오늘 날짜: $CURRENT_DATE
 인자가 주어지면 해당 내용을 제목/Context로 활용하라: $ARGUMENTS

@@ -165,6 +165,21 @@ dev-logs 자동 정리 패스. `/consolidate-memory`와 동형 패턴 — Sleep-
 - `<keyword>`: 특정 키워드 관련 항목만 분석
 - `--cluster-only`: 클러스터 탐지만 출력
 
+## 출력 형식
+
+dry-run 기본. 5개 분류별로 대상과 근거를 표로 출력한다.
+
+```
+[tier 재산출]      <slug>  tier 1 → 2   (status: resolved, importance: major)
+[superseded 후보]  <slug>  → replaced_by <대체 자료>
+[클러스터]         <주제>  <slug> 3건 — /promote-devlog 후보
+[frontmatter 부재] <slug>  (본문 추론값 제시)
+[변경 없음]        <건수>
+```
+
+마지막에 `적용하려면: /consolidate-devlogs --apply <category>` 안내를 붙인다.
+사용자 승인 없이 파일을 변경하지 않는다.
+
 ## 출력 외 부수 효과
 
 `docs/dev-logs/INDEX-active.md` 와 `INDEX-by-topic.md` (있다면) 자동 갱신 권장. 단, 사용자 승인 후 적용.

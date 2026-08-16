@@ -8,6 +8,13 @@ Terraform PR을 3개 전문 관점의 에이전트로 병렬 리뷰한다.
 - `modules/**`, `environments/**`
 - `backend.tf`, `provider.tf`, `variables.tf`, `outputs.tf`
 
+## 에이전트 실행 안전 규칙 (MANDATORY)
+
+리뷰 에이전트는 읽기와 격리된 재현만 한다. 레포 루트에서 설치·설정 명령
+(`install.sh`, `terraform apply`, `helm install` 등)을 실행하지 않으며, 재현이
+필요하면 `mktemp -d` 임시 디렉토리에서만 수행한다. 결과만 반환하고 외부 게시는
+메인 에이전트가 사용자 승인 후 실행한다. 상세: [`review-pr.md`](review-pr.md).
+
 ## 실행 절차
 
 ### 1. PR diff 확인
@@ -95,3 +102,13 @@ gh pr diff <PR번호> --repo <repo>
 | Critical | 보안/비용 심각 이슈 | IMDS 미차단, public RDS, CIDR 부족 |
 | Major | 운영 안정성 문제 | prevent_destroy 미설정, ignore_changes 오용 |
 | Minor | 개선 권장 | 네이밍, 태깅, provider 버전 |
+
+## 사용법
+
+```
+/review-pr:terraform 12                       # 현재 repo 의 PR #12
+/review-pr:terraform 12 Team-Ikujo/infra      # 특정 repo 의 PR
+```
+
+Terraform 파일이 포함된 PR 에서만 의미가 있다. 범용 리뷰는 `/review-pr` 사용.
+결과는 게시 전 사용자 확인을 거친다.

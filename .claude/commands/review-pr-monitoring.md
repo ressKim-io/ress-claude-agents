@@ -8,6 +8,13 @@
 - `alerting/*`, `dashboards/*`, `recording-rules/*`
 - OTel 설정 파일, Grafana provisioning 파일
 
+## 에이전트 실행 안전 규칙 (MANDATORY)
+
+리뷰 에이전트는 읽기와 격리된 재현만 한다. 레포 루트에서 설치·설정 명령
+(`install.sh`, `terraform apply`, `helm install` 등)을 실행하지 않으며, 재현이
+필요하면 `mktemp -d` 임시 디렉토리에서만 수행한다. 결과만 반환하고 외부 게시는
+메인 에이전트가 사용자 승인 후 실행한다. 상세: [`review-pr.md`](review-pr.md).
+
 ## 실행 절차
 
 ### 1. PR diff 확인
@@ -132,6 +139,15 @@ gh pr comment <PR번호> --repo <repo> --body "<종합된 리뷰>"
 /review-pr:monitoring 12                       # PR #12 모니터링 리뷰 (현재 repo)
 /review-pr:monitoring 12 Team-Ikujo/Goti-monitoring  # 특정 repo PR 리뷰
 ```
+
+## 출력 형식
+
+본문 §"코멘트 작성" 의 `## Code Review - Claude Code (Monitoring Specialist)` 템플릿을 그대로 따른다.
+요약 표(severity 별 건수) → severity 별 이슈 목록 → Good Practices 순이며, 각 이슈는
+`[CR-NNN] <관점 이모지> <제목>` + `confidence` + 파일/라인 + 현재 문제 + 수정 제안을 갖는다.
+
+**게시 전 사용자 확인 필수** — `user-approval.md` §리뷰 결과 게시 프로세스에 따라
+결과를 텍스트로 먼저 보여주고, 승인 후에만 `gh pr comment` 로 게시한다.
 
 ## 주의사항
 

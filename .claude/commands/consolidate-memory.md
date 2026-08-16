@@ -121,6 +121,21 @@ description: "MEMORY.md + memory/*.md 정리. stale/duplicate/orphan/repo-card �
 - frontmatter `type` 모르는 파일은 분류 제외 (기본 keep)
 - type=feedback/user 는 자동 처리 절대 안 함 (수동 조정 영역)
 
+## 출력 형식
+
+dry-run 기본. 분류별 대상과 근거를 출력한다.
+
+```
+[stale]      <항목>  마지막 참조 <날짜> — 삭제 후보
+[duplicate]  <항목A> ↔ <항목B> — 병합 후보
+[orphan]     <항목>  참조하는 자료 없음
+[repo-card]  <항목>  → repo-card 이관 후보
+[유지]       <건수>
+```
+
+마지막에 `적용하려면: /consolidate-memory --apply <category>` 안내를 붙인다.
+사용자 승인 없이 `MEMORY.md` / `memory/*.md` 를 변경하지 않는다.
+
 ## 인자
 
 `$ARGUMENTS` 가 주어지면:
