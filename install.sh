@@ -42,7 +42,7 @@ discover_modules() {
             fi
         done
     fi
-    echo "${modules[@]}"
+    echo ${modules[@]+"${modules[@]}"}
 }
 
 # Read modules dynamically
@@ -156,7 +156,7 @@ create_dir() {
 # Validate module name
 validate_module() {
     local mod="$1"
-    for valid_mod in "${ALL_MODULES[@]}"; do
+    for valid_mod in ${ALL_MODULES[@]+"${ALL_MODULES[@]}"}; do
         if [[ "$mod" == "$valid_mod" ]]; then
             return 0
         fi
@@ -363,7 +363,7 @@ while [[ $# -gt 0 ]]; do
             fi
             IFS=',' read -ra SELECTED_MODULES <<< "$2"
             # Validate modules
-            for mod in "${SELECTED_MODULES[@]}"; do
+            for mod in ${SELECTED_MODULES[@]+"${SELECTED_MODULES[@]}"}; do
                 if ! validate_module "$mod"; then
                     log_error "Invalid module: $mod"
                     log_error "Available modules: ${ALL_MODULES[*]}"
@@ -387,7 +387,7 @@ while [[ $# -gt 0 ]]; do
             fi
             # Support both --plugin A,B,C (comma) and repeated --plugin A --plugin B
             IFS=',' read -ra _NEW_PLUGINS <<< "$2"
-            for _p in "${_NEW_PLUGINS[@]}"; do
+            for _p in ${_NEW_PLUGINS[@]+"${_NEW_PLUGINS[@]}"}; do
                 [[ -n "$_p" ]] && PLUGIN_NAMES+=("$_p")
             done
             shift 2
@@ -403,7 +403,7 @@ while [[ $# -gt 0 ]]; do
             fi
             # Support both --workflow A,B,C (comma) and repeated --workflow A --workflow B
             IFS=',' read -ra _NEW_WORKFLOWS <<< "$2"
-            for _w in "${_NEW_WORKFLOWS[@]}"; do
+            for _w in ${_NEW_WORKFLOWS[@]+"${_NEW_WORKFLOWS[@]}"}; do
                 [[ -n "$_w" ]] && WORKFLOW_NAMES+=("$_w")
             done
             shift 2
@@ -502,7 +502,7 @@ if [[ "$INSTALL_ALL" == false && ${#SELECTED_MODULES[@]} -eq 0 && ${#PLUGIN_NAME
             ;;
         2)
             echo ""
-            for mod in "${ALL_MODULES[@]}"; do
+            for mod in ${ALL_MODULES[@]+"${ALL_MODULES[@]}"}; do
                 read -rp "  Include $mod? [y/N]: " -n 1 reply
                 echo ""
                 if [[ "$reply" =~ ^[Yy]$ ]]; then
@@ -538,7 +538,7 @@ fi
 
 # Set modules to install
 if [[ "$INSTALL_ALL" == true ]]; then
-    SELECTED_MODULES=("${ALL_MODULES[@]}")
+    SELECTED_MODULES=(${ALL_MODULES[@]+"${ALL_MODULES[@]}"})
 fi
 
 # Always include session in commands
@@ -564,8 +564,25 @@ else
     INSTALL_SUCCESS=false
 fi
 
+# Meta modules whose commands are also flattened to the commands root.
+# Rules (devlog-lifecycle.md / phase-workflow.md / code-review.md) reference these
+# by bare name (/where, /log-trouble, /review-pr, /phase-start), so the namespaced
+# form (/memory:where) alone would break those references. Same pattern as skills
+# installation below ("Also flatten to root for backward compat").
+# Domain modules (go/java/backend/...) are NOT flattened — they share basenames
+# (review.md, refactor.md, test-gen.md) and would collide.
+FLATTENED_COMMAND_MODULES=("memory" "review" "workflow")
+
+_is_flattened_module() {
+    local candidate="$1" m
+    for m in ${FLATTENED_COMMAND_MODULES[@]+"${FLATTENED_COMMAND_MODULES[@]}"}; do
+        [[ "$m" == "$candidate" ]] && return 0
+    done
+    return 1
+}
+
 # Install selected command modules
-for mod in "${SELECTED_MODULES[@]}"; do
+for mod in ${SELECTED_MODULES[@]+"${SELECTED_MODULES[@]}"}; do
     source_dir="$SCRIPT_DIR/commands/$mod"
     if [[ -d "$source_dir" ]]; then
         log_info "[$mod] Installing commands..."
@@ -574,6 +591,18 @@ for mod in "${SELECTED_MODULES[@]}"; do
         if backup_and_link "$source_dir" "$target" "$INSTALL_SCOPE" "dir"; then
             if [[ "$mod" != "session" ]]; then
                 INSTALLED_COMPONENTS+=("$mod commands")
+            fi
+
+            # Also flatten meta modules to the commands root so bare-name
+            # references in installed rules keep resolving.
+            if _is_flattened_module "$mod"; then
+                for cmd_file in "$source_dir"/*.md; do
+                    [[ -f "$cmd_file" ]] || continue
+                    cmd_name=$(basename "$cmd_file")
+                    if [[ ! -e "$TARGET_DIR/commands/$cmd_name" ]]; then
+                        ln -sf "$cmd_file" "$TARGET_DIR/commands/$cmd_name" 2>/dev/null || true
+                    fi
+                done
             fi
         else
             log_error "Failed to install $mod commands"
@@ -585,7 +614,7 @@ for mod in "${SELECTED_MODULES[@]}"; do
 done
 
 # Install plugin agents (supports multiple --plugin)
-for PLUGIN_NAME in "${PLUGIN_NAMES[@]}"; do
+for PLUGIN_NAME in ${PLUGIN_NAMES[@]+"${PLUGIN_NAMES[@]}"}; do
     resolve_plugin "$PLUGIN_NAME"
 
     log_info "[plugin:$PLUGIN_NAME] Installing agents..."
@@ -593,7 +622,7 @@ for PLUGIN_NAME in "${PLUGIN_NAMES[@]}"; do
     AGENTS_TARGET="$TARGET_DIR/agents"
     create_dir "$AGENTS_TARGET"
 
-    for agent in "${PLUGIN_AGENTS[@]}"; do
+    for agent in ${PLUGIN_AGENTS[@]+"${PLUGIN_AGENTS[@]}"}; do
         agent_file="$AGENTS_SOURCE/${agent}.md"
         agent_target="$AGENTS_TARGET/${agent}.md"
         if _check_and_mark_installed "$agent_target"; then
@@ -616,7 +645,7 @@ for PLUGIN_NAME in "${PLUGIN_NAMES[@]}"; do
         SKILLS_TARGET="$TARGET_DIR/skills"
         create_dir "$SKILLS_TARGET"
 
-        for category in "${PLUGIN_SKILL_CATEGORIES[@]}"; do
+        for category in ${PLUGIN_SKILL_CATEGORIES[@]+"${PLUGIN_SKILL_CATEGORIES[@]}"}; do
             cat_dir="$SKILLS_SOURCE/$category"
             if [[ -d "$cat_dir" ]]; then
                 create_dir "$SKILLS_TARGET/$category"
@@ -644,7 +673,7 @@ for PLUGIN_NAME in "${PLUGIN_NAMES[@]}"; do
 done
 
 # Install workflow (supports multiple --workflow)
-for WORKFLOW_NAME in "${WORKFLOW_NAMES[@]}"; do
+for WORKFLOW_NAME in ${WORKFLOW_NAMES[@]+"${WORKFLOW_NAMES[@]}"}; do
     resolve_workflow "$WORKFLOW_NAME"
 
     # Install workflow agents
@@ -654,7 +683,7 @@ for WORKFLOW_NAME in "${WORKFLOW_NAMES[@]}"; do
         AGENTS_TARGET="$TARGET_DIR/agents"
         create_dir "$AGENTS_TARGET"
 
-        for agent in "${WORKFLOW_AGENTS[@]}"; do
+        for agent in ${WORKFLOW_AGENTS[@]+"${WORKFLOW_AGENTS[@]}"}; do
             agent_file="$AGENTS_SOURCE/${agent}.md"
             agent_target="$AGENTS_TARGET/${agent}.md"
             if _check_and_mark_installed "$agent_target"; then
@@ -678,7 +707,7 @@ for WORKFLOW_NAME in "${WORKFLOW_NAMES[@]}"; do
         RULES_TARGET="$TARGET_DIR/rules"
         create_dir "$RULES_TARGET"
 
-        for rule in "${WORKFLOW_RULES[@]}"; do
+        for rule in ${WORKFLOW_RULES[@]+"${WORKFLOW_RULES[@]}"}; do
             rule_file="$RULES_SOURCE/${rule}.md"
             rule_target="$RULES_TARGET/${rule}.md"
             if _check_and_mark_installed "$rule_target"; then
@@ -702,7 +731,7 @@ for WORKFLOW_NAME in "${WORKFLOW_NAMES[@]}"; do
         SKILLS_TARGET="$TARGET_DIR/skills"
         create_dir "$SKILLS_TARGET"
 
-        for category in "${WORKFLOW_SKILL_CATEGORIES[@]}"; do
+        for category in ${WORKFLOW_SKILL_CATEGORIES[@]+"${WORKFLOW_SKILL_CATEGORIES[@]}"}; do
             cat_dir="$SKILLS_SOURCE/$category"
             if [[ -d "$cat_dir" ]]; then
                 create_dir "$SKILLS_TARGET/$category"
@@ -733,7 +762,7 @@ for WORKFLOW_NAME in "${WORKFLOW_NAMES[@]}"; do
         SKILLS_TARGET="$TARGET_DIR/skills"
         create_dir "$SKILLS_TARGET"
 
-        for skill_path in "${WORKFLOW_SKILL_INDIVIDUAL[@]}"; do
+        for skill_path in ${WORKFLOW_SKILL_INDIVIDUAL[@]+"${WORKFLOW_SKILL_INDIVIDUAL[@]}"}; do
             # skill_path format: category/skill-name (e.g., dx/spec-driven-development)
             skill_dir=$(dirname "$skill_path")
             skill_base=$(basename "$skill_path")
@@ -810,14 +839,14 @@ echo "Installed to: $TARGET_DIR"
 echo ""
 
 echo "Components:"
-for component in "${INSTALLED_COMPONENTS[@]}"; do
+for component in ${INSTALLED_COMPONENTS[@]+"${INSTALLED_COMPONENTS[@]}"}; do
     echo "  + $component"
 done
 
 if [[ ${#BACKUP_FILES[@]} -gt 0 ]]; then
     echo ""
     echo "Backup files created:"
-    for backup in "${BACKUP_FILES[@]}"; do
+    for backup in ${BACKUP_FILES[@]+"${BACKUP_FILES[@]}"}; do
         echo "  - $backup"
     done
 fi
@@ -831,7 +860,7 @@ fi
 echo "Available commands:"
 echo "  /session save  - Save session context"
 echo "  /session end   - End session and cleanup"
-for mod in "${SELECTED_MODULES[@]}"; do
+for mod in ${SELECTED_MODULES[@]+"${SELECTED_MODULES[@]}"}; do
     case $mod in
         backend)
             echo "  /backend review, /backend test-gen, /backend api-doc, /backend refactor"

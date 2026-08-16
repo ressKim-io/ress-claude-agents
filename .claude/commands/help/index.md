@@ -26,6 +26,20 @@ Go 백엔드 개발
 
 ---
 
+## Java
+
+Java 21+ / Spring Boot 3.x 개발
+
+| 명령어 | 설명 |
+|--------|------|
+| `/java review` | Java/Spring 코드를 리뷰합니다 (Virtual Threads, DI, Security) |
+| `/java test-gen` | JUnit 5 + Testcontainers 테스트를 생성합니다 |
+| `/java lint` | SonarQube/Qodana 정적 분석을 수행합니다 |
+| `/java refactor` | Modern Java 패턴 및 Virtual Threads 리팩토링을 제안합니다 |
+| `/java performance` | Native Image, CDS, GC 튜닝 등 성능 최적화를 제안합니다 |
+
+---
+
 ## Backend
 
 Java/Kotlin 백엔드 개발
@@ -78,15 +92,62 @@ Developer Experience
 
 ---
 
+## Memory & Dev-logs
+
+dev-log 작성·정리·승격, 지식 횡단 검색
+
+| 명령어 | 설명 |
+|--------|------|
+| `/log-trouble` | 트러블슈팅 과정을 기록합니다 (원인 분석, 해결, 회귀 테스트) |
+| `/log-decision` | 기술/아키텍처 의사결정을 기록합니다 (A vs B, 트레이드오프) |
+| `/log-meta` | Rule/Skill/Agent 추가·변경 사유를 기록합니다 |
+| `/log-feedback` | AI 출력 수정 요청을 기록합니다 (패턴 불일치, 누락) |
+| `/log-summary` | 현재 세션의 주요 활동을 자동 요약합니다 |
+| `/consolidate-devlogs` | dev-log tier 자동 산출, 클러스터 발견, superseded 식별 (dry-run) |
+| `/consolidate-memory` | MEMORY.md + memory/*.md 정리, stale/duplicate 분류 (dry-run) |
+| `/promote-devlog` | Tier 2 dev-log를 ADR/skill로 승격 (Episodic → Semantic) |
+| `/archive-devlog` | Tier 4 dev-log를 _archive/로 이동, replaced_by 링크 보존 |
+| `/where` | 키워드로 INDEX/repo-cards/MEMORY/dev-logs 횡단 검색 |
+| `/related` | 개념·주제로 dev-logs/ADR/memory를 timeline 순으로 묶어 반환 |
+
+---
+
+## PR Review
+
+다관점 PR 코드 리뷰
+
+| 명령어 | 설명 |
+|--------|------|
+| `/review-pr` | PR 코드 리뷰를 3개 관점의 에이전트로 병렬 실행해 종합합니다 |
+| `/review-pr-k8s` | K8s/Helm/ArgoCD 영역 PR을 3개 전문 관점으로 병렬 리뷰합니다 |
+| `/review-pr-monitoring` | 모니터링 영역 PR을 3개 전문 관점으로 병렬 리뷰합니다 |
+| `/review-pr-terraform` | Terraform PR을 3개 전문 관점으로 병렬 리뷰합니다 |
+
+---
+
+## Workflow
+
+SDD Phase 게이트 워크플로우
+
+| 명령어 | 설명 |
+|--------|------|
+| `/phase-start` | SDD Phase 게이트 작업 시작 (11항목 체크리스트 + Gate 1-5) |
+
+---
+
 ## 상세 도움말
 
 ```
 /help session    # Session 명령어
 /help go    # Go 명령어
+/help java    # Java 명령어
 /help backend    # Backend 명령어
 /help k8s    # Kubernetes 명령어
 /help terraform    # Terraform 명령어
 /help dx    # DX 명령어
+/help memory    # Memory & Dev-logs 명령어
+/help review    # PR Review 명령어
+/help workflow    # Workflow 명령어
 ```
 
 ---

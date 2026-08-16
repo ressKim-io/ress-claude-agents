@@ -76,6 +76,24 @@ get_category_icon() {
     yq -r ".categories.${category}.icon // \"\"" "${MANIFEST_FILE}"
 }
 
+# flatten: true 카테고리는 install.sh 가 commands 루트에도 심볼릭 링크를 만들어
+# bare 이름(/where)으로 호출된다. 네임스페이스 형태(/memory where)로 표기하면
+# 실제 호출법과 어긋나므로 help 출력에서 구분한다.
+is_flattened_category() {
+    local category="$1"
+    [[ "$(yq -r ".categories.${category}.flatten // false" "${MANIFEST_FILE}")" == "true" ]]
+}
+
+# 카테고리 + 명령 이름 → 사용자가 실제로 입력하는 호출 문자열
+format_command_invocation() {
+    local category="$1" cmd_name="$2"
+    if is_flattened_category "${category}"; then
+        printf '/%s' "${cmd_name}"
+    else
+        printf '/%s %s' "${category}" "${cmd_name}"
+    fi
+}
+
 get_commands_by_category() {
     local category="$1"
     yq -r ".commands[] | select(.category == \"${category}\") | .id" "${MANIFEST_FILE}"
@@ -128,7 +146,7 @@ generate_help_index() {
             cmd_name="${cmd_id#"${category}-"}"
             cmd_desc=$(get_command_description "${cmd_id}")
 
-            output+="| \`/${category} ${cmd_name}\` | ${cmd_desc} |\n"
+            output+="| \`$(format_command_invocation "${category}" "${cmd_name}")\` | ${cmd_desc} |\n"
         done
 
         output+="\n---\n\n"
