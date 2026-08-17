@@ -20,8 +20,10 @@ section_aliases() {
     case "$1" in
         "Contract")      printf '%s\n' "입력" "수집할 정보" "대상 파일 패턴" ;;
         "Checklist")     printf '%s\n' "실행 절차" "체크리스트" ;;
-        "Output Format") printf '%s\n' "출력 형식" ;;
-        "Usage")         printf '%s\n' "사용 예시" "사용법" ;;
+        # "코멘트 양식" 은 리뷰 계열 명령의 출력 규격 그 자체다 (PR 코멘트 템플릿).
+        "Output Format") printf '%s\n' "출력 형식" "코멘트 양식" ;;
+        # "인자" 는 명령의 호출 계약(받는 인자 규격) — Usage 의 한국어 표현.
+        "Usage")         printf '%s\n' "사용 예시" "사용법" "인자" ;;
     esac
 }
 

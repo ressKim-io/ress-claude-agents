@@ -69,5 +69,15 @@ tags: [{tag1}, {tag2}]
 - path/to/file
 ```
 
+## 사용법
+
+```
+/log-trouble                          # 현재 대화 맥락에서 자동 추출
+/log-trouble ArgoCD sync stuck        # 제목/Context 로 활용할 요약 전달
+```
+
+인자를 생략하면 대화 맥락에서 증상·원인·해결을 추출한다. 부족한 정보는 질문한다.
+산출물: `docs/dev-logs/YYYY-MM-DD-{slug}.md` (`category: troubleshoot`).
+
 오늘 날짜: $CURRENT_DATE
 인자가 주어지면 해당 내용을 제목/Context로 활용하라: $ARGUMENTS

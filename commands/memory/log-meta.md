@@ -55,5 +55,15 @@ tags: [{tag1}, {tag2}]
 - path/to/file
 ```
 
+## 사용법
+
+```
+/log-meta                             # 현재 세션의 rule/skill/agent 변경 자동 추출
+/log-meta add multi-tool-adapter rule # 변경 대상 전달
+```
+
+rules / skills / agents / commands 를 추가·변경한 직후 호출한다.
+산출물: `docs/dev-logs/YYYY-MM-DD-{slug}.md` (`category: meta`).
+
 오늘 날짜: $CURRENT_DATE
 인자가 주어지면 해당 내용을 제목/Context로 활용하라: $ARGUMENTS

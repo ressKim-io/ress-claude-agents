@@ -15,6 +15,7 @@
 #                  .claude/commands/ 최상위 동명 파일과 내용 일치
 #   3. shared    : manifest.yml / help/index.md 동일
 #   4. coverage  : 설치되는 rule 이 참조하는 bare 명령이 설치 소스에 존재
+#   5. ssot      : flatten 모듈 목록이 manifest.yml 과 install.sh 에서 일치
 #
 # 사용:
 #   ./scripts/validate-commands-drift.sh            # 전체 (CI 기본)
@@ -22,6 +23,7 @@
 #   ./scripts/validate-commands-drift.sh flattened
 #   ./scripts/validate-commands-drift.sh shared
 #   ./scripts/validate-commands-drift.sh coverage
+#   ./scripts/validate-commands-drift.sh ssot
 #
 # Exit code: 0 = 통과, 1 = 실패
 
@@ -33,8 +35,26 @@ cd "$ROOT"
 SRC="commands"
 WORK=".claude/commands"
 
-# flatten 모듈: install.sh 의 FLATTENED_COMMAND_MODULES 와 일치해야 한다.
-FLATTEN_MODULES=("memory" "review" "workflow")
+# flatten 모듈의 SSOT 는 commands/manifest.yml 의 `categories.<name>.flatten: true` 다
+# (scripts/generate-docs.sh 의 is_flattened_category() 도 같은 필드를 읽는다).
+# 여기서 하드코딩하면 SSOT 가 3곳으로 갈라지므로 manifest 에서 읽어온다.
+# install.sh 는 yq 의존을 피하는 설계라 자체 배열을 갖는데, 그 일치 여부는
+# check_flatten_ssot() 가 검증한다.
+read_flatten_modules_from_manifest() {
+    yq -r '.categories | to_entries[] | select(.value.flatten == true) | .key' \
+        "$SRC/manifest.yml" 2>/dev/null | sort
+}
+
+FLATTEN_MODULES=()
+while IFS= read -r _m; do
+    [[ -n "$_m" ]] && FLATTEN_MODULES+=("$_m")
+done < <(read_flatten_modules_from_manifest)
+
+if [[ ${#FLATTEN_MODULES[@]} -eq 0 ]]; then
+    printf 'FAIL  %s 에서 flatten 카테고리를 읽지 못했습니다 (yq 미설치 또는 manifest 손상)\n' \
+        "$SRC/manifest.yml" >&2
+    exit 1
+fi
 
 EXIT_CODE=0
 
@@ -69,7 +89,7 @@ check_modules() {
         fi
         if ! diff -rq "$SRC/$mod" "$WORK/$mod" >/dev/null 2>&1; then
             log_fail "모듈 '$mod' 내용 불일치"
-            diff -rq "$SRC/$mod" "$WORK/$mod" 2>&1 | sed 's/^/        /'
+            diff -rq "$SRC/$mod" "$WORK/$mod" 2>&1 | sed 's/^/        /' || true
             mismatched=$((mismatched + 1))
         fi
         checked=$((checked + 1))
@@ -85,7 +105,9 @@ check_modules() {
         fi
     done
 
-    [[ $mismatched -eq 0 ]] && log_pass "공유 모듈 ${checked}개 동일"
+    if [[ $mismatched -eq 0 ]]; then
+        log_pass "공유 모듈 ${checked}개 동일"
+    fi
 }
 
 # ---------------------------------------------------------------------------
@@ -134,7 +156,9 @@ check_flattened() {
         fi
     done
 
-    [[ $mismatched -eq 0 ]] && log_pass "flatten 명령 ${checked}개 일치"
+    if [[ $mismatched -eq 0 ]]; then
+        log_pass "flatten 명령 ${checked}개 일치"
+    fi
 }
 
 # ---------------------------------------------------------------------------
@@ -156,7 +180,9 @@ check_shared() {
         fi
     done
 
-    [[ $mismatched -eq 0 ]] && log_pass "manifest.yml / help/index.md 동일"
+    if [[ $mismatched -eq 0 ]]; then
+        log_pass "manifest.yml / help/index.md 동일"
+    fi
 }
 
 # ---------------------------------------------------------------------------
@@ -184,7 +210,10 @@ check_coverage() {
         fi
         checked=$((checked + 1))
     done < <(
-        grep -rhoE '/[a-z][a-z0-9]+(-[a-z0-9]+)+' .claude/rules/ 2>/dev/null \
+        # 하이픈을 강제하면 /where /related 같은 단일 단어 명령을 놓친다 —
+        # 하필 이 검사가 보호하려는 대상이다. 아래 존재 여부 필터가 URL·경로
+        # 조각을 걸러주므로 패턴을 넓혀도 오탐 위험은 낮다.
+        grep -rhoE '/[a-z][a-z0-9]*(-[a-z0-9]+)*' .claude/rules/ 2>/dev/null \
           | sed 's|^/||' | sort -u \
           | while IFS= read -r c; do
                 # 실제 명령 파일이 어느 한쪽 트리에 존재하는 이름만 대상으로 한다
@@ -195,7 +224,39 @@ check_coverage() {
             done
     )
 
-    [[ $missing -eq 0 ]] && log_pass "rule 참조 명령 ${checked}개 전부 설치 가능"
+    if [[ $missing -eq 0 ]]; then
+        log_pass "rule 참조 명령 ${checked}개 전부 설치 가능"
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# 5. flatten 모듈 목록 SSOT 일치
+# ---------------------------------------------------------------------------
+# manifest.yml(SSOT) / install.sh(FLATTENED_COMMAND_MODULES) 두 곳이 갈라지면
+# manifest 는 flatten 인데 install 은 안 하거나(설치 시 bare 이름 누락), 반대로
+# install 만 flatten 해서 help 출력이 실제 호출법과 어긋난다.
+check_flatten_ssot() {
+    section "flatten 모듈 SSOT 일치 (manifest ↔ install.sh)"
+
+    local from_manifest from_install
+    from_manifest=$(printf '%s\n' "${FLATTEN_MODULES[@]}" | sort | tr '\n' ' ')
+
+    # install.sh 의 배열 리터럴에서 추출 (yq 의존 없이 유지되는 쪽)
+    from_install=$(sed -n 's/^FLATTENED_COMMAND_MODULES=(\(.*\))$/\1/p' install.sh \
+        | tr -d '"' | tr ' ' '\n' | grep -v '^$' | sort | tr '\n' ' ')
+
+    if [[ -z "$from_install" ]]; then
+        log_fail "install.sh 에서 FLATTENED_COMMAND_MODULES 를 찾지 못했습니다"
+        return
+    fi
+
+    if [[ "$from_manifest" == "$from_install" ]]; then
+        log_pass "flatten 모듈 일치: ${from_manifest% }"
+    else
+        log_fail "flatten 모듈 불일치"
+        printf '        manifest.yml : %s\n' "${from_manifest% }"
+        printf '        install.sh   : %s\n' "${from_install% }"
+    fi
 }
 
 # ---------------------------------------------------------------------------
@@ -206,7 +267,9 @@ main() {
         flattened) check_flattened ;;
         shared)    check_shared ;;
         coverage)  check_coverage ;;
+        ssot)      check_flatten_ssot ;;
         all)
+            check_flatten_ssot
             check_modules
             check_flattened
             check_shared
@@ -214,7 +277,7 @@ main() {
             ;;
         *)
             printf 'Unknown target: %s\n' "$target" >&2
-            printf 'Usage: %s [all|modules|flattened|shared|coverage]\n' "$0" >&2
+            printf 'Usage: %s [all|ssot|modules|flattened|shared|coverage]\n' "$0" >&2
             exit 2
             ;;
     esac

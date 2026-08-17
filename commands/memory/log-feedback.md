@@ -55,5 +55,15 @@ tags: [{tag1}, {tag2}]
 - path/to/file
 ```
 
+## 사용법
+
+```
+/log-feedback                         # 직전 수정 요청 맥락에서 자동 추출
+/log-feedback 커밋 메시지 형식 어긋남   # 피드백 요지 전달
+```
+
+같은 지적이 3회 누적되면 rule 또는 skill 보강 후보다.
+산출물: `docs/dev-logs/YYYY-MM-DD-{slug}.md` (`category: meta`).
+
 오늘 날짜: $CURRENT_DATE
 인자가 주어지면 해당 내용을 제목/Context로 활용하라: $ARGUMENTS

@@ -145,6 +145,19 @@ superseded 5건 발견:
 batch 1 (3건) 승인하시겠습니까? [y/n]
 ```
 
+## 출력 형식
+
+dry-run 은 적용 없이 아래 3블록을 출력한다.
+
+```
+[archive 미리보기]
+이동:      docs/dev-logs/<slug>.md → docs/dev-logs/_archive/<slug>.md
+frontmatter: status → superseded, replaced_by: <대체 자료 경로>
+인용 갱신:  <인용한 파일 목록> (--keep-citations 시 스킵)
+```
+
+`--apply` 시 위 3블록을 실제 수행한 결과를 동일 형식으로 다시 출력한다.
+
 ## 학계 근거
 
 - **Cold Storage**: 메타데이터 유지 + 본문 archive 분리

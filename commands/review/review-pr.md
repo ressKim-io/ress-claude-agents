@@ -2,6 +2,31 @@
 
 PR 코드 리뷰를 3개 관점의 에이전트로 병렬 실행하여 종합한다.
 
+## 입력
+
+| 인자 | 필수 | 설명 |
+|---|---|---|
+| PR 번호 | ✅ | 리뷰 대상 PR (예: `12`) |
+| repo | — | `owner/name`. 생략 시 현재 repo |
+
+전제: `gh` 인증 완료, 대상 PR 의 diff 조회 가능. diff 가 비어 있으면 중단한다.
+
+## 에이전트 실행 안전 규칙 (MANDATORY)
+
+리뷰 에이전트는 **읽기와 격리된 재현만** 한다. 아래를 반드시 프롬프트에 포함한다.
+
+- **레포 루트에서 설치·설정 명령 실행 금지** — `install.sh`, `npm i`, `make install`,
+  파일을 생성·이동·삭제하는 스크립트 일체. 동작 재현이 필요하면 **`mktemp -d` 로 만든
+  임시 디렉토리에서만** 실행하고 종료 시 제거한다.
+- 검증 목적이라도 작업 트리를 수정하지 않는다. 수정이 불가피하면 사본에서 한다.
+- 결과만 반환한다. `gh pr comment` 등 외부 게시를 에이전트가 직접 실행하지 않는다
+  (`user-approval.md` §에이전트 실행 규칙).
+
+> **근거**: 2026-08-16 PR #32 리뷰에서 에이전트가 `backup_and_link` 동작을 실증하려고
+> 레포 루트에서 `install.sh --local --all --with-skills` 를 실행했다. `.claude/skills`
+> 260개 파일이 `skills.backup` 으로 밀리고 command 모듈 7개가 대체됐으며,
+> `.gitignore` 의 `*.backup` 때문에 `git status` 에도 잡히지 않아 발견이 늦었다.
+
 ## 실행 절차
 
 ### 1. PR diff 확인
@@ -185,6 +210,15 @@ gh pr comment <PR번호> --repo <repo> --body "<종합된 리뷰>"
 /review-pr 12                    # PR #12 리뷰 (현재 repo)
 /review-pr 12 Team-Ikujo/Goti-k8s  # 특정 repo PR 리뷰
 ```
+
+## 출력 형식
+
+본문 §"코멘트 작성" 의 `## Code Review - Claude Code (Multi-Perspective)` 템플릿을 그대로 따른다.
+요약 표(severity 별 건수) → severity 별 이슈 목록 → Good Practices 순이며, 각 이슈는
+`[CR-NNN] <관점 이모지> <제목>` + `confidence` + 파일/라인 + 현재 문제 + 수정 제안을 갖는다.
+
+**게시 전 사용자 확인 필수** — `user-approval.md` §리뷰 결과 게시 프로세스에 따라
+결과를 텍스트로 먼저 보여주고, 승인 후에만 `gh pr comment` 로 게시한다.
 
 ## 주의사항
 

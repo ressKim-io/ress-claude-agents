@@ -11,14 +11,16 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 
 이 레포는 **AI 코딩 에이전트용 재사용 가능한 룰/스킬/에이전트 컬렉션**이다. 다른 프로젝트에 install되어 코딩 표준과 도메인 지식을 제공한다.
 
-| 자산 | 위치 | 개수 |
+> **개수는 여기 쓰지 않는다.** CI 는 [inventory.yml](.claude/inventory.yml) 신선도는 검사하지만 산문에 박힌 숫자는 검사하지 않아 반드시 drift 한다 — 실제로 "274 skills"(실제 260) / "25 rules"(실제 26) 가 각각 방치됐다. 현재 수치는 `summary` 참조: `yq '.summary' .claude/inventory.yml`
+
+| 자산 | 위치 | 내용 |
 |---|---|---|
-| Skills (도메인 패턴) | `.claude/skills/` | 22 카테고리 (Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등). 개수는 [inventory.yml](.claude/inventory.yml) `summary.skills` 참조 |
-| Agents (전문 에이전트) | `.claude/agents/` | 49개 (database-expert, k8s-troubleshooter, saga-agent, business-decision-agent 등) |
-| Rules (코딩/보안/워크플로우) | `.claude/rules/` | 25개 (이 AGENTS.md의 상세판, effort-guide 포함) |
-| Templates (작성 표준) | `.claude/templates/` | SKILL-SPEC, AGENT-SPEC + 7개 template (신규 자산 작성 spec) |
-| Plugins (역할별 번들) | `plugins/*.yml` | 12 bundles |
-| Workflows (시나리오 번들) | `.claude/workflows/*.yml` | 11 scenarios |
+| Skills (도메인 패턴) | `.claude/skills/` | 22 카테고리 — Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등 |
+| Agents (전문 에이전트) | `.claude/agents/` | database-expert, k8s-troubleshooter, saga-agent, business-decision-agent 등 |
+| Rules (코딩/보안/워크플로우) | `.claude/rules/` | 이 AGENTS.md의 상세판. effort-guide, multi-tool-adapter 포함 |
+| Templates (작성 표준) | `.claude/templates/` | SKILL-SPEC, AGENT-SPEC + 문서 template (신규 자산 작성 spec) |
+| Plugins (역할별 번들) | `plugins/*.yml` | 역할별 agent + skill 카테고리 묶음 |
+| Workflows (시나리오 번들) | `.claude/workflows/*.yml` | 시나리오별 stage 정의 (`_base.yml` 병합) |
 
 **중요**: K8s/Cloud/Monitoring 섹션의 룰은 **install된 프로젝트**에 적용된다 (이 메타 레포 자체엔 K8s 없음).
 

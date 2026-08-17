@@ -159,6 +159,19 @@ description: "{한 줄 요약}"
 → 사용자 승인 대기
 ```
 
+## 출력 형식
+
+승격 경로에 따라 산출물이 다르다. 어느 경우든 원본 dev-log 는 삭제하지 않고
+`replaced_by` 메타만 추가한다.
+
+```
+[승격 미리보기]
+경로:   ADR | skill 보강 | rule 보강
+산출물: docs/adr/NNNN-<제목>.md  (또는 대상 skill/rule 경로)
+원본:   docs/dev-logs/<slug>.md  → replaced_by: <산출물 경로> 추가
+근거:   같은 주제 dev-log <건수>건 누적
+```
+
 ## 학계 근거
 
 - **Episodic → Semantic 변환**: 개별 사건 (dev-log) → 일반화된 지식 (ADR/skill)
