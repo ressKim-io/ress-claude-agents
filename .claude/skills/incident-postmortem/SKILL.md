@@ -1,5 +1,6 @@
 ---
 name: incident-postmortem
+category: operations
 description: 인시던트 회고 표준 + Blameless 문화 — Severity 분류(SEV1~4), 24/48/72h 회고 SLA, postmortem 템플릿(timeline/impact/RCA 5 Whys/lessons/action items), Etsy "Just Culture" 5 questions, action item 70% 룰, repeating incident 분석, 외부 통신(status page/학부모 공지), 위치정보법/PIPA 24h 신고 의무. observability-incident-playbook의 Stage 5 분리/심화.
 license: MIT
 ---

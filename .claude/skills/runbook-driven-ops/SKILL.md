@@ -1,5 +1,6 @@
 ---
 name: runbook-driven-ops
+category: operations
 description: SRE Runbook 표준 + 실행 자동화 — preventive/reactive/recovery/change 분류, 작성 템플릿(trigger/prereq/steps/verify/rollback/escalation), 자동화 단계(수동→semi→auto-remediation), MTTR/false-trigger 메트릭, on-call 핸드오프, alert↔runbook drift 방지(CI). Phase 안정화·on-call 표준화 hub.
 license: MIT
 ---
