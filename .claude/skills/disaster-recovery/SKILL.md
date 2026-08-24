@@ -1,5 +1,6 @@
 ---
 name: disaster-recovery
+category: sre
 description: "Disaster Recovery 가이드 — DR 전략, RTO/RPO 정의, Velero 백업, 멀티 클러스터 복구 Use when working with sre 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false
