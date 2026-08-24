@@ -356,19 +356,23 @@ harness 축에서 **이미 앞서 있는** 부분이다. 정리 작업 중 훼�
 
 > Step 2 수행 중 새로 발견한 2건은 **Step 5** 로 분리했다 (Step 2 잔여가 아니라 별개 작업).
 
-### Step 3 — agent 14개 강등 (F6 / F7)
+### Step 3 — agent 강등 (F6 / F7) ✅ 완료 2026-08-24
 
 - [x] **판정 오탐 정정 (F7)** — `## Output Template` 미매칭으로 5개 오분류. 강등 19 → **14**, borderline 11 → **16** (§3.1 / §3.3.1 / 부록 A)
 - [x] 강등 14개와 기존 skill 260개의 **전수 중복 대조** → §3.5 표 (B 폐기 5 / C 신규이관 7 / D 분할 2)
-- [ ] **검증 게이트 1건** — `load-tester-gatling` → `sre/load-testing-gatling`. 참조 0건 / 중복 0건이라 최소 위험으로 전 경로(신규 skill → agent 삭제 → inventory → validator) 관통
-- [ ] B 폐기 5건 — 고유분 흡수 후 agent 삭제
-- [ ] C 신규 이관 7건 — 신규 skill 생성 후 agent 삭제
-- [ ] D 분할 2건 — `go-performance`/`go-security`, `jvm-performance`/`spring-security-review`
-- [ ] 재판정 5건 (§3.3.1) — agent 유지, 본문 skill 중복분 삭제 → 참조로 대체
-- [ ] borderline 11개 재판정 (강등 / 유지 / 보강)
-- [ ] `plugins/*.yml`(55건), `.claude/workflows/*.yml`, `inventory.yml` 참조 갱신
-- [ ] **skill 본문의 `**관련 agent**:` 상호참조 일괄 정리** — 같은 파일이 여러 agent 를 참조하므로 강등 전건 완료 후 한 번에 sweep (multi-tenancy / media-handling / audit-log / data-subject-rights / credit-system / subscription-billing / kr-location-info-act 등)
-- [ ] dev-log 1건
+- [x] **검증 게이트 1건** — `load-tester-gatling` → `sre/load-testing-gatling`. skill 로드 실측 + install 스모크로 전 경로 확인
+- [x] B 폐기 5건 — 고유분 흡수 후 agent 삭제
+- [x] C 신규 이관 7건 — 신규 skill 생성 후 agent 삭제
+- [x] D 분할 2건 — `go-performance`/`go-security`, `jvm-performance`/`spring-security-review`
+- [x] 재판정 5건 (§3.3.1) — agent 유지, 본문 skill 중복분 삭제 → 참조 표로 대체
+- [x] borderline 재판정 (§3.6) — `migration-expert`/`tech-lead` 정당 승격, `pr-review-bot` 강등
+- [x] `plugins/*.yml`, `.claude/workflows/*.yml`, `inventory.yml` 참조 갱신
+- [x] **skill 본문 `**관련 agent**:` 상호참조 일괄 sweep** (13개 skill)
+- [x] dev-log — [`2026-08-24-step3-agent-tier-demotion.md`](../dev-logs/2026-08-24-step3-agent-tier-demotion.md)
+
+> 결과: agents 49→34 (19,819→12,736줄) / skills 260→272. 강등 대상 0.
+> 신규 skill 12개. §3.4 과잉 분할 2건도 해소.
+> 부수 발견: workflow `skills:` 목록의 dangling 참조 — 일부 수정, 나머지는 **검증 CI job 부재**로 Step 5 에 편입.
 
 ### Step 4 — harness 리트로핏
 
@@ -388,18 +392,19 @@ Step 2 수행 중 발견. Step 3·4 와 독립이며 순서 제약 없다.
 
 - [ ] `--plugin X --with-skills` 가 260개 전부 설치한다. `WITH_SKILLS` 전체 설치 블록이 `backup_and_link ... "dir"` 로 plugin 산출물을 덮어써 **plugin 의 범위 축소 기능이 죽어 있다**. `git stash` 후 HEAD 에서도 261개 설치로 재현 — **기존 결함이며 Step 2 의 회귀가 아니다**. [ADR 0007](../adr/0007-install-sh-narrow-scope.md) / PR-8 영역
 - [ ] `validate-schemas.sh` 를 CI job 으로 편입할지 결정 — 현재 CI 에 없어서 Step 1 이 발견한 `.agents/` dangling ref 실패가 방치돼 있었다. 미편입이면 같은 류가 다시 방치된다
+- [ ] **workflow `skills:` 참조 검증** (Step 3 발견) — `.claude/workflows/*.yml` 의 skill 참조가 실제 skill 과 어긋나도 install.sh 가 조용히 건너뛴다. 미검출 잔여: `kubernetes/k8s-cluster-evolution` `kubernetes/k8s-troubleshooting` `sre/finops-fundamentals` `sre/finops-unit-economics` `sre/load-testing-strategy`
 - [ ] dev-log 1건
 
 ---
 
 ## 7. 세션 재개 절차
 
-**현재 상태 (2026-08-24 기준)**: Step 1 ✅ / Step 2 ✅ / **Step 3 진행 중** (대조 완료, 이관 대기) / **Step 4 · 5 대기**.
+**현재 상태 (2026-08-24 기준)**: Step 1 ✅ / Step 2 ✅ / Step 3 ✅ / **Step 4 · 5 대기**.
 작업 브랜치 `docs/harness-readiness-audit` — `origin` 에 push 완료 (`git status -sb` 로 동기 상태 확인).
 
 1. 본 문서 §6 에서 미체크 항목 확인 — `grep -n "^- \[ \]" docs/audit/2026-08-24-agent-harness-readiness.md`
 2. dev-log 로 직전 세션 맥락 복원 (최신순):
-   [step2](../dev-logs/2026-08-24-step2-skill-skillmd-migration.md) → [step1](../dev-logs/2026-08-24-step1-agent-spec-modernization.md) → [측정 audit](../dev-logs/2026-08-24-harness-engineering-audit.md)
+   [step3](../dev-logs/2026-08-24-step3-agent-tier-demotion.md) → [step2](../dev-logs/2026-08-24-step2-skill-skillmd-migration.md) → [step1](../dev-logs/2026-08-24-step1-agent-spec-modernization.md) → [측정 audit](../dev-logs/2026-08-24-harness-engineering-audit.md)
 3. [부록 A](#부록-a-재측정-명령) 로 현재 수치 재측정 — 본 문서 수치와 다르면 **본 문서를 먼저 갱신**
 4. Step 순서:
    - **Step 3** 은 Step 2 를 전제로 한다 (옮겨갈 곳이 실제로 동작해야 강등 가능) → 전제 충족됨
