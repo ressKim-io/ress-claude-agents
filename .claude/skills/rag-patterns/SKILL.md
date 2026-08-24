@@ -1,5 +1,6 @@
 ---
 name: rag-patterns
+category: ai
 description: "RAG Patterns — RAG(Retrieval-Augmented Generation) 아키텍처, 청킹 전략, 임베딩 모델, 검색 최적화 Use when working with ai 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

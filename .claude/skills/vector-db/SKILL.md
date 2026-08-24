@@ -1,5 +1,6 @@
 ---
 name: vector-db
+category: ai
 description: "Vector Database — 벡터 데이터베이스 비교, 인덱싱 전략, ANN 알고리즘, 운영 패턴 Use when working with ai 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false
