@@ -58,7 +58,7 @@ stages:
     agent: load-tester
     inputs: [api-contract, code]
     outputs: [load-test-report]
-    skills: [sre/load-testing-strategy]
+    skills: [sre/load-testing]
 
   - name: record
     agent: dev-logger

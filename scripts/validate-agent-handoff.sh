@@ -262,6 +262,71 @@ check_workflows() {
 }
 
 # ---------------------------------------------------------------------------
+# workflow / plugin 의 skill 참조가 실제 skill 을 가리키는지 검증
+#
+# install.sh 는 존재하지 않는 skill 참조를 조용히 건너뛴다. 그래서 이름이 바뀌거나
+# skill 이 사라져도 아무도 모르게 죽어 있었다 — 2026-08-24 Step 3 에서 11건 발견.
+# workflow yml 은 `<category>/<skill-name>` 표기를 유지하므로 마지막 세그먼트로 대조한다.
+# 근거: docs/audit/2026-08-24-agent-harness-readiness.md §6 Step 5
+# ---------------------------------------------------------------------------
+check_skill_refs() {
+    section "workflow / plugin 의 skill·category 참조"
+
+    local skill_names skill_cats violations=0
+    skill_names=$(find .claude/skills -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort -u)
+    skill_cats=$(grep -h '^category:' .claude/skills/*/SKILL.md | sed 's/^category:[[:space:]]*//' | sort -u)
+
+    local refs
+    refs=$(awk '
+        # skills: [a/b, c/d]  또는  skills: / individual: 아래의 "- a/b"
+        /^[[:space:]]*skills:[[:space:]]*\[/ {
+            line = $0; sub(/.*\[/, "", line); sub(/\].*/, "", line)
+            n = split(line, parts, /,/)
+            for (i = 1; i <= n; i++) {
+                gsub(/^[[:space:]]+|[[:space:]]+$/, "", parts[i])
+                if (parts[i] != "") print FILENAME ":" FNR "\t" parts[i]
+            }
+            next
+        }
+        /^[[:space:]]*(skills|individual):[[:space:]]*$/ { inlist = 1; next }
+        inlist && /^[[:space:]]*-[[:space:]]+[^[:space:]]+[[:space:]]*$/ {
+            ref = $2; print FILENAME ":" FNR "\t" ref; next
+        }
+        inlist && /^[[:space:]]*[^[:space:]#-]/ { inlist = 0 }
+    ' .claude/workflows/*.yml)
+
+    while IFS=$'\t' read -r loc ref; do
+        [[ -z "$ref" ]] && continue
+        local name="${ref##*/}"
+        if ! grep -qxF "$name" <<< "$skill_names"; then
+            printf '        MISSING  %s  →  %s\n' "$loc" "$ref"
+            violations=$((violations + 1))
+        fi
+    done <<< "$refs"
+
+    local cat_refs
+    cat_refs=$(awk '
+        /^[[:space:]]*categories:[[:space:]]*$/ { inlist = 1; next }
+        inlist && /^[[:space:]]*-[[:space:]]+[^[:space:]]+[[:space:]]*$/ { print FILENAME ":" FNR "\t" $2; next }
+        inlist && /^[[:space:]]*[^[:space:]#-]/ { inlist = 0 }
+    ' plugins/*.yml .claude/workflows/*.yml)
+
+    while IFS=$'\t' read -r loc cat; do
+        [[ -z "$cat" ]] && continue
+        if ! grep -qxF "$cat" <<< "$skill_cats"; then
+            printf '        MISSING  %s  →  category:%s\n' "$loc" "$cat"
+            violations=$((violations + 1))
+        fi
+    done <<< "$cat_refs"
+
+    if [[ $violations -gt 0 ]]; then
+        log_fail "죽은 skill/category 참조: ${violations}건 (install.sh 가 조용히 건너뛴다)"
+    else
+        log_pass "workflow / plugin 의 skill·category 참조 전부 실재함"
+    fi
+}
+
+# ---------------------------------------------------------------------------
 # Dispatch
 # ---------------------------------------------------------------------------
 main() {
@@ -275,17 +340,21 @@ main() {
         workflows)
             check_workflows
             ;;
+        skill-refs)
+            check_skill_refs
+            ;;
         all)
             check_agents_registered
             check_vocabulary
             check_workflows
+            check_skill_refs
             ;;
         -h|--help|help)
             sed -n '2,20p' "$0"
             exit 0
             ;;
         *)
-            printf 'unknown: %s\n사용법: %s [all|agents|vocabulary|workflows]\n' "$1" "$0" >&2
+            printf 'unknown: %s\n사용법: %s [all|agents|vocabulary|workflows|skill-refs]\n' "$1" "$0" >&2
             exit 2
             ;;
     esac

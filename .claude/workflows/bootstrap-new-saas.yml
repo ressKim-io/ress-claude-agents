@@ -75,7 +75,7 @@ stages:
     outputs: [migration-plan, upgrade-plan]
     skills:
       - infrastructure/ec2-cd-pipeline
-      - kubernetes/k8s-cluster-evolution
+      - infrastructure/compose-to-k8s
     description: "Phase 0(EC2/compose) → Phase 1(kind/k3s) → Phase 2(EKS/GKE) → Phase 3(multi-cluster). ADR의 Provider 결정 반영"
 
   - name: slo-design
@@ -93,8 +93,8 @@ stages:
     inputs: [mvp-scope, adr, platform-blueprint]
     outputs: [adr, action-items, tech-radar-entry]
     skills:
-      - sre/finops-fundamentals
-      - sre/finops-unit-economics
+      - sre/finops
+      - sre/finops-advanced
       - sre/finops-ai
     description: "Provider별 수수료 + 인프라 비용 + Unit Economics 사전 추정. Crawl/Walk/Run 단계별 비용 plan"
 

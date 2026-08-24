@@ -87,6 +87,36 @@ jobs:
           run_case "--list-workflows"           --list-workflows
           exit "$fail"
 
+      # 2026-08-24 Step 5 회귀 방지: `--plugin X --with-skills` 가 전체 skill 을 설치하던 결함.
+      # WITH_SKILLS 전체 설치 블록이 plugin 산출물을 backup_and_link ... "dir" 로 덮어썼다.
+      # 근거: docs/audit/2026-08-24-agent-harness-readiness.md §6 Step 5 / ADR 0007
+      - name: Verify --plugin narrows skill scope
+        run: |
+          set -eu
+          REPO="$PWD"
+          expected=0
+          for c in go msa architecture; do
+            n=$(grep -l "^category: $c$" .claude/skills/*/SKILL.md | wc -l)
+            expected=$((expected + n))
+          done
+          total=$(find .claude/skills -name SKILL.md | wc -l)
+
+          tmp="$(mktemp -d)"; cd "$tmp"
+          /bin/bash "$REPO/install.sh" --local --plugin backend-go --with-skills >/dev/null 2>&1
+          got=$(find .claude/skills -name SKILL.md 2>/dev/null | wc -l)
+          cd "$REPO"; rm -rf "$tmp"
+
+          echo "plugin backend-go --with-skills: got=$got expected=$expected (total=$total)"
+          if [ "$got" -ne "$expected" ]; then
+            echo "FAIL  plugin 범위 축소가 동작하지 않는다"
+            exit 1
+          fi
+          if [ "$got" -eq "$total" ]; then
+            echo "FAIL  전체 skill 이 설치됐다 — 범위 축소 무효화 회귀"
+            exit 1
+          fi
+          echo "ok    plugin 범위 축소 동작"
+
       - name: Verify flattened commands resolve by bare name
         run: |
           set -eu
@@ -171,8 +201,13 @@ jobs:
       - name: Validate inventory labels freshness
         run: ./scripts/generate-inventory-labels.sh validate
 
-      - name: Validate agent handoff (P3 위계)
+      - name: Validate agent handoff + workflow/plugin skill refs
         run: ./scripts/validate-agent-handoff.sh all
+
+      # 2026-08-24 Step 5: CI 에 없어서 `.agents/` dangling ref 실패가 방치돼 있었다.
+      # 근거: docs/audit/2026-08-24-agent-harness-readiness.md §6 Step 5
+      - name: Validate manifest schemas
+        run: ./scripts/validate-schemas.sh
 
       - name: Setup Node (for control-plane adapter)
         uses: actions/setup-node@v4

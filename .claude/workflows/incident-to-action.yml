@@ -24,7 +24,7 @@ stages:
     agent: k8s-troubleshooter
     inputs: [k8s-manifest, alert]
     outputs: [root-cause-analysis, runbook]
-    skills: [kubernetes/k8s-troubleshooting]
+    skills: [kubernetes/k8s-troubleshoot-trees]
     parallel_with: rca
     optional: true
 

@@ -823,8 +823,11 @@ for WORKFLOW_NAME in ${WORKFLOW_NAMES[@]+"${WORKFLOW_NAMES[@]}"}; do
     fi
 done
 
-# Install skills
-if [[ "$WITH_SKILLS" == true ]]; then
+# Install skills (전체)
+# --plugin / --workflow 로 범위를 좁힌 경우에는 전체 설치를 하지 않는다.
+# 좁힌 산출물을 아래 backup_and_link ... "dir" 이 통째로 덮어써 범위 축소가 무효화됐다.
+# (ADR 0007 / 2026-08-24 audit Step 5 — `--plugin backend-go --with-skills` 가 272개 전부 설치)
+if [[ "$WITH_SKILLS" == true && ${#PLUGIN_NAMES[@]} -eq 0 && ${#WORKFLOW_NAMES[@]} -eq 0 ]]; then
     log_info "[skills] Installing skills..."
     SKILLS_SOURCE="$SCRIPT_DIR/.claude/skills"
     SKILLS_TARGET="$TARGET_DIR/skills"
@@ -841,6 +844,8 @@ if [[ "$WITH_SKILLS" == true ]]; then
     else
         log_warn "  (skills directory not found, skipping)"
     fi
+elif [[ "$WITH_SKILLS" == true ]]; then
+    log_info "[skills] Scope narrowed by --plugin/--workflow — installing only the declared skill sets."
 fi
 
 # Install MCP configs (global only)

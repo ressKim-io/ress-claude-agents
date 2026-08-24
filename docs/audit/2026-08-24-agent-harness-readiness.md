@@ -386,29 +386,33 @@ harness 축에서 **이미 앞서 있는** 부분이다. 정리 작업 중 훼�
 
 ---
 
-### Step 5 — Step 2 파생 (install.sh 범위 / CI 게이트)
+### Step 5 — Step 2 파생 (install.sh 범위 / CI 게이트) ✅ 완료 2026-08-24
 
 Step 2 수행 중 발견. Step 3·4 와 독립이며 순서 제약 없다.
 
-- [ ] `--plugin X --with-skills` 가 260개 전부 설치한다. `WITH_SKILLS` 전체 설치 블록이 `backup_and_link ... "dir"` 로 plugin 산출물을 덮어써 **plugin 의 범위 축소 기능이 죽어 있다**. `git stash` 후 HEAD 에서도 261개 설치로 재현 — **기존 결함이며 Step 2 의 회귀가 아니다**. [ADR 0007](../adr/0007-install-sh-narrow-scope.md) / PR-8 영역
-- [ ] `validate-schemas.sh` 를 CI job 으로 편입할지 결정 — 현재 CI 에 없어서 Step 1 이 발견한 `.agents/` dangling ref 실패가 방치돼 있었다. 미편입이면 같은 류가 다시 방치된다
-- [ ] **workflow `skills:` 참조 검증** (Step 3 발견) — `.claude/workflows/*.yml` 의 skill 참조가 실제 skill 과 어긋나도 install.sh 가 조용히 건너뛴다. 미검출 잔여: `kubernetes/k8s-cluster-evolution` `kubernetes/k8s-troubleshooting` `sre/finops-fundamentals` `sre/finops-unit-economics` `sre/load-testing-strategy`
-- [ ] dev-log 1건
+- [x] **`--plugin X --with-skills` 범위 무시 수정** — 전체 설치 블록을 `PLUGIN_NAMES`/`WORKFLOW_NAMES` 가 비었을 때만 실행하도록 게이트. `--plugin backend-go --with-skills` 272 → **40** (go 12 + msa 16 + architecture 12). `--all --with-skills` 는 272 유지
+- [x] `validate-schemas.sh` **CI 편입** — `drift` job 에 스텝 추가 (편입 결정)
+- [x] **workflow / plugin skill·category 참조 검증** — `validate-agent-handoff.sh` 에 `check_skill_refs` 추가. 죽은 참조 **11건 전부 수정**. 음성 테스트로 검출 확인
+- [x] **범위 회귀 방지 CI 케이스** — 기존 스모크 job 은 exit code 만 봐서 이 결함을 통과시켰다. 설치 개수를 카테고리 기대값과 대조하는 스텝 추가
+- [x] dev-log — [`2026-08-24-step5-install-scope-and-ci-gates.md`](../dev-logs/2026-08-24-step5-install-scope-and-ci-gates.md)
+
+> 남긴 것 (범위 밖, 목록만): ADR 0007 의 `--skill`/`--agent`/`--rule` 자산 단위 옵션은 여전히 PR-8 미착수.
+> `--all` 이 agents/rules 를 설치하지 않는다 (commands + skills 만) — 도움말의 "Install all modules" 와 불일치.
 
 ---
 
 ## 7. 세션 재개 절차
 
-**현재 상태 (2026-08-24 기준)**: Step 1 ✅ / Step 2 ✅ / Step 3 ✅ / **Step 4 · 5 대기**.
+**현재 상태 (2026-08-24 기준)**: Step 1 ✅ / Step 2 ✅ / Step 3 ✅ / Step 5 ✅ / **Step 4 만 대기**.
 작업 브랜치 `docs/harness-readiness-audit` — `origin` 에 push 완료 (`git status -sb` 로 동기 상태 확인).
 
 1. 본 문서 §6 에서 미체크 항목 확인 — `grep -n "^- \[ \]" docs/audit/2026-08-24-agent-harness-readiness.md`
 2. dev-log 로 직전 세션 맥락 복원 (최신순):
-   [step3](../dev-logs/2026-08-24-step3-agent-tier-demotion.md) → [step2](../dev-logs/2026-08-24-step2-skill-skillmd-migration.md) → [step1](../dev-logs/2026-08-24-step1-agent-spec-modernization.md) → [측정 audit](../dev-logs/2026-08-24-harness-engineering-audit.md)
+   [step5](../dev-logs/2026-08-24-step5-install-scope-and-ci-gates.md) → [step3](../dev-logs/2026-08-24-step3-agent-tier-demotion.md) → [step2](../dev-logs/2026-08-24-step2-skill-skillmd-migration.md) → [step1](../dev-logs/2026-08-24-step1-agent-spec-modernization.md) → [측정 audit](../dev-logs/2026-08-24-harness-engineering-audit.md)
 3. [부록 A](#부록-a-재측정-명령) 로 현재 수치 재측정 — 본 문서 수치와 다르면 **본 문서를 먼저 갱신**
 4. Step 순서:
-   - **Step 3** 은 Step 2 를 전제로 한다 (옮겨갈 곳이 실제로 동작해야 강등 가능) → 전제 충족됨
-   - **Step 4** / **Step 5** 는 독립. 순서 제약 없음
+   - **Step 3** 은 Step 2 를 전제로 한다 (옮겨갈 곳이 실제로 동작해야 강등 가능) → 완료
+   - **Step 4** 만 남았다. 시작점은 §3.6 의 borderline 13 결손 축 표
 5. **자산을 옮기거나 형식을 바꾸는 작업은 "1건 먼저 검증" 게이트를 반드시 거친다.** Step 2 에서 이 게이트가 실제로 작동했다 — 1건 이관 후 로드 확인이 되고 나서야 260개를 진행했다. 건너뛰면 전량 롤백 위험
 6. 검증 명령 (커밋 전 전부 통과해야 함):
    ```bash
