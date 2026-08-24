@@ -1,5 +1,6 @@
 ---
 name: go-errors
+category: go
 description: (DEPRECATED) Go 에러 처리 패턴. /effective-go의 "에러 처리" 섹션으로 대체되었습니다.
 deprecated: true
 deprecated_since: 2026-05-08

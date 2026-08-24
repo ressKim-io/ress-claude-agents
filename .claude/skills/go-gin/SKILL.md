@@ -1,5 +1,6 @@
 ---
 name: go-gin
+category: go
 description: "Gin Framework Patterns — Gin 웹 프레임워크 패턴 및 best practices. Use when working with go 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

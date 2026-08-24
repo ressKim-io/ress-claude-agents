@@ -1,5 +1,6 @@
 ---
 name: viper-config-binding
+category: go
 description: Go Viper의 설정 바인딩 함정과 정답 패턴. SetDefault + AutomaticEnv + Unmarshal 조합의 silent skip 동작과 mapstructure tag 매핑. 신규 config 추가 시 3곳 동시 갱신.
 ---
 
