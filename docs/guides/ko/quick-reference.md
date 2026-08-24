@@ -45,7 +45,7 @@
 | 복원력 패턴 | `java-expert` | `/msa-resilience`, `/spring-cache` | "Circuit Breaker 설정해줘" |
 | DB 성능 이슈 | `database-expert` | `/database`, `/database-sharding` | "쿼리 최적화해줘" |
 | Redis 캐싱 | `redis-expert` | `/spring-cache`, `/distributed-lock` | "Redis 캐싱 전략 설계해줘" |
-| 부하 테스트 | `load-tester-k6` | `/load-testing` | "K6로 부하테스트 시나리오 작성해줘" |
+| 부하 테스트 | `load-tester` | `/load-testing` | "K6로 부하테스트 시나리오 작성해줘" |
 | 테스트 작성 | `code-reviewer` | `/spring-testing`, `/go-testing` | "테스트 코드 작성해줘" |
 | 클린 코드 리뷰 | `java-expert` 또는 `go-expert` | `/clean-code`, `/refactoring-principles` | "클린 코드 품질 확인해줘" |
 | 보안 코드 리뷰 | `java-expert` 또는 `go-expert` | `/effective-java` 또는 `/effective-go` | "Java/Go 보안 리뷰해줘" |
@@ -180,7 +180,7 @@ eBPF 기반 Zero-Code:
       ↓
 5. security-scanner   → 보안 취약점 점검
       ↓
-6. load-tester-k6     → 성능 검증
+6. /load-testing      → 성능 검증
       ↓
 7. git-workflow       → PR 생성
 ```

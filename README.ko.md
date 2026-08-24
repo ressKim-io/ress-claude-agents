@@ -37,7 +37,7 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 Google/StackOverflow 검색              → /k8s-security 로 즉시 패턴 적용
 Runbook 찾아서 수동 실행               → incident-responder 가 자동 진단
 "이거 어떻게 해요?" 반복 질문          → 122,000줄의 지식 베이스가 즉시 답변
-100만 VU 테스트 시나리오 수동 작성     → load-tester-k6 가 템플릿 제공
+100만 VU 테스트 시나리오 수동 작성     → /load-testing skill 이 템플릿 제공
 ```
 
 **이 레포가 해결하는 문제:**
@@ -95,7 +95,7 @@ cd ress-claude-agents
 "보안 취약점 검사해줘"           → security-scanner
 "프로덕션 파드가 죽어요"         → k8s-troubleshooter
 "100만 동시접속 아키텍처 설계해줘" → ticketing-expert
-"K6로 부하테스트 시나리오 작성해줘" → load-tester-k6
+"K6로 부하테스트 시나리오 작성해줘" → /load-testing
 ```
 
 ---
@@ -213,8 +213,6 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | 🎫 `ticketing-expert` | 티켓팅 아키텍처 | Virtual Waiting Room, Redis 대기열, Saga 패턴 |
 | 🤖 `anti-bot` | 봇/매크로 방어 | Rate Limiting, 행동 분석, Device Fingerprint |
 | 📊 `load-tester` | 부하 테스트 허브 | 도구 비교, 선택 가이드 |
-| ⚡ `load-tester-k6` | K6 전문 | JavaScript, Grafana Cloud, K6 Operator |
-| 🔄 `load-tester-ngrinder` | nGrinder 전문 | Groovy, Controller/Agent, 웹 UI |
 
 ### Workflow Automation
 

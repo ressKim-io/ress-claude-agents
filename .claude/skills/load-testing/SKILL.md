@@ -356,6 +356,26 @@ jobs:
 
 ---
 
+## Grafana Cloud K6 (대규모 분산)
+
+단일 injector 한계를 넘는 규모는 Cloud 실행으로 load zone 을 분산한다.
+
+```bash
+K6_CLOUD_PROJECT_ID=12345 \
+K6_CLOUD_TOKEN=your-token \
+k6 cloud run \
+  --env BASE_URL=https://api.example.com \
+  load-test.js
+```
+
+| 항목 | 값 |
+|------|-----|
+| 100만 VU 구성 | 300 load zones × 3,500 VUs |
+| 과금 | 분당 과금 — 1회 테스트 ~$500-1000 |
+| self-hosted 대안 | K6 Operator `parallelism` 상향 (아래 K6 on Kubernetes) |
+
+> 비용이 분 단위로 누적되므로 **시나리오/threshold 를 self-hosted 소규모로 먼저 확정**한 뒤 Cloud 로 올린다.
+
 ## Anti-Patterns
 
 | 실수 | 문제 | 해결 |

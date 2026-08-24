@@ -47,7 +47,7 @@ LEGACY_AGENTS_NO_BODY_SPEC=(
     container-security-reviewer cost-analyzer database-expert database-expert-mysql
     debugging-expert dev-logger dockerfile-reviewer finops-advisor frontend-expert
     gitops-reviewer go-expert incident-responder infra-roadmap-planner java-expert
-    k8s-reviewer k8s-security-reviewer k8s-troubleshooter load-tester load-tester-k6 load-tester-ngrinder messaging-expert migration-expert mlops-expert
+    k8s-reviewer k8s-security-reviewer k8s-troubleshooter load-tester messaging-expert migration-expert mlops-expert
     network-security-reviewer observability-reviewer otel-expert platform-engineer
     platform-strategy-agent pr-review-bot product-engineer python-expert redis-expert
     saga-agent security-scanner service-mesh-expert tech-lead terraform-reviewer

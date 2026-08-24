@@ -6,7 +6,6 @@ agents:
   - finops-advisor
   - debugging-expert
   - load-tester
-  - load-tester-k6
 skills:
   categories:
     - sre

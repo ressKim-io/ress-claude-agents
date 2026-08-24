@@ -442,7 +442,7 @@ C. Hookdeck — destination-side queue
 - Per-event-type subscription (filter)
 - Webhook payload schema versioning (v1, v2 호환성)
 - Polyfill SDK (Node, Python, Go, Java) — 서명 검증 helper
-- 부하 테스트 ([`load-tester-k6`](../sre/load-test-k6.md)이 있으면): 100K event/min 시뮬레이션
+- 부하 테스트 ([`load-testing`](../load-testing/SKILL.md)): 100K event/min 시뮬레이션
 - Hookdeck/Svix로 마이그레이션 (Gateway 추상화 활용)
 - mTLS subscriber (B2B 고객 요구 시)
 - E2E 테스트: webhook.site mock receiver

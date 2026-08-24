@@ -84,6 +84,95 @@ class TestRunner {
 
 ---
 
+### Kubernetes 배포 (Controller/Agent)
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ngrinder-controller
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: ngrinder-controller }
+  template:
+    metadata:
+      labels: { app: ngrinder-controller }
+    spec:
+      containers:
+        - name: controller
+          image: ngrinder/controller:3.5.8
+          ports: [{ containerPort: 80 }, { containerPort: 16001 }, { containerPort: 12000 }]
+          resources:
+            limits: { cpu: "2", memory: "4Gi" }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ngrinder-agent
+spec:
+  replicas: 10
+  selector:
+    matchLabels: { app: ngrinder-agent }
+  template:
+    metadata:
+      labels: { app: ngrinder-agent }
+    spec:
+      containers:
+        - name: agent
+          image: ngrinder/agent:3.5.8
+          env:
+            - name: CONTROLLER_ADDR
+              value: "ngrinder-controller:16001"
+          resources:
+            limits: { cpu: "4", memory: "8Gi" }
+```
+
+### 웹 UI 테스트 생성
+
+```
+1. http://controller:80 접속 (초기 admin/admin — 즉시 변경)
+2. Script -> Create Script -> Groovy
+3. Performance Test -> Create Test
+   - Agent            : 사용할 에이전트 수
+   - Vuser per agent  : 에이전트당 가상 사용자
+   - Duration / Ramp-Up
+4. Save and Start
+```
+
+### VU 규모 산정
+
+| 항목 | 값 |
+|------|-----|
+| Agent | 100대 (각 4 vCPU / 8GB) |
+| Vuser per Agent | 10,000 |
+| Processes | 4 (CPU 코어당 1) |
+| Threads | 2,500 (프로세스당) |
+| Ramp-Up / Duration | 300초 / 1800초 |
+
+`100 agents × 10,000 VUs = 1,000,000 concurrent users`.
+agent 리소스가 부족하면 VU 는 뜨지만 **응답시간이 부하 생성기 병목으로 왜곡**된다 — agent CPU 를 함께 관측한다.
+
+### Agent Auto Scaling (AWS)
+
+테스트할 때만 스케일업하고 끝나면 0으로 되돌린다 — agent 상시 가동은 순수 낭비다.
+
+```hcl
+resource "aws_autoscaling_group" "ngrinder_agents" {
+  name             = "ngrinder-agents"
+  min_size         = 0
+  max_size         = 100
+  desired_capacity = 0  # 테스트 시에만 스케일업
+
+  launch_template {
+    id      = aws_launch_template.ngrinder_agent.id
+    version = "$Latest"
+  }
+}
+```
+
+CI(Jenkins 등)에서는 `set-desired-capacity` 스케일업 -> 테스트 실행 -> 스케일다운을 한 파이프라인으로 묶는다.
+
 ## 결과 분석
 
 ### 핵심 메트릭

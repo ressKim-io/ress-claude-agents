@@ -279,14 +279,6 @@ agents:
     consumes: [api-contract, code]
     produces: [load-test-report]
 
-  load-tester-k6:
-    consumes: [api-contract, code]
-    produces: [load-test-report]
-
-  load-tester-ngrinder:
-    consumes: [api-contract, code]
-    produces: [load-test-report]
-
   # === FinOps ===
   cost-analyzer:
     consumes: [terraform-module, k8s-manifest, helm-chart]

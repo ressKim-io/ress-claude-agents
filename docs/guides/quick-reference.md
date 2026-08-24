@@ -45,7 +45,7 @@ Know these before you start.
 | Resilience patterns | `java-expert` | `/msa-resilience`, `/spring-cache` | "Set up a Circuit Breaker" |
 | DB performance issues | `database-expert` | `/database`, `/database-sharding` | "Optimize this query" |
 | Redis caching | `redis-expert` | `/spring-cache`, `/distributed-lock` | "Design a Redis caching strategy" |
-| Load testing | `load-tester-k6` | `/load-testing` | "Write a K6 load test scenario" |
+| Load testing | `load-tester` | `/load-testing` | "Write a K6 load test scenario" |
 | Writing tests | `code-reviewer` | `/spring-testing`, `/go-testing` | "Write test code" |
 | Clean code review | `java-expert` or `go-expert` | `/clean-code`, `/refactoring-principles` | "Check clean code quality" |
 | Security code review | `java-expert` or `go-expert` | `/effective-java` or `/effective-go` | "Security review my Java/Go code" |
@@ -180,7 +180,7 @@ Use multiple agents in sequence for complex workflows.
       ↓
 5. security-scanner   → Security vulnerability check
       ↓
-6. load-tester-k6     → Performance verification
+6. /load-testing      → Performance verification
       ↓
 7. git-workflow       → Create PR
 ```
