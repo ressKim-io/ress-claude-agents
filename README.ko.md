@@ -191,7 +191,6 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | Agent | Description | Auto-trigger |
 |-------|-------------|--------------|
 | 🕸️ `service-mesh-expert` | Istio/Linkerd 디버깅, mTLS, 트래픽 관리 | Service Mesh 이슈 시 |
-| 📨 `messaging-expert` | Kafka/RabbitMQ/NATS 트러블슈팅, 패턴 설계 | 메시징 시스템 이슈 시 |
 
 ### Language Experts (High-Traffic)
 
@@ -858,7 +857,6 @@ ress-claude-agents/
 │   │   ├── security-scanner.md
 │   │   ├── k8s-troubleshooter.md
 │   │   ├── debugging-expert.md # Cascade failure 분석
-│   │   ├── messaging-expert.md # Kafka/RabbitMQ/NATS
 │   │   ├── service-mesh-expert.md # Istio/Linkerd
 │   │   ├── compliance-auditor.md # SOC2/HIPAA/GDPR
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder

@@ -49,7 +49,7 @@ cd ress-claude-agents
 | Security Reviewers | `k8s-security-reviewer`, `container-security-reviewer`, `cicd-security-reviewer`, `network-security-reviewer` |
 | Architecture | `architect-agent` |
 | Platform & MLOps | `platform-engineer`, `mlops-expert` |
-| Service Mesh & Messaging | `service-mesh-expert`, `messaging-expert` |
+| Service Mesh & Messaging | `service-mesh-expert` |
 | Language Experts | `go-expert`, `java-expert` |
 | Ticketing & Load Test | `ticketing-expert`, `anti-bot`, `load-tester` |
 | Workflow | `git-workflow`, `ci-optimizer`, `pr-review-bot`, `dev-logger` |

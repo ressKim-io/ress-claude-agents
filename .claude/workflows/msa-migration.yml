@@ -3,7 +3,6 @@ description: "Monolith to MSA migration: DDD, contract-first, Saga, CQRS, servic
 agents:
   - architect-agent
   - service-mesh-expert
-  - messaging-expert
 skills:
   categories:
     - msa

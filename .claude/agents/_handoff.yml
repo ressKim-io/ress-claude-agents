@@ -158,10 +158,6 @@ agents:
     consumes: [k8s-manifest, bounded-context]
     produces: [k8s-manifest, code-review-comment]
 
-  messaging-expert:
-    consumes: [api-contract, bounded-context]
-    produces: [code, runbook, code-review-comment]
-
   # === 리뷰어 (post-implementation) ===
   code-reviewer:
     consumes: [pr, code]

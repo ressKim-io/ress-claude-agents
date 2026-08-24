@@ -1,31 +1,15 @@
 ---
-name: messaging-expert
-description: "Kafka/RabbitMQ/NATS 메시징 전문가 — Consumer lag, partition rebalancing, queue depth 트러블슈팅, DLQ/Outbox/Idempotent Consumer 패턴 설계. Use when message broker 도입/튜닝 / consumer lag 또는 partition skew 발생 / event-driven 아키텍처 설계가 필요할 때."
-tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
-model: sonnet
+name: broker-troubleshooting
+category: messaging
+description: "메시지 브로커 장애 진단 — Kafka consumer lag·partition rebalancing·ISR shrink, RabbitMQ queue depth·unacked 누적·quorum leader election·memory alarm, NATS JetStream slow consumer. 증상별 진단 명령과 대응. Use when consumer lag 이 쌓이거나 queue 가 밀리거나 rebalance 가 반복될 때."
+effort: xhigh
+deprecated: false
 ---
 
-# Messaging Expert Agent
+# 메시지 브로커 트러블슈팅
 
-You are a senior messaging systems expert specializing in Kafka, RabbitMQ, NATS, and Redis Streams. You diagnose consumer lag, partition rebalancing issues, queue depth problems, and design resilient messaging patterns including DLQ, Transactional Outbox, and Idempotent Consumer. You provide actionable commands and production-ready configurations.
-
-## Quick Reference
-
-| 상황 | 접근 방식 | 참조 |
-|------|----------|------|
-| Consumer lag 급증 | Consumer group 분석 → 병목 식별 | #kafka-troubleshooting |
-| Partition rebalancing 반복 | session.timeout, max.poll 조정 | #kafka-troubleshooting |
-| RabbitMQ queue depth 증가 | Consumer 처리량 vs 유입량 분석 | #rabbitmq-troubleshooting |
-| 메시지 유실 의심 | acks, persistence, DLQ 확인 | #common-patterns |
-| 중복 처리 발생 | Idempotent Consumer 패턴 적용 | #common-patterns |
-| DB + 메시지 정합성 | Transactional Outbox 패턴 | #common-patterns |
-| 브로커 선택 | Comparison Matrix 참조 | #broker-comparison |
-
----
+증상 → 진단 명령 → 대응. 브로커별 구현 패턴은 [`kafka-patterns`](../kafka-patterns/SKILL.md) / [`rabbitmq`](../rabbitmq/SKILL.md) / [`nats-messaging`](../nats-messaging/SKILL.md),
+DLQ·Outbox·Idempotent Consumer 같은 설계 패턴은 [`msa-event-driven`](../msa-event-driven/SKILL.md) / [`msa-resilience`](../msa-resilience/SKILL.md) 참조.
 
 ## Broker Comparison Matrix
 
@@ -270,160 +254,6 @@ kubectl exec -n nats deploy/nats-box -- \
 
 ---
 
-## Common Patterns
-
-### DLQ (Dead Letter Queue) Design
-
-```
-목적: 처리 실패 메시지를 격리하여 분석/재처리
-
-┌──────────┐   실패   ┌──────────┐   분석   ┌──────────┐
-│  Main    │────────>│   DLQ    │────────>│ Analyzer │
-│  Queue   │         │          │         │          │
-└──────────┘         └──────────┘         └──────────┘
-      │                    │
-      │ 성공               │ 재처리
-      ▼                    ▼
- [Processing]         [Retry Queue]
-
-DLQ 메시지에 포함할 메타데이터:
-  - 원본 토픽/큐
-  - 실패 원인 (exception message)
-  - 재시도 횟수
-  - 원본 메시지 타임스탬프
-  - 마지막 시도 타임스탬프
-```
-
-**Kafka DLQ 구현:**
-```java
-// Spring Kafka - DLQ 자동 라우팅
-@Bean
-public DefaultErrorHandler errorHandler(KafkaTemplate<String, Object> template) {
-    DeadLetterPublishingRecoverer recoverer = 
-        new DeadLetterPublishingRecoverer(template,
-            (record, ex) -> new TopicPartition(
-                record.topic() + ".dlq", record.partition()));
-    
-    return new DefaultErrorHandler(recoverer,
-        new FixedBackOff(1000L, 3));  // 1초 간격, 최대 3회 재시도
-}
-```
-
-### Transactional Outbox Pattern
-
-```
-목적: DB 트랜잭션과 메시지 발행의 원자성 보장
-
-┌─────────────────────────────┐
-│      Application            │
-│  1. DB 저장 + Outbox 저장   │
-│     (하나의 트랜잭션)       │
-└─────────────────────────────┘
-              │
-     ┌────────┴────────┐
-     │  Outbox Table   │
-     │  id | payload   │
-     │  status | time  │
-     └────────┬────────┘
-              │ (Polling or CDC)
-     ┌────────┴────────┐
-     │  Outbox Relay   │
-     │  (Debezium CDC) │
-     └────────┬────────┘
-              │
-     ┌────────┴────────┐
-     │  Message Broker  │
-     └─────────────────┘
-```
-
-```sql
--- Outbox 테이블 DDL
-CREATE TABLE outbox_events (
-    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    aggregate_type VARCHAR(255) NOT NULL,
-    aggregate_id   VARCHAR(255) NOT NULL,
-    event_type     VARCHAR(255) NOT NULL,
-    payload        JSONB NOT NULL,
-    created_at     TIMESTAMP NOT NULL DEFAULT NOW(),
-    published_at   TIMESTAMP,
-    status         VARCHAR(20) NOT NULL DEFAULT 'PENDING'
-);
-
-CREATE INDEX idx_outbox_status ON outbox_events(status) WHERE status = 'PENDING';
-```
-
-### Idempotent Consumer Pattern
-
-```
-목적: 동일 메시지가 여러 번 도착해도 한 번만 처리
-
-방법 1: Message ID 기반 중복 제거
-  - 처리한 메시지 ID를 별도 테이블/Redis에 저장
-  - 새 메시지 도착 시 ID 존재 여부 확인
-
-방법 2: Upsert (INSERT ON CONFLICT)
-  - DB에 비즈니스 키 기반 Upsert
-  - 자연스러운 멱등성 보장
-
-방법 3: 조건부 업데이트 (Optimistic Lock)
-  - version/timestamp 기반 갱신
-  - 이미 처리된 이벤트는 무시
-```
-
-```java
-// Spring: Redis 기반 Idempotent Consumer
-@KafkaListener(topics = "orders")
-public void handleOrder(ConsumerRecord<String, OrderEvent> record) {
-    String messageId = record.headers()
-        .lastHeader("messageId").value().toString();
-    
-    // Redis SETNX로 중복 체크 (TTL 24h)
-    Boolean isNew = redis.opsForValue()
-        .setIfAbsent("processed:" + messageId, "1", Duration.ofHours(24));
-    
-    if (Boolean.FALSE.equals(isNew)) {
-        log.info("Duplicate message ignored: messageId={}", messageId);
-        return;
-    }
-    
-    orderService.processOrder(record.value());
-}
-```
-
-### Retry Strategy with Backoff
-
-```
-재시도 전략:
-
-1. Fixed Backoff:    1s → 1s → 1s (단순하지만 thundering herd 위험)
-2. Exponential:      1s → 2s → 4s → 8s (일반적 권장)
-3. Exponential+Jitter: 1s±0.5 → 2s±1 → 4s±2 (분산 시스템 권장)
-
-설정 가이드:
-  - 초기 지연: 1~5초
-  - 최대 재시도: 3~5회
-  - 최대 지연: 30초~5분
-  - 최대 재시도 초과: DLQ로 전송
-```
-
-```yaml
-# Spring Kafka retry 설정
-spring:
-  kafka:
-    consumer:
-      properties:
-        retry.backoff.ms: 1000
-    listener:
-      retry:
-        max-attempts: 3
-        backoff:
-          initial-interval: 1000
-          multiplier: 2.0
-          max-interval: 10000
-```
-
----
-
 ## Performance Tuning Checklist
 
 ### Kafka
@@ -463,13 +293,12 @@ Broker:
 
 ---
 
-## Referenced Skills
+## 참조 스킬
 
-| 스킬 | 용도 |
-|------|------|
-| `messaging/kafka` | Kafka 핵심 개념 및 Strimzi 운영 |
-| `messaging/kafka-patterns` | Kafka 고급 패턴 (Exactly-Once, Streams) |
-| `observability/monitoring-metrics` | Consumer lag 메트릭 모니터링 |
-| `observability/monitoring-troubleshoot` | 메트릭 기반 트러블슈팅 |
-| `msa/distributed-lock` | 분산 락 기반 멱등성 처리 |
-| `sre/sre-sli-slo` | 메시징 SLI/SLO 정의 |
+- [`kafka-patterns`](../kafka-patterns/SKILL.md) — Producer/Consumer 패턴, KEDA 오토스케일링
+- [`kafka-k8s-operations`](../kafka-k8s-operations/SKILL.md) — Strimzi 운영, JMX→Prometheus
+- [`rabbitmq`](../rabbitmq/SKILL.md) — Publisher Confirms, DLX, Cluster Operator
+- [`nats-messaging`](../nats-messaging/SKILL.md) — JetStream, Consumer 패턴
+- [`msa-event-driven`](../msa-event-driven/SKILL.md) — Outbox / 이벤트 스키마
+- [`msa-resilience`](../msa-resilience/SKILL.md) — Retry / Circuit Breaker / Timeout
+- [`msa-saga`](../msa-saga/SKILL.md) — Idempotent Consumer, DLQ + 보상

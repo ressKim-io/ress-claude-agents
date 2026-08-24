@@ -66,10 +66,10 @@ stages:
 
   # 메시징 도메인 (event-driven)
   - name: messaging-design
-    agent: messaging-expert
+    agent: (main)          # 서브에이전트 없음 — skill 주도 (2026-08-24 Step 3)
     inputs: [bounded-context, api-contract]
     outputs: [code, runbook]
-    skills: [messaging/kafka-streams, messaging/outbox-pattern, msa/msa-event-driven]
+    skills: [messaging/kafka-patterns, messaging/kafka-streams, messaging/broker-troubleshooting, msa/msa-event-driven]
     optional: true
 
   # 분산 트랜잭션

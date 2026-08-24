@@ -46,7 +46,7 @@ LEGACY_AGENTS_NO_BODY_SPEC=(
     cicd-security-reviewer code-reviewer compliance-auditor compliance-strategy-agent
     container-security-reviewer cost-analyzer debugging-expert dev-logger dockerfile-reviewer finops-advisor frontend-expert
     gitops-reviewer go-expert incident-responder infra-roadmap-planner java-expert
-    k8s-reviewer k8s-security-reviewer k8s-troubleshooter load-tester messaging-expert migration-expert mlops-expert
+    k8s-reviewer k8s-security-reviewer k8s-troubleshooter load-tester migration-expert mlops-expert
     network-security-reviewer observability-reviewer platform-engineer
     platform-strategy-agent pr-review-bot product-engineer python-expert security-scanner service-mesh-expert tech-lead terraform-reviewer
     ticketing-expert

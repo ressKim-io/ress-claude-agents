@@ -4,7 +4,6 @@ agents:
   - architect-agent
   - k8s-troubleshooter
   - service-mesh-expert
-  - messaging-expert
   - terraform-reviewer
   - incident-responder
   - platform-engineer

@@ -1,7 +1,6 @@
 name: kafka-event-driven
 description: "Kafka event-driven architecture: Strimzi, contract-first, Saga, schema registry"
 agents:
-  - messaging-expert
   - architect-agent
 skills:
   categories:
