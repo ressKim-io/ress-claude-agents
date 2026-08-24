@@ -30,7 +30,7 @@ assets/skills/**/SKILL.md    ← tool-agnostic source. adapter 입력 (Migration
 |---|---|---|---|---|
 | **보편 가이드** | `AGENTS.md` (`CLAUDE.md` symlink) | `.codex/AGENTS.md` symlink | `AGENTS.md` 자동 인식 | `AGENTS.md` 워크스페이스 루트 자동 인식 |
 | **Agent** | `.claude/agents/*.md` (49) | `.codex/agents/*.toml` (49) | — (대응 개념 없음) | `.kiro/agents/*.{md,json}` (수동) |
-| **Skill** | `.claude/skills/**/*.md` (260) | `.codex/skills/<cat>/*.toml` (15) | `.cursor/rules/*.mdc` (15) | `.kiro/skills/<name>/SKILL.md` (수동) |
+| **Skill** | `.claude/skills/<name>/SKILL.md` (260) | `.codex/skills/<cat>/*.toml` (15) | `.cursor/rules/*.mdc` (15) | `.kiro/skills/<name>/SKILL.md` (수동) |
 | **Rule** | `.claude/rules/*.md` (25) | AGENTS.md 에 흡수 | `.mdc` frontmatter `globs`/`alwaysApply` | `.kiro/steering/*.md` (`inclusion` 4 모드) |
 | **Command** | `.claude/commands/**/*.md` (51) | — | — | — |
 | **MCP** | `mcp-configs/settings.json` (설치용 템플릿, `mcpServers` 키) | `.codex/` 설정 | — | `.kiro/settings/mcp.json` (workspace) / `~/.kiro/settings/mcp.json` (global) |
@@ -38,9 +38,13 @@ assets/skills/**/SKILL.md    ← tool-agnostic source. adapter 입력 (Migration
 
 ### 개수 격차의 원인
 
-Skill 이 Claude 260 vs Codex/Cursor 각 15 인 것은 누락이 아니다. adapter 는 `assets/skills/` 를 입력으로 받는데 **Migration 0002 P7(전체 변환)이 미완**이라 현재 15개만 변환돼 있다. 나머지 245개는 `.claude/skills/` 단일 파일 형식으로만 존재한다.
+Skill 이 Claude 260 vs Codex/Cursor 각 15 인 것은 누락이 아니다. adapter 는 `assets/skills/` 를 입력으로 받는데 **Migration 0002 P7(전체 변환)이 미완**이라 현재 15개만 변환돼 있다.
 
-→ 추적: [2026-08-15 audit §8](../audit/2026-08-15-asset-tier-rebalance.md#8-선행-백로그-인수-b-트랙)
+**2026-08-24 갱신**: Claude 쪽 260개는 `.claude/skills/<name>/SKILL.md` 규격으로 이관을 마쳤다. 이전의 `<카테고리>/<이름>.md` 레이아웃은 Claude Code 가 로드하지 않는 경로였다 — 즉 260개가 실제로는 동작하지 않았다. 카테고리는 frontmatter `category:` 로 보존한다.
+
+따라서 P7 의 남은 범위는 **Claude 레이아웃 이관이 아니라 `assets/skills/` → codex/cursor 변환분 확대**뿐이다.
+
+→ 추적: [2026-08-24 audit](../audit/2026-08-24-agent-harness-readiness.md) (F1 / F2), [2026-08-15 audit §8](../audit/2026-08-15-asset-tier-rebalance.md#8-선행-백로그-인수-b-트랙)
 
 ---
 

@@ -247,20 +247,26 @@ harness 축에서 **이미 앞서 있는** 부분이다. 정리 작업 중 훼�
 
 > 검증: `validate-rules-drift` / `validate-skill-frontmatter` / `validate-agent-handoff` / `validate-commands-drift` 전부 통과. `validate-schemas.sh` 는 1건 실패하나 **HEAD 에서도 동일하게 실패하는 기존 결함**(`.agents/` dangling ref) — 아래 Step 2 로 편입.
 
-### Step 2 — 죽은 skill 260개 복구 (F1 / F2)
+### Step 2 — 죽은 skill 260개 복구 (F1 / F2) ✅ 완료 2026-08-24
 
-- [ ] 변환 스크립트 작성 (`scripts/migrate-skills-to-skillmd.sh`)
-- [ ] **1개로 먼저 검증** — 세션 재시작 후 `/` 목록에 뜨는지 실측. 실패 시 이후 단계 진행 금지
-- [ ] 22 카테고리 단위로 `git mv` — `.claude/skills/<cat>/<name>.md` → `.claude/skills/<name>/SKILL.md`
-- [ ] `.gitignore:36-41` 의 잘못된 경로 주석/패턴 정정 (F2)
-- [ ] `install.sh:839-860` flatten-symlink 로직 수정
-- [ ] `scripts/generate-inventory.sh` 경로 갱신 + `inventory.yml` 재생성
-- [ ] `docs/migration/0002-progress.md` 에 P7 경로 오류 기록
-- [ ] `docs/architecture/multi-tool-mapping.md` L41 갱신
-- [ ] `.agents/` dangling ref 정리 — `validate-schemas.sh` 가 `.agents/skills/source-command-log-summary/SKILL.md` 부재로 실패 (기존 결함, [2026-08-15 audit D5](2026-08-15-asset-tier-rebalance.md) 와 동일 건). **`validate-schemas.sh` 를 CI job 으로 편입할지도 함께 결정**
-- [ ] dev-log 1건
+- [x] 변환 스크립트 작성 (`scripts/migrate-skills-to-skillmd.sh`)
+- [x] **1개로 먼저 검증** — `go/effective-go` 이관 후 `/` 목록 등재 실측 확인. **F1 확증**
+- [x] 22 카테고리 단위로 `git mv` — `.claude/skills/<name>/SKILL.md`, 카테고리는 frontmatter `category:` 보존
+- [x] `.gitignore` 의 규격 위반 제외 규칙(`.claude/skills/*/*/SKILL.md`) 삭제 (F2)
+- [x] `install.sh` — `install_skills_by_category` 헬퍼, individual basename 해석, flatten symlink 제거
+- [x] `generate-inventory.sh` / `-labels.sh` / `validate-skill-frontmatter.sh` 경로·카테고리 해석 갱신 + inventory 재생성
+- [x] `docs/migration/0002-progress.md` — P7 범위 축소 + P4-D 결정 정정
+- [x] `docs/architecture/multi-tool-mapping.md` 갱신
+- [x] `.agents/` dangling ref 제거 — `validate-schemas.sh` 통과
+- [x] dev-log — [`2026-08-24-step2-skill-skillmd-migration.md`](../dev-logs/2026-08-24-step2-skill-skillmd-migration.md)
 
-> ⚠️ 카테고리 정보는 디렉터리에서 사라진다. 보존 방법(frontmatter `category:` 필드 vs description 접두)을 Step 2 착수 시 결정할 것.
+> 검증: 구 레이아웃 잔여 0 / SKILL.md 260 / category 260 / 22 카테고리 합계 이관 전과 동일.
+> validator 5종 + shellcheck + inventory 신선도 전부 PASS. `--workflow compose-to-k8s` 스모크 58개(dx 26 + kubernetes 14 + infrastructure 18) 정확.
+
+**Step 2 에서 새로 발견 — 후속 필요:**
+
+- [ ] `--plugin X --with-skills` 가 260개 전부 설치한다. 전체 설치 블록이 plugin 산출물을 덮어써 범위 축소가 죽어 있다. **HEAD 에서도 재현되는 기존 결함** ([ADR 0007](../adr/0007-install-sh-narrow-scope.md) / PR-8 영역)
+- [ ] `validate-schemas.sh` 를 CI job 으로 편입할지 결정 — 미편입이면 dangling ref 류가 다시 방치된다
 
 ### Step 3 — agent 19개 강등 (F6)
 

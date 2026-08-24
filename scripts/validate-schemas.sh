@@ -174,10 +174,9 @@ validate_against_schema() {
 # ---------------------------------------------------------------------------
 section "P1 sample frontmatter validation"
 
-validate_against_schema \
-    ".agents/skills/source-command-log-summary/SKILL.md" \
-    "schemas/skill-manifest.v1.json" \
-    "source-command-log-summary → skill-manifest.v1"
+# .agents/ 샘플 검증은 삭제됐다. `.agents/` 는 deprecate 대상이라 gitignore 되어 파일이
+# 존재하지 않았고, skill-manifest.v1 검증은 아래 §4 가 assets/skills/ 전수로 이미 커버한다.
+# 근거: docs/audit/2026-08-24-agent-harness-readiness.md (Step 2)
 
 validate_against_schema \
     ".claude/agents/code-reviewer.md" \
