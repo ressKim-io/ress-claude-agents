@@ -92,68 +92,16 @@ You are a senior FinOps practitioner and cloud economist. Your expertise covers 
 
 ## Tool Selection Guide
 
-### 비용 도구 비교
+도구 비교표 / OpenCost·Kubecost·Infracost 설치 / KEDA+Karpenter 통합 / Crawl-Walk-Run 스택은
+**[`/finops-tools`](../skills/finops-tools/SKILL.md)** 와 **[`/finops-tools-advanced`](../skills/finops-tools-advanced/SKILL.md)** 를 로드해서 쓴다.
+성숙도 단계별 권장 스택만 여기 남긴다.
 
-| 도구 | 유형 | 강점 | 약점 | 비용 |
-|------|------|------|------|------|
-| **Kubecost** | K8s 비용 | 정확한 가격 반영, RI/Spot 통합 | 클러스터 많으면 고비용 | $199+/클러스터 |
-| **OpenCost** | K8s 비용 | 무료, CNCF 표준 | 기본 기능만, 할인 미반영 | 무료 |
-| **Infracost** | IaC 비용 | PR 통합, Shift-left | IaC만, 런타임 미지원 | 무료 Tier |
-| **CloudHealth** | 멀티 클라우드 | 전사 뷰, 엔터프라이즈 | 고비용 | $$$$ |
-| **Spot.io** | 자동 최적화 | Spot 관리 자동화 | 벤더 종속 | 절감액 % |
+| 단계 | 스택 | 투자 |
+|------|------|------|
+| Crawl | OpenCost + Cloud 기본 대시보드 | 무료 |
+| Walk | Kubecost + Infracost PR 통합 | 유료 시작 |
+| Run | Cast AI / 자동 right-sizing + Chargeback | 자동화 |
 
-### 도구 선택 결정 트리
-
-```
-조직 규모?
-    │
-    ├─ 스타트업/SMB ──────────> OpenCost + Infracost (무료 조합)
-    │
-    ├─ 중견기업 ──────────────> Kubecost + Infracost
-    │       │
-    │       └─ 멀티 클라우드 ──> CloudHealth / Flexera
-    │
-    └─ 대기업 ────────────────> Kubecost Enterprise + CloudHealth
-            │
-            └─ Spot 자동화 ──> Spot.io / Karpenter
-```
-
-### 권장 스택
-
-```yaml
-# 2026 FinOps 권장 스택
-
-## Crawl 단계 (무료 시작)
-visibility:
-  kubernetes: OpenCost
-  cloud: AWS Cost Explorer / GCP Billing
-  iac: Infracost (free tier)
-
-## Walk 단계 (투자 시작)
-visibility:
-  kubernetes: Kubecost
-  cloud: AWS Cost Explorer + CUR/Athena
-optimization:
-  autoscaling: KEDA + Karpenter
-  spot: Karpenter (spot pools)
-governance:
-  iac: Infracost (PR integration)
-  tagging: Kyverno policies
-
-## Run 단계 (자동화)
-visibility:
-  kubernetes: Kubecost Enterprise
-  cloud: CloudHealth / Flexera
-optimization:
-  autoscaling: KEDA + Karpenter + Spot
-  rightsizing: VPA + 자동 적용
-  automation: AWS Compute Optimizer
-governance:
-  iac: Infracost + OPA policies
-  chargeback: 자동화된 청구
-greenops:
-  carbon: Cloud Carbon Footprint
-```
 
 ## Unit Economics
 
@@ -209,100 +157,12 @@ sum(kubecost_cluster_cost) * 30
 count(distinct(user_id) by (month))
 ```
 
-## GreenOps (지속가능성)
+## GreenOps
 
-### 탄소 발자국 측정
+탄소 발자국 측정 / 저탄소 리전 / ARM 전환 / SCI / ESG 리포팅은
+**[`/finops-greenops`](../skills/finops-greenops/SKILL.md)** 를 로드해서 쓴다.
+성숙도 진단에서 GreenOps 는 Run 단계 항목으로만 취급한다.
 
-```yaml
-# Cloud Carbon Footprint 설정
-cloudCarbonFootprint:
-  aws:
-    enabled: true
-    athenaRegion: "ap-northeast-2"
-    athenaDbName: "ccf"
-    billingDataDataset: "ccf-billing-data"
-
-  gcp:
-    enabled: true
-    bigQueryTable: "carbon-footprint-export"
-
-metrics:
-  - co2e_per_hour      # 시간당 CO2 배출량 (kg)
-  - energy_per_hour    # 시간당 에너지 소비 (kWh)
-  - pue               # Power Usage Effectiveness
-```
-
-### GreenOps 지표
-
-| 지표 | 설명 | 목표 |
-|------|------|------|
-| **CO2e/Transaction** | 트랜잭션당 탄소 배출 | < 1g |
-| **Energy Efficiency** | 유효 처리량/에너지 | 증가 추세 |
-| **Carbon Intensity** | 비용당 탄소 | 감소 추세 |
-| **Renewable %** | 재생 에너지 비율 | > 80% |
-
-### 지속가능한 최적화
-
-```markdown
-## GreenOps + FinOps 시너지
-
-1. **Region 선택**: 저탄소 리전 우선
-   - AWS: eu-north-1 (스웨덴), eu-west-1 (아일랜드)
-   - GCP: europe-north1, us-central1
-
-2. **인스턴스 선택**: ARM 기반 (Graviton, T2A)
-   - 동일 성능에 40% 적은 에너지
-   - 비용도 20% 저렴
-
-3. **Spot + Off-Peak**: 재생 에너지 풍부 시간대 배치
-   - 야간/주말 배치 작업 스케줄링
-
-4. **Right-sizing**: 과잉 프로비저닝 = 에너지 낭비
-   - VPA 권장값 적용
-```
-
-## KEDA + Karpenter 최적화
-
-### 이벤트 기반 스케일링 + Spot
-
-```yaml
-# KEDA ScaledObject
-apiVersion: keda.sh/v1alpha1
-kind: ScaledObject
-metadata:
-  name: order-processor
-spec:
-  scaleTargetRef:
-    name: order-processor
-  minReplicaCount: 0       # 제로 스케일 가능
-  maxReplicaCount: 100
-  triggers:
-    - type: aws-sqs-queue
-      metadata:
-        queueURL: https://sqs.ap-northeast-2.amazonaws.com/123/orders
-        queueLength: "10"  # 10개 메시지당 1개 Pod
----
-# Karpenter Spot NodePool
-apiVersion: karpenter.sh/v1
-kind: NodePool
-metadata:
-  name: spot-burst
-spec:
-  template:
-    spec:
-      requirements:
-        - key: karpenter.sh/capacity-type
-          operator: In
-          values: ["spot"]
-        - key: karpenter.k8s.aws/instance-category
-          operator: In
-          values: ["c", "m", "r"]
-  disruption:
-    consolidationPolicy: WhenEmptyOrUnderutilized
-    consolidateAfter: 30s  # 빠른 통합
-```
-
-**결과**: KEDA가 SQS 큐 기반 스케일링 → Karpenter가 Spot으로 노드 프로비저닝 → 20-30% 비용 절감
 
 ## Output Templates
 
