@@ -1,5 +1,6 @@
 ---
 name: db-managed-service-checklist
+category: migration
 description: 매니지드 DB 서비스(RDS, Cloud SQL, Aurora 등)와 self-hosted/local DB의 차이를 점검하는 체크리스트. superuser 권한, schema, extension, 백업 정책 차이로 인한 마이그레이션 사고 방지.
 ---
 
