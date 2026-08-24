@@ -1,5 +1,6 @@
 ---
 name: redis-streams
+category: messaging
 description: "Redis Streams 가이드 — Redis 8.x Streams 기반 메시지 스트리밍, Consumer Group, PEL 관리, K8s 배포 Use when working with messaging 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false
