@@ -1,5 +1,6 @@
 ---
 name: vertical-slice-architecture
+category: architecture
 description: "Vertical Slice Architecture — > Feature 단위로 코드를 조직하는 아키텍처 패턴 - Jimmy Bogard 제안 Use when working with architecture 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false
