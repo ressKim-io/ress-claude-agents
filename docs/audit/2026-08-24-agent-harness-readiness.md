@@ -263,10 +263,7 @@ harness 축에서 **이미 앞서 있는** 부분이다. 정리 작업 중 훼�
 > 검증: 구 레이아웃 잔여 0 / SKILL.md 260 / category 260 / 22 카테고리 합계 이관 전과 동일.
 > validator 5종 + shellcheck + inventory 신선도 전부 PASS. `--workflow compose-to-k8s` 스모크 58개(dx 26 + kubernetes 14 + infrastructure 18) 정확.
 
-**Step 2 에서 새로 발견 — 후속 필요:**
-
-- [ ] `--plugin X --with-skills` 가 260개 전부 설치한다. 전체 설치 블록이 plugin 산출물을 덮어써 범위 축소가 죽어 있다. **HEAD 에서도 재현되는 기존 결함** ([ADR 0007](../adr/0007-install-sh-narrow-scope.md) / PR-8 영역)
-- [ ] `validate-schemas.sh` 를 CI job 으로 편입할지 결정 — 미편입이면 dangling ref 류가 다시 방치된다
+> Step 2 수행 중 새로 발견한 2건은 **Step 5** 로 분리했다 (Step 2 잔여가 아니라 별개 작업).
 
 ### Step 3 — agent 19개 강등 (F6)
 
@@ -290,13 +287,38 @@ harness 축에서 **이미 앞서 있는** 부분이다. 정리 작업 중 훼�
 
 ---
 
+### Step 5 — Step 2 파생 (install.sh 범위 / CI 게이트)
+
+Step 2 수행 중 발견. Step 3·4 와 독립이며 순서 제약 없다.
+
+- [ ] `--plugin X --with-skills` 가 260개 전부 설치한다. `WITH_SKILLS` 전체 설치 블록이 `backup_and_link ... "dir"` 로 plugin 산출물을 덮어써 **plugin 의 범위 축소 기능이 죽어 있다**. `git stash` 후 HEAD 에서도 261개 설치로 재현 — **기존 결함이며 Step 2 의 회귀가 아니다**. [ADR 0007](../adr/0007-install-sh-narrow-scope.md) / PR-8 영역
+- [ ] `validate-schemas.sh` 를 CI job 으로 편입할지 결정 — 현재 CI 에 없어서 Step 1 이 발견한 `.agents/` dangling ref 실패가 방치돼 있었다. 미편입이면 같은 류가 다시 방치된다
+- [ ] dev-log 1건
+
+---
+
 ## 7. 세션 재개 절차
 
-1. 본 문서 §6 에서 미체크 항목 확인
-2. `docs/dev-logs/2026-08-24-harness-engineering-audit.md` 및 후속 dev-log 로 직전 세션 맥락 복원
+**현재 상태 (2026-08-24 기준)**: Step 1 ✅ / Step 2 ✅ / **Step 3 · 4 · 5 대기**.
+작업 브랜치 `docs/harness-readiness-audit` (28 커밋, push 안 함).
+
+1. 본 문서 §6 에서 미체크 항목 확인 — `grep -n "^- \[ \]" docs/audit/2026-08-24-agent-harness-readiness.md`
+2. dev-log 로 직전 세션 맥락 복원 (최신순):
+   [step2](../dev-logs/2026-08-24-step2-skill-skillmd-migration.md) → [step1](../dev-logs/2026-08-24-step1-agent-spec-modernization.md) → [측정 audit](../dev-logs/2026-08-24-harness-engineering-audit.md)
 3. [부록 A](#부록-a-재측정-명령) 로 현재 수치 재측정 — 본 문서 수치와 다르면 **본 문서를 먼저 갱신**
-4. Step 순서 준수: **Step 2 는 Step 3 의 전제**(옮겨갈 곳이 있어야 강등 가능). Step 4 는 독립 진행 가능
-5. Step 2 착수 시 "1개 검증" 단계를 건너뛰지 말 것 — 260개를 옮기고 안 붙으면 전량 롤백
+4. Step 순서:
+   - **Step 3** 은 Step 2 를 전제로 한다 (옮겨갈 곳이 실제로 동작해야 강등 가능) → 전제 충족됨
+   - **Step 4** / **Step 5** 는 독립. 순서 제약 없음
+5. **자산을 옮기거나 형식을 바꾸는 작업은 "1건 먼저 검증" 게이트를 반드시 거친다.** Step 2 에서 이 게이트가 실제로 작동했다 — 1건 이관 후 로드 확인이 되고 나서야 260개를 진행했다. 건너뛰면 전량 롤백 위험
+6. 검증 명령 (커밋 전 전부 통과해야 함):
+   ```bash
+   for s in validate-rules-drift validate-skill-frontmatter validate-agent-handoff \
+            validate-commands-drift validate-schemas; do ./scripts/$s.sh >/dev/null 2>&1 \
+     && echo "PASS $s" || echo "FAIL $s"; done
+   shellcheck install.sh scripts/*.sh
+   ./scripts/generate-inventory.sh && ./scripts/generate-inventory-labels.sh \
+     && git diff --quiet .claude/inventory*.yml && echo "inventory 최신"
+   ```
 
 ---
 
