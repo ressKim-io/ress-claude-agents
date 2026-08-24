@@ -238,12 +238,14 @@ harness 축에서 **이미 앞서 있는** 부분이다. 정리 작업 중 훼�
 
 커밋 규율: [`rules/git.md`](../../.claude/rules/git.md) "커밋당 4~5 파일 / PR 400줄". Step 2 는 **카테고리 단위 커밋**(사용자 결정 2026-08-24).
 
-### Step 1 — 사실 최신화 (파일 4 / 위험 없음)
+### Step 1 — 사실 최신화 (파일 4 / 위험 없음) ✅ 완료 2026-08-24
 
-- [ ] `.claude/rules/effort-guide.md` — L45 의 "`effort` 필드를 직접 읽지 않으므로" 오류 정정 (F3)
-- [ ] `.claude/templates/AGENT-SPEC.md` — frontmatter 16필드 반영, 검증일 2026-05-15 → 2026-08-24, `skills`/`memory`/`permissionMode` 가이드 추가
-- [ ] `AGENTS.md` — §Claude Code-Specific 에 skill = `SKILL.md` 규격, commands→skills 병합 사실 반영
-- [ ] dev-log 1건 (`docs/dev-logs/2026-08-24-harness-engineering-audit.md`)
+- [x] `.claude/rules/effort-guide.md` — L45 의 "`effort` 필드를 직접 읽지 않으므로" 오류 정정 (F3)
+- [x] `.claude/templates/AGENT-SPEC.md` — frontmatter 16필드 반영(§1.1~1.3 재구성), 검증일 2026-08-24 + **다음 재검증 2026-11** 명시, `skills`/`memory`/`permissionMode` 가이드 추가
+- [x] `AGENTS.md` — §Claude-Only Features 에 skill = `SKILL.md` 규격, commands→skills 병합, 실행 강제 3필드 반영
+- [x] dev-log — [`2026-08-24-step1-agent-spec-modernization.md`](../dev-logs/2026-08-24-step1-agent-spec-modernization.md)
+
+> 검증: `validate-rules-drift` / `validate-skill-frontmatter` / `validate-agent-handoff` / `validate-commands-drift` 전부 통과. `validate-schemas.sh` 는 1건 실패하나 **HEAD 에서도 동일하게 실패하는 기존 결함**(`.agents/` dangling ref) — 아래 Step 2 로 편입.
 
 ### Step 2 — 죽은 skill 260개 복구 (F1 / F2)
 
@@ -255,6 +257,7 @@ harness 축에서 **이미 앞서 있는** 부분이다. 정리 작업 중 훼�
 - [ ] `scripts/generate-inventory.sh` 경로 갱신 + `inventory.yml` 재생성
 - [ ] `docs/migration/0002-progress.md` 에 P7 경로 오류 기록
 - [ ] `docs/architecture/multi-tool-mapping.md` L41 갱신
+- [ ] `.agents/` dangling ref 정리 — `validate-schemas.sh` 가 `.agents/skills/source-command-log-summary/SKILL.md` 부재로 실패 (기존 결함, [2026-08-15 audit D5](2026-08-15-asset-tier-rebalance.md) 와 동일 건). **`validate-schemas.sh` 를 CI job 으로 편입할지도 함께 결정**
 - [ ] dev-log 1건
 
 > ⚠️ 카테고리 정보는 디렉터리에서 사라진다. 보존 방법(frontmatter `category:` 필드 vs description 접두)을 Step 2 착수 시 결정할 것.

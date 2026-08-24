@@ -5,7 +5,9 @@
 
 상세 룰 / Opus 4.7 전용 가이드는 [`token-budget.md`](token-budget.md) 참조. 이 문서는 매핑에 집중.
 
-> **출처**: https://platform.claude.com/docs/en/docs/build-with-claude/effort (검증일 2026-05-15)
+> **출처**
+> - effort 단계 정의: https://platform.claude.com/docs/en/docs/build-with-claude/effort (검증일 2026-05-15)
+> - subagent frontmatter `effort` 필드: https://code.claude.com/docs/en/sub-agents (검증일 **2026-08-24**)
 
 ---
 
@@ -42,7 +44,10 @@
 | `xhigh` (기본) | 일반 expert / reviewer | sonnet 42 개 대다수 (code-reviewer / go-expert / java-expert / python-expert / k8s-reviewer / terraform-reviewer / database-expert / messaging-expert ...) | Opus 4.7 coding/agentic 권장 시작점 |
 | `max` | frontier 추론 | architect-agent (opus) / debugging-expert (opus) / tech-lead (opus) | cascade failure / 트레이드오프 / 전사 RFC — opus + max 정당 |
 
-**Outlier note**: opus 3 개 + haiku 4 개 = 7 개 만 frontmatter 에 `effort:` 명시. 나머지 42 개는 본 매핑 표의 default (`xhigh`) 적용. Claude Code 는 frontmatter 의 `effort` 필드를 직접 읽지 않으므로 (model 만 표준 — F6) 본 표가 사람 / 스크립트 / agent prompt 의 SOT.
+**`effort` 는 공식 frontmatter 필드다.** subagent frontmatter 의 `effort` 는 해당 agent 가 활성화된 동안 **세션 effort 를 override** 한다. 따라서 본 표는 "무엇을 고를지" 의 기준이고, **실제 강제는 각 agent 의 frontmatter 에서 일어난다** — 표만 맞추고 frontmatter 를 비워두면 세션 기본값이 그대로 적용된다.
+
+> ⚠️ **정정 (2026-08-24)**: 2026-05-15 ~ 2026-08-24 동안 본 문서는 "Claude Code 는 frontmatter 의 `effort` 필드를 직접 읽지 않으므로 본 표가 SOT" 라고 잘못 기술했다. 대부분의 agent 가 `effort` 미명시로 남아 세션 기본값에 방치된 원인이다.
+> 경위: [2026-08-24 audit F3](../../docs/audit/2026-08-24-agent-harness-readiness.md#4-발견-f1f6)
 
 ---
 
@@ -63,10 +68,11 @@
 ### 1. Agent / Skill 호출 시
 - 본 매핑 표 default 사용 (예: `code-reviewer` → xhigh)
 - 사용자가 override 명시한 경우 (예: "low effort 로 빠르게 훑어줘") 그대로 적용
-- Outlier agent (opus 3 + haiku 4) 는 frontmatter 의 `effort:` 우선
+- agent frontmatter 에 `effort:` 가 있으면 **그것이 최우선** (세션 effort override)
 
 ### 2. 새 agent / skill 추가 시
-- 본 표의 카테고리에 매핑되면 해당 effort 사용 — frontmatter `effort:` 명시는 outlier 만
+- 본 표에서 effort 를 정한 뒤 **frontmatter `effort:` 에 명시**한다 — 표는 기준, frontmatter 가 강제
+- `model` 과의 정합성 확인: `xhigh` 는 Opus 4.7 계열만 지원. haiku / sonnet 4.6 이하는 `high` 또는 `max`
 - 새 카테고리면 본 표에 한 줄 추가 (작성자가 책임)
 - 기준 모호 시 `xhigh` (Opus 4.7 권장 시작점) 사용
 

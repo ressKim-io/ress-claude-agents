@@ -292,9 +292,9 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 | Feature | 위치 | 호출 |
 |---|---|---|
-| Skills | `.claude/skills/` | 자동 발견 (description 매칭) |
+| Skills | `.claude/skills/<name>/SKILL.md` | 자동 발견 (description 매칭) 또는 `/<name>` |
 | Subagents | `.claude/agents/` | `Agent` 도구 (`subagent_type=...`) |
-| Slash Commands | `.claude/commands/` | `/command-name` |
+| Slash Commands | `.claude/commands/` | `/command-name` — skills 로 병합됨 (기존 파일은 계속 동작) |
 | Plugins | `plugins/*.yml` | `install.sh --plugin <name>` |
 | Workflows | `.claude/workflows/*.yml` | `install.sh --workflow <name>` |
 
@@ -302,7 +302,13 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 > **개수를 산문에 쓰지 않는다.** CI 는 inventory 신선도는 검사하지만 문서 본문에 박힌 숫자는 검사하지 않아 반드시 drift 한다. 실제로 이 문단의 이전 버전이 "274 skills / 43 commands" 로 3개월간 틀린 값을 유지했다 (실제 260 / 51). 근거: [2026-08-15 audit §2](docs/audit/2026-08-15-asset-tier-rebalance.md#2-사실-오류--drift-수정은-백로그).
 
+> ⚠️ **skill 경로 규격 (검증일 2026-08-24)**: Claude Code 는 `.claude/skills/<skill-name>/SKILL.md` — **한 단계 디렉토리 + `SKILL.md`** 만 로드한다. 카테고리 하위 디렉토리는 지원하지 않는다. 현재 이 레포의 `.claude/skills/<카테고리>/<이름>.md` 는 규격을 벗어나 **로드되지 않는다**. 복구 절차: [2026-08-24 audit §6 Step 2](docs/audit/2026-08-24-agent-harness-readiness.md).
+>
+> Custom commands 는 skills 로 병합됐다 — `.claude/commands/x.md` 와 `.claude/skills/x/SKILL.md` 는 둘 다 `/x` 를 만들고, 이름이 겹치면 skill 이 우선한다.
+
 **신규 skill / agent 작성 표준**: [`.claude/templates/SKILL-SPEC.md`](.claude/templates/SKILL-SPEC.md) / [`AGENT-SPEC.md`](.claude/templates/AGENT-SPEC.md). frontmatter / description 패턴 / Verification Criteria 섹션 강제.
+
+subagent frontmatter 는 16개 필드를 지원하며, 이 중 `permissionMode` / `disallowedTools` / `maxTurns` 는 산문 규약과 달리 **런타임이 강제**한다. §User Approval 의 "에이전트에 외부 게시 권한 위임 금지" 같은 제약은 산문으로만 두지 말고 frontmatter 로 승격할 수 있는지 매번 검토한다 ([AGENT-SPEC §1.2](.claude/templates/AGENT-SPEC.md)).
 
 ### Opus 4.7 Behavioral Notes
 
