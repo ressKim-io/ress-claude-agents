@@ -1,5 +1,6 @@
 ---
 name: feature-flags
+category: business
 description: "Feature Flags / Toggles — 코드 배포와 기능 노출 분리. Release toggle / Experiment / Ops kill-switch / Permissioning. Use when working with business 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

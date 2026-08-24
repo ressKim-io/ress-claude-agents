@@ -1,5 +1,6 @@
 ---
 name: multi-tenancy
+category: business
 description: "Multi-Tenancy — 멀티테넌시 아키텍처 — Team/Org 관리, 데이터 격리(Schema/Row/Database), 멤버 권한, 초대 흐름, 컨텍스트 전파. SaaS 부트스트랩 핵심. 신규 프로젝트 시작 시  Use when working with business 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

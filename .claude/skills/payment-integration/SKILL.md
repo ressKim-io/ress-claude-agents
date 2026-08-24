@@ -1,5 +1,6 @@
 ---
 name: payment-integration
+category: business
 description: "Payment Integration — 결제 통합 패턴 — Stripe/Toss/PortOne, Token-first, Webhook 처리, 분산 트랜잭션. 한국 시장 우선 + 글로벌 옵션. SaaS 신규 프로젝트의 수익화 부트스트랩. Use when working with business 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

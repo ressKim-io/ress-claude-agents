@@ -1,5 +1,6 @@
 ---
 name: webhook-delivery
+category: business
 description: 발신자 관점 webhook 표준 — HMAC 서명, exponential backoff + jitter 재시도, per-subscriber 순서 보장, DLQ + replay, idempotency (event_id), circuit breaker, SSRF 방지. payment-integration의 수신자 관점과 짝, WebhookGateway 추상화.
 license: MIT
 ---

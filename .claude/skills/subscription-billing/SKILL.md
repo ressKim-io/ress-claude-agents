@@ -1,5 +1,6 @@
 ---
 name: subscription-billing
+category: business
 description: "Subscription Billing Hub — SaaS 구독 결제. Provider 매트릭스, 빌링 사이클 상태 머신, Webhook + idempotency, 보안. Use when working with business 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

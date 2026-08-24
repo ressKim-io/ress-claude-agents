@@ -1,5 +1,6 @@
 ---
 name: rate-limiting
+category: business
 description: "Rate Limiting — API 요청 제한. Token Bucket / Sliding Window / Leaky Bucket / Fixed Window 알고리즘, Redis 구현, 429 응답. Use when working with business 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

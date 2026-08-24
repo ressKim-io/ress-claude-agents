@@ -1,5 +1,6 @@
 ---
 name: search-recommend
+category: business
 description: 사용자 노출용 검색 + 추천 — Elasticsearch/OpenSearch/Algolia/Typesense Provider, 한국어 형태소 분석(nori), Saga 기반 인덱스 sync, BM25+벡터 하이브리드, 협업 필터링/content-based 추천. ai/vector-db(RAG/임베딩)와 별개. SearchGateway 추상화.
 license: MIT
 ---
