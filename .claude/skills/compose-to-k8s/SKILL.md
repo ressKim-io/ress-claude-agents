@@ -1,5 +1,6 @@
 ---
 name: compose-to-k8s
+category: infrastructure
 description: "Docker Compose → Kubernetes 전환 가이드 — Docker Compose에서 Kubernetes 매니페스트로의 전환 패턴. Kompose 활용 및 수동 전환 전략. Use when working with infrastructure 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

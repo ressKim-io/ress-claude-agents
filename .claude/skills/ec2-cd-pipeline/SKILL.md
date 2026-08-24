@@ -1,5 +1,6 @@
 ---
 name: ec2-cd-pipeline
+category: infrastructure
 description: "EC2 기반 CD 파이프라인 패턴 — GitHub Actions + SSM + ALB + CloudFront 기반 EC2 배포 실무 패턴. Use when working with infrastructure 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

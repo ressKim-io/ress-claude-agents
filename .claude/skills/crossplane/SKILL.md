@@ -1,5 +1,6 @@
 ---
 name: crossplane
+category: infrastructure
 description: "Crossplane 멀티클라우드 가이드 — Kubernetes-native 인프라 관리: Provider 설정, Compositions, 멀티클라우드 패턴 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false
