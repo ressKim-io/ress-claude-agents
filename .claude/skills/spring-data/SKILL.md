@@ -1,5 +1,6 @@
 ---
 name: spring-data
+category: spring
 description: "Spring Data Access Patterns — Spring Data JPA + QueryDSL 데이터 액세스 패턴 Use when working with spring 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

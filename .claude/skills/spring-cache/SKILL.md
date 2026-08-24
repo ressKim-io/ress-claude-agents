@@ -1,5 +1,6 @@
 ---
 name: spring-cache
+category: spring
 description: "Spring Cache Patterns — Redis를 활용한 Spring Boot 캐싱 전략 Use when working with spring 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

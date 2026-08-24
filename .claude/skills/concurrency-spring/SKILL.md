@@ -1,5 +1,6 @@
 ---
 name: concurrency-spring
+category: spring
 description: "Spring Concurrency Patterns — MSA/대규모 트래픽 환경에서의 동시성 문제 해결 패턴 Use when working with spring 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

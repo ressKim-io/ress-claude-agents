@@ -1,5 +1,6 @@
 ---
 name: effective-java
+category: spring
 description: "Effective Java — 패턴 결정 가이드 — Effective Java + Modern Java (17+, 21+) 기반 설계 결정 가이드. Use when working with spring 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

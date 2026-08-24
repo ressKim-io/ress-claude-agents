@@ -1,5 +1,6 @@
 ---
 name: bean-postprocessor-ordering
+category: spring
 description: BeanPostProcessor 등록 순서/초기화 시점/프록시 래핑 타이밍 오류로 인한 런타임 누락 패턴 방지. static @Bean + ObjectProvider + Before/After 선택 기준을 강제하는 체크리스트.
 ---
 
