@@ -43,10 +43,10 @@ stages:
     description: "재발 방지 결정 — 새 ADR 또는 기존 ADR 재평가"
 
   - name: monitoring-strengthen
-    agent: otel-expert
+    agent: (main)          # 서브에이전트 없음 — skill 주도 (2026-08-24 Step 3)
     inputs: [root-cause-analysis, adr]
     outputs: [alert-rule, dashboard, slo-definition]
-    skills: [observability/observability-otel, sre/sli-slo-design]
+    skills: [observability/observability-otel, sre/sre-sli-slo, observability/observability-otel-scale]
     description: "감지 못 한 신호를 alert rule로 변환, SLO 재산정"
 
   - name: runbook-update

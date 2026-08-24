@@ -49,10 +49,10 @@ stages:
     parallel_with: code-review
 
   - name: monitoring
-    agent: otel-expert
+    agent: (main)          # 서브에이전트 없음 — skill 주도 (2026-08-24 Step 3)
     inputs: [code]
     outputs: [dashboard, alert-rule, slo-definition]
-    skills: [observability/observability-otel, sre/sli-slo-design, observability/observability-incident-playbook]
+    skills: [observability/observability-otel, sre/sre-sli-slo, observability/observability-incident-playbook]
 
   - name: load-test
     agent: load-tester

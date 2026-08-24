@@ -44,10 +44,10 @@ cd ress-claude-agents
 |---|---|
 | Strategy | `tech-lead`, `product-engineer`, `migration-expert` |
 | Frontend | `frontend-expert` |
-| DevOps & SRE | `security-scanner`, `k8s-troubleshooter`, `terraform-reviewer`, `incident-responder`, `code-reviewer`, `cost-analyzer`, `finops-advisor`, `otel-expert`, `debugging-expert`, `compliance-auditor` |
+| DevOps & SRE | `security-scanner`, `k8s-troubleshooter`, `terraform-reviewer`, `incident-responder`, `code-reviewer`, `cost-analyzer`, `finops-advisor`, `debugging-expert`, `compliance-auditor` |
 | DevOps Reviewers | `k8s-reviewer`, `dockerfile-reviewer`, `cicd-reviewer`, `gitops-reviewer`, `observability-reviewer` |
 | Security Reviewers | `k8s-security-reviewer`, `container-security-reviewer`, `cicd-security-reviewer`, `network-security-reviewer` |
-| Architecture | `architect-agent`, `saga-agent` |
+| Architecture | `architect-agent` |
 | Platform & MLOps | `platform-engineer`, `mlops-expert` |
 | Service Mesh & Messaging | `service-mesh-expert`, `messaging-expert` |
 | Language Experts | `go-expert`, `java-expert`, `python-expert` |

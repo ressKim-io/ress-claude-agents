@@ -30,7 +30,7 @@
 │  Step 1     │     │  Step 2     │     │  Step 3     │
 │  Triage     │────►│  Root Cause │────►│  Observ.    │
 │             │     │  Analysis   │     │  Analysis   │
-│ incident-   │     │ k8s-trouble │     │ otel-expert │
+│ incident-   │     │ k8s-trouble │     │ /observab-  │
 │ responder   │     │ shooter     │     │ /monitoring │
 └─────────────┘     └─────────────┘     └─────────────┘
                                                │
@@ -137,7 +137,7 @@ Hypothesis 2: Memory leak
 
 ## Step 3: Observability Data Analysis
 
-**Tools**: `otel-expert` + `/monitoring-troubleshoot`
+**Tools**: `/observability-otel` + `/monitoring-troubleshoot`
 
 ### How to Request
 

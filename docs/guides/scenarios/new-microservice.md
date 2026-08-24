@@ -36,7 +36,7 @@
 │  Patterns   │     │             │     │  Review     │
 │             │     │             │     │             │
 │ /resilience │     │ /go-testing │     │ security-   │
-│ saga-agent  │     │ code-review │     │ scanner     │
+│ /msa-saga   │     │ code-review │     │ scanner     │
 └─────────────┘     └─────────────┘     └─────────────┘
                                                │
                                                ▼
@@ -146,7 +146,7 @@ order-service/
 
 ## Step 4: Apply Resilience Patterns
 
-**Tools**: `saga-agent` + `/msa-resilience` + `/msa-event-driven`
+**Tools**: `/msa-saga` + `/msa-resilience` + `/msa-event-driven`
 
 ### How to Request
 

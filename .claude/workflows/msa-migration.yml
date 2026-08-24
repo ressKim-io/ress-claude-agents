@@ -4,7 +4,6 @@ agents:
   - architect-agent
   - service-mesh-expert
   - messaging-expert
-  - saga-agent
 skills:
   categories:
     - msa

@@ -258,6 +258,66 @@ public class TemporalConfig {
 }
 ```
 
+### Temporal 결정성(Determinism) 제약
+
+Workflow 코드는 재생(replay) 가능해야 한다. 아래를 쓰면 재생 시 다른 결과가 나와 워크플로가 깨진다.
+
+```
+금지: time.Now()          -> 대안: workflow.Now()
+금지: rand.Int()          -> 대안: workflow.SideEffect()
+금지: go func()           -> 대안: workflow.Go()
+금지: 네트워크/파일 I/O    -> 대안: Activity 로 위임
+금지: uuid.New()          -> 대안: workflow.SideEffect()
+```
+
+### Temporal Retry Policy
+
+```go
+activityOpts := workflow.ActivityOptions{
+    StartToCloseTimeout: 30 * time.Second,
+    RetryPolicy: &temporal.RetryPolicy{
+        InitialInterval:    1 * time.Second,
+        BackoffCoefficient: 2.0,
+        MaximumInterval:    120 * time.Second,
+        MaximumAttempts:    50,
+        NonRetryableErrorTypes: []string{"InvalidInputError", "FraudDetectedError"},
+    },
+}
+ctx = workflow.WithActivityOptions(ctx, activityOpts)
+```
+
+| 파라미터 | 권장 값 | 설명 |
+|---------|--------|------|
+| `InitialInterval` | 1s | 첫 재시도 대기 |
+| `BackoffCoefficient` | 2.0 | 지수 백오프 계수 |
+| `MaximumInterval` | 60~120s | 대기 상한 |
+| `MaximumAttempts` | 0(무제한) 또는 50+ | 관대하게 설정 |
+
+### Workflow Versioning
+
+실행 중인 워크플로가 있는 상태에서 코드를 바꾸면 결정성이 깨진다. 반드시 버전 분기를 넣는다.
+
+```go
+func OrderWorkflow(ctx workflow.Context, order Order) error {
+    v := workflow.GetVersion(ctx, "add-fraud-check", workflow.DefaultVersion, 1)
+    if v == 1 {
+        // 새 버전: 사기 탐지 Activity 추가
+        err := workflow.ExecuteActivity(ctx, FraudCheckActivity, order).Get(ctx, nil)
+        if err != nil { return err }
+    }
+    return workflow.ExecuteActivity(ctx, ProcessPaymentActivity, order).Get(ctx, nil)
+}
+```
+
+| 방법 | 적합 시점 |
+|------|----------|
+| `GetVersion` / Patching | 소규모 변경, 점진적 마이그레이션 |
+| Worker Versioning | 대규모 변경, 완전 분리 필요 |
+| Task Queue 분리 | 완전 격리, A/B 테스트 |
+
+> ⚠️ 실험적 Worker Versioning(2025 이전 API)은 Temporal Server 2026-03 제거 예정 — 신규 도입 금지. ⚠️ unverified: 2026-08-24 시점 재확인 안 함, Temporal 공식 릴리스 노트로 검증 필요.
+
+
 ### Spring State Machine 예시 (간단)
 
 ```java
@@ -366,6 +426,46 @@ public class IdempotencyGuard {
             throw e;
         }
     }
+}
+```
+
+#### 멱등성 키 생성 전략
+
+| 전략 | 생성 방식 | 적합 시점 |
+|------|----------|----------|
+| Workflow ID + Activity | `order-123:process-payment` | Temporal 기본 전략 |
+| 비즈니스 키 조합 | `order:{id}:payment:{attempt}` | 비즈니스 의미 명확 |
+| 클라이언트 UUID | 클라이언트가 요청마다 UUID | API Gateway 레벨 |
+| 해시 기반 | `SHA256(요청 본문)` | 동일 내용 기반 탐지 |
+
+#### Deduplication 테이블 (영속 필요 시)
+
+Redis Guard 는 TTL 만료·플러시로 유실될 수 있다. 결제처럼 재실행이 치명적인 경로는 DB 에 남긴다.
+
+```sql
+CREATE TABLE idempotency_keys (
+    idempotency_key VARCHAR(255) PRIMARY KEY,
+    response_body   JSONB NOT NULL,
+    status          VARCHAR(20) NOT NULL,  -- processing / completed / failed
+    created_at      TIMESTAMP DEFAULT NOW(),
+    expires_at      TIMESTAMP DEFAULT NOW() + INTERVAL '24 hours'
+);
+CREATE INDEX idx_idempotency_expires ON idempotency_keys(expires_at);
+```
+
+
+### Temporal Search Attributes (운영 조회)
+
+Saga 를 Order/Customer 단위로 찾으려면 Search Attribute 를 올려야 한다 — 안 올리면 Web UI 에서 workflow ID 로만 찾을 수 있다.
+
+```go
+func OrderSagaWorkflow(ctx workflow.Context, order Order) error {
+    _ = workflow.UpsertSearchAttributes(ctx, map[string]interface{}{
+        "OrderID": order.ID, "CustomerID": order.CustomerID, "SagaStatus": "STARTED",
+    })
+    // ... Saga 로직 ...
+    _ = workflow.UpsertSearchAttributes(ctx, map[string]interface{}{"SagaStatus": "COMPLETED"})
+    return nil
 }
 ```
 

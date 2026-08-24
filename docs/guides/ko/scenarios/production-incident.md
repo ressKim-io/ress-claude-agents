@@ -30,7 +30,7 @@
 │  Step 1     │     │  Step 2     │     │  Step 3     │
 │  트리아지    │────►│  근본 원인   │────►│  관측성 분석 │
 │             │     │  분석        │     │             │
-│ incident-   │     │ k8s-trouble  │     │ otel-expert │
+│ incident-   │     │ k8s-trouble  │     │ /observab-  │
 │ responder   │     │ shooter      │     │ /monitoring │
 └─────────────┘     └─────────────┘     └─────────────┘
                                                │
@@ -137,7 +137,7 @@ kubectl rollout history deployment/order-service -n production
 
 ## Step 3: 관측성 데이터 분석
 
-**사용 도구**: `otel-expert` + `/monitoring-troubleshoot`
+**사용 도구**: `/observability-otel` + `/monitoring-troubleshoot`
 
 ### 이렇게 요청하세요
 

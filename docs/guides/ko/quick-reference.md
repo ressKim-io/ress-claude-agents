@@ -41,7 +41,7 @@
 | Go 코드 리뷰 | `go-expert` | `/effective-go`, `/go-microservice` | "Go 코드 리뷰해줘" |
 | API 설계 | `architect-agent` | `/api-design`, `/grpc` | "REST API 설계 검토해줘" |
 | MSA 서비스 분리 | `architect-agent` | `/msa-ddd`, `/hexagonal-clean-architecture` | "서비스 경계 설계해줘" |
-| 분산 트랜잭션 | `saga-agent` | `/msa-saga`, `/msa-event-driven` | "Saga 패턴 구현해줘" |
+| 분산 트랜잭션 | — | `/msa-saga`, `/msa-event-driven` | "Saga 패턴 구현해줘" |
 | 복원력 패턴 | `java-expert` | `/msa-resilience`, `/spring-cache` | "Circuit Breaker 설정해줘" |
 | DB 성능 이슈 | — | `/postgresql-operations`, `/mysql-operations`, `/database-sharding` | "쿼리 최적화해줘" |
 | Redis 캐싱 | — | `/redis-operations`, `/spring-cache`, `/distributed-lock` | "Redis 캐싱 전략 설계해줘" |
@@ -94,7 +94,7 @@ Go 성능 최적화:
 | 프로덕션 인시던트 | `incident-responder` | `/observability`, `/monitoring-troubleshoot` | "프로덕션 장애 대응해줘" |
 | Terraform 리뷰 | `terraform-reviewer` | `/terraform-modules`, `/terraform-security` | "Terraform plan 리뷰해줘" |
 | GitOps 배포 | `ci-optimizer` | `/gitops-argocd`, `/deployment-strategies` | "ArgoCD 배포 설정해줘" |
-| 관측성 구축 | `otel-expert` | `/observability-otel`, `/monitoring-grafana` | "OTel Collector 설정해줘" |
+| 관측성 구축 | — | `/observability-otel`, `/observability-otel-scale`, `/monitoring-grafana` | "OTel Collector 설정해줘" |
 | Service Mesh | `k8s-troubleshooter` | `/istio-core`, `/linkerd` | "Istio 설정 검토해줘" |
 | 비용 최적화 | `cost-analyzer` | `/finops`, `/finops-tools` | "클라우드 비용 분석해줘" |
 | 카오스 테스트 | `incident-responder` | `/chaos-engineering` | "카오스 실험 설계해줘" |
@@ -136,10 +136,10 @@ EKS 클러스터 구축:
 
 ```
 Full Observability Stack:
-  otel-expert → /observability-otel → /monitoring-grafana → /monitoring-metrics → /alerting-discord
+  /observability-otel → /monitoring-grafana → /monitoring-metrics → /alerting-discord
 
 eBPF 기반 Zero-Code:
-  otel-expert → /ebpf-observability → /ebpf-observability-advanced
+  /ebpf-observability → /ebpf-observability-advanced
 ```
 
 ---
@@ -196,7 +196,7 @@ eBPF 기반 Zero-Code:
       ↓
 3. /postgresql-operations → DB 관련 이슈 분석 (필요 시)
       ↓
-4. otel-expert        → 트레이스/메트릭 분석
+4. /observability-otel → 트레이스/메트릭 분석
       ↓
 5. dev-logger         → 인시던트 기록 (/log-trouble)
 ```
@@ -214,7 +214,7 @@ eBPF 기반 Zero-Code:
       ↓
 4. ci-optimizer       → CI/CD 파이프라인 최적화
       ↓
-5. otel-expert        → 관측성 기본값 설정
+5. /observability-otel → 관측성 기본값 설정
       ↓
 6. finops-advisor     → 비용 전략 수립
 ```

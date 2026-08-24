@@ -34,7 +34,7 @@
 │  복원력 패턴  │────►│  테스트     │────►│  보안 검증   │
 │             │     │             │     │             │
 │ /resilience │     │ /go-testing │     │ security-   │
-│ saga-agent  │     │ code-review │     │ scanner     │
+│ /msa-saga   │     │ code-review │     │ scanner     │
 └─────────────┘     └─────────────┘     └─────────────┘
                                                │
                                                ▼
@@ -144,7 +144,7 @@ order-service/
 
 ## Step 4: 복원력 패턴 적용
 
-**사용 도구**: `saga-agent` + `/msa-resilience` + `/msa-event-driven`
+**사용 도구**: `/msa-saga` + `/msa-resilience` + `/msa-event-driven`
 
 ### 이렇게 요청하세요
 

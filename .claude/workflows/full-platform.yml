@@ -7,7 +7,6 @@ agents:
   - messaging-expert
   - terraform-reviewer
   - incident-responder
-  - saga-agent
   - platform-engineer
 skills:
   categories:

@@ -41,7 +41,7 @@ Know these before you start.
 | Go code review | `go-expert` | `/effective-go`, `/go-microservice` | "Review my Go code" |
 | API design | `architect-agent` | `/api-design`, `/grpc` | "Review my REST API design" |
 | MSA service decomposition | `architect-agent` | `/msa-ddd`, `/hexagonal-clean-architecture` | "Design service boundaries" |
-| Distributed transactions | `saga-agent` | `/msa-saga`, `/msa-event-driven` | "Implement the Saga pattern" |
+| Distributed transactions | — | `/msa-saga`, `/msa-event-driven` | "Implement the Saga pattern" |
 | Resilience patterns | `java-expert` | `/msa-resilience`, `/spring-cache` | "Set up a Circuit Breaker" |
 | DB performance issues | — | `/postgresql-operations`, `/mysql-operations`, `/database-sharding` | "Optimize this query" |
 | Redis caching | — | `/redis-operations`, `/spring-cache`, `/distributed-lock` | "Design a Redis caching strategy" |
@@ -94,7 +94,7 @@ Error handling + OTel:
 | Production incident | `incident-responder` | `/observability`, `/monitoring-troubleshoot` | "Handle this production incident" |
 | Terraform review | `terraform-reviewer` | `/terraform-modules`, `/terraform-security` | "Review my Terraform plan" |
 | GitOps deployment | `ci-optimizer` | `/gitops-argocd`, `/deployment-strategies` | "Set up ArgoCD deployment" |
-| Observability setup | `otel-expert` | `/observability-otel`, `/monitoring-grafana` | "Configure OTel Collector" |
+| Observability setup | — | `/observability-otel`, `/observability-otel-scale`, `/monitoring-grafana` | "Configure OTel Collector" |
 | Service mesh | `k8s-troubleshooter` | `/istio-core`, `/linkerd` | "Review Istio configuration" |
 | Cost optimization | `cost-analyzer` | `/finops`, `/finops-tools` | "Analyze cloud costs" |
 | Chaos testing | `incident-responder` | `/chaos-engineering` | "Design a chaos experiment" |
@@ -136,10 +136,10 @@ Multi-cloud IaC:
 
 ```
 Full Observability Stack:
-  otel-expert → /observability-otel → /monitoring-grafana → /monitoring-metrics → /alerting-discord
+  /observability-otel → /monitoring-grafana → /monitoring-metrics → /alerting-discord
 
 eBPF-based Zero-Code:
-  otel-expert → /ebpf-observability → /ebpf-observability-advanced
+  /ebpf-observability → /ebpf-observability-advanced
 ```
 
 ---
@@ -196,7 +196,7 @@ Use multiple agents in sequence for complex workflows.
       ↓
 3. /postgresql-operations → DB issue analysis (if needed)
       ↓
-4. otel-expert        → Trace/metrics analysis
+4. /observability-otel → Trace/metrics analysis
       ↓
 5. dev-logger         → Incident record (/log-trouble)
 ```
@@ -214,7 +214,7 @@ Use multiple agents in sequence for complex workflows.
       ↓
 4. ci-optimizer       → CI/CD pipeline optimization
       ↓
-5. otel-expert        → Observability defaults
+5. /observability-otel → Observability defaults
       ↓
 6. finops-advisor     → Cost strategy
 ```

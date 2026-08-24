@@ -165,7 +165,7 @@ Failure isolation:
   /msa-resilience + /cell-based-architecture
 
 Distributed transactions:
-  saga-agent + /msa-saga + /distributed-lock
+  /msa-saga + /distributed-lock
 
 High traffic:
   /high-traffic-design + /database-sharding + /redis-streams

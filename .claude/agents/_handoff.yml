@@ -128,10 +128,6 @@ agents:
     consumes: [user-story, mvp-scope]
     produces: [bounded-context, api-contract, runbook]
 
-  saga-agent:
-    consumes: [bounded-context, api-contract]
-    produces: [code, runbook]
-
   infra-roadmap-planner:
     consumes: [bounded-context, mvp-scope, adr]
     produces: [migration-plan, upgrade-plan]
@@ -169,10 +165,6 @@ agents:
   messaging-expert:
     consumes: [api-contract, bounded-context]
     produces: [code, runbook, code-review-comment]
-
-  otel-expert:
-    consumes: [code, k8s-manifest, mvp-scope, bounded-context, adr]
-    produces: [dashboard, alert-rule, slo-definition]
 
   # === 리뷰어 (post-implementation) ===
   code-reviewer:

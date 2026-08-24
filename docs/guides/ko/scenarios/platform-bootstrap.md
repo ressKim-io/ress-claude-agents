@@ -34,7 +34,7 @@
 │  Step 4     │     │  Step 5     │     │  Step 6     │
 │  GitOps     │────►│  관측성     │────►│  보안 기반   │
 │  설정       │     │  스택 구축   │     │  라인 구축   │
-│ /gitops-    │     │ otel-expert │     │ security-   │
+│ /gitops-    │     │ /observab-  │     │ security-   │
 │ argocd      │     │ /observ-    │     │ scanner     │
 │ ci-optimizer│     │ ability     │     │ terraform-  │
 └─────────────┘     └─────────────┘     │ reviewer    │
@@ -189,7 +189,7 @@ IDP Architecture:
 
 ## Step 5: 관측성 스택 구축
 
-**사용 도구**: `otel-expert` + `/observability-otel` + `/monitoring-grafana`
+**사용 도구**: `/observability-otel` + `/observability-otel-scale` + `/monitoring-grafana`
 
 ### 이렇게 요청하세요
 

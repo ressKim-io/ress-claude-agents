@@ -74,10 +74,10 @@ stages:
 
   # 분산 트랜잭션
   - name: saga-design
-    agent: saga-agent
+    agent: (main)          # 서브에이전트 없음 — skill 주도 (2026-08-24 Step 3)
     inputs: [bounded-context, api-contract]
     outputs: [code, runbook]
-    skills: [msa/msa-saga, msa/distributed-tracing-trouble]
+    skills: [msa/msa-saga, msa/msa-event-driven, msa/distributed-lock]
     optional: true
 
   # 데이터베이스 설계 — 전담 agent 없음, skill 주도 (2026-08-24 Step 3 강등)

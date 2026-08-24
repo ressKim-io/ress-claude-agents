@@ -1,3 +1,8 @@
+# stage 의 `agent:` 표기 규약
+#   <agent-name>  — 해당 subagent 에 위임 (별도 컨텍스트)
+#   (main)        — 서브에이전트 없이 메인 세션이 `skills:` 를 로드해 수행
+# 2026-08-24 Step 3 강등으로 도메인 레퍼런스가 skill 로 내려가면서 (main) 표기가 도입됐다.
+# 근거: docs/audit/2026-08-24-agent-harness-readiness.md §3.5
 name: base
 description: "All workflows inherit: planning, documentation, and design tools"
 agents:

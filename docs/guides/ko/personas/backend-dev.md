@@ -165,7 +165,7 @@
   /msa-resilience + /cell-based-architecture
 
 분산 트랜잭션:
-  saga-agent + /msa-saga + /distributed-lock
+  /msa-saga + /distributed-lock
 
 대규모 트래픽:
   /high-traffic-design + /database-sharding + /redis-streams

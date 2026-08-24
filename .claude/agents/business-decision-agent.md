@@ -154,7 +154,7 @@ ADR 작성 시 포함:
 - Provider 1순위 + fallback
 - Token-first 결제 (PCI scope 최소화)
 - Webhook 수신 idempotency (`webhook-delivery` skill 참조)
-- Saga 패턴 적용 여부 (`saga-agent`로 위임 가능)
+- Saga 패턴 적용 여부 (`/msa-saga` skill 참조)
 - 결제 실패 retry 정책 (`subscription-billing-flows` skill)
 - MRR/Churn 측정 지표 ADR 포함 (`subscription-billing-metrics`)
 
@@ -251,9 +251,9 @@ product-engineer는 *무엇을 만들지*(user-story, mvp-scope)를 결정. busi
 
 architect-agent는 *기술 아키텍처*(bounded-context, service-boundary, api-contract). business-decision-agent는 *비즈니스 결정*. 4 ADR이 bounded-context의 경계 결정에 영향을 주므로 동시 호출 가능 (단, business 결정이 *선행*해야 한다).
 
-### vs `saga-agent` / `messaging-expert` / `ticketing-expert`
+### vs 구현 패턴 skill (`/msa-saga` / `/kafka-patterns` / `/high-traffic-design`)
 
-이들은 *구현 패턴* 전문가. business-decision-agent의 ADR이 "정기결제 Saga 필요" 라고 정하면 saga-agent로 위임. ADR 작성 단계에서 호출 안 함.
+이들은 *구현 패턴* 레퍼런스(skill). business-decision-agent의 ADR이 "정기결제 Saga 필요" 라고 정하면 구현 단계에서 `/msa-saga` 를 로드한다. ADR 작성 단계에서 참조하지 않는다.
 
 ---
 
@@ -292,7 +292,7 @@ architect-agent는 *기술 아키텍처*(bounded-context, service-boundary, api-
 - **Primary**: PortOne (카카오페이 + 신용카드)
 - **Subscription**: PortOne 빌링키
 - **Webhook**: HMAC-SHA256 + idempotency
-- **Saga 패턴**: 적용 (saga-agent 위임)
+- **Saga 패턴**: 적용 (`/msa-saga`)
 
 ### ADR-004: Notification Channels
 - **Status**: Accepted

@@ -151,7 +151,6 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | 👀 `code-reviewer` | 멀티 언어 코드 리뷰, 버그/성능/보안 탐지 | PR 생성 후 |
 | 💰 `cost-analyzer` | FinOps 분석, 비용 이상 탐지, 최적화 제안 | 비용 리뷰 시 |
 | 📈 `finops-advisor` | FinOps 전략, 성숙도 평가, 도구 선택, GreenOps | 비용 전략 수립 시 |
-| 📡 `otel-expert` | 대규모 OTel 아키텍처, Tail Sampling, 비용 최적화 | 10K+ RPS OTel 구축 시 |
 | 🐛 `debugging-expert` | Cascade failure 분석, cross-service 디버깅 | 연쇄 장애 발생 시 |
 | 📜 `compliance-auditor` | SOC2/HIPAA/GDPR/PCI-DSS 컴플라이언스 감사 | 보안 감사 시 |
 
@@ -179,7 +178,6 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | Agent | Description | Auto-trigger |
 |-------|-------------|--------------|
 | 🏛️ `architect-agent` | MSA 설계, 서비스 경계, API 계약(protobuf/OpenAPI) 정의 | 아키텍처 설계 시 |
-| 🔄 `saga-agent` | 분산 트랜잭션 오케스트레이션, Temporal.io, 보상 트랜잭션 | Saga 패턴 구현 시 |
 
 ### Platform & MLOps
 

@@ -79,12 +79,13 @@ stages:
     description: "Phase 0(EC2/compose) → Phase 1(kind/k3s) → Phase 2(EKS/GKE) → Phase 3(multi-cluster). ADR의 Provider 결정 반영"
 
   - name: slo-design
-    agent: otel-expert
+    agent: (main)          # 서브에이전트 없음 — skill 주도 (2026-08-24 Step 3)
     inputs: [mvp-scope, bounded-context, adr]
     outputs: [slo-definition]
     skills:
-      - sre/sli-slo-design
+      - sre/sre-sli-slo
       - observability/observability-otel
+      - observability/observability-otel-scale
     description: "사전 SLI/SLO 정의 — 가용성 목표가 아키텍처/인프라 비용에 영향 (99.95% vs 99% = 3배 비용)"
 
   - name: finops-estimate
