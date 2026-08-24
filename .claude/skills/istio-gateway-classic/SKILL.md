@@ -1,5 +1,6 @@
 ---
 name: istio-gateway-classic
+category: service-mesh
 description: "Istio Gateway (Classic) — Istio Gateway + VirtualService 기반 트래픽 라우팅 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

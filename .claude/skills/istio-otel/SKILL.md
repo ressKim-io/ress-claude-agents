@@ -1,5 +1,6 @@
 ---
 name: istio-otel
+category: service-mesh
 description: "Istio + OpenTelemetry 통합 가이드 — Telemetry API v1, ExtensionProviders, W3C Trace Context, OTel Collector 연동 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

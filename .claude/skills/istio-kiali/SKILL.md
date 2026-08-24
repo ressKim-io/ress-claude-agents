@@ -1,5 +1,6 @@
 ---
 name: istio-kiali
+category: service-mesh
 description: (DEPRECATED) Istio Kiali 단독 스킬. /istio-observability에 흡수 권장.
 deprecated: true
 deprecated_since: 2026-05-08

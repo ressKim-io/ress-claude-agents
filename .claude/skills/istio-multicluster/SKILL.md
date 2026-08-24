@@ -1,5 +1,6 @@
 ---
 name: istio-multicluster
+category: service-mesh
 description: "Istio 멀티클러스터 가이드 — Multi-Primary vs Primary-Remote, East-West Gateway, Shared Root CA, Cross-Cluster Discovery Use when working with service-mesh 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

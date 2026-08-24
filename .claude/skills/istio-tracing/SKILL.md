@@ -1,5 +1,6 @@
 ---
 name: istio-tracing
+category: service-mesh
 description: "Istio Distributed Tracing — Jaeger/Tempo 연동, Span 생성, Access Logging Use when working with service-mesh 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false
