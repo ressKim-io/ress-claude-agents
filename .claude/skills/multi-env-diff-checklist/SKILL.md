@@ -1,5 +1,6 @@
 ---
 name: multi-env-diff-checklist
+category: kubernetes
 description: dev / staging / prod 환경 manifest의 차이를 자동 검증하는 체크리스트. hardcoded 값과 환경별 override 누락을 사전에 검출. 멀티 클라우드(AWS/GCP) 분기까지 포함.
 ---
 

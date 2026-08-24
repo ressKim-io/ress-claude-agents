@@ -1,5 +1,6 @@
 ---
 name: k8s-helm
+category: kubernetes
 description: "Helm Best Practices — Helm chart 개발 패턴 및 best practices. Use when working with kubernetes 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

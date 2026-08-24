@@ -1,5 +1,6 @@
 ---
 name: k8s-autoscaling
+category: kubernetes
 description: "Kubernetes Autoscaling 가이드 — HPA, VPA, KEDA, Karpenter를 활용한 워크로드 자동 스케일링 Use when working with kubernetes 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

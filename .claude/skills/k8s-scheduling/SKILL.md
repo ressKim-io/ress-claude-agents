@@ -1,5 +1,6 @@
 ---
 name: k8s-scheduling
+category: kubernetes
 description: "Kubernetes Scheduling 가이드 — Node Affinity, Pod Affinity/Anti-Affinity, Taint & Toleration Use when working with kubernetes 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

@@ -1,5 +1,6 @@
 ---
 name: k8s-autoscaling-advanced
+category: kubernetes
 description: "Kubernetes Autoscaling 고급 가이드 — Karpenter, 조합 전략, 모니터링 Use when working with kubernetes 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false
