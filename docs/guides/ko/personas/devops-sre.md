@@ -173,7 +173,7 @@ incident-responder → 자동 트리아지 (SEV 분류, 영향 범위)
   ↓
 k8s-troubleshooter → 클러스터 진단 (파드, 노드, 네트워크)
   ↓
-database-expert → DB 이슈 분석 (필요 시)
+/postgresql-operations → DB 이슈 분석 (필요 시)
   ↓
 /log-trouble → 트러블슈팅 기록
 ```

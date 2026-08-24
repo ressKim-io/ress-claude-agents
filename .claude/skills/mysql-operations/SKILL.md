@@ -1,28 +1,26 @@
 ---
-name: database-expert-mysql
-description: "MySQL/InnoDB 전문가 에이전트. InnoDB 튜닝, ProxySQL, MySQL HA, Kubernetes MySQL 운영에 특화. Use for MySQL optimization, ProxySQL configuration, and MySQL HA architecture."
-tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
-model: sonnet
+name: mysql-operations
+category: infrastructure
+description: "MySQL/InnoDB 운영 — buffer pool·redo log 등 InnoDB 파라미터 튜닝, EXPLAIN 쿼리 최적화, ProxySQL 커넥션 풀링과 읽기/쓰기 분리, Group Replication InnoDB Cluster HA, K8s 배포, 핵심 메트릭·알림. Use when MySQL 성능이 떨어지거나 읽기/쓰기 분리·HA 구성이 필요할 때."
+effort: xhigh
+deprecated: false
 ---
 
-# MySQL Expert Agent
+# MySQL / InnoDB 운영
 
-You are a senior Database Engineer specializing in MySQL/InnoDB optimization. Your expertise covers InnoDB buffer pool tuning, ProxySQL connection pooling and read/write splitting, MySQL Group Replication HA, and Kubernetes MySQL operations.
+InnoDB 튜닝 · ProxySQL · HA · K8s 운영. 인덱스 설계/N+1 같은 DB 일반론은 [`database`](../database/SKILL.md) 참조.
 
-## Quick Reference
+## Quick Reference (결정 트리)
 
-| 상황 | 접근 방식 | 참조 |
-|------|----------|------|
-| 쿼리 느림 | EXPLAIN + InnoDB 튜닝 | #innodb-tuning |
-| 연결 폭주 | ProxySQL | #proxysql |
-| 읽기/쓰기 분리 | ProxySQL 쿼리 룰 | #proxysql |
-| HA 구성 | Group Replication / InnoDB Cluster | #mysql-ha |
-
----
+```
+증상은?
+    │
+    ├─ 특정 쿼리만 느림 ──────> EXPLAIN → 인덱스 (#쿼리-최적화)
+    ├─ 전반적으로 느림 ───────> InnoDB buffer pool (#innodb-튜닝)
+    ├─ 연결 폭주 ────────────> ProxySQL (#proxysql)
+    ├─ 읽기 부하 분산 필요 ───> ProxySQL 쿼리 룰 (#proxysql)
+    └─ HA 필요 ──────────────> Group Replication / InnoDB Cluster (#mysql-high-availability)
+```
 
 ## MySQL Optimization
 
@@ -276,12 +274,12 @@ groups:
 
 ---
 
-Remember: **ProxySQL은 MySQL 환경에서 필수**입니다. 읽기/쓰기 분리, 연결 풀링, 쿼리 캐싱을 하나의 레이어에서 처리합니다. 특히 읽기 비율이 높은 웹 애플리케이션에서 replica로 읽기 트래픽을 분산하면 primary 부하를 크게 줄일 수 있습니다.
 
-관련 에이전트: `database-expert` - PostgreSQL 튜닝, PgBouncer, K8s DB 운영
+## 참조 스킬
 
-Sources:
-- [MySQL InnoDB Performance Tuning](https://dev.mysql.com/doc/refman/8.0/en/innodb-performance.html)
-- [ProxySQL Documentation](https://proxysql.com/documentation/)
-- [MySQL InnoDB Cluster](https://dev.mysql.com/doc/mysql-shell/8.0/en/mysql-innodb-cluster.html)
-- [MySQL on Kubernetes - Percona](https://www.percona.com/software/percona-operator-for-mysql)
+- [`database`](../database/SKILL.md) — 인덱스 설계 / N+1 / 쿼리 최적화 일반
+- [`database-migration`](../database-migration/SKILL.md) — 스키마 마이그레이션
+- [`expand-contract-pattern`](../expand-contract-pattern/SKILL.md) — 무중단 스키마 변경
+- [`db-managed-service-checklist`](../db-managed-service-checklist/SKILL.md) — RDS / Cloud SQL 과 self-hosted 차이
+- [`database-sharding`](../database-sharding/SKILL.md) — Vitess 기반 수평 확장
+- [`postgresql-operations`](../postgresql-operations/SKILL.md) — PostgreSQL 운영

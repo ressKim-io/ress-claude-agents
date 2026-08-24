@@ -43,7 +43,7 @@
 | MSA 서비스 분리 | `architect-agent` | `/msa-ddd`, `/hexagonal-clean-architecture` | "서비스 경계 설계해줘" |
 | 분산 트랜잭션 | `saga-agent` | `/msa-saga`, `/msa-event-driven` | "Saga 패턴 구현해줘" |
 | 복원력 패턴 | `java-expert` | `/msa-resilience`, `/spring-cache` | "Circuit Breaker 설정해줘" |
-| DB 성능 이슈 | `database-expert` | `/database`, `/database-sharding` | "쿼리 최적화해줘" |
+| DB 성능 이슈 | — | `/postgresql-operations`, `/mysql-operations`, `/database-sharding` | "쿼리 최적화해줘" |
 | Redis 캐싱 | `redis-expert` | `/spring-cache`, `/distributed-lock` | "Redis 캐싱 전략 설계해줘" |
 | 부하 테스트 | `load-tester` | `/load-testing` | "K6로 부하테스트 시나리오 작성해줘" |
 | 테스트 작성 | `code-reviewer` | `/spring-testing`, `/go-testing` | "테스트 코드 작성해줘" |
@@ -194,7 +194,7 @@ eBPF 기반 Zero-Code:
       ↓
 2. k8s-troubleshooter → K8s 클러스터 진단
       ↓
-3. database-expert    → DB 관련 이슈 분석 (필요 시)
+3. /postgresql-operations → DB 관련 이슈 분석 (필요 시)
       ↓
 4. otel-expert        → 트레이스/메트릭 분석
       ↓

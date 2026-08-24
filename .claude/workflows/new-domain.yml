@@ -80,13 +80,12 @@ stages:
     skills: [msa/msa-saga, msa/distributed-tracing-trouble]
     optional: true
 
-  # 데이터베이스 설계
+  # 데이터베이스 설계 — 전담 agent 없음, skill 주도 (2026-08-24 Step 3 강등)
   - name: data-design
-    agent: database-expert   # 또는 database-expert-mysql
+    agent: code-reviewer
     inputs: [data-model, code]
-    outputs: [code-review-comment, migration-plan, runbook]
-    alternatives: [database-expert-mysql]
-    skills: [infrastructure/database-postgres, msa/database-sharding]
+    outputs: [code-review-comment]
+    skills: [infrastructure/postgresql-operations, infrastructure/mysql-operations, infrastructure/database, msa/database-sharding]
 
   # 멀티테넌시 적용
   - name: multi-tenancy-decision

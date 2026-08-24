@@ -52,8 +52,6 @@
 |---------|------|
 | `java-expert` | Virtual Threads, WebFlux, JVM 튜닝, 대용량 트래픽 |
 | `code-reviewer` | 코드 품질, 패턴 일관성, 버그 탐지 |
-| `database-expert` | PostgreSQL 튜닝, PgBouncer, 쿼리 최적화 |
-| `database-expert-mysql` | MySQL/InnoDB 튜닝, ProxySQL |
 
 ### 핵심 스킬
 
@@ -79,7 +77,7 @@
 → java-expert + /concurrency-spring
 
 "JPA N+1 문제가 발생해"
-→ database-expert + /spring-data + /database
+→ /postgresql-operations + /spring-data + /database
 
 "OAuth2 + JWT 인증 구현해줘"
 → /spring-oauth2 + /spring-security
@@ -104,7 +102,6 @@
 |---------|------|
 | `go-expert` | Worker Pool, Fan-Out/In, sync.Pool, pprof |
 | `code-reviewer` | 코드 품질, Go idiom 준수 |
-| `database-expert` | PostgreSQL + pgx/sqlc 최적화 |
 
 ### 핵심 스킬
 

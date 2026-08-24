@@ -44,8 +44,7 @@ SOFT_WARNINGS=()
 LEGACY_AGENTS_NO_BODY_SPEC=(
     anti-bot architect-agent business-decision-agent ci-optimizer cicd-reviewer
     cicd-security-reviewer code-reviewer compliance-auditor compliance-strategy-agent
-    container-security-reviewer cost-analyzer database-expert database-expert-mysql
-    debugging-expert dev-logger dockerfile-reviewer finops-advisor frontend-expert
+    container-security-reviewer cost-analyzer debugging-expert dev-logger dockerfile-reviewer finops-advisor frontend-expert
     gitops-reviewer go-expert incident-responder infra-roadmap-planner java-expert
     k8s-reviewer k8s-security-reviewer k8s-troubleshooter load-tester messaging-expert migration-expert mlops-expert
     network-security-reviewer observability-reviewer otel-expert platform-engineer

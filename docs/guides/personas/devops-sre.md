@@ -173,7 +173,7 @@ incident-responder → Auto-triage (severity, blast radius)
   ↓
 k8s-troubleshooter → Cluster diagnostics (pods, nodes, network)
   ↓
-database-expert → DB issue analysis (if needed)
+/postgresql-operations → DB issue analysis (if needed)
   ↓
 /log-trouble → Record troubleshooting
 ```

@@ -174,14 +174,6 @@ agents:
     consumes: [code, k8s-manifest, mvp-scope, bounded-context, adr]
     produces: [dashboard, alert-rule, slo-definition]
 
-  database-expert:
-    consumes: [data-model, code]
-    produces: [code-review-comment, migration-plan, runbook]
-
-  database-expert-mysql:
-    consumes: [data-model, code]
-    produces: [code-review-comment, migration-plan, runbook]
-
   redis-expert:
     consumes: [code, k8s-manifest]
     produces: [code-review-comment, runbook]

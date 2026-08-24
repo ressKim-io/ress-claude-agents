@@ -1,36 +1,32 @@
 ---
-name: database-expert
-description: "PostgreSQL 전문가 에이전트. PostgreSQL 성능 튜닝, PgBouncer, Streaming Replication, Kubernetes PostgreSQL 운영에 특화. Use for PostgreSQL optimization, query tuning, and PgBouncer configuration. MySQL은 database-expert-mysql 에이전트 참조."
-tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
-model: sonnet
+name: postgresql-operations
+category: infrastructure
+description: "PostgreSQL 운영 — postgresql.conf 파라미터 튜닝, EXPLAIN ANALYZE 쿼리 최적화, 잠금 진단, PgBouncer 커넥션 풀링, Percona Operator 기반 K8s 운영, 핵심 메트릭·알림. Use when PostgreSQL 성능이 떨어지거나 커넥션이 폭주할 때, K8s 위에서 PostgreSQL 을 운영할 때."
+effort: xhigh
+deprecated: false
 ---
 
-# PostgreSQL Expert Agent
+# PostgreSQL 운영
 
-You are a senior Database Engineer specializing in PostgreSQL optimization. Your expertise covers PostgreSQL performance tuning, PgBouncer connection pooling, Streaming Replication HA, and Kubernetes PostgreSQL operations.
+성능 튜닝 · 커넥션 풀링 · K8s 운영. 인덱스 설계/N+1 같은 DB 일반론은 [`database`](../database/SKILL.md) 참조.
 
-## Quick Reference
+## Quick Reference (결정 트리)
 
-| 상황 | 접근 방식 | 참조 |
-|------|----------|------|
-| 쿼리 느림 | EXPLAIN ANALYZE + 인덱스 | #query-optimization |
-| 연결 폭주 | PgBouncer | #connection-pooling |
-| K8s DB 운영 | Percona Operator | #kubernetes-db |
-| 복제 지연 | Streaming Replication 튜닝 | #replication |
-
-## Database Selection
+```
+증상은?
+    │
+    ├─ 특정 쿼리만 느림 ──────> EXPLAIN ANALYZE → 인덱스 (#쿼리-최적화)
+    ├─ 전반적으로 느림 ───────> postgresql.conf 파라미터 (#핵심-파라미터)
+    ├─ "too many connections" > PgBouncer (#connection-pooling-pgbouncer)
+    ├─ 쿼리가 멈춤 ───────────> 잠금 모니터링 (#잠금-모니터링)
+    └─ K8s 위 운영 ──────────> Percona Operator (#kubernetes-database-operations)
+```
 
 | DB | 강점 | 최적 사용 |
 |----|------|----------|
 | **PostgreSQL** | ACID, 복잡한 쿼리, JSON | 트랜잭션 중심, 분석 |
-| **MySQL** | 읽기 성능, 단순 CRUD | 웹 애플리케이션 |
+| **MySQL** | 읽기 성능, 단순 CRUD | 웹 애플리케이션 ([`mysql-operations`](../mysql-operations/SKILL.md)) |
 | **Aurora** | Auto-scaling, 고가용성 | AWS 클라우드 네이티브 |
-
----
 
 ## PostgreSQL Performance Tuning
 
@@ -300,12 +296,12 @@ groups:
 
 ---
 
-Remember: **Connection Pooling은 필수**입니다. PostgreSQL은 프로세스 기반이라 연결당 약 10MB 메모리를 사용합니다. PgBouncer를 사용하면 실제 DB 연결 수를 줄이면서 많은 애플리케이션 연결을 처리할 수 있습니다.
 
-관련 에이전트: `database-expert-mysql` - MySQL/InnoDB 튜닝, ProxySQL
+## 참조 스킬
 
-Sources:
-- [PostgreSQL on Kubernetes - Percona](https://www.percona.com/blog/run-postgresql-on-kubernetes-a-practical-guide-with-benchmarks-best-practices/)
-- [PostgreSQL Performance Tuning](https://last9.io/blog/postgresql-performance/)
-- [PgBouncer Connection Pooling](https://www.percona.com/blog/pgbouncer-for-postgresql-how-connection-pooling-solves-enterprise-slowdowns/)
-- [Connection Pooling in Production](https://medium.com/codetodeploy/database-connection-pooling-in-production-real-world-tuning-that-actually-works-0b6d8e12195b)
+- [`database`](../database/SKILL.md) — 인덱스 설계 / N+1 / 쿼리 최적화 일반
+- [`database-migration`](../database-migration/SKILL.md) — 스키마 마이그레이션 (Flyway / golang-migrate)
+- [`expand-contract-pattern`](../expand-contract-pattern/SKILL.md) — 무중단 스키마 변경
+- [`db-managed-service-checklist`](../db-managed-service-checklist/SKILL.md) — RDS / Cloud SQL 과 self-hosted 차이
+- [`database-sharding`](../database-sharding/SKILL.md) — 수평 확장이 필요해진 시점
+- [`mysql-operations`](../mysql-operations/SKILL.md) — MySQL/InnoDB 운영

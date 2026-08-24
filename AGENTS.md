@@ -16,7 +16,7 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 | 자산 | 위치 | 내용 |
 |---|---|---|
 | Skills (도메인 패턴) | `.claude/skills/` | 22 카테고리 — Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등 |
-| Agents (전문 에이전트) | `.claude/agents/` | database-expert, k8s-troubleshooter, saga-agent, business-decision-agent 등 |
+| Agents (전문 에이전트) | `.claude/agents/` | code-reviewer, k8s-troubleshooter, architect-agent, business-decision-agent 등 |
 | Rules (코딩/보안/워크플로우) | `.claude/rules/` | 이 AGENTS.md의 상세판. effort-guide, multi-tool-adapter 포함 |
 | Templates (작성 표준) | `.claude/templates/` | SKILL-SPEC, AGENT-SPEC + 문서 template (신규 자산 작성 spec) |
 | Plugins (역할별 번들) | `plugins/*.yml` | 역할별 agent + skill 카테고리 묶음 |

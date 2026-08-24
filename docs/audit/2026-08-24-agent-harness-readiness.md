@@ -338,6 +338,7 @@ harness 축에서 **이미 앞서 있는** 부분이다. 정리 작업 중 훼�
 - [ ] 재판정 5건 (§3.3.1) — agent 유지, 본문 skill 중복분 삭제 → 참조로 대체
 - [ ] borderline 11개 재판정 (강등 / 유지 / 보강)
 - [ ] `plugins/*.yml`(55건), `.claude/workflows/*.yml`, `inventory.yml` 참조 갱신
+- [ ] **skill 본문의 `**관련 agent**:` 상호참조 일괄 정리** — 같은 파일이 여러 agent 를 참조하므로 강등 전건 완료 후 한 번에 sweep (multi-tenancy / media-handling / audit-log / data-subject-rights / credit-system / subscription-billing / kr-location-info-act 등)
 - [ ] dev-log 1건
 
 ### Step 4 — harness 리트로핏

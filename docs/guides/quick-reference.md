@@ -43,7 +43,7 @@ Know these before you start.
 | MSA service decomposition | `architect-agent` | `/msa-ddd`, `/hexagonal-clean-architecture` | "Design service boundaries" |
 | Distributed transactions | `saga-agent` | `/msa-saga`, `/msa-event-driven` | "Implement the Saga pattern" |
 | Resilience patterns | `java-expert` | `/msa-resilience`, `/spring-cache` | "Set up a Circuit Breaker" |
-| DB performance issues | `database-expert` | `/database`, `/database-sharding` | "Optimize this query" |
+| DB performance issues | — | `/postgresql-operations`, `/mysql-operations`, `/database-sharding` | "Optimize this query" |
 | Redis caching | `redis-expert` | `/spring-cache`, `/distributed-lock` | "Design a Redis caching strategy" |
 | Load testing | `load-tester` | `/load-testing` | "Write a K6 load test scenario" |
 | Writing tests | `code-reviewer` | `/spring-testing`, `/go-testing` | "Write test code" |
@@ -194,7 +194,7 @@ Use multiple agents in sequence for complex workflows.
       ↓
 2. k8s-troubleshooter → Cluster diagnostics
       ↓
-3. database-expert    → DB issue analysis (if needed)
+3. /postgresql-operations → DB issue analysis (if needed)
       ↓
 4. otel-expert        → Trace/metrics analysis
       ↓

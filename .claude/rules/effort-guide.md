@@ -41,7 +41,7 @@
 |---|---|---|---|
 | `low` | 로깅 / 단순 자동화 | dev-logger (haiku) / git-workflow (haiku) / pr-review-bot (haiku) / anti-bot (sonnet) | 단순 기록 / commit msg / WAF 설정 — 깊은 추론 불필요 |
 | `medium` | 비용 민감 분석 | cost-analyzer / finops-advisor / compliance-auditor / ci-optimizer (sonnet) | 정량 분석은 model 자체 capability 충분, effort 절약 |
-| `xhigh` (기본) | 일반 expert / reviewer | sonnet 42 개 대다수 (code-reviewer / go-expert / java-expert / python-expert / k8s-reviewer / terraform-reviewer / database-expert / messaging-expert ...) | Opus 4.7 coding/agentic 권장 시작점 |
+| `xhigh` (기본) | 일반 expert / reviewer | sonnet 42 개 대다수 (code-reviewer / k8s-reviewer / terraform-reviewer / gitops-reviewer / observability-reviewer ...) | Opus 4.7 coding/agentic 권장 시작점 |
 | `max` | frontier 추론 | architect-agent (opus) / debugging-expert (opus) / tech-lead (opus) | cascade failure / 트레이드오프 / 전사 RFC — opus + max 정당 |
 
 **`effort` 는 공식 frontmatter 필드다.** subagent frontmatter 의 `effort` 는 해당 agent 가 활성화된 동안 **세션 effort 를 override** 한다. 따라서 본 표는 "무엇을 고를지" 의 기준이고, **실제 강제는 각 agent 의 frontmatter 에서 일어난다** — 표만 맞추고 frontmatter 를 비워두면 세션 기본값이 그대로 적용된다.

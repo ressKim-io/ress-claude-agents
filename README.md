@@ -48,7 +48,7 @@ cd ress-claude-agents
 | DevOps Reviewers | `k8s-reviewer`, `dockerfile-reviewer`, `cicd-reviewer`, `gitops-reviewer`, `observability-reviewer` |
 | Security Reviewers | `k8s-security-reviewer`, `container-security-reviewer`, `cicd-security-reviewer`, `network-security-reviewer` |
 | Architecture | `architect-agent`, `saga-agent` |
-| Platform & MLOps | `platform-engineer`, `mlops-expert`, `database-expert`, `database-expert-mysql`, `redis-expert` |
+| Platform & MLOps | `platform-engineer`, `mlops-expert`, `redis-expert` |
 | Service Mesh & Messaging | `service-mesh-expert`, `messaging-expert` |
 | Language Experts | `go-expert`, `java-expert`, `python-expert` |
 | Ticketing & Load Test | `ticketing-expert`, `anti-bot`, `load-tester` |

@@ -52,8 +52,6 @@
 |-------|----------|
 | `java-expert` | Virtual Threads, WebFlux, JVM tuning, high-traffic |
 | `code-reviewer` | Code quality, pattern consistency, bug detection |
-| `database-expert` | PostgreSQL tuning, PgBouncer, query optimization |
-| `database-expert-mysql` | MySQL/InnoDB tuning, ProxySQL |
 
 ### Core Skills
 
@@ -79,7 +77,7 @@
 → java-expert + /concurrency-spring
 
 "I have a JPA N+1 problem"
-→ database-expert + /spring-data + /database
+→ /postgresql-operations + /spring-data + /database
 
 "Implement OAuth2 + JWT authentication"
 → /spring-oauth2 + /spring-security
@@ -104,7 +102,6 @@
 |-------|----------|
 | `go-expert` | Worker Pool, Fan-Out/In, sync.Pool, pprof |
 | `code-reviewer` | Code quality, Go idiom compliance |
-| `database-expert` | PostgreSQL + pgx/sqlc optimization |
 
 ### Core Skills
 
