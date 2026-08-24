@@ -1,5 +1,6 @@
 ---
 name: wasm-edge
+category: platform
 description: "WebAssembly Edge 가이드 — WASM/WASI, WasmEdge, Spin, Kubernetes WASM 워크로드 실행 Use when working with platform 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

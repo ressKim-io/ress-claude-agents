@@ -1,5 +1,6 @@
 ---
 name: mlops
+category: platform
 description: "MLOps 가이드 — Kubeflow, KServe를 활용한 ML 파이프라인과 모델 서빙 Use when working with platform 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

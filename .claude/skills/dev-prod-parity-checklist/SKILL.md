@@ -1,5 +1,6 @@
 ---
 name: dev-prod-parity-checklist
+category: platform
 description: dev/staging/prod 환경 간 configuration drift와 snowflake environment 방지 체크리스트. 12-factor X + Beyond 12-factor 기반. 환경별 매니페스트 diff, 같은 base image, 같은 DB 종류 강제.
 ---
 

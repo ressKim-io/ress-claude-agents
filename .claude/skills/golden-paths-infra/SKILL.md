@@ -1,5 +1,6 @@
 ---
 name: golden-paths-infra
+category: platform
 description: "Golden Paths: Infrastructure & CI/CD — Infrastructure 템플릿, CI/CD 파이프라인, Observability 기본값 Use when working with platform 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

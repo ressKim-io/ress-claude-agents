@@ -1,5 +1,6 @@
 ---
 name: mlops-llmops
+category: platform
 description: (DEPRECATED) MLOps/LLMOps 통합 스킬은 분할되었습니다. /mlops, /mlops-tracking, /llmops를 사용하세요.
 deprecated: true
 deprecated_since: 2026-05-08
