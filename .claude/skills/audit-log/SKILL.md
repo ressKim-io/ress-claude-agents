@@ -21,7 +21,8 @@ Audit Log — 누가 언제 무엇을 어떻게 변경했는가. Append-only 이
 - "왜 이 데이터가 이렇게 됐어?" 질문에 답하기 위해
 
 **관련 skill**: `business/multi-tenancy.md`, `business/auth-oauth-social.md`, `security/compliance-frameworks.md`, `messaging/kafka-patterns.md`
-**관련 agent**: `compliance-auditor`, `security-scanner`, `database-expert`
+**관련 agent**: `compliance-auditor`, `security-scanner`
+**관련 skill**: [`postgresql-operations`](../postgresql-operations/SKILL.md) (append-only 테이블 파티셔닝)
 
 ---
 

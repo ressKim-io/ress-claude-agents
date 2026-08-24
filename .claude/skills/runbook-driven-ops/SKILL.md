@@ -32,7 +32,8 @@ license: MIT
 - `cicd/deployment-strategies.md` — change runbook (canary/blue-green 절차)
 - `platform/golden-paths.md` — 신규 서비스 runbook 템플릿 자동 생성
 
-**관련 agent**: `incident-responder`, `k8s-troubleshooter`, `otel-expert`, `debugging-expert`, `tech-lead`
+**관련 agent**: `incident-responder`, `k8s-troubleshooter`, `debugging-expert`, `tech-lead`
+**관련 skill**: [`observability-otel`](../observability-otel/SKILL.md), [`broker-troubleshooting`](../broker-troubleshooting/SKILL.md)
 
 ---
 

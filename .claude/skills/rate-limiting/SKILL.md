@@ -406,7 +406,7 @@ Burst: 일시 110% 허용 (10초 grace)
 - `skills/security/auth-patterns.md` — 보안 패턴
 - [`anti-bot`](../anti-bot/SKILL.md) — 봇 차단 통합
 - [`virtual-waiting-room`](../virtual-waiting-room/SKILL.md) — high-traffic 사례
-- `agents/redis-expert` — Redis 운영
+- [`redis-operations`](../redis-operations/SKILL.md) — Redis 운영
 
 **외부 자원**:
 - IETF draft: RFC RateLimit Header Fields for HTTP

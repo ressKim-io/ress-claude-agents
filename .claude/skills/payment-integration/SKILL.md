@@ -22,7 +22,8 @@ deprecated: false
 - 기획자가 "결제 어떻게 할까요?" 물어볼 때
 
 **관련 skill**: `msa/msa-saga.md`, `msa/distributed-lock.md`, `security/secure-coding.md`
-**관련 agent**: `saga-agent`, `tech-lead` (결제 ADR 작성)
+**관련 agent**: `tech-lead` (결제 ADR 작성)
+**관련 skill**: [`msa-saga`](../msa-saga/SKILL.md) (보상 트랜잭션)
 
 ---
 
@@ -145,7 +146,7 @@ Step 5: 알림 발송 (idempotent)
 **중간 실패 시**: 역순으로 compensation 실행.
 
 → 상세: [.claude/skills/msa/msa-saga.md](.claude/skills/msa/msa-saga.md)
-→ 오케스트레이션: `agents/saga-agent` 호출
+→ 오케스트레이션: [`msa-saga`](../msa-saga/SKILL.md) 참조
 
 **한국 결제 특수성**:
 - 카드 결제 후 **취소 가능 시간 제한** (당일 vs 당월 vs 30일)
@@ -281,7 +282,7 @@ Server: Order amount == Webhook amount 비교 → 불일치면 alert
 - `skills/msa/distributed-lock.md` — 동시 결제 시 잠금
 - `skills/security/secure-coding.md` — 입력 검증, 시크릿 관리
 - `skills/messaging/redis-streams.md` — Webhook 큐
-- `agents/saga-agent` — Saga 오케스트레이션 위임
+- [`msa-saga`](../msa-saga/SKILL.md) — Saga 오케스트레이션
 - `agents/tech-lead` — 결제 ADR 작성
 - `rules/security.md` — 보안 룰 (PCI 관련)
 

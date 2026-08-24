@@ -22,7 +22,8 @@ deprecated: false
 - 멤버 초대/권한 관리 필요
 
 **관련 skill**: `architecture/modular-monolith.md`, `security/auth-patterns.md`, `business/auth-oauth-social.md`
-**관련 agent**: `architect-agent`, `database-expert`, `tech-lead`
+**관련 agent**: `architect-agent`, `tech-lead`
+**관련 skill**: [`postgresql-operations`](../postgresql-operations/SKILL.md), [`mysql-operations`](../mysql-operations/SKILL.md)
 
 ---
 
@@ -327,7 +328,7 @@ Subscription은 Tenant 단위
 - `skills/business/auth-oauth-social.md` — 사용자 로그인 (이 skill과 결합)
 - `skills/business/payment-integration.md` — Tenant 단위 과금
 - `agents/architect-agent` — 격리 모델 설계 위임
-- `agents/database-expert` — DB 격리 구현
+- [`postgresql-operations`](../postgresql-operations/SKILL.md) — DB 격리 구현
 - `agents/tech-lead` — ADR 작성
 
 **외부 자원**:

@@ -22,7 +22,8 @@ deprecated: false
 - 중요/일반 알림 우선순위 분리
 
 **관련 skill**: `msa/msa-event-driven.md`, `msa/task-queue.md`, `messaging/redis-streams.md`
-**관련 agent**: `messaging-expert`, `architect-agent`
+**관련 agent**: `architect-agent`
+**관련 skill**: [`broker-troubleshooting`](../broker-troubleshooting/SKILL.md), [`kafka-patterns`](../kafka-patterns/SKILL.md)
 
 ---
 
@@ -321,7 +322,7 @@ Template 사전 등록 (카카오 심사 필요)
 - `skills/messaging/redis-streams.md` — 큐 구현
 - `skills/messaging/kafka.md` — 대규모 이벤트 (선택)
 - `skills/observability/observability-otel.md` — 발송 지표/추적
-- `agents/messaging-expert` — 큐 설계 위임
+- [`broker-troubleshooting`](../broker-troubleshooting/SKILL.md) — 큐 진단 / [`kafka-patterns`](../kafka-patterns/SKILL.md) — 큐 설계
 - `agents/architect-agent` — 추상화 설계 위임
 
 **외부 자원**:

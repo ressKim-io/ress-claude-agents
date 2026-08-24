@@ -34,7 +34,8 @@ license: MIT
 - `business/audit-log.md` — 회고 보존 (1년+) + 내부 감사
 - `observability/alerting-discord.md` — 외부 통신 도구
 
-**관련 agent**: `incident-responder`, `tech-lead`, `otel-expert`, `debugging-expert`, `compliance-auditor`
+**관련 agent**: `incident-responder`, `tech-lead`, `debugging-expert`, `compliance-auditor`
+**관련 skill**: [`observability-otel`](../observability-otel/SKILL.md), [`observability-incident-playbook`](../observability-incident-playbook/SKILL.md)
 
 ---
 

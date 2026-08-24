@@ -32,7 +32,8 @@ license: MIT
 - `infrastructure/aws-s3-cloudfront.md` — S3/CloudFront 운영
 - `cicd/cdn-purge-strategies.md` — variant 갱신/무효화
 
-**관련 agent**: `tech-lead` (Provider/CDN ADR), `database-expert` (asset 테이블 파티셔닝), `messaging-expert` (transcoding 큐), `cost-analyzer` (egress/storage 추적), `security-scanner` (SSRF/EXIF 검증)
+**관련 agent**: `tech-lead` (Provider/CDN ADR), `cost-analyzer` (egress/storage 추적), `security-scanner` (SSRF/EXIF 검증)
+**관련 skill**: [`postgresql-operations`](../postgresql-operations/SKILL.md) (asset 테이블 파티셔닝), [`broker-troubleshooting`](../broker-troubleshooting/SKILL.md) (transcoding 큐)
 
 ---
 

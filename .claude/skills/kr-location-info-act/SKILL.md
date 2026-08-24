@@ -31,7 +31,8 @@ license: MIT
 - `security/secure-coding.md` — 좌표 암호화, 마스킹
 - `observability/logging-compliance.md` — 위치 로그 보존/파기
 
-**관련 agent**: `compliance-auditor`, `security-scanner`, `tech-lead`, `database-expert`
+**관련 agent**: `compliance-auditor`, `security-scanner`, `tech-lead`
+**관련 skill**: [`postgresql-operations`](../postgresql-operations/SKILL.md)
 
 ---
 

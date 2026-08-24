@@ -21,7 +21,8 @@ SaaS 구독 결제 메인 hub — Provider 매트릭스(+SubscriptionGateway 추
 - 기획자가 "월 9,900원 구독 모델로 가요" 물어볼 때
 
 **관련 skill**: `payment-integration.md`, `multi-tenancy.md`, `notification-multichannel.md`, `feature-flags.md`, `audit-log.md`, `rate-limiting.md`, `admin-api-keys.md`, `auth-oauth-social.md`
-**관련 agent**: `saga-agent`, `tech-lead` (구독 모델 ADR), `database-expert` (invoice schema), `messaging-expert` (Webhook 큐)
+**관련 agent**: `tech-lead` (구독 모델 ADR)
+**관련 skill**: [`msa-saga`](../msa-saga/SKILL.md), [`postgresql-operations`](../postgresql-operations/SKILL.md) (invoice schema), [`broker-troubleshooting`](../broker-troubleshooting/SKILL.md) (Webhook 큐)
 
 ---
 
@@ -330,9 +331,9 @@ stripe test_clocks advance --frozen-time=$(date -d "+15 days" +%s)
 - `business/auth-oauth-social.md` — Customer Portal 인증, admin 권한
 - `skills/msa/msa-saga.md` — invoice + 후처리 분산 트랜잭션
 - `skills/messaging/redis-streams.md` / `kafka-*` — webhook 큐
-- `agents/saga-agent` — Saga 오케스트레이션
+- [`msa-saga`](../msa-saga/SKILL.md) — Saga 오케스트레이션
 - `agents/tech-lead` — 구독 모델 ADR
-- `agents/database-expert` — invoice partition, archival
+- [`postgresql-operations`](../postgresql-operations/SKILL.md) — invoice partition, archival
 - [`anti-bot`](../anti-bot/SKILL.md) — trial 어뷰즈 탐지
 - `rules/security.md`, `rules/documentation.md` — ADR/회계 문서
 
