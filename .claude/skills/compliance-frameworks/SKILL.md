@@ -1,5 +1,6 @@
 ---
 name: compliance-frameworks
+category: security
 description: "Compliance Frameworks Guide — SOC2, HIPAA, GDPR, PCI-DSS 컴플라이언스 프레임워크 매핑 및 자동화 증거 수집 Use when working with security 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false
