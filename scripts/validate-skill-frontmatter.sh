@@ -142,6 +142,27 @@ validate_agent() {
     return 0
 }
 
+# frontmatter 안의 category: 만 읽는다. 본문에 등장하는 `category:` 줄은 무시.
+skill_frontmatter_category() {
+    awk '/^---$/{n++; next} n==1 && /^category:/{sub(/^category: *"?/,""); sub(/"$/,""); print; exit} n>=2{exit}' "$1"
+}
+
+skill_categories() {
+    local f
+    for f in .claude/skills/*/SKILL.md; do
+        [[ -f "$f" ]] || continue
+        skill_frontmatter_category "$f"
+    done | sort -u
+}
+
+skill_files_in_category() {
+    local want="$1" f
+    for f in .claude/skills/*/SKILL.md; do
+        [[ -f "$f" ]] || continue
+        [[ "$(skill_frontmatter_category "$f")" == "$want" ]] && printf '%s\n' "$f"
+    done
+}
+
 check_agents() {
     section "Agents (.claude/agents/) frontmatter 검증"
 
@@ -395,9 +416,9 @@ report_stats() {
         while IFS= read -r f; do
             total=$((total + 1))
             [[ "$(head -1 "$f")" == "---" ]] && fm=$((fm + 1))
-        done < <(find "$dir" -type f -name "*.md")
+        done < <(skill_files_in_category "$cat")
         printf '  %-15s %d/%d\n' "$cat" "$fm" "$total"
-    done < <(find .claude/skills -mindepth 1 -maxdepth 1 -type d | sort)
+    done < <(skill_categories)
 }
 
 # ---------------------------------------------------------------------------
