@@ -214,7 +214,6 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | 🤖 `anti-bot` | 봇/매크로 방어 | Rate Limiting, 행동 분석, Device Fingerprint |
 | 📊 `load-tester` | 부하 테스트 허브 | 도구 비교, 선택 가이드 |
 | ⚡ `load-tester-k6` | K6 전문 | JavaScript, Grafana Cloud, K6 Operator |
-| 🎯 `load-tester-gatling` | Gatling 전문 | Scala/Java DSL, 엔터프라이즈 |
 | 🔄 `load-tester-ngrinder` | nGrinder 전문 | Groovy, Controller/Agent, 웹 UI |
 
 ### Workflow Automation

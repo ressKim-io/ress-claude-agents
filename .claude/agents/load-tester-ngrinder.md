@@ -23,7 +23,8 @@ You are a performance engineer specializing in nGrinder (Naver Open Source) for 
 | Groovy 스크립트 | GrinderRunner | #티켓팅-시나리오 |
 | 부하 설정 | Web UI | #웹-ui-설정 |
 
-**관련 에이전트**: [load-tester](load-tester.md) (도구 비교), [load-tester-k6](load-tester-k6.md), [load-tester-gatling](load-tester-gatling.md)
+**관련 에이전트**: [load-tester](load-tester.md) (도구 비교), [load-tester-k6](load-tester-k6.md)
+**관련 스킬**: `/load-testing-gatling` (Gatling)
 
 ## nGrinder Overview
 

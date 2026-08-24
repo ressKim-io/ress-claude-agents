@@ -1,29 +1,33 @@
 ---
-name: load-tester-gatling
-description: "Gatling 부하 테스트 에이전트. Scala/Java DSL 기반 엔터프라이즈급 부하 테스트 특화. Use for JVM-based load testing with enterprise features."
-tools:
-  - Read
-  - Write
-  - Grep
-  - Glob
-  - Bash
-model: sonnet
+name: load-testing-gatling
+category: sre
+description: "Gatling 부하 테스트 — Scala/Java DSL, injection 프로파일, Assertions, 분산 실행, HTML 리포트 분석. Use when JVM 기반 부하 테스트 도구로 Gatling 을 선택했거나 Scala/Java DSL 시나리오를 작성할 때."
+effort: xhigh
+deprecated: false
 ---
 
-# Gatling Load Tester Agent
+# Gatling 부하 테스트
 
-You are a performance engineer specializing in Gatling for enterprise-grade load testing. Your expertise covers Scala/Java DSL, distributed execution, and detailed HTML reporting.
+Scala/Java DSL 기반 JVM 부하 테스트. 코드로 시나리오를 관리하고 상세 HTML 리포트로 병목을 분석한다.
 
-## Quick Reference
+## Quick Reference (결정 트리)
 
-| 상황 | 패턴 | 참조 |
+```
+Gatling 을 쓸 상황인가?
+    │
+    ├─ 팀이 JVM 스택(Scala/Java) ────────> Gatling
+    ├─ 리포트 상세도가 중요 ─────────────> Gatling (HTML 리포트)
+    ├─ DevOps/JS 친화 ──────────────────> K6 (/load-testing)
+    └─ GUI 기반, 비개발자 참여 ──────────> nGrinder (/load-testing-analysis)
+```
+
+| 상황 | 패턴 | 섹션 |
 |------|------|------|
-| 기본 설정 | Maven/Gradle 프로젝트 | #설치-및-설정 |
-| Scala DSL | ScenarioBuilder | #scala-dsl |
-| Java DSL | Java 11+ API | #java-dsl |
-| 분산 실행 | Gatling Enterprise | #분산-실행 |
-
-**관련 에이전트**: [load-tester](load-tester.md) (도구 비교), [load-tester-k6](load-tester-k6.md), [load-tester-ngrinder](load-tester-ngrinder.md)
+| 프로젝트 생성 | Maven archetype / Gradle 의존성 | [설치 및 설정](#설치-및-설정) |
+| 시나리오 작성 (Scala) | `Simulation` + `ScenarioBuilder` | [Scala DSL](#scala-dsl) |
+| 시나리오 작성 (Java) | `io.gatling.javaapi` | [Java DSL](#java-dsl) |
+| SLO 게이트 | `assertions` | [Assertions](#assertions) |
+| 대규모 실행 | injector 분산 + 결과 병합 | [분산 실행](#분산-실행) |
 
 ## Gatling Overview
 
@@ -267,4 +271,28 @@ open target/gatling/*/index.html
 | P95 응답시간 | < 500ms | 500-1000ms | > 1000ms |
 | 에러율 | < 0.1% | 0.1-1% | > 1% |
 
-Remember: Gatling은 엔터프라이즈급 부하 테스트에 적합합니다. Scala DSL이 더 강력하지만, Java DSL도 충분히 표현력이 있습니다. HTML 리포트가 매우 상세하여 병목 분석에 유용합니다.
+## Anti-Patterns
+
+| 안티패턴 | 문제 | 대안 |
+|---------|------|------|
+| `.pause()` 없는 시나리오 | 실사용자 think time 미반영 → 비현실적 부하 | `.pause(1.second, 3.seconds)` 로 범위 지정 |
+| assertion 없는 실행 | 성능 회귀가 CI 를 통과 | `global.responseTime.percentile(95).lt(...)` 필수 |
+| injector 1대로 100만 VU 시도 | 부하 생성기 자체가 병목 → 측정값 왜곡 | injector 분산 후 결과 병합 |
+| Scala/Java DSL 혼용 | 빌드 설정 이원화, 유지보수 비용 | 팀 스택에 맞춰 하나로 고정 |
+| HTML 리포트만 보고 종료 | p95/p99 만 보면 부하 생성기 포화를 놓침 | injector CPU / 응답시간 추이를 함께 확인 |
+
+## 체크리스트
+
+- [ ] 시나리오에 think time(`pause`)이 들어갔는가
+- [ ] `assertions` 로 SLO 를 코드에 박았는가 (p95 / p99 / 성공률)
+- [ ] injection 프로파일이 실제 트래픽 패턴(ramp → constant → spike)을 반영하는가
+- [ ] 단일 injector 한계(~10K VU)를 넘는 목표면 분산 구성을 잡았는가
+- [ ] 부하 생성기 자체의 리소스 포화를 모니터링하는가
+- [ ] CI 에서 assertion 실패 시 빌드가 깨지는가
+
+## 참조 스킬
+
+- [`load-testing`](../load-testing/SKILL.md) — 테스트 유형 / K6 / K8s 실행
+- [`load-testing-analysis`](../load-testing-analysis/SKILL.md) — nGrinder / 결과 분석 / SLO Threshold
+- [`sre-sli-slo`](../sre-sli-slo/SKILL.md) — assertion 에 넣을 SLO 정의
+- [`high-traffic-design`](../high-traffic-design/SKILL.md) — 부하 테스트로 검증할 설계 패턴

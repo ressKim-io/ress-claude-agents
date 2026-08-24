@@ -23,7 +23,8 @@ You are a performance engineer specializing in K6 (Grafana Labs) for high-traffi
 | 분산 테스트 | Grafana Cloud K6 | #분산-테스트 |
 | K8s 환경 | K6 Operator | #k8s-operator |
 
-**관련 에이전트**: [load-tester](load-tester.md) (도구 비교), [load-tester-gatling](load-tester-gatling.md), [load-tester-ngrinder](load-tester-ngrinder.md)
+**관련 에이전트**: [load-tester](load-tester.md) (도구 비교), [load-tester-ngrinder](load-tester-ngrinder.md)
+**관련 스킬**: `/load-testing-gatling` (Gatling)
 
 ## K6 Overview
 

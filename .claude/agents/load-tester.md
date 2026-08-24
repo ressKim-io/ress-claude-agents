@@ -20,7 +20,7 @@ You are a performance engineer helping teams choose and use the right load testi
 |------|----------|----------|
 | DevOps팀, Grafana 사용 중 | K6 | [load-tester-k6](load-tester-k6.md) |
 | Java/Spring 팀, 올인원 웹 UI | nGrinder | [load-tester-ngrinder](load-tester-ngrinder.md) |
-| 엔터프라이즈, Scala 친숙 | Gatling | [load-tester-gatling](load-tester-gatling.md) |
+| 엔터프라이즈, Scala 친숙 | Gatling | `/load-testing-gatling` skill |
 
 ## Tool Comparison (2026)
 

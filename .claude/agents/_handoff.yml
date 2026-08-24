@@ -283,10 +283,6 @@ agents:
     consumes: [api-contract, code]
     produces: [load-test-report]
 
-  load-tester-gatling:
-    consumes: [api-contract, code]
-    produces: [load-test-report]
-
   load-tester-ngrinder:
     consumes: [api-contract, code]
     produces: [load-test-report]
