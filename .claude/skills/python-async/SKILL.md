@@ -1,5 +1,6 @@
 ---
 name: python-async
+category: python
 description: "Python Async Patterns — asyncio 기반 동시성 프로그래밍. TaskGroup, 커넥션 풀, 동기화, 에러 처리 패턴. Use when working with python 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

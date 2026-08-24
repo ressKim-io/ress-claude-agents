@@ -1,5 +1,6 @@
 ---
 name: python-performance
+category: python
 description: "Python Performance Optimization — 프로파일링, 메모리 최적화, 캐싱, 동시성, 직렬화 성능 튜닝 가이드. Use when working with python 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

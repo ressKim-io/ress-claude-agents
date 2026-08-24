@@ -1,5 +1,6 @@
 ---
 name: fastapi
+category: python
 description: "FastAPI Production Patterns — FastAPI + Pydantic v2 + SQLAlchemy async 기반 고성능 API 서버 구축 가이드. Use when working with python 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false
