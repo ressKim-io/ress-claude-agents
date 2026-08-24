@@ -51,9 +51,10 @@ stages:
     description: "검색/추천 도메인이면 적용"
 
   - name: domain-expert-ticketing
-    agent: ticketing-expert
+    agent: (main)          # 서브에이전트 없음 — skill 주도 (2026-08-24 Step 3)
     inputs: [user-story, mvp-scope]
     outputs: [bounded-context, api-contract, runbook]
+    skills: [business/virtual-waiting-room, security/anti-bot, msa/high-traffic-design]
     optional: true
     description: "대규모 티켓팅 (Virtual Waiting Room, 좌석 잠금)"
 

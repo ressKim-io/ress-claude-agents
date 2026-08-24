@@ -124,10 +124,6 @@ agents:
     consumes: [user-story, acceptance-criteria, mvp-scope, compliance-blueprint]
     produces: [bounded-context, service-boundary, api-contract, data-model]
 
-  ticketing-expert:
-    consumes: [user-story, mvp-scope]
-    produces: [bounded-context, api-contract, runbook]
-
   infra-roadmap-planner:
     consumes: [bounded-context, mvp-scope, adr]
     produces: [migration-plan, upgrade-plan]
@@ -211,10 +207,6 @@ agents:
   cicd-security-reviewer:
     consumes: [ci-pipeline]
     produces: [security-finding]
-
-  anti-bot:
-    consumes: [code, k8s-manifest, alert]
-    produces: [k8s-manifest, runbook, code-review-comment]
 
   compliance-auditor:
     consumes: [code, k8s-manifest, terraform-module, ci-pipeline]

@@ -1,26 +1,15 @@
 ---
 name: anti-bot
-description: "봇/매크로 방어 에이전트. Rate Limiting, 행동 분석, Device Fingerprint, WAF 설정에 특화. Use for protecting high-traffic systems from automated attacks and ticket scalpers."
-tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
-model: sonnet
+category: security
+description: "봇·매크로 방어 — 다층 방어 아키텍처, 행동 분석 기반 봇 탐지, Device/Browser Fingerprint, Headless 브라우저 탐지, JA3 TLS 지문, JS Challenge·Proof-of-Work, Nginx/AWS WAF 규칙, 탐지 메트릭·알림. Use when 티켓 매크로·크롤러·자동화 공격을 차단하거나 WAF 규칙을 설계할 때."
+effort: xhigh
+deprecated: false
 ---
 
-# Anti-Bot Agent
+# 봇 / 매크로 방어
 
-You are a security engineer specializing in bot detection and mitigation for high-traffic systems. Your expertise covers behavioral analysis, rate limiting, device fingerprinting, and multi-layer defense strategies.
-
-## Quick Reference
-
-| 상황 | 패턴 | 참조 |
-|------|------|------|
-| IP 기반 차단 | WAF + Rate Limit | #layer-1-edge |
-| 행동 분석 | Mouse/Timing 패턴 | #behavioral-analysis |
-| 기기 식별 | Browser/TLS Fingerprint | #device-fingerprinting |
-| 봇 의심 시 | JS Challenge/CAPTCHA | #challenge-systems |
+탐지(행동·지문) → 챌린지 → 차단(WAF)의 다층 구조.
+요청량 제한 자체는 [`rate-limiting`](../rate-limiting/SKILL.md) 이 다루며, 여기서는 **누가 봇인지 판별**하는 축을 다룬다.
 
 ## Multi-Layer Defense Architecture
 
@@ -45,39 +34,7 @@ You are a security engineer specializing in bot detection and mitigation for hig
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## Rate Limiting (Redis Sliding Window)
-
-```java
-@Service
-public class RateLimitService {
-    // Lua 스크립트로 원자적 Sliding Window
-    String script = """
-        local key = KEYS[1]
-        local now = tonumber(ARGV[1])
-        local window_start = tonumber(ARGV[2])
-        local max_requests = tonumber(ARGV[3])
-
-        redis.call('ZREMRANGEBYSCORE', key, 0, window_start)
-        local count = redis.call('ZCARD', key)
-
-        if count < max_requests then
-            redis.call('ZADD', key, now, now .. ':' .. math.random())
-            return {1, max_requests - count - 1, 0}
-        else
-            local oldest = redis.call('ZRANGE', key, 0, 0, 'WITHSCORES')
-            return {0, 0, oldest[2] + window_ms - now}
-        end
-        """;
-}
-
-// 권장 Rate Limit 설정
-Map<String, RateLimitRule> rules = Map.of(
-    "global", new RateLimitRule(10000, Duration.ofSeconds(1)),  // 전역: 초당 10K
-    "ip", new RateLimitRule(100, Duration.ofMinutes(1)),        // IP당: 분당 100
-    "user", new RateLimitRule(30, Duration.ofMinutes(1)),       // 사용자당: 분당 30
-    "seat_select", new RateLimitRule(10, Duration.ofMinutes(1)) // 좌석선택: 분당 10
-);
-```
+> 요청량 제한(Sliding Window / Token Bucket) 구현은 [`rate-limiting`](../rate-limiting/SKILL.md) 참조 — 여기서 중복 기술하지 않는다.
 
 ## Behavioral Analysis
 
@@ -285,4 +242,11 @@ meterRegistry.summary("behavior.score").record(score);
 | 정적 Rate Limit | 정상 사용자도 차단 | 동적/적응형 제한 |
 | 서버 사이드만 | 클라이언트 조작 못 탐지 | 프론트엔드 행동 수집 |
 
-Remember: 완벽한 봇 방어는 없습니다. 목표는 공격 비용을 수익보다 높게 만드는 것입니다. 정상 사용자 경험을 해치지 않으면서 봇을 막는 균형점을 찾으세요.
+
+## 참조 스킬
+
+- [`rate-limiting`](../rate-limiting/SKILL.md) — 알고리즘 / 키 설계 / 429 응답
+- [`virtual-waiting-room`](../virtual-waiting-room/SKILL.md) — 대기열 우회 시도 차단
+- [`owasp-top10`](../owasp-top10/SKILL.md) — A04 Insecure Design, A07 인증 실패
+- [`threat-modeling`](../threat-modeling/SKILL.md) — 공격자 관점 시나리오 도출
+- [`high-traffic-design`](../high-traffic-design/SKILL.md) — CDN/Edge 에서의 선차단

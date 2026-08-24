@@ -1,26 +1,15 @@
 ---
-name: ticketing-expert
-description: "대규모 티켓팅 플랫폼 아키텍처 에이전트. Virtual Waiting Room, Redis 대기열, 좌석 잠금, Saga 패턴에 특화. Use for high-traffic ticketing systems handling 1M+ concurrent users."
-tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
-model: sonnet
+name: virtual-waiting-room
+category: business
+description: "대규모 티켓팅 — Redis 대기열 기반 Virtual Waiting Room, SSE 입장 알림, 좌석 분산 잠금, 결제 Saga 연동, 100만 동접 Capacity Planning. Use when 티켓 오픈·수강신청·한정판 판매처럼 순간 트래픽이 몰려 대기열과 좌석 선점 제어가 필요할 때."
+effort: xhigh
+deprecated: false
 ---
 
-# Ticketing Expert Agent
+# Virtual Waiting Room (대규모 티켓팅)
 
-You are a senior architect specializing in high-traffic ticketing platforms. Your expertise covers Virtual Waiting Room systems, distributed queues, seat reservation patterns, and handling millions of concurrent users.
-
-## Quick Reference
-
-| 상황 | 패턴 | 참조 |
-|------|------|------|
-| 100만 동접 | Virtual Waiting Room | #virtual-waiting-room |
-| 좌석 잠금 | Redis SETNX + TTL | #seat-reservation |
-| 결제 실패 | Saga 보상 트랜잭션 | #saga-pattern |
-| 읽기 부하 | Read Replica + Cache | #performance |
+순간 폭주 트래픽을 대기열로 흡수하고 좌석을 안전하게 선점시키는 패턴.
+일반 트래픽 설계는 [`high-traffic-design`](../high-traffic-design/SKILL.md), 봇/매크로 차단은 [`anti-bot`](../anti-bot/SKILL.md) 참조.
 
 ## Scale Targets
 
@@ -273,4 +262,13 @@ public Page<SeatDTO> getSeatsBySection(String eventId, String section, Pageable 
 }
 ```
 
-Remember: 티켓팅은 "선착순"이 핵심입니다. 공정성(대기열 순서)과 성능(빠른 응답) 사이의 균형을 유지하고, 장애 시에도 데이터 정합성을 보장해야 합니다. Redis를 신뢰하되, 최종 상태는 항상 DB에 기록하세요.
+
+## 참조 스킬
+
+- [`high-traffic-design`](../high-traffic-design/SKILL.md) — Backpressure, CDN/Edge, Queue-based Load Leveling
+- [`anti-bot`](../anti-bot/SKILL.md) — 매크로/봇 차단 (대기열 우회 방지)
+- [`rate-limiting`](../rate-limiting/SKILL.md) — 대기열 진입/폴링 요청 제한
+- [`distributed-lock`](../distributed-lock/SKILL.md) — 좌석 잠금 Redlock / Fencing Token
+- [`msa-saga`](../msa-saga/SKILL.md) — 결제 실패 시 좌석 해제 보상 트랜잭션
+- [`redis-operations`](../redis-operations/SKILL.md) — 대기열 Redis 운영 (Cluster / 메모리 / eviction)
+- [`load-testing`](../load-testing/SKILL.md) — 대기열 시나리오 부하 검증

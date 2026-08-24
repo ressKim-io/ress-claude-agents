@@ -51,7 +51,7 @@ cd ress-claude-agents
 | Platform & MLOps | `platform-engineer`, `mlops-expert` |
 | Service Mesh & Messaging | `service-mesh-expert` |
 | Language Experts | `go-expert`, `java-expert` |
-| Ticketing & Load Test | `ticketing-expert`, `anti-bot`, `load-tester` |
+| Ticketing & Load Test | `load-tester` |
 | Workflow | `git-workflow`, `ci-optimizer`, `pr-review-bot`, `dev-logger` |
 
 ## Skills

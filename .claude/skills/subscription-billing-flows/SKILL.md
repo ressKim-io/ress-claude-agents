@@ -264,7 +264,7 @@ UsageRecord 생성 (idempotency_key 필수)
 ### 어뷰즈 방지
 
 - **Email/도메인 제한**: 같은 회사 도메인은 1 trial. (`business/multi-tenancy.md` tenant 결합)
-- **Device fingerprint / IP 제한**: `agents/anti-bot` 활용
+- **Device fingerprint / IP 제한**: [`anti-bot`](../anti-bot/SKILL.md) 활용
 - **Card fingerprint**: Stripe `card.fingerprint`로 동일 카드 탐지 (PCI 안전)
 - **Rate limiting**: trial 시작 endpoint에 IP/계정 단위 limit (`business/rate-limiting.md`)
 

@@ -333,7 +333,7 @@ stripe test_clocks advance --frozen-time=$(date -d "+15 days" +%s)
 - `agents/saga-agent` — Saga 오케스트레이션
 - `agents/tech-lead` — 구독 모델 ADR
 - `agents/database-expert` — invoice partition, archival
-- `agents/anti-bot` — trial 어뷰즈 탐지
+- [`anti-bot`](../anti-bot/SKILL.md) — trial 어뷰즈 탐지
 - `rules/security.md`, `rules/documentation.md` — ADR/회계 문서
 
 **외부 표준 / 도구**:

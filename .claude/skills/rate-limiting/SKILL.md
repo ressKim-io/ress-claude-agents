@@ -22,7 +22,7 @@ API 요청 제한 — 알고리즘 (Token Bucket / Sliding Window / Leaky Bucket
 - LLM API 비용 보호 (per-tenant token quota)
 
 **관련 skill**: `business/auth-oauth-social.md`, `business/payment-integration.md`, `business/multi-tenancy.md`, `security/auth-patterns.md`
-**관련 agent**: `anti-bot`, `ticketing-expert`, `redis-expert`
+**관련 skill**: `/anti-bot`, `/virtual-waiting-room`, `/redis-operations`
 
 ---
 
@@ -404,8 +404,8 @@ Burst: 일시 110% 허용 (10초 grace)
 - `skills/business/multi-tenancy.md` — per-tenant quota
 - `skills/business/admin-api-keys.md` — per-API-key quota
 - `skills/security/auth-patterns.md` — 보안 패턴
-- `agents/anti-bot` — 봇 차단 통합
-- `agents/ticketing-expert` — high-traffic 사례
+- [`anti-bot`](../anti-bot/SKILL.md) — 봇 차단 통합
+- [`virtual-waiting-room`](../virtual-waiting-room/SKILL.md) — high-traffic 사례
 - `agents/redis-expert` — Redis 운영
 
 **외부 자원**:

@@ -94,7 +94,7 @@ cd ress-claude-agents
 # Agent 자동 선택 (자연어로 요청)
 "보안 취약점 검사해줘"           → security-scanner
 "프로덕션 파드가 죽어요"         → k8s-troubleshooter
-"100만 동시접속 아키텍처 설계해줘" → ticketing-expert
+"100만 동시접속 아키텍처 설계해줘" → /virtual-waiting-room
 "K6로 부하테스트 시나리오 작성해줘" → /load-testing
 ```
 
@@ -203,8 +203,6 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 | Agent | Purpose | Core Features |
 |-------|---------|---------------|
-| 🎫 `ticketing-expert` | 티켓팅 아키텍처 | Virtual Waiting Room, Redis 대기열, Saga 패턴 |
-| 🤖 `anti-bot` | 봇/매크로 방어 | Rate Limiting, 행동 분석, Device Fingerprint |
 | 📊 `load-tester` | 부하 테스트 허브 | 도구 비교, 선택 가이드 |
 
 ### Workflow Automation

@@ -42,14 +42,13 @@ SOFT_WARNINGS=()
 # 미등재(= 신규) agent 는 hard fail. 마이그레이션 완료 시 해당 줄을 제거하면
 # 자동으로 hard 검증으로 전환된다. git-workflow 는 본문 3섹션을 갖추므로 의도적으로 제외.
 LEGACY_AGENTS_NO_BODY_SPEC=(
-    anti-bot architect-agent business-decision-agent ci-optimizer cicd-reviewer
+    architect-agent business-decision-agent ci-optimizer cicd-reviewer
     cicd-security-reviewer code-reviewer compliance-auditor compliance-strategy-agent
     container-security-reviewer cost-analyzer debugging-expert dev-logger dockerfile-reviewer finops-advisor frontend-expert
     gitops-reviewer go-expert incident-responder infra-roadmap-planner java-expert
     k8s-reviewer k8s-security-reviewer k8s-troubleshooter load-tester migration-expert mlops-expert
     network-security-reviewer observability-reviewer platform-engineer
     platform-strategy-agent pr-review-bot product-engineer python-expert security-scanner service-mesh-expert tech-lead terraform-reviewer
-    ticketing-expert
 )
 
 log_pass() { printf '  PASS  %s\n' "$1"; }
