@@ -153,6 +153,35 @@ create_dir() {
     fi
 }
 
+# frontmatter 안의 category: 만 읽는다 (본문에 등장하는 category: 줄은 무시).
+# 레이아웃이 .claude/skills/<name>/SKILL.md 로 평탄화되어 디렉토리에서 카테고리를 못 읽는다.
+skill_frontmatter_category() {
+    awk '/^---$/{n++; next} n==1 && /^category:/{sub(/^category: *"?/,""); sub(/"$/,""); print; exit} n>=2{exit}' "$1"
+}
+
+# frontmatter category 가 $1 인 skill 을 <dst>/<name>/SKILL.md 로 설치
+install_skills_by_category() {
+    local category="$1" src_root="$2" dst_root="$3" label="$4"
+    local found=false skill_md skill_name skill_target
+    for skill_md in "$src_root"/*/SKILL.md; do
+        [[ -f "$skill_md" ]] || continue
+        [[ "$(skill_frontmatter_category "$skill_md")" == "$category" ]] || continue
+        found=true
+        skill_name=$(basename "$(dirname "$skill_md")")
+        skill_target="$dst_root/$skill_name/SKILL.md"
+        if _check_and_mark_installed "$skill_target"; then
+            continue
+        fi
+        create_dir "$dst_root/$skill_name"
+        if backup_and_link "$skill_md" "$skill_target" "$INSTALL_SCOPE" "file"; then
+            echo "    + Skill: $skill_name ($category)"
+        fi
+    done
+    if [[ "$found" != true ]]; then
+        log_warn "    Skill category not found: $category [$label]"
+    fi
+}
+
 # Validate module name
 validate_module() {
     local mod="$1"
@@ -694,27 +723,7 @@ for PLUGIN_NAME in ${PLUGIN_NAMES[@]+"${PLUGIN_NAMES[@]}"}; do
         create_dir "$SKILLS_TARGET"
 
         for category in ${PLUGIN_SKILL_CATEGORIES[@]+"${PLUGIN_SKILL_CATEGORIES[@]}"}; do
-            cat_dir="$SKILLS_SOURCE/$category"
-            if [[ -d "$cat_dir" ]]; then
-                create_dir "$SKILLS_TARGET/$category"
-                for skill_file in "$cat_dir"/*.md; do
-                    [[ -f "$skill_file" ]] || continue
-                    skill_name=$(basename "$skill_file")
-                    skill_target="$SKILLS_TARGET/$category/$skill_name"
-                    if _check_and_mark_installed "$skill_target"; then
-                        continue
-                    fi
-                    if backup_and_link "$skill_file" "$skill_target" "$INSTALL_SCOPE" "file"; then
-                        echo "    + Skill: $category/$skill_name"
-                    fi
-                    # Also flatten to root for backward compat
-                    if [[ ! -e "$SKILLS_TARGET/$skill_name" ]]; then
-                        ln -sf "$skill_file" "$SKILLS_TARGET/$skill_name" 2>/dev/null || true
-                    fi
-                done
-            else
-                log_warn "    Skill category not found: $category"
-            fi
+            install_skills_by_category "$category" "$SKILLS_SOURCE" "$SKILLS_TARGET" "plugin:$PLUGIN_NAME"
         done
         INSTALLED_COMPONENTS+=("Plugin skills [$PLUGIN_NAME]: ${PLUGIN_SKILL_CATEGORIES[*]}")
     fi
@@ -780,26 +789,7 @@ for WORKFLOW_NAME in ${WORKFLOW_NAMES[@]+"${WORKFLOW_NAMES[@]}"}; do
         create_dir "$SKILLS_TARGET"
 
         for category in ${WORKFLOW_SKILL_CATEGORIES[@]+"${WORKFLOW_SKILL_CATEGORIES[@]}"}; do
-            cat_dir="$SKILLS_SOURCE/$category"
-            if [[ -d "$cat_dir" ]]; then
-                create_dir "$SKILLS_TARGET/$category"
-                for skill_file in "$cat_dir"/*.md; do
-                    [[ -f "$skill_file" ]] || continue
-                    skill_name=$(basename "$skill_file")
-                    skill_target="$SKILLS_TARGET/$category/$skill_name"
-                    if _check_and_mark_installed "$skill_target"; then
-                        continue
-                    fi
-                    if backup_and_link "$skill_file" "$skill_target" "$INSTALL_SCOPE" "file"; then
-                        echo "    + Skill: $category/$skill_name"
-                    fi
-                    if [[ ! -e "$SKILLS_TARGET/$skill_name" ]]; then
-                        ln -sf "$skill_file" "$SKILLS_TARGET/$skill_name" 2>/dev/null || true
-                    fi
-                done
-            else
-                log_warn "    Skill category not found: $category"
-            fi
+            install_skills_by_category "$category" "$SKILLS_SOURCE" "$SKILLS_TARGET" "workflow:$WORKFLOW_NAME"
         done
     fi
 
@@ -811,25 +801,22 @@ for WORKFLOW_NAME in ${WORKFLOW_NAMES[@]+"${WORKFLOW_NAMES[@]}"}; do
         create_dir "$SKILLS_TARGET"
 
         for skill_path in ${WORKFLOW_SKILL_INDIVIDUAL[@]+"${WORKFLOW_SKILL_INDIVIDUAL[@]}"}; do
-            # skill_path format: category/skill-name (e.g., dx/spec-driven-development)
-            skill_dir=$(dirname "$skill_path")
+            # workflow yml 은 category/skill-name 표기를 유지한다 (설정 표면 안정).
+            # 실제 레이아웃은 .claude/skills/<skill-name>/SKILL.md 이므로 basename 으로 해석한다.
             skill_base=$(basename "$skill_path")
-            source_file="$SKILLS_SOURCE/${skill_path}.md"
-            skill_target="$SKILLS_TARGET/${skill_path}.md"
+            source_file="$SKILLS_SOURCE/$skill_base/SKILL.md"
+            skill_target="$SKILLS_TARGET/$skill_base/SKILL.md"
             if _check_and_mark_installed "$skill_target"; then
                 continue
             fi
 
             if [[ -f "$source_file" ]]; then
-                create_dir "$SKILLS_TARGET/$skill_dir"
+                create_dir "$SKILLS_TARGET/$skill_base"
                 if backup_and_link "$source_file" "$skill_target" "$INSTALL_SCOPE" "file"; then
-                    echo "    + Skill: ${skill_path}"
-                fi
-                if [[ ! -e "$SKILLS_TARGET/${skill_base}.md" ]]; then
-                    ln -sf "$source_file" "$SKILLS_TARGET/${skill_base}.md" 2>/dev/null || true
+                    echo "    + Skill: ${skill_base}"
                 fi
             else
-                log_warn "    Skill not found: $skill_path"
+                log_warn "    Skill not found: $skill_path (expected $source_file)"
             fi
         done
         INSTALLED_COMPONENTS+=("Workflow skills [$WORKFLOW_NAME]: ${#WORKFLOW_SKILL_CATEGORIES[@]} categories, ${#WORKFLOW_SKILL_INDIVIDUAL[@]} individual")
@@ -845,13 +832,8 @@ if [[ "$WITH_SKILLS" == true ]]; then
     if [[ -d "$SKILLS_SOURCE" ]]; then
         if backup_and_link "$SKILLS_SOURCE" "$SKILLS_TARGET" "$INSTALL_SCOPE" "dir"; then
             INSTALLED_COMPONENTS+=("Skills")
-            # Flatten: 서브디렉토리 내 파일들을 root에 심볼릭 링크
-            while IFS= read -r skill_file; do
-                skill_name=$(basename "$skill_file")
-                if [[ ! -e "$SKILLS_TARGET/$skill_name" ]]; then
-                    ln -sf "$skill_file" "$SKILLS_TARGET/$skill_name"
-                fi
-            done < <(find "$SKILLS_SOURCE" -mindepth 2 -name "*.md" -type f)
+            # flatten 하지 않는다. Claude Code 는 <name>/SKILL.md 만 로드하므로
+            # 평면 .md 심볼릭 링크는 로드되지 않는 죽은 파일이었다 (2026-08-24 audit F1).
         else
             log_error "Failed to install skills"
             INSTALL_SUCCESS=false
