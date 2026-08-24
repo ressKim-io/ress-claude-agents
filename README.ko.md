@@ -187,7 +187,6 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 |-------|-------------|--------------|
 | 🏗️ `platform-engineer` | IDP 설계, Backstage, Golden Path, DX 최적화 | 플랫폼 구축 시 |
 | 🧠 `mlops-expert` | GPU 스케줄링, 분산 학습, 모델 서빙, LLM 배포 | AI/ML 워크로드 시 |
-| 🔴 `redis-expert` | Redis Cluster, Sentinel, 캐싱 전략, Lua | Redis 최적화 시 |
 
 ### Service Mesh & Messaging
 

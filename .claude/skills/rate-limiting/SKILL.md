@@ -150,7 +150,7 @@ Hash 1개에 `tokens`, `ts` 저장. 매 호출 시:
 2. `tokens < 1` → 거부, 아니면 `-= 1`
 3. `HSET` + `EXPIRE`로 atomic 갱신
 
-→ Lua 전체 구현: redis-cell 모듈 또는 [redis-expert agent](.claude/agents/redis-expert.md) 참조 (GCRA가 더 효율적).
+→ Lua 전체 구현: redis-cell 모듈 또는 [`redis-operations`](../redis-operations/SKILL.md) 참조 (GCRA가 더 효율적).
 
 ---
 

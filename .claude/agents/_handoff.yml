@@ -174,10 +174,6 @@ agents:
     consumes: [code, k8s-manifest, mvp-scope, bounded-context, adr]
     produces: [dashboard, alert-rule, slo-definition]
 
-  redis-expert:
-    consumes: [code, k8s-manifest]
-    produces: [code-review-comment, runbook]
-
   # === 리뷰어 (post-implementation) ===
   code-reviewer:
     consumes: [pr, code]

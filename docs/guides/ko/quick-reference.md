@@ -44,7 +44,7 @@
 | 분산 트랜잭션 | `saga-agent` | `/msa-saga`, `/msa-event-driven` | "Saga 패턴 구현해줘" |
 | 복원력 패턴 | `java-expert` | `/msa-resilience`, `/spring-cache` | "Circuit Breaker 설정해줘" |
 | DB 성능 이슈 | — | `/postgresql-operations`, `/mysql-operations`, `/database-sharding` | "쿼리 최적화해줘" |
-| Redis 캐싱 | `redis-expert` | `/spring-cache`, `/distributed-lock` | "Redis 캐싱 전략 설계해줘" |
+| Redis 캐싱 | — | `/redis-operations`, `/spring-cache`, `/distributed-lock` | "Redis 캐싱 전략 설계해줘" |
 | 부하 테스트 | `load-tester` | `/load-testing` | "K6로 부하테스트 시나리오 작성해줘" |
 | 테스트 작성 | `code-reviewer` | `/spring-testing`, `/go-testing` | "테스트 코드 작성해줘" |
 | 클린 코드 리뷰 | `java-expert` 또는 `go-expert` | `/clean-code`, `/refactoring-principles` | "클린 코드 품질 확인해줘" |

@@ -1,17 +1,15 @@
 ---
-name: redis-expert
-description: "Redis 전문가 에이전트. Redis Cluster, Sentinel HA, 캐싱 전략, Lua 스크립트, Kubernetes Redis 운영에 특화. Use for Redis optimization, cluster design, and caching patterns."
-tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
-model: sonnet
+name: redis-operations
+category: infrastructure
+description: "Redis 운영 — Standalone/Sentinel/Cluster 모드 선택, Cache-Aside·Write-Through 캐싱 전략과 Cache Stampede 방지, maxmemory·eviction 정책, Redlock 분산 락, K8s Operator/Helm 배포, 핵심 메트릭. Use when Redis 캐싱 전략·고가용성 구성·메모리 정책을 정하거나 K8s 위에서 Redis 를 운영할 때."
+effort: xhigh
+deprecated: false
 ---
 
-# Redis Expert Agent
+# Redis 운영
 
-You are a senior Database Engineer specializing in Redis. Your expertise covers Redis Cluster architecture, Sentinel HA, caching strategies, Lua scripting, and Kubernetes Redis operations.
+모드 선택 · 캐싱 전략 · HA · 메모리 · K8s 운영.
+Streams 를 메시지 브로커로 쓰는 경우는 [`redis-streams`](../redis-streams/SKILL.md), 분산 락 코드 패턴은 [`distributed-lock`](../distributed-lock/SKILL.md) 참조.
 
 ## Quick Reference
 
@@ -370,3 +368,12 @@ redis-cli info stats | grep -E "keyspace_hits|keyspace_misses|expired_keys"
 - [ ] maxmemory + eviction 정책 설정
 - [ ] 모니터링 대시보드 구성
 - [ ] 슬로우 로그 활성화 (`slowlog-log-slower-than 10000`)
+
+## 참조 스킬
+
+- [`redis-streams`](../redis-streams/SKILL.md) — Consumer Group / PEL / DLQ (메시징 용도)
+- [`distributed-lock`](../distributed-lock/SKILL.md) — Redisson / Redsync / ShedLock / Fencing Token
+- [`spring-cache`](../spring-cache/SKILL.md) — Spring `@Cacheable` 연동
+- [`rate-limiting`](../rate-limiting/SKILL.md) — Redis Sliding Window 구현
+- [`high-traffic-design`](../high-traffic-design/SKILL.md) — 캐시가 흡수해야 할 트래픽 규모 산정
+- [`secrets-management`](../secrets-management/SKILL.md) — Redis 인증 정보 관리
