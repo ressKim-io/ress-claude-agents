@@ -29,11 +29,11 @@ stages:
     skills: [dx/rfc-adr, dx/adr-retrospective, dx/engineering-strategy]
 
   - name: implementation
-    agent: go-expert   # 또는 java-expert / frontend-expert
+    agent: (main)          # 서브에이전트 없음 — skill 주도. frontend 는 frontend-expert
     inputs: [api-contract, adr, acceptance-criteria]
     outputs: [code, unit-test, integration-test]
-    alternatives: [java-expert, frontend-expert]
-    skills: [go/effective-go, msa/contract-first, msa/msa-saga]
+    alternatives: [frontend-expert]
+    skills: [go/effective-go, go/go-performance, spring/effective-java, spring/jvm-performance, python/python-patterns, msa/contract-first, msa/msa-saga]
 
   - name: code-review
     agent: code-reviewer
@@ -45,7 +45,7 @@ stages:
     agent: security-scanner
     inputs: [code]
     outputs: [security-finding]
-    skills: [security/secure-coding-2026, security/owasp-top-10]
+    skills: [security/secure-coding, security/owasp-top10, go/go-security, spring/spring-security-review]
     parallel_with: code-review
 
   - name: monitoring

@@ -1,7 +1,6 @@
 name: backend-java
 description: "Java/Spring backend: code review, architecture, database"
 agents:
-  - java-expert
   - code-reviewer
 skills:
   categories:

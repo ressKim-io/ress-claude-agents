@@ -37,18 +37,18 @@
 
 | 상황 | 핵심 에이전트 | 지원 스킬 | 이렇게 요청하세요 |
 |------|-------------|----------|-----------------|
-| Java 코드 리뷰 | `java-expert` | `/effective-java`, `/spring-patterns` | "Java 코드 리뷰해줘" |
-| Go 코드 리뷰 | `go-expert` | `/effective-go`, `/go-microservice` | "Go 코드 리뷰해줘" |
+| Java 코드 리뷰 | `/jvm-performance` | `/effective-java`, `/spring-patterns` | "Java 코드 리뷰해줘" |
+| Go 코드 리뷰 | `/go-performance` | `/effective-go`, `/go-microservice` | "Go 코드 리뷰해줘" |
 | API 설계 | `architect-agent` | `/api-design`, `/grpc` | "REST API 설계 검토해줘" |
 | MSA 서비스 분리 | `architect-agent` | `/msa-ddd`, `/hexagonal-clean-architecture` | "서비스 경계 설계해줘" |
 | 분산 트랜잭션 | — | `/msa-saga`, `/msa-event-driven` | "Saga 패턴 구현해줘" |
-| 복원력 패턴 | `java-expert` | `/msa-resilience`, `/spring-cache` | "Circuit Breaker 설정해줘" |
+| 복원력 패턴 | `/jvm-performance` | `/msa-resilience`, `/spring-cache` | "Circuit Breaker 설정해줘" |
 | DB 성능 이슈 | — | `/postgresql-operations`, `/mysql-operations`, `/database-sharding` | "쿼리 최적화해줘" |
 | Redis 캐싱 | — | `/redis-operations`, `/spring-cache`, `/distributed-lock` | "Redis 캐싱 전략 설계해줘" |
 | 부하 테스트 | `load-tester` | `/load-testing` | "K6로 부하테스트 시나리오 작성해줘" |
 | 테스트 작성 | `code-reviewer` | `/spring-testing`, `/go-testing` | "테스트 코드 작성해줘" |
-| 클린 코드 리뷰 | `java-expert` 또는 `go-expert` | `/clean-code`, `/refactoring-principles` | "클린 코드 품질 확인해줘" |
-| 보안 코드 리뷰 | `java-expert` 또는 `go-expert` | `/effective-java` 또는 `/effective-go` | "Java/Go 보안 리뷰해줘" |
+| 클린 코드 리뷰 | `/clean-code` | `/clean-code`, `/refactoring-principles` | "클린 코드 품질 확인해줘" |
+| 보안 코드 리뷰 | `/clean-code` | `/effective-java` 또는 `/effective-go` | "Java/Go 보안 리뷰해줘" |
 
 ### Java 전용 콤보
 
@@ -57,13 +57,13 @@ Spring 신규 프로젝트:
   /spring-patterns → /effective-java → /spring-security → /spring-testing
 
 Spring 성능 최적화:
-  java-expert → /concurrency-spring → /spring-cache → /spring-jooq
+  /jvm-performance → /concurrency-spring → /spring-cache → /spring-jooq
 
 클린 코드 + 리팩토링:
-  java-expert → /clean-code → /refactoring-principles → /refactoring-spring
+  /jvm-performance → /clean-code → /refactoring-principles → /refactoring-spring
 
 보안 강화:
-  java-expert (보안 체크리스트) → security-scanner → /spring-security
+  /spring-security-review → security-scanner → /spring-security
 ```
 
 ### Go 전용 콤보
@@ -73,13 +73,13 @@ Go 신규 프로젝트:
   /effective-go → /go-microservice → /go-database → /go-testing
 
 Go 성능 최적화:
-  go-expert → /concurrency-go → /go-database → /refactoring-go
+  /go-performance → /concurrency-go → /go-database → /refactoring-go
 
 클린 코드 + 리팩토링:
-  go-expert → /clean-code → /refactoring-principles → /refactoring-go
+  /go-performance → /clean-code → /refactoring-principles → /refactoring-go
 
 에러 핸들링 + OTel:
-  go-expert (Handle OR Return + OTel) → /observability-otel → /go-errors
+  /go-performance → /observability-otel → /go-errors
 ```
 
 ---
@@ -152,7 +152,7 @@ eBPF 기반 Zero-Code:
 |------|-------------|----------|-----------------|
 | 새 프로젝트 시작 | `architect-agent` | `/api-design`, `/docker` | "프로젝트 구조 설계해줘" |
 | 코드 정리 | `code-reviewer` | `/clean-code`, `/refactoring-principles` | "코드 리팩토링해줘" |
-| 클린 코드 점검 | `java-expert` 또는 `go-expert` | `/clean-code` | "코드 가독성 확인해줘" |
+| 클린 코드 점검 | `/clean-code` | `/clean-code` | "코드 가독성 확인해줘" |
 | PR 자동화 | `git-workflow` | `/conventional-commits`, `/git-workflow` | "PR 만들어줘" |
 | 개발환경 구축 | `platform-engineer` | `/local-dev-makefile`, `/docker` | "로컬 개발환경 설정해줘" |
 | 문서화 | `dev-logger` | `/docs-as-code` | "API 문서 생성해줘" |
@@ -172,11 +172,11 @@ eBPF 기반 Zero-Code:
 ```
 1. architect-agent    → 서비스 경계 설계, API 계약 정의
       ↓
-2. java-expert 또는 go-expert → 코드 구현, 패턴 적용
+2. /jvm-performance 또는 /go-performance → 코드 구현, 패턴 적용
       ↓
 3. code-reviewer      → 코드 리뷰, 품질 검증
       ↓
-4. java-expert 또는 go-expert → 클린 코드 + 보안 리뷰 (내장 체크리스트)
+4. /jvm-performance 또는 /go-performance → 클린 코드 + 보안 리뷰 (내장 체크리스트)
       ↓
 5. security-scanner   → 보안 취약점 점검
       ↓

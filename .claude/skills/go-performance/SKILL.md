@@ -1,32 +1,15 @@
 ---
-name: go-expert
-description: "Go 언어 전문가 — 대용량 트래픽, goroutine/channel 동시성, sync.Pool/Circuit Breaker, GC 튜닝, pprof 프로파일링. Use when Go-specific idiom / concurrency / performance 검증이 필요할 때. 일반 코드 품질(가독성, 테스트, 명명, 중복)은 code-reviewer 사용. 두 agent 함께 호출 시 Go 특화 영역은 go-expert 결과 우선."
-tools:
-  - Read
-  - Grep
-  - Glob
-  - Bash
-model: sonnet
+name: go-performance
+category: go
+description: "Go 고성능 패턴 — sync.Pool 오브젝트 풀링, zero-allocation 기법, GC 튜닝(GOGC/GOMEMLIMIT), DB·HTTP 커넥션 관리, Graceful Shutdown, pprof 프로파일링 명령, Circuit Breaker, 대용량 트래픽 Performance Target. Use when Go 서비스의 지연·메모리·GC·커넥션 병목을 잡거나 pprof 로 프로파일링할 때."
+effort: xhigh
+deprecated: false
 ---
 
-# Go Expert Agent
+# Go 고성능 / 프로파일링
 
-You are a senior Go engineer specializing in high-traffic, production-grade systems. Your expertise covers concurrency patterns, performance optimization, and building systems that handle millions of requests per second.
-
-## 역할 경계 (Boundary)
-
-- **go-expert (이 agent)** = Go 특화 깊은 검증. goroutine/channel 동시성, sync.Pool, Circuit Breaker, GC 튜닝, pprof 프로파일링, idiom (errors.Is/As, context propagation, table-driven tests).
-- **code-reviewer** = cross-language 일반 검증 (가독성, 명명, 중복, 테스트 커버리지). Go 외 영역도 다룸.
-- 두 agent 함께 호출 시 **Go 특화 영역은 go-expert 결과 우선**, 일반 코드 품질은 code-reviewer 결과 우선.
-
-## Quick Reference
-
-| 상황 | 패턴 | 참조 |
-|------|------|------|
-| 대량 작업 처리 | Worker Pool | #worker-pool |
-| 병렬 분산 + 병합 | Fan-Out/Fan-In | #fan-out-fan-in |
-| 메모리 절약 | sync.Pool | #object-pooling |
-| 외부 서비스 보호 | Circuit Breaker | #circuit-breaker |
+동시성 기본기(Worker Pool, Mutex vs Channel, errgroup)는 [`effective-go`](../effective-go/SKILL.md) / [`concurrency-go`](../concurrency-go/SKILL.md),
+Circuit Breaker·Retry·Bulkhead 설계는 [`msa-resilience`](../msa-resilience/SKILL.md) 참조. 여기서는 **측정과 튜닝**을 다룬다.
 
 ## High-Traffic Patterns
 
@@ -300,24 +283,6 @@ go tool trace trace.out
 go test -race ./...
 ```
 
-## Code Review Checklist
-
-### Concurrency
-- [ ] Worker pool (unbounded goroutines 대신)
-- [ ] Context passed and respected
-- [ ] sync.WaitGroup for lifecycle
-- [ ] No goroutine leaks (exit conditions)
-
-### Memory
-- [ ] sync.Pool for frequent allocations
-- [ ] Preallocated slices
-- [ ] No string concat in hot paths
-
-### Connections
-- [ ] Connection pools properly sized
-- [ ] HTTP client reused (not per request)
-- [ ] Timeouts on all external calls
-
 ## Anti-Patterns
 
 | Anti-Pattern | 문제 | 해결 |
@@ -338,156 +303,6 @@ go test -race ./...
 | Goroutine Count | < 10,000 | > 50,000 |
 | Heap Alloc | Stable | > 20% growth/min |
 | GC Pause | < 1ms | > 5ms |
-
-## Security Review Checklist
-
-Go 코드 리뷰 시 반드시 점검해야 할 보안 항목. Red team 공격 시나리오 기반.
-
-### Input Validation & Injection
-
-```go
-// ❌ VULNERABLE: SQL injection
-func GetUser(db *sql.DB, id string) (*User, error) {
-    query := "SELECT * FROM users WHERE id = '" + id + "'"
-    return db.Query(query)
-}
-// 🔓 Attack: id = "'; DROP TABLE users; --"
-
-// ✅ HARDENED: Parameterized query
-func GetUser(db *sql.DB, id string) (*User, error) {
-    return db.QueryRow("SELECT * FROM users WHERE id = $1", id).Scan(...)
-}
-
-// ❌ VULNERABLE: Command injection
-func RunCommand(userInput string) {
-    exec.Command("sh", "-c", "echo " + userInput).Run()
-}
-// 🔓 Attack: userInput = "; cat /etc/passwd"
-
-// ✅ HARDENED: 직접 실행, 셸 우회
-func RunCommand(filename string) {
-    if !isValidFilename(filename) { return }
-    exec.Command("echo", filename).Run()
-}
-```
-
-### Authentication & Secrets
-
-```go
-// ❌ VULNERABLE: 하드코딩된 시크릿
-const apiKey = "sk-live-abc123def456"
-
-// ✅ HARDENED: 환경변수
-apiKey := os.Getenv("API_KEY")
-if apiKey == "" { log.Fatal("API_KEY not set") }
-
-// ❌ VULNERABLE: JWT alg 미검증
-token, _ := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
-    return []byte("secret"), nil  // alg 검증 없음
-})
-
-// ✅ HARDENED: 알고리즘 검증
-token, err := jwt.Parse(tokenString, func(t *jwt.Token) (interface{}, error) {
-    if _, ok := t.Method.(*jwt.SigningMethodRSA); !ok {
-        return nil, fmt.Errorf("unexpected signing method: %v", t.Header["alg"])
-    }
-    return publicKey, nil
-})
-```
-
-### Concurrency Safety
-
-```go
-// ❌ VULNERABLE: Race condition
-var cache = make(map[string]string)
-func Set(k, v string) { cache[k] = v }  // concurrent map write → panic
-
-// ✅ HARDENED: sync.Map 또는 RWMutex
-var cache sync.Map
-func Set(k, v string) { cache.Store(k, v) }
-```
-
-### Crypto & TLS
-
-```go
-// ❌ VULNERABLE: 취약한 TLS 설정
-tlsConfig := &tls.Config{
-    InsecureSkipVerify: true,  // MITM 공격 허용
-    MinVersion: tls.VersionTLS10,
-}
-
-// ✅ HARDENED
-tlsConfig := &tls.Config{
-    MinVersion: tls.VersionTLS12,
-    CipherSuites: []uint16{
-        tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
-        tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
-    },
-}
-```
-
-### Error Handling & Information Disclosure
-
-```go
-// ❌ VULNERABLE: 내부 정보 노출
-func handler(w http.ResponseWriter, r *http.Request) {
-    _, err := db.Query(query)
-    if err != nil {
-        http.Error(w, fmt.Sprintf("DB error: %v", err), 500)
-        // 🔓 Attack: 에러 메시지로 DB 구조, 쿼리, 스택 노출
-    }
-}
-
-// ✅ HARDENED: 내부 로깅 + generic 응답
-func handler(w http.ResponseWriter, r *http.Request) {
-    _, err := db.Query(query)
-    if err != nil {
-        log.Error("db query failed", "error", err, "query", query)
-        http.Error(w, "Internal server error", 500)
-    }
-}
-```
-
-### Path Traversal
-
-```go
-// ❌ VULNERABLE: path traversal
-func serveFile(w http.ResponseWriter, r *http.Request) {
-    filename := r.URL.Query().Get("file")
-    http.ServeFile(w, r, "/uploads/" + filename)
-    // 🔓 Attack: file=../../../etc/passwd
-}
-
-// ✅ HARDENED: filepath.Clean + 경로 검증
-func serveFile(w http.ResponseWriter, r *http.Request) {
-    filename := filepath.Clean(r.URL.Query().Get("file"))
-    fullPath := filepath.Join("/uploads", filename)
-    if !strings.HasPrefix(fullPath, "/uploads/") {
-        http.Error(w, "Forbidden", 403)
-        return
-    }
-    http.ServeFile(w, r, fullPath)
-}
-```
-
-### Security Tools
-
-```bash
-# 정적 분석
-gosec ./...                    # Go 보안 린터
-go vet ./...                   # 일반 분석
-staticcheck ./...              # 확장 분석
-
-# 의존성 취약점
-govulncheck ./...              # Go 공식 취약점 스캐너
-nancy sleuth < go.sum          # Sonatype 취약점 DB
-
-# Race detector
-go test -race ./...
-
-# Fuzzing
-go test -fuzz=FuzzParseInput ./...
-```
 
 ## Error Handling + OTel 통합
 
@@ -586,20 +401,28 @@ func validateAll(items []Item) error {
 }
 ```
 
-## Clean Code Checklist
+## 체크리스트
 
-### Readability
-- [ ] 함수 20-50줄 이내, Cognitive Complexity ≤ 15
-- [ ] Guard Clause로 중첩 최소화
-- [ ] 의도를 드러내는 이름 (패키지명 중복 금지: `user.Service` not `user.UserService`)
-- [ ] 좁은 스코프 = 짧은 이름, 넓은 스코프 = 설명적 이름
-- [ ] 주석은 WHY만 (비즈니스 규칙, 비자명한 최적화, 외부 시스템 우회 사유)
+### Concurrency
+- [ ] goroutine 누수 없음 (context 취소 전파)
+- [ ] channel 버퍼 크기 근거 있음
+- [ ] `-race` 로 검증했는가
 
-### Error Handling
-- [ ] Handle OR Return — 절대 둘 다 하지 않음
-- [ ] 모든 에러에 `fmt.Errorf("context: %w", err)` 래핑
-- [ ] `errors.Is()`/`errors.As()` 사용 (문자열 비교 금지)
-- [ ] OTel 스팬에 `RecordError()` + `SetStatus()` 둘 다 호출
-- [ ] `ctx` 충실히 전달 — 트레이스 체인 끊지 않기
+### Memory
+- [ ] 핫 패스에 `sync.Pool` 적용 검토
+- [ ] slice/map 사전 할당(`make(..., n)`)
+- [ ] `GOMEMLIMIT` 을 컨테이너 메모리 한도에 맞췄는가
 
-Remember: Go의 강점은 단순하고 효율적인 동시성입니다. Goroutine, channel, 표준 라이브러리를 활용하세요. 프로파일링 먼저, 최적화는 나중에. 에러는 wrap하고 경계에서만 로깅하세요.
+### Connections
+- [ ] `SetMaxOpenConns` / `SetMaxIdleConns` / `SetConnMaxLifetime` 명시
+- [ ] HTTP client 를 재사용하는가 (요청마다 생성 금지)
+- [ ] Graceful Shutdown 에서 in-flight 요청을 기다리는가
+
+## 참조 스킬
+
+- [`effective-go`](../effective-go/SKILL.md) — 인터페이스 / 에러 / 동시성 관용구
+- [`concurrency-go`](../concurrency-go/SKILL.md) — Mutex / Channel / Race Detector
+- [`go-microservice`](../go-microservice/SKILL.md) — 프로젝트 구조 / Graceful Shutdown / Health Check
+- [`msa-resilience`](../msa-resilience/SKILL.md) — Circuit Breaker / Retry / Bulkhead 설계
+- [`observability-pyroscope`](../observability-pyroscope/SKILL.md) — 상시 프로파일링
+- [`go-security`](../go-security/SKILL.md) — Go 보안 리뷰 체크리스트

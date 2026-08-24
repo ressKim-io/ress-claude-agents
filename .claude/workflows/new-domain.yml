@@ -59,11 +59,10 @@ stages:
     description: "대규모 티켓팅 (Virtual Waiting Room, 좌석 잠금)"
 
   - name: implementation
-    agent: go-expert
+    agent: (main)          # 서브에이전트 없음 — skill 주도 (2026-08-24 Step 3)
     inputs: [api-contract, adr, acceptance-criteria]
     outputs: [code, unit-test, integration-test]
-    alternatives: [java-expert]
-    skills: [msa/contract-first, msa/msa-saga, msa/idempotent-consumer]
+    skills: [go/effective-go, go/go-performance, spring/effective-java, spring/jvm-performance, python/python-patterns, msa/contract-first, msa/msa-saga]
 
   # 메시징 도메인 (event-driven)
   - name: messaging-design
@@ -111,7 +110,7 @@ stages:
     agent: security-scanner
     inputs: [code]
     outputs: [security-finding]
-    skills: [security/secure-coding-2026, security/owasp-top-10]
+    skills: [security/secure-coding, security/owasp-top10, go/go-security, spring/spring-security-review]
     parallel_with: code-review
 
 # 핸드오프 의도:

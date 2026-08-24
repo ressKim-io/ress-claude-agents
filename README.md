@@ -50,7 +50,6 @@ cd ress-claude-agents
 | Architecture | `architect-agent` |
 | Platform & MLOps | `platform-engineer`, `mlops-expert` |
 | Service Mesh & Messaging | `service-mesh-expert` |
-| Language Experts | `go-expert`, `java-expert` |
 | Ticketing & Load Test | `load-tester` |
 | Workflow | `git-workflow`, `ci-optimizer`, `pr-review-bot`, `dev-logger` |
 

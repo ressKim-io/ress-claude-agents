@@ -37,18 +37,18 @@ Know these before you start.
 
 | Situation | Core Agent | Supporting Skills | How to Request |
 |-----------|-----------|-------------------|----------------|
-| Java code review | `java-expert` | `/effective-java`, `/spring-patterns` | "Review my Java code" |
-| Go code review | `go-expert` | `/effective-go`, `/go-microservice` | "Review my Go code" |
+| Java code review | `/jvm-performance` | `/effective-java`, `/spring-patterns` | "Review my Java code" |
+| Go code review | `/go-performance` | `/effective-go`, `/go-microservice` | "Review my Go code" |
 | API design | `architect-agent` | `/api-design`, `/grpc` | "Review my REST API design" |
 | MSA service decomposition | `architect-agent` | `/msa-ddd`, `/hexagonal-clean-architecture` | "Design service boundaries" |
 | Distributed transactions | — | `/msa-saga`, `/msa-event-driven` | "Implement the Saga pattern" |
-| Resilience patterns | `java-expert` | `/msa-resilience`, `/spring-cache` | "Set up a Circuit Breaker" |
+| Resilience patterns | `/jvm-performance` | `/msa-resilience`, `/spring-cache` | "Set up a Circuit Breaker" |
 | DB performance issues | — | `/postgresql-operations`, `/mysql-operations`, `/database-sharding` | "Optimize this query" |
 | Redis caching | — | `/redis-operations`, `/spring-cache`, `/distributed-lock` | "Design a Redis caching strategy" |
 | Load testing | `load-tester` | `/load-testing` | "Write a K6 load test scenario" |
 | Writing tests | `code-reviewer` | `/spring-testing`, `/go-testing` | "Write test code" |
-| Clean code review | `java-expert` or `go-expert` | `/clean-code`, `/refactoring-principles` | "Check clean code quality" |
-| Security code review | `java-expert` or `go-expert` | `/effective-java` or `/effective-go` | "Security review my Java/Go code" |
+| Clean code review | `/clean-code` | `/clean-code`, `/refactoring-principles` | "Check clean code quality" |
+| Security code review | `/clean-code` | `/effective-java` or `/effective-go` | "Security review my Java/Go code" |
 
 ### Java Combos
 
@@ -57,13 +57,13 @@ New Spring project:
   /spring-patterns → /effective-java → /spring-security → /spring-testing
 
 Spring performance optimization:
-  java-expert → /concurrency-spring → /spring-cache → /spring-jooq
+  /jvm-performance → /concurrency-spring → /spring-cache → /spring-jooq
 
 Clean code + refactoring:
-  java-expert → /clean-code → /refactoring-principles → /refactoring-spring
+  /jvm-performance → /clean-code → /refactoring-principles → /refactoring-spring
 
 Security hardening:
-  java-expert (security checklist) → security-scanner → /spring-security
+  /spring-security-review → security-scanner → /spring-security
 ```
 
 ### Go Combos
@@ -73,13 +73,13 @@ New Go project:
   /effective-go → /go-microservice → /go-database → /go-testing
 
 Go performance optimization:
-  go-expert → /concurrency-go → /go-database → /refactoring-go
+  /go-performance → /concurrency-go → /go-database → /refactoring-go
 
 Clean code + refactoring:
-  go-expert → /clean-code → /refactoring-principles → /refactoring-go
+  /go-performance → /clean-code → /refactoring-principles → /refactoring-go
 
 Error handling + OTel:
-  go-expert (Handle OR Return + OTel) → /observability-otel → /go-errors
+  /go-performance → /observability-otel → /go-errors
 ```
 
 ---
@@ -152,7 +152,7 @@ eBPF-based Zero-Code:
 |-----------|-----------|-------------------|----------------|
 | New project setup | `architect-agent` | `/api-design`, `/docker` | "Design the project structure" |
 | Code cleanup | `code-reviewer` | `/clean-code`, `/refactoring-principles` | "Refactor this code" |
-| Clean code check | `java-expert` or `go-expert` | `/clean-code` | "Check code readability" |
+| Clean code check | `/clean-code` | `/clean-code` | "Check code readability" |
 | PR automation | `git-workflow` | `/conventional-commits`, `/git-workflow` | "Create a PR" |
 | Dev environment setup | `platform-engineer` | `/local-dev-makefile`, `/docker` | "Set up local dev environment" |
 | Documentation | `dev-logger` | `/docs-as-code` | "Generate API docs" |
@@ -172,11 +172,11 @@ Use multiple agents in sequence for complex workflows.
 ```
 1. architect-agent    → Design service boundaries, define API contracts
       ↓
-2. java-expert or go-expert → Implement code, apply patterns
+2. /jvm-performance or /go-performance → Implement code, apply patterns
       ↓
 3. code-reviewer      → Code review, quality verification
       ↓
-4. java-expert or go-expert → Clean code + security review (built-in checklists)
+4. /jvm-performance or /go-performance → Clean code + security review (built-in checklists)
       ↓
 5. security-scanner   → Security vulnerability check
       ↓

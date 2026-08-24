@@ -23,7 +23,7 @@
 
 ```
 1. 코드 작성 중
-   → java-expert 또는 go-expert가 자동 리뷰 제안
+   → /jvm-performance 또는 /go-performance가 자동 리뷰 제안
 
 2. 코드 완성 후
    → "코드 리뷰해줘" → code-reviewer 실행
@@ -48,9 +48,9 @@
 
 ### 핵심 에이전트
 
-| 에이전트 | 용도 |
+| 에이전트 / 스킬 | 용도 |
 |---------|------|
-| `java-expert` | Virtual Threads, WebFlux, JVM 튜닝, 대용량 트래픽 |
+| `/jvm-performance` | Virtual Threads, WebFlux, JVM 튜닝, 대용량 트래픽 |
 | `code-reviewer` | 코드 품질, 패턴 일관성, 버그 탐지 |
 
 ### 핵심 스킬
@@ -74,7 +74,7 @@
 
 ```
 "Virtual Threads로 마이그레이션하고 싶어"
-→ java-expert + /concurrency-spring
+→ /jvm-performance + /concurrency-spring
 
 "JPA N+1 문제가 발생해"
 → /postgresql-operations + /spring-data + /database
@@ -86,10 +86,10 @@
 → /spring-testcontainers + /spring-testing
 
 "클린 코드 품질 확인해줘"
-→ java-expert + /clean-code + /refactoring-principles
+→ /jvm-performance + /clean-code + /refactoring-principles
 
 "Java 보안 리뷰해줘"
-→ java-expert (보안 체크리스트) + security-scanner
+→ /spring-security-review + security-scanner
 ```
 
 ---
@@ -98,9 +98,9 @@
 
 ### 핵심 에이전트
 
-| 에이전트 | 용도 |
+| 에이전트 / 스킬 | 용도 |
 |---------|------|
-| `go-expert` | Worker Pool, Fan-Out/In, sync.Pool, pprof |
+| `/go-performance` | Worker Pool, Fan-Out/In, sync.Pool, pprof |
 | `code-reviewer` | 코드 품질, Go idiom 준수 |
 
 ### 핵심 스킬
@@ -121,10 +121,10 @@
 
 ```
 "Go MSA 프로젝트 구조 잡아줘"
-→ go-expert + /go-microservice + /effective-go
+→ /go-performance + /go-microservice + /effective-go
 
 "Worker Pool 패턴 구현해줘"
-→ go-expert + /concurrency-go
+→ /go-performance + /concurrency-go
 
 "sqlc로 DB 레이어 설계해줘"
 → /go-database + /database
@@ -133,10 +133,10 @@
 → /go-testing + /effective-go
 
 "Go 에러 핸들링 + OTel 통합 리뷰해줘"
-→ go-expert (Handle OR Return + OTel 패턴)
+→ /go-performance + /effective-go
 
 "Go 클린 코드 리뷰해줘"
-→ go-expert + /clean-code + /refactoring-go
+→ /go-performance + /clean-code + /refactoring-go
 ```
 
 ---

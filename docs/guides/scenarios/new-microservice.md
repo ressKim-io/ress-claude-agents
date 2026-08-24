@@ -25,7 +25,7 @@
 │  Service    │────►│  Scaffold   │────►│  Core       │
 │  Design     │     │  Structure  │     │  Logic      │
 │             │     │             │     │             │
-│ architect   │     │ go-expert   │     │ go-expert   │
+│ architect   │     │ /go-perf    │     │ /go-perf    │
 │ /msa-ddd    │     │ /go-micro   │     │ /go-database│
 └─────────────┘     └─────────────┘     └─────────────┘
        │                                       │
@@ -81,7 +81,7 @@
 
 ## Step 2: Scaffold Project Structure
 
-**Tools**: `go-expert` + `/go-microservice`
+**Tools**: `/go-performance` + `/go-microservice`
 
 ### How to Request
 
@@ -120,7 +120,7 @@ order-service/
 
 ## Step 3: Implement Core Business Logic
 
-**Tools**: `go-expert` + `/go-database` + `/effective-go`
+**Tools**: `/go-performance` + `/go-database` + `/effective-go`
 
 ### How to Request
 

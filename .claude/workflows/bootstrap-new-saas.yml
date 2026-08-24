@@ -109,15 +109,18 @@ stages:
     description: "OpenAPI / protobuf 계약. ADR (auth/payment) + compliance (Data Subject Rights API) 반영"
 
   - name: implementation
-    agent: go-expert
+    agent: (main)          # 서브에이전트 없음 — skill 주도 (2026-08-24 Step 3)
     inputs: [api-contract, adr, acceptance-criteria]
     outputs: [code, unit-test, integration-test]
-    alternatives: [java-expert, frontend-expert]
+    alternatives: [frontend-expert]
     skills:
       - go/effective-go
+      - go/go-performance
+      - spring/effective-java
+      - spring/jvm-performance
+      - python/python-patterns
       - msa/contract-first
       - msa/msa-saga
-      - msa/idempotent-consumer
 
   - name: code-review
     agent: code-reviewer
@@ -130,8 +133,10 @@ stages:
     inputs: [code]
     outputs: [security-finding]
     skills:
-      - security/secure-coding-2026
-      - security/owasp-top-10
+      - security/secure-coding
+      - security/owasp-top10
+      - go/go-security
+      - spring/spring-security-review
     parallel_with: code-review
 
 # 핸드오프 의도:

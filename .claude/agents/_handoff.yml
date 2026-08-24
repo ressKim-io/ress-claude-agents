@@ -129,14 +129,6 @@ agents:
     produces: [migration-plan, upgrade-plan]
 
   # === 언어별 구현 ===
-  go-expert:
-    consumes: [api-contract, adr, acceptance-criteria]
-    produces: [code, unit-test, integration-test, code-review-comment]
-
-  java-expert:
-    consumes: [api-contract, adr, acceptance-criteria]
-    produces: [code, unit-test, integration-test, code-review-comment]
-
   frontend-expert:
     consumes: [api-contract, acceptance-criteria]
     produces: [code, unit-test, code-review-comment]

@@ -106,7 +106,7 @@ cd ress-claude-agents
 
 | 페르소나 | 가이드 | 핵심 도구 |
 |----------|--------|----------|
-| **백엔드 개발자** (Java/Go) | [personas/backend-dev.md](docs/guides/personas/backend-dev.md) | `java-expert`, `go-expert`, `/msa-ddd` |
+| **백엔드 개발자** (Java/Go) | [personas/backend-dev.md](docs/guides/personas/backend-dev.md) | `/jvm-performance`, `/go-performance`, `/msa-ddd` |
 | **DevOps / SRE** | [personas/devops-sre.md](docs/guides/personas/devops-sre.md) | `incident-responder`, `terraform-reviewer`, `/gitops-argocd` |
 | **풀스택 / 제너럴리스트** | [personas/fullstack-generalist.md](docs/guides/personas/fullstack-generalist.md) | `code-reviewer`, `architect-agent`, `/api-design` |
 
@@ -196,8 +196,6 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 | Agent | Expertise | Key Patterns |
 |-------|-----------|--------------|
-| 🦫 `go-expert` | Go 대용량 트래픽 | Worker Pool, Fan-Out/In, sync.Pool, pprof |
-| ☕ `java-expert` | Java/Spring 대용량 트래픽 | Virtual Threads (Java 21+), WebFlux, JVM 튜닝 |
 
 ### Ticketing Platform (1M+ Concurrent Users)
 

@@ -122,7 +122,7 @@ description: AI-powered FinOps cost analyzer. Use to analyze cloud spending.
 | Model | Effort | 사용 상황 | 본 레포 예 |
 |---|---|---|---|
 | `haiku` | `low` | 단순 자동화, 기록, template 적용 | dev-logger / git-workflow / pr-review-bot |
-| `sonnet` | `xhigh` (default) | 일반 expert / reviewer / 분석 (대다수) | code-reviewer / go-expert / k8s-reviewer 42 개 |
+| `sonnet` | `xhigh` (default) | 일반 expert / reviewer / 분석 (대다수) | code-reviewer / k8s-reviewer / terraform-reviewer 등 |
 | `opus` | `max` | cascade failure / 트레이드오프 / 전사 RFC | architect-agent / debugging-expert / tech-lead |
 
 **model 선택 self-check**:
@@ -166,7 +166,7 @@ Components) 은 go-/java-/python-/frontend-expert 를 함께 호출.
 | 150-250 줄 | OK |
 | **250-450 줄** | **Sweet spot** |
 | 450-600 줄 | 검토 필요 — 일부 섹션 skill 로 분리 |
-| >600 줄 | 분할 / 압축 필수 (현재 go-expert / java-expert 605 줄) |
+| >600 줄 | 분할 / 압축 필수 (2026-08-24 Step 3 에서 605 줄 go-expert / java-expert 를 skill 로 분할해 소진) |
 
 > **도메인 레퍼런스를 본문에 인라인하지 않는다.** 코드 샘플·패턴 카탈로그는 skill 로 두고 frontmatter `skills:` 로 주입한다 (시작 시 전문이 주입되므로 본문에 붙여 쓰는 것과 동일한 효과에 재사용까지 얻는다).
 > agent 본문은 **"언제 무엇을 판단하고 무엇을 반환하는가"** — 조사 프로토콜과 출력 계약만 남긴다. 본문이 코드블록 비중 60%+ 면 그 agent 는 skill 이어야 한다 ([2026-08-24 audit §3](../../docs/audit/2026-08-24-agent-harness-readiness.md)).

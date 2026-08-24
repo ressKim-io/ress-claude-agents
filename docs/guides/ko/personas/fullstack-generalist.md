@@ -87,7 +87,7 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 
 ```
 클린 코드 리뷰:
-  java-expert 또는 go-expert → /clean-code → /refactoring-principles
+  /jvm-performance 또는 /go-performance → /clean-code → /refactoring-principles
 
 "코드 가독성 확인해줘"
 → /clean-code + code-reviewer

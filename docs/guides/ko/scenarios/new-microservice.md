@@ -24,7 +24,7 @@
 │  Step 1     │     │  Step 2     │     │  Step 3     │
 │  서비스 설계  │────►│  구조 생성   │────►│  핵심 구현   │
 │             │     │             │     │             │
-│ architect   │     │ go-expert   │     │ go-expert   │
+│ architect   │     │ /go-perf    │     │ /go-perf    │
 │ /msa-ddd    │     │ /go-micro   │     │ /go-database│
 └─────────────┘     └─────────────┘     └─────────────┘
        │                                       │
@@ -79,7 +79,7 @@
 
 ## Step 2: 프로젝트 구조 생성
 
-**사용 도구**: `go-expert` + `/go-microservice`
+**사용 도구**: `/go-performance` + `/go-microservice`
 
 ### 이렇게 요청하세요
 
@@ -118,7 +118,7 @@ order-service/
 
 ## Step 3: 핵심 비즈니스 로직 구현
 
-**사용 도구**: `go-expert` + `/go-database` + `/effective-go`
+**사용 도구**: `/go-performance` + `/go-database` + `/effective-go`
 
 ### 이렇게 요청하세요
 

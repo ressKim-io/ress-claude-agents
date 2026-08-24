@@ -87,7 +87,7 @@ Load specific skills directly with slash commands:
 
 ```
 Clean code review:
-  java-expert or go-expert → /clean-code → /refactoring-principles
+  /jvm-performance or /go-performance → /clean-code → /refactoring-principles
 
 "Check my code readability"
 → /clean-code + code-reviewer
