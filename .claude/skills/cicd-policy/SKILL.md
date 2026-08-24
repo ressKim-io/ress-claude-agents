@@ -1,5 +1,6 @@
 ---
 name: cicd-policy
+category: cicd
 description: "CI/CD Policy as Code 가이드 — Kyverno 정책, 보안 점수 대시보드, 통합 DevSecOps 파이프라인 Use when working with cicd 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

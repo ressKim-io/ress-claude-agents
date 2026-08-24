@@ -1,5 +1,6 @@
 ---
 name: gitops-argocd-ai
+category: cicd
 description: "AI-assisted GitOps 가이드 — AI 기반 GitOps 자동화: Spacelift Intent, ArgoCD AI 분석, 예측적 배포, Drift 수정 Use when working with cicd 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

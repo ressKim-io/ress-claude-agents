@@ -1,5 +1,6 @@
 ---
 name: deployment-strategies
+category: cicd
 description: "배포 전략 가이드 — Rolling Update, Blue-Green 배포 및 기본 전략 개요 Use when working with cicd 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

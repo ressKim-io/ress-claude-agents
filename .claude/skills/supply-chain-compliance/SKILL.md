@@ -1,5 +1,6 @@
 ---
 name: supply-chain-compliance
+category: cicd
 description: "Supply Chain 컴플라이언스 가이드 — EU Cyber Resilience Act, SBOM 자동화, VEX, 중앙 저장소 아키텍처 Use when working with cicd 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false
