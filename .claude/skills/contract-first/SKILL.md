@@ -1,5 +1,6 @@
 ---
 name: contract-first
+category: msa
 description: "Contract-First Development — API 계약을 먼저 정의하고 코드를 생성하는 개발 방법론 — OpenAPI, Protobuf, AsyncAPI, Pact Use when working with msa 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

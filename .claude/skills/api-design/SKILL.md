@@ -1,5 +1,6 @@
 ---
 name: api-design
+category: msa
 description: "REST API Design Patterns — REST API 설계 원칙, RFC 9457 에러 처리, 페이지네이션, 버저닝 Use when working with msa 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

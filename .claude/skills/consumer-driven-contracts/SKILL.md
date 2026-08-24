@@ -1,5 +1,6 @@
 ---
 name: consumer-driven-contracts
+category: msa
 description: 마이크로서비스 간 API contract drift를 막는 Consumer-Driven Contracts(CDC) + Pact 운영 가이드. consumer test로 contract 정의 → provider verification 자동화 → GitOps 통합. Martin Fowler canon + Microsoft playbook 기반.
 ---
 

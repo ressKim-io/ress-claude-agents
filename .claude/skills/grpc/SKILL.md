@@ -1,5 +1,6 @@
 ---
 name: grpc
+category: msa
 description: "gRPC Service Design — gRPC 서비스 설계, Protocol Buffers, 스트리밍, 에러 처리, 성능 최적화 Use when working with msa 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false

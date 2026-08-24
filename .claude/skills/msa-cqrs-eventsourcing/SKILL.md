@@ -1,5 +1,6 @@
 ---
 name: msa-cqrs-eventsourcing
+category: msa
 description: "CQRS & Event Sourcing 가이드 — Command/Query 분리와 이벤트 기반 상태 관리로 확장 가능한 마이크로서비스를 구축하는 실전 가이드 Use when working with msa 도메인의 패턴 / 구현 선택."
 effort: xhigh
 deprecated: false
