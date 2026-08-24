@@ -112,7 +112,7 @@ stages:
     agent: go-expert
     inputs: [api-contract, adr, acceptance-criteria]
     outputs: [code, unit-test, integration-test]
-    alternatives: [java-expert, python-expert, frontend-expert]
+    alternatives: [java-expert, frontend-expert]
     skills:
       - go/effective-go
       - msa/contract-first

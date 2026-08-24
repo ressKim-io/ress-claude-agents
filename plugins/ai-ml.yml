@@ -2,7 +2,6 @@ name: ai-ml
 description: "AI/ML: MLOps, LLM deployment, RAG, prompt engineering"
 agents:
   - mlops-expert
-  - python-expert
 skills:
   categories:
     - ai

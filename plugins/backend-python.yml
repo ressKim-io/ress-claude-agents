@@ -1,7 +1,6 @@
 name: backend-python
 description: "Python backend: code review, testing, async patterns"
 agents:
-  - python-expert
   - code-reviewer
 skills:
   categories:

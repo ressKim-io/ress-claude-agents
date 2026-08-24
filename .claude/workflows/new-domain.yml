@@ -61,7 +61,7 @@ stages:
     agent: go-expert
     inputs: [api-contract, adr, acceptance-criteria]
     outputs: [code, unit-test, integration-test]
-    alternatives: [java-expert, python-expert]
+    alternatives: [java-expert]
     skills: [msa/contract-first, msa/msa-saga, msa/idempotent-consumer]
 
   # 메시징 도메인 (event-driven)

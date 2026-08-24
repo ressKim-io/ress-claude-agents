@@ -29,10 +29,10 @@ stages:
     skills: [dx/rfc-adr, dx/adr-retrospective, dx/engineering-strategy]
 
   - name: implementation
-    agent: go-expert   # 또는 java-expert / python-expert / frontend-expert
+    agent: go-expert   # 또는 java-expert / frontend-expert
     inputs: [api-contract, adr, acceptance-criteria]
     outputs: [code, unit-test, integration-test]
-    alternatives: [java-expert, python-expert, frontend-expert]
+    alternatives: [java-expert, frontend-expert]
     skills: [go/effective-go, msa/contract-first, msa/msa-saga]
 
   - name: code-review

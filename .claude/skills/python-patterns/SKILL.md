@@ -33,6 +33,64 @@ deprecated: false
 
 ---
 
+## Framework Selection
+
+| 기준 | FastAPI | Django | Flask |
+|------|---------|--------|-------|
+| **Use Case** | API 서버, 마이크로서비스 | 풀스택 웹, 어드민 | 소규모 API, 프로토타입 |
+| **Async** | Native async/await | ASGI 지원 (3.1+) | 제한적 (Quart 필요) |
+| **ORM** | SQLAlchemy async | Django ORM (강력) | SQLAlchemy |
+| **Performance** | 높음 (uvicorn) | 중간 | 중간 |
+| **Ecosystem** | 빠르게 성장 | 가장 성숙 | 성숙 |
+| **Learning Curve** | 낮음 | 중간-높음 | 낮음 |
+| **Admin** | 없음 (별도 구현) | 내장 (강력) | Flask-Admin |
+| **OpenAPI** | 자동 생성 | drf-spectacular | flask-smorest |
+
+```
+프레임워크 선택?
+├── API 전용 + 고성능 필요 ──────> FastAPI      (/fastapi)
+├── 풀스택 + 어드민 + ORM ───────> Django + DRF (/django)
+├── 빠른 프로토타입 ──────────────> Flask
+├── 마이크로서비스 ───────────────> FastAPI      (/fastapi)
+└── 기존 Django 프로젝트 확장 ───> Django       (/django)
+```
+
+## Project Configuration (pyproject.toml)
+
+lint / 테스트 / 커버리지 기준을 한 파일에 모아 CI 와 로컬이 같은 규칙을 쓰게 한다.
+
+```toml
+[project]
+name = "my-service"
+version = "1.0.0"
+requires-python = ">=3.12"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "SIM", "TCH"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-v --tb=short --strict-markers"
+
+[tool.coverage.run]
+source = ["app"]
+branch = true
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+```
+
+
 ## Type Hints (Modern Python 3.10+)
 
 ### Generics and TypeVar

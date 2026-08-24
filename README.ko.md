@@ -199,7 +199,6 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 |-------|-----------|--------------|
 | 🦫 `go-expert` | Go 대용량 트래픽 | Worker Pool, Fan-Out/In, sync.Pool, pprof |
 | ☕ `java-expert` | Java/Spring 대용량 트래픽 | Virtual Threads (Java 21+), WebFlux, JVM 튜닝 |
-| 🐍 `python-expert` | Python 대용량 트래픽 | FastAPI, asyncio, Pydantic v2, pytest |
 
 ### Ticketing Platform (1M+ Concurrent Users)
 
@@ -862,7 +861,6 @@ ress-claude-agents/
 │   │   ├── messaging-expert.md # Kafka/RabbitMQ/NATS
 │   │   ├── service-mesh-expert.md # Istio/Linkerd
 │   │   ├── compliance-auditor.md # SOC2/HIPAA/GDPR
-│   │   ├── python-expert.md  # FastAPI/Django/async
 │   │   ├── load-tester*.md   # Hub + K6/Gatling/nGrinder
 │   │   ├── dev-logger.md     # 개발 과정 기록
 │   │   └── ...

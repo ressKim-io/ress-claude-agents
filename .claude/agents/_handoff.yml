@@ -141,10 +141,6 @@ agents:
     consumes: [api-contract, adr, acceptance-criteria]
     produces: [code, unit-test, integration-test, code-review-comment]
 
-  python-expert:
-    consumes: [api-contract, adr, acceptance-criteria]
-    produces: [code, unit-test, integration-test, code-review-comment]
-
   frontend-expert:
     consumes: [api-contract, acceptance-criteria]
     produces: [code, unit-test, code-review-comment]
