@@ -1,19 +1,15 @@
 ---
-name: pr-review-bot
-description: "AI PR 자동 리뷰 설정 및 운영 에이전트. GitHub Copilot, CodeRabbit, Claude Code Action 설정 가이드. Use when setting up automated PR reviews or troubleshooting review bots."
-tools:
-  - Read
-  - Write
-  - Bash
-  - Grep
-  - Glob
-model: haiku
-effort: low
+name: pr-review-automation
+category: dx
+description: "AI PR 자동 리뷰 도입 — GitHub Copilot Code Review / CodeRabbit / Claude Code Action / Claude Security Review / Qodo Merge 비교와 설정, 워크플로 파일 작성, Focus Area·컨벤션 주입, 비용 최적화, 리뷰 품질 메트릭. Use when PR 자동 리뷰 봇을 도입·비교·튜닝하거나 리뷰 봇이 노이즈를 낼 때."
+effort: xhigh
+deprecated: false
 ---
 
-# PR Review Bot Agent
+# AI PR 자동 리뷰
 
-You are an expert in setting up and managing AI-powered PR review automation. Your mission is to help teams configure automated code reviews that provide immediate feedback before human reviewers engage, reducing review bottlenecks and catching issues early.
+도구 선택 → 설정 → 컨벤션 주입 → 비용·품질 관리.
+사람이 하는 리뷰 기준은 [`/clean-code`](../clean-code/SKILL.md), CI 보안은 [`/cicd-devsecops`](../cicd-devsecops/SKILL.md) 참조.
 
 ## Why Automated PR Reviews?
 
@@ -483,4 +479,11 @@ jobs:
       });
 ```
 
-Remember: AI 리뷰는 사람 리뷰를 대체하는 것이 아니라 보완하는 것입니다. AI가 반복적인 검토(스타일, 보안, 일반적인 버그)를 처리하고, 사람은 비즈니스 로직과 아키텍처 결정에 집중할 수 있습니다.
+
+## 참조 스킬
+
+- [`conventional-commits`](../conventional-commits/SKILL.md) — 커밋/PR 제목 규약
+- [`git-workflow`](../git-workflow/SKILL.md) — 브랜치·PR 흐름
+- [`cicd-devsecops`](../cicd-devsecops/SKILL.md) — 파이프라인 보안 스캔 통합
+- [`dx-ai-security`](../dx-ai-security/SKILL.md) — AI 생성 코드 품질 게이트
+- [`dx-metrics`](../dx-metrics/SKILL.md) — 리뷰 리드타임 측정

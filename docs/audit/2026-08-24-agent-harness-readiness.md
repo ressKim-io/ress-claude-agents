@@ -229,7 +229,36 @@ Step 3 착수 시 전수 대조했다. 판정 근거는 H2/H3 구조 비교 + �
 
 ---
 
-### 3.6 본문 구성 — reference dump
+### 3.6 borderline 재판정 (2026-08-24 Step 3)
+
+정정된 정규식(§3.1)으로 borderline 을 다시 판정했다. 두 건이 **양쪽 축을 다 갖고 있어 "정당한 agent" 로 승격**했고, 한 건은 정규식 오탐이 반대 방향으로 드러나 **강등**했다.
+
+| agent | 판정 변화 | 근거 |
+|---|---|---|
+| `migration-expert` | borderline → **정당** | `## Migration Assessment Protocol` + `## Output Templates` 양쪽 보유. 초판 정규식이 `Output Templates` 를 놓쳤다 |
+| `tech-lead` | borderline → **정당** | `## RFC/ADR Workflow` + `## Output Templates` 양쪽 보유. 동일 원인 |
+| `pr-review-bot` | borderline → **강등** | `## Workflow 파일 생성 헬퍼` 는 GitHub Actions YAML 생성기이지 조사 프로토콜이 아니다 (정규식 오탐). 본문 296/486줄(61%)이 도구 설정 카탈로그 → `dx/pr-review-automation` 으로 이관 |
+
+**Step 3 종료 시점 판정 (agent 35 → 34)**
+
+| 판정 | 개수 | 줄수 | 후속 |
+|---|---|---|---|
+| 정당한 agent | 21 | 8,737 | 유지 |
+| borderline (한쪽만) | 13 | 3,996 | **Step 4 에서 결손 축 보강** |
+| 강등 대상 | **0** | 0 | — |
+
+borderline 13 의 결손 축 (Step 4 작업 목록):
+
+| 결손 | agent | 필요 작업 |
+|---|---|---|
+| 조사 프로토콜 없음 (출력 계약만) | `ci-optimizer` `compliance-auditor` `cost-analyzer` `load-tester` `service-mesh-expert` `architect-agent` `finops-advisor` `mlops-expert` `platform-engineer` `product-engineer` | `## Review Process` / `Decision Tree` 신설 |
+| 출력 계약 없음 (프로토콜만) | `dev-logger` `frontend-expert` `infra-roadmap-planner` | `## Output Format` 신설 |
+
+> `architect-agent` / `finops-advisor` / `mlops-expert` / `platform-engineer` / `product-engineer` 5건은 본 Step 에서 **본문 중복 삭제까지 완료**했고(§3.3.1), 남은 것은 조사 프로토콜 신설뿐이다.
+
+---
+
+### 3.7 본문 구성 — reference dump
 
 | agent | 총줄 | 코드블록 | 비율 |
 |---|---|---|---|
@@ -253,8 +282,8 @@ Step 3 착수 시 전수 대조했다. 판정 근거는 H2/H3 구조 비교 + �
 | **F3** | `effort` 는 공식 frontmatter 필드다 — rule 의 사실 오류 | `.claude/rules/effort-guide.md:45` | 🟡 |
 | **F4** | 산문 규약을 강제 메커니즘으로 승격하지 않음 (자기 rule 위반) | 리뷰어 11개 | 🟡 |
 | **F5** | AGENT-SPEC 필수 3섹션이 1/49, LEGACY 배열로 CI 우회 | `validate-skill-frontmatter.sh` | 🟡 |
-| **F6** | agent 14개가 티어 오배치 (5,395줄) | §3.3 | 🟡 |
-| **F7** | 티어 판정 정규식이 `Output Template` 표기를 놓쳐 5개를 오분류 | §3.1 / 부록 A | 🟡 |
+| **F6** | agent 15개가 티어 오배치 (5,881줄) | §3.3 / §3.6 | 🟡 |
+| **F7** | 티어 판정 정규식이 `Output Template` 표기를 놓쳐 **7개**를 오분류 (강등 5 + borderline 2) 하고, `Workflow` 부분일치로 `pr-review-bot` 1개를 반대로 오분류 | §3.1 / §3.6 / 부록 A | 🟡 |
 
 ### F1 상세 — skill 260개 미로드
 

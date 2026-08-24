@@ -175,10 +175,6 @@ agents:
     consumes: [ci-pipeline]
     produces: [code-review-comment]
 
-  pr-review-bot:
-    consumes: [pr]
-    produces: [code-review-comment]
-
   # === 보안 리뷰어 (security-finding 산출) ===
   security-scanner:
     consumes: [code, dockerfile]

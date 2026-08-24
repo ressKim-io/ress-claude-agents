@@ -39,7 +39,7 @@
 
 | Effort | 카테고리 | 대상 (model) | 정당화 |
 |---|---|---|---|
-| `low` | 로깅 / 단순 자동화 | dev-logger (haiku) / git-workflow (haiku) / pr-review-bot (haiku) | 단순 기록 / commit msg — 깊은 추론 불필요 |
+| `low` | 로깅 / 단순 자동화 | dev-logger (haiku) / git-workflow (haiku) | 단순 기록 / commit msg — 깊은 추론 불필요 |
 | `medium` | 비용 민감 분석 | cost-analyzer / finops-advisor / compliance-auditor / ci-optimizer (sonnet) | 정량 분석은 model 자체 capability 충분, effort 절약 |
 | `xhigh` (기본) | 일반 expert / reviewer | sonnet 42 개 대다수 (code-reviewer / k8s-reviewer / terraform-reviewer / gitops-reviewer / observability-reviewer ...) | Opus 4.7 coding/agentic 권장 시작점 |
 | `max` | frontier 추론 | architect-agent (opus) / debugging-expert (opus) / tech-lead (opus) | cascade failure / 트레이드오프 / 전사 RFC — opus + max 정당 |

@@ -209,7 +209,6 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 |-------|---------|----------|
 | 📝 `git-workflow` | Git 워크플로우 자동화 | 커밋 메시지 생성, PR 자동화 |
 | ⚙️ `ci-optimizer` | CI/CD 최적화 | 빌드 시간 분석, DORA 메트릭 |
-| 🔍 `pr-review-bot` | AI PR 리뷰 설정 | Copilot/CodeRabbit/Claude Action |
 | 📓 `dev-logger` | 개발 과정 기록 | AI 수정 요청, 의사결정, 트러블슈팅 로깅 |
 
 ---

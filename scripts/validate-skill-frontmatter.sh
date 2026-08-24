@@ -48,7 +48,7 @@ LEGACY_AGENTS_NO_BODY_SPEC=(
     gitops-reviewer incident-responder infra-roadmap-planner
     k8s-reviewer k8s-security-reviewer k8s-troubleshooter load-tester migration-expert mlops-expert
     network-security-reviewer observability-reviewer platform-engineer
-    platform-strategy-agent pr-review-bot product-engineer python-expert security-scanner service-mesh-expert tech-lead terraform-reviewer
+    platform-strategy-agent product-engineer python-expert security-scanner service-mesh-expert tech-lead terraform-reviewer
 )
 
 log_pass() { printf '  PASS  %s\n' "$1"; }
