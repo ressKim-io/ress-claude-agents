@@ -15,10 +15,10 @@
 
 1. **harness 3축 중 guides 만 있다.** `Agent = Model + Harness`, harness = guides(지시) + sensors(검증) + enforcement(구속). 이 레포는 19,819줄 전부가 guides 다. sensors·enforcement 는 **사실상 0**.
 2. **frontmatter 가 2026-05 스펙에 멈춰 있다.** 공식 16개 필드 중 4개만 사용. harness 핵심 4개(`memory` `hooks` `permissionMode`/`disallowedTools` `maxTurns`)가 통째로 **0/49**.
-3. **49개 중 19개는 agent 일 이유가 없다.** 조사 프로토콜도 출력 계약도 없는 순수 레퍼런스 7,617줄이 agent 로 등록돼 있다.
+3. **49개 중 14개는 agent 일 이유가 없다.** 조사 프로토콜도 출력 계약도 없는 순수 레퍼런스 5,395줄이 agent 로 등록돼 있다. (초판은 19개 / 7,617줄로 셌으나 판정 스크립트가 `## Output Template` 표기를 놓친 오탐이었다 — 2026-08-24 Step 3 착수 시 정정. §3.3 참조)
 4. **skill 260개 / 97,912줄이 로드되지 않는다.** 디렉터리 구조가 공식 규격 위반이다. 그리고 **Migration 0002 P7 이 향하는 목표 경로도 규격 위반**이라, 지금 P7 을 그대로 실행하면 260개를 변환하고도 여전히 안 붙는다.
 
-3과 4는 같은 문제의 양면이다 — 레퍼런스가 agent 안에 7,617줄 들어앉아 있고, 정작 레퍼런스가 있어야 할 skill 97,912줄은 죽어 있다.
+3과 4는 같은 문제의 양면이다 — 레퍼런스가 agent 안에 5,395줄 들어앉아 있고, 정작 레퍼런스가 있어야 할 skill 97,912줄은 죽어 있다.
 
 > 본 문서는 **측정 + 실행 백로그 정의**를 수행한다. §6 백로그는 세션을 넘겨 재개할 수 있도록 체크박스로 관리한다.
 > 선행 audit: [2026-08-15 자산 티어 재배치](2026-08-15-asset-tier-rebalance.md) (drift / 개수 / description 축). 본 audit 은 harness / 티어 축으로 그와 중복되지 않는다.
@@ -134,32 +134,52 @@ agent 는 **격리된 컨텍스트에서 조사를 수행하고 요약을 반환
 | 신호 | 의미 |
 |---|---|
 | **조사 프로토콜** (`## Review Process` / `Protocol` / `Decision Tree` / `Methodology`) | 어떻게 파고들지 |
-| **출력 계약** (`## Output Format` / `Report Template`) | 무엇을 돌려줄지 |
+| **출력 계약** (`## Output Format` / `Report Template` / **`Output Template(s)`**) | 무엇을 돌려줄지 |
 
-둘 다 없으면 위임 단위가 아니라 **레퍼런스 문서**다.
+둘 다 없으면 위임 단위가 아니라 **레퍼런스 문서**다. 한쪽만 있으면 borderline 이다.
+
+> ⚠️ **정정 (2026-08-24, Step 3 착수 시)**: 초판 정규식은 `Output Format|Report Template|출력` 이었는데 이 레포가 실제로 쓰는 표기는 **`## Output Template(s)`** 라 매칭되지 않았다. 그 결과 출력 계약을 실제로 가진 agent 5개가 강등 대상으로 잘못 분류됐다. 부록 A 의 재측정 명령도 함께 정정했다.
 
 ### 3.2 판정 결과
 
 | 판정 | 개수 | 줄수 | 대상 |
 |---|---|---|---|
 | **정당한 agent** | 19 | 7,553 | 리뷰어 11 + 조사형 4 + ADR 생산형 3 + `git-workflow` |
-| **borderline** (한쪽만) | 11 | 4,649 | `ci-optimizer` `compliance-auditor` `cost-analyzer` `dev-logger` `frontend-expert` `infra-roadmap-planner` `load-tester` `migration-expert` `pr-review-bot` `service-mesh-expert` `tech-lead` |
-| **agent 일 이유 없음** | **19** | **7,617** | 아래 §3.3 |
+| **borderline** (한쪽만) | 16 | 6,871 | `ci-optimizer` `compliance-auditor` `cost-analyzer` `dev-logger` `frontend-expert` `infra-roadmap-planner` `load-tester` `migration-expert` `pr-review-bot` `service-mesh-expert` `tech-lead` + **재판정 5** (§3.3.1) |
+| **agent 일 이유 없음** | **14** | **5,395** | 아래 §3.3 |
 
-### 3.3 강등 대상 19개
+합계 19 + 16 + 14 = 49 / 7,553 + 6,871 + 5,395 = 19,819줄.
 
-`anti-bot`(288) `architect-agent`(535) `database-expert`(311) `database-expert-mysql`(287) `finops-advisor`(357) `go-expert`(605) `java-expert`(605) `load-tester-gatling`(270) `load-tester-k6`(292) `load-tester-ngrinder`(375) `messaging-expert`(475) `mlops-expert`(423) `otel-expert`(242) `platform-engineer`(430) `product-engineer`(477) `python-expert`(504) `redis-expert`(372) `saga-agent`(493) `ticketing-expert`(276)
+### 3.3 강등 대상 14개
 
-휴리스틱 오탐을 의심해 6개를 손으로 검증했고 **전부 판정이 유지됐다**:
+`anti-bot`(288) `database-expert`(311) `database-expert-mysql`(287) `go-expert`(605) `java-expert`(605) `load-tester-gatling`(270) `load-tester-k6`(292) `load-tester-ngrinder`(375) `messaging-expert`(475) `otel-expert`(242) `python-expert`(504) `redis-expert`(372) `saga-agent`(493) `ticketing-expert`(276)
+
+휴리스틱 오탐을 의심해 6개를 손으로 검증했다:
 
 | agent | 손 검증 결과 |
 |---|---|
-| `architect-agent` | "Step 1/2/3" 은 Event Storming **방법론 설명**이지 실행 프로토콜이 아님. 535줄 중 327줄이 protobuf/gRPC 코드 샘플 |
-| `otel-expert` | H2 가 `역할;사용 시점;전문 분야;핵심 지식;권장 도구;질문 예시;**참조 스킬**` — 스킬 문서 구조 그대로 |
-| `saga-agent` | deliverable 언급 0건. Temporal 패턴 레퍼런스 |
-| `product-engineer` | RICE / MoSCoW / Shape Up 프레임워크 모음 |
-| `platform-engineer` | Backstage Quick Start = 설치 가이드 |
-| `finops-advisor` | Maturity Model + Tool Selection = 진단 가이드 |
+| `otel-expert` | H2 가 `역할;사용 시점;전문 분야;핵심 지식;권장 도구;질문 예시;**참조 스킬**` — 스킬 문서 구조 그대로. 판정 유지 |
+| `saga-agent` | deliverable 언급 0건. Temporal 패턴 레퍼런스. 판정 유지 |
+| `architect-agent` | "Step 1/2/3" 은 Event Storming **방법론 설명**이지 실행 프로토콜이 아님. 535줄 중 327줄이 protobuf/gRPC 코드 샘플 → **조사 프로토콜 축은 확증. 출력 계약 축은 미확인이었고 §3.3.1 에서 뒤집혔다** |
+| `product-engineer` | RICE / MoSCoW / Shape Up 프레임워크 모음 → 동일 (§3.3.1) |
+| `platform-engineer` | Backstage Quick Start = 설치 가이드 → 동일 (§3.3.1) |
+| `finops-advisor` | Maturity Model + Tool Selection = 진단 가이드 → 동일 (§3.3.1) |
+
+**손 검증의 한계**: 6건 모두 *조사 프로토콜* 축만 재확인했고 *출력 계약* 축은 정규식 결과를 그대로 신뢰했다. 정규식이 틀린 축을 손 검증이 덮지 못해 오탐이 살아남았다.
+
+#### 3.3.1 재판정 5개 — 출력 계약 보유 (강등 보류)
+
+정규식이 놓친 `## Output Template(s)` 를 실제로 가진 agent 다. 5개 모두 ` ```markdown ` fence 안에 **반환할 보고서 구조**가 들어 있어 §3.1 기준상 borderline(출력 계약 O / 조사 프로토콜 X) 이다.
+
+| agent | 줄 | 출력 계약 |
+|---|---|---|
+| `architect-agent` | 535 | `## Output Template: 서비스 분해 제안서` — Bounded Context 표 / 통신 설계 표 / 마이그레이션 로드맵 |
+| `finops-advisor` | 357 | `## Output Templates` → FinOps 성숙도 평가 보고서 (Gap 표 + 90일 로드맵) |
+| `mlops-expert` | 423 | `## Output Templates` → GPU Cluster Design (요구사항 / 인프라 표 / 스케줄링 / 서빙) |
+| `platform-engineer` | 430 | `## Output Templates` → IDP 설계 문서 (현재 상태 / 목표 아키텍처 / Golden Paths / 로드맵) |
+| `product-engineer` | 477 | `## Output Templates` → Story Map / RICE Sheet / Shape Up Pitch / MVP Definition / Feature Spec (5종) |
+
+**조치** (사용자 결정 2026-08-24): 강등하지 않는다. agent 는 유지하되 **본문의 skill 중복분(코드 샘플·튜토리얼)을 삭제하고 skill 참조로 대체**한다 — 출력 계약과 조사 절차만 남긴다.
 
 ### 3.4 과잉 분할 2건
 
@@ -168,7 +188,48 @@ agent 는 **격리된 컨텍스트에서 조사를 수행하고 요약을 반환
 | load-tester 4개 | 허브 + k6 + gatling + ngrinder = 1,087줄 | 내용이 "설치 및 설정 / DSL / 사용법" 튜토리얼. 도구 선택은 프로젝트당 1회 |
 | database 2개 | `database-expert`(PostgreSQL) + `-mysql` = 598줄 | 동일 구조 2벌 (Quick Reference / Tuning / Pooling / Monitoring / Anti-Patterns) |
 
-### 3.5 본문 구성 — reference dump
+> 두 건 모두 **강등으로 자동 해소된다** — agent 를 skill 로 내리면 agent 쪽 과잉 분할은 0이 된다. 다만 skill 쪽에서는 분리를 유지한다: 엔진(PostgreSQL/MySQL)·도구(K6/Gatling/nGrinder)가 다르면 description 매칭이 갈리므로 합치면 오히려 발견이 나빠진다 (§3.5).
+
+### 3.5 강등 14개 × skill 260개 중복 대조 (2026-08-24)
+
+Step 3 착수 시 전수 대조했다. 판정 근거는 H2/H3 구조 비교 + 키워드 실측(`grep -c`)이다.
+
+**B. 폐기 — 기존 skill 이 이미 커버 (5건 / 1,906줄)**
+
+| agent | 줄 | 중복 skill | 흡수할 고유분 |
+|---|---|---|---|
+| `saga-agent` | 493 | `msa-saga`(502) — 10섹션 중 8 일치 | Temporal 결정성 제약 / Workflow Versioning / Search Attributes / 멱등키 생성전략 + Dedup 테이블 |
+| `otel-expert` | 242 | `observability-otel-scale`(트래픽 규모별 + Tail Sampling) `observability-cost` `observability-otel` | **없음** — 본문이 `## 참조 스킬` 포함 index 구조 |
+| `python-expert` | 504 | `python-async`(TaskGroup·asyncpg·Semaphore·aiohttp·redis) `python-patterns`(Pydantic·타입) `python-performance`(__slots__·generators·프로파일링·풀) `python-testing` | Framework Selection 표 / `pyproject.toml` |
+| `load-tester-k6` | 292 | `load-testing`(K6 기본·고급·K8s Operator) | Grafana Cloud K6 100만 VU 구성 / GitHub Actions 통합 |
+| `load-tester-ngrinder` | 375 | `load-testing-analysis`(nGrinder·결과분석) | K8s 배포 / 웹 UI / AWS Auto Scaling / Jenkins |
+
+**C. 신규 skill 로 이관 — 기존 커버 없음 (7건 / 2,279줄)**
+
+| agent | 줄 | 기존 커버 실측 | 신규 skill |
+|---|---|---|---|
+| `redis-expert` | 372 | `redis-streams` 는 Streams 전용. 캐싱·Sentinel·Cluster·Redlock·Operator·메모리 **0** | `infrastructure/redis-operations` |
+| `database-expert` | 311 | `infrastructure/database` 는 일반 인덱스·N+1. PG 파라미터·PgBouncer·Percona Operator **0** | `infrastructure/postgresql-operations` |
+| `database-expert-mysql` | 287 | 동일. InnoDB 튜닝·ProxySQL·InnoDB Cluster **0** | `infrastructure/mysql-operations` |
+| `messaging-expert` | 475 | `rabbitmq` 는 quorum 16회만 — queue depth / unacked / memory alarm **각 0**. kafka 계열은 lag·rebalance 일부 | `messaging/broker-troubleshooting` (패턴 4종 DLQ·Outbox·Idempotent·Retry 는 `msa-event-driven`·`msa-resilience` 중복 → 삭제) |
+| `ticketing-expert` | 276 | `high-traffic-design`·`distributed-lock`·`msa-saga` 가 각 1섹션 | `business/virtual-waiting-room` |
+| `anti-bot` | 288 | `rate-limiting` 과 Redis sliding window 1섹션만 | `security/anti-bot` (Rate Limiting 섹션 삭제 후 참조) |
+| `load-tester-gatling` | 270 | **없음** — Gatling skill 부재 | `sre/load-testing-gatling` |
+
+**D. 부분 이관 — 분할 (2건 / 1,210줄)**
+
+| agent | 줄 | 중복 | 고유분 행선지 |
+|---|---|---|---|
+| `go-expert` | 605 | `effective-go`(인터페이스·에러·Worker Pool) `concurrency-go` `msa-resilience`(Circuit Breaker) `go-microservice`(Graceful Shutdown) `secure-coding`(Go 5행 요약표) | sync.Pool·Zero-alloc·GC튜닝·pprof·Performance Targets·OTel 에러통합 → `go/go-performance` / Security Review Checklist 7섹션 → `go/go-security` |
+| `java-expert` | 605 | `effective-java`(VT 개요) `concurrency-spring` `spring-cache` `msa-resilience` `spring-security` `secure-coding`(Java 5행 요약표) | VT vs WebFlux 결정표·HikariCP+VT 주의·G1GC/ZGC 튜닝·Performance Targets → `spring/jvm-performance` / Security Review Checklist 8섹션 → `spring/spring-security-review` |
+
+> 보안 체크리스트 행선지는 사용자 결정(2026-08-24): `secure-coding` 의 언어별 표는 언어당 5행 요약이라 깊이가 다르다. 요약은 남기고 상세는 언어 skill 에서 발견되게 한다.
+
+**참조 갱신 범위**: `plugins/*.yml` + `.claude/workflows/*.yml` 55건, 타 자산 상호참조 58건.
+
+---
+
+### 3.6 본문 구성 — reference dump
 
 | agent | 총줄 | 코드블록 | 비율 |
 |---|---|---|---|
@@ -192,7 +253,8 @@ agent 는 **격리된 컨텍스트에서 조사를 수행하고 요약을 반환
 | **F3** | `effort` 는 공식 frontmatter 필드다 — rule 의 사실 오류 | `.claude/rules/effort-guide.md:45` | 🟡 |
 | **F4** | 산문 규약을 강제 메커니즘으로 승격하지 않음 (자기 rule 위반) | 리뷰어 11개 | 🟡 |
 | **F5** | AGENT-SPEC 필수 3섹션이 1/49, LEGACY 배열로 CI 우회 | `validate-skill-frontmatter.sh` | 🟡 |
-| **F6** | agent 19개가 티어 오배치 (7,617줄) | §3.3 | 🟡 |
+| **F6** | agent 14개가 티어 오배치 (5,395줄) | §3.3 | 🟡 |
+| **F7** | 티어 판정 정규식이 `Output Template` 표기를 놓쳐 5개를 오분류 | §3.1 / 부록 A | 🟡 |
 
 ### F1 상세 — skill 260개 미로드
 
@@ -265,14 +327,17 @@ harness 축에서 **이미 앞서 있는** 부분이다. 정리 작업 중 훼�
 
 > Step 2 수행 중 새로 발견한 2건은 **Step 5** 로 분리했다 (Step 2 잔여가 아니라 별개 작업).
 
-### Step 3 — agent 19개 강등 (F6)
+### Step 3 — agent 14개 강등 (F6 / F7)
 
-- [ ] 강등 19개와 기존 skill 260개의 중복 대조 (`go-expert`↔`effective-go`, `saga-agent`↔`msa-saga`, `k8s-security-reviewer`↔`k8s-security` 등 21건 후보 확인됨)
-- [ ] 중복 아닌 내용만 skill 로 이관, 중복은 폐기
-- [ ] `load-tester` 4 → 1 통합
-- [ ] `database-expert` + `-mysql` → 1 통합
+- [x] **판정 오탐 정정 (F7)** — `## Output Template` 미매칭으로 5개 오분류. 강등 19 → **14**, borderline 11 → **16** (§3.1 / §3.3.1 / 부록 A)
+- [x] 강등 14개와 기존 skill 260개의 **전수 중복 대조** → §3.5 표 (B 폐기 5 / C 신규이관 7 / D 분할 2)
+- [ ] **검증 게이트 1건** — `load-tester-gatling` → `sre/load-testing-gatling`. 참조 0건 / 중복 0건이라 최소 위험으로 전 경로(신규 skill → agent 삭제 → inventory → validator) 관통
+- [ ] B 폐기 5건 — 고유분 흡수 후 agent 삭제
+- [ ] C 신규 이관 7건 — 신규 skill 생성 후 agent 삭제
+- [ ] D 분할 2건 — `go-performance`/`go-security`, `jvm-performance`/`spring-security-review`
+- [ ] 재판정 5건 (§3.3.1) — agent 유지, 본문 skill 중복분 삭제 → 참조로 대체
 - [ ] borderline 11개 재판정 (강등 / 유지 / 보강)
-- [ ] `plugins/*.yml`, `.claude/workflows/*.yml`, `inventory.yml` 참조 갱신
+- [ ] `plugins/*.yml`(55건), `.claude/workflows/*.yml`, `inventory.yml` 참조 갱신
 - [ ] dev-log 1건
 
 ### Step 4 — harness 리트로핏
@@ -299,8 +364,8 @@ Step 2 수행 중 발견. Step 3·4 와 독립이며 순서 제약 없다.
 
 ## 7. 세션 재개 절차
 
-**현재 상태 (2026-08-24 기준)**: Step 1 ✅ / Step 2 ✅ / **Step 3 · 4 · 5 대기**.
-작업 브랜치 `docs/harness-readiness-audit` (28 커밋, push 안 함).
+**현재 상태 (2026-08-24 기준)**: Step 1 ✅ / Step 2 ✅ / **Step 3 진행 중** (대조 완료, 이관 대기) / **Step 4 · 5 대기**.
+작업 브랜치 `docs/harness-readiness-audit` — `origin` 에 push 완료 (`git status -sb` 로 동기 상태 확인).
 
 1. 본 문서 §6 에서 미체크 항목 확인 — `grep -n "^- \[ \]" docs/audit/2026-08-24-agent-harness-readiness.md`
 2. dev-log 로 직전 세션 맥락 복원 (최신순):
@@ -347,7 +412,7 @@ done
 # 티어 판정 (조사 프로토콜 × 출력 계약)
 for f in .claude/agents/*.md; do
   P=no; grep -qE "^## .*(Process|Protocol|Decision Tree|Workflow|Methodology)" "$f" && P=YES
-  O=no; grep -qE "^## .*(Output Format|Report Template|출력)" "$f" && O=YES
+  O=no; grep -qE "^## .*(Output Format|Report Template|Output Template|출력)" "$f" && O=YES  # Output Template 누락이 F7 오탐 원인
   [ "$P" = no ] && [ "$O" = no ] && basename "$f" .md
 done
 
