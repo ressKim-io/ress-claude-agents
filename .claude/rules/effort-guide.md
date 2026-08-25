@@ -57,7 +57,7 @@
 **`effort` 는 공식 frontmatter 필드다.** subagent frontmatter 의 `effort` 는 해당 agent 가 활성화된 동안 **세션 effort 를 override** 한다. 따라서 본 표는 "무엇을 고를지" 의 기준이고, **실제 강제는 각 agent 의 frontmatter 에서 일어난다** — 표만 맞추고 frontmatter 를 비워두면 세션 기본값이 그대로 적용된다.
 
 > ⚠️ **정정 (2026-08-24)**: 2026-05-15 ~ 2026-08-24 동안 본 문서는 "Claude Code 는 frontmatter 의 `effort` 필드를 직접 읽지 않으므로 본 표가 SOT" 라고 잘못 기술했다. 대부분의 agent 가 `effort` 미명시로 남아 세션 기본값에 방치된 원인이다.
-> 경위: [2026-08-24 audit F3](../../docs/audit/2026-08-24-agent-harness-readiness.md#4-발견-f1f6)
+> 경위: [2026-08-24 audit F3](../../docs/audit/2026-08-24-agent-harness-readiness.md#4-발견-f1f10)
 
 ---
 

@@ -6,7 +6,7 @@
 > **출처 (F6)**: https://code.claude.com/docs/en/sub-agents (검증일 **2026-08-24**, 직전 2026-05-15)
 >
 > 핵심 1: sub-agent 의 `description` 은 Agent 도구가 invocation 결정 시 매칭하는 primary trigger. universal "always use sonnet" 룰 없음 — task 복잡도 기반 model 선택.
-> 핵심 2: frontmatter 는 **16개 필드**를 지원한다. 이 중 `permissionMode` / `disallowedTools` / `maxTurns` 는 산문 규약과 달리 **실행 강제**다 (§1.2).
+> 핵심 2: frontmatter 는 **16개 필드**를 지원한다. 이 중 실행 강제력이 있는 것은 `disallowedTools` / `maxTurns` / `hooks` 이고, `permissionMode` 는 부모 세션에 따라 무시될 수 있다 — 강제력의 실제 경계는 §1.2 참조.
 >
 > ⚠️ 외부 사양은 분기별 재검증 대상이다 ([`multi-tool-adapter.md`](../rules/multi-tool-adapter.md) §외부 도구 사양). 2026-05-15 → 2026-08-24 사이에 실제로 `effort` 필드 관련 기술이 drift 했다 — 경위는 [2026-08-24 audit](../../docs/audit/2026-08-24-agent-harness-readiness.md) 참조. **다음 재검증 예정: 2026-11**.
 
@@ -23,7 +23,7 @@ description: |
 tools: Read, Grep, Glob, Bash                  # 명시적 listing (전체 `*` 회피)
 model: sonnet                                   # haiku | sonnet | opus | fable | inherit
 effort: xhigh                                   # 세션 effort 를 override — 본 레포는 전 agent 명시
-disallowedTools: [Bash]                         # 읽기 전용 agent 는 여기서 차단 (산문 아님)
+# disallowedTools: [Write, Edit]                # 도구 단위 차단만 가능 — §1.2 의 경계를 읽고 쓸 것
 ---
 ```
 
@@ -36,19 +36,24 @@ disallowedTools: [Bash]                         # 읽기 전용 agent 는 여기
 | `tools` | ✅ | 명시적 도구 listing. 보안상 `*` (전체) 회피. WebFetch / Write 는 필요 시만 |
 | `model` | ✅ | haiku (단순) / sonnet (대다수) / opus (frontier) — outlier 정당화 본문에 명시 |
 | `effort` | ✅ | **세션 effort override.** [`effort-guide.md`](../rules/effort-guide.md) 에서 고른 값을 명시. 생략하면 세션 기본값에 방치됨 |
-| `disallowedTools` | 조건부 | 결과만 반환하는 agent(리뷰어 등)에 **필수** — §1.2 |
+| `disallowedTools` | 조건부 | 도구 단위 denylist. `tools` 허용목록과 중복되면 no-op — 실제 효과가 있을 때만 쓴다 (§1.2) |
 
-### 1.2 실행 강제 필드 — 산문 규약을 승격하는 자리
+### 1.2 실행 강제 필드 — 무엇이 실제로 강제되는가
 
-[`multi-tool-adapter.md`](../rules/multi-tool-adapter.md) 는 "산문 규약을 대상 도구의 **강제 메커니즘으로 승격**하라" 고 규정한다. Claude Code 에서 그 자리가 아래 3개다.
+[`multi-tool-adapter.md`](../rules/multi-tool-adapter.md) 는 "산문 규약을 대상 도구의 **강제 메커니즘으로 승격**하라" 고 규정한다. 다만 **어디까지 승격되는지에 경계가 있다.**
 
-| 필드 | 승격 대상 산문 | 사용 기준 |
+| 필드 | 강제력 | 경계 (2026-08-25 공식 docs 확인) |
 |---|---|---|
-| `disallowedTools` | §Permission Boundary ("gh / git push 직접 실행 금지") | 결과만 반환하는 agent — 상속·명시 목록에서 도구를 제거한다 |
-| `permissionMode` | [`user-approval.md`](../rules/user-approval.md) §외부 작업 승인 | `default`(=`manual`) / `plan` / `acceptEdits` / `auto` / `dontAsk` / `bypassPermissions` |
-| `maxTurns` | 무한 탐색 방지 | 조사 범위가 발산할 수 있는 agent 에 상한 |
+| `disallowedTools` | ✅ 런타임 강제 | **도구 이름 / MCP 패턴 단위만.** `Bash(gh pr comment:*)` 같은 명령 단위 지정자는 **지원하지 않는다** (settings.json 문법과 다르다). `tools` 허용목록에 이미 없는 도구를 적으면 no-op |
+| `maxTurns` | ✅ 런타임 강제 | 턴 상한. 조사 범위가 발산할 수 있는 agent 에 |
+| `hooks` | ✅ 런타임 강제 | `PreToolUse` 가 `permissionDecision: deny` 로 개별 호출 차단. **명령 단위에 닿는 유일한 필드.** ⚠️ 부모가 `bypassPermissions` 일 때의 동작은 공식 문서에 기술 없음 — 미검증 |
+| `permissionMode` | ⚠️ 조건부 | 부모가 `bypassPermissions` / `acceptEdits` 면 **override 불가**. 부모가 auto mode(Pro/Max/Team 기본)면 frontmatter 값이 **무시된다** |
 
-> MUST 산문 §Permission Boundary 를 쓰는 것으로 끝내지 말고, **같은 제약을 frontmatter 로도 표현할 수 있는지 매번 검토**한다. 산문은 모델이 따르는 것이고 frontmatter 는 런타임이 강제하는 것이다.
+> ⚠️ **정정 (2026-08-25)**: 직전 판(2026-08-24)은 `disallowedTools` 를 "§Permission Boundary(gh / git push 직접 실행 금지)의 승격 자리" 라고 적었다. **스펙상 성립하지 않는다** — 두 필드 모두 `Bash` 안쪽의 `gh` / `git push` / `argocd sync` 에 닿지 못한다.
+>
+> 따라서 §Permission Boundary 는 현재 **산문 규약으로 남아 있고**, 그 사실을 알고 쓴다. 실행 강제로 옮기는 근본 설계는 별도 과제다 — [audit §6 Step 6](../../docs/audit/2026-08-24-agent-harness-readiness.md).
+
+> MUST 신규 필드를 넣기 전에 **그게 실제로 무엇을 막는지** 확인한다. 막지 못하는 것을 막는다고 적은 frontmatter 는 산문보다 나쁘다 — 지켜지고 있다고 착각하게 만든다.
 
 ### 1.3 선택 필드 (필요 시)
 

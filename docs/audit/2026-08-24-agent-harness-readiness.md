@@ -273,7 +273,7 @@ borderline 13 의 결손 축 (Step 4 작업 목록):
 
 ---
 
-## 4. 발견 (F1~F6)
+## 4. 발견 (F1~F10)
 
 | # | 발견 | 위치 | 심각도 |
 |---|---|---|---|
@@ -284,6 +284,9 @@ borderline 13 의 결손 축 (Step 4 작업 목록):
 | **F5** | AGENT-SPEC 필수 3섹션이 1/49, LEGACY 배열로 CI 우회 | `validate-skill-frontmatter.sh` | 🟡 |
 | **F6** | agent 15개가 티어 오배치 (5,881줄) | §3.3 / §3.6 | 🟡 |
 | **F7** | 티어 판정 정규식이 `Output Template` 표기를 놓쳐 **7개**를 오분류 (강등 5 + borderline 2) 하고, `Workflow` 부분일치로 `pr-review-bot` 1개를 반대로 오분류 | §3.1 / §3.6 / 부록 A | 🟡 |
+| **F8** | `validate-schemas.sh` 가 agent 34개 중 **1건만 샘플 검증**해, 구 스키마(8필드 + `additionalProperties:false`)를 위반한 agent 5개를 통과시켰다 | `scripts/validate-schemas.sh` / `schemas/agent-manifest.v1.json` | 🟡 |
+| **F9** | `effort-guide.md` 의 model×effort 매트릭스 drift — "xhigh 는 Opus 4.7 만" / "Haiku 4.5 는 low~max 지원" 이 현행 스펙과 불일치 | `.claude/rules/effort-guide.md` | 🟡 |
+| **F10** | **F4 의 해법이 스펙상 성립하지 않는다** — `disallowedTools` 는 도구 단위, `permissionMode` 는 부모 세션에 종속. 둘 다 `Bash` 안쪽 명령에 닿지 못한다 | AGENT-SPEC §1.2 / §Step 6 | 🔴 설계 결함 |
 
 ### F1 상세 — skill 260개 미로드
 
@@ -374,15 +377,19 @@ harness 축에서 **이미 앞서 있는** 부분이다. 정리 작업 중 훼�
 > 신규 skill 12개. §3.4 과잉 분할 2건도 해소.
 > 부수 발견: workflow `skills:` 목록의 dangling 참조 — 일부 수정, 나머지는 **검증 CI job 부재**로 Step 5 에 편입.
 
-### Step 4 — harness 리트로핏
+### Step 4 — harness 리트로핏 (진행 중 2026-08-25)
 
-- [ ] 리뷰어 11개에 `disallowedTools` 또는 `permissionMode` — 산문을 실행 강제로 승격 (F4)
-- [ ] 42개 agent 에 `effort` frontmatter 실제 반영 (F3 후속)
-- [ ] `## Verification Criteria` 섹션 채우기 → `LEGACY_AGENTS_NO_BODY_SPEC` 배열 소진 (F5)
-- [ ] agent 행동 eval 도입 검토 (고정 입력 → 기대 발견 항목)
-- [ ] `memory: project` 도입 검토 — dev-logs 수동 반영 루프 대체
+- [x] **`effort` 전 agent 반영** (F3 후속) — 5/34 → **34/34**. 선행으로 `effort-guide.md` 의 model×effort 매트릭스를 정정했다 (아래 F9)
+- [x] **`## Verification Criteria` + `Permission Boundary` + `Escalation`** — 각 1/34 → **34/34**. `LEGACY_AGENTS_NO_BODY_SPEC` **완전 소진**, 신규 agent 는 hard fail (F5)
+- [x] **borderline 13 결손 축 보강** (§3.6) — 조사 프로토콜 10 신설 + 출력 계약 3 신설. borderline **13 → 0**
+- [x] **agent 스키마 / 검증 확대** (F8 신규) — `agent-manifest.v1` 을 공식 16필드로 갱신, `validate-schemas.sh` 를 1건 샘플 → agent 전수로 확대
+- [x] **AGENT-SPEC §1.2 사실 정정** — `disallowedTools` 를 "gh / git push 금지의 승격 자리" 라고 적은 것이 스펙상 성립하지 않음 (아래 F10)
 - [ ] 버전 클레임 전수 재검증 + ✅/⚠️ 마킹, 분기 재검증 일정 명시
-- [ ] dev-log 1건
+- [x] dev-log — [`2026-08-25-step4-harness-retrofit.md`](../dev-logs/2026-08-25-step4-harness-retrofit.md)
+
+**Step 4 에서 분리한 것** → 아래 **Step 6**:
+- ~~리뷰어 11개에 `disallowedTools` 또는 `permissionMode`~~ — **스펙상 성립하지 않아 이월** (F10). 사용자 결정 2026-08-25: "일차원적 설정 말고 근본적인 해결을 다른 세션에서"
+- ~~agent 행동 eval 도입 검토~~ / ~~`memory: project` 도입 검토~~ — Step 6 의 harness 근본 설계와 같은 묶음
 
 ---
 
@@ -401,18 +408,45 @@ Step 2 수행 중 발견. Step 3·4 와 독립이며 순서 제약 없다.
 
 ---
 
+### Step 6 — 실행 강제(enforcement) 근본 설계 — **미착수**
+
+Step 4 착수 시 F4 를 `disallowedTools` / `permissionMode` 로 닫으려다 **스펙상 불가**임이 확인돼 분리했다 (F10). 필드 한두 개를 더 붙이는 방식으로는 해결되지 않으므로 설계부터 다시 한다.
+
+**풀어야 하는 문제**: 리뷰어를 포함한 34개 agent 전부가 무제한 `Bash` 를 갖는다. `gh pr comment` / `git push` / `argocd app sync` / 변경형 `kubectl` 이 기술적으로 실행 가능하고, [`user-approval.md`](../../.claude/rules/user-approval.md) §"에이전트에 외부 게시 권한 위임 금지" 를 **산문으로만** 막고 있다.
+
+**막다른 길로 확인된 것** (2026-08-25 공식 docs):
+
+| 수단 | 왜 안 되는가 |
+|---|---|
+| `disallowedTools` | 도구 이름 / MCP 패턴 단위만. `Bash(gh pr comment:*)` 같은 명령 단위 지정자 미지원 |
+| `permissionMode` | 부모가 `bypassPermissions`/`acceptEdits` 면 override 불가, 부모가 auto mode 면 **무시** |
+| `disallowedTools: Bash` (전면 차단) | 리뷰어가 `terraform validate` / `helm template` / `trivy` / `git diff` 를 못 쓴다 — 능력 손실이 실질적 |
+
+**후보로 남은 것** (착수 시 재검증 필요):
+- `hooks: PreToolUse` matcher `Bash` → 명령 패턴 검사 후 `permissionDecision: deny`. 명령 단위에 닿는 유일한 필드이나 **`bypassPermissions` 하 동작이 공식 문서에 없음** → 실측 필요
+- settings.json 의 `permissions.deny` 규칙(명령 단위 지정자 지원)과 agent frontmatter 의 역할 분담 재설계
+- 애초에 agent 에 `Bash` 를 주지 않고, 검증 명령을 **메인 에이전트가 실행해 결과를 주입**하는 구조로 전환
+
+**착수 조건**: 위 3안의 트레이드오프를 ADR 로 비교한 뒤 진행. 1건 검증 게이트 필수 (§7-5).
+
+---
+
 ## 7. 세션 재개 절차
 
-**현재 상태 (2026-08-24 기준)**: Step 1 ✅ / Step 2 ✅ / Step 3 ✅ / Step 5 ✅ / **Step 4 만 대기**.
-작업 브랜치 `docs/harness-readiness-audit` — `origin` 에 push 완료 (`git status -sb` 로 동기 상태 확인).
+**현재 상태 (2026-08-25 기준)**: Step 1 ✅ / Step 2 ✅ / Step 3 ✅ / Step 5 ✅ / **Step 4 진행 중** / **Step 6 미착수**.
+
+Step 4 잔여는 "버전 클레임 재검증 + ✅/⚠️ 마킹" 1건이다. Step 6(실행 강제 근본 설계)은 Step 4 에서 분리됐고 ADR 선행이 착수 조건이다.
+
+작업 브랜치 `docs/harness-readiness-audit` — `origin` 동기 상태는 `git status -sb` 로 확인.
 
 1. 본 문서 §6 에서 미체크 항목 확인 — `grep -n "^- \[ \]" docs/audit/2026-08-24-agent-harness-readiness.md`
 2. dev-log 로 직전 세션 맥락 복원 (최신순):
-   [step5](../dev-logs/2026-08-24-step5-install-scope-and-ci-gates.md) → [step3](../dev-logs/2026-08-24-step3-agent-tier-demotion.md) → [step2](../dev-logs/2026-08-24-step2-skill-skillmd-migration.md) → [step1](../dev-logs/2026-08-24-step1-agent-spec-modernization.md) → [측정 audit](../dev-logs/2026-08-24-harness-engineering-audit.md)
+   [step4](../dev-logs/2026-08-25-step4-harness-retrofit.md) → [step5](../dev-logs/2026-08-24-step5-install-scope-and-ci-gates.md) → [step3](../dev-logs/2026-08-24-step3-agent-tier-demotion.md) → [step2](../dev-logs/2026-08-24-step2-skill-skillmd-migration.md) → [step1](../dev-logs/2026-08-24-step1-agent-spec-modernization.md) → [측정 audit](../dev-logs/2026-08-24-harness-engineering-audit.md)
 3. [부록 A](#부록-a-재측정-명령) 로 현재 수치 재측정 — 본 문서 수치와 다르면 **본 문서를 먼저 갱신**
 4. Step 순서:
    - **Step 3** 은 Step 2 를 전제로 한다 (옮겨갈 곳이 실제로 동작해야 강등 가능) → 완료
-   - **Step 4** 만 남았다. 시작점은 §3.6 의 borderline 13 결손 축 표
+   - **Step 4** 잔여 1건 — 버전 클레임 재검증. 대상은 §2.4 의 "출처 URL 0건" agent 와 본문 버전 클레임
+   - **Step 6** 은 ADR 선행. 막다른 길 3건이 이미 확인됐으니 그것부터 읽을 것
 5. **자산을 옮기거나 형식을 바꾸는 작업은 "1건 먼저 검증" 게이트를 반드시 거친다.** Step 2 에서 이 게이트가 실제로 작동했다 — 1건 이관 후 로드 확인이 되고 나서야 260개를 진행했다. 건너뛰면 전량 롤백 위험
 6. 검증 명령 (커밋 전 전부 통과해야 함):
    ```bash
