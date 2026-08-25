@@ -7,26 +7,30 @@
 
 ## 원본은 하나 (MANDATORY)
 
-- **SSOT 는 `AGENTS.md` + `.claude/**` + `assets/skills/**`** 뿐이다. 도구별 디렉토리(`.codex/` `.cursor/` `.kiro/`)는 **전부 산출물(view)** 이다.
+- **SSOT 는 `AGENTS.md` + `.claude/**` + `assets/skills/**`** 뿐이다. 도구별 디렉토리(`.cursor/` `.kiro/`)는 **전부 산출물(view)** 이다.
 - NEVER 도구별 디렉토리를 직접 편집. 원본을 고치고 변환을 다시 돌린다.
-- `CLAUDE.md` / `.codex/AGENTS.md` 는 `AGENTS.md` 의 symlink — 직접 편집 금지.
+- `CLAUDE.md` 는 `AGENTS.md` 의 symlink — 직접 편집 금지.
 - 도구별 view 만 고친 변경은 다음 변환에서 **소실**된다.
 
 ## 자동 변환 vs 수동 port
 
 | 도구 | 방식 | 근거 |
 |---|---|---|
-| Codex / Cursor | **자동** — `control-plane/src/adapter.ts` | 형식 변환 필요 (`.toml` / `.mdc`) |
+| Cursor | **자동** — `control-plane/src/adapter.ts` | 형식 변환 필요 (`.mdc`) |
 | Kiro | **수동** | AGENTS.md·SKILL.md 표준을 그대로 인식 → 자동화 ROI 낮음 ([ADR 0006](../../docs/adr/0006-kiro-adapter-strategy.md) Option 1) |
-| Copilot / Gemini CLI / Windsurf | **불필요** | `AGENTS.md` 자동 인식 |
+| Codex / Copilot / Gemini CLI / Windsurf | **불필요** | `AGENTS.md` 자동 인식 |
 
 ```bash
-node control-plane/dist/cli.js adapter --tool=codex  --mode=diff   # 미리보기
+node control-plane/dist/cli.js adapter --tool=cursor --mode=diff   # 미리보기
 node control-plane/dist/cli.js adapter --tool=cursor --mode=write  # 반영
 ```
 
-- MUST 원본 자산 변경 후 **같은 PR에서** 변환을 재실행한다. CI drift job 이 `.codex/` / `.cursor/` 산출물의 git diff 를 게이트하므로 누락 시 fail.
+- MUST 원본 자산 변경 후 **같은 PR에서** 변환을 재실행한다. CI drift job 이 `.cursor/` 산출물의 git diff 를 게이트하므로 누락 시 fail.
 - NEVER adapter 에 도구를 추가하기 전에 ADR 로 ROI 를 먼저 판단한다 (Kiro 선례).
+
+### 도구를 뺄 때도 ADR 을 쓴다
+
+Codex 는 2026-08-25 에 제거됐다 ([ADR 0010](../../docs/adr/0010-drop-codex-support.md)). **추가할 때만 판단하고 뺄 때는 방치하면, 유지되지 않는 산출물이 SSOT 인 척 남는다** — 실제로 `.codex/agents/` 는 3개월간 재생성되지 않아 원본과 다른 내용을 담고 있었다. 도구별 view 는 **재생성 실적이 유지 근거**다. 분기 review 에서 "이 도구의 산출물이 최근 원본 변경을 따라갔는가" 를 함께 본다.
 
 ## 신규 도구 합류 절차
 
@@ -66,8 +70,9 @@ MUST port 시 산문 규약을 대상 도구의 **강제 메커니즘으로 승�
 
 ## 관련 문서
 
-- [`docs/architecture/multi-tool-mapping.md`](../../docs/architecture/multi-tool-mapping.md) — 4 도구 매핑 표 + Kiro port 규칙 + 검증 상태
+- [`docs/architecture/multi-tool-mapping.md`](../../docs/architecture/multi-tool-mapping.md) — 3 도구 매핑 표 + Kiro port 규칙 + 검증 상태
 - [ADR 0006](../../docs/adr/0006-kiro-adapter-strategy.md) — Kiro 수동 매핑 결정 + 분기 review 기록
 - [ADR 0007](../../docs/adr/0007-install-sh-narrow-scope.md) — install.sh 자산 단위 옵션
+- [ADR 0010](../../docs/adr/0010-drop-codex-support.md) — Codex 지원 중단
 - [`deep-thinking.md`](deep-thinking.md) — 외부 사양 검증 의무
 - `control-plane/src/adapter.ts` — 자동 변환 구현

@@ -237,14 +237,15 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | 도구 | 추가 설정 | 변환 |
 |---|---|---|
 | **Claude Code** | 본 파일 §Claude Code-Specific + `.claude/rules/`, `.claude/skills/`, `.claude/agents/` 자동 로딩 | 원본 |
-| **Codex** | `.codex/AGENTS.md` (본 파일의 symlink) + `.codex/agents/*.toml`, `.codex/skills/<cat>/*.toml` | 자동 (adapter) |
 | **Cursor** | 본 파일 자동 인식 + `.cursor/rules/*.mdc` | 자동 (adapter) |
 | **Kiro** | 본 파일 루트 자동 인식 + `.kiro/{skills,agents,steering}/` | **수동** ([ADR 0006](docs/adr/0006-kiro-adapter-strategy.md) Option 1) |
-| **Copilot / Gemini CLI / Windsurf** | 본 파일 자동 인식 — 추가 설정 불필요 | 불필요 |
+| **Codex / Copilot / Gemini CLI / Windsurf** | 본 파일 자동 인식 — 추가 설정 불필요 | 불필요 |
 
 도구별 최적화는 선택. 핵심 룰은 모두 본 파일에 있다.
 
 **도구별 디렉토리는 전부 산출물(view)이다 — 직접 편집 금지.** 원본을 고치고 변환을 재실행한다. 매핑 표·port 규칙은 [`docs/architecture/multi-tool-mapping.md`](docs/architecture/multi-tool-mapping.md), 거버넌스 원칙은 [`.claude/rules/multi-tool-adapter.md`](.claude/rules/multi-tool-adapter.md) 참조.
+
+> ⛔ **Codex 전용 view 는 2026-08-25 에 제거됐다** ([ADR 0010](docs/adr/0010-drop-codex-support.md)). Codex 는 본 파일을 자동 인식하므로 계속 쓸 수 있다 — 없어진 것은 `.codex/*.toml` 산출물뿐이다.
 
 ---
 
@@ -331,8 +332,7 @@ subagent frontmatter 는 16개 필드를 지원하며, 이 중 `permissionMode` 
 2. **`.claude/rules/*.md`** — Claude Code 자동 로딩 상세 룰. 본 파일과 **반드시 일관**.
 3. **Mirrors**:
    - `CLAUDE.md` → 본 파일 symlink (Claude Code 호환)
-   - `.codex/AGENTS.md` → 본 파일 symlink (Codex 호환)
-4. **도구별 view** (`.codex/agents`, `.codex/skills`, `.cursor/rules`, `.kiro/**`) — **산출물. 직접 편집 금지.** Codex/Cursor 는 `control-plane/src/adapter.ts` 가 생성하고 CI drift job 이 게이트한다. Kiro 는 수동 port ([`multi-tool-adapter.md`](.claude/rules/multi-tool-adapter.md)).
+4. **도구별 view** (`.cursor/rules`, `.kiro/**`) — **산출물. 직접 편집 금지.** Cursor 는 `control-plane/src/adapter.ts` 가 생성하고 CI drift job 이 게이트한다. Kiro 는 수동 port ([`multi-tool-adapter.md`](.claude/rules/multi-tool-adapter.md)).
 
 **룰 변경 절차**:
 - **보편 룰 또는 Claude Code-Specific** → 본 파일 수정 → 관련 `.claude/rules/`로 propagate

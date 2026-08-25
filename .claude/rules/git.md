@@ -77,7 +77,7 @@ release/v<major>.<minor>.<patch>
 NEVER add `Co-Authored-By: Claude ...` (또는 다른 AI 어시스턴트) trailer to commit messages **unless the user has explicitly requested it.**
 
 - 모든 경로에서 금지: `git commit`, slash command, amend, rebase, squash merge 시 commit message 재작성 포함
-- Claude Code CLI / Codex / Cursor 기본 commit template 사용 시에도 동일
+- Claude Code CLI / Cursor 등 도구 기본 commit template 사용 시에도 동일
 - 예외: 사용자가 명시적으로 "Co-Authored-By 넣어줘"라고 요청한 경우만
 
 ---
