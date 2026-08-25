@@ -293,7 +293,7 @@ borderline 13 의 결손 축 (Step 4 작업 목록):
 
 ---
 
-## 4. 발견 (F1~F10)
+## 4. 발견 (F1~F11)
 
 | # | 발견 | 위치 | 심각도 |
 |---|---|---|---|
@@ -307,6 +307,7 @@ borderline 13 의 결손 축 (Step 4 작업 목록):
 | **F8** | `validate-schemas.sh` 가 agent 34개 중 **1건만 샘플 검증**해, 구 스키마(8필드 + `additionalProperties:false`)를 위반한 agent 5개를 통과시켰다 | `scripts/validate-schemas.sh` / `schemas/agent-manifest.v1.json` | 🟡 |
 | **F9** | `effort-guide.md` 의 model×effort 매트릭스 drift — "xhigh 는 Opus 4.7 만" / "Haiku 4.5 는 low~max 지원" 이 현행 스펙과 불일치 | `.claude/rules/effort-guide.md` | 🟡 |
 | **F10** | **F4 의 해법이 스펙상 성립하지 않는다** — `disallowedTools` 는 도구 단위, `permissionMode` 는 부모 세션에 종속. 둘 다 `Bash` 안쪽 명령에 닿지 못한다 | AGENT-SPEC §1.2 / §Step 6 | 🔴 설계 결함 |
+| **F11** | **이미 있던 강제력 레이어가 3.5개월째 0% 로 작동했다** — `control-plane` 의 PreToolUse `admit` hook 이 존재하지 않는 env var 로 배선돼 있고, hook 명령이 참조하는 npm 패키지도 미배포다. 수집 이벤트 0건 | `control-plane/src/install-hook.ts` / Migration 0002 P5~P6.5 | 🔴 무효 통제 |
 
 ### F1 상세 — skill 260개 미로드
 
@@ -329,6 +330,28 @@ borderline 13 의 결손 축 (Step 4 작업 목록):
 **지금 P7 을 설계대로 실행하면 260개를 변환하고도 여전히 안 붙는다.** 착수 전 목표 경로를 `.claude/skills/<이름>/SKILL.md` 로 정정해야 한다.
 
 **평탄화 가능성 확인 (2026-08-24 실측)**: 260개 파일명 중복 **0건**, `.claude/commands/` 51개와 이름 충돌 **0건**. 이름 재설계 없이 그대로 평탄화 가능하다.
+
+### F11 상세 — 죽은 강제력 레이어 부검 (2026-08-25)
+
+Step 6 착수 조사 중 발견했다. **이 레포엔 이미 PreToolUse hook 이 있었고, 도입 이래 단 한 번도 발동한 적이 없다.**
+
+경위: Migration 0002 P5(2026-05-06)에서 `control-plane` 의 `admit` 서브명령 + `install-hook.ts` 가 도입됐고, P6(2026-05-08)에서 baseline sink([ADR 0004](../adr/0004-admit-baseline-sink.md))가 붙었으며, P6.5 는 "setup 완료, 1주 수집 중" 상태로 3.5개월 정지해 있었다.
+
+| 결함 | 실측 |
+|---|---|
+| `install-hook.ts:80-84` 가 만드는 hook 명령이 `$CLAUDE_TOOL` / `$CLAUDE_TOOL_INPUT_path` / `$CLAUDE_ACTIVE_SKILL` 를 참조 | 공식 문서상 **존재하지 않는 env var**. command hook 입력은 **stdin JSON** 이고, Claude Code 가 설정하는 건 `CLAUDE_PROJECT_DIR` `CLAUDE_PLUGIN_ROOT` `CLAUDE_PLUGIN_DATA` `CLAUDE_CODE_REMOTE` `CLAUDE_CODE_BRIDGE_SESSION_ID` `CLAUDE_EFFORT` 뿐이다 |
+| hook 명령이 `npx @ress/claude-agents admit …` | 해당 패키지 **npm 미배포** (`npm view` → `E404`). 명령 자체가 실행되지 않는다 |
+| P6.5 "baseline setup 완료 (2026-05-08)" 4항목 | 싱크 파일 없음 / `.claude/settings.local.json` 없음 / `~/.zshrc` export 없음 / lock 파일 없음. **수집 이벤트 0건** |
+| control-plane vitest 111건 all green | `admit()` **순수 함수만** 테스트한다. hook 배선을 검증하는 테스트는 0건 |
+
+**왜 아무도 몰랐나**: `PreToolUse` hook 은 exit 1 이나 실행 실패를 **비차단 오류로 처리하고 그대로 진행**한다. 즉 깨진 hook 은 아무 소리 없이 통과시킨다. 산문 규칙은 최소한 확률적으로라도 지켜지는데, 깨진 hook 은 0% 이면서 더 안전해 보인다 — **F4 보다 나쁜 상태였다.**
+
+**교훈 (Step 6 설계에 반영)**:
+1. 강제력 자산은 **위반 fixture 없이 도입하지 않는다.** 순수 함수 테스트는 배선 결함을 못 잡는다.
+2. 선언형 설정(`permissions.deny`)을 스크립트 hook 보다 선호한다 — 잘못된 규칙은 startup warning 으로 드러나지만 깨진 hook 은 침묵한다.
+3. 외부 도구 사양(env var / 입력 형식)은 [`multi-tool-adapter.md`](../../.claude/rules/multi-tool-adapter.md) §분기 재검증 대상이다. 2026-05 배선은 검증 없이 작성됐다.
+
+**조치**: 사용자 결정(2026-08-25) — **폐기**. ADR 0002/0005 Rejected, ADR 0004 Superseded, control-plane 에서 제거. 상세는 §6 Step 6-A.
 
 ---
 
@@ -428,34 +451,85 @@ Step 2 수행 중 발견. Step 3·4 와 독립이며 순서 제약 없다.
 
 ---
 
-### Step 6 — 실행 강제(enforcement) 근본 설계 — **미착수**
+### Step 6 — 실행 강제(enforcement) 레이어 — **진행 중 (착수 2026-08-25)**
 
-Step 4 착수 시 F4 를 `disallowedTools` / `permissionMode` 로 닫으려다 **스펙상 불가**임이 확인돼 분리했다 (F10). 필드 한두 개를 더 붙이는 방식으로는 해결되지 않으므로 설계부터 다시 한다.
+Step 4 착수 시 F4 를 `disallowedTools` / `permissionMode` 로 닫으려다 **스펙상 불가**임이 확인돼 분리했다 (F10). 착수 조사에서 **이미 있던 강제력 레이어가 3.5개월째 0% 로 작동했다는 사실**을 추가로 발견했다 (F11).
 
 **풀어야 하는 문제**: 리뷰어를 포함한 34개 agent 전부가 무제한 `Bash` 를 갖는다. `gh pr comment` / `git push` / `argocd app sync` / 변경형 `kubectl` 이 기술적으로 실행 가능하고, [`user-approval.md`](../../.claude/rules/user-approval.md) §"에이전트에 외부 게시 권한 위임 금지" 를 **산문으로만** 막고 있다.
 
-**막다른 길로 확인된 것** (2026-08-25 공식 docs):
+#### 검증한 사실 (전 항목 2026-08-25 WebFetch)
 
-| 수단 | 왜 안 되는가 |
+출처: [hooks](https://code.claude.com/docs/en/hooks) · [permissions](https://code.claude.com/docs/en/permissions) · [permission-modes](https://code.claude.com/docs/en/permission-modes) · [settings](https://code.claude.com/docs/en/settings) · [sub-agents](https://code.claude.com/docs/en/sub-agents)
+
+| # | 사실 | 상태 |
+|---|---|---|
+| V1 | hook event **31개** (`SessionStart` … `SessionEnd`) | ✅ |
+| V2 | command hook 입력 = **stdin JSON** (`tool_name` / `tool_input` / `permission_mode` …). env var 은 `CLAUDE_PROJECT_DIR` `CLAUDE_PLUGIN_ROOT` `CLAUDE_PLUGIN_DATA` `CLAUDE_CODE_REMOTE` `CLAUDE_CODE_BRIDGE_SESSION_ID` `CLAUDE_EFFORT` 뿐 | ✅ |
+| V3 | `PreToolUse` exit 2 = 차단. JSON `permissionDecision: deny\|allow\|escalate`. **exit 1 = 비차단 오류로 그냥 진행**. timeout 시 결정 폐기 | ✅ |
+| V4 | `PostToolUse` 는 **차단 불가** (이미 실행됨) | ✅ |
+| V5 | **"Deny rules block in every mode, including `bypassPermissions`."** allow 규칙은 bypassPermissions 에서 무효 | ✅ |
+| V6 | **"Hook decisions don't bypass permission rules."** deny/ask 는 hook 반환값과 무관하게 평가 — deny-first | ✅ |
+| V7 | Bash 지정자 `Bash(git push *)` 지원, `:*` 는 끝자리 wildcard 동치. `Bash(command:...)` 형태는 **무시 + startup warning** | ✅ |
+| V8 | 어느 scope 의 deny 든 어느 scope 의 allow 를 이긴다 | ✅ |
+| V9 | settings.json 의 hook 은 **subagent 안에서도 실행**된다 | ✅ |
+| V10 | subagent frontmatter `hooks` 지원. project-level agent 의 frontmatter hook 은 **workspace trust 수락 후** 동작. plugin subagent 는 `hooks`/`mcpServers`/`permissionMode` 무시 | ✅ |
+| V11 | 인자를 제약하는 Bash 패턴은 **취약** (옵션 순서 / 변수 / 공백) — 공식 Warning | ✅ |
+| V12 | `bypassPermissions` 하에서 PreToolUse hook 이 실행/차단되는지 | ⚠️ **not stated** → 6-B 실측 |
+| V13 | `ask` 규칙이 `bypassPermissions` 에서 유지되는지 | ⚠️ **not stated** → 6-B 실측 |
+| V14 | `Stop` hook 무한루프 안전장치 (`stop_hook_active` 등) | ⚠️ **not stated** → 사용하지 않는다 |
+
+#### F10 정정 — 나가는 문은 `permissions.deny` 다
+
+F10 이 "명령 단위에 닿는 건 hook 뿐" 이라고 적은 것은 **agent frontmatter 안에서만 참**이다. `.claude/settings.json` 의 `permissions.deny` 는 (V7) 명령 단위에 닿고, (V5) 모든 모드에서 유효하며, (V8) 어떤 allow 도 못 뚫고, (V9/V6) subagent 에도 적용된다. 그리고 **선언형 설정이라 hook script 처럼 조용히 죽지 않는다** (F11 의 교훈).
+
+→ **1순위 = `permissions.deny` / `ask`. hook 은 deny 로 표현 불가능한 잔여분에만, 그리고 반드시 fixture 와 함께.**
+
+#### 사용자 결정 (2026-08-25)
+
+| 항목 | 결정 |
 |---|---|
-| `disallowedTools` | 도구 이름 / MCP 패턴 단위만. `Bash(gh pr comment:*)` 같은 명령 단위 지정자 미지원 |
-| `permissionMode` | 부모가 `bypassPermissions`/`acceptEdits` 면 override 불가, 부모가 auto mode 면 **무시** |
-| `disallowedTools: Bash` (전면 차단) | 리뷰어가 `terraform validate` / `helm template` / `trivy` / `git diff` 를 못 쓴다 — 능력 손실이 실질적 |
+| 죽은 `admit` hook (F11) | **폐기** — ADR 0002/0005 Rejected, control-plane 에서 제거 |
+| install.sh 배포 경계 | **고려하지 않는다** — install.sh 자체를 없애는 방향. 이 레포 dogfooding 만 |
+| 착수 범위 | Step 6 만 (rules 분류 · ablation 은 Step 7+) |
 
-**후보로 남은 것** (착수 시 재검증 필요):
-- `hooks: PreToolUse` matcher `Bash` → 명령 패턴 검사 후 `permissionDecision: deny`. 명령 단위에 닿는 유일한 필드이나 **`bypassPermissions` 하 동작이 공식 문서에 없음** → 실측 필요
-- settings.json 의 `permissions.deny` 규칙(명령 단위 지정자 지원)과 agent frontmatter 의 역할 분담 재설계
-- 애초에 agent 에 `Bash` 를 주지 않고, 검증 명령을 **메인 에이전트가 실행해 결과를 주입**하는 구조로 전환
+#### 작업 목록
 
-**착수 조건**: 위 3안의 트레이드오프를 ADR 로 비교한 뒤 진행. 1건 검증 게이트 필수 (§7-5).
+- [ ] **6-A. 죽은 admit hook 폐기** (F11) — `control-plane` 의 `admit.ts` / `install-hook.ts` / `admit.test.ts` 삭제, `index.ts`(admit 커맨드 · baseline sink) · `init.ts`(step 5 hook wiring · `LockFile.hook`) 정리, `cli.test.ts` / `init.test.ts` 의 해당 describe 제거. ADR 0002·0005 Rejected / 0004 Superseded, `docs/migration/0002-progress.md` P5·P6.5 상태 정정. **보존**: `applies_when`(match/adapter 가 사용), `security.sandbox`(스키마 유지 + orphan 표기)
+- [ ] **6-B. 실측 게이트** (§7-5) — 문서에 없는 것만. sentinel 명령(`echo ENFORCE_PROBE_…`)만 사용, 파괴적 명령 금지
+      - M1 deny 규칙이 **subagent 의 Bash** 에도 적용되는가 (V9 는 hook 상속만 명시)
+      - M2 `bypassPermissions` 하에서 PreToolUse hook 실행/차단 여부 (V12)
+      - M3 `ask` 규칙이 `bypassPermissions` 에서 유지되는가 (V13)
+      - M4 deny 위반 시 실제 거절 동작 · 메시지 (V5/V6)
+      > M1~M4 전에 6-D 를 확정하지 않는다 — F10 이 정확히 "배치처 동작을 확인하지 않고 설계한" 실패였다
+- [ ] **6-C. ADR 0009** — `docs/adr/0009-enforcement-layer-placement.md`. 대안 3안 비교: (A) `permissions.deny`+`ask` 우선 · hook 보조 / (B) hook 단독 / (C) agent 에서 `Bash` 제거 후 메인이 검증 명령 실행. (C) 의 비용 정량화(리뷰어 11개가 `terraform validate` / `helm template` / `trivy` / `git diff` 를 잃는다). Sources 표 + 분기 재검증 2026-11
+- [ ] **6-D. `.claude/settings.json` 신설** — `user-approval.md` 금지 표의 강제 승격
+      - `deny` = 세션 내 실행 이유가 없는 것: 변경형 `kubectl`(`apply`/`delete`/`patch`/`edit`/`scale`/`rollout`/`set image`), `argocd app sync --force`, `git push --force`, `git commit --no-verify`
+      - `ask` = 승인 프로세스가 존재하는 것: `git push`, `gh pr create/comment/merge/close`, `gh issue create/close`, `gh release create` — deny 로 막으면 **승인받은 push 조차 불가능**해진다
+      - V11 을 존중해 명령 이름 수준에서 건다. `Bash(command:...)` 형태 금지 (V7)
+      - ⚠️ 추가하는 순간 현재 세션에 즉시 적용된다 → 백로그 push **이후** 순서
+- [ ] **6-E. 조용한 실패 검출** (F11 교훈) — 정적/런타임 분리
+      - 정적(CI): `scripts/validate-enforcement.sh` + `drift` job 스텝 — `user-approval.md` 금지 표 ↔ `settings.json` 드리프트, JSON 유효성, 무효 패턴 검출
+      - 런타임(로컬): `make verify-enforcement` — sentinel 위반 시도 후 거절 단언. **CI 에선 claude CLI 부재로 못 돈다 — 이 한계를 문서에 명시**
+- [ ] **6-F. 산문 정정** — `AGENT-SPEC.md` §1.2(`hooks` 를 "명령 단위에 닿는 유일한 필드" 라 한 오류), `user-approval.md`(금지 표에 강제 메커니즘 열 추가, 산문 잔존분 명시), `AGENTS.md`, 본 문서 §2.0
+- [ ] **6-G. dev-log** — `docs/dev-logs/2026-08-25-step6-enforcement-layer.md`
+
+**완료 기준**: §7-6 검증 명령 전부 통과 + M1~M4 가 ADR 0009 에 검증일과 함께 기록 + `user-approval.md` 각 금지 항목의 강제 메커니즘 확정. 실행하지 못한 검증은 "실행 안 함" 으로 명시한다.
+
+---
+
+### Step 7+ — 범위 밖 (목록만)
+
+- always-on rules 13개(1,503줄) + `AGENTS.md`(340줄) = **90KB 가 매 세션 상주**한다. 각 항목을 [DENY 가능] / [HOOK 가능] / [CI 가능] / [강제 불가] 로 분류하고 이관 확정분을 산문에서 제거 — 측정 없이 줄일 수 있는 유일한 구간
+- 활성화 경로 트레이스(`claude -p --output-format stream-json`) 기반 ablation. 단일 자산 ablation 은 중복 쌍(A/B 가 서로를 받쳐줌)에서 양쪽 다 "불필요" 로 오판하므로 **경로 단위**로 묶어 이진 탐색
+- `mcp-configs/settings.json` 이 `mcpServers` 를 settings.json 에 두는 문제 (Claude Code 는 `.mcp.json` 을 쓴다) — 관찰만
 
 ---
 
 ## 7. 세션 재개 절차
 
-**현재 상태 (2026-08-25 기준)**: Step 1 ✅ / Step 2 ✅ / Step 3 ✅ / Step 4 ✅ / Step 5 ✅ / **Step 6 만 대기**.
+**현재 상태 (2026-08-25 기준)**: Step 1 ✅ / Step 2 ✅ / Step 3 ✅ / Step 4 ✅ / Step 5 ✅ / **Step 6 진행 중** (6-A ~ 6-G).
 
-Step 6(실행 강제 근본 설계)은 Step 4 에서 분리됐다 — F10 으로 기존 해법이 스펙상 불가임이 확인됐기 때문이다. **ADR 선행이 착수 조건**이고, 막다른 길 3건이 Step 6 에 기록돼 있으니 그것부터 읽는다.
+Step 6(실행 강제)은 Step 4 에서 분리됐다 — F10 으로 기존 해법이 스펙상 불가임이 확인됐기 때문이다. 2026-08-25 착수 조사에서 **F10 의 출구가 `permissions.deny`** 임을 공식 문서로 확인했고(§6 V1~V14), 동시에 **이미 있던 hook 이 3.5개월째 죽어 있었다는 사실(F11)** 을 발견했다. 재개 시 §6 Step 6 의 V 표와 F11 상세부터 읽는다.
 
 작업 브랜치 `docs/harness-readiness-audit` — `origin` 동기 상태는 `git status -sb` 로 확인.
 
@@ -465,7 +539,8 @@ Step 6(실행 강제 근본 설계)은 Step 4 에서 분리됐다 — F10 으로
 3. [부록 A](#부록-a-재측정-명령) 로 현재 수치 재측정 — 본 문서 수치와 다르면 **본 문서를 먼저 갱신**
 4. Step 순서:
    - **Step 3** 은 Step 2 를 전제로 한다 (옮겨갈 곳이 실제로 동작해야 강등 가능) → 완료
-   - **Step 6** 만 남았다. ADR 선행이 착수 조건이고, 막다른 길 3건이 이미 확인됐으니 그것부터 읽을 것
+   - **Step 6** 은 6-A(폐기) → 6-B(실측) → 6-C(ADR) → 6-D(설정) → 6-E(검출) → 6-F(산문) → 6-G(dev-log) 순서다. **6-B 실측 없이 6-D 를 확정하지 않는다** — F10 이 그 실패였다
+   - 6-D 의 `.claude/settings.json` 은 **추가 즉시 현재 세션에 적용**된다. `ask` 층이 승인 흐름을 프롬프트로 대체하므로, deny 로 잘못 넣으면 승인받은 작업도 막힌다
    - 현재 수치는 §2.0 참조 (§2 이하는 audit 시점 기록)
 5. **자산을 옮기거나 형식을 바꾸는 작업은 "1건 먼저 검증" 게이트를 반드시 거친다.** Step 2 에서 이 게이트가 실제로 작동했다 — 1건 이관 후 로드 확인이 되고 나서야 260개를 진행했다. 건너뛰면 전량 롤백 위험
 6. 검증 명령 (커밋 전 전부 통과해야 함):
