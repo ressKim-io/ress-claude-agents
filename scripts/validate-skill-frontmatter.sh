@@ -42,10 +42,8 @@ SOFT_WARNINGS=()
 # 미등재(= 신규) agent 는 hard fail. 마이그레이션 완료 시 해당 줄을 제거하면
 # 자동으로 hard 검증으로 전환된다. git-workflow 는 본문 3섹션을 갖추므로 의도적으로 제외.
 LEGACY_AGENTS_NO_BODY_SPEC=(
-    ci-optimizer compliance-auditor cost-analyzer
-    dev-logger finops-advisor frontend-expert
-    load-tester mlops-expert platform-engineer
-    service-mesh-expert
+    dev-logger frontend-expert load-tester
+    mlops-expert platform-engineer service-mesh-expert
 )
 
 log_pass() { printf '  PASS  %s\n' "$1"; }
