@@ -454,7 +454,7 @@ Step 2 수행 중 발견. Step 3·4 와 독립이며 순서 제약 없다.
 
 ---
 
-### Step 6 — 실행 강제(enforcement) 레이어 — **진행 중 (착수 2026-08-25)**
+### Step 6 — 실행 강제(enforcement) 레이어 ✅ 완료 2026-08-25
 
 Step 4 착수 시 F4 를 `disallowedTools` / `permissionMode` 로 닫으려다 **스펙상 불가**임이 확인돼 분리했다 (F10). 착수 조사에서 **이미 있던 강제력 레이어가 3.5개월째 0% 로 작동했다는 사실**을 추가로 발견했다 (F11).
 
@@ -514,7 +514,7 @@ F10 이 "명령 단위에 닿는 건 hook 뿐" 이라고 적은 것은 **agent f
       - 정적(CI): `scripts/validate-enforcement.sh` + `drift` job 스텝 — `user-approval.md` 금지 표 ↔ `settings.json` 드리프트, JSON 유효성, 무효 패턴 검출
       - 런타임(로컬): `make verify-enforcement` — sentinel 위반 시도 후 거절 단언. **CI 에선 claude CLI 부재로 못 돈다 — 이 한계를 문서에 명시**
 - [x] **6-F. 산문 정정** ✅ 2026-08-25 — `AGENT-SPEC.md` §1.2(`hooks` 를 "명령 단위에 닿는 유일한 필드" 라 한 오류), `user-approval.md`(금지 표에 강제 메커니즘 열 추가, 산문 잔존분 명시), `AGENTS.md`, 본 문서 §2.0
-- [ ] **6-G. dev-log** — `docs/dev-logs/2026-08-25-step6-enforcement-layer.md`
+- [x] **6-G. dev-log** ✅ 2026-08-25 — [`2026-08-25-step6-enforcement-layer.md`](../dev-logs/2026-08-25-step6-enforcement-layer.md)
 
 **완료 기준**: §7-6 검증 명령 전부 통과 + M1~M4 가 ADR 0009 에 검증일과 함께 기록 + `user-approval.md` 각 금지 항목의 강제 메커니즘 확정. 실행하지 못한 검증은 "실행 안 함" 으로 명시한다.
 
@@ -530,7 +530,7 @@ F10 이 "명령 단위에 닿는 건 hook 뿐" 이라고 적은 것은 **agent f
 
 ## 7. 세션 재개 절차
 
-**현재 상태 (2026-08-25 기준)**: Step 1 ✅ / Step 2 ✅ / Step 3 ✅ / Step 4 ✅ / Step 5 ✅ / **Step 6 진행 중** (6-A ~ 6-G).
+**현재 상태 (2026-08-25 기준)**: Step 1~6 전부 ✅. **다음은 Step 7+** (아래 §Step 7+ 목록).
 
 Step 6(실행 강제)은 Step 4 에서 분리됐다 — F10 으로 기존 해법이 스펙상 불가임이 확인됐기 때문이다. 2026-08-25 착수 조사에서 **F10 의 출구가 `permissions.deny`** 임을 공식 문서로 확인했고(§6 V1~V14), 동시에 **이미 있던 hook 이 3.5개월째 죽어 있었다는 사실(F11)** 을 발견했다. 재개 시 §6 Step 6 의 V 표와 F11 상세부터 읽는다.
 
