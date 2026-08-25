@@ -28,6 +28,48 @@
 
 ---
 
+## 강제 메커니즘 매핑 (MANDATORY — 드리프트 검증 대상)
+
+위 산문은 **1차 방어선**이다. 그 아래에 [`.claude/settings.json`](../settings.json) 의 `permissions` 규칙이 그물로 깔린다.
+[ADR 0009](../../docs/adr/0009-enforcement-layer-placement.md) 실측(2026-08-25): deny/ask 는 `bypassPermissions` 에서도, **subagent 의 `Bash` 안쪽에서도** 유지된다.
+
+| 규칙 | 층 | 대상 산문 |
+|---|---|---|
+| `Bash(kubectl apply *)` | deny | §kubectl 변경 금지 |
+| `Bash(kubectl delete *)` | deny | §kubectl 변경 금지 |
+| `Bash(kubectl patch *)` | deny | §kubectl 변경 금지 |
+| `Bash(kubectl edit *)` | deny | §kubectl 변경 금지 |
+| `Bash(kubectl scale *)` | deny | §kubectl 변경 금지 |
+| `Bash(kubectl rollout *)` | deny | §kubectl 변경 금지 |
+| `Bash(kubectl set *)` | deny | §kubectl 변경 금지 (`set image`) |
+| `Bash(kubectl annotate *)` | deny | §kubectl 변경 금지 |
+| `Bash(kubectl label *)` | deny | §kubectl 변경 금지 |
+| `Bash(argocd app sync --force*)` | deny | §ArgoCD Force Sync 금지 |
+| `Bash(argocd app sync * --force*)` | deny | §ArgoCD Force Sync 금지 (플래그 후위) |
+| `Bash(git push *)` | ask | §Git 작업 — force push 포함 전 형태를 사람이 본다 |
+| `Bash(git branch -D *)` | ask | §Git 작업 |
+| `Bash(gh pr create *)` | ask | §GitHub 작업 |
+| `Bash(gh pr comment *)` | ask | §리뷰 결과 게시 프로세스 |
+| `Bash(gh pr merge *)` | ask | §GitHub 작업 |
+| `Bash(gh pr close *)` | ask | §GitHub 작업 |
+| `Bash(gh issue create *)` | ask | §GitHub 작업 |
+| `Bash(gh issue close *)` | ask | §GitHub 작업 |
+| `Bash(gh release create *)` | ask | §GitHub 작업 |
+| `Bash(argocd app sync *)` | ask | §외부 서비스 — ArgoCD sync 트리거 |
+| `Bash(kubectl run *)` | ask | §kubectl — 디버깅용 임시 pod 만 허용 |
+
+**왜 두 층인가**: `deny` 는 사용자 본인에게도 적용된다. 승인 프로세스가 존재하는 작업(`git push` 등)을 `deny` 로 막으면 **승인받은 작업조차 실행할 수 없다.** 그래서 "세션에서 실행할 정당한 경우가 없는 것" 만 `deny`, 나머지는 `ask` 로 프롬프트를 강제한다.
+
+**산문으로만 남는 것** (명령 패턴으로 표현 불가):
+- Slack / Discord 메시지 전송 — 명령 형태가 정해져 있지 않다
+- 임의 API 호출로 외부 상태 변경 (`curl -X POST …`) — 인자 값 제약은 우회에 취약하다 ([공식 Warning](https://code.claude.com/docs/en/permissions))
+- `git commit --no-verify` / `--force` 계열 — 플래그가 명령 어디에나 올 수 있어 견고한 패턴을 만들 수 없다
+- 클라우드 리소스 생성/삭제/변경 — [`cloud-cli-safety.md`](cloud-cli-safety.md) 의 활성화 절차를 따른다
+
+**드리프트 게이트**: 위 표와 `.claude/settings.json` 의 불일치는 `scripts/validate-enforcement.sh` 가 CI 에서 검출한다. 규칙을 추가·삭제할 때 **양쪽을 같은 커밋에서** 고친다.
+
+---
+
 ## 리뷰 결과 게시 프로세스 (MANDATORY)
 
 코드 리뷰 실행 후 반드시 다음 순서를 따른다:
