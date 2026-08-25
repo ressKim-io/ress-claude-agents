@@ -474,8 +474,8 @@ Step 4 착수 시 F4 를 `disallowedTools` / `permissionMode` 로 닫으려다 *
 | V9 | settings.json 의 hook 은 **subagent 안에서도 실행**된다 | ✅ |
 | V10 | subagent frontmatter `hooks` 지원. project-level agent 의 frontmatter hook 은 **workspace trust 수락 후** 동작. plugin subagent 는 `hooks`/`mcpServers`/`permissionMode` 무시 | ✅ |
 | V11 | 인자를 제약하는 Bash 패턴은 **취약** (옵션 순서 / 변수 / 공백) — 공식 Warning | ✅ |
-| V12 | `bypassPermissions` 하에서 PreToolUse hook 이 실행/차단되는지 | ⚠️ **not stated** → 6-B 실측 |
-| V13 | `ask` 규칙이 `bypassPermissions` 에서 유지되는지 | ⚠️ **not stated** → 6-B 실측 |
+| V12 | `bypassPermissions` 하에서 PreToolUse hook 이 실행/차단되는지 | ⚠️ not stated → **✅ 실측 P3: 실행되고 차단한다** |
+| V13 | `ask` 규칙이 `bypassPermissions` 에서 유지되는지 | ⚠️ not stated → **✅ 실측 P4: 유지된다 (자동승인 안 됨)** |
 | V14 | `Stop` hook 무한루프 안전장치 (`stop_hook_active` 등) | ⚠️ **not stated** → 사용하지 않는다 |
 
 #### F10 정정 — 나가는 문은 `permissions.deny` 다
@@ -494,14 +494,14 @@ F10 이 "명령 단위에 닿는 건 hook 뿐" 이라고 적은 것은 **agent f
 
 #### 작업 목록
 
-- [ ] **6-A. 죽은 admit hook 폐기** (F11) — `control-plane` 의 `admit.ts` / `install-hook.ts` / `admit.test.ts` 삭제, `index.ts`(admit 커맨드 · baseline sink) · `init.ts`(step 5 hook wiring · `LockFile.hook`) 정리, `cli.test.ts` / `init.test.ts` 의 해당 describe 제거. ADR 0002·0005 Rejected / 0004 Superseded, `docs/migration/0002-progress.md` P5·P6.5 상태 정정. **보존**: `applies_when`(match/adapter 가 사용), `security.sandbox`(스키마 유지 + orphan 표기)
-- [ ] **6-B. 실측 게이트** (§7-5) — 문서에 없는 것만. sentinel 명령(`echo ENFORCE_PROBE_…`)만 사용, 파괴적 명령 금지
+- [x] **6-A. 죽은 admit hook 폐기** (F11) ✅ 2026-08-25 — vitest 111→97, typecheck 통과 — `control-plane` 의 `admit.ts` / `install-hook.ts` / `admit.test.ts` 삭제, `index.ts`(admit 커맨드 · baseline sink) · `init.ts`(step 5 hook wiring · `LockFile.hook`) 정리, `cli.test.ts` / `init.test.ts` 의 해당 describe 제거. ADR 0002·0005 Rejected / 0004 Superseded, `docs/migration/0002-progress.md` P5·P6.5 상태 정정. **보존**: `applies_when`(match/adapter 가 사용), `security.sandbox`(스키마 유지 + orphan 표기)
+- [x] **6-B. 실측 게이트** (§7-5) ✅ 2026-08-25 — P0~P7 8건, 결과는 [ADR 0009](../adr/0009-enforcement-layer-placement.md) §실측 — 문서에 없는 것만. sentinel 명령(`echo ENFORCE_PROBE_…`)만 사용, 파괴적 명령 금지
       - M1 deny 규칙이 **subagent 의 Bash** 에도 적용되는가 (V9 는 hook 상속만 명시)
       - M2 `bypassPermissions` 하에서 PreToolUse hook 실행/차단 여부 (V12)
       - M3 `ask` 규칙이 `bypassPermissions` 에서 유지되는가 (V13)
       - M4 deny 위반 시 실제 거절 동작 · 메시지 (V5/V6)
       > M1~M4 전에 6-D 를 확정하지 않는다 — F10 이 정확히 "배치처 동작을 확인하지 않고 설계한" 실패였다
-- [ ] **6-C. ADR 0009** — `docs/adr/0009-enforcement-layer-placement.md`. 대안 3안 비교: (A) `permissions.deny`+`ask` 우선 · hook 보조 / (B) hook 단독 / (C) agent 에서 `Bash` 제거 후 메인이 검증 명령 실행. (C) 의 비용 정량화(리뷰어 11개가 `terraform validate` / `helm template` / `trivy` / `git diff` 를 잃는다). Sources 표 + 분기 재검증 2026-11
+- [x] **6-C. ADR 0009** ✅ 2026-08-25 — [`0009-enforcement-layer-placement.md`](../adr/0009-enforcement-layer-placement.md) — `docs/adr/0009-enforcement-layer-placement.md`. 대안 3안 비교: (A) `permissions.deny`+`ask` 우선 · hook 보조 / (B) hook 단독 / (C) agent 에서 `Bash` 제거 후 메인이 검증 명령 실행. (C) 의 비용 정량화(리뷰어 11개가 `terraform validate` / `helm template` / `trivy` / `git diff` 를 잃는다). Sources 표 + 분기 재검증 2026-11
 - [ ] **6-D. `.claude/settings.json` 신설** — `user-approval.md` 금지 표의 강제 승격
       - `deny` = 세션 내 실행 이유가 없는 것: 변경형 `kubectl`(`apply`/`delete`/`patch`/`edit`/`scale`/`rollout`/`set image`), `argocd app sync --force`, `git push --force`, `git commit --no-verify`
       - `ask` = 승인 프로세스가 존재하는 것: `git push`, `gh pr create/comment/merge/close`, `gh issue create/close`, `gh release create` — deny 로 막으면 **승인받은 push 조차 불가능**해진다

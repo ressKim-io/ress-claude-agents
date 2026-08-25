@@ -1,7 +1,15 @@
 # ADR 0005 — admit warn → deny 전환 결정 (placeholder)
 
-- **Status**: Proposed (1주 baseline 수집 후 채움)
-- **Date**: 2026-05-08 (placeholder 작성), TBD (실제 결정)
+- **Status**: **Rejected** (2026-08-25) — baseline 이 수집된 적이 없다
+- **Date**: 2026-05-08 (placeholder 작성) / 2026-08-25 (기각)
+- **Superseded by**: [ADR 0009](0009-enforcement-layer-placement.md)
+
+> ## 기각 사유 (2026-08-25)
+>
+> 본 ADR 은 "1주 baseline 수집 후 채운다" 는 placeholder 로 작성돼 3.5개월간 비어 있었다. 2026-08-25 실측 결과 **수집은 시작조차 되지 않았다** — sink 파일 없음 / `.claude/settings.local.json` 없음 / 환경변수 export 없음. 대상 hook 이 배선 결함으로 실행되지 않았기 때문이다 ([audit F11](../audit/2026-08-24-agent-harness-readiness.md#f11-상세--죽은-강제력-레이어-부검-2026-08-25)).
+>
+> 아래의 Option A/B/C(deny 전환 / 매처 튜닝 / warn 영구)는 전부 존재하지 않는 데이터를 전제한다. 강제력은 [ADR 0009](0009-enforcement-layer-placement.md) 로 다시 설계했다.
+
 - **Driver**: Migration 0002 P6 종료 게이트 — baseline 결과 기반 deny 전환 가부 판단
 - **Phase**: P6 종결 전제 / P7 진입 전제
 - **Depends on**: ADR 0004 (sink + 메트릭 정의)

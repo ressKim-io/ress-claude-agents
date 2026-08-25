@@ -2,7 +2,11 @@
 
 > 매 Phase 시작/완료 시 이 파일을 갱신. 세션 휘발 시 첫 명령은 본 파일 cat.
 >
-> ⚠️ **P6.5 정지 (2026-08-16 확인)**: baseline 수집 마감이 2026-05-15 였으나 3개월째 `in_progress (collecting)` 이다. [ADR 0008](../adr/0008-asset-tier-policy.md) 이 **description 재작성을 applies_when 변환보다 우선**하기로 결정했고, 본 migration 은 그 효과 측정 후 재평가(P4)로 유보됐다. 통합 추적은 [2026-08-15 audit §8](../audit/2026-08-15-asset-tier-rebalance.md#8-선행-백로그-인수-b-트랙).
+> ⛔ **P5 / P6 / P6.5 폐기 (2026-08-25)**: P5 가 설치하던 PreToolUse `admit` hook 은 **존재하지 않는 환경변수**(`$CLAUDE_TOOL` / `$CLAUDE_TOOL_INPUT_path` / `$CLAUDE_ACTIVE_SKILL`)로 배선돼 있었고, hook 이 부르는 `@ress/claude-agents` 는 npm 미배포였다. 그래서 **도입 이래 단 한 번도 발동하지 않았다** — P6.5 baseline 은 "3개월째 수집 중" 이 아니라 **수집이 시작된 적이 없다** (싱크 파일 / `settings.local.json` / 환경변수 export 전부 부재, 2026-08-25 실측).
+>
+> vitest 111건이 전부 green 이었던 이유는 `admit()` **순수 함수만** 테스트하고 배선을 테스트하지 않았기 때문이다.
+>
+> 조치: `admit` / `install-hook` 제거, [ADR 0002](../adr/0002-tool-safety-pretooluse-hook.md) · [0005](../adr/0005-admit-deny-transition.md) Rejected, [ADR 0004](../adr/0004-admit-baseline-sink.md) Superseded. 강제력은 [ADR 0009](../adr/0009-enforcement-layer-placement.md) 로 재설계했다. 근거: [2026-08-24 audit F11](../audit/2026-08-24-agent-harness-readiness.md#f11-상세--죽은-강제력-레이어-부검-2026-08-25).
 
 ## 재개 명령 (세션 끊겼을 때)
 
@@ -25,9 +29,9 @@ git log --oneline -20                                          # 최근 commit
 | P2. PoC 10개 변환 | **completed** | 2026-05-05 | 2026-05-05 | main | `assets/skills/{kubernetes,go}/<n>/SKILL.md` 10개 (commit `00128dd`). validate-schemas.sh PoC strict 게이트 + validate-skill-frontmatter.sh assets 섹션. 기존 5 lint 모두 green. 검증 게이트 (b) matching CLI dry-run은 P3 의존 |
 | P3. Control plane PoC | **completed** | 2026-05-05 | 2026-05-06 | main | Step 1: scaffold. Step 2: probe. Step 3: match (precision=recall=1.0). Step 4: init (10x hash × 3 fixture). Step 5 (`810ac58`): lint shell delegation (validate-*.sh auto-discover, exit code aggregate). **모든 4 subcommand (probe/match/init/lint) 구현 완료**. **87/87 vitest**. CI drift green은 push 후 GitHub Actions가 step 6에서 검증 |
 | P4. Multi-AI adapter | **completed** | 2026-05-06 | 2026-05-06 | main | Step A: codex spike (.codex/agents schema 3 키 동질성 확인). Step B: `control-plane/src/adapter.ts` 신설 (claude/codex/cursor 3 tool × write/dry-run/diff 3 mode, codex skills `manifest_yaml=''…''`로 9 키 보존). Step C: AGENTS.md primary 승격(254→312줄, §Claude Code-Specific 흡수), `CLAUDE.md→AGENTS.md` symlink, `.codex/AGENTS.md→../AGENTS.md` symlink, `.gitignore` `.codex/` ignore 해제. Step D: `init.ts` step 4 stub → 실제 adapter 호출 wiring (detection + LockFile.adapters.status p4-active/p4-skipped + runs[]). Step E: CI drift job에 adapter parity step (codex+cursor write + git diff 게이트), .claude/skills SKILL.md 디렉토리 형식은 dual-tree 충돌 회피로 gitignore. CLI parser `--tool=value` 형식 추가. **96/96 vitest** (87→96, +9), typecheck 0, build OK, **5 lint green** |
-| P5. Enforcement hook | **completed** | 2026-05-06 | 2026-05-06 | main | Step A: admit.ts + 9 vitest (3 deny / 3 allow / 3 globToRegex unit). 매칭 = `applies_when.files_present` glob + `files_contain` regex + `security.sandbox: read-only` 가드. 단일 path glob→regex 매처(50줄, deps 추가 X). CLI `admit --tool/--path/--skill/--mode warn|deny`, warn=exit 0 + stderr / deny=exit 2 + stderr. Step B: install-hook.ts (settings.local.json idempotent merge), init.ts step 5 wiring (.claude 있을 때만 hook install, hookMode default 'warn'), LockFile.hook 확장 `{installed, status: p5-active|p5-skipped|p5-already-present, mode, settings_path}`. 기존/idempotent/merge 3 init 테스트 추가. **108/108 vitest** (96→108, +12), 5 lint green |
+| P5. Enforcement hook | **폐기 (2026-08-25)** — 배선 결함으로 발동 0건 | 2026-05-06 | 2026-05-06 | main | Step A: admit.ts + 9 vitest (3 deny / 3 allow / 3 globToRegex unit). 매칭 = `applies_when.files_present` glob + `files_contain` regex + `security.sandbox: read-only` 가드. 단일 path glob→regex 매처(50줄, deps 추가 X). CLI `admit --tool/--path/--skill/--mode warn|deny`, warn=exit 0 + stderr / deny=exit 2 + stderr. Step B: install-hook.ts (settings.local.json idempotent merge), init.ts step 5 wiring (.claude 있을 때만 hook install, hookMode default 'warn'), LockFile.hook 확장 `{installed, status: p5-active|p5-skipped|p5-already-present, mode, settings_path}`. 기존/idempotent/merge 3 init 테스트 추가. **108/108 vitest** (96→108, +12), 5 lint green |
 | P6. Pilot 1 카테고리 | **completed** | 2026-05-08 | 2026-05-08 | main | kubernetes 카테고리 5 신규 변환(gateway-api / gateway-api-migration / k8s-autoscaling-advanced / k8s-scheduling-advanced / k8s-traffic-ingress) + 기존 5 = 10/10. 모두 schema strict 통과, k8s-only fixture에서 false positive 0건. validate-schemas.sh를 glob 기반(MIN=15)으로 확장. ADR 0004 (baseline sink + 메트릭 정의) + ADR 0005 (deny 전환 placeholder, 1주 후 채움). admit handler에 `CLAUDE_AGENTS_ADMIT_LOG` 환경변수 옵트인 JSONL sink 추가. **111/111 vitest** (108→111, +3 = 5 신규 P6 회귀 단언 1 + sink test 2). 5 lint green. CI run 25539882702 ✓ (push `a220e8e` 2026-05-08) |
-| P6.5. baseline 수집 | **in_progress (collecting)** | 2026-05-08 | — | — | **Setup 완료 2026-05-08**: (a) P6 push + CI 5/5 green, (b) `node control-plane/dist/cli.js init` → `.claude/settings.local.json` PreToolUse warn-mode hook 설치 (3 skill 매칭: go-gin 70 / k8s-helm 65 / go-microservice 50), (c) `~/.zshrc`에 `export CLAUDE_AGENTS_ADMIT_LOG=$HOME/.claude-agents-admit.jsonl` 추가, sink 파일 prewarm, (d) `.gitignore`에 self-bootstrap lock 2개(`.claude-agents.yml` / `project-profile.yml`) 추가 commit `a220e8e`. **Baseline due ≈ 2026-05-15** (1주 wall-clock). 임계 = total ≥ 50 / activation rate ≥ 70% / allow rate ≥ 90% / per-skill warn < 15%. 통과 시 ADR 0005 Option A (deny), 미통과 시 B (매처 튜닝) / C (warn 영구) 결정 |
+| P6.5. baseline 수집 | **폐기 (2026-08-25)** — 수집 시작된 적 없음 | 2026-05-08 | — | — | **Setup 완료 2026-05-08**: (a) P6 push + CI 5/5 green, (b) `node control-plane/dist/cli.js init` → `.claude/settings.local.json` PreToolUse warn-mode hook 설치 (3 skill 매칭: go-gin 70 / k8s-helm 65 / go-microservice 50), (c) `~/.zshrc`에 `export CLAUDE_AGENTS_ADMIT_LOG=$HOME/.claude-agents-admit.jsonl` 추가, sink 파일 prewarm, (d) `.gitignore`에 self-bootstrap lock 2개(`.claude-agents.yml` / `project-profile.yml`) 추가 commit `a220e8e`. **Baseline due ≈ 2026-05-15** (1주 wall-clock). 임계 = total ≥ 50 / activation rate ≥ 70% / allow rate ≥ 90% / per-skill warn < 15%. 통과 시 ADR 0005 Option A (deny), 미통과 시 B (매처 튜닝) / C (warn 영구) 결정 |
 | P7. 전체 마이그레이션 | pending (**범위 축소**) | — | — | — | **2026-08-24 정정**: P7 이 향하던 목표 경로 `.claude/skills/<cat>/<n>/SKILL.md` 는 Claude Code 가 로드하지 않는 규격 위반 경로였다. 같은 날 Claude 쪽 260개를 `.claude/skills/<n>/SKILL.md` 로 이관 완료(카테고리는 frontmatter `category:` 보존, 22 카테고리 커밋). **남은 P7 범위 = `assets/skills/` → codex/cursor 변환분 확대만.** 근거: [2026-08-24 audit](../audit/2026-08-24-agent-harness-readiness.md) F1/F2 |
 | P8. Registry-ready 동결 | pending | — | — | — | signature/sandbox 메타 채움. skills.sh 포맷 export script. **Q8 결정**: sigstore cosign vs SLSA provenance |
 
@@ -42,10 +46,10 @@ git log --oneline -20                                          # 최근 commit
 - [x] Adapter parity (claude/codex/cursor diff 0) — 2026-05-06 P4-E (`tests/adapter.test.ts` 8 케이스 + CI drift step)
 - [ ] CI drift green — P4 push 후 GitHub Actions가 검증 (drift job에 adapter parity step 통합 완료)
 - [x] Multi-AI 동시 사용 시뮬 — 2026-05-06 P4-D (`init.test.ts` "detects .claude/.codex/.cursor and records p4-active in lock")
-- [x] Hook 동작 (deny 3건, allow 3건) — 2026-05-06 P5 (`tests/admit.test.ts` 3 deny + 3 allow + 3 globToRegex unit)
+- [~] ~~Hook 동작 (deny 3건, allow 3건)~~ — **무효 (2026-08-25)**. `admit()` 순수 함수만 검증했고 hook 배선은 테스트되지 않았다. 실제 발동 0건
 - [x] kubernetes 카테고리 100% 변환 — 2026-05-08 P6 (5 신규 + 5 기존 = 10, validate-schemas.sh strict 통과)
-- [x] baseline sink 동작 — 2026-05-08 P6 (cli.test.ts 2건: env unset no-op + env set JSONL append schema 검증)
-- [ ] Activation rate ≥ 70% (1주 baseline) — P6.5 (사용자 일상 작업으로 수집, ADR 0005에서 결과 본문 인용)
+- [~] ~~baseline sink 동작~~ — **무효 (2026-08-25)**. sink 는 동작했으나 이를 호출하는 hook 이 실행되지 않아 기록 0건
+- [~] ~~Activation rate ≥ 70% (1주 baseline)~~ — **폐기 (2026-08-25)**. ADR 0005 Rejected
 
 ## Decision Log (Phase 진행 중 발견되는 추가 결정)
 
@@ -117,7 +121,9 @@ git log --oneline -20                                          # 최근 commit
 | 2026-05-08 | P6.5 | self-bootstrap lock(`.claude-agents.yml` / `project-profile.yml`) `.gitignore` 처리 | 메타 레포 fork/clone 시 각자 init 재실행이 의도된 흐름. install 받은 프로젝트에선 사용자 가시성 위해 commit 가능 — install repo와 SSOT 메타 repo의 commit policy 차이 명문화 (commit `a220e8e`) |
 | 2026-05-08 | P6.5 | baseline 수집은 메타 레포 self-bootstrap에서 진행 (k8s 작업 노출도 약함 인정) | install repo가 따로 없는 현재 상황에서 0보다는 낫다. 1주 후 임계 미통과(total < 50) 시 baseline 기간 연장 또는 사용자 K8s 프로젝트에 install 후 재시작. ADR 0005 Option B/C 흡수 가능 |
 
-## P6.5 Baseline 수집 setup (사용자 작업)
+## ~~P6.5 Baseline 수집 setup (사용자 작업)~~ — 폐기 (2026-08-25)
+
+> 아래 절차는 **실행되지 않았고, 실행됐더라도 hook 배선 결함으로 0건을 수집했을 것이다.** 기록으로만 보존한다.
 
 P6 종료 후 1주 baseline 수집을 위해 다음 setup을 1회 수행:
 
