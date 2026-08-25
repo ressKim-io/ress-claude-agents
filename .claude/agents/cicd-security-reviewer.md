@@ -7,6 +7,7 @@ tools:
   - Glob
   - Bash
 model: sonnet
+effort: xhigh
 ---
 
 # CI/CD Security Reviewer (Attack Surface Focus)

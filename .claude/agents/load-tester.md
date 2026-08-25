@@ -8,6 +8,7 @@ tools:
   - Glob
   - Bash
 model: sonnet
+effort: xhigh
 ---
 
 # Load Tester Agent (Hub)
