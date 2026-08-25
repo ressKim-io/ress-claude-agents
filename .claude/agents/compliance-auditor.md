@@ -7,6 +7,7 @@ tools:
   - Grep
   - Glob
 model: sonnet
+effort: medium
 ---
 
 # Compliance Auditor Agent

@@ -7,6 +7,7 @@ tools:
   - Grep
   - Glob
 model: sonnet
+effort: medium
 ---
 
 # Cost Analyzer Agent
