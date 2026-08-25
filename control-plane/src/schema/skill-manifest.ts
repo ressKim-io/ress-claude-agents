@@ -68,6 +68,9 @@ export const Portability = z
   .strict();
 export type Portability = z.infer<typeof Portability>;
 
+// NOTE: `sandbox` has no runtime consumer since the admit hook was removed
+// (2026-08-25, audit F11). Kept in the schema so removing it doesn't force a
+// MAJOR bump on every published manifest; re-wire or drop in a future v2.
 export const Security = z
   .object({
     signature: z.string().optional(),
