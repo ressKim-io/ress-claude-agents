@@ -100,7 +100,7 @@ push 직후 발견했다. `git push` 가 **프롬프트 없이 그대로 실행�
 
 ## 남긴 것 (범위 밖, 목록만)
 
-- **`.codex/agents/` 가 2026-05-18 이후 재생성되지 않았다.** Step 3/4 의 agent 본문 변경이 codex view 에 반영되지 않아 adapter parity drift 33파일 / ~1,500줄. [`multi-tool-adapter.md`](../../.claude/rules/multi-tool-adapter.md) 는 "같은 PR 에서 변환 재실행" 을 MUST 로 규정한다 — Step 3/4 가 이를 놓쳤다.
+- ~~**`.codex/agents/` 가 2026-05-18 이후 재생성되지 않았다.**~~ → **해소 (2026-08-25)**: 재생성이 아니라 **codex 지원 자체를 제거**했다. [ADR 0010](../adr/0010-drop-codex-support.md) / [dev-log](2026-08-25-drop-codex-support.md).
 - **CI 가 이 브랜치에서 한 번도 돌지 않았다.** `ci.yml` 은 `push: branches: [main]` + `pull_request` 에서만 트리거된다. PR 이 없으니 drift job 이 위 항목을 잡을 기회가 없었다. 게이트는 있는데 발화 조건이 없는 것 — F11 과 같은 계열의 문제다.
 - `user-approval.md` 가 201줄이 됐다 (매핑 표 +38줄). always-on rules 예산(13개 / 1,503줄 + AGENTS.md 340줄 ≈ 90KB)이 그만큼 늘었다. Step 7 의 산문→강제 이관 분류에서 상계될 자리다.
 - `security.sandbox` (skill manifest) 는 소비자가 사라져 orphan 이다. 스키마 MAJOR bump 회피로 필드는 유지, 주석만 달았다.
