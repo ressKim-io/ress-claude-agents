@@ -283,7 +283,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 ### Token Budget (Opus 4.7)
 
 - Context **80% 초과 → 세션 종료**, 무관 태스크 전환 시 `/clear`
-- Effort 기본 `xhigh` (Claude Code 기본값), 단순 조회 `low`, frontier 문제만 `max`
+- Effort 는 본 레포 기본 `xhigh`, 단순 조회 `low`, frontier 문제만 `max` — **런타임 기본은 `high`** 라 agent frontmatter 에 명시해야 적용된다 (모델별 지원 표: [`effort-guide.md`](.claude/rules/effort-guide.md))
 - Tokenizer 4.6 → 4.7: `max_tokens` **35% headroom**, prompt cache 재빌드 가정 (최소 4096 tokens)
 - Subagent는 명시 spawn (Opus 4.7은 기본적으로 덜 spawn함). 10+ 파일 탐색은 subagent 위임
 - 상세: `.claude/rules/token-budget.md` + 카테고리별 매핑 `.claude/rules/effort-guide.md`, 코드 예시·비용 계산은 `/token-budget` skill
