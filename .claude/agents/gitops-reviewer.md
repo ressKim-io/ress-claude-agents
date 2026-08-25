@@ -20,6 +20,24 @@ Helm values 관리, Health Assessment, Repository 구조 등을 종합 검증한
 
 ---
 
+## Permission Boundary (외부 작업 경계)
+
+- 이 agent 는 결과(리뷰 결과 / Application·values 수정 제안)만 반환한다.
+- `gh pr create` / `gh pr comment` / `gh issue create` / `gh release create` / `git push` /
+  Slack·Discord 전송 / 외부 API 상태 변경 / `argocd app sync` 를 직접 실행하지 않는다.
+  필요하면 "메인 에이전트가 승인 후 실행할 명령"으로 output 에 제시만 한다.
+- `kubectl` 은 읽기 전용(`get` / `describe` / `logs` / `top`)만.
+
+## Escalation (중단·이관 기준)
+
+다음 중 하나라도 해당하면 작업을 중단하고, 추측으로 진행하지 말고
+메인 에이전트에 결과 + 차단 사유를 반환한다:
+- 권한 밖 — 외부 상태 변경(§Permission Boundary)이 필요한 단계
+- 입력 불충분 — ArgoCD Application / Flux Kustomization / Helm values 가 프롬프트에 없거나 대상 환경(dev/stg/prod)을 특정할 수 없음
+- 범위 밖 — 다른 도메인 agent 책임. 해당 agent 를 명시해 이관
+- 모순 — `rules/` 또는 다른 agent 결과와 충돌해 단독 판단 불가
+반환 형식: `[BLOCKED] <사유> — 필요한 것: <X> / 제안: <다음 agent 또는 사용자 액션>`
+
 ## Review Domains
 
 ### 1. Application Definition
@@ -460,3 +478,20 @@ helm template release-name chart/ -f values-prod.yaml | kubeconform -strict
 - [ ] base/overlays 표준 디렉토리 구조
 - [ ] ignoreDifferences (HPA replica 등)
 - [ ] Progressive delivery (Argo Rollouts)
+
+## Verification Criteria
+
+이 agent 의 산출물이 다음을 만족해야 한다:
+
+1. **정확성** — 모든 지적이 실제로 읽은 파일·라인 근거. 파일 경로 + 라인 번호 동반
+2. **완전성** — §Review Domains 8개 도메인을 모두 훑었고, 훑지 못한 도메인은 사유와 함께 명시
+3. **실행 가능성** — Critical / High 지적마다 구체 수정안(패치 diff 또는 대체 설정) 동반. "검토하세요" 수준 금지
+4. **등급 산정** — Category Budget 점수가 실제 발견 건수·심각도에서 계산됐고, 임의 조정이 없음
+5. **일관성** — [`k8s-manifest.md`](../rules/k8s-manifest.md) / [`user-approval.md`](../rules/user-approval.md) §ArgoCD Force Sync 금지 와 모순 없음
+
+### Self-verification (제출 전 자가 점검)
+
+- [ ] 모든 지적이 실제로 읽은 파일·라인 근거 — 기억·추측 기반 0건
+- [ ] 확인 못 한 항목은 단정하지 않고 "미확인"으로 표기
+- [ ] 환경 간 diff 를 실제 values 파일 대조로 확인했음 (한 환경만 보고 판단하지 않음)
+- [ ] §Permission Boundary 위반 명령을 직접 실행하지 않았음
