@@ -31,7 +31,11 @@
 ## 강제 메커니즘 매핑 (MANDATORY — 드리프트 검증 대상)
 
 위 산문은 **1차 방어선**이다. 그 아래에 [`.claude/settings.json`](../settings.json) 의 `permissions` 규칙이 그물로 깔린다.
-[ADR 0009](../../docs/adr/0009-enforcement-layer-placement.md) 실측(2026-08-25): deny/ask 는 `bypassPermissions` 에서도, **subagent 의 `Bash` 안쪽에서도** 유지된다.
+[ADR 0009](../../docs/adr/0009-enforcement-layer-placement.md) 실측(2026-08-25):
+
+- **`deny` 는 모든 모드에서, subagent 의 `Bash` 안쪽에서도 유지된다.** 실제 강제력이 있다.
+- 🔴 **`ask` 는 대화형 `bypassPermissions` 세션에서 아무것도 막지 않는다.** 이 모드가 프롬프트 자체를 건너뛰기 때문이다. `default` / `auto` 대화형과 비대화형 `claude -p` 에서만 작동한다.
+  **그러므로 아래 `ask` 층 항목은 bypass 모드에서 산문과 동급이다** — 승인 절차는 여전히 사람이 지켜야 한다. 봉쇄 선택지는 ADR 0009 §`ask` 층의 한계.
 
 | 규칙 | 층 | 대상 산문 |
 |---|---|---|

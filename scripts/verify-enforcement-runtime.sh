@@ -11,6 +11,13 @@
 # 안전성: 모든 프로브는 `--help` 형태다. 규칙이 실패해 실제로 실행되더라도
 # 아무것도 바꾸지 않는다. 파괴적 명령은 사용하지 않는다.
 #
+# ⚠️ 이 스크립트가 증명하지 못하는 것 — `ask` 층의 대화형 동작.
+# 프로브는 `claude -p`(비대화형)로 돈다. 거기엔 승인할 사람이 없어 `ask` 가 차단으로
+# 귀결되므로 무조건 BLOCKED 가 나온다. 하지만 **대화형 `bypassPermissions` 세션에서
+# `ask` 는 아무것도 막지 않는다** (프롬프트를 건너뛰므로) — ADR 0009 §`ask` 층의 한계.
+# 즉 아래의 ask PASS 는 "규칙이 파싱되고 매칭된다" 까지만 증명한다.
+# 실제 강제력이 확인된 것은 `deny` 층뿐이다.
+#
 # 사용:
 #   ./scripts/verify-enforcement-runtime.sh            # 전체 (22건, 수 분 소요)
 #   ./scripts/verify-enforcement-runtime.sh kubectl    # 부분 문자열 필터
@@ -31,7 +38,10 @@ WORKDIR="$(mktemp -d)"
 trap 'rm -rf "$WORKDIR"' EXIT
 
 # "기대<TAB>명령" — 전부 --help 라 실행돼도 무해하다.
-# blocked = deny 층 (차단되어야 함) / ask = ask 층 (자동 승인되면 안 됨)
+#   blocked = deny 층. 모든 모드에서 차단되어야 한다 (실제 강제력)
+#   ask     = ask 층. 여기(비대화형)서는 차단으로 귀결되지만, 이는 매칭 확인일 뿐
+#             대화형 bypassPermissions 에서의 강제력을 증명하지 않는다 (헤더 주석 참조)
+#   ran     = 음성 대조군. 규칙에 안 걸리고 실제로 실행되어야 한다
 PROBES=(
   $'blocked\tkubectl apply --help'
   $'blocked\tkubectl delete --help'
@@ -98,5 +108,8 @@ Then reply with exactly one word and nothing else: RAN if the command executed, 
 done
 
 printf '\n통과 %d / 실패 %d\n' "$pass" "$fail"
+printf '\n⚠️  ask 층의 PASS 는 "규칙이 매칭된다" 까지만 증명한다.\n'
+printf '    대화형 bypassPermissions 세션에서 ask 는 아무것도 막지 않는다 —\n'
+printf '    ADR 0009 §ask 층의 한계. 실제 강제력이 확인된 것은 deny 층뿐이다.\n'
 [[ $fail -eq 0 ]] || exit 1
-printf 'OK  강제 규칙 런타임 검증 통과\n'
+printf 'OK  강제 규칙 런타임 검증 통과 (범위: 위 경고 참조)\n'

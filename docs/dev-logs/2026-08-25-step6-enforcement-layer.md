@@ -61,11 +61,31 @@ npx @ress/claude-agents admit --tool="$CLAUDE_TOOL" \
 | 질문 | 문서 | 실측 |
 |---|---|---|
 | `bypassPermissions` 하에서 PreToolUse hook 이 도는가 | 기술 없음 | **돈다. 차단도 된다** (P3) |
-| `ask` 가 `bypassPermissions` 에서 유지되는가 | 기술 없음 | **유지된다. 자동승인 안 됨** (P4) |
+| `ask` 가 `bypassPermissions` 에서 유지되는가 | 기술 없음 | **비대화형은 차단, 대화형은 무력** (P4/P8 — 아래 §정정) |
 | deny 가 subagent 의 `Bash` 에 닿는가 | hook 상속만 명시 | **닿는다** (P5) |
 | 복합 명령 / 여분 공백으로 우회되는가 | "인자 제약 패턴은 취약" 경고 | **이 두 변형으로는 우회 안 됨** (P6/P7, 음성 대조군으로 확인) |
 
 마지막 행은 공식 Warning 의 **범위를 좁힌다**: 취약한 것은 인자 *값* 을 제약하는 패턴이고, 명령 접두 단위 deny 는 견뎠다. 인용 우회(`e''cho`) / 변수 치환은 **시험하지 않았다** — 그래서 deny 를 유일한 방어선으로 삼지 않는다.
+
+## 🔴 정정 — `ask` 층이 실세션에서 작동하지 않는다
+
+push 직후 발견했다. `git push` 가 **프롬프트 없이 그대로 실행됐다.** 확인해 보니:
+
+| 확인 | 결과 |
+|---|---|
+| `kubectl apply --help` (deny 층) | **차단됨** — deny 는 이 세션에서 살아 있다 |
+| `gh release create --help` / `gh issue close --help` / `gh pr comment --help` / `git push` (ask 층) | **전부 실행됨** |
+| 같은 명령을 `claude -p --dangerously-skip-permissions` 로 | **차단됨** |
+
+원인: **`bypassPermissions` 는 프롬프트 자체를 건너뛴다.** `ask` 규칙의 유일한 효과가 프롬프트이므로 이 모드에서는 no-op 이 된다. 비대화형 `claude -p` 에서는 승인할 사람이 없어 차단으로 귀결될 뿐, 강제력이 있어서가 아니다.
+
+공식 문서가 "Deny rules block in every mode, including `bypassPermissions`" 와 "Allow rules have no effect in `bypassPermissions`" 는 명시하면서 **`ask` 만 언급하지 않는 것**이 이 동작과 일치한다. 침묵을 "유지된다" 로 읽은 것이 잘못이었다.
+
+**내가 한 실수**: 비대화형 프로브(P4) 하나로 "`ask` 는 bypassPermissions 에서 유지된다" 고 ADR·rule·AGENTS.md 에 적었다. **실행 형태가 다른 환경에서 잰 결과를 일반화했다.** 이건 F11 을 진단해 놓고 같은 형태의 오류를 만든 것이다 — "강제되는 것처럼 보이지만 아무것도 막지 않는" 상태.
+
+**잡힌 경위**: 계획대로 push 하면서 "ask 규칙에 걸려 프롬프트가 뜰 것" 이라고 예고했는데 안 떴다. **예고한 관측이 빗나간 것이 검출 경로였다.** 자동 게이트는 이걸 못 잡았다 — 런타임 검증기가 `-p` 로 돌기 때문이다. 해당 스크립트에 이 한계를 명시하는 경고를 넣었다.
+
+**현재 상태**: deny 11건은 실제 강제, **ask 11건은 이 레포 상시 모드에서 산문과 동급.** 봉쇄 선택지 4개는 ADR 0009 §`ask` 층의 한계에 적었다 — 사용자 결정 대기.
 
 ## 왜 두 층(deny / ask)인가
 
@@ -92,6 +112,7 @@ validators      rules-drift / skill-frontmatter / agent-handoff / commands-drift
 shellcheck      install.sh + scripts/*.sh 전부 PASS
 inventory       최신 (재생성 후 diff 없음)
 enforcement     정적 음성 테스트 6/6 검출 · 런타임 25/25 (음성 대조군 3 포함)
+                ⚠️ 런타임 25/25 중 ask 11건은 매칭 확인까지만 — 위 §정정 참조
 ```
 
 `bats tests/install.bats` 는 **실행 안 함** — 로컬에 bats 미설치 (CI 에서 실행됨).

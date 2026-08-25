@@ -39,7 +39,7 @@ F11 이 본 ADR 의 판단 기준을 하나 추가한다: **"강제된다"고 �
 | 속성 | `permissions.deny` | PreToolUse hook |
 |---|---|---|
 | `Bash` 안쪽 명령 단위에 닿는가 | ✅ `Bash(git push *)` | ✅ |
-| `bypassPermissions` 에서 유지되는가 | ✅ 공식 명시 + 실측 P2 | ✅ 실측 P3 (공식 문서엔 **기술 없음**) |
+| `bypassPermissions` 에서 유지되는가 | ✅ `deny` 는 공식 명시 + 실측 P2. ⚠️ **`ask` 는 대화형에서 무력** (실측 P8) | ✅ 실측 P3 (공식 문서엔 **기술 없음**) |
 | subagent 에 적용되는가 | ✅ 실측 P5 | ✅ 실측 P5 |
 | allow 규칙을 이기는가 | ✅ deny-first | ⚠️ hook 결정은 permission 규칙을 우회하지 못한다 |
 | **조용히 죽는가** | ❌ 선언형 — 무효 규칙은 startup warning | ⚠️ **exit 1 / 실행 실패 / timeout 이 전부 비차단**. F11 이 이것 |
@@ -58,8 +58,9 @@ probe 설정: `deny: ["Bash(echo ENFORCE_PROBE_DENY *)"]`, `ask: ["Bash(echo ENF
 | **P1** | default | `echo ENFORCE_PROBE_DENY ok` + `--allowedTools "Bash(echo *)"` | **차단** | deny 가 allow 를 이긴다 (V8) |
 | **P2** | **bypass** | 동일 | **차단** | "Deny rules block in every mode" 실증 (V5) |
 | **P3** | **bypass** | `echo ENFORCE_PROBE_HOOK ok` | **차단** + `permissionDecisionReason` 이 모델에 전달 | ⚠️→✅ **PreToolUse hook 은 `bypassPermissions` 에서도 실행되고 차단한다** (공식 문서 미기재, V12) |
-| **P4** | **bypass** | `echo ENFORCE_PROBE_ASK ok` + allow | **자동 승인 안 됨 — 승인 요구** | ⚠️→✅ **`ask` 는 `bypassPermissions` 에서 유지된다** (공식 문서 미기재, V13) |
-| **P4b** | default | 동일 | 승인 요구 | 동일 |
+| **P4** | bypass, **비대화형 `-p`** | `echo ENFORCE_PROBE_ASK ok` + allow | **자동 승인 안 됨 — 승인 요구** | `-p` 에는 승인할 사람이 없어 차단으로 귀결 |
+| **P4b** | default, 비대화형 | 동일 | 승인 요구 | 동일 |
+| **P8** | bypass, **대화형 실세션** | `gh release create --help` / `gh issue close --help` / `gh pr comment --help` / `git push` (ask 층 4건) | **전부 그냥 실행됨** | 🔴 **`ask` 는 대화형 `bypassPermissions` 에서 무력이다** — 아래 §ask 층의 한계 |
 | **P5** | bypass | **subagent 에 위임**해 `echo ENFORCE_PROBE_DENY ok` | **차단** | deny 가 subagent 의 `Bash` 에도 적용된다 (M1) |
 | **P6 / P6c** | bypass | `true && echo …DENY` / `…CONTROL` | 차단 / **통과** | **복합 명령으로 우회되지 않는다** |
 | **P7 / P7c** | bypass | `echo␣␣…DENY` / `…CONTROL` | 차단 / **통과** | **여분 공백으로 우회되지 않는다** |
@@ -69,6 +70,26 @@ hook 은 P1(default) / P2·P3·P5(bypass) 전부에서 발동했고, stdin JSON 
 P6/P6c · P7/P7c 는 공식 Warning("인자를 제약하는 Bash 패턴은 취약")의 **범위를 좁힌다**: 취약한 것은 URL·인자 *값* 을 제약하는 패턴이고, **명령 접두 단위 deny 는 복합·공백 변형에 견딘다.** 다만 이는 이번에 시험한 두 변형에 한정된 결과다 — 인자 값 제약은 여전히 쓰지 않는다.
 
 > ⚠️ 미검증: 인용 우회(`e''cho`), 변수 치환(`C=kubectl; $C apply`), 스크립트 경유 실행. 그래서 `deny` 를 **유일한** 방어선으로 삼지 않는다 — [`user-approval.md`](../../.claude/rules/user-approval.md) 산문이 계속 1차 방어선이고 `deny` 는 그 아래 그물이다.
+
+### ⚠️ `ask` 층의 한계 — 대화형 `bypassPermissions` 에서 무력 (2026-08-25 정정)
+
+본 ADR 초판은 P4(비대화형 `-p`) 결과를 근거로 "`ask` 는 `bypassPermissions` 에서 유지된다" 고 적었다. **과잉 일반화였다.** 실세션에서 확인한 결과(P8):
+
+| 실행 형태 | `ask` 규칙 |
+|---|---|
+| 대화형 + `default` / `auto` | 프롬프트가 뜬다 (공식 동작, 본 레포에서 미시험) |
+| 대화형 + **`bypassPermissions`** | **그냥 실행된다.** 이 모드는 프롬프트 자체를 건너뛰므로 `ask` 의 유일한 효과가 사라진다 |
+| 비대화형 `claude -p` | 승인할 사람이 없어 **차단**으로 귀결 (모드 무관) |
+
+공식 문서가 "Deny rules block in every mode, including `bypassPermissions`" 와 "Allow rules have no effect in `bypassPermissions`" 는 명시하면서 **`ask` 는 언급하지 않는 것**이 이 동작과 일치한다.
+
+**따라서 `ask` 층 11건은 본 레포의 상시 모드(대화형 bypassPermissions)에서 강제되지 않는다.** 산문 규약과 같은 수준이다. 이 사실을 숨기지 않고 표기하는 것이 F11 재발 방지의 요점이다 — "강제되는 것처럼 보이지만 아무것도 막지 않는" 상태를 만들지 않는다.
+
+**선택지** (사용자 결정 대기):
+1. 그대로 두고 한계를 명시 — `ask` 는 `default`/`auto` 모드와 비대화형 실행에서만 작동하는 층
+2. 세션 모드를 `default` 또는 `auto` 로 바꾼다 — `ask` 가 의도대로 작동한다
+3. `permissions.disableBypassPermissionsMode: "disable"` 을 settings.json 에 넣어 bypass 자체를 봉쇄 — `ask` 가 항상 작동하지만 사용자가 bypass 모드를 못 쓴다
+4. `ask` 항목 일부를 `deny` 로 올린다 — 승인받은 작업조차 세션에서 못 하게 된다 (§Decision 의 두 층 근거와 충돌)
 
 ## 대안 비교
 
@@ -88,7 +109,8 @@ A 가 C 를 대체하는 근거: C 가 막으려는 것은 "agent 가 외부 상
 - `bypassPermissions` 세션(이 레포의 상시 모드)에서도 유지된다
 
 **잃는 것 / 위험**
-- `ask` 층은 비대화형(`claude -p`) 실행에서 **승인 불가 = 사실상 차단**이 된다. CI/자동화에서 `git push` 가 필요하면 그 경로는 Claude 세션 밖에 둬야 한다
+- **`ask` 층은 대화형 `bypassPermissions` 에서 아무것도 막지 않는다** (실측 P8). 본 레포의 상시 모드가 그것이라 `ask` 11건은 현재 산문과 동급이다 — §ask 층의 한계 참조
+- `ask` 층은 반대로 비대화형(`claude -p`) 실행에서는 **승인 불가 = 사실상 차단**이 된다. CI/자동화에서 `git push` 가 필요하면 그 경로는 Claude 세션 밖에 둬야 한다
 - `deny` 는 **사용자 본인에게도 적용**된다. 잘못 넣으면 승인받은 작업까지 막힌다 → 그래서 두 층으로 나눴다
 - 인용/변수 우회는 미검증이다. 방어선이지 담장이 아니다
 
@@ -114,5 +136,5 @@ make verify-enforcement               # sentinel 위반 시도 → 거절 단언
 | [code.claude.com/docs/en/permissions](https://code.claude.com/docs/en/permissions) | `Bash(git push *)` 지정자, `:*` 동치, `Bash(command:…)` 무시+warning, deny-first, "Hook decisions don't bypass permission rules" | ✅ |
 | [code.claude.com/docs/en/hooks](https://code.claude.com/docs/en/hooks) | hook event 31개, 입력=stdin JSON, exit 2=차단 / exit 1=비차단, PostToolUse 차단 불가, subagent frontmatter hooks | ✅ |
 | [code.claude.com/docs/en/sub-agents](https://code.claude.com/docs/en/sub-agents) | frontmatter 16필드, settings.json hook 이 subagent 안에서도 실행, plugin subagent 는 `hooks`/`permissionMode` 무시 | ✅ |
-| 본 ADR §실측 (P0~P7, CLI v2.1.245) | `bypassPermissions` 하 hook 동작 / `ask` 유지 / subagent 적용 / 복합·공백 우회 불가 | ✅ 실측 |
+| 본 ADR §실측 (P0~P8, CLI v2.1.245) | `bypassPermissions` 하 hook 동작 / subagent 적용 / 복합·공백 우회 불가 / **`ask` 는 대화형 bypass 에서 무력** | ✅ 실측 |
 | 인용·변수 치환 우회 | 시험하지 않음 — 방어선의 상한을 주장하지 않기 위해 명시 | ⚠️ unverified |

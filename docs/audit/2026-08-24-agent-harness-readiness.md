@@ -82,7 +82,7 @@ Anthropic 공식 2편에서 확인한 실행 원칙:
 | | agent frontmatter 스키마 검증 | 1건 샘플 (구 스펙) | **34건 전수 (16필드)** | ❌ → ✅ (F8) |
 | | agent 행동 eval | 0건 | 0건 | ❌ — Step 6 |
 | enforcement | `permissionMode` / `disallowedTools` / `maxTurns` | 0 / 49 | **0 / 34 (의도적)** | 🔴 스펙상 불가 판명 (F10) |
-| | **`.claude/settings.json` `permissions` 규칙** | 0 | **22 (deny 11 / ask 11)** | ❌ → ✅ Step 6. agent 수와 무관하게 전 agent 에 적용 |
+| | **`.claude/settings.json` `permissions` 규칙** | 0 | **22 (deny 11 / ask 11)** | ❌ → ⚠️ Step 6. agent 수와 무관하게 전 agent 에 적용되나, **`ask` 11건은 대화형 `bypassPermissions` 에서 무력** (ADR 0009 §`ask` 층의 한계) |
 | memory | `memory:` | 0 / 49 | 0 / 34 | ❌ — Step 6 |
 | context 경제성 | `skills:` | 0 / 49 | 0 / 34 | ⚠️ 미착수 |
 | — | `effort` | 6 / 49 | **34 / 34** | ⚠️ → ✅ |
@@ -478,7 +478,7 @@ Step 4 착수 시 F4 를 `disallowedTools` / `permissionMode` 로 닫으려다 *
 | V10 | subagent frontmatter `hooks` 지원. project-level agent 의 frontmatter hook 은 **workspace trust 수락 후** 동작. plugin subagent 는 `hooks`/`mcpServers`/`permissionMode` 무시 | ✅ |
 | V11 | 인자를 제약하는 Bash 패턴은 **취약** (옵션 순서 / 변수 / 공백) — 공식 Warning | ✅ |
 | V12 | `bypassPermissions` 하에서 PreToolUse hook 이 실행/차단되는지 | ⚠️ not stated → **✅ 실측 P3: 실행되고 차단한다** |
-| V13 | `ask` 규칙이 `bypassPermissions` 에서 유지되는지 | ⚠️ not stated → **✅ 실측 P4: 유지된다 (자동승인 안 됨)** |
+| V13 | `ask` 규칙이 `bypassPermissions` 에서 유지되는지 | ⚠️ not stated → **🔴 실측 P8: 대화형에서는 무력** (비대화형 `-p` 에서만 차단으로 귀결). 공식 문서가 deny/allow 만 언급하고 ask 를 빼놓은 것과 일치 |
 | V14 | `Stop` hook 무한루프 안전장치 (`stop_hook_active` 등) | ⚠️ **not stated** → 사용하지 않는다 |
 
 #### F10 정정 — 나가는 문은 `permissions.deny` 다

@@ -151,7 +151,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 **서브 에이전트 위임 시**: 에이전트는 결과만 반환. 외부 게시 권한 위임 금지.
 
-**산문 아래에 실행 강제가 깔려 있다**: [`.claude/settings.json`](.claude/settings.json) 의 `permissions.deny` / `ask` 가 위 항목 중 명령으로 표현 가능한 것을 강제한다 — `deny` = 세션에서 실행할 이유가 없는 것(변경형 `kubectl`, ArgoCD Force Sync), `ask` = 승인 프로세스가 있는 것(`git push`, `gh pr *`). **`bypassPermissions` 에서도, subagent 의 `Bash` 안쪽에서도 유지된다** (실측: [ADR 0009](docs/adr/0009-enforcement-layer-placement.md)). 규칙 ↔ 산문 매핑과 "산문으로만 남는 것" 목록은 [`user-approval.md`](.claude/rules/user-approval.md) §강제 메커니즘 매핑, 드리프트는 `scripts/validate-enforcement.sh` 가 게이트한다.
+**산문 아래에 실행 강제가 깔려 있다**: [`.claude/settings.json`](.claude/settings.json) 의 `permissions.deny` / `ask` 가 위 항목 중 명령으로 표현 가능한 것을 강제한다 — `deny` = 세션에서 실행할 이유가 없는 것(변경형 `kubectl`, ArgoCD Force Sync), `ask` = 승인 프로세스가 있는 것(`git push`, `gh pr *`). `deny` 는 **모든 모드에서, subagent 의 `Bash` 안쪽에서도 유지된다**. 🔴 반면 **`ask` 는 대화형 `bypassPermissions` 에서 무력**이다 (프롬프트를 건너뛰므로) — 그 모드에선 산문과 동급이니 승인 절차를 사람이 지켜야 한다 (실측: [ADR 0009](docs/adr/0009-enforcement-layer-placement.md)). 규칙 ↔ 산문 매핑과 "산문으로만 남는 것" 목록은 [`user-approval.md`](.claude/rules/user-approval.md) §강제 메커니즘 매핑, 드리프트는 `scripts/validate-enforcement.sh` 가 게이트한다.
 
 ---
 
