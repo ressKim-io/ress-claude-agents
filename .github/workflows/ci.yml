@@ -237,20 +237,20 @@ jobs:
         working-directory: control-plane
         run: npm test
 
-      - name: Adapter parity drift (P4 — codex + cursor only; .claude/skills SKILL.md is gitignored until P7)
+      - name: Adapter parity drift (P4 — cursor only; codex 지원 중단 2026-08-25, ADR 0010)
         run: |
-          for tool in codex cursor; do
+          for tool in cursor; do
             echo "=== adapter --tool=$tool ==="
             node control-plane/dist/cli.js adapter \
               --tool="$tool" \
               --root="$PWD" \
               --assets="$PWD/assets"
           done
-          if ! git diff --quiet -- .codex/skills/ .codex/agents/ .cursor/; then
+          if ! git diff --quiet -- .cursor/; then
             echo "::error::adapter parity drift detected. Run locally:"
             echo "  cd control-plane && npm run build && cd .."
-            echo "  for t in codex cursor; do node control-plane/dist/cli.js adapter --tool=\$t --root=. --assets=./assets; done"
+            echo "  node control-plane/dist/cli.js adapter --tool=cursor --root=. --assets=./assets"
             echo "Then commit the regenerated view files."
-            git diff --stat -- .codex/skills/ .codex/agents/ .cursor/
+            git diff --stat -- .cursor/
             exit 1
           fi

@@ -137,7 +137,7 @@ export async function init(opts: InitOptions): Promise<InitOutput> {
                 `${s.tool}: ${s.create}c/${s.update}u/${s.unchanged}=`,
             )
             .join(", ")})`
-        : "no .claude/.codex/.cursor directories detected",
+        : "no .claude/.cursor directories detected",
   });
 
   const generated_at = opts.frozenTime ?? new Date().toISOString();
@@ -198,7 +198,6 @@ function round2(n: number): number {
 function detectTools(root: string): AdapterTool[] {
   const detected: AdapterTool[] = [];
   if (existsSync(path.join(root, ".claude"))) detected.push("claude");
-  if (existsSync(path.join(root, ".codex"))) detected.push("codex");
   if (existsSync(path.join(root, ".cursor"))) detected.push("cursor");
   return detected;
 }

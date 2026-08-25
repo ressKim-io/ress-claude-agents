@@ -9,7 +9,7 @@ import fg from "fast-glob";
 import { parse as parseYaml } from "yaml";
 import { extractFrontmatter, loadSkills } from "./skill-loader.js";
 
-export type AdapterTool = "claude" | "codex" | "cursor";
+export type AdapterTool = "claude" | "cursor";
 export type AdapterMode = "write" | "dry-run" | "diff";
 
 export interface AdapterOptions {
@@ -39,8 +39,6 @@ export async function adapter(
   switch (opts.tool) {
     case "claude":
       return adapterClaude(opts.root, opts.assets, mode);
-    case "codex":
-      return adapterCodex(opts.root, opts.assets, mode);
     case "cursor":
       return adapterCursor(opts.root, opts.assets, mode);
   }
@@ -69,80 +67,6 @@ async function adapterClaude(
   }
 
   return { tool: "claude", changes: sortChanges(changes), issues };
-}
-
-async function adapterCodex(
-  root: string,
-  assets: string,
-  mode: AdapterMode,
-): Promise<AdapterResult> {
-  const issues: string[] = [];
-  const changes: AdapterFileChange[] = [];
-
-  const { skills, issues: loadIssues } = await loadSkills(assets);
-  issues.push(
-    ...loadIssues.map((i) => `${rel(i.sourcePath, root)}: ${i.reason}`),
-  );
-
-  for (const s of skills) {
-    const body = readBody(s.sourcePath);
-    const fmRaw = extractFrontmatter(readFileSync(s.sourcePath, "utf8")) ?? "";
-    const toml = stringifyCodexSkillToml({
-      name: s.manifest.name,
-      description: s.manifest.description,
-      body,
-      frontmatterYaml: fmRaw,
-    });
-    const target = path.join(
-      root,
-      ".codex",
-      "skills",
-      s.category,
-      `${s.dirName}.toml`,
-    );
-    changes.push(applyChange(target, toml, s.sourcePath, root, mode));
-  }
-
-  const agentPaths = await fg(".claude/agents/*.md", {
-    cwd: root,
-    onlyFiles: true,
-  });
-  agentPaths.sort();
-  for (const rel0 of agentPaths) {
-    const sourcePath = path.join(root, rel0);
-    const raw = readFileSync(sourcePath, "utf8");
-    const fm = extractFrontmatter(raw);
-    if (fm === null) {
-      issues.push(`${rel0}: no yaml frontmatter`);
-      continue;
-    }
-    let meta: { name?: unknown; description?: unknown };
-    try {
-      meta = parseYaml(fm) as { name?: unknown; description?: unknown };
-    } catch (e) {
-      issues.push(
-        `${rel0}: yaml parse failed: ${(e as Error).message}`,
-      );
-      continue;
-    }
-    if (
-      typeof meta.name !== "string" ||
-      typeof meta.description !== "string"
-    ) {
-      issues.push(`${rel0}: name/description missing in frontmatter`);
-      continue;
-    }
-    const body = readBody(sourcePath);
-    const toml = stringifyCodexAgentToml({
-      name: meta.name,
-      description: meta.description,
-      body,
-    });
-    const target = path.join(root, ".codex", "agents", `${meta.name}.toml`);
-    changes.push(applyChange(target, toml, sourcePath, root, mode));
-  }
-
-  return { tool: "codex", changes: sortChanges(changes), issues };
 }
 
 async function adapterCursor(
@@ -216,53 +140,6 @@ function readBody(filePath: string): string {
     }
   }
   return raw;
-}
-
-interface CodexAgentArgs {
-  name: string;
-  description: string;
-  body: string;
-}
-
-function stringifyCodexAgentToml(args: CodexAgentArgs): string {
-  return [
-    `description = ${tomlBasicString(args.description)}`,
-    `developer_instructions = ${tomlMultiline(args.body)}`,
-    `name = ${tomlBasicString(args.name)}`,
-    "",
-  ].join("\n");
-}
-
-interface CodexSkillArgs extends CodexAgentArgs {
-  frontmatterYaml: string;
-}
-
-function stringifyCodexSkillToml(args: CodexSkillArgs): string {
-  return [
-    `description = ${tomlBasicString(args.description)}`,
-    `developer_instructions = ${tomlMultiline(args.body)}`,
-    `manifest_yaml = ${tomlMultiline(args.frontmatterYaml)}`,
-    `name = ${tomlBasicString(args.name)}`,
-    "",
-  ].join("\n");
-}
-
-function tomlBasicString(value: string): string {
-  const escaped = value
-    .replace(/\\/g, "\\\\")
-    .replace(/"/g, '\\"')
-    .replace(/\n/g, "\\n")
-    .replace(/\r/g, "\\r")
-    .replace(/\t/g, "\\t");
-  return `"${escaped}"`;
-}
-
-function tomlMultiline(body: string): string {
-  if (!body.includes("'''")) {
-    return `'''\n${body}\n'''`;
-  }
-  const escaped = body.replace(/"""/g, '\\"\\"\\"');
-  return `"""\n${escaped}\n"""`;
 }
 
 interface CursorMdcArgs {

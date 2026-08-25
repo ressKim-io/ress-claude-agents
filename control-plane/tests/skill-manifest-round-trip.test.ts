@@ -20,7 +20,7 @@ const validSample = {
   },
   portability: {
     level: "universal",
-    tested_on: ["claude-code", "codex"],
+    tested_on: ["claude-code", "cursor"],
     model_dependency: "none",
     domain_specificity: "focused",
   },

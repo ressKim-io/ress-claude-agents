@@ -30,7 +30,7 @@ tmp/
 
 # Auto-generated tool caches
 # .agents/는 P7까지 deprecate 예정 (assets/skills/ SSOT로 이동), 그동안 ignore.
-# .codex/는 P4 adapter SSoT view → commit 대상 (0002 plan §86-89, decision log P4-C).
+# .codex/ 는 2026-08-25 제거 (ADR 0010) — ignore 규칙도 불필요.
 .agents/
 
 # .claude/skills/<name>/SKILL.md 는 2026-08-24 부터 SSOT 다 — commit 대상.

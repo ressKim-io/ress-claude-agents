@@ -87,116 +87,6 @@ function readBodyFromMarkdown(filePath: string): string {
   return raw;
 }
 
-describe("adapter --tool=codex (agent round-trip)", () => {
-  it("converts .claude/agents/<n>.md to .codex/agents/<n>.toml with parse-equal data", async () => {
-    // Given
-    const tmp = makeTestRoot();
-    try {
-      const agentSource = copyAgent(tmp, "code-reviewer");
-
-      // When
-      const result = await adapter({
-        tool: "codex",
-        root: tmp,
-        assets: path.join(tmp, "assets"),
-        mode: "write",
-      });
-
-      // Then
-      const generatedPath = path.join(
-        tmp,
-        ".codex",
-        "agents",
-        "code-reviewer.toml",
-      );
-      expect(existsSync(generatedPath)).toBe(true);
-
-      const generated = readFileSync(generatedPath, "utf8");
-      const parsed = parseCodexAgentToml(generated);
-
-      const sourceRaw = readFileSync(agentSource, "utf8");
-      const fmRaw = extractFrontmatter(sourceRaw) ?? "";
-      const sourceFm = parseYaml(fmRaw) as {
-        name: string;
-        description: string;
-      };
-      const sourceBody = readBodyFromMarkdown(agentSource);
-
-      expect(parsed.name).toBe(sourceFm.name);
-      expect(parsed.description).toBe(sourceFm.description);
-      expect(parsed.body).toBe(sourceBody);
-
-      const codexChange = result.changes.find(
-        (c) => c.path === ".codex/agents/code-reviewer.toml",
-      );
-      expect(codexChange?.status).toBe("create");
-    } finally {
-      rmSync(tmp, { recursive: true, force: true });
-    }
-  });
-
-  it("re-running adapter produces unchanged status (idempotent)", async () => {
-    const tmp = makeTestRoot();
-    try {
-      copyAgent(tmp, "code-reviewer");
-      await adapter({ tool: "codex", root: tmp, assets: path.join(tmp, "assets"), mode: "write" });
-      const second = await adapter({
-        tool: "codex",
-        root: tmp,
-        assets: path.join(tmp, "assets"),
-        mode: "write",
-      });
-      const codexChange = second.changes.find(
-        (c) => c.path === ".codex/agents/code-reviewer.toml",
-      );
-      expect(codexChange?.status).toBe("unchanged");
-    } finally {
-      rmSync(tmp, { recursive: true, force: true });
-    }
-  });
-});
-
-describe("adapter --tool=codex (skill view)", () => {
-  it("emits .codex/skills/<cat>/<n>.toml with manifest_yaml preserving 9 keys", async () => {
-    const tmp = makeTestRoot();
-    try {
-      const skillSrc = copySkill(tmp, "kubernetes", "k8s-helm");
-
-      await adapter({ tool: "codex", root: tmp, assets: path.join(tmp, "assets"), mode: "write" });
-
-      const generated = path.join(
-        tmp,
-        ".codex",
-        "skills",
-        "kubernetes",
-        "k8s-helm.toml",
-      );
-      expect(existsSync(generated)).toBe(true);
-
-      const toml = readFileSync(generated, "utf8");
-      const parsed = parseCodexAgentToml(toml);
-      const fmYaml = parseManifestYamlField(toml);
-      const fm = parseYaml(fmYaml) as Record<string, unknown>;
-
-      expect(parsed.name).toBe("k8s-helm");
-      expect(fm.applies_when).toBeDefined();
-      expect(fm.portability).toBeDefined();
-      expect(fm.produces).toEqual(["helm-chart"]);
-      expect(fm.consumes).toEqual(["k8s-manifest", "service-boundary"]);
-      expect(fm.security).toBeDefined();
-      expect(fm.version).toBe("1.0.0");
-      expect(fm.license).toBe("MIT");
-
-      const sourceBody = readBodyFromMarkdown(
-        path.join(skillSrc, "SKILL.md"),
-      );
-      expect(parsed.body).toBe(sourceBody);
-    } finally {
-      rmSync(tmp, { recursive: true, force: true });
-    }
-  });
-});
-
 describe("adapter --tool=cursor", () => {
   it("emits .cursor/rules/<n>.mdc with globs from applies_when.files_present", async () => {
     const tmp = makeTestRoot();
@@ -328,7 +218,7 @@ describe("adapter mode=dry-run", () => {
 });
 
 describe("adapter determinism", () => {
-  it("produces identical bytes across 10 runs (codex skill)", async () => {
+  it("produces identical bytes across 10 runs (cursor rule)", async () => {
     const tmp = makeTestRoot();
     try {
       copySkill(tmp, "kubernetes", "k8s-helm");
@@ -336,13 +226,13 @@ describe("adapter determinism", () => {
       const outputs = new Set<string>();
       for (let i = 0; i < 10; i++) {
         const result = await adapter({
-          tool: "codex",
+          tool: "cursor",
           root: tmp,
           assets: path.join(tmp, "assets"),
           mode: "dry-run",
         });
         const change = result.changes.find(
-          (c) => c.path === ".codex/skills/kubernetes/k8s-helm.toml",
+          (c) => c.path === ".cursor/rules/k8s-helm.mdc",
         );
         outputs.add(change?.content ?? "");
       }
