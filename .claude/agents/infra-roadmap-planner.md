@@ -490,10 +490,13 @@ slis:
 [상세 계획]
 
 ## 기술 스택 매트릭스
+
+> ⚠️ 아래 버전 값은 **예시**다 (마지막 검증 2026-08-25: K8s 최신 1.36 / 지원 1.34~1.36 — [kubernetes.io/releases](https://kubernetes.io/releases/)).
+> 로드맵 작성 시 착수 시점 기준으로 재확인한다. Phase 전환에 수개월이 걸리므로 **목표 버전은 착수일이 아니라 도달 예정일 기준으로** 고른다.
 | 컴포넌트 | Phase 0 | Phase 1 | Phase 2 | Phase 3 |
 |----------|---------|---------|---------|---------|
 | Runtime | Docker | kind | EKS | EKS |
-| Orchestration | compose | K8s 1.30 | K8s 1.30 | K8s 1.30 |
+| Orchestration | compose | K8s 1.36 | K8s 1.36 | K8s 1.36 |
 | GitOps | - | ArgoCD | ArgoCD | ArgoCD |
 | Monitoring | - | kube-prom | kube-prom | Thanos |
 | Logging | stdout | Loki | Loki | Loki+S3 |

@@ -56,15 +56,35 @@ You specialize in version upgrades and migrations across the entire technology s
 #### Step 1: 현재/대상 버전 확인
 
 ```markdown
+### Verified Version Baseline (검증일 2026-08-25)
+
+착수 시 **반드시 재확인한다.** 아래는 마지막 검증 시점의 스냅샷이지 현재값 보증이 아니다.
+
+| 대상 | 최신 | 지원 중 | 출처 | 상태 |
+|---|---|---|---|---|
+| Kubernetes | 1.36 | 1.34 / 1.35 / 1.36 | [kubernetes.io/releases](https://kubernetes.io/releases/) | ✅ |
+| Java | 25 (LTS, GA 2025-09-16) | LTS 8 / 11 / 17 / 21 / 25 | [openjdk.org/projects/jdk/25](https://openjdk.org/projects/jdk/25/) | ✅ |
+| Spring Boot | 4.1 | 4.1 / 4.0 / 3.5 | [endoflife.date/spring-boot](https://endoflife.date/spring-boot) | ✅ |
+| PostgreSQL | 18 | 14 ~ 18 | [endoflife.date/postgresql](https://endoflife.date/postgresql) | ✅ |
+| Kotlin | 2.4 | — | [endoflife.date/kotlin](https://endoflife.date/kotlin) | ✅ |
+| Python | 3.14 | 3.10 ~ 3.14 (3.8 은 2024-10-07 EOL) | [endoflife.date/python](https://endoflife.date/python) | ✅ |
+| Terraform | 1.15 | 1.14 / 1.15 | [endoflife.date/terraform](https://endoflife.date/terraform) | ✅ |
+
+**재검증 주기: 분기 1회 (다음 2026-11).** 이 표가 6개월 이상 갱신되지 않았으면 본문의 모든 버전 값을 미검증으로 취급한다.
+
 ## Version Matrix
-| Component | Current | Target | Gap | EOL Date |
+| Component | Current | Target | Gap | Current 의 EOL |
 |-----------|---------|--------|-----|----------|
-| Java | 11 | 21 | 10 major | 2023-09 (already EOL) |
-| Spring Boot | 2.7.x | 3.3.x | 1 major | 2025-08 |
-| Kotlin | 1.7 | 2.0 | 1 major | - |
-| PostgreSQL | 14 | 16 | 2 major | 2026-11 |
-| Kubernetes | 1.27 | 1.30 | 3 minor | 2024-06 |
+| Java | 11 | 25 (LTS) | 2 LTS | 이미 EOL |
+| Spring Boot | 2.7.x | 4.1.x | 2 major | 이미 EOL |
+| Kotlin | 1.7 | 2.4 | 1 major | - |
+| PostgreSQL | 14 | 18 | 4 major | 2026-11-12 |
+| Kubernetes | 1.33 | 1.36 | 3 minor | 이미 EOL |
 ```
+
+> ⚠️ **위 표의 Target 값은 예시다. 그대로 복사하지 말고 착수 시점에 재확인한다.**
+> 버전은 분기마다 바뀌고, 이 표는 마지막 검증일 기준이다 ([`deep-thinking.md`](../rules/deep-thinking.md) §1 knowledge cutoff 자각).
+> 최신 값은 §Verified Version Baseline 참조.
 
 #### Step 2: Breaking Changes 추출
 
@@ -101,12 +121,14 @@ grep -r "extensions/v1beta1\|networking.k8s.io/v1beta1" --include="*.yaml" -l
 ## Compatibility Matrix
 | Component A | Component B | Compatible | Notes |
 |-------------|-------------|------------|-------|
-| Java 21 | Spring Boot 3.3 | YES | 필수 조합 |
-| Java 21 | Spring Boot 2.7 | PARTIAL | 동작하나 미지원 |
-| Spring Boot 3.3 | Hibernate 5.x | NO | Hibernate 6.x 필수 |
-| K8s 1.30 | Ingress v1beta1 | NO | v1으로 마이그레이션 필수 |
-| PostgreSQL 16 | pgBouncer 1.18 | YES | |
+| Java 25 | Spring Boot 4.1 | YES | Spring Boot 4.x 는 Java 17+ 요구 |
+| Java 25 | Spring Boot 2.7 | NO | 2.7 은 이미 EOL |
+| Spring Boot 4.x | Hibernate 5.x | NO | ⚠️ 대응 Hibernate 버전은 착수 시 릴리스 노트로 확인 |
+| K8s 1.36 | Ingress v1beta1 | NO | v1 으로 마이그레이션 필수 |
+| PostgreSQL 18 | pgBouncer 1.18 | ⚠️ | 미검증 — pgBouncer 릴리스 노트로 확인 |
 ```
+
+> 조합의 YES/NO 는 **양쪽 공식 문서에서 확인한 것만** 적는다. 확인 못 한 조합은 빈칸이 아니라 `⚠️ 미검증` 으로 남긴다 — 빈칸은 "호환된다" 로 읽힌다.
 
 ### 2. Risk Classification
 
@@ -243,7 +265,7 @@ git diff --stat
 
 ### Python Migration
 
-#### Python 3.8 → 3.12+
+#### Python 3.8 (EOL 2024-10-07) → 3.14
 
 ```markdown
 ## 버전별 주요 변경
@@ -310,7 +332,7 @@ pluto detect-files-in-path ./k8s/
 # my-ingress  Ingress   extensions/v1beta1   networking.k8s.io/v1 v1.22     v1.14
 
 # kubent: 클러스터 내 deprecated 리소스 탐지
-kubent --target-version 1.30
+kubent --target-version 1.36   # 목표 버전으로 교체
 ```
 
 #### Ingress → Gateway API 전환
@@ -434,7 +456,7 @@ terraform init -upgrade
 terraform plan
 
 # state에 영향 주는 변경 시: import/moved block 활용
-# Terraform 1.7+: removed block으로 안전한 리소스 제거
+# Terraform 1.7 이상: removed block으로 안전한 리소스 제거 (기능 도입 하한 — 현행 최신은 1.15)
 ```
 
 #### Helm Chart Major Version Upgrade
@@ -598,13 +620,13 @@ grype myapp:latest
 
 ```markdown
 ## Compatibility Matrix: [프로젝트명]
-| | Java 21 | Spring 3.3 | Hibernate 6 | PG 16 | K8s 1.30 |
+| | Java 25 | Spring 4.1 | Hibernate 6 | PG 18 | K8s 1.36 |
 |---|---------|-----------|-------------|-------|----------|
-| Java 21 | - | YES | YES | YES | N/A |
+| Java 25 | - | YES | YES | YES | N/A |
 | Spring 3.3 | YES | - | YES | YES | N/A |
 | Hibernate 6 | YES | YES | - | YES | N/A |
 | PG 16 | N/A | N/A | YES | - | N/A |
-| K8s 1.30 | N/A | N/A | N/A | N/A | - |
+| K8s 1.36 | N/A | N/A | N/A | N/A | - |
 ```
 
 ---
