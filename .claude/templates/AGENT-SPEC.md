@@ -6,7 +6,7 @@
 > **출처 (F6)**: https://code.claude.com/docs/en/sub-agents (검증일 **2026-08-24**, 직전 2026-05-15)
 >
 > 핵심 1: sub-agent 의 `description` 은 Agent 도구가 invocation 결정 시 매칭하는 primary trigger. universal "always use sonnet" 룰 없음 — task 복잡도 기반 model 선택.
-> 핵심 2: frontmatter 는 **16개 필드**를 지원한다. 이 중 실행 강제력이 있는 것은 `disallowedTools` / `maxTurns` / `hooks` 이고, `permissionMode` 는 부모 세션에 따라 무시될 수 있다 — 강제력의 실제 경계는 §1.2 참조.
+> 핵심 2: frontmatter 는 **16개 필드**를 지원한다. 이 중 실행 강제력이 있는 것은 `disallowedTools` / `maxTurns` / `hooks` 이고, `permissionMode` 는 부모 세션에 따라 무시될 수 있다. **명령 단위 강제는 frontmatter 가 아니라 `.claude/settings.json` 의 `permissions` 에서 한다** — 경계는 §1.2 참조.
 >
 > ⚠️ 외부 사양은 분기별 재검증 대상이다 ([`multi-tool-adapter.md`](../rules/multi-tool-adapter.md) §외부 도구 사양). 2026-05-15 → 2026-08-24 사이에 실제로 `effort` 필드 관련 기술이 drift 했다 — 경위는 [2026-08-24 audit](../../docs/audit/2026-08-24-agent-harness-readiness.md) 참조. **다음 재검증 예정: 2026-11**.
 
@@ -46,12 +46,14 @@ effort: xhigh                                   # 세션 effort 를 override —
 |---|---|---|
 | `disallowedTools` | ✅ 런타임 강제 | **도구 이름 / MCP 패턴 단위만.** `Bash(gh pr comment:*)` 같은 명령 단위 지정자는 **지원하지 않는다** (settings.json 문법과 다르다). `tools` 허용목록에 이미 없는 도구를 적으면 no-op |
 | `maxTurns` | ✅ 런타임 강제 | 턴 상한. 조사 범위가 발산할 수 있는 agent 에 |
-| `hooks` | ✅ 런타임 강제 | `PreToolUse` 가 `permissionDecision: deny` 로 개별 호출 차단. **명령 단위에 닿는 유일한 필드.** ⚠️ 부모가 `bypassPermissions` 일 때의 동작은 공식 문서에 기술 없음 — 미검증 |
+| `hooks` | ✅ 런타임 강제 | `PreToolUse` 가 `permissionDecision: deny` 로 개별 호출 차단. frontmatter 필드 중 명령 단위에 닿는 유일한 것 (**frontmatter 밖에는 settings.json 의 `permissions.deny` 가 있다 — 아래 정정**). `bypassPermissions` 하에서도 실행·차단된다 (공식 문서엔 기술 없음, [ADR 0009](../../docs/adr/0009-enforcement-layer-placement.md) 실측 P3). ⚠️ **exit 1 / 실행 실패 / timeout 은 전부 비차단** — 깨진 hook 은 조용히 통과시킨다 (F11) |
 | `permissionMode` | ⚠️ 조건부 | 부모가 `bypassPermissions` / `acceptEdits` 면 **override 불가**. 부모가 auto mode(Pro/Max/Team 기본)면 frontmatter 값이 **무시된다** |
 
-> ⚠️ **정정 (2026-08-25)**: 직전 판(2026-08-24)은 `disallowedTools` 를 "§Permission Boundary(gh / git push 직접 실행 금지)의 승격 자리" 라고 적었다. **스펙상 성립하지 않는다** — 두 필드 모두 `Bash` 안쪽의 `gh` / `git push` / `argocd sync` 에 닿지 못한다.
+> ⚠️ **정정 (2026-08-25)**: 2026-08-24 판은 `disallowedTools` 를 "§Permission Boundary(gh / git push 직접 실행 금지)의 승격 자리" 라고 적었다. **스펙상 성립하지 않는다** — `disallowedTools` 도 `permissionMode` 도 `Bash` 안쪽의 `gh` / `git push` / `argocd sync` 에 닿지 못한다.
 >
-> 따라서 §Permission Boundary 는 현재 **산문 규약으로 남아 있고**, 그 사실을 알고 쓴다. 실행 강제로 옮기는 근본 설계는 별도 과제다 — [audit §6 Step 6](../../docs/audit/2026-08-24-agent-harness-readiness.md).
+> **다만 "그래서 산문으로 남는다" 는 결론도 틀렸다.** 강제력은 frontmatter 밖에 있다 — [`.claude/settings.json`](../settings.json) 의 `permissions.deny` / `ask` 는 명령 단위 지정자(`Bash(gh pr comment *)`)를 지원하고, **`bypassPermissions` 에서도 subagent 의 `Bash` 안쪽에서도 유지된다** ([ADR 0009](../../docs/adr/0009-enforcement-layer-placement.md) 실측 P2/P5).
+>
+> 따라서 §Permission Boundary 의 승격 자리는 **agent frontmatter 가 아니라 세션 설정**이다. agent 마다 다른 경계가 정말 필요할 때만 frontmatter `hooks` 를 쓰고, 그때는 **위반 fixture 를 같은 커밋에** 둔다 (F11: fixture 없는 hook 은 3.5개월간 0% 로 작동했다).
 
 > MUST 신규 필드를 넣기 전에 **그게 실제로 무엇을 막는지** 확인한다. 막지 못하는 것을 막는다고 적은 frontmatter 는 산문보다 나쁘다 — 지켜지고 있다고 착각하게 만든다.
 

@@ -81,7 +81,8 @@ Anthropic 공식 2편에서 확인한 실행 원칙:
 | sensors | `## Verification Criteria` | 1 / 49 | **34 / 34** | ❌ → ✅ |
 | | agent frontmatter 스키마 검증 | 1건 샘플 (구 스펙) | **34건 전수 (16필드)** | ❌ → ✅ (F8) |
 | | agent 행동 eval | 0건 | 0건 | ❌ — Step 6 |
-| enforcement | `permissionMode` / `disallowedTools` / `maxTurns` | 0 / 49 | **0 / 34 (의도적)** | 🔴 스펙상 불가 판명 (F10) — Step 6 |
+| enforcement | `permissionMode` / `disallowedTools` / `maxTurns` | 0 / 49 | **0 / 34 (의도적)** | 🔴 스펙상 불가 판명 (F10) |
+| | **`.claude/settings.json` `permissions` 규칙** | 0 | **22 (deny 11 / ask 11)** | ❌ → ✅ Step 6. agent 수와 무관하게 전 agent 에 적용 |
 | memory | `memory:` | 0 / 49 | 0 / 34 | ❌ — Step 6 |
 | context 경제성 | `skills:` | 0 / 49 | 0 / 34 | ⚠️ 미착수 |
 | — | `effort` | 6 / 49 | **34 / 34** | ⚠️ → ✅ |
@@ -89,7 +90,9 @@ Anthropic 공식 2편에서 확인한 실행 원칙:
 | — | `LEGACY_AGENTS_NO_BODY_SPEC` 경고 | 144 (49 기준) → 99 (34 기준) | **0** | ✅ |
 | — | 미검증 버전 클레임 | K8s 1.30 등 다수 | **0** — Verified Baseline 표로 대체 | ✅ |
 
-**남은 ❌ 는 전부 Step 6(실행 강제 근본 설계) 묶음이다.** enforcement 0/34 는 방치가 아니라 "닿지 않는 필드를 붙여 강제되는 척하지 않는다" 는 판단의 결과다 (F10).
+frontmatter enforcement 0/34 는 방치가 아니라 "닿지 않는 필드를 붙여 강제되는 척하지 않는다" 는 판단의 결과다 (F10). **강제는 frontmatter 밖 — 세션 설정에서 일어난다** (Step 6 / [ADR 0009](../adr/0009-enforcement-layer-placement.md)).
+
+남은 ❌ 는 `memory` / 행동 eval / `skills` 세 축이다 — Step 7+ 로 이월.
 
 ### 2.1 frontmatter 채택률
 
@@ -502,15 +505,15 @@ F10 이 "명령 단위에 닿는 건 hook 뿐" 이라고 적은 것은 **agent f
       - M4 deny 위반 시 실제 거절 동작 · 메시지 (V5/V6)
       > M1~M4 전에 6-D 를 확정하지 않는다 — F10 이 정확히 "배치처 동작을 확인하지 않고 설계한" 실패였다
 - [x] **6-C. ADR 0009** ✅ 2026-08-25 — [`0009-enforcement-layer-placement.md`](../adr/0009-enforcement-layer-placement.md) — `docs/adr/0009-enforcement-layer-placement.md`. 대안 3안 비교: (A) `permissions.deny`+`ask` 우선 · hook 보조 / (B) hook 단독 / (C) agent 에서 `Bash` 제거 후 메인이 검증 명령 실행. (C) 의 비용 정량화(리뷰어 11개가 `terraform validate` / `helm template` / `trivy` / `git diff` 를 잃는다). Sources 표 + 분기 재검증 2026-11
-- [ ] **6-D. `.claude/settings.json` 신설** — `user-approval.md` 금지 표의 강제 승격
+- [x] **6-D. `.claude/settings.json` 신설** ✅ 2026-08-25 — deny 11 / ask 11 — `user-approval.md` 금지 표의 강제 승격
       - `deny` = 세션 내 실행 이유가 없는 것: 변경형 `kubectl`(`apply`/`delete`/`patch`/`edit`/`scale`/`rollout`/`set image`), `argocd app sync --force`, `git push --force`, `git commit --no-verify`
       - `ask` = 승인 프로세스가 존재하는 것: `git push`, `gh pr create/comment/merge/close`, `gh issue create/close`, `gh release create` — deny 로 막으면 **승인받은 push 조차 불가능**해진다
       - V11 을 존중해 명령 이름 수준에서 건다. `Bash(command:...)` 형태 금지 (V7)
       - ⚠️ 추가하는 순간 현재 세션에 즉시 적용된다 → 백로그 push **이후** 순서
-- [ ] **6-E. 조용한 실패 검출** (F11 교훈) — 정적/런타임 분리
+- [x] **6-E. 조용한 실패 검출** (F11 교훈) ✅ 2026-08-25 — 정적 게이트 음성 테스트 6/6, 런타임 25/25 (음성 대조군 3 포함). CI 에 control-plane vitest 도 추가 — 정적/런타임 분리
       - 정적(CI): `scripts/validate-enforcement.sh` + `drift` job 스텝 — `user-approval.md` 금지 표 ↔ `settings.json` 드리프트, JSON 유효성, 무효 패턴 검출
       - 런타임(로컬): `make verify-enforcement` — sentinel 위반 시도 후 거절 단언. **CI 에선 claude CLI 부재로 못 돈다 — 이 한계를 문서에 명시**
-- [ ] **6-F. 산문 정정** — `AGENT-SPEC.md` §1.2(`hooks` 를 "명령 단위에 닿는 유일한 필드" 라 한 오류), `user-approval.md`(금지 표에 강제 메커니즘 열 추가, 산문 잔존분 명시), `AGENTS.md`, 본 문서 §2.0
+- [x] **6-F. 산문 정정** ✅ 2026-08-25 — `AGENT-SPEC.md` §1.2(`hooks` 를 "명령 단위에 닿는 유일한 필드" 라 한 오류), `user-approval.md`(금지 표에 강제 메커니즘 열 추가, 산문 잔존분 명시), `AGENTS.md`, 본 문서 §2.0
 - [ ] **6-G. dev-log** — `docs/dev-logs/2026-08-25-step6-enforcement-layer.md`
 
 **완료 기준**: §7-6 검증 명령 전부 통과 + M1~M4 가 ADR 0009 에 검증일과 함께 기록 + `user-approval.md` 각 금지 항목의 강제 메커니즘 확정. 실행하지 못한 검증은 "실행 안 함" 으로 명시한다.
