@@ -3,7 +3,7 @@ date: 2026-08-25
 category: meta
 tier: 2
 importance: major
-status: open
+status: resolved
 tags: [harness, agents, frontmatter, effort, enforcement, validator, audit]
 related:
   - dev-logs/2026-08-24-step5-install-scope-and-ci-gates.md
@@ -113,10 +113,41 @@ Step 3 에서 삭제된 `python-expert` 의 잔존 엔트리도 정리했다.
 | `Verification Criteria` 삭제 | FAIL 검출 |
 | 3섹션 없는 신규 agent 추가 | 3건 모두 FAIL 검출 |
 
+### 5. 버전 클레임 전수 재검증
+
+audit §2.4 대상. 클레임이 3개 agent 에 집중돼 있었다.
+
+| 클레임 | 현행 (2026-08-25 검증) | 조치 |
+|---|---|---|
+| K8s 1.30 (6회) | 1.36 최신 / 지원 1.34~1.36 | **EOL** — 정정 |
+| Spring Boot 3.3 | 4.1 최신 | **2025-06-30 EOL** — 정정 |
+| Java 21 | LTS 25 (GA 2025-09-16) | 정정 |
+| PostgreSQL 16 / Kotlin 2.0 / Python 3.12+ | 18 / 2.4 / 3.14 | 정정 |
+| Next.js 15 | 16 LTS, 15 는 2026-10-21 종료 | 15·16 병기 |
+| React 19 | 19.2.8 | ✅ 유지 |
+
+값만 갱신하면 3개월 뒤 같은 drift 가 나므로 구조를 함께 바꿨다:
+- `migration-expert` / `frontend-expert` 에 **Verified Version Baseline** 표 (최신 / 지원 범위 / 출처 URL / 검증일 / 분기 재검증)
+- 예시 매트릭스에 "그대로 복사하지 말고 착수 시점에 재확인"
+- 호환성 표의 미확인 조합은 빈칸이 아니라 `⚠️ 미검증` — **빈칸은 "호환된다" 로 읽힌다**
+
+## 결과
+
+| 항목 | 시작 | 종료 |
+|---|---|---|
+| `effort` | 5 / 34 | **34 / 34** |
+| `Permission Boundary` / `Escalation` / `Verification Criteria` | 1 / 34 | **34 / 34** |
+| LEGACY 배열 경고 | 99 | **0** |
+| borderline (한쪽 축만) | 13 | **0** |
+| agent 스키마 검증 커버리지 | 1 / 34 (구 스펙) | **34 / 34 (16필드)** |
+| 미검증 버전 클레임 | 다수 | **0** |
+| `disallowedTools` / `permissionMode` | 0 / 34 | **0 / 34 (의도적)** |
+
+마지막 줄이 핵심이다. 0 을 유지한 건 방치가 아니라 **닿지 않는 필드를 붙여 강제되는 척하지 않겠다는 판단**이다.
+
 ## 남은 것
 
-- **Step 4 잔여 1건** — 버전 클레임 전수 재검증 + ✅/⚠️ 마킹 (출처 URL 0건 agent 대상)
-- **Step 6 미착수** — 실행 강제 근본 설계. 막다른 길 3건이 audit 에 기록됨. ADR 선행이 착수 조건
+- **Step 6 미착수** — 실행 강제 근본 설계. 막다른 길 3건과 후보 3안이 audit 에 기록됨. ADR 선행이 착수 조건
 
 ## 학습
 

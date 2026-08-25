@@ -71,6 +71,26 @@ Anthropic 공식 2편에서 확인한 실행 원칙:
 | **memory** | `memory:` (세션 간 학습) | **0 / 49** | ❌ |
 | **context 경제성** | `skills:` (progressive disclosure) | **0 / 49** | ⚠️ 역행 |
 
+### 2.0 Step 4 이후 재측정 (2026-08-25)
+
+§2 이하의 표는 **audit 시점(2026-08-24, agent 49개)** 의 측정이다 — 기록으로 보존한다. Step 3·4 를 거친 현재 값은 아래.
+
+| 축 | 지표 | audit 시점 | Step 4 이후 | 판정 변화 |
+|---|---|---|---|---|
+| guides | agent 개수 / 줄수 | 49 / 19,819 | **34 / 14,182** | Step 3 에서 레퍼런스 5,395줄 이관(19,819→12,736), Step 4 에서 프로토콜·계약 1,446줄 추가 |
+| sensors | `## Verification Criteria` | 1 / 49 | **34 / 34** | ❌ → ✅ |
+| | agent frontmatter 스키마 검증 | 1건 샘플 (구 스펙) | **34건 전수 (16필드)** | ❌ → ✅ (F8) |
+| | agent 행동 eval | 0건 | 0건 | ❌ — Step 6 |
+| enforcement | `permissionMode` / `disallowedTools` / `maxTurns` | 0 / 49 | **0 / 34 (의도적)** | 🔴 스펙상 불가 판명 (F10) — Step 6 |
+| memory | `memory:` | 0 / 49 | 0 / 34 | ❌ — Step 6 |
+| context 경제성 | `skills:` | 0 / 49 | 0 / 34 | ⚠️ 미착수 |
+| — | `effort` | 6 / 49 | **34 / 34** | ⚠️ → ✅ |
+| — | 티어 borderline (한쪽 축만) | 16 | **0** | ✅ |
+| — | `LEGACY_AGENTS_NO_BODY_SPEC` 경고 | 144 (49 기준) → 99 (34 기준) | **0** | ✅ |
+| — | 미검증 버전 클레임 | K8s 1.30 등 다수 | **0** — Verified Baseline 표로 대체 | ✅ |
+
+**남은 ❌ 는 전부 Step 6(실행 강제 근본 설계) 묶음이다.** enforcement 0/34 는 방치가 아니라 "닿지 않는 필드를 붙여 강제되는 척하지 않는다" 는 판단의 결과다 (F10).
+
 ### 2.1 frontmatter 채택률
 
 공식 16개 필드 대비:
@@ -377,14 +397,14 @@ harness 축에서 **이미 앞서 있는** 부분이다. 정리 작업 중 훼�
 > 신규 skill 12개. §3.4 과잉 분할 2건도 해소.
 > 부수 발견: workflow `skills:` 목록의 dangling 참조 — 일부 수정, 나머지는 **검증 CI job 부재**로 Step 5 에 편입.
 
-### Step 4 — harness 리트로핏 (진행 중 2026-08-25)
+### Step 4 — harness 리트로핏 ✅ 완료 2026-08-25
 
 - [x] **`effort` 전 agent 반영** (F3 후속) — 5/34 → **34/34**. 선행으로 `effort-guide.md` 의 model×effort 매트릭스를 정정했다 (아래 F9)
 - [x] **`## Verification Criteria` + `Permission Boundary` + `Escalation`** — 각 1/34 → **34/34**. `LEGACY_AGENTS_NO_BODY_SPEC` **완전 소진**, 신규 agent 는 hard fail (F5)
 - [x] **borderline 13 결손 축 보강** (§3.6) — 조사 프로토콜 10 신설 + 출력 계약 3 신설. borderline **13 → 0**
 - [x] **agent 스키마 / 검증 확대** (F8 신규) — `agent-manifest.v1` 을 공식 16필드로 갱신, `validate-schemas.sh` 를 1건 샘플 → agent 전수로 확대
 - [x] **AGENT-SPEC §1.2 사실 정정** — `disallowedTools` 를 "gh / git push 금지의 승격 자리" 라고 적은 것이 스펙상 성립하지 않음 (아래 F10)
-- [ ] 버전 클레임 전수 재검증 + ✅/⚠️ 마킹, 분기 재검증 일정 명시
+- [x] **버전 클레임 전수 재검증 + ✅/⚠️ 마킹** — K8s 1.30(EOL) / Spring Boot 3.3(EOL) / Java 21 등 정정, `migration-expert`·`frontend-expert` 에 Verified Version Baseline 표(출처 URL + 검증일 + 분기 재검증) 신설
 - [x] dev-log — [`2026-08-25-step4-harness-retrofit.md`](../dev-logs/2026-08-25-step4-harness-retrofit.md)
 
 **Step 4 에서 분리한 것** → 아래 **Step 6**:
@@ -433,9 +453,9 @@ Step 4 착수 시 F4 를 `disallowedTools` / `permissionMode` 로 닫으려다 *
 
 ## 7. 세션 재개 절차
 
-**현재 상태 (2026-08-25 기준)**: Step 1 ✅ / Step 2 ✅ / Step 3 ✅ / Step 5 ✅ / **Step 4 진행 중** / **Step 6 미착수**.
+**현재 상태 (2026-08-25 기준)**: Step 1 ✅ / Step 2 ✅ / Step 3 ✅ / Step 4 ✅ / Step 5 ✅ / **Step 6 만 대기**.
 
-Step 4 잔여는 "버전 클레임 재검증 + ✅/⚠️ 마킹" 1건이다. Step 6(실행 강제 근본 설계)은 Step 4 에서 분리됐고 ADR 선행이 착수 조건이다.
+Step 6(실행 강제 근본 설계)은 Step 4 에서 분리됐다 — F10 으로 기존 해법이 스펙상 불가임이 확인됐기 때문이다. **ADR 선행이 착수 조건**이고, 막다른 길 3건이 Step 6 에 기록돼 있으니 그것부터 읽는다.
 
 작업 브랜치 `docs/harness-readiness-audit` — `origin` 동기 상태는 `git status -sb` 로 확인.
 
@@ -445,8 +465,8 @@ Step 4 잔여는 "버전 클레임 재검증 + ✅/⚠️ 마킹" 1건이다. St
 3. [부록 A](#부록-a-재측정-명령) 로 현재 수치 재측정 — 본 문서 수치와 다르면 **본 문서를 먼저 갱신**
 4. Step 순서:
    - **Step 3** 은 Step 2 를 전제로 한다 (옮겨갈 곳이 실제로 동작해야 강등 가능) → 완료
-   - **Step 4** 잔여 1건 — 버전 클레임 재검증. 대상은 §2.4 의 "출처 URL 0건" agent 와 본문 버전 클레임
-   - **Step 6** 은 ADR 선행. 막다른 길 3건이 이미 확인됐으니 그것부터 읽을 것
+   - **Step 6** 만 남았다. ADR 선행이 착수 조건이고, 막다른 길 3건이 이미 확인됐으니 그것부터 읽을 것
+   - 현재 수치는 §2.0 참조 (§2 이하는 audit 시점 기록)
 5. **자산을 옮기거나 형식을 바꾸는 작업은 "1건 먼저 검증" 게이트를 반드시 거친다.** Step 2 에서 이 게이트가 실제로 작동했다 — 1건 이관 후 로드 확인이 되고 나서야 260개를 진행했다. 건너뛰면 전량 롤백 위험
 6. 검증 명령 (커밋 전 전부 통과해야 함):
    ```bash
