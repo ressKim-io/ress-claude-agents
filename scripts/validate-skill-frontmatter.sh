@@ -42,8 +42,9 @@ SOFT_WARNINGS=()
 # 미등재(= 신규) agent 는 hard fail. 마이그레이션 완료 시 해당 줄을 제거하면
 # 자동으로 hard 검증으로 전환된다. git-workflow 는 본문 3섹션을 갖추므로 의도적으로 제외.
 LEGACY_AGENTS_NO_BODY_SPEC=(
-    dev-logger frontend-expert load-tester
-    mlops-expert platform-engineer service-mesh-expert
+    # 비었다 — 2026-08-25 Step 4 에서 전 agent 가 본문 3섹션을 갖췄다.
+    # 신규 agent 를 여기 추가해 게이트를 우회하지 말 것. AGENT-SPEC §5/§6 대로 작성한다.
+    # 경위: docs/audit/2026-08-24-agent-harness-readiness.md §6 Step 4
 )
 
 log_pass() { printf '  PASS  %s\n' "$1"; }
@@ -92,6 +93,8 @@ has_body_section() {
 # agent 이름이 LEGACY 화이트리스트에 있는지 — 0 = 레거시(soft 대상)
 agent_in_legacy_list() {
     local needle="$1" a
+    # 배열이 비면 set -u 에서 unbound — 소진 완료 상태를 정상 경로로 처리한다
+    (( ${#LEGACY_AGENTS_NO_BODY_SPEC[@]} == 0 )) && return 1
     for a in "${LEGACY_AGENTS_NO_BODY_SPEC[@]}"; do
         [[ "$a" == "$needle" ]] && return 0
     done
