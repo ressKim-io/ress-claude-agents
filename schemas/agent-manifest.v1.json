@@ -2,9 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/ressKim/ress-claude-agents/schemas/agent-manifest.v1.json",
   "title": "Agent Manifest v1",
-  "description": "SSOT for agent (.claude/agents/<name>.md, AGENT.md) frontmatter. Mirrors Anthropic agent spec + portability + handoff. Agents have no applies_when (LLM-routed) — they activate via directive description and tool matchers. Refs: docs/migration/0002.",
+  "description": "SSOT for agent (.claude/agents/<name>.md) frontmatter. Mirrors the official Claude Code subagent frontmatter spec (16 fields, verified 2026-08-25 against https://code.claude.com/docs/en/sub-agents) plus repo-local portability/handoff fields. Agents have no applies_when (LLM-routed) — they activate via directive description. Refs: docs/audit/2026-08-24-agent-harness-readiness.md",
   "type": "object",
-  "required": ["name", "description"],
+  "required": [
+    "name",
+    "description"
+  ],
   "additionalProperties": false,
   "properties": {
     "name": {
@@ -22,11 +25,14 @@
     },
     "model": {
       "type": "string",
-      "$comment": "Anthropic model id (e.g. opus-4-7, sonnet-4-6, haiku-4-5) or alias (opus, sonnet, haiku, inherit). Optional; harness default applies when absent."
+      "$comment": "Model alias (opus, sonnet, haiku, fable, inherit) or full model id (e.g. claude-opus-5). Optional; defaults to inherit."
     },
     "tools": {
       "type": "array",
-      "items": { "type": "string", "minLength": 1 },
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
       "uniqueItems": true,
       "description": "Allowed tool names. Empty array = no tools (analysis-only). Absent = inherit harness default."
     },
@@ -46,34 +52,165 @@
       "properties": {
         "level": {
           "type": "string",
-          "enum": ["universal", "claude-only", "codex-incompat"]
+          "enum": [
+            "universal",
+            "claude-only",
+            "codex-incompat"
+          ]
         },
         "tested_on": {
           "type": "array",
-          "items": { "type": "string", "minLength": 1 },
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
           "uniqueItems": true
         },
         "model_dependency": {
           "type": "string",
-          "enum": ["none", "claude-features", "tool-use"]
+          "enum": [
+            "none",
+            "claude-features",
+            "tool-use"
+          ]
         },
         "domain_specificity": {
           "type": "string",
-          "enum": ["focused", "general"]
+          "enum": [
+            "focused",
+            "general"
+          ]
         }
       }
     },
     "produces": {
       "type": "array",
-      "items": { "type": "string", "minLength": 1 },
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
       "uniqueItems": true,
       "description": "Artifact types this agent outputs. Vocabulary defined in .claude/agents/_handoff.yml; enforced by scripts/validate-agent-handoff.sh."
     },
     "consumes": {
       "type": "array",
-      "items": { "type": "string", "minLength": 1 },
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
       "uniqueItems": true,
       "description": "Artifact types this agent expects. Vocabulary defined in .claude/agents/_handoff.yml."
+    },
+    "effort": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "xhigh",
+        "max"
+      ],
+      "description": "Effort level while this agent is active; overrides session effort. Model support varies — see .claude/rules/effort-guide.md."
+    },
+    "permissionMode": {
+      "type": "string",
+      "enum": [
+        "default",
+        "manual",
+        "acceptEdits",
+        "auto",
+        "dontAsk",
+        "bypassPermissions",
+        "plan"
+      ],
+      "description": "Permission mode for this agent. NOTE: ignored when the parent session runs in auto mode, and cannot override a parent using bypassPermissions/acceptEdits."
+    },
+    "disallowedTools": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "description": "Denylist applied before `tools`. Tool names or MCP patterns only — command-level specifiers such as Bash(gh:*) are NOT supported."
+    },
+    "maxTurns": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Upper bound on agentic turns. Absent = unlimited."
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "description": "Skills preloaded in full at agent startup (progressive disclosure instead of inlining reference material)."
+    },
+    "memory": {
+      "type": "string",
+      "enum": [
+        "user",
+        "project",
+        "local"
+      ],
+      "description": "Persistent cross-session memory scope."
+    },
+    "mcpServers": {
+      "description": "MCP servers available to this agent — list of names or inline definitions.",
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "object"
+              }
+            ]
+          }
+        },
+        {
+          "type": "object"
+        }
+      ]
+    },
+    "hooks": {
+      "type": "object",
+      "description": "Lifecycle hooks scoped to this agent; removed when it finishes."
+    },
+    "background": {
+      "type": "boolean",
+      "description": "Always run in background."
+    },
+    "isolation": {
+      "type": "string",
+      "enum": [
+        "worktree"
+      ],
+      "description": "Run in a temporary git worktree."
+    },
+    "color": {
+      "type": "string",
+      "enum": [
+        "red",
+        "blue",
+        "green",
+        "yellow",
+        "purple",
+        "orange",
+        "pink",
+        "cyan"
+      ],
+      "description": "Display color in task list and transcript."
+    },
+    "initialPrompt": {
+      "type": "string",
+      "description": "Auto-submitted first turn when run as a main-session agent via --agent."
     }
   }
 }
