@@ -44,12 +44,10 @@ SOFT_WARNINGS=()
 LEGACY_AGENTS_NO_BODY_SPEC=(
     architect-agent business-decision-agent ci-optimizer
     compliance-auditor compliance-strategy-agent cost-analyzer
-    debugging-expert dev-logger finops-advisor
-    frontend-expert incident-responder infra-roadmap-planner
-    k8s-troubleshooter load-tester migration-expert
-    mlops-expert platform-engineer platform-strategy-agent
-    product-engineer security-scanner service-mesh-expert
-    tech-lead
+    dev-logger finops-advisor frontend-expert
+    infra-roadmap-planner load-tester mlops-expert
+    platform-engineer platform-strategy-agent product-engineer
+    service-mesh-expert tech-lead
 )
 
 log_pass() { printf '  PASS  %s\n' "$1"; }
