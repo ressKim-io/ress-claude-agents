@@ -209,6 +209,12 @@ jobs:
       - name: Validate manifest schemas
         run: ./scripts/validate-schemas.sh
 
+      # 2026-08-25 Step 6: 강제 규칙(.claude/settings.json)과 user-approval.md 의
+      # 드리프트 게이트. 런타임 발동 여부는 claude CLI 가 필요해 여기서 못 본다 —
+      # `make verify-enforcement` 로 로컬에서 확인한다 (ADR 0009 §Consequences).
+      - name: Validate enforcement rules
+        run: ./scripts/validate-enforcement.sh
+
       - name: Setup Node (for control-plane adapter)
         uses: actions/setup-node@v4
         with:
@@ -223,6 +229,13 @@ jobs:
       - name: Build control-plane
         working-directory: control-plane
         run: npm run build
+
+      # 2026-08-25 Step 6: control-plane vitest 가 CI 에서 돈 적이 없다.
+      # F11(죽은 hook 이 3.5개월간 방치)의 2차 원인 — 로컬에서만 도는 테스트는
+      # 회귀를 막지 못한다.
+      - name: Test control-plane
+        working-directory: control-plane
+        run: npm test
 
       - name: Adapter parity drift (P4 — codex + cursor only; .claude/skills SKILL.md is gitignored until P7)
         run: |

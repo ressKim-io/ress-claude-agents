@@ -1,7 +1,7 @@
 # Makefile for ress-claude-agents
 # Claude Code Custom Commands & Skills Management
 
-.PHONY: help test validate generate inventory lint install-global install-local setup-hooks clean all
+.PHONY: help test validate validate-enforcement verify-enforcement generate inventory lint install-global install-local setup-hooks clean all
 
 # Default target
 help:
@@ -11,6 +11,8 @@ help:
 	@echo "  help           Show this help message (default)"
 	@echo "  test           Run BATS tests"
 	@echo "  validate       Validate documentation consistency"
+	@echo "  validate-enforcement  Check settings.json <-> user-approval.md rule drift (static, CI)"
+	@echo "  verify-enforcement    Check permission rules actually fire (runtime, needs claude CLI)"
 	@echo "  generate       Generate documentation (help/index.md)"
 	@echo "  inventory      Generate .claude/inventory.yml"
 	@echo "  lint           Run shellcheck on shell scripts"
@@ -34,6 +36,15 @@ test:
 validate:
 	@echo "Validating documentation..."
 	@./scripts/generate-docs.sh validate
+
+# 강제 규칙 정적 검증 (CI 에서도 돈다)
+validate-enforcement:
+	@./scripts/validate-enforcement.sh
+
+# 강제 규칙 런타임 검증 — claude CLI 와 계정 인증이 필요해 CI 에서 돌지 않는다.
+# 규칙을 추가·변경한 커밋에서 1회 실행한다 (ADR 0009 §Consequences).
+verify-enforcement:
+	@./scripts/verify-enforcement-runtime.sh
 
 # Generate documentation
 generate:
