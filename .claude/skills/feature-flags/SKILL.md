@@ -176,7 +176,7 @@ Phase 5: 100%                                     — flag 제거 PR
 
 **자동화**: CI/CD에서 메트릭 정상 시 자동 ramp up (Argo Rollouts, Flagger 통합).
 
-→ 배포 전략: [.claude/skills/cicd/deployment-canary.md](.claude/skills/cicd/deployment-canary.md)
+→ 배포 전략: [.claude/skills/cicd/deployment-canary.md](../deployment-canary/SKILL.md)
 
 ---
 
@@ -207,7 +207,7 @@ if (!ff.eval("external-payment-provider.enabled")) {
 - 변경 권한: 온콜만 + audit 필수
 - 정기 훈련 (kill-switch 작동 테스트)
 
-→ incident: [.claude/skills/observability/observability-incident-playbook.md](.claude/skills/observability/observability-incident-playbook.md)
+→ incident: [.claude/skills/observability/observability-incident-playbook.md](../observability-incident-playbook/SKILL.md)
 
 ---
 
@@ -280,7 +280,7 @@ KPI: 활성 flag 수 < 50개 / 서비스
 
 - 모든 flag 변경 audit log
 - 변경자, 시점, before/after, 변경 사유 필수
-- → audit-log: [.claude/skills/business/audit-log.md](.claude/skills/business/audit-log.md)
+- → audit-log: [.claude/skills/business/audit-log.md](../audit-log/SKILL.md)
 
 ---
 

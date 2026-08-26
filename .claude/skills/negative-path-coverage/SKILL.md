@@ -176,6 +176,6 @@ PR template 예시:
 
 ## 연계 skill
 
-- [`spring/bean-postprocessor-ordering.md`](../spring/bean-postprocessor-ordering.md) — M1 순서 race
-- [`msa/consumer-driven-contracts.md`](../msa/consumer-driven-contracts.md) — M10 contract drift
-- [`platform/resource-budget-calculator.md`](../platform/resource-budget-calculator.md) — M9 리소스 budget
+- [`spring/bean-postprocessor-ordering.md`](../bean-postprocessor-ordering/SKILL.md) — M1 순서 race
+- [`msa/consumer-driven-contracts.md`](../consumer-driven-contracts/SKILL.md) — M10 contract drift
+- [`platform/resource-budget-calculator.md`](../resource-budget-calculator/SKILL.md) — M9 리소스 budget

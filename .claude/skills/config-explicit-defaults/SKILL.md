@@ -186,6 +186,6 @@ kubectl get deployment X -o jsonpath='{.spec.template.spec.containers[0].env}'
 
 ## 연계 skill
 
-- [`platform/dev-prod-parity-checklist.md`](../platform/dev-prod-parity-checklist.md) — M3 가 환경별로 drift 하면 M7 (snowflake) 으로 진화
-- [`architecture/service-ownership-matrix.md`](./service-ownership-matrix.md) — 각 config 의 owner 가 없으면 drift 감지 불가
-- [`go/viper-config-binding.md`](../go/viper-config-binding.md) — Go 특화 binding 함정
+- [`platform/dev-prod-parity-checklist.md`](../dev-prod-parity-checklist/SKILL.md) — M3 가 환경별로 drift 하면 M7 (snowflake) 으로 진화
+- [`architecture/service-ownership-matrix.md`](../service-ownership-matrix/SKILL.md) — 각 config 의 owner 가 없으면 drift 감지 불가
+- [`go/viper-config-binding.md`](../viper-config-binding/SKILL.md) — Go 특화 binding 함정

@@ -240,7 +240,7 @@ Subscription은 Tenant 단위
 - Stripe Customer Portal 활용 (셀프 서비스)
 - Plan downgrade 시 limit check (over-limit 사용자 처리)
 
-→ 결제 통합: [.claude/skills/business/payment-integration.md](.claude/skills/business/payment-integration.md)
+→ 결제 통합: [.claude/skills/business/payment-integration.md](../payment-integration/SKILL.md)
 
 ---
 

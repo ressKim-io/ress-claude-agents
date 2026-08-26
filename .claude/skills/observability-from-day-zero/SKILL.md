@@ -163,9 +163,9 @@ http_requests_total{user_id="u_12345", endpoint="/api/x"}
 
 ## 연계 skill
 
-- [`observability/observability-otel.md`](./observability-otel.md) — OTel SDK 상세
-- [`observability/monitoring-prometheus-operator.md`](./monitoring-prometheus-operator.md) — Prometheus operator
-- [`architecture/config-explicit-defaults.md`](../architecture/config-explicit-defaults.md) — OTel exporter default 변경 추적
+- [`observability/observability-otel.md`](../observability-otel/SKILL.md) — OTel SDK 상세
+- [`observability/monitoring-prometheus-operator.md`](../monitoring-prometheus-operator/SKILL.md) — Prometheus operator
+- [`architecture/config-explicit-defaults.md`](../config-explicit-defaults/SKILL.md) — OTel exporter default 변경 추적
 
 ---
 

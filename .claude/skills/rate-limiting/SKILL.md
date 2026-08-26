@@ -115,7 +115,7 @@ if weighted > limit → 거부
 4) Endpoint  — 민감 액션 (login 5/15min)
 ```
 
-→ multi-tenancy: [.claude/skills/business/multi-tenancy.md](.claude/skills/business/multi-tenancy.md)
+→ multi-tenancy: [.claude/skills/business/multi-tenancy.md](../multi-tenancy/SKILL.md)
 
 ---
 
@@ -287,7 +287,7 @@ Pro:     1000 req/min, 100k req/day
 Enterprise: custom (계약)
 ```
 
-→ 인증 brute-force: [.claude/skills/business/auth-oauth-social.md](.claude/skills/business/auth-oauth-social.md)
+→ 인증 brute-force: [.claude/skills/business/auth-oauth-social.md](../auth-oauth-social/SKILL.md)
 
 ---
 
@@ -353,7 +353,7 @@ Burst: 일시 110% 허용 (10초 grace)
   - 한 tenant가 quota 80% 초과 (사전 안내)
 ```
 
-→ alerting: [.claude/skills/observability/alerting-discord.md](.claude/skills/observability/alerting-discord.md)
+→ alerting: [.claude/skills/observability/alerting-discord.md](../alerting-discord/SKILL.md)
 
 ---
 

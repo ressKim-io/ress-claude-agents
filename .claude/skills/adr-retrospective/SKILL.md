@@ -274,7 +274,7 @@ Superseded 처리도 status 필드만 변경, 본문은 유지 (역사적 기록
 
 > 한국 결정은 **frontmatter `review_due`를 글로벌 결정의 절반(3개월)으로** 설정 권장.
 
-자세한 법령 추적은 [`legal/kr-location-info-act.md`](../legal/kr-location-info-act.md), [`legal/data-subject-rights.md`](../legal/data-subject-rights.md) 참조.
+자세한 법령 추적은 [`legal/kr-location-info-act.md`](../kr-location-info-act/SKILL.md), [`legal/data-subject-rights.md`](../data-subject-rights/SKILL.md) 참조.
 
 ---
 

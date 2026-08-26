@@ -195,7 +195,7 @@ ORDER BY count DESC;
 | MTTR 분기 대비 50% 증가 | 운영 역량 저하 | runbook + on-call 훈련 강화 |
 | Action item completion < 70% | postmortem 흐지부지 | tech-lead 에스컬레이션 |
 
-자세한 회고 절차는 [`operations/incident-postmortem.md`](../operations/incident-postmortem.md) §Action Item 추적 참조.
+자세한 회고 절차는 [`operations/incident-postmortem.md`](../incident-postmortem/SKILL.md) §Action Item 추적 참조.
 
 ---
 
@@ -217,7 +217,7 @@ DB 비용 비중       38%          41%          +3pp
 - **관측 비용 / 매출 ratio > 5%** → cardinality 관리 필요 (`observability/observability-cost.md`)
 - **컴포넌트별 비용 비중 5pp 이상 변화** → 원인 추적 (예: DB scale up, egress spike)
 
-자세한 비용 분석은 [`sre/finops-ai.md`](../sre/finops-ai.md), 관측 비용은 [`observability/observability-cost.md`](../observability/observability-cost.md) 참조.
+자세한 비용 분석은 [`sre/finops-ai.md`](../finops-ai/SKILL.md), 관측 비용은 [`observability/observability-cost.md`](../observability-cost/SKILL.md) 참조.
 
 ---
 
@@ -379,7 +379,7 @@ Now / Next / Later 재배치 (engineering-strategy.md)
 Q2 W1 OKR commit
 ```
 
-전환 가이드는 [`dx/engineering-strategy.md`](engineering-strategy.md) §Engineering OKR 참조.
+전환 가이드는 [`dx/engineering-strategy.md`](../engineering-strategy/SKILL.md) §Engineering OKR 참조.
 
 ---
 

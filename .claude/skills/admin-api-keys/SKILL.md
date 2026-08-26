@@ -180,7 +180,7 @@ Server: payload + secret → HMAC-SHA256 → "X-Signature"
 Client: 수신 후 동일하게 계산, timing-safe compare
 ```
 
-→ 결제 webhook 검증: [.claude/skills/business/payment-integration.md](.claude/skills/business/payment-integration.md)
+→ 결제 webhook 검증: [.claude/skills/business/payment-integration.md](../payment-integration/SKILL.md)
 
 ---
 
@@ -255,7 +255,7 @@ Service Token: 항상 tenant 단위 발급
 **권장**: PAT도 tenant 명시 — token 자체에 tenant_id 바인딩.
 이유: 사용자가 N개 tenant 멤버일 때, 한 토큰으로 다른 tenant 데이터 접근 위험.
 
-→ multi-tenancy: [.claude/skills/business/multi-tenancy.md](.claude/skills/business/multi-tenancy.md)
+→ multi-tenancy: [.claude/skills/business/multi-tenancy.md](../multi-tenancy/SKILL.md)
 
 ---
 
@@ -272,7 +272,7 @@ Limit 키 우선순위:
 - Pro 플랜 키 > Free 플랜 키
 - Endpoint별 차등 (login은 별도 key 단위 limit X — 봇 탐지 우회 위험)
 
-→ rate limiting: [.claude/skills/business/rate-limiting.md](.claude/skills/business/rate-limiting.md)
+→ rate limiting: [.claude/skills/business/rate-limiting.md](../rate-limiting/SKILL.md)
 
 ---
 
@@ -299,7 +299,7 @@ Limit 키 우선순위:
 - 영향 범위 산정 (어떤 데이터 조회/변경됐는지)
 - GDPR 대상이면 사용자 통지 필요
 
-→ incident: [.claude/skills/observability/observability-incident-playbook.md](.claude/skills/observability/observability-incident-playbook.md)
+→ incident: [.claude/skills/observability/observability-incident-playbook.md](../observability-incident-playbook/SKILL.md)
 
 ---
 

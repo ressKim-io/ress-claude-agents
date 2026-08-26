@@ -7,7 +7,7 @@ license: MIT
 
 # Media Streaming — 라이브 + DRM
 
-라이브 방송 + 보호 콘텐츠 스트리밍 패턴. VOD/이미지/EXIF/SSRF는 [`business/media-handling.md`](media-handling.md) cover. 이 skill은 **실시간 라이브 + DRM**에 집중.
+라이브 방송 + 보호 콘텐츠 스트리밍 패턴. VOD/이미지/EXIF/SSRF는 [`business/media-handling.md`](../media-handling/SKILL.md) cover. 이 skill은 **실시간 라이브 + DRM**에 집중.
 
 > 핵심 결정: (1) 프로토콜 (LL-HLS vs WebRTC), (2) Ingest (RTMP vs SRT vs WebRTC), (3) DRM 적용 여부, (4) Self-host (origin server) vs SaaS (Mux/Livepeer/AWS IVS).
 
@@ -230,7 +230,7 @@ Origin (transcoded segments)
 
 - 한국: 네이버/KT + 글로벌 CloudFront/Fastly
 - 망내 latency 최적화 + 글로벌 fallback
-- 자세한 CDN 비교: [`business/media-handling.md`](media-handling.md) §Provider 매트릭스
+- 자세한 CDN 비교: [`business/media-handling.md`](../media-handling/SKILL.md) §Provider 매트릭스
 
 ### P2P Streaming (대규모 라이브)
 
@@ -258,7 +258,7 @@ Origin (transcoded segments)
 
 - 라이브 직후: 7일 무료 보관 (replay 핫)
 - 7일 후: cold storage (Glacier / 네이버 Archive)
-- 청소년 콘텐츠: PIPA 14세 미만 보관 제한 ([`legal/child-data-protection.md`](../legal/child-data-protection.md))
+- 청소년 콘텐츠: PIPA 14세 미만 보관 제한 ([`legal/child-data-protection.md`](../child-data-protection/SKILL.md))
 
 ---
 
@@ -291,7 +291,7 @@ Origin (transcoded segments)
 
 - 시청 로그 (IP/디바이스) PII 가능 → 마스킹 + 30일 retention
 - 위치 기반 라이브 (예: GPS-trigger broadcast) → 위치 정보 처리 동의 의무
-- 자세한 법령: [`legal/kr-location-info-act.md`](../legal/kr-location-info-act.md), [`legal/data-subject-rights.md`](../legal/data-subject-rights.md)
+- 자세한 법령: [`legal/kr-location-info-act.md`](../kr-location-info-act/SKILL.md), [`legal/data-subject-rights.md`](../data-subject-rights/SKILL.md)
 
 ### 청소년 보호
 
@@ -321,7 +321,7 @@ Cloudflare:  포함 (구독 모델)
 5. **Replay 캐싱** — Live → VOD CDN cache 90%+ hit
 6. **시청자 cap** — 무료 ≤ N명, premium 이상 추가
 
-분기 비용 추적: [`observability/observability-cost.md`](../observability/observability-cost.md), [`dx/quarterly-review.md`](../dx/quarterly-review.md).
+분기 비용 추적: [`observability/observability-cost.md`](../observability-cost/SKILL.md), [`dx/quarterly-review.md`](../quarterly-review/SKILL.md).
 
 ---
 
@@ -382,7 +382,7 @@ D. Cloudflare Stream (단순, $1/1K min)
 - Tier 1, 6개월 (트래픽 5x 시 즉시)
 ```
 
-[`dx/adr-retrospective.md`](../dx/adr-retrospective.md) 참조.
+[`dx/adr-retrospective.md`](../adr-retrospective/SKILL.md) 참조.
 
 ---
 

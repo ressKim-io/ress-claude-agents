@@ -254,7 +254,7 @@ spec:
 
 ## 연계 skill
 
-- [`migration/expand-contract-pattern.md`](../migration/expand-contract-pattern.md) — API breaking change 의 무중단 변경
-- [`testing/negative-path-coverage.md`](../testing/negative-path-coverage.md) — 외부 의존 실패 시나리오
-- [`msa/api-design.md`](./api-design.md) — REST/gRPC API design
-- [`msa/contract-first.md`](./contract-first.md) — Contract-first 개발
+- [`migration/expand-contract-pattern.md`](../expand-contract-pattern/SKILL.md) — API breaking change 의 무중단 변경
+- [`testing/negative-path-coverage.md`](../negative-path-coverage/SKILL.md) — 외부 의존 실패 시나리오
+- [`msa/api-design.md`](../api-design/SKILL.md) — REST/gRPC API design
+- [`msa/contract-first.md`](../contract-first/SKILL.md) — Contract-first 개발

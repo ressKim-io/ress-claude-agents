@@ -211,6 +211,6 @@ DB schema migration PR 작성 시:
 
 ## 연계 skill
 
-- [`migration/db-managed-service-checklist.md`](./db-managed-service-checklist.md) — 매니지드 DB 권한 차이
-- [`testing/negative-path-coverage.md`](../testing/negative-path-coverage.md) — backfill 중 timeout / replica lag
-- [`architecture/config-explicit-defaults.md`](../architecture/config-explicit-defaults.md) — schema migration 도 config 의 일부
+- [`migration/db-managed-service-checklist.md`](../db-managed-service-checklist/SKILL.md) — 매니지드 DB 권한 차이
+- [`testing/negative-path-coverage.md`](../negative-path-coverage/SKILL.md) — backfill 중 timeout / replica lag
+- [`architecture/config-explicit-defaults.md`](../config-explicit-defaults/SKILL.md) — schema migration 도 config 의 일부

@@ -7,7 +7,7 @@ license: MIT
 
 # Webhook Delivery — 발신자 관점
 
-우리 서비스가 **외부에 webhook을 발신할 때** 표준화된 안정성·보안·운영 패턴. 외부에서 받는 webhook(Stripe/Toss 등)은 [`business/payment-integration.md`](payment-integration.md), [`business/subscription-billing.md`](subscription-billing.md)이 cover.
+우리 서비스가 **외부에 webhook을 발신할 때** 표준화된 안정성·보안·운영 패턴. 외부에서 받는 webhook(Stripe/Toss 등)은 [`business/payment-integration.md`](../payment-integration/SKILL.md), [`business/subscription-billing.md`](../subscription-billing/SKILL.md)이 cover.
 
 > 핵심 결정: (1) 순서 보장(per-subscriber queue) vs 처리량(병렬), (2) 동기 vs 비동기 발신, (3) 서명 표준 (HMAC vs JWS), (4) DLQ + replay 정책.
 
@@ -154,7 +154,7 @@ header = "sha256=" + hex(signature)
 
 ### Secret 회전 (zero-downtime)
 
-[`business/admin-api-keys.md`](admin-api-keys.md) §회전 패턴 재사용:
+[`business/admin-api-keys.md`](../admin-api-keys/SKILL.md) §회전 패턴 재사용:
 ```
 1. 새 secret 생성 → DB에 active=false로 저장
 2. 다음 발신부터 두 secret으로 서명 (X-Webhook-Signature, X-Webhook-Signature-Next)
@@ -321,7 +321,7 @@ GET    /api/webhooks/deliveries?subscriber_id=...&status=failed
 POST   /api/webhooks/deliveries/:id/replay
 ```
 
-API 인증은 [`business/admin-api-keys.md`](admin-api-keys.md) 패턴 적용.
+API 인증은 [`business/admin-api-keys.md`](../admin-api-keys/SKILL.md) 패턴 적용.
 
 ---
 
@@ -342,7 +342,7 @@ API 인증은 [`business/admin-api-keys.md`](admin-api-keys.md) 패턴 적용.
 - `circuit_open count > N` → endpoint 품질 저하 (대규모 사고 가능)
 - `p95 duration > 10s` → 수신자 felomada 또는 우리 worker 부하
 
-분기 회고에서 delivery 성공률, MTTR을 [`dx/quarterly-review.md`](../dx/quarterly-review.md)에 통합.
+분기 회고에서 delivery 성공률, MTTR을 [`dx/quarterly-review.md`](../quarterly-review/SKILL.md)에 통합.
 
 ---
 
@@ -379,7 +379,7 @@ API 인증은 [`business/admin-api-keys.md`](admin-api-keys.md) 패턴 적용.
 - **금융권 webhook** — 금감원 가이드 (금융 데이터는 TLS 1.3 + 국가표준 암호화 추가 검토)
 - **카카오/네이버 talk biz** — 알림톡/채널 메시지 발송 webhook은 별도 표준 (자체 SDK)
 
-법령 추적: [`legal/data-subject-rights.md`](../legal/data-subject-rights.md)
+법령 추적: [`legal/data-subject-rights.md`](../data-subject-rights/SKILL.md)
 
 ---
 
@@ -415,7 +415,7 @@ C. Hookdeck — destination-side queue
 - Auto-trigger: 실패율 5%+, 비용 2x, scale 10x
 ```
 
-[`dx/adr-retrospective.md`](../dx/adr-retrospective.md) 참조.
+[`dx/adr-retrospective.md`](../adr-retrospective/SKILL.md) 참조.
 
 ---
 

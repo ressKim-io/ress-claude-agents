@@ -219,6 +219,6 @@ storage = sample_rate × series × retention × byte_per_sample
 
 ## 연계 skill
 
-- [`platform/dev-prod-parity-checklist.md`](./dev-prod-parity-checklist.md) — replica scaling 환경 차이
-- [`testing/negative-path-coverage.md`](../testing/negative-path-coverage.md) — pool 고갈 / OOM 시나리오 테스트
-- [`observability/observability-from-day-zero.md`](../observability/observability-from-day-zero.md) — cardinality 폭발 방지
+- [`platform/dev-prod-parity-checklist.md`](../dev-prod-parity-checklist/SKILL.md) — replica scaling 환경 차이
+- [`testing/negative-path-coverage.md`](../negative-path-coverage/SKILL.md) — pool 고갈 / OOM 시나리오 테스트
+- [`observability/observability-from-day-zero.md`](../observability-from-day-zero/SKILL.md) — cardinality 폭발 방지

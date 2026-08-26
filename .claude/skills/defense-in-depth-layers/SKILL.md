@@ -255,6 +255,6 @@ L7 (Service mesh):
 
 ## 연계 skill
 
-- [`kubernetes/netpol-defense-depth.md`](./netpol-defense-depth.md) — NetworkPolicy 3중 체크리스트 상세
-- [`kubernetes/k8s-security.md`](./k8s-security.md) — Pod Security 상세
-- [`architecture/service-ownership-matrix.md`](../architecture/service-ownership-matrix.md) — 각 레이어 owner
+- [`kubernetes/netpol-defense-depth.md`](../netpol-defense-depth/SKILL.md) — NetworkPolicy 3중 체크리스트 상세
+- [`kubernetes/k8s-security.md`](../k8s-security/SKILL.md) — Pod Security 상세
+- [`architecture/service-ownership-matrix.md`](../service-ownership-matrix/SKILL.md) — 각 레이어 owner

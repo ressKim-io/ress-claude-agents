@@ -145,7 +145,7 @@ Step 5: 알림 발송 (idempotent)
 
 **중간 실패 시**: 역순으로 compensation 실행.
 
-→ 상세: [.claude/skills/msa/msa-saga.md](.claude/skills/msa/msa-saga.md)
+→ 상세: [.claude/skills/msa/msa-saga.md](../msa-saga/SKILL.md)
 → 오케스트레이션: [`msa-saga`](../msa-saga/SKILL.md) 참조
 
 **한국 결제 특수성**:

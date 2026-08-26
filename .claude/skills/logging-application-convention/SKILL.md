@@ -223,5 +223,5 @@ TraceQL: {resource.service.name="$svc"}
 
 - ADR: `docs/adr/0006-logging-convention.md`
 - 컨벤션 가이드: `docs/conventions/logging-standard.md`
-- Loki 쿼리 가이드: `.claude/skills/observability/logging-loki.md`
-- OTel 설정: `.claude/skills/observability/observability-otel.md`
+- Loki 쿼리 가이드: [`/logging-loki`](../logging-loki/SKILL.md)
+- OTel 설정: [`/observability-otel`](../observability-otel/SKILL.md)

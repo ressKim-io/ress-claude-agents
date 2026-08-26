@@ -215,6 +215,12 @@ jobs:
       - name: Validate enforcement rules
         run: ./scripts/validate-enforcement.sh
 
+      # 2026-08-26 PR #36 리뷰: Step 2 의 skill 이관이 상호 참조를 고치지 않아
+      # 79개 링크가 깨진 채 남아 있었다 (4개는 매 세션 로드되는 AGENTS.md 안).
+      # 링크를 보는 job 이 하나도 없었다.
+      - name: Validate internal markdown links
+        run: ./scripts/validate-links.sh
+
       - name: Setup Node (for control-plane adapter)
         uses: actions/setup-node@v4
         with:

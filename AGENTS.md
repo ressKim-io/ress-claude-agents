@@ -217,10 +217,10 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 | 영역 | Skill | 핵심 |
 |---|---|---|
-| 멀티테넌시 | [`skills/business/multi-tenancy`](.claude/skills/business/multi-tenancy.md) | Team/Org, 데이터 격리(Row/Schema/DB), RBAC, 초대 |
-| 인증 | [`skills/business/auth-oauth-social`](.claude/skills/business/auth-oauth-social.md) | Google/Apple/Kakao, PKCE, Magic Link, 2FA |
-| 결제 | [`skills/business/payment-integration`](.claude/skills/business/payment-integration.md) | Stripe/Toss/PortOne, Token-first, Webhook, Saga |
-| 알림 | [`skills/business/notification-multichannel`](.claude/skills/business/notification-multichannel.md) | Push/Email/SMS, Fallback, Notification Center |
+| 멀티테넌시 | [`multi-tenancy`](.claude/skills/multi-tenancy/SKILL.md) | Team/Org, 데이터 격리(Row/Schema/DB), RBAC, 초대 |
+| 인증 | [`auth-oauth-social`](.claude/skills/auth-oauth-social/SKILL.md) | Google/Apple/Kakao, PKCE, Magic Link, 2FA |
+| 결제 | [`payment-integration`](.claude/skills/payment-integration/SKILL.md) | Stripe/Toss/PortOne, Token-first, Webhook, Saga |
+| 알림 | [`notification-multichannel`](.claude/skills/notification-multichannel/SKILL.md) | Push/Email/SMS, Fallback, Notification Center |
 
 **신규 프로젝트 시작 시 ADR 작성 순서** (이 순서대로 결정해야 변경 비용 ↓):
 1. 멀티테넌시 격리 모델 (가장 비싼 결정)
