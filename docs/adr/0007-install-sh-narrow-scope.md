@@ -1,6 +1,10 @@
 # ADR 0007 — install.sh 축소: `--plugin` / `--workflow` deprecation + 자산 단위 정밀 옵션
 
-- **Status**: Accepted
+- **Status**: **Superseded** by [ADR 0011](0011-remove-install-sh.md) (2026-08-26)
+
+> ## 무효화 사유 (2026-08-26)
+>
+> `install.sh` 자체가 제거됐다. 본 ADR 이 정의한 자산 단위 옵션(`--skill` / `--agent` / `--rule`, PR-8)은 **착수되지 않은 채 종료**됐다. "필요한 것만 골라 가져간다" 는 원칙은 [`multi-tool-adapter.md`](../../.claude/rules/multi-tool-adapter.md) 에 남아 있고, 수단은 `cp` 다.
 - **Date**: 2026-05-20 (실제 커밋 `dbf5e73` 2026-05-26)
 - **Driver**: install.sh 광범위 묶음 불만 ("안 쓰는 것까지 다 깔린다") + 자산 picky 운영 욕구
 - **Depends on**: ADR 0006 (Kiro 어댑터 — 본 결정과 같은 picky 정신)

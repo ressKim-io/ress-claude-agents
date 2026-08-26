@@ -9,7 +9,7 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 
 ## Project Overview
 
-이 레포는 **AI 코딩 에이전트용 재사용 가능한 룰/스킬/에이전트 컬렉션**이다. 다른 프로젝트에 install되어 코딩 표준과 도메인 지식을 제공한다.
+이 레포는 **AI 코딩 에이전트용 룰/스킬/에이전트 컬렉션**이다. **이 레포에서 직접 작업할 때 로드되는 자산**이며, 배포 수단은 두지 않는다 — `install.sh` 와 그 설정 표면(`plugins/` · `.claude/workflows/`)은 2026-08-26 에 제거됐다 ([ADR 0011](docs/adr/0011-remove-install-sh.md)). 다른 프로젝트에서 쓰려면 필요한 파일을 직접 가져간다.
 
 > **개수는 여기 쓰지 않는다.** CI 는 [inventory.yml](.claude/inventory.yml) 신선도는 검사하지만 산문에 박힌 숫자는 검사하지 않아 반드시 drift 한다 — 실제로 "274 skills"(실제 260) / "25 rules"(실제 26) 가 각각 방치됐다. 현재 수치는 `summary` 참조: `yq '.summary' .claude/inventory.yml`
 
@@ -19,19 +19,8 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 | Agents (전문 에이전트) | `.claude/agents/` | code-reviewer, k8s-troubleshooter, architect-agent, business-decision-agent 등 |
 | Rules (코딩/보안/워크플로우) | `.claude/rules/` | 이 AGENTS.md의 상세판. effort-guide, multi-tool-adapter 포함 |
 | Templates (작성 표준) | `.claude/templates/` | SKILL-SPEC, AGENT-SPEC + 문서 template (신규 자산 작성 spec) |
-| Plugins (역할별 번들) | `plugins/*.yml` | 역할별 agent + skill 카테고리 묶음 |
-| Workflows (시나리오 번들) | `.claude/workflows/*.yml` | 시나리오별 stage 정의 (`_base.yml` 병합) |
 
-**중요**: K8s/Cloud/Monitoring 섹션의 룰은 **install된 프로젝트**에 적용된다 (이 메타 레포 자체엔 K8s 없음).
-
-## Setup
-
-```bash
-./install.sh                      # 전체 설치
-./install.sh --plugin go-stack    # 특정 번들만
-./install.sh --list-plugins       # 사용 가능한 번들 목록
-./install.sh --workflow msa       # 시나리오 번들
-```
+**중요**: K8s/Cloud/Monitoring 섹션의 룰은 **그 자산을 가져간 프로젝트**에 적용된다 (이 메타 레포 자체엔 K8s 없음).
 
 전체 인덱스: [.claude/inventory.yml](.claude/inventory.yml)
 
@@ -228,7 +217,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 3. 결제 Provider (한국=PortOne/Toss, 글로벌=Stripe)
 4. 알림 채널 + Provider
 
-각 skill에 ADR 템플릿 포함. **0→1 신규 프로젝트는 [`bootstrap-new-saas`](.claude/workflows/bootstrap-new-saas.yml) workflow가 `agents/business-decision-agent`로 4 ADR을 자동 orchestration**한다 (compliance-strategy-agent / platform-strategy-agent와 함께). 기존 프로젝트에 새 도메인 추가만 필요하면 [`new-domain`](.claude/workflows/new-domain.yml) workflow 사용.
+각 skill에 ADR 템플릿 포함. 0→1 신규 프로젝트는 `business-decision-agent` 에 4 ADR orchestration 을 맡기고, 규제·platform 결정은 `compliance-strategy-agent` / `platform-strategy-agent` 와 병행한다. (이전에는 `.claude/workflows/*.yml` 이 stage 를 선언했으나 실행 주체가 `install.sh` 뿐이라 함께 제거됐다 — [ADR 0011](docs/adr/0011-remove-install-sh.md).)
 
 ---
 
@@ -298,8 +287,6 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | Skills | `.claude/skills/<name>/SKILL.md` | 자동 발견 (description 매칭) 또는 `/<name>` |
 | Subagents | `.claude/agents/` | `Agent` 도구 (`subagent_type=...`) |
 | Slash Commands | `.claude/commands/` | `/command-name` — skills 로 병합됨 (기존 파일은 계속 동작) |
-| Plugins | `plugins/*.yml` | `install.sh --plugin <name>` |
-| Workflows | `.claude/workflows/*.yml` | `install.sh --workflow <name>` |
 
 자산 통계는 [.claude/inventory.yml](.claude/inventory.yml) 의 `summary` 가 유일한 출처다 (`scripts/generate-inventory.sh` 로 자동 재생성, CI `Inventory Freshness` job 이 신선도 검증).
 

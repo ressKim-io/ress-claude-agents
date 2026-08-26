@@ -12,7 +12,7 @@ K8s 영역 PR을 3개 전문 관점의 에이전트로 병렬 리뷰한다.
 ## 에이전트 실행 안전 규칙 (MANDATORY)
 
 리뷰 에이전트는 읽기와 격리된 재현만 한다. 레포 루트에서 설치·설정 명령
-(`install.sh`, `terraform apply`, `helm install` 등)을 실행하지 않으며, 재현이
+(`terraform apply`, `helm install`, 부트스트랩 스크립트 등)을 실행하지 않으며, 재현이
 필요하면 `mktemp -d` 임시 디렉토리에서만 수행한다. 결과만 반환하고 외부 게시는
 메인 에이전트가 사용자 승인 후 실행한다. 상세: [`review-pr.md`](review-pr.md).
 

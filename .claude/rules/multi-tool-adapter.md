@@ -53,7 +53,7 @@ MUST 매핑 문서의 각 항목에 **✅ verified / ⚠️ unverified + 사유*
 ## 자산 단위로 가져간다 (picky 운영)
 
 - PREFER 도구에 자산을 옮길 때 **필요한 것만** 고른다. 묶음 전체 복사 금지 — "안 쓰는 것까지 다 깔린다" 가 [ADR 0007](../../docs/adr/0007-install-sh-narrow-scope.md) 의 출발점이었다.
-- `install.sh --skill <cat>/<name>` / `--agent <name>` / `--rule <name>` 이 이 용도다 (⚠️ PR-8 미착수 — 현재는 수동 복사).
+- 수단은 **직접 복사**다. `install.sh` 는 2026-08-26 에 제거됐고 자산 단위 옵션(PR-8)은 착수되지 않은 채 끝났다 ([ADR 0011](../../docs/adr/0011-remove-install-sh.md)).
 
 ## 도구 간 강제력 차이 인지
 
@@ -72,7 +72,8 @@ MUST port 시 산문 규약을 대상 도구의 **강제 메커니즘으로 승�
 
 - [`docs/architecture/multi-tool-mapping.md`](../../docs/architecture/multi-tool-mapping.md) — 3 도구 매핑 표 + Kiro port 규칙 + 검증 상태
 - [ADR 0006](../../docs/adr/0006-kiro-adapter-strategy.md) — Kiro 수동 매핑 결정 + 분기 review 기록
-- [ADR 0007](../../docs/adr/0007-install-sh-narrow-scope.md) — install.sh 자산 단위 옵션
+- [ADR 0007](../../docs/adr/0007-install-sh-narrow-scope.md) — install.sh 자산 단위 옵션 (Superseded)
+- [ADR 0011](../../docs/adr/0011-remove-install-sh.md) — install.sh 제거
 - [ADR 0010](../../docs/adr/0010-drop-codex-support.md) — Codex 지원 중단
 - [`deep-thinking.md`](deep-thinking.md) — 외부 사양 검증 의무
 - `control-plane/src/adapter.ts` — 자동 변환 구현
