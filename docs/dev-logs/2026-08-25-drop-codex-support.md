@@ -55,8 +55,12 @@ adapter         --tool=cursor 정상, cursor parity drift 0
 validators      7종 전부 PASS · shellcheck PASS · inventory 최신
 ```
 
-`bats tests/install.bats` 는 **실행 안 함** — 로컬에 bats 미설치.
+`bats tests/install.bats` 는 로컬에 bats 미설치라 **실행하지 못했다**.
+
+**후속 (2026-08-26)**: PR [#36](https://github.com/ressKim-io/ress-claude-agents/pull/36) 에서 CI 6/6 통과. codex 제거 후의 adapter parity(`.cursor/` 단독)가 실제 러너에서 확인됐다 — **`.codex/` drift 를 3개월간 놓쳤던 바로 그 job 이다**.
 
 ## 남은 문제
 
 **CI 가 feature 브랜치에서 돌지 않는다.** 이번 drift 가 3개월간 발견되지 않은 직접 원인이고, 트리거 확대는 러너 비용과 얽혀 있어 별도 판단이 필요하다. ADR 0010 §남은 문제에 기록.
+
+> 2026-08-26 PR #36 으로 CI 를 처음 돌려 전 job 통과를 확인했지만, **원인은 그대로다** — 다음 장기 브랜치에서 PR 을 늦게 열면 같은 일이 반복된다. 실행 결과가 좋았다는 것이 트리거 문제가 해결됐다는 뜻은 아니다.

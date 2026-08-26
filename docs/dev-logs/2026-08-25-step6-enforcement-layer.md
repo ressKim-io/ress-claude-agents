@@ -117,4 +117,6 @@ enforcement     정적 음성 테스트 6/6 검출 · 런타임 25/25 (음성 �
                 ⚠️ 런타임 25/25 중 ask 11건은 매칭 확인까지만 — 위 §정정 참조
 ```
 
-`bats tests/install.bats` 는 **실행 안 함** — 로컬에 bats 미설치 (CI 에서 실행됨).
+`bats tests/install.bats` 는 로컬에 bats 미설치라 **실행하지 못했다**.
+
+**후속 (2026-08-26)**: PR [#36](https://github.com/ressKim-io/ress-claude-agents/pull/36) 생성으로 이 브랜치에서 **CI 가 처음 실행**됐고 **6/6 job 전부 통과**했다 — `Test`(bats) / `install.sh smoke (macOS bash 3.2)` / `Rules · Frontmatter · Adapter Drift` / `Shellcheck` / `Documentation Validation` / `Inventory Freshness`. 이번에 drift job 에 새로 넣은 `validate-enforcement.sh` 와 control-plane vitest 도 실제 러너에서 검증됐다.

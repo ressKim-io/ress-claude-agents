@@ -518,12 +518,17 @@ F10 이 "명령 단위에 닿는 건 hook 뿐" 이라고 적은 것은 **agent f
 
 **완료 기준**: §7-6 검증 명령 전부 통과 + M1~M4 가 ADR 0009 에 검증일과 함께 기록 + `user-approval.md` 각 금지 항목의 강제 메커니즘 확정. 실행하지 못한 검증은 "실행 안 함" 으로 명시한다.
 
+> **CI 검증 (2026-08-26)**: PR [#36](https://github.com/ressKim-io/ress-claude-agents/pull/36) 생성으로 **이 브랜치에서 CI 가 처음 실행**됐고 **6/6 job 전부 통과**했다. 로컬에서 못 돌렸던 `bats tests/install.bats` 와 macOS bash 3.2 스모크가 여기서 확인됐고, Step 6 이 drift job 에 새로 넣은 `validate-enforcement.sh` · control-plane vitest 도 실제 러너에서 검증됐다.
+>
+> ⚠️ 단, **CI 트리거 문제 자체는 남아 있다** — `ci.yml` 은 여전히 `push: branches: [main]` + `pull_request` 에서만 돈다. Step 1~6 내내 CI 가 침묵했던 원인이고, 다음 장기 브랜치에서 PR 을 늦게 열면 같은 일이 반복된다. §Step 7+ 참조.
+
 ---
 
 ### Step 7+ — 범위 밖 (목록만)
 
 - always-on rules 13개(1,503줄) + `AGENTS.md`(340줄) = **90KB 가 매 세션 상주**한다. 각 항목을 [DENY 가능] / [HOOK 가능] / [CI 가능] / [강제 불가] 로 분류하고 이관 확정분을 산문에서 제거 — 측정 없이 줄일 수 있는 유일한 구간
 - 활성화 경로 트레이스(`claude -p --output-format stream-json`) 기반 ablation. 단일 자산 ablation 은 중복 쌍(A/B 가 서로를 받쳐줌)에서 양쪽 다 "불필요" 로 오판하므로 **경로 단위**로 묶어 이진 탐색
+- **`ci.yml` 트리거가 `push: [main]` + `pull_request` 뿐이다.** feature 브랜치에서 게이트가 전부 침묵한다 — Step 1~6 내내 CI 가 한 번도 돌지 않았고, `.codex/` drift 3개월 방치의 직접 원인이다 ([ADR 0010](../adr/0010-drop-codex-support.md) §남은 문제). 트리거 확대는 러너 비용(특히 macOS job)과의 트레이드오프라 별도 판단 필요
 - `mcp-configs/settings.json` 이 `mcpServers` 를 settings.json 에 두는 문제 (Claude Code 는 `.mcp.json` 을 쓴다) — 관찰만
 
 ---
