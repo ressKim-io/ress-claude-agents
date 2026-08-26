@@ -100,7 +100,7 @@ describe.each(FIXTURES)("init on fixture: $name", (fixture) => {
     const lock = parseYaml(out.lock) as ParsedLock;
     expect(lock.schema_version).toBe(1);
     expect(lock.threshold).toBe(50);
-    // fixtures have no .claude/.cursor → adapter step skipped
+    // fixtures have no .cursor → adapter step skipped
     expect(lock.adapters.detected).toEqual([]);
     expect(lock.adapters.status).toBe("p4-skipped");
   });
@@ -119,12 +119,11 @@ describe.each(FIXTURES)("init on fixture: $name", (fixture) => {
 });
 
 describe("init step 4 adapter wiring (P4)", () => {
-  it("detects .claude/.cursor and records p4-active in lock", async () => {
+  it("detects .cursor and records p4-active in lock", async () => {
     const root = mkdtempSync(path.join(os.tmpdir(), "init-detect-"));
     try {
-      // Given: fixture with .claude and .cursor stubs
+      // Given: fixture with a .cursor stub (.claude is SSOT, not an adapter target)
       const { mkdirSync } = await import("node:fs");
-      mkdirSync(path.join(root, ".claude"), { recursive: true });
       mkdirSync(path.join(root, ".cursor"), { recursive: true });
 
       // When
@@ -137,9 +136,7 @@ describe("init step 4 adapter wiring (P4)", () => {
 
       // Then
       expect(result.lock.adapters.status).toBe("p4-active");
-      expect(result.lock.adapters.detected).toContain("claude");
-      expect(result.lock.adapters.detected).toContain("cursor");
-      expect(result.lock.adapters.detected).toHaveLength(2);
+      expect(result.lock.adapters.detected).toEqual(["cursor"]);
       expect(result.lock.adapters.runs?.length ?? 0).toBeGreaterThan(0);
     } finally {
       rmSync(root, { recursive: true, force: true });

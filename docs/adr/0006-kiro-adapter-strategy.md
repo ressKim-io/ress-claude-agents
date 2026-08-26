@@ -17,7 +17,7 @@ ress-claude-agents 는 현재 4 도구 호환을 다음 SOT 구조로 운영한�
 | 보편 가이드 | `AGENTS.md` (325 줄) | Linux Foundation 표준, 모든 도구 자동 인식 |
 | 상세 룰 (Claude) | `.claude/rules/` (25 개) | Claude Code 자동 로딩 |
 | Universal 자산 | `.agents/skills/` (21 카테고리) | tool-agnostic source |
-| 어댑터 변환기 | `control-plane/src/adapter.ts` | claude / codex / cursor 3 도구 byte-equal 또는 형식 변환 (⚠️ codex 는 2026-08-25 제거 — [ADR 0010](0010-drop-codex-support.md)) |
+| 어댑터 변환기 | `control-plane/src/adapter.ts` | claude / codex / cursor 3 도구 byte-equal 또는 형식 변환 (⚠️ 2026-08-25~26 에 codex 제거 — [ADR 0010](0010-drop-codex-support.md) — 및 claude 제거. 현재는 cursor 단독) |
 
 여기에 **Kiro IDE 를 추가 운영**하려는 욕구가 있다. Kiro 공식 docs 검증 결과 (2026-05-20):
 

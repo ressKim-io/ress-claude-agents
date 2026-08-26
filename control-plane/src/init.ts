@@ -137,7 +137,7 @@ export async function init(opts: InitOptions): Promise<InitOutput> {
                 `${s.tool}: ${s.create}c/${s.update}u/${s.unchanged}=`,
             )
             .join(", ")})`
-        : "no .claude/.cursor directories detected",
+        : "no .cursor directory detected",
   });
 
   const generated_at = opts.frozenTime ?? new Date().toISOString();
@@ -195,9 +195,11 @@ function round2(n: number): number {
   return Math.round(n * 100) / 100;
 }
 
+// `.claude/` 는 탐지하지 않는다. adapter 대상이 아니기 때문이다 — `.claude/**` 는
+// SSOT 이지 생성물이 아니고, 이전 구현은 Claude Code 가 로드하지 않는 2단계 경로에
+// 죽은 파일을 만들었다 (audit F1/F2, PR #36 리뷰). adapter.ts §AdapterTool 참조.
 function detectTools(root: string): AdapterTool[] {
   const detected: AdapterTool[] = [];
-  if (existsSync(path.join(root, ".claude"))) detected.push("claude");
   if (existsSync(path.join(root, ".cursor"))) detected.push("cursor");
   return detected;
 }

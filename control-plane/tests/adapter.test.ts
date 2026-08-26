@@ -165,32 +165,6 @@ describe("adapter --tool=cursor", () => {
   });
 });
 
-describe("adapter --tool=claude", () => {
-  it("copies assets/skills/<cat>/<n>/SKILL.md to .claude/skills/<cat>/<n>/SKILL.md byte-equal", async () => {
-    const tmp = makeTestRoot();
-    try {
-      const skillSrc = copySkill(tmp, "kubernetes", "k8s-helm");
-
-      await adapter({ tool: "claude", root: tmp, assets: path.join(tmp, "assets"), mode: "write" });
-
-      const generated = path.join(
-        tmp,
-        ".claude",
-        "skills",
-        "kubernetes",
-        "k8s-helm",
-        "SKILL.md",
-      );
-      expect(existsSync(generated)).toBe(true);
-      expect(readFileSync(generated, "utf8")).toBe(
-        readFileSync(path.join(skillSrc, "SKILL.md"), "utf8"),
-      );
-    } finally {
-      rmSync(tmp, { recursive: true, force: true });
-    }
-  });
-});
-
 describe("adapter mode=dry-run", () => {
   it("does not write files but reports planned changes", async () => {
     const tmp = makeTestRoot();

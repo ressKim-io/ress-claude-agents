@@ -553,10 +553,10 @@ function parseAdapterArgs(
       if (flag === "--root") opts.root = value;
       else if (flag === "--assets") opts.assets = value;
       else if (flag === "--tool") {
-        if (value !== "claude" && value !== "cursor") {
+        if (value !== "cursor") {
           err.write(
             kleur.red(
-              `--tool must be one of: claude, cursor (got: ${value})\n`,
+              `--tool must be one of: cursor (got: ${value})\n`,
             ),
           );
           return null;
@@ -569,7 +569,7 @@ function parseAdapterArgs(
     }
   }
   if (opts.tool === undefined) {
-    err.write(kleur.red(`adapter requires --tool=<claude|cursor>\n`));
+    err.write(kleur.red(`adapter requires --tool=<cursor>\n`));
     return null;
   }
   return opts as AdapterCliOpts;
@@ -586,7 +586,7 @@ function helpText(): string {
     `  match    Score skills against profile (threshold 50)`,
     `  init     Bootstrap project: probe → match → confirm → adapter`,
     `  lint     Run all repo validators`,
-    `  adapter  Generate per-tool view (--tool=claude|cursor)`,
+    `  adapter  Generate per-tool view (--tool=cursor)`,
     ``,
     `Flags:`,
     `  -h, --help     Show this help`,

@@ -9,7 +9,12 @@ import fg from "fast-glob";
 import { parse as parseYaml } from "yaml";
 import { extractFrontmatter, loadSkills } from "./skill-loader.js";
 
-export type AdapterTool = "claude" | "cursor";
+// `claude` 는 adapter 대상이 아니다. `.claude/**` 는 view 가 아니라 SSOT 이고
+// (AGENTS.md §Governance), 이전 구현은 `.claude/skills/<category>/<name>/SKILL.md`
+// 라는 **Claude Code 가 로드하지 않는 2단계 경로**에 파일을 만들었다 (audit F1/F2).
+// Step 2 가 그 경로의 .gitignore 규칙까지 지워서, adapter 나 init 을 한 번 돌리면
+// 죽은 파일 15개가 커밋 대상이 됐다 — 2026-08-26 PR #36 리뷰.
+export type AdapterTool = "cursor";
 export type AdapterMode = "write" | "dry-run" | "diff";
 
 export interface AdapterOptions {
@@ -37,36 +42,9 @@ export async function adapter(
 ): Promise<AdapterResult> {
   const mode = opts.mode ?? "write";
   switch (opts.tool) {
-    case "claude":
-      return adapterClaude(opts.root, opts.assets, mode);
     case "cursor":
       return adapterCursor(opts.root, opts.assets, mode);
   }
-}
-
-async function adapterClaude(
-  root: string,
-  assets: string,
-  mode: AdapterMode,
-): Promise<AdapterResult> {
-  const { skills, issues: loadIssues } = await loadSkills(assets);
-  const changes: AdapterFileChange[] = [];
-  const issues = loadIssues.map((i) => `${rel(i.sourcePath, root)}: ${i.reason}`);
-
-  for (const s of skills) {
-    const target = path.join(
-      root,
-      ".claude",
-      "skills",
-      s.category,
-      s.dirName,
-      "SKILL.md",
-    );
-    const content = readFileSync(s.sourcePath, "utf8");
-    changes.push(applyChange(target, content, s.sourcePath, root, mode));
-  }
-
-  return { tool: "claude", changes: sortChanges(changes), issues };
 }
 
 async function adapterCursor(

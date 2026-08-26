@@ -21,8 +21,8 @@
 | Codex / Copilot / Gemini CLI / Windsurf | **불필요** | `AGENTS.md` 자동 인식 |
 
 ```bash
-node control-plane/dist/cli.js adapter --tool=cursor --mode=diff   # 미리보기
-node control-plane/dist/cli.js adapter --tool=cursor --mode=write  # 반영
+node control-plane/dist/cli.js adapter --tool=cursor --diff   # 미리보기
+node control-plane/dist/cli.js adapter --tool=cursor  # 반영
 ```
 
 - MUST 원본 자산 변경 후 **같은 PR에서** 변환을 재실행한다. CI drift job 이 `.cursor/` 산출물의 git diff 를 게이트하므로 누락 시 fail.

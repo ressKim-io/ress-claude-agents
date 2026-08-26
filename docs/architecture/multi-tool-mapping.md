@@ -20,7 +20,11 @@ assets/skills/**/SKILL.md    ← tool-agnostic source. adapter 입력 (Migration
   └── .kiro/     (수동)      ADR 0006 Option 1 — adapter 미지원
 ```
 
-**변환 주체**: `control-plane/src/adapter.ts`. 지원 도구는 `claude` / `cursor` 2개다. **Kiro 는 의도적으로 제외**됐고(ADR 0006 Option 1 — AGENTS.md·SKILL.md 표준을 그대로 인식해 변환 ROI 가 낮다), **Codex 는 2026-08-25 에 제거**됐다(ADR 0010 — 같은 이유 + 유지 실패 실적).
+**변환 주체**: `control-plane/src/adapter.ts`. 지원 도구는 **`cursor` 하나뿐**이다.
+
+- **Kiro** 는 의도적으로 제외됐다 (ADR 0006 Option 1 — AGENTS.md·SKILL.md 표준을 그대로 인식해 변환 ROI 가 낮다)
+- **Codex** 는 2026-08-25 에 제거됐다 ([ADR 0010](../adr/0010-drop-codex-support.md) — 같은 이유 + 유지 실패 실적)
+- **`claude` 는 애초에 adapter 대상이 아니다.** `.claude/**` 는 view 가 아니라 SSOT 다 (AGENTS.md §Governance). 이전 구현은 `.claude/skills/<category>/<name>/SKILL.md` 라는 **Claude Code 가 로드하지 않는 2단계 경로**(audit F1/F2)에 파일을 만들었고, Step 2 가 그 경로의 `.gitignore` 규칙까지 지워서 `init` 한 번에 죽은 파일이 커밋 대상이 됐다 — 2026-08-26 PR #36 리뷰에서 제거
 
 ---
 
@@ -116,8 +120,8 @@ AGENTS.md §Auto-Loaded Rules 표의 "path-scoped" 표기가 `fileMatchPattern` 
 `alwaysApply` 는 **항상 `false` 로 하드코딩**된다 (`adapter.ts` L285). 즉 현재 adapter 는 Cursor 의 "항상 적용" 룰을 생성하지 않으며, 이 레포의 always-on rule 25개는 Cursor 에서 `AGENTS.md` 자동 인식에만 의존한다.
 
 ```bash
-node control-plane/dist/cli.js adapter --tool=cursor --mode=diff    # 변경 미리보기
-node control-plane/dist/cli.js adapter --tool=cursor --mode=write   # 반영
+node control-plane/dist/cli.js adapter --tool=cursor --diff    # 변경 미리보기
+node control-plane/dist/cli.js adapter --tool=cursor   # 반영
 ```
 
 CI drift job 이 `.cursor/` 산출물의 git diff 를 게이트한다.
