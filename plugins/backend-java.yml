@@ -1,9 +1,0 @@
-name: backend-java
-description: "Java/Spring backend: code review, architecture, database"
-agents:
-  - code-reviewer
-skills:
-  categories:
-    - spring
-    - msa
-    - architecture

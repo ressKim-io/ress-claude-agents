@@ -1,8 +1,0 @@
-name: backend-python
-description: "Python backend: code review, testing, async patterns"
-agents:
-  - code-reviewer
-skills:
-  categories:
-    - python
-    - msa

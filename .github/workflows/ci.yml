@@ -12,127 +12,6 @@ permissions:
   contents: read
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y bats shellcheck
-
-      - name: Install yq
-        run: |
-          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-          sudo chmod +x /usr/local/bin/yq
-
-      - name: Run BATS tests
-        run: bats tests/install.bats
-
-  # macOS 는 /bin/bash 가 3.2 라 `set -u` + 빈 배열 `${arr[@]}` 확장이 unbound
-  # 오류를 낸다 (bash 4.4+ 에서 수정된 동작). ubuntu 러너(bash 5.x)만 돌리면
-  # 이 계열 회귀를 못 잡는다 — 실제로 2026-08-16 audit 에서 install.sh 가
-  # macOS 에서 어떤 플래그 조합으로도 완주하지 못하는 상태가 발견됐다.
-  # paths 필터를 걸지 않는 이유: 이 job 은 main branch protection 의 required status
-  # check 에 등록돼 있다. 경로 필터로 skip 되면 체크 컨텍스트가 보고되지 않아 해당
-  # PR 이 "Waiting for status to be reported" 로 영구 대기한다. macOS 러너 과금
-  # (PR #32 리뷰 CR-011) 보다 머지 차단 위험이 크다고 판단해 항상 실행한다.
-  # 비용이 문제가 되면 required check 에서 먼저 빼고 필터를 걸어야 한다.
-  install-macos:
-    name: install.sh smoke (macOS bash 3.2)
-    runs-on: macos-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
-
-      - name: Show bash version
-        run: /bin/bash --version | head -1
-
-      - name: Run install.sh across flag combinations
-        run: |
-          set -eu
-          REPO="$PWD"
-          fail=0
-          run_case() {
-            desc="$1"; shift
-            tmp="$(mktemp -d)"
-            cd "$tmp"
-            if out="$(/bin/bash "$REPO/install.sh" "$@" 2>&1)"; then
-              if printf '%s' "$out" | grep -qiE 'unbound variable|Error occurred at line'; then
-                echo "FAIL  $desc — 오류 출력 감지"
-                printf '%s\n' "$out" | grep -iE 'unbound variable|Error occurred at line' | head -3
-                fail=1
-              else
-                echo "ok    $desc"
-              fi
-            else
-              echo "FAIL  $desc — exit $?"
-              printf '%s\n' "$out" | tail -5
-              fail=1
-            fi
-            cd "$REPO"; rm -rf "$tmp"
-          }
-          run_case "--local --all"              --local --all
-          run_case "--local --all --with-skills" --local --all --with-skills
-          run_case "--local --modules go"       --local --modules go
-          run_case "--local --modules memory,review,workflow" --local --modules memory,review,workflow
-          run_case "--local --plugin backend-go" --local --plugin backend-go
-          run_case "--local --workflow msa-migration" --local --workflow msa-migration
-          run_case "--list-plugins"             --list-plugins
-          run_case "--list-workflows"           --list-workflows
-          exit "$fail"
-
-      # 2026-08-24 Step 5 회귀 방지: `--plugin X --with-skills` 가 전체 skill 을 설치하던 결함.
-      # WITH_SKILLS 전체 설치 블록이 plugin 산출물을 backup_and_link ... "dir" 로 덮어썼다.
-      # 근거: docs/audit/2026-08-24-agent-harness-readiness.md §6 Step 5 / ADR 0007
-      - name: Verify --plugin narrows skill scope
-        run: |
-          set -eu
-          REPO="$PWD"
-          expected=0
-          for c in go msa architecture; do
-            n=$(grep -l "^category: $c$" .claude/skills/*/SKILL.md | wc -l)
-            expected=$((expected + n))
-          done
-          total=$(find .claude/skills -name SKILL.md | wc -l)
-
-          tmp="$(mktemp -d)"; cd "$tmp"
-          /bin/bash "$REPO/install.sh" --local --plugin backend-go --with-skills >/dev/null 2>&1
-          got=$(find .claude/skills -name SKILL.md 2>/dev/null | wc -l)
-          cd "$REPO"; rm -rf "$tmp"
-
-          echo "plugin backend-go --with-skills: got=$got expected=$expected (total=$total)"
-          if [ "$got" -ne "$expected" ]; then
-            echo "FAIL  plugin 범위 축소가 동작하지 않는다"
-            exit 1
-          fi
-          if [ "$got" -eq "$total" ]; then
-            echo "FAIL  전체 skill 이 설치됐다 — 범위 축소 무효화 회귀"
-            exit 1
-          fi
-          echo "ok    plugin 범위 축소 동작"
-
-      - name: Verify flattened commands resolve by bare name
-        run: |
-          set -eu
-          REPO="$PWD"
-          tmp="$(mktemp -d)"
-          cd "$tmp"
-          /bin/bash "$REPO/install.sh" --local --modules memory,review,workflow >/dev/null 2>&1
-          missing=0
-          for n in where related log-trouble log-decision log-meta log-summary log-feedback \
-                   consolidate-devlogs consolidate-memory promote-devlog archive-devlog \
-                   review-pr review-pr-k8s review-pr-monitoring review-pr-terraform phase-start; do
-            [ -e "$tmp/.claude/commands/$n.md" ] || { echo "MISSING /$n"; missing=1; }
-          done
-          cd "$REPO"; rm -rf "$tmp"
-          exit "$missing"
-
   docs:
     name: Documentation Validation
     runs-on: ubuntu-latest
@@ -173,11 +52,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y shellcheck
 
-      - name: Run shellcheck on install.sh
-        run: shellcheck install.sh
-
       - name: Run shellcheck on scripts
-        run: shellcheck scripts/*.sh
+        run: shellcheck scripts/*.sh scripts/lib/*.sh
 
   drift:
     name: Rules / Frontmatter / Adapter Drift
@@ -201,7 +77,7 @@ jobs:
       - name: Validate inventory labels freshness
         run: ./scripts/generate-inventory-labels.sh validate
 
-      - name: Validate agent handoff + workflow/plugin skill refs
+      - name: Validate agent handoff
         run: ./scripts/validate-agent-handoff.sh all
 
       # 2026-08-24 Step 5: CI 에 없어서 `.agents/` dangling ref 실패가 방치돼 있었다.

@@ -1,9 +1,0 @@
-name: backend-go
-description: "Go backend: code review, architecture, database"
-agents:
-  - code-reviewer
-skills:
-  categories:
-    - go
-    - msa
-    - architecture
