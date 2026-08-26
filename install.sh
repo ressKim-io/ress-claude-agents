@@ -153,21 +153,32 @@ create_dir() {
     fi
 }
 
-# frontmatter 안의 category: 만 읽는다 (본문에 등장하는 category: 줄은 무시).
-# 레이아웃이 .claude/skills/<name>/SKILL.md 로 평탄화되어 디렉토리에서 카테고리를 못 읽는다.
-skill_frontmatter_category() {
-    awk '/^---$/{n++; next} n==1 && /^category:/{sub(/^category: *"?/,""); sub(/"$/,""); print; exit} n>=2{exit}' "$1"
+# frontmatter category 파서는 scripts/lib/skill-category.sh 가 단일 구현이다.
+# 4벌 복사돼 있었고 그중 둘에 early-exit 이 빠져 phantom 카테고리를 만들었다 (PR #36 리뷰).
+# shellcheck source=scripts/lib/skill-category.sh
+# shellcheck disable=SC1091
+source "$SCRIPT_DIR/scripts/lib/skill-category.sh"
+
+# 카테고리 조회를 위해 name<TAB>category 맵을 1회만 만든다.
+# 이전에는 카테고리마다 272개 파일을 재파싱해 O(카테고리 × 스킬) 이었다.
+SKILL_CATEGORY_MAP=""
+_ensure_skill_category_map() {
+    local src_root="$1"
+    [[ -n "$SKILL_CATEGORY_MAP" ]] && return 0
+    SKILL_CATEGORY_MAP=$(skill_category_map "$src_root")
 }
 
 # frontmatter category 가 $1 인 skill 을 <dst>/<name>/SKILL.md 로 설치
 install_skills_by_category() {
     local category="$1" src_root="$2" dst_root="$3" label="$4"
-    local found=false skill_md skill_name skill_target
-    for skill_md in "$src_root"/*/SKILL.md; do
+    local found=false skill_name skill_md skill_target
+    _ensure_skill_category_map "$src_root"
+    while IFS=$'\t' read -r skill_name skill_cat; do
+        [[ -n "$skill_name" ]] || continue
+        [[ "$skill_cat" == "$category" ]] || continue
+        skill_md="$src_root/$skill_name/SKILL.md"
         [[ -f "$skill_md" ]] || continue
-        [[ "$(skill_frontmatter_category "$skill_md")" == "$category" ]] || continue
         found=true
-        skill_name=$(basename "$(dirname "$skill_md")")
         skill_target="$dst_root/$skill_name/SKILL.md"
         if _check_and_mark_installed "$skill_target"; then
             continue
@@ -176,7 +187,7 @@ install_skills_by_category() {
         if backup_and_link "$skill_md" "$skill_target" "$INSTALL_SCOPE" "file"; then
             echo "    + Skill: $skill_name ($category)"
         fi
-    done
+    done <<< "$SKILL_CATEGORY_MAP"
     if [[ "$found" != true ]]; then
         log_warn "    Skill category not found: $category [$label]"
     fi
@@ -782,7 +793,10 @@ for WORKFLOW_NAME in ${WORKFLOW_NAMES[@]+"${WORKFLOW_NAMES[@]}"}; do
     fi
 
     # Install workflow skill categories
-    if [[ ${#WORKFLOW_SKILL_CATEGORIES[@]} -gt 0 ]]; then
+    # plugin 블록과 동일하게 --with-skills 를 요구한다. 이 게이트가 없어서
+    # `--workflow X` 만으로 71개 skill 이 깔렸다 (plugin 은 0) — 2026-08-26 PR #36 리뷰.
+    # ADR 0007 의 narrow-scope 의도와도 어긋났다.
+    if [[ "$WITH_SKILLS" == true && ${#WORKFLOW_SKILL_CATEGORIES[@]} -gt 0 ]]; then
         log_info "[workflow:$WORKFLOW_NAME] Installing skill categories..."
         SKILLS_SOURCE="$SCRIPT_DIR/.claude/skills"
         SKILLS_TARGET="$TARGET_DIR/skills"
@@ -794,7 +808,7 @@ for WORKFLOW_NAME in ${WORKFLOW_NAMES[@]+"${WORKFLOW_NAMES[@]}"}; do
     fi
 
     # Install workflow individual skills
-    if [[ ${#WORKFLOW_SKILL_INDIVIDUAL[@]} -gt 0 ]]; then
+    if [[ "$WITH_SKILLS" == true && ${#WORKFLOW_SKILL_INDIVIDUAL[@]} -gt 0 ]]; then
         log_info "[workflow:$WORKFLOW_NAME] Installing individual skills..."
         SKILLS_SOURCE="$SCRIPT_DIR/.claude/skills"
         SKILLS_TARGET="$TARGET_DIR/skills"

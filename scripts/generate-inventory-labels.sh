@@ -18,6 +18,11 @@
 
 set -euo pipefail
 
+# frontmatter category 파서 (단일 구현)
+# shellcheck source=scripts/lib/skill-category.sh
+# shellcheck disable=SC1091
+source "$(dirname "$0")/lib/skill-category.sh"
+
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SKILLS_DIR="$REPO_ROOT/.claude/skills"
 AGENTS_DIR="$REPO_ROOT/.claude/agents"
@@ -112,7 +117,7 @@ generate_labels() {
         local entries=()
         while IFS= read -r file; do
             local category
-            category=$(awk '/^---$/{n++; next} n==1 && /^category:/{sub(/^category: *"?/,""); sub(/"$/,""); print; exit}' "$file")
+            category=$(skill_frontmatter_category "$file")
             [[ -n "$category" ]] || category="other"
             local name
             name=$(basename "$(dirname "$file")")

@@ -20,6 +20,11 @@
 
 set -euo pipefail
 
+# frontmatter category 파서 (install.sh 와 단일 구현 공유)
+# shellcheck source=scripts/lib/skill-category.sh
+# shellcheck disable=SC1091
+source "$(dirname "$0")/lib/skill-category.sh"
+
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
@@ -274,7 +279,10 @@ check_skill_refs() {
 
     local skill_names skill_cats violations=0
     skill_names=$(find .claude/skills -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort -u)
-    skill_cats=$(grep -h '^category:' .claude/skills/*/SKILL.md | sed 's/^category:[[:space:]]*//' | sort -u)
+    # install.sh 와 **같은 파서**를 써야 한다. grep 방식은 본문의 `category:` 줄까지
+    # 읽어 install.sh 가 해석하지 못하는 phantom 카테고리(payment / reactive)를
+    # 유효한 것으로 통과시켰다 — 2026-08-26 PR #36 리뷰.
+    skill_cats=$(skill_category_map .claude/skills | cut -f2 | sort -u)
 
     local refs
     refs=$(awk '

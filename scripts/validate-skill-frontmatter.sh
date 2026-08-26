@@ -136,10 +136,10 @@ validate_agent() {
     return 0
 }
 
-# frontmatter 안의 category: 만 읽는다. 본문에 등장하는 `category:` 줄은 무시.
-skill_frontmatter_category() {
-    awk '/^---$/{n++; next} n==1 && /^category:/{sub(/^category: *"?/,""); sub(/"$/,""); print; exit} n>=2{exit}' "$1"
-}
+# frontmatter category 파서는 scripts/lib/skill-category.sh 가 단일 구현.
+# shellcheck source=scripts/lib/skill-category.sh
+# shellcheck disable=SC1091
+source "$(dirname "$0")/lib/skill-category.sh"
 
 skill_categories() {
     local f

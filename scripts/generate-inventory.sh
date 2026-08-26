@@ -8,13 +8,18 @@ SKILLS_DIR="$REPO_ROOT/.claude/skills"
 AGENTS_DIR="$REPO_ROOT/.claude/agents"
 OUTPUT="$REPO_ROOT/.claude/inventory.yml"
 
+# frontmatter category 파서 (단일 구현)
+# shellcheck source=scripts/lib/skill-category.sh
+# shellcheck disable=SC1091
+source "$(dirname "$0")/lib/skill-category.sh"
+
 # Category mapping for skills (filename prefix -> category)
 categorize_skill() {
   local file_path="$1"
   # 카테고리는 frontmatter category: 가 SSOT — 레이아웃이 <name>/SKILL.md 로 평탄화되어
   # 디렉토리에서 카테고리를 읽을 수 없다.
   local fm_cat
-  fm_cat=$(awk '/^---$/{n++; next} n==1 && /^category:/{sub(/^category: *"?/,""); sub(/"$/,""); print; exit}' "$file_path")
+  fm_cat=$(skill_frontmatter_category "$file_path")
   if [ -n "$fm_cat" ]; then
     echo "$fm_cat"
     return
