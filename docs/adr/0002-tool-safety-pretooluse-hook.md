@@ -1,8 +1,17 @@
 # ADR 0002 — Tool 안전 룰 (PreToolUse hook 기반)
 
-- **Status**: Proposed
-- **Date**: 2026-05-08
+- **Status**: **Rejected** (2026-08-25)
+- **Date**: 2026-05-08 (제안) / 2026-08-25 (기각)
 - **Driver**: deep audit (`docs/audit/2026-05-08-deep-audit.md` §5-1) + Migration 0002 control-plane PoC
+- **Superseded by**: [ADR 0009](0009-enforcement-layer-placement.md)
+
+> ## 기각 사유 (2026-08-25)
+>
+> 본 ADR 은 3.5개월간 Proposed 로 남아 구현되지 않았고, 그 사이 **전제로 삼던 구현체가 죽어 있었다** — `control-plane` 의 PreToolUse `admit` hook 이 존재하지 않는 환경변수(`$CLAUDE_TOOL` 등)로 배선돼 있었고 hook 이 부르는 npm 패키지도 미배포였다 ([audit F11](../audit/2026-08-24-agent-harness-readiness.md#f11-상세--죽은-강제력-레이어-부검-2026-08-25)).
+>
+> 아래 Tier 1/2/3 차단 카탈로그의 **문제 인식은 유효하다.** 다만 배치처를 hook 에서 `.claude/settings.json` 의 `permissions.deny` / `ask` 로 옮긴다 — 같은 위협을 막으면서 조용히 죽지 않기 때문이다. 카탈로그는 [ADR 0009](0009-enforcement-layer-placement.md) §Decision 의 두 층으로 이관됐다.
+>
+> 아래 본문은 **기록으로만 보존**한다.
 
 ## Context
 

@@ -12,16 +12,21 @@ Production-ready agents, skills, and rules for Claude Code.
 ```bash
 git clone https://github.com/ressKim-io/ress-claude-agents.git
 cd ress-claude-agents
-
-# Install globally (all projects)
-./install.sh --global --all --with-skills
-
-# Or install by role
-./install.sh --global --plugin backend-java
-
-# Or install by scenario (NEW)
-./install.sh --global --workflow eks-gitops-setup
 ```
+
+That's it — the assets under `.claude/` load automatically when you work **in this repo**.
+
+There is no installer. `install.sh` and its configuration surface (`plugins/`, `.claude/workflows/`)
+were removed on 2026-08-26 ([ADR 0011](docs/adr/0011-remove-install-sh.md)) because nothing used them.
+To reuse an asset in another project, copy the file you need:
+
+```bash
+cp -r .claude/skills/go-performance   /path/to/project/.claude/skills/
+cp    .claude/agents/code-reviewer.md /path/to/project/.claude/agents/
+cp    .claude/rules/security.md       /path/to/project/.claude/rules/
+```
+
+Skills must keep the `<skill-name>/SKILL.md` layout — Claude Code does not load any other shape.
 
 ## What's Inside
 
@@ -44,15 +49,14 @@ cd ress-claude-agents
 |---|---|
 | Strategy | `tech-lead`, `product-engineer`, `migration-expert` |
 | Frontend | `frontend-expert` |
-| DevOps & SRE | `security-scanner`, `k8s-troubleshooter`, `terraform-reviewer`, `incident-responder`, `code-reviewer`, `cost-analyzer`, `finops-advisor`, `otel-expert`, `debugging-expert`, `compliance-auditor` |
+| DevOps & SRE | `security-scanner`, `k8s-troubleshooter`, `terraform-reviewer`, `incident-responder`, `code-reviewer`, `cost-analyzer`, `finops-advisor`, `debugging-expert`, `compliance-auditor` |
 | DevOps Reviewers | `k8s-reviewer`, `dockerfile-reviewer`, `cicd-reviewer`, `gitops-reviewer`, `observability-reviewer` |
 | Security Reviewers | `k8s-security-reviewer`, `container-security-reviewer`, `cicd-security-reviewer`, `network-security-reviewer` |
-| Architecture | `architect-agent`, `saga-agent` |
-| Platform & MLOps | `platform-engineer`, `mlops-expert`, `database-expert`, `database-expert-mysql`, `redis-expert` |
-| Service Mesh & Messaging | `service-mesh-expert`, `messaging-expert` |
-| Language Experts | `go-expert`, `java-expert`, `python-expert` |
-| Ticketing & Load Test | `ticketing-expert`, `anti-bot`, `load-tester`, `load-tester-k6`, `load-tester-gatling`, `load-tester-ngrinder` |
-| Workflow | `git-workflow`, `ci-optimizer`, `pr-review-bot`, `dev-logger` |
+| Architecture | `architect-agent` |
+| Platform & MLOps | `platform-engineer`, `mlops-expert` |
+| Service Mesh & Messaging | `service-mesh-expert` |
+| Ticketing & Load Test | `load-tester` |
+| Workflow | `git-workflow`, `ci-optimizer`, `dev-logger` |
 
 ## Skills
 
@@ -81,62 +85,16 @@ cd ress-claude-agents
 | Legal | 3 | 한국 위치정보법/PIPA, 아동 보호, 글로벌 GDPR/SOC2 매핑 |
 | Operations | 2 | Runbook 표준, Blameless postmortem |
 
-## Plugin Bundles
-
-Install agents and skills by role:
-
-```bash
-./install.sh --list-plugins    # Show available bundles
-./install.sh --global --plugin k8s-ops
-```
-
-| Plugin | Agents | Focus |
-|---|---|---|
-| `k8s-ops` | 4 | Kubernetes, service mesh, observability |
-| `backend-java` | 3 | Spring Boot, MSA, architecture |
-| `backend-go` | 3 | Go, MSA, architecture |
-| `backend-python` | 3 | FastAPI/Django, MSA, architecture |
-| `sre-full` | 6 | SRE, observability, Kubernetes |
-| `ai-engineering` | 3 | Agentic coding, SDD, AI cost, GenAI observability |
-| `ai-ml` | 2 | Kubeflow, KServe, RAG |
-| `messaging` | 2 | Kafka, RabbitMQ, NATS |
-| `frontend` | 2 | React, Next.js, TypeScript |
-| `strategy` | 3 | Tech strategy, product engineering |
-| `compliance` | 3 | 한국 PIPA/위치정보법, GDPR/SOC2/HIPAA, DSR 자동화 |
-| `ops` | 4 | Runbook 표준, blameless postmortem, on-call, SRE 도구 |
-
-## Scenario Workflows
-
-Install everything needed for a specific scenario. Every workflow auto-includes `_base` (planning tools: SDD, RFC/ADR, docs-as-code).
-
-```bash
-./install.sh --list-workflows     # Show available workflows
-./install.sh --global --workflow eks-gitops-setup
-```
-
-| Workflow | Scenario | Key Components |
-|---|---|---|
-| `eks-gitops-setup` | EC2/kind -> EKS with ArgoCD, Terraform, Istio | 3 agents, 3 cat + 7 skills |
-| `gke-gitops-setup` | Local dev -> GKE with ArgoCD, Terraform | 3 agents, 3 cat + 7 skills |
-| `msa-migration` | Monolith -> MSA (DDD, Saga, CQRS) | 4 agents, 3 cat + 6 skills |
-| `compose-to-k8s` | Docker Compose -> Kubernetes | 2 agents, 2 cat + 4 skills |
-| `observability-full` | Full observability stack (Prometheus, OTel) | 2 agents, 2 cat + 2 skills |
-| `kafka-event-driven` | Kafka event-driven architecture | 3 agents, 2 cat + 4 skills |
-| `full-platform` | Complete platform setup (all combined) | 8 agents, 9 cat + 10 skills |
-| `feature-development` | Handoff flow: 요구사항 → 설계 → ADR → 구현 → 리뷰 → 모니터링 | 8 agents, multi-stage |
-| `incident-to-action` | Handoff flow: 장애 → RCA → 포스트모템 → 재발방지 ADR | 5 agents, parallel triage |
-| `new-domain` | Handoff flow: 신규 도메인 부트스트랩 (multi-tenancy 포함) | 6+ agents, multi-stage |
-
-> **Plugin vs Workflow**: Plugins are role-based ("I'm a Java developer"), Workflows are scenario-based ("I want to set up EKS GitOps"). Handoff workflows (`feature-development`, `incident-to-action`, `new-domain`) enforce artifact handoff between stages via `validate-agent-handoff.sh`.
-
 ## Development
 
 ```bash
-make test       # Run 51 BATS test cases
-make validate   # Verify file consistency
-make inventory  # Regenerate .claude/inventory.yml
-make lint       # ShellCheck static analysis
-make all        # Full verification
+make validate             # Documentation consistency
+make validate-enforcement # settings.json <-> user-approval.md rule drift
+make validate-links       # Internal markdown links resolve
+make inventory            # Regenerate .claude/inventory.yml
+make lint                 # ShellCheck static analysis
+make all                  # validate + enforcement + links
+make verify-enforcement   # Permission rules actually fire (needs claude CLI, local only)
 ```
 
 ## Resources

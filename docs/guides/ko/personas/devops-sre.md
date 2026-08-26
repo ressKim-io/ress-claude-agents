@@ -31,7 +31,7 @@
    → /gitops-argocd로 ArgoCD 설정
 
 3. 모니터링
-   → otel-expert로 관측성 구축
+   → /observability-otel 로 관측성 구축
    → /monitoring-grafana로 대시보드 설정
 
 4. 장애 대응
@@ -173,7 +173,7 @@ incident-responder → 자동 트리아지 (SEV 분류, 영향 범위)
   ↓
 k8s-troubleshooter → 클러스터 진단 (파드, 노드, 네트워크)
   ↓
-database-expert → DB 이슈 분석 (필요 시)
+/postgresql-operations → DB 이슈 분석 (필요 시)
   ↓
 /log-trouble → 트러블슈팅 기록
 ```
@@ -195,7 +195,6 @@ database-expert → DB 이슈 분석 (필요 시)
 
 | 에이전트 | 역할 |
 |---------|------|
-| `otel-expert` | 대규모 OTel 아키텍처, Tail Sampling, 비용 최적화 |
 
 ### 관측성 스택별 스킬
 

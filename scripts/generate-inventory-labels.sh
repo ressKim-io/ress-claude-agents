@@ -18,6 +18,11 @@
 
 set -euo pipefail
 
+# frontmatter category 파서 (단일 구현)
+# shellcheck source=scripts/lib/skill-category.sh
+# shellcheck disable=SC1091
+source "$(dirname "$0")/lib/skill-category.sh"
+
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SKILLS_DIR="$REPO_ROOT/.claude/skills"
 AGENTS_DIR="$REPO_ROOT/.claude/agents"
@@ -111,11 +116,11 @@ generate_labels() {
         # category | name | model_dep | portability | domain_spec
         local entries=()
         while IFS= read -r file; do
-            local rel="${file#"$SKILLS_DIR"/}"
-            local category="${rel%%/*}"
-            [[ "$category" == "$rel" ]] && category="other"
+            local category
+            category=$(skill_frontmatter_category "$file")
+            [[ -n "$category" ]] || category="other"
             local name
-            name=$(basename "$file" .md)
+            name=$(basename "$(dirname "$file")")
 
             local md po ds
             md=$(classify_model_dependency "$file" "$category")
@@ -123,9 +128,8 @@ generate_labels() {
             ds=$(classify_domain_specificity "$category")
 
             entries+=("${category}|${name}|${md}|${po}|${ds}")
-        done < <(find "$SKILLS_DIR" -type f -name "*.md" -not -name "SKILL.md" | sort)
-        # SKILL.md (.claude/skills/<cat>/<name>/SKILL.md, gitignored)는 P4 adapter --tool=claude
-        # 산출물 — 같은 내용이 부모 단일 파일(.claude/skills/<cat>/<name>.md)에 존재하므로 skip.
+        done < <(find "$SKILLS_DIR" -type f -name "SKILL.md" | sort)
+        # 레이아웃: .claude/skills/<name>/SKILL.md — 카테고리는 frontmatter category: 에서 읽는다.
 
         local prev_cat=""
         printf '%s\n' "${entries[@]}" | sort -t'|' -k1,1 -k2,2 | while IFS='|' read -r cat name md po ds; do

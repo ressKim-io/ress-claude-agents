@@ -2,7 +2,6 @@ import { existsSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { stringify } from "yaml";
 import { adapter, type AdapterTool } from "./adapter.js";
-import { installHook, type HookMode } from "./install-hook.js";
 import { buildMatchContext, selectSkills, type ScoreResult } from "./match.js";
 import { probe } from "./probe.js";
 import type { ProjectProfile } from "./schema/project-profile.js";
@@ -18,12 +17,11 @@ export interface InitOptions {
   dryRun?: boolean;
   outProfile?: string;
   outLock?: string;
-  hookMode?: HookMode;
 }
 
 export interface InitStepLog {
   step: number;
-  name: "probe" | "match" | "confirm" | "adapter" | "hook";
+  name: "probe" | "match" | "confirm" | "adapter";
   status: "ok" | "stub" | "skipped";
   detail: string;
 }
@@ -56,12 +54,6 @@ export interface LockFile {
     detected: AdapterTool[];
     status: "p4-active" | "p4-skipped";
     runs?: AdapterRunSummary[];
-  };
-  hook: {
-    installed: boolean;
-    status: "p5-active" | "p5-skipped" | "p5-already-present";
-    mode?: HookMode;
-    settings_path?: string;
   };
 }
 
@@ -145,54 +137,8 @@ export async function init(opts: InitOptions): Promise<InitOutput> {
                 `${s.tool}: ${s.create}c/${s.update}u/${s.unchanged}=`,
             )
             .join(", ")})`
-        : "no .claude/.codex/.cursor directories detected",
+        : "no .cursor directory detected",
   });
-
-  const hookMode: HookMode = opts.hookMode ?? "warn";
-  const claudeDirExists = detected.includes("claude");
-  let hookField: LockFile["hook"];
-  if (claudeDirExists) {
-    const hookResult = await installHook({
-      root: opts.root,
-      mode: hookMode,
-      ...(opts.dryRun ? { dryRun: true } : {}),
-    });
-    const status: LockFile["hook"]["status"] = hookResult.alreadyPresent
-      ? "p5-already-present"
-      : "p5-active";
-    hookField = {
-      installed: hookResult.installed,
-      status,
-      mode: hookMode,
-      settings_path: path.relative(opts.root, hookResult.settingsPath),
-    };
-    logs.push({
-      step: 5,
-      name: "hook",
-      status: hookResult.installed
-        ? "ok"
-        : hookResult.alreadyPresent
-          ? "skipped"
-          : "skipped",
-      detail: hookResult.alreadyPresent
-        ? `existing PreToolUse hook found in ${path.relative(opts.root, hookResult.settingsPath)} (idempotent skip)`
-        : opts.dryRun
-          ? `dry-run: would install warn-mode admit hook at ${path.relative(opts.root, hookResult.settingsPath)}`
-          : `installed warn-mode admit hook at ${path.relative(opts.root, hookResult.settingsPath)}`,
-    });
-  } else {
-    hookField = {
-      installed: false,
-      status: "p5-skipped",
-      mode: hookMode,
-    };
-    logs.push({
-      step: 5,
-      name: "hook",
-      status: "skipped",
-      detail: "no .claude/ directory — hook installation skipped",
-    });
-  }
 
   const generated_at = opts.frozenTime ?? new Date().toISOString();
   const generator = `@ress/claude-agents@${VERSION}`;
@@ -212,7 +158,6 @@ export async function init(opts: InitOptions): Promise<InitOutput> {
       skip_count: result.skip.length,
     },
     adapters: adaptersField,
-    hook: hookField,
   };
 
   const paths: InitOutput["paths"] = {};
@@ -250,10 +195,11 @@ function round2(n: number): number {
   return Math.round(n * 100) / 100;
 }
 
+// `.claude/` 는 탐지하지 않는다. adapter 대상이 아니기 때문이다 — `.claude/**` 는
+// SSOT 이지 생성물이 아니고, 이전 구현은 Claude Code 가 로드하지 않는 2단계 경로에
+// 죽은 파일을 만들었다 (audit F1/F2, PR #36 리뷰). adapter.ts §AdapterTool 참조.
 function detectTools(root: string): AdapterTool[] {
   const detected: AdapterTool[] = [];
-  if (existsSync(path.join(root, ".claude"))) detected.push("claude");
-  if (existsSync(path.join(root, ".codex"))) detected.push("codex");
   if (existsSync(path.join(root, ".cursor"))) detected.push("cursor");
   return detected;
 }

@@ -25,7 +25,7 @@
 │  Service    │────►│  Scaffold   │────►│  Core       │
 │  Design     │     │  Structure  │     │  Logic      │
 │             │     │             │     │             │
-│ architect   │     │ go-expert   │     │ go-expert   │
+│ architect   │     │ /go-perf    │     │ /go-perf    │
 │ /msa-ddd    │     │ /go-micro   │     │ /go-database│
 └─────────────┘     └─────────────┘     └─────────────┘
        │                                       │
@@ -36,7 +36,7 @@
 │  Patterns   │     │             │     │  Review     │
 │             │     │             │     │             │
 │ /resilience │     │ /go-testing │     │ security-   │
-│ saga-agent  │     │ code-review │     │ scanner     │
+│ /msa-saga   │     │ code-review │     │ scanner     │
 └─────────────┘     └─────────────┘     └─────────────┘
                                                │
                                                ▼
@@ -81,7 +81,7 @@
 
 ## Step 2: Scaffold Project Structure
 
-**Tools**: `go-expert` + `/go-microservice`
+**Tools**: `/go-performance` + `/go-microservice`
 
 ### How to Request
 
@@ -120,7 +120,7 @@ order-service/
 
 ## Step 3: Implement Core Business Logic
 
-**Tools**: `go-expert` + `/go-database` + `/effective-go`
+**Tools**: `/go-performance` + `/go-database` + `/effective-go`
 
 ### How to Request
 
@@ -146,7 +146,7 @@ order-service/
 
 ## Step 4: Apply Resilience Patterns
 
-**Tools**: `saga-agent` + `/msa-resilience` + `/msa-event-driven`
+**Tools**: `/msa-saga` + `/msa-resilience` + `/msa-event-driven`
 
 ### How to Request
 

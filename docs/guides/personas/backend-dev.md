@@ -23,7 +23,7 @@
 
 ```
 1. While coding
-   → java-expert or go-expert suggests review feedback
+   → /jvm-performance or /go-performance suggests review feedback
 
 2. After code is ready
    → "Review my code" → code-reviewer runs
@@ -48,12 +48,10 @@
 
 ### Core Agents
 
-| Agent | Use Case |
+| Agent / Skill | Use Case |
 |-------|----------|
-| `java-expert` | Virtual Threads, WebFlux, JVM tuning, high-traffic |
+| `/jvm-performance` | Virtual Threads, WebFlux, JVM tuning, high-traffic |
 | `code-reviewer` | Code quality, pattern consistency, bug detection |
-| `database-expert` | PostgreSQL tuning, PgBouncer, query optimization |
-| `database-expert-mysql` | MySQL/InnoDB tuning, ProxySQL |
 
 ### Core Skills
 
@@ -76,10 +74,10 @@
 
 ```
 "I want to migrate to Virtual Threads"
-→ java-expert + /concurrency-spring
+→ /jvm-performance + /concurrency-spring
 
 "I have a JPA N+1 problem"
-→ database-expert + /spring-data + /database
+→ /postgresql-operations + /spring-data + /database
 
 "Implement OAuth2 + JWT authentication"
 → /spring-oauth2 + /spring-security
@@ -88,10 +86,10 @@
 → /spring-testcontainers + /spring-testing
 
 "Check clean code quality and readability"
-→ java-expert + /clean-code + /refactoring-principles
+→ /jvm-performance + /clean-code + /refactoring-principles
 
 "Security review my Java code"
-→ java-expert (security checklist) + security-scanner
+→ /spring-security-review + security-scanner
 ```
 
 ---
@@ -100,11 +98,10 @@
 
 ### Core Agents
 
-| Agent | Use Case |
+| Agent / Skill | Use Case |
 |-------|----------|
-| `go-expert` | Worker Pool, Fan-Out/In, sync.Pool, pprof |
+| `/go-performance` | Worker Pool, Fan-Out/In, sync.Pool, pprof |
 | `code-reviewer` | Code quality, Go idiom compliance |
-| `database-expert` | PostgreSQL + pgx/sqlc optimization |
 
 ### Core Skills
 
@@ -124,10 +121,10 @@
 
 ```
 "Set up a Go MSA project structure"
-→ go-expert + /go-microservice + /effective-go
+→ /go-performance + /go-microservice + /effective-go
 
 "Implement a Worker Pool pattern"
-→ go-expert + /concurrency-go
+→ /go-performance + /concurrency-go
 
 "Design a DB layer with sqlc"
 → /go-database + /database
@@ -136,10 +133,10 @@
 → /go-testing + /effective-go
 
 "Review Go error handling + OTel integration"
-→ go-expert (Handle OR Return + OTel patterns)
+→ /go-performance + /effective-go
 
 "Clean code review for Go"
-→ go-expert + /clean-code + /refactoring-go
+→ /go-performance + /clean-code + /refactoring-go
 ```
 
 ---
@@ -168,7 +165,7 @@ Failure isolation:
   /msa-resilience + /cell-based-architecture
 
 Distributed transactions:
-  saga-agent + /msa-saga + /distributed-lock
+  /msa-saga + /distributed-lock
 
 High traffic:
   /high-traffic-design + /database-sharding + /redis-streams

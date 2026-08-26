@@ -42,17 +42,9 @@ SOFT_WARNINGS=()
 # 미등재(= 신규) agent 는 hard fail. 마이그레이션 완료 시 해당 줄을 제거하면
 # 자동으로 hard 검증으로 전환된다. git-workflow 는 본문 3섹션을 갖추므로 의도적으로 제외.
 LEGACY_AGENTS_NO_BODY_SPEC=(
-    anti-bot architect-agent business-decision-agent ci-optimizer cicd-reviewer
-    cicd-security-reviewer code-reviewer compliance-auditor compliance-strategy-agent
-    container-security-reviewer cost-analyzer database-expert database-expert-mysql
-    debugging-expert dev-logger dockerfile-reviewer finops-advisor frontend-expert
-    gitops-reviewer go-expert incident-responder infra-roadmap-planner java-expert
-    k8s-reviewer k8s-security-reviewer k8s-troubleshooter load-tester load-tester-gatling
-    load-tester-k6 load-tester-ngrinder messaging-expert migration-expert mlops-expert
-    network-security-reviewer observability-reviewer otel-expert platform-engineer
-    platform-strategy-agent pr-review-bot product-engineer python-expert redis-expert
-    saga-agent security-scanner service-mesh-expert tech-lead terraform-reviewer
-    ticketing-expert
+    # 비었다 — 2026-08-25 Step 4 에서 전 agent 가 본문 3섹션을 갖췄다.
+    # 신규 agent 를 여기 추가해 게이트를 우회하지 말 것. AGENT-SPEC §5/§6 대로 작성한다.
+    # 경위: docs/audit/2026-08-24-agent-harness-readiness.md §6 Step 4
 )
 
 log_pass() { printf '  PASS  %s\n' "$1"; }
@@ -101,6 +93,8 @@ has_body_section() {
 # agent 이름이 LEGACY 화이트리스트에 있는지 — 0 = 레거시(soft 대상)
 agent_in_legacy_list() {
     local needle="$1" a
+    # 배열이 비면 set -u 에서 unbound — 소진 완료 상태를 정상 경로로 처리한다
+    (( ${#LEGACY_AGENTS_NO_BODY_SPEC[@]} == 0 )) && return 1
     for a in "${LEGACY_AGENTS_NO_BODY_SPEC[@]}"; do
         [[ "$a" == "$needle" ]] && return 0
     done
@@ -140,6 +134,27 @@ validate_agent() {
         return 1
     fi
     return 0
+}
+
+# frontmatter category 파서는 scripts/lib/skill-category.sh 가 단일 구현.
+# shellcheck source=scripts/lib/skill-category.sh
+# shellcheck disable=SC1091
+source "$(dirname "$0")/lib/skill-category.sh"
+
+skill_categories() {
+    local f
+    for f in .claude/skills/*/SKILL.md; do
+        [[ -f "$f" ]] || continue
+        skill_frontmatter_category "$f"
+    done | sort -u
+}
+
+skill_files_in_category() {
+    local want="$1" f
+    for f in .claude/skills/*/SKILL.md; do
+        [[ -f "$f" ]] || continue
+        [[ "$(skill_frontmatter_category "$f")" == "$want" ]] && printf '%s\n' "$f"
+    done
 }
 
 check_agents() {
@@ -395,9 +410,9 @@ report_stats() {
         while IFS= read -r f; do
             total=$((total + 1))
             [[ "$(head -1 "$f")" == "---" ]] && fm=$((fm + 1))
-        done < <(find "$dir" -type f -name "*.md")
+        done < <(skill_files_in_category "$cat")
         printf '  %-15s %d/%d\n' "$cat" "$fm" "$total"
-    done < <(find .claude/skills -mindepth 1 -maxdepth 1 -type d | sort)
+    done < <(skill_categories)
 }
 
 # ---------------------------------------------------------------------------

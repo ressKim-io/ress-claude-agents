@@ -1,7 +1,7 @@
 # Makefile for ress-claude-agents
 # Claude Code Custom Commands & Skills Management
 
-.PHONY: help test validate generate inventory lint install-global install-local setup-hooks clean all
+.PHONY: help validate validate-enforcement validate-links verify-enforcement generate inventory lint setup-hooks clean all
 
 # Default target
 help:
@@ -9,31 +9,34 @@ help:
 	@echo ""
 	@echo "Available targets:"
 	@echo "  help           Show this help message (default)"
-	@echo "  test           Run BATS tests"
 	@echo "  validate       Validate documentation consistency"
+	@echo "  validate-enforcement  Check settings.json <-> user-approval.md rule drift (static, CI)"
+	@echo "  validate-links        Check internal markdown links resolve"
+	@echo "  verify-enforcement    Check permission rules actually fire (runtime, needs claude CLI)"
 	@echo "  generate       Generate documentation (help/index.md)"
 	@echo "  inventory      Generate .claude/inventory.yml"
 	@echo "  lint           Run shellcheck on shell scripts"
-	@echo "  install-global Install commands globally (~/.claude)"
-	@echo "  install-local  Install commands to current project"
 	@echo "  setup-hooks    Setup pre-commit git hooks"
 	@echo "  clean          Remove generated files"
-	@echo "  all            Run validate and test"
-
-# Run BATS tests
-test:
-	@echo "Running BATS tests..."
-	@if command -v bats >/dev/null 2>&1; then \
-		bats tests/*.bats; \
-	else \
-		echo "Error: bats is not installed. Install with: brew install bats-core"; \
-		exit 1; \
-	fi
+	@echo "  all            Run validate + enforcement + links"
 
 # Validate documentation consistency
 validate:
 	@echo "Validating documentation..."
 	@./scripts/generate-docs.sh validate
+
+# 강제 규칙 정적 검증 (CI 에서도 돈다)
+validate-enforcement:
+	@./scripts/validate-enforcement.sh
+
+# 내부 마크다운 링크 검증 (CI 에서도 돈다)
+validate-links:
+	@./scripts/validate-links.sh
+
+# 강제 규칙 런타임 검증 — claude CLI 와 계정 인증이 필요해 CI 에서 돌지 않는다.
+# 규칙을 추가·변경한 커밋에서 1회 실행한다 (ADR 0009 §Consequences).
+verify-enforcement:
+	@./scripts/verify-enforcement-runtime.sh
 
 # Generate documentation
 generate:
@@ -56,16 +59,6 @@ lint:
 		exit 1; \
 	fi
 
-# Install globally
-install-global:
-	@echo "Installing globally..."
-	@./install.sh --global
-
-# Install locally
-install-local:
-	@echo "Installing locally..."
-	@./install.sh --local
-
 # Setup pre-commit hooks
 setup-hooks:
 	@echo "Setting up pre-commit hooks..."
@@ -83,5 +76,5 @@ clean:
 	@echo "Clean completed."
 
 # Run all checks
-all: validate test
+all: validate validate-enforcement validate-links
 	@echo "All checks completed."

@@ -4,6 +4,9 @@ const NAME_PATTERN = /^[a-z0-9][a-z0-9-]{1,62}[a-z0-9]$/;
 const SEMVER_PATTERN =
   /^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$/;
 
+// NOTE: `codex-incompat` 은 codex 지원 중단(2026-08-25, ADR 0010) 이후 의미가
+// 없다. enum 값 제거는 published manifest 전부에 MAJOR bump 를 강제하므로
+// 남겨 둔다 — 신규 자산에는 쓰지 않는다. `security.sandbox` 와 동일 처리.
 export const PortabilityLevel = z.enum([
   "universal",
   "claude-only",
@@ -68,6 +71,9 @@ export const Portability = z
   .strict();
 export type Portability = z.infer<typeof Portability>;
 
+// NOTE: `sandbox` has no runtime consumer since the admit hook was removed
+// (2026-08-25, audit F11). Kept in the schema so removing it doesn't force a
+// MAJOR bump on every published manifest; re-wire or drop in a future v2.
 export const Security = z
   .object({
     signature: z.string().optional(),

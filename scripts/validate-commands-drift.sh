@@ -2,7 +2,7 @@
 # commands/ <-> .claude/commands/ drift 자동 검증
 #
 # 배경: 두 트리는 역할이 다르지만 내용은 같아야 한다.
-#   - commands/          = install.sh 가 읽는 **설치 소스** (모듈 디렉토리 단위)
+#   - commands/          = 모듈 디렉토리 단위 소스 (install.sh 가 읽던 레이아웃)
 #   - .claude/commands/  = 이 레포에서 Claude Code 가 읽는 **작업 세트**
 # 2026-08-16 audit 에서 이 중복이 소리 없이 벌어진 사실이 확인됐다:
 #   - 명령 16개가 .claude/ 에만 있어 설치 프로젝트에서 사용 불가 (기능 결함)
@@ -15,7 +15,6 @@
 #                  .claude/commands/ 최상위 동명 파일과 내용 일치
 #   3. shared    : manifest.yml / help/index.md 동일
 #   4. coverage  : 설치되는 rule 이 참조하는 bare 명령이 설치 소스에 존재
-#   5. ssot      : flatten 모듈 목록이 manifest.yml 과 install.sh 에서 일치
 #
 # 사용:
 #   ./scripts/validate-commands-drift.sh            # 전체 (CI 기본)
@@ -38,8 +37,6 @@ WORK=".claude/commands"
 # flatten 모듈의 SSOT 는 commands/manifest.yml 의 `categories.<name>.flatten: true` 다
 # (scripts/generate-docs.sh 의 is_flattened_category() 도 같은 필드를 읽는다).
 # 여기서 하드코딩하면 SSOT 가 3곳으로 갈라지므로 manifest 에서 읽어온다.
-# install.sh 는 yq 의존을 피하는 설계라 자체 배열을 갖는데, 그 일치 여부는
-# check_flatten_ssot() 가 검증한다.
 read_flatten_modules_from_manifest() {
     yq -r '.categories | to_entries[] | select(.value.flatten == true) | .key' \
         "$SRC/manifest.yml" 2>/dev/null | sort
@@ -231,33 +228,6 @@ check_coverage() {
 
 # ---------------------------------------------------------------------------
 # 5. flatten 모듈 목록 SSOT 일치
-# ---------------------------------------------------------------------------
-# manifest.yml(SSOT) / install.sh(FLATTENED_COMMAND_MODULES) 두 곳이 갈라지면
-# manifest 는 flatten 인데 install 은 안 하거나(설치 시 bare 이름 누락), 반대로
-# install 만 flatten 해서 help 출력이 실제 호출법과 어긋난다.
-check_flatten_ssot() {
-    section "flatten 모듈 SSOT 일치 (manifest ↔ install.sh)"
-
-    local from_manifest from_install
-    from_manifest=$(printf '%s\n' "${FLATTEN_MODULES[@]}" | sort | tr '\n' ' ')
-
-    # install.sh 의 배열 리터럴에서 추출 (yq 의존 없이 유지되는 쪽)
-    from_install=$(sed -n 's/^FLATTENED_COMMAND_MODULES=(\(.*\))$/\1/p' install.sh \
-        | tr -d '"' | tr ' ' '\n' | grep -v '^$' | sort | tr '\n' ' ')
-
-    if [[ -z "$from_install" ]]; then
-        log_fail "install.sh 에서 FLATTENED_COMMAND_MODULES 를 찾지 못했습니다"
-        return
-    fi
-
-    if [[ "$from_manifest" == "$from_install" ]]; then
-        log_pass "flatten 모듈 일치: ${from_manifest% }"
-    else
-        log_fail "flatten 모듈 불일치"
-        printf '        manifest.yml : %s\n' "${from_manifest% }"
-        printf '        install.sh   : %s\n' "${from_install% }"
-    fi
-}
 
 # ---------------------------------------------------------------------------
 main() {
@@ -267,9 +237,7 @@ main() {
         flattened) check_flattened ;;
         shared)    check_shared ;;
         coverage)  check_coverage ;;
-        ssot)      check_flatten_ssot ;;
         all)
-            check_flatten_ssot
             check_modules
             check_flattened
             check_shared

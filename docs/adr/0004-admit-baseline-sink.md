@@ -1,7 +1,14 @@
 # ADR 0004 — admit warn-mode baseline sink + 메트릭 정의
 
-- **Status**: Accepted
+- **Status**: **Superseded** by [ADR 0009](0009-enforcement-layer-placement.md) (2026-08-25)
 - **Date**: 2026-05-08
+
+> ## 무효화 사유 (2026-08-25)
+>
+> 본 ADR 이 정의한 sink 는 `admit` hook 의 결정 이벤트를 기록하기 위한 것이었다. **그 hook 이 배선 결함으로 한 번도 발동하지 않아 수집 이벤트가 0건**이었고 ([audit F11](../audit/2026-08-24-agent-harness-readiness.md#f11-상세--죽은-강제력-레이어-부검-2026-08-25)), hook 자체가 폐기되면서 sink 도 제거됐다.
+>
+> 여기서 정의한 임계(activation rate / allow rate / per-skill warn rate)는 skill 매칭 품질 지표라 강제력 레이어와 무관하다 — 필요해지면 별도 ADR 로 되살린다.
+
 - **Driver**: Migration 0002 P6 (`docs/migration/0002-progress.md`) — kubernetes 카테고리 pilot 후 1주 baseline 수집을 위한 sink 결정 미해결
 - **Phase**: P6 진입 (5/8) → P6 종결 게이트 입력
 - **Supersedes**: 없음

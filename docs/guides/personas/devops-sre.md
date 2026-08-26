@@ -31,7 +31,7 @@
    → /gitops-argocd for ArgoCD setup
 
 3. Monitoring
-   → otel-expert for observability setup
+   → /observability-otel for observability setup
    → /monitoring-grafana for dashboards
 
 4. Incident response
@@ -173,7 +173,7 @@ incident-responder → Auto-triage (severity, blast radius)
   ↓
 k8s-troubleshooter → Cluster diagnostics (pods, nodes, network)
   ↓
-database-expert → DB issue analysis (if needed)
+/postgresql-operations → DB issue analysis (if needed)
   ↓
 /log-trouble → Record troubleshooting
 ```
@@ -195,7 +195,6 @@ database-expert → DB issue analysis (if needed)
 
 | Agent | Role |
 |-------|------|
-| `otel-expert` | Large-scale OTel architecture, Tail Sampling, cost optimization |
 
 ### Observability Stack Skills
 

@@ -8,9 +8,22 @@ SKILLS_DIR="$REPO_ROOT/.claude/skills"
 AGENTS_DIR="$REPO_ROOT/.claude/agents"
 OUTPUT="$REPO_ROOT/.claude/inventory.yml"
 
+# frontmatter category 파서 (단일 구현)
+# shellcheck source=scripts/lib/skill-category.sh
+# shellcheck disable=SC1091
+source "$(dirname "$0")/lib/skill-category.sh"
+
 # Category mapping for skills (filename prefix -> category)
 categorize_skill() {
   local file_path="$1"
+  # 카테고리는 frontmatter category: 가 SSOT — 레이아웃이 <name>/SKILL.md 로 평탄화되어
+  # 디렉토리에서 카테고리를 읽을 수 없다.
+  local fm_cat
+  fm_cat=$(skill_frontmatter_category "$file_path")
+  if [ -n "$fm_cat" ]; then
+    echo "$fm_cat"
+    return
+  fi
   local rel_path="${file_path#"$SKILLS_DIR"/}"
   local dir
   dir=$(dirname "$rel_path")
@@ -134,7 +147,7 @@ generate() {
   while IFS= read -r file; do
     [ -f "$file" ] || continue
     local basename
-    basename=$(basename "$file" .md)
+    basename=$(basename "$(dirname "$file")")
     local meta
     meta=$(extract_skill_meta "$file")
     local lines title desc category
@@ -145,9 +158,9 @@ generate() {
     skill_entries+=("$category|$basename|$lines|$title|$desc")
     total_skill_lines=$((total_skill_lines + lines))
     skill_count=$((skill_count + 1))
-  done < <(find "$SKILLS_DIR" -name "*.md" -type f -not -name "SKILL.md" | sort)
-  # SKILL.md (.claude/skills/<cat>/<name>/SKILL.md, gitignored)는 P4 adapter --tool=claude
-  # 산출물 — 같은 내용이 부모 단일 파일(.claude/skills/<cat>/<name>.md)에 존재하므로 skip.
+  done < <(find "$SKILLS_DIR" -name "SKILL.md" -type f | sort)
+  # 레이아웃: .claude/skills/<name>/SKILL.md (Claude Code 규격). skill 이름은 디렉토리명,
+  # 카테고리는 frontmatter category: 에서 읽는다.
 
   # Duplicate name check
   local all_names dupes

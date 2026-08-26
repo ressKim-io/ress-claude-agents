@@ -34,7 +34,7 @@
 │  Step 4     │     │  Step 5     │     │  Step 6     │
 │  GitOps     │────►│  Observ.    │────►│  Security   │
 │  Setup      │     │  Stack      │     │  Baseline   │
-│ /gitops-    │     │ otel-expert │     │ security-   │
+│ /gitops-    │     │ /observab-  │     │ security-   │
 │ argocd      │     │ /observ-    │     │ scanner     │
 │ ci-optimizer│     │ ability     │     │ terraform-  │
 └─────────────┘     └─────────────┘     │ reviewer    │
@@ -189,7 +189,7 @@ IDP Architecture:
 
 ## Step 5: Observability Stack
 
-**Tools**: `otel-expert` + `/observability-otel` + `/monitoring-grafana`
+**Tools**: `/observability-otel` + `/observability-otel-scale` + `/monitoring-grafana`
 
 ### How to Request
 

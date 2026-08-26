@@ -172,17 +172,34 @@ validate_against_schema() {
 # ---------------------------------------------------------------------------
 # 3. P1 sample 검증
 # ---------------------------------------------------------------------------
-section "P1 sample frontmatter validation"
+section "Agent frontmatter validation (전수)"
 
-validate_against_schema \
-    ".agents/skills/source-command-log-summary/SKILL.md" \
-    "schemas/skill-manifest.v1.json" \
-    "source-command-log-summary → skill-manifest.v1"
+# .agents/ 샘플 검증은 삭제됐다. `.agents/` 는 deprecate 대상이라 gitignore 되어 파일이
+# 존재하지 않았고, skill-manifest.v1 검증은 아래 §4 가 assets/skills/ 전수로 이미 커버한다.
+# 근거: docs/audit/2026-08-24-agent-harness-readiness.md (Step 2)
+#
+# 2026-08-25: code-reviewer 1건 샘플 → .claude/agents/ 전수로 확대. 샘플 방식은
+# 이미 `effort` 를 쓰던 agent 5개가 구 스키마(additionalProperties:false)를 위반하고도
+# 통과하도록 방치했다. 근거: 같은 audit F8.
+MIN_AGENT_COUNT=30
 
-validate_against_schema \
-    ".claude/agents/code-reviewer.md" \
-    "schemas/agent-manifest.v1.json" \
-    "code-reviewer → agent-manifest.v1"
+AGENT_FILES=()
+while IFS= read -r f; do
+    AGENT_FILES+=("$f")
+done < <(find .claude/agents -maxdepth 1 -name "*.md" -type f | sort)
+
+if (( ${#AGENT_FILES[@]} < MIN_AGENT_COUNT )); then
+    log_fail "agent 개수 회귀: ${#AGENT_FILES[@]} < $MIN_AGENT_COUNT"
+else
+    log_pass "agent 개수 ${#AGENT_FILES[@]} >= $MIN_AGENT_COUNT"
+fi
+
+for f in "${AGENT_FILES[@]}"; do
+    validate_against_schema \
+        "$f" \
+        "schemas/agent-manifest.v1.json" \
+        "$(basename "$f" .md) → agent-manifest.v1"
+done
 
 # ---------------------------------------------------------------------------
 # 4. 변환된 SKILL.md 전체 strict 검증 (P2=10 게이트 / P6=15 게이트 / 이후 증가)

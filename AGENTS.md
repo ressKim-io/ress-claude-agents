@@ -9,29 +9,18 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 
 ## Project Overview
 
-이 레포는 **AI 코딩 에이전트용 재사용 가능한 룰/스킬/에이전트 컬렉션**이다. 다른 프로젝트에 install되어 코딩 표준과 도메인 지식을 제공한다.
+이 레포는 **AI 코딩 에이전트용 룰/스킬/에이전트 컬렉션**이다. **이 레포에서 직접 작업할 때 로드되는 자산**이며, 배포 수단은 두지 않는다 — `install.sh` 와 그 설정 표면(`plugins/` · `.claude/workflows/`)은 2026-08-26 에 제거됐다 ([ADR 0011](docs/adr/0011-remove-install-sh.md)). 다른 프로젝트에서 쓰려면 필요한 파일을 직접 가져간다.
 
 > **개수는 여기 쓰지 않는다.** CI 는 [inventory.yml](.claude/inventory.yml) 신선도는 검사하지만 산문에 박힌 숫자는 검사하지 않아 반드시 drift 한다 — 실제로 "274 skills"(실제 260) / "25 rules"(실제 26) 가 각각 방치됐다. 현재 수치는 `summary` 참조: `yq '.summary' .claude/inventory.yml`
 
 | 자산 | 위치 | 내용 |
 |---|---|---|
 | Skills (도메인 패턴) | `.claude/skills/` | 22 카테고리 — Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등 |
-| Agents (전문 에이전트) | `.claude/agents/` | database-expert, k8s-troubleshooter, saga-agent, business-decision-agent 등 |
+| Agents (전문 에이전트) | `.claude/agents/` | code-reviewer, k8s-troubleshooter, architect-agent, business-decision-agent 등 |
 | Rules (코딩/보안/워크플로우) | `.claude/rules/` | 이 AGENTS.md의 상세판. effort-guide, multi-tool-adapter 포함 |
 | Templates (작성 표준) | `.claude/templates/` | SKILL-SPEC, AGENT-SPEC + 문서 template (신규 자산 작성 spec) |
-| Plugins (역할별 번들) | `plugins/*.yml` | 역할별 agent + skill 카테고리 묶음 |
-| Workflows (시나리오 번들) | `.claude/workflows/*.yml` | 시나리오별 stage 정의 (`_base.yml` 병합) |
 
-**중요**: K8s/Cloud/Monitoring 섹션의 룰은 **install된 프로젝트**에 적용된다 (이 메타 레포 자체엔 K8s 없음).
-
-## Setup
-
-```bash
-./install.sh                      # 전체 설치
-./install.sh --plugin go-stack    # 특정 번들만
-./install.sh --list-plugins       # 사용 가능한 번들 목록
-./install.sh --workflow msa       # 시나리오 번들
-```
+**중요**: K8s/Cloud/Monitoring 섹션의 룰은 **그 자산을 가져간 프로젝트**에 적용된다 (이 메타 레포 자체엔 K8s 없음).
 
 전체 인덱스: [.claude/inventory.yml](.claude/inventory.yml)
 
@@ -151,6 +140,8 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 **서브 에이전트 위임 시**: 에이전트는 결과만 반환. 외부 게시 권한 위임 금지.
 
+**산문 아래에 실행 강제가 깔려 있다**: [`.claude/settings.json`](.claude/settings.json) 의 `permissions.deny` / `ask` 가 위 항목 중 명령으로 표현 가능한 것을 강제한다 — `deny` = 세션에서 실행할 이유가 없는 것(변경형 `kubectl`, ArgoCD Force Sync), `ask` = 승인 프로세스가 있는 것(`git push`, `gh pr *`). `deny` 는 **모든 모드에서, subagent 의 `Bash` 안쪽에서도 유지된다**. 🔴 반면 **`ask` 는 대화형 `bypassPermissions` 에서 무력**이다 (프롬프트를 건너뛰므로) — 그 모드에선 산문과 동급이니 승인 절차를 사람이 지켜야 한다 (실측: [ADR 0009](docs/adr/0009-enforcement-layer-placement.md)). 규칙 ↔ 산문 매핑과 "산문으로만 남는 것" 목록은 [`user-approval.md`](.claude/rules/user-approval.md) §강제 메커니즘 매핑, 드리프트는 `scripts/validate-enforcement.sh` 가 게이트한다.
+
 ---
 
 ## Kubernetes Safety
@@ -215,10 +206,10 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 | 영역 | Skill | 핵심 |
 |---|---|---|
-| 멀티테넌시 | [`skills/business/multi-tenancy`](.claude/skills/business/multi-tenancy.md) | Team/Org, 데이터 격리(Row/Schema/DB), RBAC, 초대 |
-| 인증 | [`skills/business/auth-oauth-social`](.claude/skills/business/auth-oauth-social.md) | Google/Apple/Kakao, PKCE, Magic Link, 2FA |
-| 결제 | [`skills/business/payment-integration`](.claude/skills/business/payment-integration.md) | Stripe/Toss/PortOne, Token-first, Webhook, Saga |
-| 알림 | [`skills/business/notification-multichannel`](.claude/skills/business/notification-multichannel.md) | Push/Email/SMS, Fallback, Notification Center |
+| 멀티테넌시 | [`multi-tenancy`](.claude/skills/multi-tenancy/SKILL.md) | Team/Org, 데이터 격리(Row/Schema/DB), RBAC, 초대 |
+| 인증 | [`auth-oauth-social`](.claude/skills/auth-oauth-social/SKILL.md) | Google/Apple/Kakao, PKCE, Magic Link, 2FA |
+| 결제 | [`payment-integration`](.claude/skills/payment-integration/SKILL.md) | Stripe/Toss/PortOne, Token-first, Webhook, Saga |
+| 알림 | [`notification-multichannel`](.claude/skills/notification-multichannel/SKILL.md) | Push/Email/SMS, Fallback, Notification Center |
 
 **신규 프로젝트 시작 시 ADR 작성 순서** (이 순서대로 결정해야 변경 비용 ↓):
 1. 멀티테넌시 격리 모델 (가장 비싼 결정)
@@ -226,7 +217,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 3. 결제 Provider (한국=PortOne/Toss, 글로벌=Stripe)
 4. 알림 채널 + Provider
 
-각 skill에 ADR 템플릿 포함. **0→1 신규 프로젝트는 [`bootstrap-new-saas`](.claude/workflows/bootstrap-new-saas.yml) workflow가 `agents/business-decision-agent`로 4 ADR을 자동 orchestration**한다 (compliance-strategy-agent / platform-strategy-agent와 함께). 기존 프로젝트에 새 도메인 추가만 필요하면 [`new-domain`](.claude/workflows/new-domain.yml) workflow 사용.
+각 skill에 ADR 템플릿 포함. 0→1 신규 프로젝트는 `business-decision-agent` 에 4 ADR orchestration 을 맡기고, 규제·platform 결정은 `compliance-strategy-agent` / `platform-strategy-agent` 와 병행한다. (이전에는 `.claude/workflows/*.yml` 이 stage 를 선언했으나 실행 주체가 `install.sh` 뿐이라 함께 제거됐다 — [ADR 0011](docs/adr/0011-remove-install-sh.md).)
 
 ---
 
@@ -235,14 +226,15 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | 도구 | 추가 설정 | 변환 |
 |---|---|---|
 | **Claude Code** | 본 파일 §Claude Code-Specific + `.claude/rules/`, `.claude/skills/`, `.claude/agents/` 자동 로딩 | 원본 |
-| **Codex** | `.codex/AGENTS.md` (본 파일의 symlink) + `.codex/agents/*.toml`, `.codex/skills/<cat>/*.toml` | 자동 (adapter) |
 | **Cursor** | 본 파일 자동 인식 + `.cursor/rules/*.mdc` | 자동 (adapter) |
 | **Kiro** | 본 파일 루트 자동 인식 + `.kiro/{skills,agents,steering}/` | **수동** ([ADR 0006](docs/adr/0006-kiro-adapter-strategy.md) Option 1) |
-| **Copilot / Gemini CLI / Windsurf** | 본 파일 자동 인식 — 추가 설정 불필요 | 불필요 |
+| **Codex / Copilot / Gemini CLI / Windsurf** | 본 파일 자동 인식 — 추가 설정 불필요 | 불필요 |
 
 도구별 최적화는 선택. 핵심 룰은 모두 본 파일에 있다.
 
 **도구별 디렉토리는 전부 산출물(view)이다 — 직접 편집 금지.** 원본을 고치고 변환을 재실행한다. 매핑 표·port 규칙은 [`docs/architecture/multi-tool-mapping.md`](docs/architecture/multi-tool-mapping.md), 거버넌스 원칙은 [`.claude/rules/multi-tool-adapter.md`](.claude/rules/multi-tool-adapter.md) 참조.
+
+> ⛔ **Codex 전용 view 는 2026-08-25 에 제거됐다** ([ADR 0010](docs/adr/0010-drop-codex-support.md)). Codex 는 본 파일을 자동 인식하므로 계속 쓸 수 있다 — 없어진 것은 `.codex/*.toml` 산출물뿐이다.
 
 ---
 
@@ -283,7 +275,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 ### Token Budget (Opus 4.7)
 
 - Context **80% 초과 → 세션 종료**, 무관 태스크 전환 시 `/clear`
-- Effort 기본 `xhigh` (Claude Code 기본값), 단순 조회 `low`, frontier 문제만 `max`
+- Effort 는 본 레포 기본 `xhigh`, 단순 조회 `low`, frontier 문제만 `max` — **런타임 기본은 `high`** 라 agent frontmatter 에 명시해야 적용된다 (모델별 지원 표: [`effort-guide.md`](.claude/rules/effort-guide.md))
 - Tokenizer 4.6 → 4.7: `max_tokens` **35% headroom**, prompt cache 재빌드 가정 (최소 4096 tokens)
 - Subagent는 명시 spawn (Opus 4.7은 기본적으로 덜 spawn함). 10+ 파일 탐색은 subagent 위임
 - 상세: `.claude/rules/token-budget.md` + 카테고리별 매핑 `.claude/rules/effort-guide.md`, 코드 예시·비용 계산은 `/token-budget` skill
@@ -292,17 +284,21 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 | Feature | 위치 | 호출 |
 |---|---|---|
-| Skills | `.claude/skills/` | 자동 발견 (description 매칭) |
+| Skills | `.claude/skills/<name>/SKILL.md` | 자동 발견 (description 매칭) 또는 `/<name>` |
 | Subagents | `.claude/agents/` | `Agent` 도구 (`subagent_type=...`) |
-| Slash Commands | `.claude/commands/` | `/command-name` |
-| Plugins | `plugins/*.yml` | `install.sh --plugin <name>` |
-| Workflows | `.claude/workflows/*.yml` | `install.sh --workflow <name>` |
+| Slash Commands | `.claude/commands/` | `/command-name` — skills 로 병합됨 (기존 파일은 계속 동작) |
 
 자산 통계는 [.claude/inventory.yml](.claude/inventory.yml) 의 `summary` 가 유일한 출처다 (`scripts/generate-inventory.sh` 로 자동 재생성, CI `Inventory Freshness` job 이 신선도 검증).
 
 > **개수를 산문에 쓰지 않는다.** CI 는 inventory 신선도는 검사하지만 문서 본문에 박힌 숫자는 검사하지 않아 반드시 drift 한다. 실제로 이 문단의 이전 버전이 "274 skills / 43 commands" 로 3개월간 틀린 값을 유지했다 (실제 260 / 51). 근거: [2026-08-15 audit §2](docs/audit/2026-08-15-asset-tier-rebalance.md#2-사실-오류--drift-수정은-백로그).
 
+> ⚠️ **skill 경로 규격 (검증일 2026-08-24)**: Claude Code 는 `.claude/skills/<skill-name>/SKILL.md` — **한 단계 디렉토리 + `SKILL.md`** 만 로드한다. 카테고리 하위 디렉토리는 지원하지 않는다. 현재 이 레포의 `.claude/skills/<카테고리>/<이름>.md` 는 규격을 벗어나 **로드되지 않는다**. 복구 절차: [2026-08-24 audit §6 Step 2](docs/audit/2026-08-24-agent-harness-readiness.md).
+>
+> Custom commands 는 skills 로 병합됐다 — `.claude/commands/x.md` 와 `.claude/skills/x/SKILL.md` 는 둘 다 `/x` 를 만들고, 이름이 겹치면 skill 이 우선한다.
+
 **신규 skill / agent 작성 표준**: [`.claude/templates/SKILL-SPEC.md`](.claude/templates/SKILL-SPEC.md) / [`AGENT-SPEC.md`](.claude/templates/AGENT-SPEC.md). frontmatter / description 패턴 / Verification Criteria 섹션 강제.
+
+subagent frontmatter 는 16개 필드를 지원하며, 이 중 `permissionMode` / `disallowedTools` / `maxTurns` 는 산문 규약과 달리 **런타임이 강제**한다. §User Approval 의 "에이전트에 외부 게시 권한 위임 금지" 같은 제약은 산문으로만 두지 말고 frontmatter 로 승격할 수 있는지 매번 검토한다 ([AGENT-SPEC §1.2](.claude/templates/AGENT-SPEC.md)).
 
 ### Opus 4.7 Behavioral Notes
 
@@ -323,8 +319,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 2. **`.claude/rules/*.md`** — Claude Code 자동 로딩 상세 룰. 본 파일과 **반드시 일관**.
 3. **Mirrors**:
    - `CLAUDE.md` → 본 파일 symlink (Claude Code 호환)
-   - `.codex/AGENTS.md` → 본 파일 symlink (Codex 호환)
-4. **도구별 view** (`.codex/agents`, `.codex/skills`, `.cursor/rules`, `.kiro/**`) — **산출물. 직접 편집 금지.** Codex/Cursor 는 `control-plane/src/adapter.ts` 가 생성하고 CI drift job 이 게이트한다. Kiro 는 수동 port ([`multi-tool-adapter.md`](.claude/rules/multi-tool-adapter.md)).
+4. **도구별 view** (`.cursor/rules`, `.kiro/**`) — **산출물. 직접 편집 금지.** Cursor 는 `control-plane/src/adapter.ts` 가 생성하고 CI drift job 이 게이트한다. Kiro 는 수동 port ([`multi-tool-adapter.md`](.claude/rules/multi-tool-adapter.md)).
 
 **룰 변경 절차**:
 - **보편 룰 또는 Claude Code-Specific** → 본 파일 수정 → 관련 `.claude/rules/`로 propagate

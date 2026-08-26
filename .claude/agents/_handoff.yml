@@ -124,31 +124,11 @@ agents:
     consumes: [user-story, acceptance-criteria, mvp-scope, compliance-blueprint]
     produces: [bounded-context, service-boundary, api-contract, data-model]
 
-  ticketing-expert:
-    consumes: [user-story, mvp-scope]
-    produces: [bounded-context, api-contract, runbook]
-
-  saga-agent:
-    consumes: [bounded-context, api-contract]
-    produces: [code, runbook]
-
   infra-roadmap-planner:
     consumes: [bounded-context, mvp-scope, adr]
     produces: [migration-plan, upgrade-plan]
 
   # === 언어별 구현 ===
-  go-expert:
-    consumes: [api-contract, adr, acceptance-criteria]
-    produces: [code, unit-test, integration-test, code-review-comment]
-
-  java-expert:
-    consumes: [api-contract, adr, acceptance-criteria]
-    produces: [code, unit-test, integration-test, code-review-comment]
-
-  python-expert:
-    consumes: [api-contract, adr, acceptance-criteria]
-    produces: [code, unit-test, integration-test, code-review-comment]
-
   frontend-expert:
     consumes: [api-contract, acceptance-criteria]
     produces: [code, unit-test, code-review-comment]
@@ -165,26 +145,6 @@ agents:
   service-mesh-expert:
     consumes: [k8s-manifest, bounded-context]
     produces: [k8s-manifest, code-review-comment]
-
-  messaging-expert:
-    consumes: [api-contract, bounded-context]
-    produces: [code, runbook, code-review-comment]
-
-  otel-expert:
-    consumes: [code, k8s-manifest, mvp-scope, bounded-context, adr]
-    produces: [dashboard, alert-rule, slo-definition]
-
-  database-expert:
-    consumes: [data-model, code]
-    produces: [code-review-comment, migration-plan, runbook]
-
-  database-expert-mysql:
-    consumes: [data-model, code]
-    produces: [code-review-comment, migration-plan, runbook]
-
-  redis-expert:
-    consumes: [code, k8s-manifest]
-    produces: [code-review-comment, runbook]
 
   # === 리뷰어 (post-implementation) ===
   code-reviewer:
@@ -215,10 +175,6 @@ agents:
     consumes: [ci-pipeline]
     produces: [code-review-comment]
 
-  pr-review-bot:
-    consumes: [pr]
-    produces: [code-review-comment]
-
   # === 보안 리뷰어 (security-finding 산출) ===
   security-scanner:
     consumes: [code, dockerfile]
@@ -239,10 +195,6 @@ agents:
   cicd-security-reviewer:
     consumes: [ci-pipeline]
     produces: [security-finding]
-
-  anti-bot:
-    consumes: [code, k8s-manifest, alert]
-    produces: [k8s-manifest, runbook, code-review-comment]
 
   compliance-auditor:
     consumes: [code, k8s-manifest, terraform-module, ci-pipeline]
@@ -276,18 +228,6 @@ agents:
 
   # === 부하/성능 테스트 ===
   load-tester:
-    consumes: [api-contract, code]
-    produces: [load-test-report]
-
-  load-tester-k6:
-    consumes: [api-contract, code]
-    produces: [load-test-report]
-
-  load-tester-gatling:
-    consumes: [api-contract, code]
-    produces: [load-test-report]
-
-  load-tester-ngrinder:
     consumes: [api-contract, code]
     produces: [load-test-report]
 

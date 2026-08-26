@@ -90,7 +90,7 @@ Spec-Driven Development(SDD) 문서를 작성한 직후 다음 순서를 따른�
 
 ## 템플릿
 
-문서 12종(ADR / 프로젝트 개요 / 인프라 아키텍처 / SLI/SLO / CI/CD / 포스트모템 / 마이그레이션 / DX 개선 / 비용 분석 / 온보딩 / 프로젝트 회고 / 부하 테스트 결과)의 마크다운 템플릿은 `.claude/skills/dx/documentation-templates.md` (`/documentation-templates`)에 있다.
+문서 12종(ADR / 프로젝트 개요 / 인프라 아키텍처 / SLI/SLO / CI/CD / 포스트모템 / 마이그레이션 / DX 개선 / 비용 분석 / 온보딩 / 프로젝트 회고 / 부하 테스트 결과)의 마크다운 템플릿은 [`/documentation-templates`](../skills/documentation-templates/SKILL.md)에 있다.
 
 신규 문서 작성 시 해당 skill을 호출하여 템플릿을 가져온다. 템플릿 본문은 rules에 중복 보관하지 않는다.
 

@@ -23,15 +23,15 @@ Opus 4.7은 기본적으로 subagent를 덜 spawn하므로 필요 시 **명시 �
 
 | 레벨 | 사용 상황 | 비용 |
 |------|---------|------|
-| `xhigh` | **코딩/agentic 기본** (권장 시작점) | high 대비 ~2x |
-| `high` | 지능 민감 작업 최소 기준 | 기본값 |
+| `xhigh` | **본 레포 코딩/agentic 기본** — Opus 4.7/4.8 권장 시작점, Sonnet 5 도 지원 | high 대비 ~2x |
+| `high` | 지능 민감 작업 최소 기준 | **런타임 기본값** |
 | `medium` | 비용 민감 + 품질 타협 | ~50% |
 | `low` | 단순 조회·subagent·속도 우선 | ~25% |
 | `max` | 진짜 frontier 문제만 | xhigh 대비 2x, +3%p만 |
 
 - MUST 얕은 추론 관찰 시 prompting 우회 대신 effort 레벨 **상향**
 - NEVER 일반 코딩에 `max` 사용 — overthinking 위험, 비용 대비 효과 미미
-- PREFER Claude Code 기본값(`xhigh`) 유지 — 수동 설정 필요 시에만 조정
+- MUST agent frontmatter 에 `effort` 를 **명시**한다 — Claude Code 런타임 기본은 Sonnet 5 기준 `high` 라 생략하면 xhigh 로 안 간다 (모델별 지원: [`effort-guide.md`](effort-guide.md))
 
 > 카테고리별 effort 매핑: [`effort-guide.md`](effort-guide.md)
 

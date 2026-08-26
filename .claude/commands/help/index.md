@@ -152,11 +152,16 @@ SDD Phase 게이트 워크플로우
 
 ---
 
-## 설치
+## 자산 가져가기
+
+설치 스크립트는 없다 (2026-08-26 제거, [ADR 0011](../../../docs/adr/0011-remove-install-sh.md)).
+다른 프로젝트에서 쓰려면 필요한 파일만 직접 복사한다.
 
 ```bash
-./install.sh --global --all      # 전역 설치
-./install.sh --local --modules go,k8s  # 로컬 설치
-./install.sh                     # 대화형 설치
+cp -r .claude/skills/<name>       /path/to/project/.claude/skills/
+cp    .claude/agents/<name>.md    /path/to/project/.claude/agents/
+cp    .claude/rules/<name>.md     /path/to/project/.claude/rules/
 ```
+
+skill 은 `<skill-name>/SKILL.md` 레이아웃을 유지해야 로드된다.
 
