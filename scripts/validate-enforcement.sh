@@ -11,12 +11,13 @@
 #   2. invalid : 공식 문서상 무시되는 패턴 (Bash(command:...)) 사용 0건
 #   3. overlap : deny 와 ask 에 같은 규칙 중복 0건
 #   4. drift   : settings.json 규칙 <-> user-approval.md 매핑 표 양방향 일치
+#   5. count   : 규칙 최소 개수 하한 — 빈 상태가 "0건 일치" 로 통과하는 것 차단
 #
 # 잡지 못하는 것 (의도적):
 #   - 규칙이 런타임에 실제로 발동하는지. 그건 `make verify-enforcement` 가 하고,
 #     claude CLI 가 필요해 CI 에서 돌지 않는다. ADR 0009 §Consequences 참조.
 #
-# 사용: ./scripts/validate-enforcement.sh [syntax|invalid|overlap|drift]
+# 사용: ./scripts/validate-enforcement.sh [syntax|invalid|overlap|drift|count]
 # Exit code: 0 = 통과, 1 = 실패
 
 set -euo pipefail
@@ -26,6 +27,11 @@ cd "$ROOT"
 
 SETTINGS=".claude/settings.json"
 RULEDOC=".claude/rules/user-approval.md"
+
+# 규칙이 통째로 사라져도 "0건 양방향 일치" 로 초록이 되는 것을 막는다.
+# validate-schemas.sh 의 MIN_AGENT_COUNT 과 같은 이유 — 빈 상태가 통과하면
+# 게이트가 아니라 장식이다 (PR #36 리뷰).
+MIN_RULE_COUNT=15
 
 EXIT_CODE=0
 FAILED_CHECKS=()
@@ -140,6 +146,18 @@ check_drift() {
     fi
 }
 
+check_min_count() {
+    section "5. 최소 규칙 개수"
+    local n
+    n=$(settings_rules | wc -l | tr -d ' ')
+    if [[ "$n" -lt "$MIN_RULE_COUNT" ]]; then
+        log_fail "규칙 ${n}건 — 하한 ${MIN_RULE_COUNT}건 미달. 강제력이 축소·삭제됐는지 확인할 것"
+        printf '        의도한 축소라면 %s 의 MIN_RULE_COUNT 를 함께 낮춘다.\n' "$0"
+    else
+        log_pass "규칙 ${n}건 (하한 ${MIN_RULE_COUNT})"
+    fi
+}
+
 main() {
     require_files
     local target="${1:-all}"
@@ -148,14 +166,16 @@ main() {
         invalid) check_invalid_pattern ;;
         overlap) check_overlap ;;
         drift)   check_drift ;;
+        count)   check_min_count ;;
         all)
             check_syntax
             check_invalid_pattern
             check_overlap
             check_drift
+            check_min_count
             ;;
         *)
-            printf 'Usage: %s [syntax|invalid|overlap|drift|all]\n' "$0" >&2
+            printf 'Usage: %s [syntax|invalid|overlap|drift|count|all]\n' "$0" >&2
             exit 2
             ;;
     esac
