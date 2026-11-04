@@ -143,8 +143,6 @@ should_fail_links_when_command_has_broken_link() {
 
 should_fail_links_when_nested_rule_has_broken_link() {
     # Given
-    mkdir -p "$CASE_DIR/.claude/rules/core"
-    mv "$CASE_DIR/.claude/rules/git.md" "$CASE_DIR/.claude/rules/core/git.md"
     printf '\n[x](./no-such-file.md)\n' >>"$CASE_DIR/.claude/rules/core/git.md"
     # When/Then
     expect_fail 'core/git\.md' ./scripts/validate-links.sh
@@ -152,7 +150,7 @@ should_fail_links_when_nested_rule_has_broken_link() {
 
 should_fail_links_when_non_markdown_target_is_missing() {
     # Given
-    printf '\n[x](../no-such-settings.json)\n' >>"$CASE_DIR/.claude/rules/git.md"
+    printf '\n[x](../no-such-settings.json)\n' >>"$CASE_DIR/.claude/rules/core/git.md"
     # When/Then
     expect_fail '깨진 내부 링크' ./scripts/validate-links.sh
 }
@@ -180,7 +178,7 @@ should_pass_links_when_plugin_link_stays_inside_plugin() {
 # ---------------------------------------------------------------------------
 should_fail_drift_when_rule_has_stale_model_id() {
     # Given
-    printf '\nclaude-opus-4-7\n' >>"$CASE_DIR/.claude/rules/git.md"
+    printf '\nclaude-opus-4-7\n' >>"$CASE_DIR/.claude/rules/core/git.md"
     # When/Then
     expect_fail '구 모델 ID' ./scripts/validate-rules-drift.sh model-ids
 }
@@ -207,10 +205,9 @@ should_fail_drift_when_nested_rule_ref_is_dangling() {
     expect_fail 'core/no-such-rule' ./scripts/validate-rules-drift.sh refs
 }
 
-should_pass_drift_when_critical_rule_is_nested() {
-    # Given
-    mkdir -p "$CASE_DIR/.claude/rules/core"
-    mv "$CASE_DIR/.claude/rules/security.md" "$CASE_DIR/.claude/rules/core/security.md"
+should_pass_drift_when_critical_rule_changes_group() {
+    # Given: critical rule 은 경로가 아니라 파일명으로 찾는다
+    mv "$CASE_DIR/.claude/rules/core/security.md" "$CASE_DIR/.claude/rules/process/security.md"
     # When/Then
     expect_pass ./scripts/validate-rules-drift.sh consistency
 }
@@ -263,10 +260,9 @@ should_fail_inventory_when_skill_has_no_area() {
     expect_fail '영역을 알 수 없' ./scripts/generate-inventory.sh generate
 }
 
-should_keep_inventory_fresh_when_rule_is_nested() {
+should_keep_inventory_fresh_when_rule_changes_group() {
     # Given
-    mkdir -p "$CASE_DIR/.claude/rules/core"
-    mv "$CASE_DIR/.claude/rules/git.md" "$CASE_DIR/.claude/rules/core/git.md"
+    mv "$CASE_DIR/.claude/rules/core/git.md" "$CASE_DIR/.claude/rules/process/git.md"
     # When/Then: rule 개수는 재귀로 세므로 그대로여야 한다
     expect_pass ./scripts/generate-inventory.sh validate
 }
@@ -308,7 +304,7 @@ should_fail_handoff_when_plugin_agent_is_unregistered() {
 # ---------------------------------------------------------------------------
 should_fail_catalog_when_rule_disappears() {
     # Given
-    rm -f "$CASE_DIR/.claude/rules/git.md"
+    rm -f "$CASE_DIR/.claude/rules/core/git.md"
     # When/Then
     expect_fail '하한' ./scripts/validate-catalog.sh
 }
@@ -323,7 +319,7 @@ should_fail_catalog_when_command_has_no_description() {
 should_fail_catalog_when_rule_references_missing_command() {
     # Given
     # shellcheck disable=SC2016  # 백틱은 실행이 아니라 문서 표기다
-    printf '\n`/no-such-command` 를 쓴다\n' >>"$CASE_DIR/.claude/rules/git.md"
+    printf '\n`/no-such-command` 를 쓴다\n' >>"$CASE_DIR/.claude/rules/core/git.md"
     # When/Then
     expect_fail '해석되지 않는 명령.*no-such-command' ./scripts/validate-catalog.sh
 }

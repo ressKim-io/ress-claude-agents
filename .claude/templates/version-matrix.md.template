@@ -1,7 +1,7 @@
 # {PROJECT_NAME} — Version Compatibility Matrix
 
 > 의존성 호환성 SoT. K8s/Istio/ArgoCD/Helm chart/언어/SDK 버전 변경 시 반드시 갱신.
-> `.claude/rules/version-compatibility.md` 의 기준.
+> `.claude/rules/infra/version-compatibility.md` 의 기준.
 
 ---
 
@@ -113,4 +113,4 @@ Container runtime: {containerd 1.7+}
 - Grafana 스택 설정 변경
 - docker-compose / Dockerfile 베이스 이미지 변경
 
-상세 규칙: `.claude/rules/version-compatibility.md`
+상세 규칙: `.claude/rules/infra/version-compatibility.md`

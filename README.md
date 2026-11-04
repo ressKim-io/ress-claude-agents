@@ -23,7 +23,7 @@ To reuse an asset in another project, copy the file you need:
 ```bash
 cp -r .claude/skills/go-performance   /path/to/project/.claude/skills/
 cp    .claude/agents/code-reviewer.md /path/to/project/.claude/agents/
-cp    .claude/rules/security.md       /path/to/project/.claude/rules/
+cp    .claude/rules/core/security.md       /path/to/project/.claude/rules/
 ```
 
 Skills must keep the `<skill-name>/SKILL.md` layout — Claude Code does not load any other shape.

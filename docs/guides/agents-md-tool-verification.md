@@ -116,7 +116,7 @@ gemini "이 레포의 코딩 룰을 요약해줘"
 
 기대 결과:
 - AGENTS.md §Security 요약
-- .claude/rules/security.md 내용 인용 (PreparedStatement, bcrypt 등)
+- .claude/rules/core/security.md 내용 인용 (PreparedStatement, bcrypt 등)
   ↑ 도구가 링크 따라가는지 검증
 
 실패 신호:
@@ -208,7 +208,7 @@ gemini "이 레포의 코딩 룰을 요약해줘"
 
 - **실제 시크릿 / 사내 코드 절대 입력 금지** — placeholder만
 - Cursor/Copilot은 입력을 학습 데이터로 사용 가능 (Privacy Mode 활성화 권장)
-- AGENTS.md 자체는 공개 OK이지만, `.claude/rules/cloud-cli-safety.md` 같은 내부 룰을 외부 도구에 보낼 때 주의
+- AGENTS.md 자체는 공개 OK이지만, `.claude/rules/core/cloud-cli-safety.md` 같은 내부 룰을 외부 도구에 보낼 때 주의
 
 ---
 

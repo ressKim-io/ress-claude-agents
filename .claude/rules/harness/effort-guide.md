@@ -5,7 +5,7 @@
 
 상세 룰은 [`token-budget.md`](token-budget.md) 참조. 이 문서는 매핑에 집중.
 
-> **출처** (검증일 **2026-11-04**, 직전 2026-08-25). 검증 기록: [2026-11-04 사양 검증](../../docs/audit/2026-11-04-claude-spec-verification.md)
+> **출처** (검증일 **2026-11-04**, 직전 2026-08-25). 검증 기록: [2026-11-04 사양 검증](../../../docs/audit/2026-11-04-claude-spec-verification.md)
 > - effort 단계: https://platform.claude.com/docs/en/build-with-claude/effort
 > - Claude Code 기본값: https://code.claude.com/docs/en/model-config
 > - agent / skill frontmatter: https://code.claude.com/docs/en/sub-agents, https://code.claude.com/docs/en/skills

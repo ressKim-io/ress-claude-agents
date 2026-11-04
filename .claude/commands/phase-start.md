@@ -4,9 +4,9 @@ description: "Phase 기반 작업(SDD 게이트 강제) 시작. 11항목 체크�
 
 # /phase-start
 
-대규모 작업(6개 이상 파일 변경 / API 3개 이상 / 시스템 마이그레이션)을 시작할 때 `.claude/rules/phase-workflow.md`의 Gate 1-5를 강제하는 진입점.
+대규모 작업(6개 이상 파일 변경 / API 3개 이상 / 시스템 마이그레이션)을 시작할 때 `.claude/rules/process/phase-workflow.md`의 Gate 1-5를 강제하는 진입점.
 
-`/phase-start`로 시작하지 않은 작업은 `.claude/rules/workflow.md`의 일반 작업 순서(EXPLORE → PLAN → IMPLEMENT → VERIFY → COMMIT)를 따른다.
+`/phase-start`로 시작하지 않은 작업은 `.claude/rules/core/workflow.md`의 일반 작업 순서(EXPLORE → PLAN → IMPLEMENT → VERIFY → COMMIT)를 따른다.
 
 ## 입력
 
@@ -17,7 +17,7 @@ description: "Phase 기반 작업(SDD 게이트 강제) 시작. 11항목 체크�
 - 번호 + 슬러그: `phase-3-multitenancy`
 - 생략: 현재 작업 컨텍스트에서 추론 (사용자 확인 필요)
 
-## 적용 대상 (rules/phase-workflow.md §"적용 대상")
+## 적용 대상 (rules/process/phase-workflow.md §"적용 대상")
 
 다음 중 하나 이상에 해당하면 `/phase-start` 사용:
 
@@ -138,9 +138,9 @@ Gate 5: <조건> — 통과/미통과
 
 ## 관련 파일
 
-- Phase Gate 규칙: `.claude/rules/phase-workflow.md`
+- Phase Gate 규칙: `.claude/rules/process/phase-workflow.md`
 - SDD 템플릿: `.claude/templates/sdd.md.template`
-- 일반 작업 순서: `.claude/rules/workflow.md`
+- 일반 작업 순서: `.claude/rules/core/workflow.md`
 - PR 리뷰: `/review-pr`
 
 오늘 날짜: $CURRENT_DATE

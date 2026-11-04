@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# .claude/settings.json <-> .claude/rules/user-approval.md 강제 규칙 드리프트 검증
+# .claude/settings.json <-> .claude/rules/core/user-approval.md 강제 규칙 드리프트 검증
 #
 # 배경: 2026-08-25 audit F11 — control-plane 의 PreToolUse hook 이 존재하지 않는
 # 환경변수로 배선돼 3.5개월간 0% 로 작동했는데, 순수 함수 테스트만 있어 아무도
@@ -26,7 +26,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
 SETTINGS=".claude/settings.json"
-RULEDOC=".claude/rules/user-approval.md"
+RULEDOC=".claude/rules/core/user-approval.md"
 
 # 규칙이 통째로 사라져도 "0건 양방향 일치" 로 초록이 되는 것을 막는다.
 # validate-schemas.sh 의 MIN_AGENT_COUNT 과 같은 이유 — 빈 상태가 통과하면

@@ -8,7 +8,7 @@
 > 핵심 1: sub-agent 의 `description` 은 Agent 도구가 invocation 결정 시 매칭하는 primary trigger. universal "always use sonnet" 룰 없음 — task 복잡도 기반 model 선택.
 > 핵심 2: frontmatter 는 **19개 필드**를 지원한다. 이 중 실행 강제력이 있는 것은 `disallowedTools` / `maxTurns` / `hooks` 이고, `permissionMode` 는 부모 세션에 따라 무시될 수 있다. **명령 단위 강제는 frontmatter 가 아니라 `.claude/settings.json` 의 `permissions` 에서 한다** — 경계는 §1.2 참조.
 >
-> ⚠️ 외부 사양은 분기별 재검증 대상이다 ([`multi-tool-adapter.md`](../rules/multi-tool-adapter.md) §외부 도구 사양). 2026-05-15 → 2026-08-24 사이에 실제로 `effort` 필드 관련 기술이 drift 했다 — 경위는 [2026-08-24 audit](../../docs/audit/2026-08-24-agent-harness-readiness.md) 참조. **다음 재검증 예정: 2027-02**.
+> ⚠️ 외부 사양은 분기별 재검증 대상이다 ([`multi-tool-adapter.md`](../rules/harness/multi-tool-adapter.md) §외부 도구 사양). 2026-05-15 → 2026-08-24 사이에 실제로 `effort` 필드 관련 기술이 drift 했다 — 경위는 [2026-08-24 audit](../../docs/audit/2026-08-24-agent-harness-readiness.md) 참조. **다음 재검증 예정: 2027-02**.
 
 ---
 
@@ -35,12 +35,12 @@ effort: high                                    # 세션 effort 를 override —
 | `description` | ✅ | 50-200 단어, F1 패턴 — "What. Use [PROACTIVELY] when X." + hand-off |
 | `tools` | ✅ | 명시적 도구 listing. 보안상 `*` (전체) 회피. WebFetch / Write 는 필요 시만 |
 | `model` | ✅ | haiku (단순) / sonnet (대다수) / opus (frontier) — outlier 정당화 본문에 명시 |
-| `effort` | ✅ | **세션 effort override.** [`effort-guide.md`](../rules/effort-guide.md) 에서 고른 값을 명시. 생략하면 세션 기본값에 방치됨 |
+| `effort` | ✅ | **세션 effort override.** [`effort-guide.md`](../rules/harness/effort-guide.md) 에서 고른 값을 명시. 생략하면 세션 기본값에 방치됨 |
 | `disallowedTools` | 조건부 | 도구 단위 denylist. `tools` 허용목록과 중복되면 no-op — 실제 효과가 있을 때만 쓴다 (§1.2) |
 
 ### 1.2 실행 강제 필드 — 무엇이 실제로 강제되는가
 
-[`multi-tool-adapter.md`](../rules/multi-tool-adapter.md) 는 "산문 규약을 대상 도구의 **강제 메커니즘으로 승격**하라" 고 규정한다. 다만 **어디까지 승격되는지에 경계가 있다.**
+[`multi-tool-adapter.md`](../rules/harness/multi-tool-adapter.md) 는 "산문 규약을 대상 도구의 **강제 메커니즘으로 승격**하라" 고 규정한다. 다만 **어디까지 승격되는지에 경계가 있다.**
 
 | 필드 | 강제력 | 경계 (2026-08-25 공식 docs 확인) |
 |---|---|---|
@@ -137,7 +137,7 @@ description: AI-powered FinOps cost analyzer. Use to analyze cloud spending.
 | `sonnet` | `high` (default) | 일반 expert / reviewer / 분석 (대다수) | code-reviewer / k8s-reviewer / terraform-reviewer 등 |
 | `opus` | `high` | cascade failure / 트레이드오프 / 전사 RFC | architect-agent / debugging-expert / tech-lead |
 
-`xhigh` / `max` 는 품질 향상을 측정한 agent 에만 쓴다 ([`effort-guide.md`](../rules/effort-guide.md)).
+`xhigh` / `max` 는 품질 향상을 측정한 agent 에만 쓴다 ([`effort-guide.md`](../rules/harness/effort-guide.md)).
 
 **model 선택 self-check**:
 - 단순 lookup / template 만? → haiku
@@ -322,7 +322,7 @@ model: sonnet
 
 ## 관련 문서
 
-- Effort 매핑: [`../rules/effort-guide.md`](../rules/effort-guide.md)
+- Effort 매핑: [`../rules/harness/effort-guide.md`](../rules/harness/effort-guide.md)
 - Skill spec: [`SKILL-SPEC.md`](SKILL-SPEC.md)
-- Token / context 룰: [`../rules/token-budget.md`](../rules/token-budget.md)
-- 코드 리뷰 룰: [`../rules/code-review.md`](../rules/code-review.md)
+- Token / context 룰: [`../rules/harness/token-budget.md`](../rules/harness/token-budget.md)
+- 코드 리뷰 룰: [`../rules/process/code-review.md`](../rules/process/code-review.md)

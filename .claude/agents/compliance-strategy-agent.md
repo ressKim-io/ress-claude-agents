@@ -320,13 +320,13 @@ architect-agent는 *data-model / service-boundary*. compliance-strategy-agent는
 
 1. **법령 특정** — 각 요구사항이 어느 법·조항 근거인지 명시 (PIPA 제O조 / GDPR Art.O 형태)
 2. **설계 반영 가능성** — 요구사항마다 데이터 모델·플로우 상의 구체 반영 지점을 지정. "준수해야 함" 수준 금지
-3. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](../rules/documentation.md) §ADR 검증 규칙)
+3. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](../rules/process/documentation.md) §ADR 검증 규칙)
 4. **트레이드오프 인정** — 선택한 안의 단점·리스크를 명시. 장점만 나열한 ADR 은 미완성
 5. **geo 분기** — 시장별로 요구가 갈리는 항목은 분기표로 제시
 
 ### Self-verification (제출 전 자가 점검)
 
-- [ ] 법령 조항 인용에 출처 또는 ⚠️ unverified 표기가 있음 ([`deep-thinking.md`](../rules/deep-thinking.md))
+- [ ] 법령 조항 인용에 출처 또는 ⚠️ unverified 표기가 있음 ([`deep-thinking.md`](../rules/core/deep-thinking.md))
 - [ ] 법률 자문이 필요한 회색지대는 그렇게 표기하고 단정하지 않았음
 - [ ] §Output Format 의 blueprint 형식을 그대로 사용했음
 - [ ] §Permission Boundary 위반 명령을 직접 실행하지 않았음

@@ -606,7 +606,7 @@ OTel 도입                이벤트 기반 전환          AI/ML 파이프라�
 
 이 agent 의 산출물이 다음을 만족해야 한다:
 
-1. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](../rules/documentation.md) §ADR 검증 규칙)
+1. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](../rules/process/documentation.md) §ADR 검증 규칙)
 2. **트레이드오프 인정** — 선택한 안의 단점·리스크를 명시. 장점만 나열한 ADR 은 미완성
 3. **프로젝트 맥락** — 일반론이 아니라 "이 프로젝트에서 왜 이것인가"로 논증
 4. **정량 근거 우선** — 벤치마크 / 처리량 / 비용 / 리소스 수치가 있는 항목은 수치로. 미측정은 "미측정"으로 표기
@@ -615,7 +615,7 @@ OTel 도입                이벤트 기반 전환          AI/ML 파이프라�
 
 ### Self-verification (제출 전 자가 점검)
 
-- [ ] 외부 기술의 버전·기능 클레임에 출처 또는 ⚠️ unverified 표기가 있음 ([`deep-thinking.md`](../rules/deep-thinking.md))
+- [ ] 외부 기술의 버전·기능 클레임에 출처 또는 ⚠️ unverified 표기가 있음 ([`deep-thinking.md`](../rules/core/deep-thinking.md))
 - [ ] 결정을 되돌릴 조건(재평가 트리거)을 명시했음
 - [ ] 확인 못 한 항목은 단정하지 않고 "확인 필요"로 표기
 - [ ] §Permission Boundary 위반 명령을 직접 실행하지 않았음

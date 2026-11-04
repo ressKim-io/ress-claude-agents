@@ -3,7 +3,7 @@
 모든 대화에서 공통 적용되는 컨텍스트·토큰 운영 원칙.
 Rules는 매 대화마다 주입되므로 핵심만 유지 — 상세는 `/token-budget` 스킬 참조.
 
-> 출처·검증 상태: [2026-11-04 사양 검증](../../docs/audit/2026-11-04-claude-spec-verification.md)
+> 출처·검증 상태: [2026-11-04 사양 검증](../../../docs/audit/2026-11-04-claude-spec-verification.md)
 
 ## Context Window 관리 (Claude Code)
 

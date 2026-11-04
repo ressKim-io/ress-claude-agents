@@ -140,7 +140,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 **서브 에이전트 위임 시**: 에이전트는 결과만 반환. 외부 게시 권한 위임 금지.
 
-**산문 아래에 실행 강제가 깔려 있다**: [`.claude/settings.json`](.claude/settings.json) 의 `permissions.deny` / `ask` 가 위 항목 중 명령으로 표현 가능한 것을 강제한다 — `deny` = 세션에서 실행할 이유가 없는 것(변경형 `kubectl`, ArgoCD Force Sync), `ask` = 승인 프로세스가 있는 것(`git push`, `gh pr *`). `deny` 는 **모든 모드에서, subagent 의 `Bash` 안쪽에서도 유지된다**. 🔴 반면 **`ask` 는 대화형 `bypassPermissions` 에서 무력**이다 (프롬프트를 건너뛰므로) — 그 모드에선 산문과 동급이니 승인 절차를 사람이 지켜야 한다 (실측: [ADR 0009](docs/adr/0009-enforcement-layer-placement.md)). 규칙 ↔ 산문 매핑과 "산문으로만 남는 것" 목록은 [`user-approval.md`](.claude/rules/user-approval.md) §강제 메커니즘 매핑, 드리프트는 `scripts/validate-enforcement.sh` 가 게이트한다.
+**산문 아래에 실행 강제가 깔려 있다**: [`.claude/settings.json`](.claude/settings.json) 의 `permissions.deny` / `ask` 가 위 항목 중 명령으로 표현 가능한 것을 강제한다 — `deny` = 세션에서 실행할 이유가 없는 것(변경형 `kubectl`, ArgoCD Force Sync), `ask` = 승인 프로세스가 있는 것(`git push`, `gh pr *`). `deny` 는 **모든 모드에서, subagent 의 `Bash` 안쪽에서도 유지된다**. 🔴 반면 **`ask` 는 대화형 `bypassPermissions` 에서 무력**이다 (프롬프트를 건너뛰므로) — 그 모드에선 산문과 동급이니 승인 절차를 사람이 지켜야 한다 (실측: [ADR 0009](docs/adr/0009-enforcement-layer-placement.md)). 규칙 ↔ 산문 매핑과 "산문으로만 남는 것" 목록은 [`user-approval.md`](.claude/rules/core/user-approval.md) §강제 메커니즘 매핑, 드리프트는 `scripts/validate-enforcement.sh` 가 게이트한다.
 
 ---
 
@@ -159,7 +159,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 ## Cloud CLI Safety
 
 위험한 클라우드 CLI 명령(AWS/GCP destructive operations)은 사전 승인 없이 실행 금지.
-상세 목록: [.claude/rules/cloud-cli-safety.md](.claude/rules/cloud-cli-safety.md)
+상세 목록: [.claude/rules/core/cloud-cli-safety.md](.claude/rules/core/cloud-cli-safety.md)
 
 ---
 
@@ -168,7 +168,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 - **PromQL/LogQL/TraceQL 안티패턴 회피** (high-cardinality label, `.*` regex 등)
 - **OTel 시맨틱 컨벤션 v2** 준수 (`http.request.method`, `service.name`)
 - **Grafana 변수**는 metric label과 정확히 일치
-- 상세: [.claude/rules/monitoring.md](.claude/rules/monitoring.md)
+- 상세: [.claude/rules/infra/monitoring.md](.claude/rules/infra/monitoring.md)
 
 ---
 
@@ -184,7 +184,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | 환경/아키텍처 전환 완료 | `docs/migration/NNNN-제목.md` |
 | CI/CD 신규/대폭 변경 | `docs/cicd/레포명-pipeline.md` |
 
-상세 템플릿 11종: [.claude/rules/documentation.md](.claude/rules/documentation.md)
+상세 템플릿 11종: [.claude/rules/process/documentation.md](.claude/rules/process/documentation.md)
 
 ---
 
@@ -192,8 +192,8 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 | 언어 | Rules | Skills |
 |---|---|---|
-| Go | [.claude/rules/go.md](.claude/rules/go.md) | `.claude/skills/go/` |
-| Java/Spring | [.claude/rules/java.md](.claude/rules/java.md), [spring.md](.claude/rules/spring.md) | `.claude/skills/spring/` |
+| Go | [.claude/rules/lang/go.md](.claude/rules/lang/go.md) | `.claude/skills/go/` |
+| Java/Spring | [.claude/rules/lang/java.md](.claude/rules/lang/java.md), [spring.md](.claude/rules/lang/spring.md) | `.claude/skills/spring/` |
 | Python | — | `.claude/skills/python/` |
 | Frontend (React/Next.js/TS) | — | `.claude/skills/frontend/` |
 
@@ -232,7 +232,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 도구별 최적화는 선택. 핵심 룰은 모두 본 파일에 있다.
 
-**도구별 디렉토리는 전부 산출물(view)이다 — 직접 편집 금지.** 원본을 고치고 변환을 재실행한다. 매핑 표·port 규칙은 [`docs/architecture/multi-tool-mapping.md`](docs/architecture/multi-tool-mapping.md), 거버넌스 원칙은 [`.claude/rules/multi-tool-adapter.md`](.claude/rules/multi-tool-adapter.md) 참조.
+**도구별 디렉토리는 전부 산출물(view)이다 — 직접 편집 금지.** 원본을 고치고 변환을 재실행한다. 매핑 표·port 규칙은 [`docs/architecture/multi-tool-mapping.md`](docs/architecture/multi-tool-mapping.md), 거버넌스 원칙은 [`.claude/rules/harness/multi-tool-adapter.md`](.claude/rules/harness/multi-tool-adapter.md) 참조.
 
 > ⛔ **Codex 전용 view 는 2026-08-25 에 제거됐다** ([ADR 0010](docs/adr/0010-drop-codex-support.md)). Codex 는 본 파일을 자동 인식하므로 계속 쓸 수 있다 — 없어진 것은 `.codex/*.toml` 산출물뿐이다.
 
@@ -244,7 +244,9 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 ### Auto-Loaded Rules
 
-`.claude/rules/*.md`는 Claude Code 세션 시작 시 자동 로딩 (다른 도구는 자동 로드하지 않으므로 핵심은 본 파일에 요약).
+`.claude/rules/**/*.md`는 Claude Code 세션 시작 시 자동 로딩 (다른 도구는 자동 로드하지 않으므로 핵심은 본 파일에 요약). `paths:` 가 있는 rule 은 매칭되는 파일을 다룰 때만 로드된다.
+
+폴더: `core/`(모든 작업의 기본 원칙) · `process/`(리뷰·디버깅·문서 절차) · `lang/`(언어별) · `infra/`(K8s·Terraform·모니터링) · `harness/`(Claude 운영·도구 정합). **이 아래의 `.md` 는 전부 rule 로 로드되므로 README 를 두지 않는다.**
 
 | Rule | 역할 | 본 파일 대응 섹션 |
 |---|---|---|
@@ -275,10 +277,10 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 ### Token Budget (Claude 5.5 세대)
 
 - Context **80% 초과 → 세션 종료**, 무관 태스크 전환 시 `/clear`
-- Effort 는 agent 기본 `high`, 단순 조회 `low`, `xhigh`·`max` 는 품질 향상을 측정한 작업만. **Claude Code 의 Opus·Sonnet·Haiku 5.5 기본은 `medium`** 이라 agent frontmatter 에 명시한다. skill 에는 넣지 않는다 (모델별 지원 표: [`effort-guide.md`](.claude/rules/effort-guide.md))
+- Effort 는 agent 기본 `high`, 단순 조회 `low`, `xhigh`·`max` 는 품질 향상을 측정한 작업만. **Claude Code 의 Opus·Sonnet·Haiku 5.5 기본은 `medium`** 이라 agent frontmatter 에 명시한다. skill 에는 넣지 않는다 (모델별 지원 표: [`effort-guide.md`](.claude/rules/harness/effort-guide.md))
 - `max_tokens` 에 여유를 둔다 (agentic 코딩 128,000 제안). 최소 cacheable 길이는 5.5 세대 512 tokens
 - fan-out 이 필요하면 명시한다. 10+ 파일 탐색은 subagent 위임
-- 상세: `.claude/rules/token-budget.md` + 카테고리별 매핑 `.claude/rules/effort-guide.md`, 코드 예시·비용 계산은 `/token-budget` skill
+- 상세: `.claude/rules/harness/token-budget.md` + 카테고리별 매핑 `.claude/rules/harness/effort-guide.md`, 코드 예시·비용 계산은 `/token-budget` skill
 
 ### Claude-Only Features
 
@@ -316,10 +318,10 @@ Opus 5.5·Sonnet 5.5 공식 prompting 가이드 기준 ([검증 기록](docs/aud
 **Source of Truth 계층** (충돌 시 위에서 아래로 우선):
 
 1. **AGENTS.md** (본 파일) — 모든 도구 적용 보편 룰 + §Claude Code-Specific. **Single source of truth.**
-2. **`.claude/rules/*.md`** — Claude Code 자동 로딩 상세 룰. 본 파일과 **반드시 일관**.
+2. **`.claude/rules/**/*.md`** — Claude Code 자동 로딩 상세 룰. 본 파일과 **반드시 일관**.
 3. **Mirrors**:
    - `CLAUDE.md` → 본 파일 symlink (Claude Code 호환)
-4. **도구별 view** (`.cursor/rules`, `.kiro/**`) — **산출물. 직접 편집 금지.** Cursor 는 `control-plane/src/adapter.ts` 가 생성하고 CI drift job 이 게이트한다. Kiro 는 수동 port ([`multi-tool-adapter.md`](.claude/rules/multi-tool-adapter.md)).
+4. **도구별 view** (`.cursor/rules`, `.kiro/**`) — **산출물. 직접 편집 금지.** Cursor 는 `control-plane/src/adapter.ts` 가 생성하고 CI drift job 이 게이트한다. Kiro 는 수동 port ([`multi-tool-adapter.md`](.claude/rules/harness/multi-tool-adapter.md)).
 
 **룰 변경 절차**:
 - **보편 룰 또는 Claude Code-Specific** → 본 파일 수정 → 관련 `.claude/rules/`로 propagate

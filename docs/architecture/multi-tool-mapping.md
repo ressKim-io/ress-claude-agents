@@ -3,7 +3,7 @@
 이 레포의 자산을 3개 AI 코딩 도구에 배치하는 매핑 표와 변환 규칙.
 
 > ⛔ **Codex 지원 중단 (2026-08-25, [ADR 0010](../adr/0010-drop-codex-support.md))**: `.codex/` 산출물과 adapter 의 codex 경로를 제거했다. Codex 는 `AGENTS.md` 를 자동 인식하므로 **추가 설정 없이 계속 쓸 수 있다** — 없어진 것은 `.toml` view 뿐이다.
-[ADR 0006](../adr/0006-kiro-adapter-strategy.md) PR-2 산출물. 거버넌스 원칙은 [`.claude/rules/multi-tool-adapter.md`](../../.claude/rules/multi-tool-adapter.md) 참조.
+[ADR 0006](../adr/0006-kiro-adapter-strategy.md) PR-2 산출물. 거버넌스 원칙은 [`.claude/rules/harness/multi-tool-adapter.md`](../../.claude/rules/multi-tool-adapter.md) 참조.
 
 > **검증일 2026-08-16** — Kiro 사양은 공식 docs WebFetch 로 확인 (ADR 0006 §분기 review 2026-08 회차). 항목별 ✅/⚠️ 는 [§5](#5-검증-상태) 참조.
 
@@ -37,7 +37,7 @@ assets/skills/**/SKILL.md    ← tool-agnostic source. adapter 입력 (Migration
 | **보편 가이드** | `AGENTS.md` (`CLAUDE.md` symlink) | `AGENTS.md` 자동 인식 | `AGENTS.md` 워크스페이스 루트 자동 인식 | `AGENTS.md` 자동 인식 |
 | **Agent** | `.claude/agents/*.md` | — (대응 개념 없음) | `.kiro/agents/*.{md,json}` (수동) | — |
 | **Skill** | `.claude/skills/<name>/SKILL.md` | `.cursor/rules/*.mdc` | `.kiro/skills/<name>/SKILL.md` (수동) | — |
-| **Rule** | `.claude/rules/*.md` | `.mdc` frontmatter `globs`/`alwaysApply` | `.kiro/steering/*.md` (`inclusion` 4 모드) | AGENTS.md 에 흡수 |
+| **Rule** | `.claude/rules/**/*.md` | `.mdc` frontmatter `globs`/`alwaysApply` | `.kiro/steering/*.md` (`inclusion` 4 모드) | AGENTS.md 에 흡수 |
 | **Command** | `.claude/commands/**/*.md` | — | — | — |
 | **MCP** | `mcp-configs/settings.json` (설치용 템플릿, `mcpServers` 키) | — | `.kiro/settings/mcp.json` (workspace) / `~/.kiro/settings/mcp.json` (global) | 도구별 자체 설정 |
 | **Spec/워크플로우** | `.claude/workflows/*.yml` | — | `.kiro/specs/<feat>/` (requirements/design/tasks) ⚠️ | — |
@@ -150,7 +150,7 @@ CI drift job 이 `.cursor/` 산출물의 git diff 를 게이트한다.
 
 - [ADR 0006 — Kiro 어댑터 전략](../adr/0006-kiro-adapter-strategy.md) — Option 1(수동) 채택 근거 + 분기 review 기록
 - [ADR 0007 — install.sh 축소](../adr/0007-install-sh-narrow-scope.md) — `--skill` 옵션이 자산 port 1단계로 결합 (PR-8 미착수)
-- [`.claude/rules/multi-tool-adapter.md`](../../.claude/rules/multi-tool-adapter.md) — 거버넌스 원칙 (본 문서의 rule 판)
+- [`.claude/rules/harness/multi-tool-adapter.md`](../../.claude/rules/multi-tool-adapter.md) — 거버넌스 원칙 (본 문서의 rule 판)
 - [2026-08-15 audit §8](../audit/2026-08-15-asset-tier-rebalance.md#8-선행-백로그-인수-b-트랙) — PR-5~8 백로그 추적
 - [ADR 0010 — Codex 지원 중단](../adr/0010-drop-codex-support.md) — `.codex/` 및 adapter codex 경로 제거 근거
 - `control-plane/src/adapter.ts` — 자동 변환 구현

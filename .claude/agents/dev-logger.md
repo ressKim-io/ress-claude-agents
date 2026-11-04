@@ -123,7 +123,7 @@ related: [<파일 경로 / 커밋 / 이슈>]
 
 | category | 추가로 반드시 포함 |
 |---|---|
-| `trouble` | 재현 조건 / 근본 원인 / 회귀 방지 조치 ([`workflow.md`](../rules/workflow.md) §Trouble → 회귀 방지 SOP 5단계) |
+| `trouble` | 재현 조건 / 근본 원인 / 회귀 방지 조치 ([`workflow.md`](../rules/core/workflow.md) §Trouble → 회귀 방지 SOP 5단계) |
 | `decision` | 대안과 탈락 사유. 대안이 2개 이상이면 ADR 로 승격 제안 |
 | `feedback` | 어떤 지시가 어떻게 잘못 해석됐는가 — 재발 방지 문구 제안 |
 | `meta` | 변경한 자산 경로와 그 영향 범위 |
@@ -234,7 +234,7 @@ duration: ~{estimated}
 1. **사실성** — 기록된 내용이 실제 세션에서 일어난 일. 요약 과정에서 없던 결론을 만들지 않음
 2. **카테고리 정합성** — §Log Categories 분류가 사건 성격과 일치
 3. **추적 가능성** — 관련 파일 경로 / 커밋 / 이슈 링크가 붙음
-4. **재발 방지 연결** — trouble 카테고리는 [`workflow.md`](../rules/workflow.md) §Trouble → 회귀 방지 SOP 항목을 포함
+4. **재발 방지 연결** — trouble 카테고리는 [`workflow.md`](../rules/core/workflow.md) §Trouble → 회귀 방지 SOP 항목을 포함
 5. **출력 계약** — §Output Format 의 파일명 규칙과 frontmatter 를 그대로 사용
 
 ### Self-verification (제출 전 자가 점검)

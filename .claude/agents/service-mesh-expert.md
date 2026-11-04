@@ -592,6 +592,6 @@ spec:
 
 ### Self-verification (제출 전 자가 점검)
 
-- [ ] FQDN·포트 이름 규칙([`istio.md`](../rules/istio.md))을 실제 값으로 확인했음
+- [ ] FQDN·포트 이름 규칙([`istio.md`](../rules/infra/istio.md))을 실제 값으로 확인했음
 - [ ] 확인 못 한 항목은 단정하지 않고 "미확인"으로 표기
 - [ ] §Permission Boundary 위반 명령을 직접 실행하지 않았음
