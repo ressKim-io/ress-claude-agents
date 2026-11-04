@@ -7,7 +7,7 @@
 
 ## 원본은 하나 (MANDATORY)
 
-- **SSOT 는 `AGENTS.md` + `.claude/**` + `assets/skills/**`** 뿐이다. 도구별 디렉토리(`.cursor/` `.kiro/`)는 **전부 산출물(view)** 이다.
+- **SSOT 는 `AGENTS.md` + `.claude/**` + `plugins/**` + `assets/skills/**`** 뿐이다. 도구별 디렉토리(`.cursor/` `.kiro/`)는 **전부 산출물(view)** 이다.
 - NEVER 도구별 디렉토리를 직접 편집. 원본을 고치고 변환을 다시 돌린다.
 - `CLAUDE.md` 는 `AGENTS.md` 의 symlink — 직접 편집 금지.
 - 도구별 view 만 고친 변경은 다음 변환에서 **소실**된다.
@@ -53,7 +53,7 @@ MUST 매핑 문서의 각 항목에 **✅ verified / ⚠️ unverified + 사유*
 ## 자산 단위로 가져간다 (picky 운영)
 
 - PREFER 도구에 자산을 옮길 때 **필요한 것만** 고른다. 묶음 전체 복사 금지 — "안 쓰는 것까지 다 깔린다" 가 [ADR 0007](../../../docs/adr/0007-install-sh-narrow-scope.md) 의 출발점이었다.
-- 수단은 **직접 복사**다. `install.sh` 는 2026-08-26 에 제거됐고 자산 단위 옵션(PR-8)은 착수되지 않은 채 끝났다 ([ADR 0011](../../../docs/adr/0011-remove-install-sh.md)).
+- Claude Code 는 **영역별 plugin 을 설치하거나 폴더를 복사**한다 ([ADR 0012](../../../docs/adr/0012-native-plugin-structure.md)). 다른 도구는 직접 복사한다. `install.sh` 는 2026-08-26 에 제거됐다 ([ADR 0011](../../../docs/adr/0011-remove-install-sh.md)).
 
 ## 도구 간 강제력 차이 인지
 
@@ -74,6 +74,7 @@ MUST port 시 산문 규약을 대상 도구의 **강제 메커니즘으로 승�
 - [ADR 0006](../../../docs/adr/0006-kiro-adapter-strategy.md) — Kiro 수동 매핑 결정 + 분기 review 기록
 - [ADR 0007](../../../docs/adr/0007-install-sh-narrow-scope.md) — install.sh 자산 단위 옵션 (Superseded)
 - [ADR 0011](../../../docs/adr/0011-remove-install-sh.md) — install.sh 제거
+- [ADR 0012](../../../docs/adr/0012-native-plugin-structure.md) — 영역별 plugin 구조
 - [ADR 0010](../../../docs/adr/0010-drop-codex-support.md) — Codex 지원 중단
 - [`deep-thinking.md`](../core/deep-thinking.md) — 외부 사양 검증 의무
 - `control-plane/src/adapter.ts` — 자동 변환 구현
