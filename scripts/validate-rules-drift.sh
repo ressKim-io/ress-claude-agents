@@ -2,7 +2,7 @@
 # AGENTS.md <-> .claude/rules/ drift 자동 검증
 #
 # 검증 항목:
-#   1. model-ids   : Phase D 마커 — 구 모델 ID 잔존 0건 (claude-3-*, claude-*-4-2025*)
+#   1. model-ids   : 구 모델 ID 잔존 0건 (claude-3-*, claude-{opus,sonnet,haiku}-{3,4}*)
 #   2. refs        : AGENTS.md <-> .claude/rules/ 양방향 참조 무결성
 #   3. consistency : Critical 룰 키워드 양쪽 존재 일관성
 #   4. sweet-spot  : Rules 200줄 이내 권장 (경고)
@@ -21,6 +21,10 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
+# shellcheck source=scripts/lib/layout.sh
+# shellcheck disable=SC1091
+source "$ROOT/scripts/lib/layout.sh"
+
 EXIT_CODE=0
 FAILED_CHECKS=()
 
@@ -33,27 +37,34 @@ section()  { printf '\n=== %s ===\n' "$1"; }
 # Check 1: 모델 ID drift (Phase D 마커)
 # ---------------------------------------------------------------------------
 # 잡고자 하는 패턴 (드리프트):
-#   - claude-3-(opus|sonnet|haiku)        : 3.x 시대 ID
-#   - claude-(opus|sonnet|haiku)-3...     : 3-suffix 형식 (claude-haiku-3-20250522 등)
-#   - claude-(opus|sonnet|haiku)-4-2025   : 4.x 초기 dated 모델 (4.5 GA 이전)
+#   - claude-3-(opus|sonnet|haiku)         : 3.x 시대 ID
+#   - claude-(opus|sonnet|haiku)-3...      : 3-suffix 형식 (claude-haiku-3-20250522 등)
+#   - claude-(opus|sonnet|haiku)-4...      : 4.x 세대 (claude-opus-4-7 등)
 #
-# 정상 (4.5 / 4.6 / 4.7 표기, 또는 dated 없는 4):
-#   - claude-opus-4-7, claude-sonnet-4-6, claude-haiku-4-5
+# 정상: 현행 5.x 세대 (claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5, claude-fable-5-1)
+# 예시 코드가 복사돼 쓰이므로 활성 자산에는 현행 ID 만 둔다. 역사 기록(docs/)은 대상이 아니다.
 #
-# 검증 대상: .claude/ 활성 자산 + AGENTS.md + CLAUDE.md
+# 검증 대상: .claude/ 활성 자산 + plugins/ + AGENTS.md
 check_model_id_drift() {
-    section "Phase D 마커: 모델 ID drift 검증"
+    section "모델 ID drift 검증"
 
-    local pattern='claude-(3-(opus|sonnet|haiku)|(opus|sonnet|haiku)-(3|4-2025))'
-    local matches
-    if matches=$(grep -rEn "$pattern" .claude/ AGENTS.md CLAUDE.md 2>/dev/null); then
-        local count
-        count=$(printf '%s\n' "$matches" | wc -l | tr -d ' ')
-        log_fail "구 모델 ID 잔존: ${count}건"
-        printf '%s\n' "$matches" | sed 's/^/        /'
-    else
-        log_pass "모델 ID drift = 0건"
-    fi
+    local pattern='claude-(3-(opus|sonnet|haiku)|(opus|sonnet|haiku)-(3|4))'
+    local targets=(.claude AGENTS.md)
+    [[ -d plugins ]] && targets+=(plugins)
+
+    # grep 은 대상이 없으면 매치가 있어도 2 를 반환한다. 2 를 통과로 읽지 않도록 구분한다.
+    local matches rc=0
+    matches=$(grep -rEn "$pattern" "${targets[@]}") || rc=$?
+    case "$rc" in
+        0)
+            local count
+            count=$(printf '%s\n' "$matches" | wc -l | tr -d ' ')
+            log_fail "구 모델 ID 잔존: ${count}건"
+            printf '%s\n' "$matches" | sed 's/^/        /'
+            ;;
+        1) log_pass "모델 ID drift = 0건" ;;
+        *) log_fail "모델 ID 검색 실패 (grep rc=$rc)" ;;
+    esac
 }
 
 # ---------------------------------------------------------------------------
@@ -62,13 +73,19 @@ check_model_id_drift() {
 check_agents_md_references() {
     section "AGENTS.md -> .claude/rules/ 링크 유효성"
 
-    local missing=()
+    local missing=() checked=0
     while IFS= read -r ref; do
         [[ -z "$ref" ]] && continue
+        checked=$((checked + 1))
         if [[ ! -f "$ref" ]]; then
             missing+=("$ref")
         fi
-    done < <(grep -oE '\.claude/rules/[a-z-]+\.md' AGENTS.md CLAUDE.md 2>/dev/null | awk -F: '{print $NF}' | sort -u)
+    done < <(grep -oE '\.claude/rules/[a-z/-]+\.md' AGENTS.md CLAUDE.md 2>/dev/null | awk -F: '{print $NF}' | sort -u)
+
+    if [[ $checked -eq 0 ]]; then
+        log_fail "AGENTS.md -> rules 참조 0건 — 경로가 바뀌었거나 패턴이 깨졌다"
+        return
+    fi
 
     if [[ ${#missing[@]} -gt 0 ]]; then
         log_fail "AGENTS.md/CLAUDE.md 링크 누락: ${#missing[@]}건"
@@ -83,6 +100,8 @@ check_agents_md_references() {
 check_rules_back_referenced() {
     section ".claude/rules/ -> AGENTS.md/CLAUDE.md 역참조"
 
+    assert_floor rules || EXIT_CODE=1
+
     local unreferenced=()
     while IFS= read -r rule; do
         local base
@@ -90,7 +109,7 @@ check_rules_back_referenced() {
         if ! grep -qE "(\.claude/rules/)?${base}|${base%.md}\.md" AGENTS.md CLAUDE.md 2>/dev/null; then
             unreferenced+=("$rule")
         fi
-    done < <(find .claude/rules -type f -name "*.md" | sort)
+    done < <(rule_files)
 
     if [[ ${#unreferenced[@]} -gt 0 ]]; then
         log_fail "AGENTS.md/CLAUDE.md에 미참조 rules: ${#unreferenced[@]}건"
@@ -131,7 +150,8 @@ check_critical_rules_consistency() {
         local rest="${entry#*|}"
         local rule_file="${rest%%|*}"
         local desc="${rest#*|}"
-        local rule_path=".claude/rules/${rule_file}"
+        local rule_path
+        rule_path=$(rule_path_by_name "$rule_file")
         checked=$((checked + 1))
 
         local in_agents=0 in_rule=0
@@ -160,7 +180,7 @@ check_critical_rules_consistency() {
 # ---------------------------------------------------------------------------
 # Check 4: Rules sweet spot (≤ 200줄)
 # ---------------------------------------------------------------------------
-# Opus 4.7 기준: rules는 매 대화 자동 로딩 → 길면 묻힘. sweet spot 100~150,
+# rules는 매 대화 자동 로딩 → 길면 묻힘. sweet spot 100~150,
 # 200줄까지 허용. 초과 시 경고만 (실패 처리 X) — cloud-cli-safety처럼
 # 활성화 항목 누적이 의도된 케이스가 있어서.
 check_rules_length_sweet_spot() {
@@ -173,7 +193,7 @@ check_rules_length_sweet_spot() {
         if [[ $lines -gt 200 ]]; then
             violations+=("${rule}:${lines}")
         fi
-    done < <(find .claude/rules -type f -name "*.md" | sort)
+    done < <(rule_files)
 
     if [[ ${#violations[@]} -gt 0 ]]; then
         log_warn "Sweet spot 초과: ${#violations[@]}개 (rules는 매 대화 자동 로딩)"

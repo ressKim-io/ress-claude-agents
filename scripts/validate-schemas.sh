@@ -17,6 +17,10 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
+# shellcheck source=scripts/lib/layout.sh
+# shellcheck disable=SC1091
+source "$ROOT/scripts/lib/layout.sh"
+
 EXIT_CODE=0
 FAILED=()
 
@@ -181,20 +185,18 @@ section "Agent frontmatter validation (전수)"
 # 2026-08-25: code-reviewer 1건 샘플 → .claude/agents/ 전수로 확대. 샘플 방식은
 # 이미 `effort` 를 쓰던 agent 5개가 구 스키마(additionalProperties:false)를 위반하고도
 # 통과하도록 방치했다. 근거: 같은 audit F8.
-MIN_AGENT_COUNT=30
-
 AGENT_FILES=()
 while IFS= read -r f; do
     AGENT_FILES+=("$f")
-done < <(find .claude/agents -maxdepth 1 -name "*.md" -type f | sort)
+done < <(agent_files)
 
-if (( ${#AGENT_FILES[@]} < MIN_AGENT_COUNT )); then
-    log_fail "agent 개수 회귀: ${#AGENT_FILES[@]} < $MIN_AGENT_COUNT"
+if assert_floor agents; then
+    log_pass "agent 개수 ${#AGENT_FILES[@]}"
 else
-    log_pass "agent 개수 ${#AGENT_FILES[@]} >= $MIN_AGENT_COUNT"
+    log_fail "agent 개수 하한 미달"
 fi
 
-for f in "${AGENT_FILES[@]}"; do
+for f in ${AGENT_FILES[@]+"${AGENT_FILES[@]}"}; do
     validate_against_schema \
         "$f" \
         "schemas/agent-manifest.v1.json" \
