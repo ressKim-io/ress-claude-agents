@@ -276,7 +276,7 @@ should_pass_frontmatter_when_skill_uses_every_allowed_field() {
         fields="$fields$field: x\n"
     done
     mkdir -p "$CASE_DIR/plugins/a/skills/full"
-    printf -- "---\nname: full\ndescription: \"테스트 skill. Use when 테스트할 때.\"\n$fields---\n\n# Test\n" \
+    printf -- '---\nname: full\ndescription: "테스트 skill. Use when 테스트할 때."\n%b---\n\n# Test\n' "$fields" \
         >"$CASE_DIR/plugins/a/skills/full/SKILL.md"
     # When/Then
     expect_pass ./scripts/validate-skill-frontmatter.sh skills
