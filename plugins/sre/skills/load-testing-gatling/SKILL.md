@@ -1,9 +1,6 @@
 ---
 name: load-testing-gatling
-category: sre
 description: "Gatling 부하 테스트 — Scala/Java DSL, injection 프로파일, Assertions, 분산 실행, HTML 리포트 분석. Use when JVM 기반 부하 테스트 도구로 Gatling 을 선택했거나 Scala/Java DSL 시나리오를 작성할 때."
-effort: xhigh
-deprecated: false
 ---
 
 # Gatling 부하 테스트

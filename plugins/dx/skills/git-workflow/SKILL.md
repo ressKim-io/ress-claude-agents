@@ -1,9 +1,6 @@
 ---
 name: git-workflow
-category: dx
 description: "Git Workflow Patterns — Git 워크플로우 패턴 및 best practices. Use when working with dx 도메인의 패턴 / 구현 선택."
-effort: low
-deprecated: false
 ---
 
 # Git Workflow Patterns

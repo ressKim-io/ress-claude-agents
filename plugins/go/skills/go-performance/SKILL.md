@@ -1,9 +1,6 @@
 ---
 name: go-performance
-category: go
 description: "Go 고성능 패턴 — sync.Pool 오브젝트 풀링, zero-allocation 기법, GC 튜닝(GOGC/GOMEMLIMIT), DB·HTTP 커넥션 관리, Graceful Shutdown, pprof 프로파일링 명령, Circuit Breaker, 대용량 트래픽 Performance Target. Use when Go 서비스의 지연·메모리·GC·커넥션 병목을 잡거나 pprof 로 프로파일링할 때."
-effort: xhigh
-deprecated: false
 ---
 
 # Go 고성능 / 프로파일링

@@ -1,9 +1,6 @@
 ---
 name: broker-troubleshooting
-category: messaging
 description: "메시지 브로커 장애 진단 — Kafka consumer lag·partition rebalancing·ISR shrink, RabbitMQ queue depth·unacked 누적·quorum leader election·memory alarm, NATS JetStream slow consumer. 증상별 진단 명령과 대응. Use when consumer lag 이 쌓이거나 queue 가 밀리거나 rebalance 가 반복될 때."
-effort: xhigh
-deprecated: false
 ---
 
 # 메시지 브로커 트러블슈팅

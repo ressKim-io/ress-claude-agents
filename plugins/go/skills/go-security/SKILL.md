@@ -1,9 +1,6 @@
 ---
 name: go-security
-category: go
 description: "Go 보안 리뷰 — 입력 검증·SQL/Command injection, 시크릿·인증 처리, 동시성 안전성, crypto/TLS 설정, 에러 정보 노출, path traversal, govulncheck/gosec 도구. Use when Go 코드 보안 리뷰나 취약점 점검이 필요할 때."
-effort: xhigh
-deprecated: false
 ---
 
 # Go 보안 리뷰

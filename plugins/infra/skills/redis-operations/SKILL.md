@@ -1,9 +1,6 @@
 ---
 name: redis-operations
-category: infrastructure
 description: "Redis 운영 — Standalone/Sentinel/Cluster 모드 선택, Cache-Aside·Write-Through 캐싱 전략과 Cache Stampede 방지, maxmemory·eviction 정책, Redlock 분산 락, K8s Operator/Helm 배포, 핵심 메트릭. Use when Redis 캐싱 전략·고가용성 구성·메모리 정책을 정하거나 K8s 위에서 Redis 를 운영할 때."
-effort: xhigh
-deprecated: false
 ---
 
 # Redis 운영

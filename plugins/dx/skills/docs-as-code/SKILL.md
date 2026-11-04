@@ -1,9 +1,6 @@
 ---
 name: docs-as-code
-category: dx
 description: "Docs as Code 가이드 — MkDocs, Docusaurus, Backstage TechDocs, API 문서 자동화 Use when working with dx 도메인의 패턴 / 구현 선택."
-effort: low
-deprecated: false
 ---
 
 # Docs as Code 가이드
