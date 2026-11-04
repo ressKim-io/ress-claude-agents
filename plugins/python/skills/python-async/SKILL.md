@@ -1,6 +1,6 @@
 ---
 name: python-async
-description: "Python Async Patterns — asyncio 기반 동시성 프로그래밍. TaskGroup, 커넥션 풀, 동기화, 에러 처리 패턴. Use when working with python 도메인의 패턴 / 구현 선택."
+description: "Python asyncio — TaskGroup(구조적 동시성), aiohttp, 커넥션 풀, 동기화 primitive, uvloop, 비동기 에러 처리·디버깅. Use when Python 코드를 async 로 작성·전환하거나 asyncio 데드락·블로킹 문제를 추적할 때."
 ---
 
 # Python Async Patterns

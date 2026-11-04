@@ -1,6 +1,6 @@
 ---
 name: nextjs
-description: "Next.js 가이드 — Next.js 15 App Router, React Server Components, ISR, Middleware, 라우팅 전략 종합 가이드. Use when working with frontend 도메인의 패턴 / 구현 선택."
+description: "Next.js App Router — React Server Components, Data Fetching, ISR, Route Handlers, Middleware, Parallel·Intercepting Routes, Server Actions, 캐싱. Use when Next.js 앱의 라우팅·데이터 패칭·캐싱을 설계하거나 구현할 때."
 ---
 
 # Next.js 가이드

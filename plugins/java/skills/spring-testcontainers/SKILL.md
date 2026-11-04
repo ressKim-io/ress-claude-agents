@@ -1,6 +1,6 @@
 ---
 name: spring-testcontainers
-description: "Spring Testcontainers Patterns — Testcontainers, REST Assured를 활용한 통합 테스트 패턴 Use when working with spring 도메인의 패턴 / 구현 선택."
+description: "Spring 통합 테스트 — Testcontainers 공유 컨테이너, PostgreSQL·MongoDB, @DataJpaTest, REST Assured, @Sql 데이터, 컨테이너 재사용. Use when 실제 DB 컨테이너로 Spring 통합·API 테스트를 구성할 때."
 ---
 
 # Spring Testcontainers Patterns

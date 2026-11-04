@@ -1,6 +1,6 @@
 ---
 name: python-performance
-description: "Python Performance Optimization — 프로파일링, 메모리 최적화, 캐싱, 동시성, 직렬화 성능 튜닝 가이드. Use when working with python 도메인의 패턴 / 구현 선택."
+description: "Python 성능 최적화 — 프로파일링 도구, 메모리 최적화, 캐싱, 동시성, 직렬화, DB 쿼리·커넥션 풀, 벤치마크. Use when Python 코드가 느리거나 메모리를 많이 쓸 때 병목을 찾아 개선할 때."
 ---
 
 # Python Performance Optimization

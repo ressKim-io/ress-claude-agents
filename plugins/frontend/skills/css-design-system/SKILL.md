@@ -1,6 +1,6 @@
 ---
 name: css-design-system
-description: "CSS & Design System 가이드 — Tailwind CSS, Design System 구축, Radix UI, Shadcn/ui, 접근성 종합 가이드. Use when working with frontend 도메인의 패턴 / 구현 선택."
+description: "CSS 와 디자인 시스템 — Tailwind CSS 4, Design Token, Shadcn/ui, Radix UI, Atomic Design, Dark Mode, 반응형, a11y. Use when Tailwind 로 스타일링하거나 UI 컴포넌트 라이브러리와 디자인 토큰을 구축할 때."
 ---
 
 # CSS & Design System 가이드

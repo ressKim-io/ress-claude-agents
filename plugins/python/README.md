@@ -24,9 +24,9 @@ cp -r plugins/python/skills/<이름> <프로젝트>/.claude/skills/
 
 | 이름 | 설명 |
 |---|---|
-| `/python:django` | Django Production Patterns — Django + DRF + Celery 기반 풀스택 웹 애플리케이션 구축 가이드 |
-| `/python:fastapi` | FastAPI Production Patterns — FastAPI + Pydantic v2 + SQLAlchemy async 기반 고성능 API 서버 구축 가이드 |
-| `/python:python-async` | Python Async Patterns — asyncio 기반 동시성 프로그래밍. TaskGroup, 커넥션 풀, 동기화, 에러 처리 패턴 |
-| `/python:python-patterns` | Python Design Patterns — 타입 힌트, 디자인 패턴, Clean Architecture, SOLID 원칙의 Python 구현 가이드 |
-| `/python:python-performance` | Python Performance Optimization — 프로파일링, 메모리 최적화, 캐싱, 동시성, 직렬화 성능 튜닝 가이드 |
-| `/python:python-testing` | Python Testing Patterns — pytest 기반 테스트 전략. 단위/통합/E2E 테스트와 async 테스트 패턴 |
+| `/python:django` | Django 웹 앱 — Django ORM, DRF, Middleware, Signals, Admin 커스터마이징, Celery, Migration, 배포 |
+| `/python:fastapi` | FastAPI 서버 — Pydantic v2 스키마, lifespan, Depends 의존성 주입, async SQLAlchemy, BackgroundTasks, WebSocket, … |
+| `/python:python-async` | Python asyncio — TaskGroup(구조적 동시성), aiohttp, 커넥션 풀, 동기화 primitive, uvloop, 비동기 에러 처리·디버깅 |
+| `/python:python-patterns` | Python 설계 — 타입 힌트, dataclass vs Pydantic, 디자인 패턴, 의존성 주입, Context Manager, SOLID, Clean Architecture |
+| `/python:python-performance` | Python 성능 최적화 — 프로파일링 도구, 메모리 최적화, 캐싱, 동시성, 직렬화, DB 쿼리·커넥션 풀, 벤치마크 |
+| `/python:python-testing` | pytest 테스트 전략 — fixture·mocking, async 테스트, Testcontainers 통합 테스트, coverage, Hypothesis 속성 기반 테스트, CI |

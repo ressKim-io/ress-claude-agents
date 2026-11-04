@@ -1,6 +1,6 @@
 ---
 name: spring-cache
-description: "Spring Cache Patterns — Redis를 활용한 Spring Boot 캐싱 전략 Use when working with spring 도메인의 패턴 / 구현 선택."
+description: "Spring Cache 와 Redis — @Cacheable·@CacheEvict 등 캐시 어노테이션, 캐싱 전략, RedisTemplate 직접 사용. Use when Spring Boot 에 Redis 캐시를 설정하거나 캐시 무효화·TTL 전략을 정할 때."
 ---
 
 # Spring Cache Patterns

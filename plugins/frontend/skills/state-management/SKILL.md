@@ -1,6 +1,6 @@
 ---
 name: state-management
-description: "State Management 가이드 — Zustand, Jotai, TanStack Query, React Context 기반 상태관리 선택 및 패턴 Use when working with frontend 도메인의 패턴 / 구현 선택."
+description: "React 상태관리 — TanStack Query, Zustand, Jotai, Context, URL state 선택 기준. Use when 서버 상태와 클라이언트 상태를 나누거나 어떤 상태관리 라이브러리를 쓸지 정할 때."
 ---
 
 # State Management 가이드

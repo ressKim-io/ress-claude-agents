@@ -1,6 +1,6 @@
 ---
 name: frontend-performance
-description: "Frontend Performance 가이드 — Core Web Vitals 최적화, 번들 분석, Code Splitting, Image/Font 최적화 종합 가이드. Use when working with frontend 도메인의 패턴 / 구현 선택."
+description: "프론트엔드 성능 — Core Web Vitals(LCP·INP·CLS), 번들 분석, Code Splitting, 이미지·폰트·스크립트 최적화, Prefetching. Use when 웹 페이지 로딩이 느리거나 Lighthouse·Web Vitals 점수를 개선할 때."
 ---
 
 # Frontend Performance 가이드

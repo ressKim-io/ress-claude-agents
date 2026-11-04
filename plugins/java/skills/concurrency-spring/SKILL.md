@@ -1,6 +1,6 @@
 ---
 name: concurrency-spring
-description: "Spring Concurrency Patterns — MSA/대규모 트래픽 환경에서의 동시성 문제 해결 패턴 Use when working with spring 도메인의 패턴 / 구현 선택."
+description: "Spring 동시성 제어 — Optimistic Locking(@Version), Pessimistic Locking, Deadlock 방지, 락 선택 기준. Use when 재고·좌석처럼 동시 갱신 충돌이나 lost update·deadlock 을 JPA 에서 다룰 때."
 ---
 
 # Spring Concurrency Patterns

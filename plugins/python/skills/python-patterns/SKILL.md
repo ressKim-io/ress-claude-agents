@@ -1,6 +1,6 @@
 ---
 name: python-patterns
-description: "Python Design Patterns — 타입 힌트, 디자인 패턴, Clean Architecture, SOLID 원칙의 Python 구현 가이드. Use when working with python 도메인의 패턴 / 구현 선택."
+description: "Python 설계 — 타입 힌트, dataclass vs Pydantic, 디자인 패턴, 의존성 주입, Context Manager, SOLID, Clean Architecture. Use when Python 프로젝트의 구조와 타입 설계를 정하거나 pyproject.toml 을 구성할 때."
 ---
 
 # Python Design Patterns

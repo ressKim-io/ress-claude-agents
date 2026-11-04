@@ -1,6 +1,6 @@
 ---
 name: bean-postprocessor-ordering
-description: BeanPostProcessor 등록 순서/초기화 시점/프록시 래핑 타이밍 오류로 인한 런타임 누락 패턴 방지. static @Bean + ObjectProvider + Before/After 선택 기준을 강제하는 체크리스트.
+description: "Spring BeanPostProcessor 순서 함정 — 빈 초기화 순서, 다른 BPP 의 래핑 타이밍, 메트릭·계측·AOP 의 silent 누락. Use when 프록시·메트릭·AOP 가 일부 빈에만 적용되지 않거나 BPP 를 작성할 때."
 ---
 
 # BeanPostProcessor Ordering (M1: 비동기/순서 가정 오류)

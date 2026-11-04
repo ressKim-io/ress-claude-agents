@@ -1,6 +1,6 @@
 ---
 name: effective-go
-description: "Effective Go — 패턴 결정 가이드 — Rob Pike의 Go Proverbs + Modern Go (1.21+) 기반 실전 결정 가이드. Use when working with go 도메인의 패턴 / 구현 선택."
+description: "Go 관용 패턴 결정 기준 — 인터페이스 설계, 에러 처리(wrapping), Functional Options, 동시성 기본기, Modern Go 문법. Use when Go 코드를 새로 설계하거나 idiomatic 한 구현 방식을 고를 때."
 ---
 
 # Effective Go — 패턴 결정 가이드

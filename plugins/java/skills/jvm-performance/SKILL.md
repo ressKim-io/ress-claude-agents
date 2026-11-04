@@ -1,6 +1,6 @@
 ---
 name: jvm-performance
-description: "JVM/Spring 성능 튜닝 — Virtual Threads vs WebFlux 선택 기준, HikariCP 커넥션 풀(Virtual Threads 병용 주의), 다단계 캐싱, Resilience4j Circuit Breaker, G1GC/ZGC 튜닝, JFR·async-profiler 프로파일링, Performance Target. Use when Spring Boot 서비스의 지연·GC·커넥션 풀 병목을 잡거나 Virtual Threads 도입을 결정할 때."
+description: "JVM·Spring 성능 튜닝 — Virtual Threads vs WebFlux, HikariCP, 다단계 캐싱, Resilience4j Circuit Breaker, JVM 옵션. Use when Spring 서비스의 지연·스레드·커넥션 풀 병목을 분석하거나 성능 목표를 맞출 때."
 ---
 
 # JVM / Spring 성능 튜닝

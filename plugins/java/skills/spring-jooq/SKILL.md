@@ -1,6 +1,6 @@
 ---
 name: spring-jooq
-description: "Spring Boot + jOOQ Patterns — jOOQ (Java Object Oriented Querying) — 타입 세이프 SQL 빌더 + 코드 생성. JPA 대신 SQL 중심 개발. Use when working with spring 도메인의 패턴 / 구현 선택."
+description: "Spring Boot + jOOQ — 타입 세이프 SQL 빌더, 코드 생성(Flyway·Testcontainers), MULTISET, Window Function·CTE, Keyset Pagination. Use when JPA 대신 SQL 중심으로 jOOQ 쿼리를 작성하거나 설정할 때."
 ---
 
 # Spring Boot + jOOQ Patterns
