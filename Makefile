@@ -1,7 +1,7 @@
 # Makefile for ress-claude-agents
 # Claude Code Custom Commands & Skills Management
 
-.PHONY: help validate validate-enforcement validate-links verify-enforcement inventory lint setup-hooks all
+.PHONY: help validate validate-enforcement validate-links validate-yaml test-gates verify-enforcement inventory lint setup-hooks all
 
 # Default target
 help:
@@ -12,6 +12,8 @@ help:
 	@echo "  validate       Validate asset catalog (floors, locations, command refs)"
 	@echo "  validate-enforcement  Check settings.json <-> user-approval.md rule drift (static, CI)"
 	@echo "  validate-links        Check internal markdown links resolve"
+	@echo "  validate-yaml         Parse all frontmatter with a real YAML parser (needs control-plane npm ci)"
+	@echo "  test-gates            Break a copy of the repo and check each gate fails for the right reason"
 	@echo "  verify-enforcement    Check permission rules actually fire (runtime, needs claude CLI)"
 	@echo "  inventory      Generate .claude/inventory.yml"
 	@echo "  lint           Run shellcheck on shell scripts"
@@ -29,6 +31,14 @@ validate-enforcement:
 # 내부 마크다운 링크 검증 (CI 에서도 돈다)
 validate-links:
 	@./scripts/validate-links.sh
+
+# frontmatter YAML 검증 (CI 에서도 돈다)
+validate-yaml:
+	@node scripts/validate-frontmatter-yaml.mjs
+
+# 게이트 자체 검증: 레포 사본을 망가뜨려 각 게이트가 의도한 사유로 실패하는지 본다 (CI 에서도 돈다)
+test-gates:
+	@./scripts/test-gates.sh
 
 # 강제 규칙 런타임 검증 — claude CLI 와 계정 인증이 필요해 CI 에서 돌지 않는다.
 # 규칙을 추가·변경한 커밋에서 1회 실행한다 (ADR 0009 §Consequences).
