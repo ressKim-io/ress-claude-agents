@@ -1,6 +1,6 @@
 ---
 name: observability-mimir-monolithic
-description: "Mimir 싱글바이너리 (Monolithic) 모드 가이드 — 분산 모드 대비 경량, 중소 규모 배포를 위한 Mimir 모놀리식 설정 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "Mimir 싱글바이너리(monolithic) 모드 — 분산 모드와 선택 기준, dev·prod Helm values, OTel Collector 연동, 전환 주의점, 스케일링 한계. Use when 중소 규모에서 Mimir 를 가볍게 배포하거나 분산 모드에서 줄여 옮길 때."
 ---
 
 # Mimir 싱글바이너리 (Monolithic) 모드 가이드

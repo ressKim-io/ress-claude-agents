@@ -1,6 +1,6 @@
 ---
 name: disaster-recovery
-description: "Disaster Recovery 가이드 — DR 전략, RTO/RPO 정의, Velero 백업, 멀티 클러스터 복구 Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "재해 복구 기본 — RTO/RPO 정의, DR 전략 비교, Velero 백업 설치·설정, 복구 절차. Use when 목표 복구 시간을 정하고 Kubernetes 백업·복구 체계를 처음 구축할 때. 멀티 클러스터·DB 는 disaster-recovery-advanced."
 ---
 
 # Disaster Recovery 가이드

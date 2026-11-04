@@ -1,6 +1,6 @@
 ---
 name: monitoring-self-monitoring
-description: "Observability Stack Self-Monitoring — Who watches the watchmen? — 모니터링 스택 자체의 건강 상태를 감시하는 전략과 패턴 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "모니터링 스택 자체 감시 — 독립 알림 채널, Prometheus·OTel Collector·Grafana·Loki·Tempo 헬스 점검, 증상별 컴포넌트 매핑. Use when 모니터링이 조용히 죽는 것을 막거나 관측 스택의 건강 지표를 설계할 때."
 ---
 
 # Observability Stack Self-Monitoring

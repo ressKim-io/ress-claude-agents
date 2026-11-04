@@ -1,6 +1,6 @@
 ---
 name: finops-showback
-description: "FinOps: Showback & Chargeback 가이드 — 팀별 비용 가시화, Kubecost 대시보드, AWS CUR 기반 Chargeback Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "팀별 비용 가시화 — Showback·Chargeback 구현, Kubecost 대시보드, AWS CUR 기반 배분, Prophet 비용 예측. Use when 팀·서비스별 클라우드 비용을 보여 주거나 부서에 청구하는 체계를 만들 때."
 ---
 
 # FinOps: Showback & Chargeback 가이드

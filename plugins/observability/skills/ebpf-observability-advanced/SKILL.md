@@ -1,6 +1,6 @@
 ---
 name: ebpf-observability-advanced
-description: "eBPF Observability 고급 가이드 — Cilium Hubble, DeepFlow, 프로덕션 요구사항, OpenTelemetry 연동 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "eBPF 관측 심화 — Cilium Hubble 네트워크 흐름 가시성, DeepFlow, 커널 버전 등 프로덕션 요구사항, OTel 연동. Use when Hubble·DeepFlow 를 운영 클러스터에 도입하거나 eBPF 요구사항을 점검할 때. 기초 도구 선택은 ebpf-observability."
 ---
 
 # eBPF Observability 고급 가이드

@@ -1,6 +1,6 @@
 ---
 name: kube-prometheus-stack
-description: "kube-prometheus-stack 가이드 — Helm chart 설치, values 커스터마이징, Phase별 환경 overlay, ArgoCD 통합 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "kube-prometheus-stack Helm chart — ArgoCD Application 설치, values 커스터마이징, Phase별 환경 overlay, EKS·GKE 차이, 트러블슈팅. Use when Prometheus·Grafana·Alertmanager 스택을 Helm 으로 배포하거나 values 를 조정할 때."
 ---
 
 # kube-prometheus-stack 가이드

@@ -1,6 +1,6 @@
 ---
 name: observability-otel-migration
-description: "OTel Migration Patterns — Grafana Agent → Alloy, Zipkin → OTLP, Semantic Conventions 마이그레이션 전략 및 Declarative Configuration 1.0.0 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "OTel 마이그레이션 — Grafana Agent→Alloy, Zipkin→OTLP, Semantic Conventions 전환, Declarative Configuration 1.0.0. Use when 구 계측·수집 구성을 OTel 표준으로 옮기거나 attribute 이름을 바꿀 때. Alloy 에서 나올 땐 alloy-to-otel."
 ---
 
 # OTel Migration Patterns

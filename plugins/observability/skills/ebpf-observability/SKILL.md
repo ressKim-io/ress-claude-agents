@@ -1,6 +1,6 @@
 ---
 name: ebpf-observability
-description: "eBPF Observability 가이드 — Zero-code 분산 추적: Grafana Beyla, Odigos, Cilium Hubble 활용 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "eBPF 기반 zero-code 분산 추적 — Grafana Beyla, Odigos, 기존 agent 계측과의 비교, eBPF 기초 개념. Use when 코드 수정 없이 서비스 트레이스·메트릭을 수집하거나 Beyla·Odigos 중 고를 때. Hubble·DeepFlow 는 advanced 쪽."
 ---
 
 # eBPF Observability 가이드

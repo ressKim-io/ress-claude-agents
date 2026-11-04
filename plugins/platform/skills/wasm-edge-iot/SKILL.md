@@ -1,6 +1,6 @@
 ---
 name: wasm-edge-iot
-description: "WASM Edge/IoT 활용 가이드 — Edge Computing, IoT 배포, 성능 최적화 Use when working with platform 도메인의 패턴 / 구현 선택."
+description: "WASM Edge·IoT 적용 — 엣지 컴퓨팅과 IoT 배포 사례, 성능 최적화, 안티패턴, 체크리스트. Use when WebAssembly 를 IoT 디바이스나 엣지 노드에 배포하고 튜닝할 때. 런타임 선택·K8s 통합은 wasm-edge."
 ---
 
 # WASM Edge/IoT 활용 가이드

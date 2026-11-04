@@ -1,6 +1,6 @@
 ---
 name: finops-tools-advanced
-description: "FinOps Tools 고급 최적화 가이드 — Cast AI 자동 최적화, Kubecost 고급 설정, 4Rs Framework, Right-sizing 자동화 Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "FinOps 도구 심화 — Cast AI 자동 최적화, Kubecost 고급 설정, 4Rs Framework, right-sizing 자동화, Infracost OPA 정책. Use when Kubernetes 비용 최적화를 자동화하거나 비용 정책을 코드로 강제할 때. 도구 선택은 finops-tools."
 ---
 
 # FinOps Tools 고급 최적화 가이드

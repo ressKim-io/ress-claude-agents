@@ -1,6 +1,6 @@
 ---
 name: golden-paths
-description: "Golden Paths 가이드 — 개발자를 위한 표준화된 경로 설계, 템플릿 패턴 Use when working with platform 도메인의 패턴 / 구현 선택."
+description: "Golden Path 설계 — 원칙, 구성 요소, 서비스 템플릿, best practice. Use when 개발자가 따를 표준 경로와 서비스 템플릿의 범위를 정하려 할 때. 인프라·CI/CD 템플릿 실체는 golden-paths-infra."
 ---
 
 # Golden Paths 가이드

@@ -1,6 +1,6 @@
 ---
 name: sre-sli-slo
-description: "SRE: SLI/SLO/SLA 정의 가이드 — 서비스 신뢰성 목표 설정 및 에러 버짓 관리 Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "SRE 신뢰성 목표 — SLI 유형별 정의, SLO 설정, SLA 구분, error budget 정책, burn rate 알림, Grafana 대시보드. Use when 서비스의 가용성·지연 목표를 숫자로 정하고 error budget 으로 운영할 때."
 ---
 
 # SRE: SLI/SLO/SLA 정의 가이드

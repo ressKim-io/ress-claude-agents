@@ -1,6 +1,6 @@
 ---
 name: backstage
-description: "Backstage 가이드 — Developer Portal 구축, Software Catalog, 기본 설치 및 설정 Use when working with platform 도메인의 패턴 / 구현 선택."
+description: "Backstage 개발자 포털 — 아키텍처, 설치·초기 설정, Software Catalog, TechDocs, 주요 플러그인. Use when Backstage 를 처음 설치하고 서비스 카탈로그와 문서를 올릴 때. 템플릿·셀프서비스는 platform-backstage."
 ---
 
 # Backstage 가이드

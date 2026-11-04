@@ -1,6 +1,6 @@
 ---
 name: load-testing
-description: "부하 테스트 가이드 — K6, nGrinder를 활용한 성능 테스트 및 결과 분석 Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "K6 부하 테스트 — 테스트 유형, 기본·고급 시나리오, Kubernetes 실행, Grafana Cloud K6 분산 테스트, 안티패턴. Use when K6 스크립트로 스파이크·soak 등 부하를 만들고 실행할 때. 결과 분석은 load-testing-analysis."
 ---
 
 # 부하 테스트 가이드

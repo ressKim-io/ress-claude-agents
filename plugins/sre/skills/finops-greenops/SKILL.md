@@ -1,6 +1,6 @@
 ---
 name: finops-greenops
-description: "GreenOps 가이드 — 클라우드 탄소 발자국 측정, 지속가능성 최적화, FinOps + GreenOps 통합 Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "GreenOps — 클라우드 탄소 발자국 측정, 저탄소 리전 선택, ARM 인스턴스 전환, 오프피크 스케줄링, SCI(Software Carbon Intensity). Use when 비용 절감과 함께 탄소 배출을 측정·줄이려 할 때."
 ---
 
 # GreenOps 가이드

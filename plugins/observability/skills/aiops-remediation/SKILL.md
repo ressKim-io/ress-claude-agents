@@ -1,6 +1,6 @@
 ---
 name: aiops-remediation
-description: "AIOps: RCA & 자동 복구 — 근본 원인 분석 (RCA), 자동 복구 (Auto-Remediation) Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "AIOps 근본 원인 분석(RCA)과 자동 복구 — 이벤트 상관 분석, auto-remediation 실행·안전장치, 복구 대시보드. Use when 장애 원인을 자동으로 좁히거나 알림에서 복구 액션까지 자동화하는 파이프라인을 만들 때."
 ---
 
 # AIOps: RCA & 자동 복구

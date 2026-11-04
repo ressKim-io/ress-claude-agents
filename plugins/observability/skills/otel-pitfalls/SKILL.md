@@ -1,6 +1,6 @@
 ---
 name: otel-pitfalls
-description: "OTel 실전 Pitfalls — 실전 트러블슈팅 기반 OpenTelemetry 실전 함정. SDK 버전 충돌 / label cardinality / exporter protocol / agent vs starter 이중 계측. Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "OpenTelemetry 실전 함정 — Spring Boot BOM 버전 충돌, Java Agent 메모리, OTLP protocol 변경, HikariCP 초기화 순서, Agent·Starter 이중 계측, PII 유출. Use when OTel Java 계측 후 트레이스가 안 나오거나 버전·메모리 문제를 만났을 때."
 ---
 
 # OTel 실전 Pitfalls

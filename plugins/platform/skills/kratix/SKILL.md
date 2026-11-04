@@ -1,6 +1,6 @@
 ---
 name: kratix
-description: "Kratix 플랫폼 오케스트레이터 가이드 — Kratix Promise 기반 셀프서비스 플랫폼 API, Backstage 연동, 소규모~대규모 팀 적용 전략 Use when working with platform 도메인의 패턴 / 구현 선택."
+description: "Kratix 플랫폼 오케스트레이터 — Promise CRD 작성, PostgreSQL·Redis as-a-Service 예제, Backstage 연동, 소규모 팀 적용 판단. Use when Promise 로 셀프서비스 플랫폼 API 를 만들지 판단하거나 Kratix 를 도입할 때."
 ---
 
 # Kratix 플랫폼 오케스트레이터 가이드

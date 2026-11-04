@@ -1,6 +1,6 @@
 ---
 name: observability-otel
-description: "OpenTelemetry Patterns — Spring Boot, Go를 위한 OpenTelemetry 설정 및 Collector 구성 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "OTel 기본 설정 — Spring Boot·Go 계측, Collector 구성, 샘플링 전략, Collector 버전 관리, Tempo v2 Scoped Tag API. Use when Java·Go 서비스에 OpenTelemetry 를 처음 붙이거나 Collector 파이프라인을 짤 때. 배포·스케일은 하위 otel skill."
 ---
 
 # OpenTelemetry Patterns

@@ -1,6 +1,6 @@
 ---
 name: dev-prod-parity-checklist
-description: dev/staging/prod 환경 간 configuration drift와 snowflake environment 방지 체크리스트. 12-factor X + Beyond 12-factor 기반. 환경별 매니페스트 diff, 같은 base image, 같은 DB 종류 강제.
+description: "dev·prod 환경 parity 점검 — 6차원 비교, snowflake 환경 안티패턴, parity 강화 패턴, 자가 검증 체크리스트. Use when 개발에서는 되는데 운영에서만 실패하거나 Terraform 이후에도 환경이 어긋나는 drift 를 의심할 때."
 ---
 
 # Dev/Prod Parity Checklist (M7: 환경 차이 misforecasting)

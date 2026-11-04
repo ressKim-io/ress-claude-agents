@@ -1,6 +1,6 @@
 ---
 name: load-testing-analysis
-description: "부하 테스트 분석 가이드 — nGrinder, 결과 분석, SLO 기반 Threshold Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "부하 테스트 결과 분석 — nGrinder 사용, 결과 요약·병목 지점·권장 사항 정리, SLO 기반 threshold. Use when 부하 테스트 결과를 해석해 병목을 찾고 보고서를 쓰거나 합격 기준을 정할 때. K6 스크립트는 load-testing."
 ---
 
 # 부하 테스트 분석 가이드

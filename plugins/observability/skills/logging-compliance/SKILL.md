@@ -1,6 +1,6 @@
 ---
 name: logging-compliance
-description: "Compliance Logging Patterns — 결제, 개인정보, 법적 요구사항을 충족하는 로그 저장 가이드 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "규제 대응 로그 저장 — 결제 로그(PCI-DSS, 전자금융거래법), 개인정보 접속기록(개인정보보호법), 보존·분리 아키텍처, 감사 대응. Use when 결제·개인정보 로그의 보관 기간과 저장 구조를 법적 요구에 맞춰 설계할 때."
 ---
 
 # Compliance Logging Patterns

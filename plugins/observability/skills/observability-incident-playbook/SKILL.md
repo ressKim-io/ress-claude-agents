@@ -1,6 +1,6 @@
 ---
 name: observability-incident-playbook
-description: "Observability Incident Playbook — Alert 수신 -> 진단 -> RCA -> 복구 -> 포스트모템까지 E2E 인시던트 대응 워크플로우 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "인시던트 대응 플레이북 — 증상별 시작 도구 결정 트리, 5단계 대응 흐름, 시그널 기반 조사, runbook·회고 템플릿. Use when 알림을 받고 진단·RCA·복구 순서를 잡아야 하는 장애 상황일 때. 회고 작성은 incident-postmortem."
 ---
 
 # Observability Incident Playbook

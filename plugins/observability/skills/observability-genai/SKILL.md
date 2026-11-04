@@ -1,6 +1,6 @@
 ---
 name: observability-genai
-description: "GenAI Observability — OTel GenAI Semantic Conventions, LLM 호출 Tracing, Token Usage Metrics, Quality Metrics, Grafana 대시보드 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "GenAI 관측 — OTel GenAI Semantic Conventions, LLM 호출 tracing, token usage 메트릭, RAG 파이프라인 tracing, 품질·안전 메트릭. Use when LLM 호출의 지연·토큰·품질을 트레이스와 Grafana 로 보고 싶을 때."
 ---
 
 # GenAI Observability

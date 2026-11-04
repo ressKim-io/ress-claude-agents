@@ -1,6 +1,6 @@
 ---
 name: aiops
-description: "AIOps 가이드 — AI 기반 IT 운영: 이상 탐지, OpenTelemetry 통합 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "AIOps 개요 — 성숙도 모델, ML 기반 이상 탐지(Anomaly Detection), OpenTelemetry 통합, 핵심 메트릭. Use when 임계값 알림을 넘어 이상 탐지 도입을 검토하거나 AIOps 단계를 설계할 때. 복구 자동화는 aiops-remediation."
 ---
 
 # AIOps 가이드

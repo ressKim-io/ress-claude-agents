@@ -1,6 +1,6 @@
 ---
 name: finops-ai
-description: "FinOps for AI — AI 워크로드 비용 관리 — AI/LLM 비용 구조, Token Economics, GPU 비용 최적화, Shift-Left FinOps, Model Routing Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "AI 워크로드 비용 관리 — LLM 비용 구조, token economics·귀속, GPU 최적화, Shift-Left FinOps, model routing. Use when LLM API·GPU 비용이 늘어 토큰 단위로 추적하고 모델 라우팅으로 줄일 때."
 ---
 
 # FinOps for AI — AI 워크로드 비용 관리

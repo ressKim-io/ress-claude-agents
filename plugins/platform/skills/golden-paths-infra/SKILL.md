@@ -1,6 +1,6 @@
 ---
 name: golden-paths-infra
-description: "Golden Paths: Infrastructure & CI/CD — Infrastructure 템플릿, CI/CD 파이프라인, Observability 기본값 Use when working with platform 도메인의 패턴 / 구현 선택."
+description: "Golden Path 인프라편 — Infrastructure 템플릿, CI/CD 파이프라인 템플릿, observability 기본값. Use when 표준 인프라·CI/CD·관측 기본 구성을 템플릿으로 제공할 때. 경로 설계 원칙은 golden-paths."
 ---
 
 # Golden Paths: Infrastructure & CI/CD

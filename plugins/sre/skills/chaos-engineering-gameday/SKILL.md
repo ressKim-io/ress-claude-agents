@@ -1,6 +1,6 @@
 ---
 name: chaos-engineering-gameday
-description: "Chaos Engineering GameDay 가이드 — GameDay 운영, 모니터링, 알림 Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "Chaos GameDay 운영 — Pre·During·Post 단계, 진행 중 모니터링·알림, 안티패턴, 체크리스트. Use when 팀이 모여 장애 주입 훈련을 계획하고 진행·회고할 때. 실험 정의와 LitmusChaos 는 chaos-engineering."
 ---
 
 # Chaos Engineering GameDay 가이드
