@@ -1,6 +1,6 @@
 ---
 name: distributed-lock
-description: "Distributed Lock Patterns — MSA/다중 서버 환경에서의 분산 락 패턴 Use when working with msa 도메인의 패턴 / 구현 선택."
+description: "분산 락 — Redisson(Spring Boot), Redsync(Go Redlock), ShedLock 스케줄러 중복 방지, Fencing Token. Use when 다중 인스턴스 환경에서 동시 실행·중복 처리·경쟁 상태를 막는 락을 설계할 때."
 ---
 
 # Distributed Lock Patterns

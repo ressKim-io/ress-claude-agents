@@ -40,31 +40,31 @@ cp -r plugins/architecture/skills/<이름> <프로젝트>/.claude/skills/
 
 | 이름 | 설명 |
 |---|---|
-| `/architecture:api-design` | REST API Design Patterns — REST API 설계 원칙, RFC 9457 에러 처리, 페이지네이션, 버저닝 |
+| `/architecture:api-design` | REST API 설계 — URL 규칙, RFC 9457 Problem Details 에러 응답, 페이지네이션, 필터링·정렬, 버저닝 |
 | `/architecture:cell-based-architecture` | Cell-Based Architecture 가이드 — 대규모 장애 격리를 위한 Cell 기반 아키텍처: Bulkhead 패턴, 블라스트 반경 제한, Horizontal Isolation |
-| `/architecture:composable-architecture` | Composable Architecture (MACH) — MACH Alliance 기반 조합형 아키텍처 — Packaged Business Capabilities(PBC)를 교체·조합하여 … |
-| `/architecture:config-explicit-defaults` | 설정 안 한 값은 자동 처리되니 괜찮다'는 mental model 오류 방지. 명시값/기본값/환경별 override 3단 검증 체크리스트로 config sprawl과 silent default … |
-| `/architecture:consumer-driven-contracts` | 마이크로서비스 간 API contract drift를 막는 Consumer-Driven Contracts(CDC) + Pact 운영 가이드. consumer test로 contract 정의 → … |
-| `/architecture:contract-first` | Contract-First Development — API 계약을 먼저 정의하고 코드를 생성하는 개발 방법론 — OpenAPI, Protobuf, AsyncAPI, Pact |
-| `/architecture:data-mesh` | Data Mesh Architecture 가이드 — Zhamak Dehghani의 분산 데이터 아키텍처. 도메인 소유권, Data as a Product, 셀프서비스 플랫폼, 연합 거버넌스 |
-| `/architecture:distributed-lock` | Distributed Lock Patterns — MSA/다중 서버 환경에서의 분산 락 패턴 |
-| `/architecture:graphql-federation` | GraphQL Federation 가이드 — Apollo Federation v2 기반 Supergraph 설계, Subgraph 구현 (Go gqlgen / Spring DGS), Router … |
-| `/architecture:grpc` | gRPC Service Design — gRPC 서비스 설계, Protocol Buffers, 스트리밍, 에러 처리, 성능 최적화 |
-| `/architecture:hexagonal-clean-architecture` | Hexagonal Architecture (Clean Architecture) — Ports & Adapters 패턴, 의존성 역전, 도메인 중심 설계로 테스트 가능하고 유연한 시스템 구축 |
-| `/architecture:high-traffic-design` | 대규모 트래픽 설계 가이드 — Backpressure, Rate Limiting, CDN Edge, Connection Pooling, Queue Load Leveling, Request … |
-| `/architecture:modular-monolith` | Modular Monolith Architecture — 단일 배포 단위 내에서 모듈 경계를 강제하여 확장성과 단순성의 균형을 달성하는 아키텍처 패턴 |
-| `/architecture:msa-api-gateway-patterns` | MSA API Gateway 패턴 가이드 — BFF, Gateway Aggregation, Protocol Translation, Layered Auth, API 버저닝 패턴의 설계 원칙과 실전 … |
-| `/architecture:msa-cqrs-eventsourcing` | CQRS & Event Sourcing 가이드 — Command/Query 분리와 이벤트 기반 상태 관리로 확장 가능한 마이크로서비스를 구축하는 실전 가이드 |
-| `/architecture:msa-ddd` | DDD 마이크로서비스 설계 가이드 — Bounded Context, Aggregate, Domain Event, Context Mapping, 서비스 경계 설계 |
-| `/architecture:msa-event-driven` | 이벤트 드리븐 아키텍처 가이드 — 서비스 간 비동기 통신, 이벤트 스키마 설계, 발행/수신 패턴, Kubernetes 통합 |
-| `/architecture:msa-observability` | MSA 분산 추적 & 관측성 가이드 — Distributed Tracing, Correlation ID, Service Topology, Trace Context, Baggage … |
-| `/architecture:msa-resilience` | MSA 복원력 패턴 가이드 — Resilience4j 기반 Circuit Breaker, Bulkhead, Retry, Timeout, Fallback 패턴의 실전 구현과 조합 전략 |
-| `/architecture:msa-saga` | Saga 패턴 가이드 — 분산 트랜잭션의 일관성을 보장하는 Saga 패턴 구현 전략 (Choreography, Orchestration, Compensation) |
-| `/architecture:service-ownership-matrix` | 책임 경계 불명확으로 인한 의사결정 정체·장애 미대응을 막는 RACI / Shared Responsibility Model 작성 가이드. "platform team" 같은 모호한 owner 표기를 … |
-| `/architecture:state-machine` | 도메인 상태머신 가이드 — 도메인 엔티티의 상태 전이 관리, FSM 구현 패턴, 이벤트 기반 상태 변경, 감사 추적 |
-| `/architecture:strangler-fig-pattern` | Strangler Fig Pattern — 레거시 시스템을 점진적으로 현대화하는 안전한 마이그레이션 전략 |
-| `/architecture:task-queue` | Task Queue 패턴 가이드 — 비동기 작업 분산 처리, 우선순위 큐, 재시도 전략, Worker 오토스케일링 패턴 |
-| `/architecture:vertical-slice-architecture` | Vertical Slice Architecture — > Feature 단위로 코드를 조직하는 아키텍처 패턴 - Jimmy Bogard 제안 |
+| `/architecture:composable-architecture` | 조합형 아키텍처(MACH) — Packaged Business Capabilities(PBC), API Composition, Micro-Frontends 로 교체 가능한 구성 요소 설계 |
+| `/architecture:config-explicit-defaults` | 묵시적 기본값 방지 — 명시값·라이브러리 기본값·환경별 override 3단 검증과 silent default drift 점검 |
+| `/architecture:consumer-driven-contracts` | Consumer-Driven Contracts — Pact consumer test, provider verification, GitOps 연동으로 서비스 간 API contract drift 방지 |
+| `/architecture:contract-first` | Contract-First 개발 — OpenAPI 3.1 spec-first, Protobuf/gRPC, AsyncAPI, Schema Registry, 코드 생성 CI 파이프라인 |
+| `/architecture:data-mesh` | Data Mesh — 도메인 소유권, Data as a Product, 셀프서비스 데이터 플랫폼, 연합 거버넌스, Spring Boot·Go data product 구현 |
+| `/architecture:distributed-lock` | 분산 락 — Redisson(Spring Boot), Redsync(Go Redlock), ShedLock 스케줄러 중복 방지, Fencing Token |
+| `/architecture:graphql-federation` | GraphQL Federation — Apollo Federation v2 Supergraph, Subgraph 스키마 설계, Go gqlgen·Spring DGS 구현, Router 배포, … |
+| `/architecture:grpc` | gRPC 서비스 설계 — Protocol Buffers, buf 설정, Go·Spring 구현, 스트리밍, 에러 처리, 인터셉터, gRPC-Gateway |
+| `/architecture:hexagonal-clean-architecture` | Hexagonal(Ports & Adapters)·Clean Architecture — 의존성 역전, 도메인 중심 계층 구조, Spring Boot·Go 구현 |
+| `/architecture:high-traffic-design` | 대규모 트래픽 설계 — Backpressure, Rate Limiting, CDN Edge, Connection Pooling, Queue Load Leveling, Request Batching |
+| `/architecture:modular-monolith` | 모듈러 모놀리스 — 단일 배포 안에서 모듈 경계 강제, Spring Modulith, Go internal 패키지, 서비스 추출 전략 |
+| `/architecture:msa-api-gateway-patterns` | MSA API Gateway 패턴 — BFF, Gateway Aggregation, Protocol Translation, 계층형 인가, API 버저닝·deprecation |
+| `/architecture:msa-cqrs-eventsourcing` | CQRS 와 Event Sourcing — Command/Query 분리, 이벤트 저장소, Eventual Consistency, Axon Framework |
+| `/architecture:msa-ddd` | DDD 마이크로서비스 설계 — Bounded Context, Aggregate, Domain Event, Context Mapping, Event Storming, 서비스 분해 전략 |
+| `/architecture:msa-event-driven` | 이벤트 드리븐 아키텍처 — 서비스 간 비동기 통신, 이벤트 스키마 설계, 발행·수신 패턴, 메시징 패턴 비교 |
+| `/architecture:msa-observability` | MSA 분산 추적 — Distributed Tracing, Trace Context 전파, Correlation ID, Baggage, Span Attributes, Exemplar, 서비스 … |
+| `/architecture:msa-resilience` | MSA 복원력 — Resilience4j Circuit Breaker, Bulkhead, Retry, Timeout, Fallback 조합과 Istio 연동 |
+| `/architecture:msa-saga` | Saga 패턴 — Choreography vs Orchestration, 보상 트랜잭션, 실패 처리 |
+| `/architecture:service-ownership-matrix` | 서비스 소유권 — RACI, Shared Responsibility Model, 팀 이름이 아닌 개인·직무 단위 owner 명시, 워크숍 템플릿 |
+| `/architecture:state-machine` | 도메인 상태머신 — 상태 전이 테이블, Go looplab/fsm, Spring State Machine, guard·side effect, 감사 로그, Mermaid 시각화 |
+| `/architecture:strangler-fig-pattern` | Strangler Fig — 레거시 점진 현대화, API Gateway 라우팅 전환, 데이터 동기화, 신구 시스템 병행 검증 |
+| `/architecture:task-queue` | Task Queue — Celery, BullMQ, Go asynq, Spring RabbitMQ 기반 비동기 작업 분산, 우선순위 큐, 재시도, Worker 오토스케일링 |
+| `/architecture:vertical-slice-architecture` | Vertical Slice Architecture — 계층이 아닌 feature 단위 코드 구성, Spring Boot·Go 구현, CQRS 결합, 공유 코드 전략 |
 
 ## Agents (1)
 

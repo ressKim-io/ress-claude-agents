@@ -1,6 +1,6 @@
 ---
 name: modular-monolith
-description: "Modular Monolith Architecture — 단일 배포 단위 내에서 모듈 경계를 강제하여 확장성과 단순성의 균형을 달성하는 아키텍처 패턴 Use when working with architecture 도메인의 패턴 / 구현 선택."
+description: "모듈러 모놀리스 — 단일 배포 안에서 모듈 경계 강제, Spring Modulith, Go internal 패키지, 서비스 추출 전략. Use when MSA 로 가기 전에 모놀리스 내부 경계를 정리하거나 모듈을 서비스로 분리할 때."
 ---
 
 # Modular Monolith Architecture

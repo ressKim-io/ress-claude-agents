@@ -1,6 +1,6 @@
 ---
 name: aws-messaging
-description: "AWS 메시징 서비스 가이드 — SQS, SNS, EventBridge 비교 및 구현 패턴, K8s 통합 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "AWS 메시징 — SQS, SNS, EventBridge 비교와 구현 패턴, K8s 통합. Use when AWS 에서 큐·팬아웃·이벤트 버스 중 무엇을 쓸지 고르거나 SQS·SNS 연동을 구현할 때."
 ---
 
 # AWS 메시징 서비스 가이드

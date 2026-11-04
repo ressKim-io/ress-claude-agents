@@ -1,6 +1,6 @@
 ---
 name: strangler-fig-pattern
-description: "Strangler Fig Pattern — 레거시 시스템을 점진적으로 현대화하는 안전한 마이그레이션 전략 Use when working with architecture 도메인의 패턴 / 구현 선택."
+description: "Strangler Fig — 레거시 점진 현대화, API Gateway 라우팅 전환, 데이터 동기화, 신구 시스템 병행 검증. Use when 레거시를 한 번에 갈아엎지 않고 기능 단위로 새 시스템으로 옮길 때."
 ---
 
 # Strangler Fig Pattern

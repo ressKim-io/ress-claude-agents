@@ -1,6 +1,6 @@
 ---
 name: msa-resilience
-description: "MSA 복원력 패턴 가이드 — Resilience4j 기반 Circuit Breaker, Bulkhead, Retry, Timeout, Fallback 패턴의 실전 구현과 조합 전략 Use when working with msa 도메인의 패턴 / 구현 선택."
+description: "MSA 복원력 — Resilience4j Circuit Breaker, Bulkhead, Retry, Timeout, Fallback 조합과 Istio 연동. Use when 하위 서비스 장애가 연쇄 전파되지 않게 장애 격리·재시도 정책을 설계할 때."
 ---
 
 # MSA 복원력 패턴 가이드

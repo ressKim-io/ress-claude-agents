@@ -1,6 +1,6 @@
 ---
 name: hexagonal-clean-architecture
-description: "Hexagonal Architecture (Clean Architecture) — Ports & Adapters 패턴, 의존성 역전, 도메인 중심 설계로 테스트 가능하고 유연한 시스템 구축 Use when working with architecture 도메인의 패턴 / 구현 선택."
+description: "Hexagonal(Ports & Adapters)·Clean Architecture — 의존성 역전, 도메인 중심 계층 구조, Spring Boot·Go 구현. Use when 도메인 로직을 프레임워크·DB 에서 분리해 테스트하기 쉬운 구조로 설계할 때."
 ---
 
 # Hexagonal Architecture (Clean Architecture)

@@ -1,6 +1,6 @@
 ---
 name: kafka
-description: "Apache Kafka 가이드 — Kafka 클러스터, Strimzi Operator, 핵심 개념 Use when working with messaging 도메인의 패턴 / 구현 선택."
+description: "Apache Kafka 기초 — 클러스터 개념, 토픽·파티션 전략, Strimzi Operator 설치. Use when Kafka 를 처음 도입하거나 파티션 설계 등 기본 개념을 잡을 때, 고급·Connect·Streams 는 kafka- 접두 skill 사용."
 ---
 
 # Apache Kafka 가이드

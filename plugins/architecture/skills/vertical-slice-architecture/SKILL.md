@@ -1,6 +1,6 @@
 ---
 name: vertical-slice-architecture
-description: "Vertical Slice Architecture — > Feature 단위로 코드를 조직하는 아키텍처 패턴 - Jimmy Bogard 제안 Use when working with architecture 도메인의 패턴 / 구현 선택."
+description: "Vertical Slice Architecture — 계층이 아닌 feature 단위 코드 구성, Spring Boot·Go 구현, CQRS 결합, 공유 코드 전략. Use when 계층형 구조 대신 기능별로 코드를 묶어 변경 범위를 줄이고 싶을 때."
 ---
 
 # Vertical Slice Architecture

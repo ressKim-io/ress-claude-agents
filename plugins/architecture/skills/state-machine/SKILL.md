@@ -1,6 +1,6 @@
 ---
 name: state-machine
-description: "도메인 상태머신 가이드 — 도메인 엔티티의 상태 전이 관리, FSM 구현 패턴, 이벤트 기반 상태 변경, 감사 추적 Use when working with architecture 도메인의 패턴 / 구현 선택."
+description: "도메인 상태머신 — 상태 전이 테이블, Go looplab/fsm, Spring State Machine, guard·side effect, 감사 로그, Mermaid 시각화. Use when 주문 같은 엔티티의 상태 전이 규칙을 구현하거나 검증할 때."
 ---
 
 # 도메인 상태머신 가이드

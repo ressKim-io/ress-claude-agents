@@ -1,6 +1,6 @@
 ---
 name: grpc
-description: "gRPC Service Design — gRPC 서비스 설계, Protocol Buffers, 스트리밍, 에러 처리, 성능 최적화 Use when working with msa 도메인의 패턴 / 구현 선택."
+description: "gRPC 서비스 설계 — Protocol Buffers, buf 설정, Go·Spring 구현, 스트리밍, 에러 처리, 인터셉터, gRPC-Gateway. Use when 서비스 간 gRPC API 를 정의하거나 스트리밍·에러 코드·성능 문제를 다룰 때."
 ---
 
 # gRPC Service Design

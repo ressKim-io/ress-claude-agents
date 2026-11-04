@@ -34,15 +34,15 @@ cp -r plugins/messaging/skills/<이름> <프로젝트>/.claude/skills/
 
 | 이름 | 설명 |
 |---|---|
-| `/messaging:aws-messaging` | AWS 메시징 서비스 가이드 — SQS, SNS, EventBridge 비교 및 구현 패턴, K8s 통합 |
+| `/messaging:aws-messaging` | AWS 메시징 — SQS, SNS, EventBridge 비교와 구현 패턴, K8s 통합 |
 | `/messaging:broker-troubleshooting` | 메시지 브로커 장애 진단 — Kafka consumer lag·partition rebalancing·ISR shrink, RabbitMQ queue depth·unacked 누적·quorum … |
-| `/messaging:kafka` | Apache Kafka 가이드 — Kafka 클러스터, Strimzi Operator, 핵심 개념 |
-| `/messaging:kafka-advanced` | Kafka 고급 Producer/Consumer 가이드 — Transactional API, Exactly-Once, KIP-848 리밸런싱, Offset 전략, Inbox 패턴 |
-| `/messaging:kafka-connect-cdc` | Kafka Connect & CDC (Debezium) 가이드 — Source/Sink Connector, Debezium CDC, Outbox Event Router, Schema … |
-| `/messaging:kafka-k8s-operations` | Kafka on Kubernetes 운영 가이드 — Strimzi+ArgoCD 통합, kind→EKS(MSK)/GKE 전환, JMX 모니터링, Schema Registry K8s 배포 |
+| `/messaging:kafka` | Apache Kafka 기초 — 클러스터 개념, 토픽·파티션 전략, Strimzi Operator 설치 |
+| `/messaging:kafka-advanced` | Kafka 고급 Producer/Consumer — Transactional API, Exactly-Once, KIP-848 리밸런싱, offset 전략, Inbox 패턴 |
+| `/messaging:kafka-connect-cdc` | Kafka Connect 와 CDC — Source/Sink Connector, Debezium, Outbox Event Router, Schema Registry, Strimzi 운영 |
+| `/messaging:kafka-k8s-operations` | Kafka on Kubernetes 운영 — Strimzi·ArgoCD 통합, kind에서 EKS(MSK)/GKE 전환, JMX→Prometheus 모니터링, Schema Registry 배포 |
 | `/messaging:kafka-msa-patterns` | Kafka MSA 실전 패턴 — MSA에서 Kafka를 올바르게 사용하기 위한 실전 패턴. Idempotency, DLQ, Retry, Outbox, Schema Evolution |
-| `/messaging:kafka-patterns` | Kafka Producer/Consumer 패턴 — Producer/Consumer 구현, KEDA 오토스케일링, 모니터링 |
-| `/messaging:kafka-streams` | Kafka Streams 가이드 — KTable, GlobalKTable, Windowing, Interactive Queries, Stateful Processing, RocksDB 튜닝 |
-| `/messaging:nats-messaging` | NATS 메시징 가이드 — NATS v2.10+ Core NATS, JetStream, Key-Value Store, Object Store, K8s 운영 |
-| `/messaging:rabbitmq` | RabbitMQ 가이드 — RabbitMQ v4.1 Quorum Queues, AMQP 1.0, Exchange 패턴, Publisher Confirms, DLX, K8s 운영 |
-| `/messaging:redis-streams` | Redis Streams 가이드 — Redis 8.x Streams 기반 메시지 스트리밍, Consumer Group, PEL 관리, K8s 배포 |
+| `/messaging:kafka-patterns` | Kafka Producer/Consumer 기본 구현 패턴 — Producer 설정, Consumer 처리, KEDA 오토스케일링, 모니터링 |
+| `/messaging:kafka-streams` | Kafka Streams — KTable, GlobalKTable, Windowing, Interactive Queries, stateful 처리, RocksDB 튜닝 |
+| `/messaging:nats-messaging` | NATS 메시징 — Core NATS, JetStream, Key-Value·Object Store, subject 설계, Go 클라이언트, K8s 배포, Kafka·RabbitMQ 비교 |
+| `/messaging:rabbitmq` | RabbitMQ — Quorum Queues, AMQP 1.0, Exchange 패턴, Publisher Confirms, Dead Letter Exchange, Go·Spring AMQP, … |
+| `/messaging:redis-streams` | Redis Streams — Consumer Group, PEL 관리, XREADGROUP 등 핵심 명령, MAXLEN 트리밍, Go·Spring 구현, K8s 배포 |

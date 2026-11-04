@@ -1,6 +1,6 @@
 ---
 name: high-traffic-design
-description: "대규모 트래픽 설계 가이드 — Backpressure, Rate Limiting, CDN Edge, Connection Pooling, Queue Load Leveling, Request Batching 패턴 기반 대규모 트래픽 아키텍처 가이드 Use when working with msa 도메인의 패턴 / 구현 선택."
+description: "대규모 트래픽 설계 — Backpressure, Rate Limiting, CDN Edge, Connection Pooling, Queue Load Leveling, Request Batching. Use when 트래픽 폭주에도 버티는 아키텍처를 설계하거나 병목·과부하 대응책을 고를 때."
 ---
 
 # 대규모 트래픽 설계 가이드

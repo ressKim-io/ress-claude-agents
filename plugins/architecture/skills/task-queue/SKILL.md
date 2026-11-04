@@ -1,6 +1,6 @@
 ---
 name: task-queue
-description: "Task Queue 패턴 가이드 — 비동기 작업 분산 처리, 우선순위 큐, 재시도 전략, Worker 오토스케일링 패턴 Use when working with msa 도메인의 패턴 / 구현 선택."
+description: "Task Queue — Celery, BullMQ, Go asynq, Spring RabbitMQ 기반 비동기 작업 분산, 우선순위 큐, 재시도, Worker 오토스케일링. Use when 무거운 작업을 백그라운드 worker 로 분리하고 재시도·스케일링을 설계할 때."
 ---
 
 # Task Queue 패턴 가이드

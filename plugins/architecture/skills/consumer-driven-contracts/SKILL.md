@@ -1,6 +1,6 @@
 ---
 name: consumer-driven-contracts
-description: 마이크로서비스 간 API contract drift를 막는 Consumer-Driven Contracts(CDC) + Pact 운영 가이드. consumer test로 contract 정의 → provider verification 자동화 → GitOps 통합. Martin Fowler canon + Microsoft playbook 기반.
+description: "Consumer-Driven Contracts — Pact consumer test, provider verification, GitOps 연동으로 서비스 간 API contract drift 방지. Use when 마이크로서비스 간 필드 제거·변경이 소비자를 깨뜨리는 사고를 막고 싶을 때."
 ---
 
 # Consumer-Driven Contracts (M10: 외부 시스템 contract drift)

@@ -1,6 +1,6 @@
 ---
 name: kafka-k8s-operations
-description: "Kafka on Kubernetes 운영 가이드 — Strimzi+ArgoCD 통합, kind→EKS(MSK)/GKE 전환, JMX 모니터링, Schema Registry K8s 배포 Use when working with messaging 도메인의 패턴 / 구현 선택."
+description: "Kafka on Kubernetes 운영 — Strimzi·ArgoCD 통합, kind에서 EKS(MSK)/GKE 전환, JMX→Prometheus 모니터링, Schema Registry 배포. Use when K8s 위에 Kafka 를 배포·이전·모니터링할 때."
 ---
 
 # Kafka on Kubernetes 운영 가이드

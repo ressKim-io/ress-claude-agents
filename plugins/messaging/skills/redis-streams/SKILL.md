@@ -1,6 +1,6 @@
 ---
 name: redis-streams
-description: "Redis Streams 가이드 — Redis 8.x Streams 기반 메시지 스트리밍, Consumer Group, PEL 관리, K8s 배포 Use when working with messaging 도메인의 패턴 / 구현 선택."
+description: "Redis Streams — Consumer Group, PEL 관리, XREADGROUP 등 핵심 명령, MAXLEN 트리밍, Go·Spring 구현, K8s 배포. Use when Redis 로 가벼운 메시지 스트리밍을 구현하거나 pending 메시지를 처리할 때."
 ---
 
 # Redis Streams 가이드
