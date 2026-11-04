@@ -495,4 +495,4 @@ Step 4: 타임박스 설정
 - Teresa Torres, "Continuous Discovery Habits" (2021)
 - Marty Cagan, "Inspired" (2017) — Product Discovery
 
-**관련 skill**: `/engineering-strategy`, `/rfc-adr`, `/dx-metrics`, `/team-topologies`
+**관련 skill**: `/dx:engineering-strategy`, `/dx:rfc-adr`, `/dx:dx-metrics`, `/dx:team-topologies`

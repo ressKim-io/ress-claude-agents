@@ -2,11 +2,11 @@
 description: "Phase 기반 작업(SDD 게이트 강제) 시작. 11항목 체크리스트 출력 + Gate 1-5 흐름 안내."
 ---
 
-# /phase-start
+# /dx:phase-start
 
-대규모 작업(6개 이상 파일 변경 / API 3개 이상 / 시스템 마이그레이션)을 시작할 때 `.claude/rules/process/phase-workflow.md`의 Gate 1-5를 강제하는 진입점.
+대규모 작업(6개 이상 파일 변경 / API 3개 이상 / 시스템 마이그레이션)을 시작할 때 [`phase-workflow.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/phase-workflow.md)의 Gate 1-5를 강제하는 진입점.
 
-`/phase-start`로 시작하지 않은 작업은 `.claude/rules/core/workflow.md`의 일반 작업 순서(EXPLORE → PLAN → IMPLEMENT → VERIFY → COMMIT)를 따른다.
+`/dx:phase-start`로 시작하지 않은 작업은 [`workflow.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/workflow.md)의 일반 작업 순서(EXPLORE → PLAN → IMPLEMENT → VERIFY → COMMIT)를 따른다.
 
 ## 입력
 
@@ -19,7 +19,7 @@ description: "Phase 기반 작업(SDD 게이트 강제) 시작. 11항목 체크�
 
 ## 적용 대상 (rules/process/phase-workflow.md §"적용 대상")
 
-다음 중 하나 이상에 해당하면 `/phase-start` 사용:
+다음 중 하나 이상에 해당하면 `/dx:phase-start` 사용:
 
 - 새 서비스/모듈 구현 (6개 이상 파일 변경 예상)
 - 기존 서비스 대규모 변경 (API 추가/변경 3개 이상)
@@ -42,7 +42,7 @@ description: "Phase 기반 작업(SDD 게이트 강제) 시작. 11항목 체크�
 SDD 파일을 다음 위치에 작성하십시오:
   docs/sdd-<phase-slug>.md
 
-템플릿: .claude/templates/sdd.md.template
+템플릿: ${CLAUDE_PLUGIN_ROOT}/templates/sdd.md.template
 
 SDD 필수 섹션:
   - Background (왜 이 작업이 필요한가)
@@ -68,11 +68,11 @@ Phase: <phase-slug>
 [ ] Gate 3: 코드/보안 리뷰 실행 + 피드백 반영
 [ ] Gate 4: 테스트 코드 작성 + 전체 통과 (단위 + 통합)
 [ ] Gate 5: PR 생성
-[ ] Gate 5: /review-pr 멀티 관점 리뷰
+[ ] Gate 5: /dx:review-pr 멀티 관점 리뷰
 [ ] Gate 5: Gemini 리뷰 확인 + 갭 기록 (docs/review-gaps.md)
 [ ] Gate 5: 피드백 반영 → push → merge
 [ ] main pull
-[ ] 트러블슈팅 로그 (/log-trouble) — 문제 발생 시
+[ ] 트러블슈팅 로그 (/dx:log-trouble) — 문제 발생 시
 ```
 
 체크리스트는 SDD `## Phase Gates` 섹션에 복사하여 진행 상태를 추적한다.
@@ -87,18 +87,18 @@ Phase 진행 중 다음을 감지하면 작업을 중단하고 안내한다:
 | SDD 리뷰 없이 구현 시작 | Gate 2 | "code-reviewer 에이전트로 SDD 리뷰 후 진행" |
 | 코드 리뷰 없이 PR 생성 시도 | Gate 3 | "기술 스택 리뷰 커맨드 실행 (/go:review, /java:review 등)" |
 | 테스트 미통과 상태 PR | Gate 4 | "테스트 실패 — PR 차단" |
-| /review-pr 미실행 머지 시도 | Gate 5 | "/review-pr 실행 후 머지" |
+| /dx:review-pr 미실행 머지 시도 | Gate 5 | "/dx:review-pr 실행 후 머지" |
 
 ### 5. 후속 권장
 
 - Phase 종료 시 회고: `docs/retrospective/$CURRENT_DATE-<phase-slug>.md` 작성 권장
-- Tier 2+ dev-log 누적 시 `/promote-devlog`로 ADR/skill 정착
+- Tier 2+ dev-log 누적 시 `/dx:promote-devlog`로 ADR/skill 정착
 - Phase 간 SDD가 dependency를 가지면 SDD frontmatter `depends_on:`로 명시
 
 ## 사용 예시
 
 ```
-/phase-start auth-refactor
+/dx:phase-start auth-refactor
 → Phase: auth-refactor
 → 시작일: 2026-05-12
 → SDD 작성 안내: docs/sdd-auth-refactor.md
@@ -107,7 +107,7 @@ Phase 진행 중 다음을 감지하면 작업을 중단하고 안내한다:
 ```
 
 ```
-/phase-start phase-3-multitenancy
+/dx:phase-start phase-3-multitenancy
 → Phase: phase-3-multitenancy
 → 시작일: 2026-05-12
 → SDD 작성 안내: docs/sdd-phase-3-multitenancy.md
@@ -117,7 +117,7 @@ Phase 진행 중 다음을 감지하면 작업을 중단하고 안내한다:
 
 ## 안전 장치
 
-- `/phase-start`를 호출하지 않은 채 SDD 파일만 생성하면 path-scoped rule이 자동 로딩되지만 Gate 추적은 수동
+- `/dx:phase-start`를 호출하지 않은 채 SDD 파일만 생성하면 path-scoped rule이 자동 로딩되지만 Gate 추적은 수동
 - Phase 종료(merge) 후에도 SDD는 보존 (히스토리)
 - 동시에 여러 Phase 진행 불가 — 1 Phase 1 PR 원칙
 
@@ -138,9 +138,9 @@ Gate 5: <조건> — 통과/미통과
 
 ## 관련 파일
 
-- Phase Gate 규칙: `.claude/rules/process/phase-workflow.md`
-- SDD 템플릿: `.claude/templates/sdd.md.template`
-- 일반 작업 순서: `.claude/rules/core/workflow.md`
-- PR 리뷰: `/review-pr`
+- Phase Gate 규칙: [`phase-workflow.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/phase-workflow.md)
+- SDD 템플릿: `${CLAUDE_PLUGIN_ROOT}/templates/sdd.md.template`
+- 일반 작업 순서: [`workflow.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/workflow.md)
+- PR 리뷰: `/dx:review-pr`
 
 오늘 날짜: $CURRENT_DATE

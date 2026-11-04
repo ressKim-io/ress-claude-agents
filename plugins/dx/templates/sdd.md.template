@@ -11,7 +11,7 @@ depends_on: []
 
 # SDD: {Phase 제목 — 동사형 / 명확한 목표}
 
-> Software Design Document. `.claude/rules/process/phase-workflow.md` Gate 1-5 강제 대상.
+> Software Design Document. [`phase-workflow.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/phase-workflow.md) Gate 1-5 강제 대상.
 > 이 문서가 없으면 코드 구현 금지. 작성 후 `code-reviewer` 에이전트 리뷰 필수 (Gate 2).
 
 ---
@@ -125,13 +125,13 @@ depends_on: []
 
 ## 6. Phase Gates
 
-> 진행 상태 추적. `/phase-start <slug>` 출력과 동일 항목. 각 Gate 완료 시 체크.
+> 진행 상태 추적. `/dx:phase-start <slug>` 출력과 동일 항목. 각 Gate 완료 시 체크.
 
 - [ ] **Gate 1**: SDD 작성 완료 (이 문서)
 - [ ] **Gate 2**: SDD 리뷰 완료 (code-reviewer 에이전트 + 피드백 반영)
 - [ ] **Gate 3**: 코드 구현 + 코드 리뷰 + 피드백 반영
 - [ ] **Gate 4**: 테스트 작성 + 전체 통과 (§5)
-- [ ] **Gate 5**: PR 생성 + /review-pr + Gemini 비교 + 머지
+- [ ] **Gate 5**: PR 생성 + /dx:review-pr + Gemini 비교 + 머지
 
 ---
 

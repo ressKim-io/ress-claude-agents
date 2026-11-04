@@ -441,7 +441,7 @@ Remember: Your goal is to help developers ship better code faster. A good review
 1. **정확성** — 모든 지적이 실제로 읽은 파일·라인 근거. 파일 경로 + 라인 번호 동반
 2. **완전성** — §Review Domains 의 6개 도메인을 모두 훑었고, 훑지 못한 도메인은 사유와 함께 명시
 3. **실행 가능성** — Critical / High 지적마다 구체 수정안(패치 또는 대체 코드) 동반. "개선하세요" 수준 금지
-4. **일관성** — [`clean-code.md`](../rules/core/clean-code.md) / [`testing.md`](../rules/process/testing.md) / [`security.md`](../rules/core/security.md) 와 모순 없음
+4. **일관성** — [`clean-code.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/clean-code.md) / [`testing.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/testing.md) / [`security.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/security.md) 와 모순 없음
 5. **경계 준수** — 언어 특화 심화 판정은 expert 에 이관 표기 (§역할 경계)
 
 ### Self-verification (제출 전 자가 점검)

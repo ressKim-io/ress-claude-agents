@@ -2,7 +2,7 @@
 description: "PR 코드 리뷰를 3개 관점의 에이전트로 병렬 실행해 종합합니다"
 ---
 
-# /review-pr — 멀티 관점 PR 코드 리뷰
+# /dx:review-pr — 멀티 관점 PR 코드 리뷰
 
 PR 코드 리뷰를 3개 관점의 에이전트로 병렬 실행하여 종합한다.
 
@@ -45,8 +45,8 @@ PR diff 파일 패턴으로 영역을 판별하고, **전문 리뷰의 에이전
 
 | 패턴 | 영역 | 동작 |
 |------|------|------|
-| `docker-compose*`, `prometheus*`, `grafana*`, `alloy*`, `alerting/*`, `dashboards/*`, `recording-rules/*` | monitoring | 아래 Agent 1/2/3을 `/review-pr:monitoring`의 3개 관점으로 **교체** |
-| `charts/**`, `values*.yaml`, `Chart.yaml`, `templates/**`, `environments/**/*.yaml`, `infrastructure/**/*.yaml`, `gitops/**` | k8s | 아래 Agent 1/2/3을 `/review-pr:k8s`의 3개 관점으로 **교체** |
+| `docker-compose*`, `prometheus*`, `grafana*`, `alloy*`, `alerting/*`, `dashboards/*`, `recording-rules/*` | monitoring | 아래 Agent 1/2/3을 `/dx:review-pr-monitoring`의 3개 관점으로 **교체** |
+| `charts/**`, `values*.yaml`, `Chart.yaml`, `templates/**`, `environments/**/*.yaml`, `infrastructure/**/*.yaml`, `gitops/**` | k8s | 아래 Agent 1/2/3을 `/dx:review-pr-k8s`의 3개 관점으로 **교체** |
 | `src/main/java/**`, `build.gradle*`, `application*.yml`, `**/test/**` | server | 기존 범용 리뷰 (향후 `/review-pr:server` 추가 예정) |
 
 **라우팅 규칙:**
@@ -55,7 +55,7 @@ PR diff 파일 패턴으로 영역을 판별하고, **전문 리뷰의 에이전
 - **영역 감지 안 됨** → 기존 범용 리뷰 실행 (아래 Agent 1/2/3)
 
 **구현 방법 (단일 영역 교체 시):**
-1. 감지된 영역의 전문 커맨드 파일을 읽는다 (예: `.claude/commands/review-pr-k8s.md`)
+1. 감지된 영역의 전문 커맨드 파일을 읽는다 (예: `${CLAUDE_PLUGIN_ROOT}/commands/review-pr-k8s.md`)
 2. 해당 파일의 Agent 1/2/3 정의, subagent_type, 체크 항목을 그대로 사용
 3. 종합/코멘트 양식은 전문 커맨드 파일의 헤더/태그를 따름
 4. 아래 "2. 3개 에이전트 병렬 실행" 섹션은 **범용 리뷰 전용** (영역 미감지 시에만 적용)
@@ -91,7 +91,7 @@ helm template test <chart-dir>/ -f <values-file> --debug 2>&1 | grep -E "(image:
 각 에이전트에 PR diff 전체를 전달하고, 아래 관점에서 리뷰하도록 지시한다.
 
 #### Agent 1: 보안 + 권한 (Security & Access)
-- subagent_type: `security-scanner`
+- subagent_type: `dx:security-scanner`
 - 체크 항목:
   - 시크릿/credential 하드코딩
   - securityContext (runAsNonRoot, readOnlyRootFilesystem, capabilities)
@@ -110,7 +110,7 @@ helm template test <chart-dir>/ -f <values-file> --debug 2>&1 | grep -E "(image:
   - AppProject sourceRepos, destinations 와일드카드 범위 검증
 
 #### Agent 2: 운영 + 성능 (Operations & Performance)
-- subagent_type: `code-reviewer`
+- subagent_type: `dx:code-reviewer`
 - 체크 항목:
   - Resource requests/limits 적정성 (OOM 가능성)
   - Health probe 설정 (startup/liveness/readiness 분리, 타이밍)
@@ -129,7 +129,7 @@ helm template test <chart-dir>/ -f <values-file> --debug 2>&1 | grep -E "(image:
   - Kind extraPortMappings ↔ Service NodePort 매핑 일관성
 
 #### Agent 3: 패턴 + 일관성 (Patterns & Consistency)
-- subagent_type: `code-reviewer`
+- subagent_type: `dx:code-reviewer`
 - 체크 항목:
   - Values ↔ Template 정합성 (values에 정의했는데 template에서 미사용 또는 그 반대)
   - Helm chart best practices (Chart.yaml 필드, 네이밍)
@@ -185,7 +185,7 @@ Confidence Score 기준:
 2. **중복 제거**: 같은 파일/라인의 동일 이슈는 하나로 병합
 3. **severity 조정**: 여러 관점에서 동시 지적된 이슈는 severity 상향 고려. 기존 이슈라도 PR 변경으로 공격 표면이 확대된 경우 severity 재평가.
 4. **CR-ID 순차 부여**: [CR-001]부터 번호 매김
-5. **코멘트 양식**: `.claude/rules/process/code-review.md`의 PR 코멘트 양식을 따름
+5. **코멘트 양식**: [`code-review.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/code-review.md)의 PR 코멘트 양식을 따름
 6. **관점 태그 추가**: 각 이슈에 어떤 관점에서 발견됐는지 표시
 
 최종 코멘트 헤더:
@@ -211,8 +211,8 @@ gh pr comment <PR번호> --repo <repo> --body "<종합된 리뷰>"
 ## 사용법
 
 ```
-/review-pr 12                    # PR #12 리뷰 (현재 repo)
-/review-pr 12 Team-Ikujo/Goti-k8s  # 특정 repo PR 리뷰
+/dx:review-pr 12                    # PR #12 리뷰 (현재 repo)
+/dx:review-pr 12 Team-Ikujo/Goti-k8s  # 특정 repo PR 리뷰
 ```
 
 ## 출력 형식

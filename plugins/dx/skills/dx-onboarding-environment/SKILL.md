@@ -261,4 +261,4 @@ echo "개발 환경 준비 완료!"
 - [ ] DB 마이그레이션
 - [ ] 환경 검증 테스트
 
-**관련 skill**: `/dx-onboarding` (허브), `/dx-onboarding-gitpod` (Gitpod, 포털)
+**관련 skill**: `/dx:dx-onboarding` (허브), `/dx:dx-onboarding-gitpod` (Gitpod, 포털)

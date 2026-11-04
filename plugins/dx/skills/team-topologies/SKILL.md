@@ -431,4 +431,4 @@ def test_platform_dependency():
 - Nicole Forsgren et al., "Accelerate" (2018) — Conway's Law 연구
 - Martin Fowler, "Conway's Law": https://martinfowler.com/bliki/ConwaysLaw.html
 
-**관련 skill**: `/engineering-strategy`, `/rfc-adr`, `/platform-backstage`, `/dx-metrics`
+**관련 skill**: `/dx:engineering-strategy`, `/dx:rfc-adr`, `/platform-backstage`, `/dx:dx-metrics`

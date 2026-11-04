@@ -370,4 +370,4 @@ markdown_extensions:
 - [ ] FAQ 정리
 - [ ] TechDocs 설정
 
-**관련 skill**: `/dx-onboarding` (허브), `/dx-onboarding-environment` (Dev Container), `/backstage`
+**관련 skill**: `/dx:dx-onboarding` (허브), `/dx:dx-onboarding-environment` (Dev Container), `/backstage`

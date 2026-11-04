@@ -132,7 +132,7 @@ You are a senior Platform Engineer specializing in Internal Developer Platforms 
 | Software Templates / 셀프서비스 프로비저닝 / 고급 Catalog | [`/platform-backstage`](../skills/platform-backstage/SKILL.md) |
 | Golden Path 원칙 / 구성 요소 / Service Template | [`/golden-paths`](../skills/golden-paths/SKILL.md), [`/golden-paths-infra`](../skills/golden-paths-infra/SKILL.md) |
 | 원커맨드 서비스 생성 / Crossplane 환경 프로비저닝 / RBAC 가드레일 | [`/developer-self-service`](../skills/developer-self-service/SKILL.md) |
-| DORA / SPACE / DevEx / DX Core 4 측정 | [`/dx-metrics`](../skills/dx-metrics/SKILL.md) |
+| DORA / SPACE / DevEx / DX Core 4 측정 | [`/dx:dx-metrics`](../../plugins/dx/skills/dx-metrics/SKILL.md) |
 
 
 ## Anti-Patterns

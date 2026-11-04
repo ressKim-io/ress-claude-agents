@@ -2,7 +2,7 @@
 description: "Terraform PR을 3개 전문 관점으로 병렬 리뷰합니다"
 ---
 
-# /review-pr:terraform — Terraform 전문 PR 코드 리뷰
+# /dx:review-pr-terraform — Terraform 전문 PR 코드 리뷰
 
 Terraform PR을 3개 전문 관점의 에이전트로 병렬 리뷰한다.
 
@@ -57,7 +57,7 @@ gh pr diff <PR번호> --repo <repo>
   - Bottlerocket user_data `max-pods` 설정 확인
 
 #### Agent 3: 안정성/상태 관리 검증
-- subagent_type: `code-reviewer`
+- subagent_type: `dx:code-reviewer`
 - 체크 항목:
   - `create_before_destroy` 패턴 적절성
   - `ignore_changes` 사용 적절성 (보안 설정 ignore 금지)
@@ -110,9 +110,9 @@ gh pr diff <PR번호> --repo <repo>
 ## 사용법
 
 ```
-/review-pr:terraform 12                       # 현재 repo 의 PR #12
-/review-pr:terraform 12 Team-Ikujo/infra      # 특정 repo 의 PR
+/dx:review-pr-terraform 12                       # 현재 repo 의 PR #12
+/dx:review-pr-terraform 12 Team-Ikujo/infra      # 특정 repo 의 PR
 ```
 
-Terraform 파일이 포함된 PR 에서만 의미가 있다. 범용 리뷰는 `/review-pr` 사용.
+Terraform 파일이 포함된 PR 에서만 의미가 있다. 범용 리뷰는 `/dx:review-pr` 사용.
 결과는 게시 전 사용자 확인을 거친다.

@@ -1,6 +1,6 @@
 # {PROJECT_NAME} — INDEX
 
-> 프로젝트 자산 진입점. `/where`, `/related` 슬래시 커맨드가 이 파일을 참조한다.
+> 프로젝트 자산 진입점. `/dx:where`, `/dx:related` 슬래시 커맨드가 이 파일을 참조한다.
 > 부트스트랩 후 빈 줄을 채우고 commit. 이후 자산 추가/이동 시 함께 갱신.
 
 ---
@@ -33,15 +33,15 @@
 
 | 의도 | 커맨드 | 동작 |
 |------|--------|------|
-| "이거 어디 있지?" | `/where <키워드>` | INDEX + repo-cards + memory + dev-log 횡단 검색 |
-| "이거 어떻게 흘러왔지?" | `/related <개념>` | timeline 재구성 + CURRENT STATE 합성 |
-| 메모리 정리 | `/consolidate-memory` | stale/duplicate/orphan 분류 (dry-run) |
-| dev-log Tier 산출 | `/consolidate-devlogs` | frontmatter 기반 자동 분류 |
-| Tier 2 → ADR/skill | `/promote-devlog <slug>` | episodic → semantic 승격 |
-| Tier 4 archive | `/archive-devlog <slug>` | superseded 이동 |
-| 트러블 기록 | `/log-trouble` | dev-log troubleshoot |
-| 결정 기록 | `/log-decision` | ADR or decision dev-log |
-| meta 기록 | `/log-meta` | AI 워크플로우 변경 |
+| "이거 어디 있지?" | `/dx:where <키워드>` | INDEX + repo-cards + memory + dev-log 횡단 검색 |
+| "이거 어떻게 흘러왔지?" | `/dx:related <개념>` | timeline 재구성 + CURRENT STATE 합성 |
+| 메모리 정리 | `/dx:consolidate-memory` | stale/duplicate/orphan 분류 (dry-run) |
+| dev-log Tier 산출 | `/dx:consolidate-devlogs` | frontmatter 기반 자동 분류 |
+| Tier 2 → ADR/skill | `/dx:promote-devlog <slug>` | episodic → semantic 승격 |
+| Tier 4 archive | `/dx:archive-devlog <slug>` | superseded 이동 |
+| 트러블 기록 | `/dx:log-trouble` | dev-log troubleshoot |
+| 결정 기록 | `/dx:log-decision` | ADR or decision dev-log |
+| meta 기록 | `/dx:log-meta` | AI 워크플로우 변경 |
 
 ---
 

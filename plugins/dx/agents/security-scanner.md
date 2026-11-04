@@ -199,7 +199,7 @@ Remember: Your goal is to help developers ship secure code faster by catching is
 2. **재현 가능성** — finding 마다 "어떤 입력이 어디로 흘러 무엇이 되는가"의 경로가 기술됨. "위험한 패턴" 수준 금지
 3. **실행 가능성** — Critical / High 마다 구체 수정안(패치 또는 대체 API) 동반
 4. **Severity 정합성** — §Security Severity Levels 기준이 실제 영향 범위·악용 난이도에 비례
-5. **일관성** — [`security.md`](../rules/core/security.md) 의 시크릿·입력검증·인증 규칙과 모순 없음
+5. **일관성** — [`security.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/security.md) 의 시크릿·입력검증·인증 규칙과 모순 없음
 
 ### Self-verification (제출 전 자가 점검)
 

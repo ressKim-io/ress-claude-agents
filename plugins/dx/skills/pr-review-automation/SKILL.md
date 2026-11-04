@@ -9,7 +9,7 @@ deprecated: false
 # AI PR 자동 리뷰
 
 도구 선택 → 설정 → 컨벤션 주입 → 비용·품질 관리.
-사람이 하는 리뷰 기준은 [`/clean-code`](../clean-code/SKILL.md), CI 보안은 [`/cicd-devsecops`](../cicd-devsecops/SKILL.md) 참조.
+사람이 하는 리뷰 기준은 [`/dx:clean-code`](../clean-code/SKILL.md), CI 보안은 `/cicd:cicd-devsecops` 참조.
 
 ## Why Automated PR Reviews?
 
@@ -485,6 +485,6 @@ jobs:
 
 - [`conventional-commits`](../conventional-commits/SKILL.md) — 커밋/PR 제목 규약
 - [`git-workflow`](../git-workflow/SKILL.md) — 브랜치·PR 흐름
-- [`cicd-devsecops`](../cicd-devsecops/SKILL.md) — 파이프라인 보안 스캔 통합
-- [`dx-ai-security`](../dx-ai-security/SKILL.md) — AI 생성 코드 품질 게이트
+- `/cicd:cicd-devsecops` — 파이프라인 보안 스캔 통합
+- `/ai:dx-ai-security` — AI 생성 코드 품질 게이트
 - [`dx-metrics`](../dx-metrics/SKILL.md) — 리뷰 리드타임 측정

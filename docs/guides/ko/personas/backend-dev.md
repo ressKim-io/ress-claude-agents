@@ -40,7 +40,7 @@
 | `/effective-java` 또는 `/effective-go` | `/msa-resilience` | `/msa-ddd` |
 | `/spring-patterns` 또는 `/go-microservice` | `/database` | `/api-design` |
 | `/spring-testing` 또는 `/go-testing` | `/msa-event-driven` | `/hexagonal-clean-architecture` |
-| `/clean-code` | `/refactoring-principles` | `/clean-code` |
+| `/dx:clean-code` | `/dx:refactoring-principles` | `/dx:clean-code` |
 
 ---
 
@@ -68,7 +68,7 @@
 | 테스트 | `/spring-testcontainers` | Testcontainers, REST Assured |
 | 동시성 | `/concurrency-spring` | @Async, Virtual Threads |
 | 리팩토링 | `/refactoring-spring` | Spring 리팩토링 패턴 |
-| 클린 코드 | `/clean-code` | Guard Clause, Cognitive Complexity, 네이밍, Tell Don't Ask |
+| 클린 코드 | `/dx:clean-code` | Guard Clause, Cognitive Complexity, 네이밍, Tell Don't Ask |
 
 ### 상황별 요청 예시
 
@@ -86,7 +86,7 @@
 → /spring-testcontainers + /spring-testing
 
 "클린 코드 품질 확인해줘"
-→ /jvm-performance + /clean-code + /refactoring-principles
+→ /jvm-performance + /dx:clean-code + /dx:refactoring-principles
 
 "Java 보안 리뷰해줘"
 → /spring-security-review + security-scanner
@@ -115,7 +115,7 @@
 | 동시성 | `/concurrency-go` | Mutex, Channel, Worker Pool |
 | 테스트 | `/go-testing` | Table-driven testing |
 | 리팩토링 | `/refactoring-go` | Go 리팩토링 패턴 |
-| 클린 코드 | `/clean-code` | Guard Clause, Cognitive Complexity, 네이밍 |
+| 클린 코드 | `/dx:clean-code` | Guard Clause, Cognitive Complexity, 네이밍 |
 
 ### 상황별 요청 예시
 
@@ -136,7 +136,7 @@
 → /go-performance + /effective-go
 
 "Go 클린 코드 리뷰해줘"
-→ /go-performance + /clean-code + /refactoring-go
+→ /go-performance + /dx:clean-code + /refactoring-go
 ```
 
 ---

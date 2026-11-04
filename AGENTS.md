@@ -280,7 +280,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 - Effort 는 agent 기본 `high`, 단순 조회 `low`, `xhigh`·`max` 는 품질 향상을 측정한 작업만. **Claude Code 의 Opus·Sonnet·Haiku 5.5 기본은 `medium`** 이라 agent frontmatter 에 명시한다. skill 에는 넣지 않는다 (모델별 지원 표: [`effort-guide.md`](.claude/rules/harness/effort-guide.md))
 - `max_tokens` 에 여유를 둔다 (agentic 코딩 128,000 제안). 최소 cacheable 길이는 5.5 세대 512 tokens
 - fan-out 이 필요하면 명시한다. 10+ 파일 탐색은 subagent 위임
-- 상세: `.claude/rules/harness/token-budget.md` + 카테고리별 매핑 `.claude/rules/harness/effort-guide.md`, 코드 예시·비용 계산은 `/token-budget` skill
+- 상세: `.claude/rules/harness/token-budget.md` + 카테고리별 매핑 `.claude/rules/harness/effort-guide.md`, 코드 예시·비용 계산은 `/dx:token-budget` skill
 
 ### Claude-Only Features
 

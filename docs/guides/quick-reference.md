@@ -47,8 +47,8 @@ Know these before you start.
 | Redis caching | — | `/redis-operations`, `/spring-cache`, `/distributed-lock` | "Design a Redis caching strategy" |
 | Load testing | `load-tester` | `/load-testing` | "Write a K6 load test scenario" |
 | Writing tests | `code-reviewer` | `/spring-testing`, `/go-testing` | "Write test code" |
-| Clean code review | `/clean-code` | `/clean-code`, `/refactoring-principles` | "Check clean code quality" |
-| Security code review | `/clean-code` | `/effective-java` or `/effective-go` | "Security review my Java/Go code" |
+| Clean code review | `/dx:clean-code` | `/dx:clean-code`, `/dx:refactoring-principles` | "Check clean code quality" |
+| Security code review | `/dx:clean-code` | `/effective-java` or `/effective-go` | "Security review my Java/Go code" |
 
 ### Java Combos
 
@@ -60,7 +60,7 @@ Spring performance optimization:
   /jvm-performance → /concurrency-spring → /spring-cache → /spring-jooq
 
 Clean code + refactoring:
-  /jvm-performance → /clean-code → /refactoring-principles → /refactoring-spring
+  /jvm-performance → /dx:clean-code → /dx:refactoring-principles → /refactoring-spring
 
 Security hardening:
   /spring-security-review → security-scanner → /spring-security
@@ -76,7 +76,7 @@ Go performance optimization:
   /go-performance → /concurrency-go → /go-database → /refactoring-go
 
 Clean code + refactoring:
-  /go-performance → /clean-code → /refactoring-principles → /refactoring-go
+  /go-performance → /dx:clean-code → /dx:refactoring-principles → /refactoring-go
 
 Error handling + OTel:
   /go-performance → /observability-otel → /go-errors
@@ -151,11 +151,11 @@ eBPF-based Zero-Code:
 | Situation | Core Agent | Supporting Skills | How to Request |
 |-----------|-----------|-------------------|----------------|
 | New project setup | `architect-agent` | `/api-design`, `/docker` | "Design the project structure" |
-| Code cleanup | `code-reviewer` | `/clean-code`, `/refactoring-principles` | "Refactor this code" |
-| Clean code check | `/clean-code` | `/clean-code` | "Check code readability" |
-| PR automation | `git-workflow` | `/conventional-commits`, `/git-workflow` | "Create a PR" |
-| Dev environment setup | `platform-engineer` | `/local-dev-makefile`, `/docker` | "Set up local dev environment" |
-| Documentation | `dev-logger` | `/docs-as-code` | "Generate API docs" |
+| Code cleanup | `code-reviewer` | `/dx:clean-code`, `/dx:refactoring-principles` | "Refactor this code" |
+| Clean code check | `/dx:clean-code` | `/dx:clean-code` | "Check code readability" |
+| PR automation | `git-workflow` | `/dx:conventional-commits`, `/dx:git-workflow` | "Create a PR" |
+| Dev environment setup | `platform-engineer` | `/dx:local-dev-makefile`, `/docker` | "Set up local dev environment" |
+| Documentation | `dev-logger` | `/dx:docs-as-code` | "Generate API docs" |
 | Security check | `security-scanner` | `/k8s-security`, `/terraform-security` | "Run a security scan" |
 | Tech decisions | `architect-agent` | Relevant domain skills | "Compare A vs B" |
 
@@ -198,7 +198,7 @@ Use multiple agents in sequence for complex workflows.
       ↓
 4. /observability-otel → Trace/metrics analysis
       ↓
-5. dev-logger         → Incident record (/log-trouble)
+5. dev-logger         → Incident record (/dx:log-trouble)
 ```
 
 ### IDP Bootstrap (Platform)

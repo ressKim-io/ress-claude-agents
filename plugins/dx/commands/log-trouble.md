@@ -2,7 +2,7 @@
 description: "트러블슈팅 과정을 기록합니다. 에러 원인 분석, 해결 과정, 회귀 테스트."
 ---
 
-# /log-trouble
+# /dx:log-trouble
 
 트러블슈팅(버그 수정, 에러 해결) 과정을 기록하라.
 
@@ -72,8 +72,8 @@ tags: [{tag1}, {tag2}]
 ## 사용법
 
 ```
-/log-trouble                          # 현재 대화 맥락에서 자동 추출
-/log-trouble ArgoCD sync stuck        # 제목/Context 로 활용할 요약 전달
+/dx:log-trouble                          # 현재 대화 맥락에서 자동 추출
+/dx:log-trouble ArgoCD sync stuck        # 제목/Context 로 활용할 요약 전달
 ```
 
 인자를 생략하면 대화 맥락에서 증상·원인·해결을 추출한다. 부족한 정보는 질문한다.

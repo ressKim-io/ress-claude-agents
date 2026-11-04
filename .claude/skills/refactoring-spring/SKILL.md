@@ -486,4 +486,4 @@ public class GlobalExceptionHandler {
 
 ---
 
-**관련 skill**: `/refactoring-principles`, `/spring-data`, `/spring-testing`
+**관련 skill**: `/dx:refactoring-principles`, `/spring-data`, `/spring-testing`

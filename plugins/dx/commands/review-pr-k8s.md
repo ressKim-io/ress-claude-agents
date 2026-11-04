@@ -2,7 +2,7 @@
 description: "K8s/Helm/ArgoCD 영역 PR을 3개 전문 관점으로 병렬 리뷰합니다"
 ---
 
-# /review-pr:k8s — K8s/Helm/ArgoCD 전문 PR 코드 리뷰
+# /dx:review-pr-k8s — K8s/Helm/ArgoCD 전문 PR 코드 리뷰
 
 K8s 영역 PR을 3개 전문 관점의 에이전트로 병렬 리뷰한다.
 
@@ -36,7 +36,7 @@ gh pr diff <PR번호> --repo <repo>
 - **K8s 스킬 참조**: `/k8s-helm`, `/k8s-security`, `/gitops-argocd`, `/gitops-argocd-advanced`, `/gitops-argocd-helm` 기반
 
 #### Agent 1: Helm Chart 구조 + values 검증
-- subagent_type: `code-reviewer`
+- subagent_type: `dx:code-reviewer`
 - 체크 항목:
   - Library Chart ↔ Application Chart 의존성 정합성 (`goti-common` 참조 확인)
   - values.yaml ↔ templates 정합성 (values 정의 → template 미사용 또는 그 반대)
@@ -49,7 +49,7 @@ gh pr diff <PR번호> --repo <repo>
   - 멀티 환경 values 구조: `$values/` 패턴 활용 여부
 
 #### Agent 2: ArgoCD GitOps + 보안
-- subagent_type: `security-scanner`
+- subagent_type: `dx:security-scanner`
 - 체크 항목:
   - `targetRevision: main/HEAD` 사용 → dev 한정 허용 + `# dev only:` 주석 요구, prod는 Blocker
   - AppProject `kind: "*"` 와일드카드 카운트 → 2개+ API 그룹이면 최소 권한 위반 경고
@@ -62,7 +62,7 @@ gh pr diff <PR번호> --repo <repo>
   - Bootstrap Application sync-wave 순서 논리성
 
 #### Agent 3: 운영 + 패턴 일관성
-- subagent_type: `code-reviewer`
+- subagent_type: `dx:code-reviewer`
 - 체크 항목:
   - Kind extraPortMappings ↔ Service NodePort 매핑 일관성
   - 서비스 주소 FQDN 일관성 (같은 파일 내 `svc` vs `svc.cluster.local` 혼용)
@@ -138,8 +138,8 @@ gh pr comment <PR번호> --repo <repo> --body "<종합된 리뷰>"
 ## 사용법
 
 ```
-/review-pr:k8s 15                       # PR #15 K8s 리뷰 (현재 repo)
-/review-pr:k8s 15 Team-Ikujo/Goti-k8s  # 특정 repo PR 리뷰
+/dx:review-pr-k8s 15                       # PR #15 K8s 리뷰 (현재 repo)
+/dx:review-pr-k8s 15 Team-Ikujo/Goti-k8s  # 특정 repo PR 리뷰
 ```
 
 ## 출력 형식
@@ -154,5 +154,5 @@ gh pr comment <PR번호> --repo <repo> --body "<종합된 리뷰>"
 ## 주의사항
 
 - 리뷰 후 직접 코드 수정하지 않는다 (코멘트만)
-- 범용 `/review-pr`에서 K8s 파일 감지 시 자동으로 이 체크 항목이 적용됨
+- 범용 `/dx:review-pr`에서 K8s 파일 감지 시 자동으로 이 체크 항목이 적용됨
 - 에이전트 3개를 반드시 **동시에** 실행하여 병렬성 확보

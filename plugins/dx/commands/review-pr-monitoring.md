@@ -2,7 +2,7 @@
 description: "모니터링 영역 PR을 3개 전문 관점으로 병렬 리뷰합니다"
 ---
 
-# /review-pr:monitoring — 모니터링 전문 PR 코드 리뷰
+# /dx:review-pr-monitoring — 모니터링 전문 PR 코드 리뷰
 
 모니터링 영역 PR을 3개 전문 관점의 에이전트로 병렬 리뷰한다.
 
@@ -35,7 +35,7 @@ gh pr diff <PR번호> --repo <repo>
 - **모니터링 스킬 참조**: `/monitoring-metrics`, `/monitoring-grafana`, `/observability-otel`, `/observability-otel-optimization` 기반
 
 #### Agent 1: OTel 메트릭/레이블 정합성
-- subagent_type: `code-reviewer`
+- subagent_type: `dx:code-reviewer`
 - 체크 항목:
   - OTel resource attributes → Prometheus 레이블 매핑 정확성
     - `service.name` → `job`, `service.namespace` 있으면 `job="ns/name"`
@@ -48,7 +48,7 @@ gh pr diff <PR번호> --repo <repo>
   - OTel SDK 버전과 Spring Boot dependency-management 플러그인 충돌 여부
 
 #### Agent 2: 환경 동기화 + 보안
-- subagent_type: `code-reviewer`
+- subagent_type: `dx:code-reviewer`
 - 체크 항목:
   - docker-compose ↔ Terraform ↔ 앱 config 설정값 동기화
   - 포트 바인딩: ALB 뒤 컨테이너에 `127.0.0.1` 바인딩 감지 → `0.0.0.0` 필수
@@ -65,7 +65,7 @@ gh pr diff <PR번호> --repo <repo>
   - TLS 미설정 상태에서 외부 접근 허용 시 경고 (dev 한정이라도 사유 명시 요구)
 
 #### Agent 3: Grafana 대시보드/변수 검증
-- subagent_type: `code-reviewer`
+- subagent_type: `dx:code-reviewer`
 - 체크 항목:
   - Cross-datasource 변수 정합성
     - Prometheus: `job="$service_name"` (namespace/name 형식)
@@ -140,8 +140,8 @@ gh pr comment <PR번호> --repo <repo> --body "<종합된 리뷰>"
 ## 사용법
 
 ```
-/review-pr:monitoring 12                       # PR #12 모니터링 리뷰 (현재 repo)
-/review-pr:monitoring 12 Team-Ikujo/Goti-monitoring  # 특정 repo PR 리뷰
+/dx:review-pr-monitoring 12                       # PR #12 모니터링 리뷰 (현재 repo)
+/dx:review-pr-monitoring 12 Team-Ikujo/Goti-monitoring  # 특정 repo PR 리뷰
 ```
 
 ## 출력 형식
@@ -156,5 +156,5 @@ gh pr comment <PR번호> --repo <repo> --body "<종합된 리뷰>"
 ## 주의사항
 
 - 리뷰 후 직접 코드 수정하지 않는다 (코멘트만)
-- 범용 `/review-pr`에서 모니터링 파일 감지 시 자동으로 이 체크 항목이 적용됨
+- 범용 `/dx:review-pr`에서 모니터링 파일 감지 시 자동으로 이 체크 항목이 적용됨
 - 에이전트 3개를 반드시 **동시에** 실행하여 병렬성 확보

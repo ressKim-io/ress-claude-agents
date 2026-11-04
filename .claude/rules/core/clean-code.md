@@ -72,4 +72,4 @@ account.withdraw(amount);
 
 ---
 
-상세 가이드 및 언어별 예시: `/clean-code` 스킬 참조
+상세 가이드 및 언어별 예시: `/dx:clean-code` 스킬 참조

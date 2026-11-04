@@ -505,4 +505,4 @@ import { EntityAdrContent } from '@backstage/plugin-adr';
 - adr-tools: https://github.com/npryce/adr-tools
 - log4brains: https://github.com/thomvaill/log4brains
 
-**관련 skill**: `/engineering-strategy`, `/docs-as-code`, `/dx-onboarding`
+**관련 skill**: `/dx:engineering-strategy`, `/dx:docs-as-code`, `/dx:dx-onboarding`

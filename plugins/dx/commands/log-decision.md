@@ -2,7 +2,7 @@
 description: "기술/아키텍처 의사결정을 기록합니다. A vs B 선택, 트레이드오프, 근거 등."
 ---
 
-# /log-decision
+# /dx:log-decision
 
 기술 또는 아키텍처 의사결정 내용을 기록하라.
 
@@ -65,8 +65,8 @@ tags: [{tag1}, {tag2}]
 ## 사용법
 
 ```
-/log-decision                         # 현재 대화의 결정 내용 자동 추출
-/log-decision Kafka vs RabbitMQ       # 결정 주제 전달
+/dx:log-decision                         # 현재 대화의 결정 내용 자동 추출
+/dx:log-decision Kafka vs RabbitMQ       # 결정 주제 전달
 ```
 
 ADR 수준의 큰 결정은 `docs/adr/` 로, 그보다 가벼운 결정은 본 명령으로 기록한다.

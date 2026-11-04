@@ -2,7 +2,7 @@
 description: "키워드로 INDEX.md + repo-cards + MEMORY + dev-logs 횡단 검색. '어디에 있지?' 질문에 1분 안에 답."
 ---
 
-# /where
+# /dx:where
 
 키워드 기반 인덱스 횡단 검색. 프로젝트 자산 전체(INDEX.md, repo-cards, MEMORY, dev-logs) 에서 가장 관련 높은 위치를 즉시 알려준다.
 
@@ -13,10 +13,10 @@ description: "키워드로 INDEX.md + repo-cards + MEMORY + dev-logs 횡단 검�
 `$ARGUMENTS` — 검색 키워드 또는 자연어 질의 (한글/영문 혼용 OK)
 
 예시:
-- `/where session 만료`
-- `/where pgbouncer`
-- `/where ESO External Secrets`
-- `/where 결제 흐름`
+- `/dx:where session 만료`
+- `/dx:where pgbouncer`
+- `/dx:where ESO External Secrets`
+- `/dx:where 결제 흐름`
 
 ## 검색 대상 (우선순위순)
 
@@ -39,7 +39,7 @@ description: "키워드로 INDEX.md + repo-cards + MEMORY + dev-logs 횡단 검�
 ## 출력 형식
 
 ```
-[/where {query} · {today}]
+[/dx:where {query} · {today}]
 
 ## 가장 관련 높은 결과
 
@@ -82,15 +82,15 @@ description: "키워드로 INDEX.md + repo-cards + MEMORY + dev-logs 횡단 검�
 
 ## 빠른 단축
 
-`/where` 단독 실행 시 (인자 없음): "현재 작업 컨텍스트" 기준으로 추론
+`/dx:where` 단독 실행 시 (인자 없음): "현재 작업 컨텍스트" 기준으로 추론
 - 가장 최근 dev-log + 메모리 진행 중 항목 + 24h 내 git 변경 파일
 
 ## 사용 예시
 
 ```
-/where 세션 dropout
+/dx:where 세션 dropout
 →
-[/where 세션 dropout · 2026-04-29]
+[/dx:where 세션 dropout · 2026-04-29]
 
 ## 가장 관련 높은 결과
 

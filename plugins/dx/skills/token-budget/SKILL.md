@@ -6,9 +6,9 @@ category: dx
 
 # Token Budget 심화 가이드 (Claude 5.5 세대)
 
-`.claude/rules/harness/token-budget.md`의 상세판. API 파라미터, 코드 예시, 비용 계산 포함.
+[`token-budget.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/harness/token-budget.md)의 상세판. API 파라미터, 코드 예시, 비용 계산 포함.
 가격·파라미터는 2026-11-04 공식 문서 기준이다. 사용 전 [공식 가격표](https://platform.claude.com/docs/en/about-claude/pricing)를 다시 확인한다.
-Claude Code 세션 내 도구 사용 효율은 `/token-efficiency` 참조.
+Claude Code 세션 내 도구 사용 효율은 `/dx:token-efficiency` 참조.
 
 ## Quick Reference
 
@@ -112,7 +112,7 @@ Fresh context = 편향 없는 리뷰.
 | `high` | 어렵거나 긴 작업, 리뷰, 조사 |
 | `xhigh` / `max` | "where you've measured a quality gain" 인 작업만 |
 
-레벨 간 비용 배수는 공식 문서에 없다. "It shapes behavior but doesn't guarantee a token count." 모델별 지원과 기본값은 [`effort-guide.md`](../../rules/harness/effort-guide.md) 참조.
+레벨 간 비용 배수는 공식 문서에 없다. "It shapes behavior but doesn't guarantee a token count." 모델별 지원과 기본값은 [`effort-guide.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/harness/effort-guide.md) 참조.
 
 ### API 코드 예시
 
@@ -434,8 +434,8 @@ API version `2026-10-21` 에서는 샘플링 파라미터를 기본값으로 보
 ## 참조
 
 - `rules/harness/token-budget.md` — 핵심 원칙 (auto-load)
-- `/token-efficiency` — Claude Code 세션 내 도구 사용 효율
-- `/clean-code` — 코드 가독성 원칙
+- `/dx:token-efficiency` — Claude Code 세션 내 도구 사용 효율
+- `/dx:clean-code` — 코드 가독성 원칙
 - [공식: What's new in Opus 5.5](https://platform.claude.com/docs/en/models/opus-5-5/whats-new-opus-5-5)
 - [공식: Opus 5.5 migration guide](https://platform.claude.com/docs/en/models/opus-5-5/migration-guide)
 - [공식: Sonnet 5.5 migration guide](https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide)

@@ -2,11 +2,11 @@
 description: "Tier 2 dev-log를 ADR/skill로 승격 (Episodic → Semantic). 패턴 정착 시 사용."
 ---
 
-# /promote-devlog
+# /dx:promote-devlog
 
 dev-log (episodic memory)를 **ADR 또는 skill (semantic memory)** 로 승격한다. 학계 패턴 "Episodic → Semantic" 동형.
 
-`/consolidate-devlogs`가 클러스터 (3건+)를 발견하면 이 커맨드로 정착시킨다.
+`/dx:consolidate-devlogs`가 클러스터 (3건+)를 발견하면 이 커맨드로 정착시킨다.
 
 ## 입력
 
@@ -21,7 +21,7 @@ dev-log (episodic memory)를 **ADR 또는 skill (semantic memory)** 로 승격�
 | 패턴 | 산출물 | 위치 |
 |------|--------|------|
 | **결정·트레이드오프 패턴** (decision 카테고리) | ADR | `docs/adr/NNNN-제목.md` |
-| **반복 절차 패턴** (troubleshoot/migration 카테고리) | skill | `.claude/skills/{도메인}/{이름}.md` |
+| **반복 절차 패턴** (troubleshoot/migration 카테고리) | skill | `.claude/skills/{이름}/SKILL.md` |
 | **인프라 표준 패턴** | architecture 문서 | `docs/architecture/주제.md` |
 
 ## 실행 절차
@@ -29,7 +29,7 @@ dev-log (episodic memory)를 **ADR 또는 skill (semantic memory)** 로 승격�
 ### 1. 대상 식별
 
 - 단일 slug → 해당 dev-log + frontmatter `related` 링크 수집
-- 클러스터 키워드 → `/consolidate-devlogs` 결과의 같은 그룹 dev-logs 묶음
+- 클러스터 키워드 → `/dx:consolidate-devlogs` 결과의 같은 그룹 dev-logs 묶음
 
 ### 2. 승격 경로 추천
 
@@ -120,7 +120,7 @@ description: "{한 줄 요약}"
 ### 6. 후속 권장
 
 승격 후 자동 권장:
-- 기존 `replaced_by` 처리된 dev-logs는 `/archive-devlog` 후보 (Tier 4)
+- 기존 `replaced_by` 처리된 dev-logs는 `/dx:archive-devlog` 후보 (Tier 4)
 - ADR 채택되면 `status: Accepted` 갱신
 - skill 추가되면 관련 rules에서 cross-reference 권장
 
@@ -144,15 +144,15 @@ description: "{한 줄 요약}"
 ## 사용 예시
 
 ```
-/promote-devlog otel
+/dx:promote-devlog otel
 → otel 클러스터 (3건) 발견
-→ skill 산출물 추천: .claude/skills/observability/otel-spec-compliance.md
+→ skill 산출물 추천: .claude/skills/otel-spec-compliance/SKILL.md
 → 초안 표시
 → 사용자 승인 대기
 ```
 
 ```
-/promote-devlog 2026-04-21-decision-cross-cloud-db-promote-automation
+/dx:promote-devlog 2026-04-21-decision-cross-cloud-db-promote-automation
 → category: decision 감지
 → ADR 산출물 추천: docs/adr/0017-cross-cloud-db-promote-automation.md
 → 초안 표시
@@ -175,7 +175,7 @@ description: "{한 줄 요약}"
 ## 학계 근거
 
 - **Episodic → Semantic 변환**: 개별 사건 (dev-log) → 일반화된 지식 (ADR/skill)
-- **Sleep-time consolidation**: `/consolidate-devlogs` (탐지) + `/promote-devlog` (정착) 2단계
+- **Sleep-time consolidation**: `/dx:consolidate-devlogs` (탐지) + `/dx:promote-devlog` (정착) 2단계
 - 출처: `docs/dev-logs/2026-04-29-devlog-tier-policy.md` 끝 섹션
 
 오늘 날짜: $CURRENT_DATE

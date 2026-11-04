@@ -40,7 +40,7 @@
 | `/effective-java` or `/effective-go` | `/msa-resilience` | `/msa-ddd` |
 | `/spring-patterns` or `/go-microservice` | `/database` | `/api-design` |
 | `/spring-testing` or `/go-testing` | `/msa-event-driven` | `/hexagonal-clean-architecture` |
-| `/clean-code` | `/refactoring-principles` | `/clean-code` |
+| `/dx:clean-code` | `/dx:refactoring-principles` | `/dx:clean-code` |
 
 ---
 
@@ -68,7 +68,7 @@
 | Testing | `/spring-testcontainers` | Testcontainers, REST Assured |
 | Concurrency | `/concurrency-spring` | @Async, Virtual Threads |
 | Refactoring | `/refactoring-spring` | Spring refactoring patterns |
-| Clean Code | `/clean-code` | Guard Clause, Cognitive Complexity, naming, Tell Don't Ask |
+| Clean Code | `/dx:clean-code` | Guard Clause, Cognitive Complexity, naming, Tell Don't Ask |
 
 ### Example Requests
 
@@ -86,7 +86,7 @@
 → /spring-testcontainers + /spring-testing
 
 "Check clean code quality and readability"
-→ /jvm-performance + /clean-code + /refactoring-principles
+→ /jvm-performance + /dx:clean-code + /dx:refactoring-principles
 
 "Security review my Java code"
 → /spring-security-review + security-scanner
@@ -115,7 +115,7 @@
 | Concurrency | `/concurrency-go` | Mutex, Channel, Worker Pool |
 | Testing | `/go-testing` | Table-driven testing |
 | Refactoring | `/refactoring-go` | Go refactoring patterns |
-| Clean Code | `/clean-code` | Guard Clause, Cognitive Complexity, naming |
+| Clean Code | `/dx:clean-code` | Guard Clause, Cognitive Complexity, naming |
 
 ### Example Requests
 
@@ -136,7 +136,7 @@
 → /go-performance + /effective-go
 
 "Clean code review for Go"
-→ /go-performance + /clean-code + /refactoring-go
+→ /go-performance + /dx:clean-code + /refactoring-go
 ```
 
 ---

@@ -2,7 +2,7 @@
 description: "MEMORY.md + memory/*.md 정리. stale/duplicate/orphan/repo-card 이관 후보 분류. dry-run 기본, 사용자 승인 후 적용."
 ---
 
-# /consolidate-memory
+# /dx:consolidate-memory
 
 자동 메모리 정리 패스. Anthropic 의 "Dream Memory Consolidation" 패턴을 프로젝트 메모리 자산에 적용한다.
 
@@ -52,7 +52,7 @@ description: "MEMORY.md + memory/*.md 정리. stale/duplicate/orphan/repo-card �
 1. **자산 인벤토리**:
    - 메모리 디렉토리 절대경로 확인 (자동 탐지)
    - `ls -la` 로 모든 파일 + mtime 수집
-   - MEMORY.md 파싱해 `[name](file.md) — desc` 패턴으로 인덱스 추출
+   - MEMORY.md 파싱해 `[name](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/commands/file.md) — desc` 패턴으로 인덱스 추출
    - `docs/repo-cards/*.md` 목록 수집
 
 2. **각 메모리 파일을 6 분류로 라벨링**:
@@ -89,7 +89,7 @@ description: "MEMORY.md + memory/*.md 정리. stale/duplicate/orphan/repo-card �
    - {file} → 권장: MEMORY.md 추가 또는 삭제
 
    ## INDEX-ONLY (broken link)
-   - MEMORY.md 라인 N: [{name}]({file}) — 파일 없음
+   - MEMORY.md 라인 N: [{name}](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/commands/{file}) — 파일 없음
 
    ## RECOMMEND
    1. 우선 처리: {top 3 actions}
@@ -133,7 +133,7 @@ dry-run 기본. 분류별 대상과 근거를 출력한다.
 [유지]       <건수>
 ```
 
-마지막에 `적용하려면: /consolidate-memory --apply <category>` 안내를 붙인다.
+마지막에 `적용하려면: /dx:consolidate-memory --apply <category>` 안내를 붙인다.
 사용자 승인 없이 `MEMORY.md` / `memory/*.md` 를 변경하지 않는다.
 
 ## 인자

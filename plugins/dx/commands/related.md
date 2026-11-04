@@ -2,11 +2,11 @@
 description: "개념/주제로 dev-logs + ADR + memory + repo-cards를 timeline 순으로 묶어 반환. 컨텍스트 복원용."
 ---
 
-# /related
+# /dx:related
 
 특정 개념/주제와 관련된 자료를 **시간순 timeline 형태**로 모아 반환한다.
 
-`/where` 가 "어디에?" 라면, `/related` 는 "어떻게 흘러왔지?" 답.
+`/dx:where` 가 "어디에?" 라면, `/dx:related` 는 "어떻게 흘러왔지?" 답.
 
 ## 입력
 
@@ -15,7 +15,7 @@ description: "개념/주제로 dev-logs + ADR + memory + repo-cards를 timeline 
 ## 출력 형식
 
 ```
-[/related {topic} · {today}]
+[/dx:related {topic} · {today}]
 
 ## Topic: {topic}
 
@@ -43,7 +43,7 @@ description: "개념/주제로 dev-logs + ADR + memory + repo-cards를 timeline 
 
 ## 검색 대상
 
-`/where` 와 동일하지만 **포함도** 우선 (정확도보다):
+`/dx:where` 와 동일하지만 **포함도** 우선 (정확도보다):
 - dev-logs `docs/dev-logs/*.md` — 가장 중요
 - ADR `docs/adr/*.md`
 - memory `~/.claude/projects/{slug}/memory/*.md`
@@ -76,9 +76,9 @@ description: "개념/주제로 dev-logs + ADR + memory + repo-cards를 timeline 
 ## 사용 예시
 
 ```
-/related JWT migration
+/dx:related JWT migration
 →
-[/related JWT migration · 2026-04-29]
+[/dx:related JWT migration · 2026-04-29]
 
 ## TIMELINE
 

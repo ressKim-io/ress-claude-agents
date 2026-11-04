@@ -634,4 +634,4 @@ make up
 ## 관련 Skills
 
 - `/docker` — Production Dockerfile 최적화, 멀티스테이지 빌드
-- `/dx-onboarding-environment` — VS Code Dev Container 기반 개발 환경
+- `/dx:dx-onboarding-environment` — VS Code Dev Container 기반 개발 환경

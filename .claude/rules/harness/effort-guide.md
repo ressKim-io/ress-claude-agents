@@ -132,5 +132,5 @@
 ## 참고 / cross-link
 
 - 토큰 / 캐시 / API 파라미터: [`token-budget.md`](token-budget.md)
-- Token Budget skill (코드 예시 / 비용 계산): `/token-budget` 슬래시
+- Token Budget skill (코드 예시 / 비용 계산): `/dx:token-budget` 슬래시
 - 공식 출처 분기 재검증 대상 — **다음 2027-02**

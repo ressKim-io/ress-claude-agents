@@ -1,21 +1,21 @@
 ---
 paths:
   - "**/sdd-*.md"
-  - "**/phase-start*"
+  - "**/dx:phase-start*"
   - "**/phase-workflow*"
 ---
 
 # Phase Workflow Gate Rules
 
 Phase 기반 작업 시 반드시 따라야 할 게이트 규칙.
-**이 규칙은 `/phase-start` 커맨드로 Phase를 시작한 경우에만 적용된다.**
+**이 규칙은 `/dx:phase-start` 커맨드로 Phase를 시작한 경우에만 적용된다.**
 각 게이트를 통과하지 않으면 다음 단계로 넘어가지 않는다.
 
 ---
 
 ## 적용 대상
 
-다음 조건 중 하나 이상에 해당하면 `/phase-start`로 Phase를 시작해야 한다:
+다음 조건 중 하나 이상에 해당하면 `/dx:phase-start`로 Phase를 시작해야 한다:
 
 - 새 서비스/모듈 구현 (6개 이상 파일 변경 예상)
 - 기존 서비스 대규모 변경 (API 추가/변경 3개 이상)
@@ -44,7 +44,7 @@ Phase 기반 작업 시 반드시 따라야 할 게이트 규칙.
 ## Gate 1: SDD 작성 (MANDATORY)
 
 - SDD(Software Design Document)를 먼저 작성한다
-- 템플릿: `.claude/templates/sdd.md.template` (범용) 또는 도메인 특화 템플릿
+- 템플릿: `plugins/dx/templates/sdd.md.template` (범용) 또는 도메인 특화 템플릿
 - SDD에 "구현 순서" 섹션이 명확해야 한다 (Step별 의존성 포함)
 - SDD에 "테스트 전략" 섹션이 있어야 한다
 
@@ -65,7 +65,7 @@ Phase 기반 작업 시 반드시 따라야 할 게이트 규칙.
 ## Gate 3: 코드 리뷰 (MANDATORY)
 
 - SDD 기반으로 구현 완료 후 코드 리뷰를 받는다
-- 사용 커맨드: 기술 스택에 맞는 리뷰 (`/go:review`, `/java:review`, `/backend:review` 등)
+- 사용 커맨드: 기술 스택에 맞는 리뷰 (`/go:review`, `/java:review`, `/dx:backend-review` 등)
 - 리뷰 피드백을 반영한다
 
 **금지**: 코드 리뷰 없이 PR 생성
@@ -84,18 +84,18 @@ Phase 기반 작업 시 반드시 따라야 할 게이트 규칙.
 
 ## Gate 5: PR 리뷰 (MANDATORY)
 
-- PR 생성 직후 `/review-pr`을 자동 실행한다
+- PR 생성 직후 `/dx:review-pr`을 자동 실행한다
 - Gemini 리뷰 결과와 비교하여 리뷰 갭을 `docs/review-gaps.md`에 기록한다
 - 양쪽 피드백을 반영한 후 머지한다
 
-**금지**: `/review-pr` 미실행 상태에서 머지
+**금지**: `/dx:review-pr` 미실행 상태에서 머지
 
 ---
 
 ## Phase 체크리스트
 
 Phase 시작 시 아래 체크리스트를 출력하고 진행 상황을 추적한다.
-(`/phase-start` 커맨드로 자동 출력)
+(`/dx:phase-start` 커맨드로 자동 출력)
 
 ```
 [ ] SDD 작성 완료
@@ -104,11 +104,11 @@ Phase 시작 시 아래 체크리스트를 출력하고 진행 상황을 추적�
 [ ] 코드/보안 리뷰 실행 + 피드백 반영
 [ ] 테스트 코드 작성 + 전체 통과
 [ ] PR 생성
-[ ] /review-pr 멀티 관점 리뷰
+[ ] /dx:review-pr 멀티 관점 리뷰
 [ ] Gemini 리뷰 확인 + 갭 기록
 [ ] 피드백 반영 → push → merge
 [ ] main pull
-[ ] 트러블슈팅 로그 (/log-trouble) — 문제 발생 시
+[ ] 트러블슈팅 로그 (/dx:log-trouble) — 문제 발생 시
 ```
 
 ---
@@ -117,15 +117,15 @@ Phase 시작 시 아래 체크리스트를 출력하고 진행 상황을 추적�
 
 Phase 진행 중 문제 발생 시:
 1. `rules/process/debugging.md`의 가설-검증 루프를 따른다
-2. 해결 후 `/log-trouble`로 기록한다 (failure_type 태그 포함)
+2. 해결 후 `/dx:log-trouble`로 기록한다 (failure_type 태그 포함)
 3. SDD에 영향이 있으면 SDD를 업데이트한다
 
 ---
 
 ## 관련 파일
 
-- 범용 SDD 템플릿: `.claude/templates/sdd.md.template`
+- 범용 SDD 템플릿: `plugins/dx/templates/sdd.md.template`
 - 일반 작업 순서: `.claude/rules/core/workflow.md`
 - 디버깅 프로토콜: `.claude/rules/process/debugging.md`
 - PR 리뷰 프로세스: `.claude/rules/process/code-review.md`
-- Phase 시작 커맨드: `/phase-start`
+- Phase 시작 커맨드: `/dx:phase-start`

@@ -446,4 +446,4 @@ TD-001: 레거시 인증 모듈 교체
 - Intercom, "RICE Scoring" framework
 - Shape Up (Basecamp): https://basecamp.com/shapeup
 
-**관련 skill**: `/rfc-adr`, `/dx-metrics`, `/team-topologies`, `/product-thinking`
+**관련 skill**: `/dx:rfc-adr`, `/dx:dx-metrics`, `/dx:team-topologies`, `/dx:product-thinking`

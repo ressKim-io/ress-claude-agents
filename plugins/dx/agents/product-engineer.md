@@ -115,10 +115,10 @@ Feature: 장바구니 할인 쿠폰 적용
 
 | 영역 | skill |
 |---|---|
-| RICE / MoSCoW / Shape Up / JTBD / Story Mapping / MVP 프로토콜 / A/B 기초 | [`/product-thinking`](../skills/product-thinking/SKILL.md) |
-| 요구사항 → Spec → 게이트 흐름 | [`/spec-driven-development`](../skills/spec-driven-development/SKILL.md) |
-| 결정 기록 (ADR / RFC) | [`/rfc-adr`](../skills/rfc-adr/SKILL.md) |
-| 분기 리뷰 / 결정 사후 검증 | [`/quarterly-review`](../skills/quarterly-review/SKILL.md), [`/adr-retrospective`](../skills/adr-retrospective/SKILL.md) |
+| RICE / MoSCoW / Shape Up / JTBD / Story Mapping / MVP 프로토콜 / A/B 기초 | [`/dx:product-thinking`](../skills/product-thinking/SKILL.md) |
+| 요구사항 → Spec → 게이트 흐름 | [`/dx:spec-driven-development`](../skills/spec-driven-development/SKILL.md) |
+| 결정 기록 (ADR / RFC) | [`/dx:rfc-adr`](../skills/rfc-adr/SKILL.md) |
+| 분기 리뷰 / 결정 사후 검증 | [`/dx:quarterly-review`](../skills/quarterly-review/SKILL.md), [`/dx:adr-retrospective`](../skills/adr-retrospective/SKILL.md) |
 
 여기 남긴 것은 **agent 고유의 판단 절차**뿐이다: INVEST 품질 게이트, Scope Lock / Won't Have 운영, Output Templates.
 
@@ -276,8 +276,8 @@ Feature: 장바구니 할인 쿠폰 적용
 
 ## 참조 스킬
 
-- `/product-thinking` — 제품 사고 프레임워크
-- `/rfc-adr` — RFC/ADR 작성 가이드
+- `/dx:product-thinking` — 제품 사고 프레임워크
+- `/dx:rfc-adr` — RFC/ADR 작성 가이드
 - `/api-design` — API 설계 패턴
 
 ---

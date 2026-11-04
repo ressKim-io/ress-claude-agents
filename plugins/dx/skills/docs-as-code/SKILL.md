@@ -222,7 +222,7 @@ sequenceDiagram
 
 ## 참고
 
-자세한 내용은 [API 레퍼런스](../reference/api.md)를 참조하세요.
+자세한 내용은 [API 레퍼런스](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/skills/reference/api.md)를 참조하세요.
 ```
 
 ---
@@ -502,6 +502,6 @@ jobs:
 
 ## 참조 스킬
 
-- `/docs-as-code-automation` - API 문서 자동화, 문서 품질 측정
+- `/dx:docs-as-code-automation` - API 문서 자동화, 문서 품질 측정
 - `/backstage` - Backstage 플랫폼
-- `/dx-onboarding` - 온보딩 가이드
+- `/dx:dx-onboarding` - 온보딩 가이드

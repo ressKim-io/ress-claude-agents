@@ -2,7 +2,7 @@
 description: "Rule, Skill, Agent 추가/변경 사유를 기록합니다. AI 워크플로우 자체의 개선 기록."
 ---
 
-# /log-meta
+# /dx:log-meta
 
 AI 워크플로우(rule, skill, agent, command) 추가/변경 사유를 기록하라.
 
@@ -58,8 +58,8 @@ tags: [{tag1}, {tag2}]
 ## 사용법
 
 ```
-/log-meta                             # 현재 세션의 rule/skill/agent 변경 자동 추출
-/log-meta add multi-tool-adapter rule # 변경 대상 전달
+/dx:log-meta                             # 현재 세션의 rule/skill/agent 변경 자동 추출
+/dx:log-meta add multi-tool-adapter rule # 변경 대상 전달
 ```
 
 rules / skills / agents / commands 를 추가·변경한 직후 호출한다.

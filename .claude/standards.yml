@@ -6,7 +6,7 @@
 # ============================================
 code_quality:
   # Function/Method length limits
-  # 기준은 .claude/rules/clean-code.md §메서드/함수 길이 (AGENTS.md §Code Style 와 동일):
+  # 기준은 .claude/rules/core/clean-code.md §메서드/함수 길이 (AGENTS.md §Code Style 와 동일):
   #   20-50줄 권장 / 50줄 초과 분할 검토 / 100줄 초과 금지.
   # warn = 분할 검토 임계, max = 절대 금지 임계.
   max_function_lines:

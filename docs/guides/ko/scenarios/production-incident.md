@@ -40,7 +40,7 @@
                     │  수정 적용   │────►│  기록/회고   │
                     │             │     │             │
                     │ code-review │     │ dev-logger  │
-                    │ /k8s-auto   │     │ /log-trouble│
+                    │ /k8s-auto   │     │ /dx:log-trouble│
                     └─────────────┘     └─────────────┘
 ```
 
@@ -211,12 +211,12 @@ kubectl top pods -n production -l app=order-service
 
 ## Step 5: 기록 및 회고
 
-**사용 도구**: `dev-logger` (`/log-trouble`)
+**사용 도구**: `dev-logger` (`/dx:log-trouble`)
 
 ### 이렇게 요청하세요
 
 ```
-/log-trouble
+/dx:log-trouble
 ```
 
 ### Claude가 하는 일

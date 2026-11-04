@@ -212,6 +212,6 @@ if __name__ == "__main__":
 
 ## 참조 스킬
 
-- `/docs-as-code` - Docs as Code 핵심 도구 (MkDocs, Docusaurus, Backstage TechDocs)
+- `/dx:docs-as-code` - Docs as Code 핵심 도구 (MkDocs, Docusaurus, Backstage TechDocs)
 - `/backstage` - Backstage 플랫폼
 - `/api-design` - API 설계

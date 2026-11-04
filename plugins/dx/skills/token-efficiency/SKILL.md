@@ -486,5 +486,5 @@ Auto-compact가 발생하면 ~8K tokens의 요약 비용 발생.
 /dx-ai-agents              - AI 에이전트 거버넌스
 /dx-ai-agents-orchestration - 멀티 에이전트 오케스트레이션
 /llmops                     - LLM 운영, 프롬프트 관리
-/dx-metrics                 - DORA, SPACE, DevEx 측정
+/dx:dx-metrics                 - DORA, SPACE, DevEx 측정
 ```

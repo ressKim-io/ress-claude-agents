@@ -47,22 +47,22 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 
 | 스킬 | 용도 |
 |------|------|
-| `/local-dev-makefile` | `make up`으로 풀스택 실행, Hot Reload |
+| `/dx:local-dev-makefile` | `make up`으로 풀스택 실행, Hot Reload |
 | `/docker` | Dockerfile 최적화, 멀티스테이지 빌드 |
-| `/dx-onboarding-environment` | Dev Container 자동화 |
+| `/dx:dx-onboarding-environment` | Dev Container 자동화 |
 
 ```
 "로컬 개발환경 Docker로 설정해줘"
-→ /local-dev-makefile + /docker
+→ /dx:local-dev-makefile + /docker
 ```
 
 ### 클라우드 IDE
 
 | 스킬 | 용도 |
 |------|------|
-| `/dx-onboarding-gitpod` | Gitpod/Codespaces 설정 |
-| `/dx-onboarding` | Time-to-First-Deploy 최적화 |
-| `/dx-onboarding-deploy` | 첫 배포 가이드 |
+| `/dx:dx-onboarding-gitpod` | Gitpod/Codespaces 설정 |
+| `/dx:dx-onboarding` | Time-to-First-Deploy 최적화 |
+| `/dx:dx-onboarding-deploy` | 첫 배포 가이드 |
 
 ---
 
@@ -80,17 +80,17 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 
 | 스킬 | 대상 |
 |------|------|
-| `/clean-code` | Composed Method, Cognitive Complexity, Guard Clause, 네이밍 |
-| `/refactoring-principles` | 언어 무관 기본 원칙 |
+| `/dx:clean-code` | Composed Method, Cognitive Complexity, Guard Clause, 네이밍 |
+| `/dx:refactoring-principles` | 언어 무관 기본 원칙 |
 | `/refactoring-spring` | Spring Boot 코드 |
 | `/refactoring-go` | Go 코드 |
 
 ```
 클린 코드 리뷰:
-  /jvm-performance 또는 /go-performance → /clean-code → /refactoring-principles
+  /jvm-performance 또는 /go-performance → /dx:clean-code → /dx:refactoring-principles
 
 "코드 가독성 확인해줘"
-→ /clean-code + code-reviewer
+→ /dx:clean-code + code-reviewer
 ```
 
 ### 기술 의사결정
@@ -118,15 +118,15 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 
 | 명령 | 용도 | 예시 |
 |------|------|------|
-| `/log-feedback` | AI 수정 요청 기록 | 코드 패턴 불일치, 누락 등 |
-| `/log-decision` | 기술 의사결정 기록 | A vs B 선택 근거 |
-| `/log-meta` | Rule/Skill 변경 기록 | 워크플로우 개선 |
-| `/log-trouble` | 트러블슈팅 기록 | 에러 원인, 해결 과정 |
-| `/log-summary` | 세션 요약 | 세션 종료 전 실행 |
+| `/dx:log-feedback` | AI 수정 요청 기록 | 코드 패턴 불일치, 누락 등 |
+| `/dx:log-decision` | 기술 의사결정 기록 | A vs B 선택 근거 |
+| `/dx:log-meta` | Rule/Skill 변경 기록 | 워크플로우 개선 |
+| `/dx:log-trouble` | 트러블슈팅 기록 | 에러 원인, 해결 과정 |
+| `/dx:log-summary` | 세션 요약 | 세션 종료 전 실행 |
 
 ```
 세션 종료 전:
-  /log-summary → 오늘 작업 요약 자동 생성
+  /dx:log-summary → 오늘 작업 요약 자동 생성
 ```
 
 ---
@@ -135,10 +135,10 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 
 | 스킬 | 용도 |
 |------|------|
-| `/docs-as-code` | MkDocs, Docusaurus, TechDocs |
-| `/docs-as-code-automation` | API 문서 자동화, Vale 린터 |
-| `/conventional-commits` | 커밋 메시지 규칙, Changelog 자동화 |
-| `/token-efficiency` | Claude Code 세션 토큰 효율화 |
+| `/dx:docs-as-code` | MkDocs, Docusaurus, TechDocs |
+| `/dx:docs-as-code-automation` | API 문서 자동화, Vale 린터 |
+| `/dx:conventional-commits` | 커밋 메시지 규칙, Changelog 자동화 |
+| `/dx:token-efficiency` | Claude Code 세션 토큰 효율화 |
 
 ---
 
@@ -160,10 +160,10 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 ```
 Week 1: 기본 사이클 익히기
   - code-reviewer, security-scanner, git-workflow
-  - /effective-java 또는 /effective-go, /clean-code
+  - /effective-java 또는 /effective-go, /dx:clean-code
 
 Week 2: 프로젝트 구조
-  - /api-design, /docker, /local-dev-makefile
+  - /api-design, /docker, /dx:local-dev-makefile
   - architect-agent 활용
 
 Week 3: 테스트 + 관측성

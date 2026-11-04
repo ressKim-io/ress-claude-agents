@@ -2,7 +2,7 @@
 description: "AI 출력 수정 요청을 기록합니다. 코드 패턴 불일치, 누락, 잘못된 접근 등을 기록."
 ---
 
-# /log-feedback
+# /dx:log-feedback
 
 개발 과정에서 AI의 출력을 수정 요청한 내용을 기록하라.
 
@@ -58,8 +58,8 @@ tags: [{tag1}, {tag2}]
 ## 사용법
 
 ```
-/log-feedback                         # 직전 수정 요청 맥락에서 자동 추출
-/log-feedback 커밋 메시지 형식 어긋남   # 피드백 요지 전달
+/dx:log-feedback                         # 직전 수정 요청 맥락에서 자동 추출
+/dx:log-feedback 커밋 메시지 형식 어긋남   # 피드백 요지 전달
 ```
 
 같은 지적이 3회 누적되면 rule 또는 skill 보강 후보다.
