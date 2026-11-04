@@ -30,6 +30,8 @@ skill 272개가 한곳에 몰려 있어 무엇을 가져갈지 판단하기 어�
 | `skill-category` 파서를 지운 뒤 "영역 없음" 테스트 2건이 의미를 잃었다 | 음성 테스트 | 영역을 경로에서 얻게 되어 그 분기가 사라졌다 | 테스트 삭제. 옛 폴더가 되살아나면 실패하는 테스트로 대체 |
 | 3단계에서 "살아 있는 문서만 고쳤다" 고 했지만 옛 rule 경로가 남았다 | 4단계의 경로 grep | 링크 게이트 범위 밖이었다 | 게이트를 `docs/architecture`, `docs/guides`, `docs/onboarding`, README 로 확대 |
 | `.md` 로 된 README 를 `.claude/rules/` 에 두면 rule 로 로드된다 | 사전 검토 | `.claude/rules/**/*.md` 가 전부 로드 대상이다 | 폴더 설명을 AGENTS.md 에 둔다 |
+| CI `Shellcheck` 가 #47~#55 에서 전부 실패했다 (SC2059) | PR 을 연 뒤의 CI | `scripts/test-gates.sh` 의 테스트 도우미가 `$fields` 를 `printf` 형식 문자열에 넣었다. 아래 `make lint` 때문에 로컬에서 드러나지 않았다 | `%b` 인자로 옮기고 생성 파일이 바이트 단위로 같음을 확인. 뒤 브랜치는 merge-forward 로 반영 (force push 없음) |
+| `make lint` 가 shellcheck 실패에도 exit 0 이었다 | 위 실패의 원인을 좇다 발견 | `find ...; echo` 형태라 `echo` 의 종료 코드만 남았다. 2026-01-29 (`34fed08`) 부터 그랬고, 머지 전 사전 게이트가 이 결과를 믿었다 | `&&` 로 변경, `should_fail_make_lint_when_shellcheck_reports_issue` 추가. 고친 `make lint` 가 새 테스트 줄의 SC2016 을 바로 잡았다 |
 
 ## 계획의 확인 방법이 틀렸던 것
 
@@ -44,6 +46,9 @@ skill 272개가 한곳에 몰려 있어 무엇을 가져갈지 판단하기 어�
 - **subagent 결과는 기계로 다시 검사한다.** description 의 영문 용어를 본문과 대조해 근거 없는 내용이 없음을 확인했다. 자체 보고만으로는 알 수 없다.
 - **`initialize` control request** 는 무토큰으로 실제 로드 상태를 보여 준다.
 - **`CLAUDE_CONFIG_DIR` 를 임시 폴더로** 두면 사용자 설정을 건드리지 않고 설치를 시험할 수 있다. 브랜치 지정(`owner/repo#ref`)을 쓰면 머지 전에도 된다.
+- **통과만 해 온 게이트는 먼저 실패시켜 본다.** `make lint` 는 약 9개월 동안 실패할 수 없었다. 로컬 확인은 CI 와 같은 명령으로 하고, 게이트를 믿으려면 음성 테스트를 둔다.
+- **변수로 명령을 돌리는 반복문은 bash 파일로 실행한다.** 이 환경의 Bash 도구는 zsh 라 `$var` 가 단어로 나뉘지 않는다. 공백이 든 명령 5건이 거짓 FAIL 로 나왔고 bash 로 다시 돌리니 모두 통과했다.
+- **strict 보호 규칙 아래의 체인 머지는 스크립트로 돌린다.** `gh pr edit --base main` → 뒤처졌으면 `gh pr update-branch` → CI 대기 → `gh pr merge --merge --match-head-commit <sha>` 순서다. `--admin` 없이 #37~#54 를 약 1시간에 머지했다. 머지마다 `main` tree 와 PR head tree 가 같은지 대조하면 잘못된 머지를 바로 알 수 있다.
 
 ## 남은 일
 

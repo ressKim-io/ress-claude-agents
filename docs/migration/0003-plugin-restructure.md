@@ -1,6 +1,6 @@
 # Migration 0003 — 평탄 구조에서 영역별 plugin 으로
 
-- **기간**: 2026-11-04
+- **기간**: 2026-11-04 ~ 2026-11-05
 - **결정**: [ADR 0012](../adr/0012-native-plugin-structure.md)
 - **사양 근거**: [2026-11-04 사양 검증](../audit/2026-11-04-claude-spec-verification.md)
 - **과정의 문제와 재발 방지**: [dev-log](../dev-logs/2026-11-04-plugin-restructure.md)
@@ -88,16 +88,17 @@ agent 는 `subagent_type` 에 `<plugin>:<agent>` 로 쓴다. `/dx:review-pr-terr
 | 이동 대조 | 이전 대상 302개: 이동 291, 삭제 11, 누락 0. rename 커밋은 전부 R100 |
 | 17개 plugin 로드 (`make verify-plugins`) | 파일 수와 로드 수 일치. 모델 호출 없음 |
 | GitHub 설치 | 격리한 설정 폴더에서 `marketplace add <repo>#<브랜치>` → `install go@ress` → skill·command 15개 로드, 캐시본으로 skill 호출 성공 |
+| main 기준 설치 (2026-11-05, `2e8dcf6`) | 격리한 설정 폴더에서 `marketplace add ressKim-io/ress-claude-agents` → `install go@ress`. 설치 SHA 가 main 과 같고, skill·command 15개 로드, 캐시본 17개 파일이 main 과 내용 동일. 모델 호출 없음 |
 | 폴더 복사 | `go-testing` 이 접두사 없이 로드 |
 | `dx` 자체 활성화 | 설정 있음 50·6 / 설정 제거한 사본 0·0 |
 | 코드 구간 링크 | 원본과 대조해 달라진 곳 0건 |
 
 **실행하지 못한 것**
 
-- ⚠️ main 기준의 `/plugin marketplace add ressKim-io/ress-claude-agents`. 머지 전이라 브랜치 지정으로 대신했다. 머지 후 한 번 확인한다.
+- ⚠️ GitHub 설치를 `go` 외의 plugin 으로 해 보지 않았다. 나머지는 `--plugin-dir` 로드(`make verify-plugins`)로만 확인했다.
 - ⚠️ `/doctor`, `/skill-doctor` 전후 비교. 대화형 명령이라 사용자가 실행해야 한다. 이번 작업의 출발점인 "272개 중 94개만 description 표시" 가 해소됐는지는 이 비교로만 확정된다.
 - ⚠️ 일반 문장의 언급 치환 약 1,000건은 게이트만 통과했고 전수 검토하지 않았다.
 
 ## 롤백
 
-PR 체인을 merge commit 으로 머지하므로 `git revert -m 1 <merge>` 로 되돌린다. squash 하면 `SKILL.md` 수백 개가 잘못 짝지어질 수 있어 쓰지 않는다.
+PR #37~#55 를 merge commit 으로 머지했으므로 뒤에서부터 `git revert -m 1 <merge>` 로 되돌린다. 체인 직전 `main` 은 `f999388` 이다. squash 하면 `SKILL.md` 수백 개가 잘못 짝지어질 수 있어 쓰지 않았다.
