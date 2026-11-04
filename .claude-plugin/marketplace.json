@@ -1,0 +1,8 @@
+{
+  "name": "ress",
+  "owner": { "name": "ressKim-io" },
+  "description": "영역별 Claude Code plugin 모음. 필요한 영역만 골라 설치한다.",
+  "plugins": [
+    { "name": "dx", "source": "./plugins/dx", "category": "common" }
+  ]
+}

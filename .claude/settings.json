@@ -27,5 +27,16 @@
       "Bash(argocd app sync *)",
       "Bash(kubectl run *)"
     ]
+  },
+  "extraKnownMarketplaces": {
+    "ress": {
+      "source": {
+        "source": "directory",
+        "path": "."
+      }
+    }
+  },
+  "enabledPlugins": {
+    "dx@ress": true
   }
 }
