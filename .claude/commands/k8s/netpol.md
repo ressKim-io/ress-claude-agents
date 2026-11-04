@@ -1,3 +1,7 @@
+---
+description: "K8s: NetworkPolicy를 생성하고 검증합니다"
+---
+
 # Network Policy Generator
 
 Kubernetes Network Policy를 생성하고 검증합니다.

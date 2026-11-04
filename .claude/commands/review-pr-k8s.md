@@ -1,3 +1,7 @@
+---
+description: "K8s/Helm/ArgoCD 영역 PR을 3개 전문 관점으로 병렬 리뷰합니다"
+---
+
 # /review-pr:k8s — K8s/Helm/ArgoCD 전문 PR 코드 리뷰
 
 K8s 영역 PR을 3개 전문 관점의 에이전트로 병렬 리뷰한다.

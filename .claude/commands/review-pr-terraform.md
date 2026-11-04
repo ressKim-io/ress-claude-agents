@@ -1,3 +1,7 @@
+---
+description: "Terraform PR을 3개 전문 관점으로 병렬 리뷰합니다"
+---
+
 # /review-pr:terraform — Terraform 전문 PR 코드 리뷰
 
 Terraform PR을 3개 전문 관점의 에이전트로 병렬 리뷰한다.

@@ -1,3 +1,7 @@
+---
+description: "현재 세션 컨텍스트를 저장합니다"
+---
+
 # Session Context Save
 
 현재 세션 컨텍스트를 강제 저장합니다.

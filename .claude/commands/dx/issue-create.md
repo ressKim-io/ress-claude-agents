@@ -1,3 +1,7 @@
+---
+description: "템플릿 기반으로 Issue를 생성합니다"
+---
+
 # GitHub Issue Creator
 
 템플릿 기반으로 GitHub Issue를 생성합니다.

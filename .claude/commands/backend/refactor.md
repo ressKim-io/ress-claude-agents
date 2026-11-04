@@ -1,3 +1,7 @@
+---
+description: "코드 품질 개선을 위한 리팩토링을 제안합니다"
+---
+
 # Code Refactoring Assistant
 
 코드 품질 개선을 위한 리팩토링을 제안하고 수행합니다.

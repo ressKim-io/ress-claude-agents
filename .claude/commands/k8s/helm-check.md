@@ -1,3 +1,7 @@
+---
+description: "K8s: Helm chart의 best practice를 검증합니다"
+---
+
 # Helm Chart Validator
 
 Helm chart의 best practice를 검증합니다.
