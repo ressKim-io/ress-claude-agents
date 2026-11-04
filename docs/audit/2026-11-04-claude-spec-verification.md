@@ -70,7 +70,7 @@
 | Skill | 목록 예산은 컨텍스트의 1% (`skillListingBudgetFraction`, 기본 0.01), 대체값 8,000자. description + `when_to_use` 는 1,536자에서 잘린다 | ✅ |
 | Skill | 예산 초과 시 이름은 남고 덜 쓰는 skill 부터 description 이 빠진다 | ✅ |
 | Skill | compact 후 skill 당 5,000 tokens, 전체 25,000 tokens 공유. 이전 판의 "25KB" 는 오기였다 | ✅ |
-| Skill | `.claude/skills/<카테고리>/<이름>/` 중첩 탐색 | ⚠️ 문서에 없음 |
+| Skill | `.claude/skills/<카테고리>/<이름>/` 중첩 탐색. 문서에 없고, 실측에서 로드되지 않았다 (§8) | 🧪 |
 | Agent | 공식 frontmatter 19개. 하위 디렉터리는 재귀 탐색된다. 이름은 경로가 아니라 `name` 에서 온다 | ✅ |
 | Rule | 하위 디렉터리는 재귀 탐색된다. `paths` 가 유일한 frontmatter 다 | ✅ |
 | Rule | 사본의 `core/git.md` 에 심은 문자열이 세션 시작 시 보이고, `paths:` 가 있는 `lang/go.md` 의 문자열은 보이지 않는다. 평탄 구조 대조군과 결과가 같다 (`claude -p`, Haiku 5.5) | 🧪 |
@@ -101,8 +101,6 @@
 
 | 항목 | 상태 | 이유와 다음 행동 |
 |---|---|---|
-| 중첩 skill 경로 동작 | ⚠️ | 문서에 없다. plugin 파일럿에서 임시 디렉터리로 시험한다 |
-| `extraKnownMarketplaces` 의 `path: "."` | ⚠️ | 상대 경로는 문서에 있으나 `"."` 자체는 없다. plugin 파일럿에서 시험한다 |
 | 목록 예산 초과량 | ⚠️ | 세션 목록에서 272개 중 94개만 description 이 보였다. 토큰-문자 환산은 문서에 없어 추정치다. `/doctor`, `/skill-doctor` 로 확인한다 (대화형) |
 | Spring AI 가 unset `temperature` 를 보내는가 | ⚠️ | 문서에 없다. Chat Options 표의 기본값은 "1.0". 실제 호출로만 확인 가능하다 |
 | `ChatAnthropic` 기본 temperature | ⚠️ | 문서에 기본값과 생략 여부가 없다 |
@@ -122,3 +120,20 @@
 | 허용 | 3 | 전부 RAN |
 
 통과 25 / 실패 0. [ADR 0009](../adr/0009-enforcement-layer-placement.md) 의 결론을 바꿀 결과가 아니어서 `user-approval.md` 와 ADR 은 고치지 않았다. 대화형 `bypassPermissions` 측정(P8)은 다시 하지 않았다.
+
+## 8. plugin 실측 🧪
+
+CLI 2.1.318, `initialize` control request 응답으로 확인했다. 이 요청은 모델을 호출하지 않는다.
+
+| 항목 | 결과 |
+|---|---|
+| `.claude/skills/flat-probe/` | 로드됨 |
+| `.claude/skills/cat/nested-probe/` | **로드되지 않음** |
+| `--plugin-dir plugins/dx` | skill+command 50/50, agent 6/6 |
+| 레포 루트 + `extraKnownMarketplaces` `path: "."` | skill+command 50, agent 6 |
+| 같은 사본에서 설정 키 제거 | 0, 0 |
+| `claude plugin details dx` (레포 루트) | "not found". 프로젝트 marketplace 를 읽지 않는 관리 명령이라 자체 활성화 확인에 쓸 수 없다 |
+| `claude plugin marketplace add .` | 형식 오류. `./path` 형태여야 한다 |
+| bare `/log-trouble` | 명령으로 등록되지 않는다. `claude -p` 에서는 모델이 `dx:log-trouble` 로 찾아 실행했다 |
+
+실제 호출은 Haiku 5.5 의 `claude -p` 로 확인했다: skill(`dx:clean-code`), agent(`dx:dev-logger`), command(`/dx:where`) 모두 성공.
