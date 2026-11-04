@@ -52,7 +52,7 @@ description: "MEMORY.md + memory/*.md 정리. stale/duplicate/orphan/repo-card �
 1. **자산 인벤토리**:
    - 메모리 디렉토리 절대경로 확인 (자동 탐지)
    - `ls -la` 로 모든 파일 + mtime 수집
-   - MEMORY.md 파싱해 `[name](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/commands/file.md) — desc` 패턴으로 인덱스 추출
+   - MEMORY.md 파싱해 `[name](file.md) — desc` 패턴으로 인덱스 추출
    - `docs/repo-cards/*.md` 목록 수집
 
 2. **각 메모리 파일을 6 분류로 라벨링**:
@@ -89,7 +89,7 @@ description: "MEMORY.md + memory/*.md 정리. stale/duplicate/orphan/repo-card �
    - {file} → 권장: MEMORY.md 추가 또는 삭제
 
    ## INDEX-ONLY (broken link)
-   - MEMORY.md 라인 N: [{name}](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/commands/{file}) — 파일 없음
+   - MEMORY.md 라인 N: [{name}]({file}) — 파일 없음
 
    ## RECOMMEND
    1. 우선 처리: {top 3 actions}

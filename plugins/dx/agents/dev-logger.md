@@ -206,7 +206,7 @@ duration: ~{estimated}
 - path/to/file2 — {what changed}
 
 ## Logs Created
-- [log title](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/YYYY-MM-DD-slug.md)
+- [log title](../YYYY-MM-DD-slug.md)
 
 ## Notes
 {Any additional observations or follow-up items}
