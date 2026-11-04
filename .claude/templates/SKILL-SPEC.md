@@ -1,6 +1,6 @@
 # Skill 작성 표준 — SKILL-SPEC
 
-이 레포의 모든 `.claude/skills/**/*.md` 가 따라야 할 frontmatter / 본문 / trigger 표준.
+이 레포의 모든 `plugins/<plugin>/skills/<name>/SKILL.md` 가 따라야 할 frontmatter / 본문 / trigger 표준.
 신규 skill 추가 시 본 spec 을 그대로 카피해 사용.
 
 > **출처 (F1)**: https://code.claude.com/docs/en/skills (검증일 2026-11-04)
@@ -147,8 +147,8 @@ replaced_by: new-skill
 # 전체 skill frontmatter 검증
 scripts/validate-skill-frontmatter.sh
 
-# 특정 skill 만
-scripts/validate-skill-frontmatter.sh .claude/skills/go/effective-go.md
+# skill 만
+scripts/validate-skill-frontmatter.sh skills
 ```
 
 검증 항목:

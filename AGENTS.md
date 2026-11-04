@@ -9,14 +9,13 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 
 ## Project Overview
 
-이 레포는 **AI 코딩 에이전트용 룰/스킬/에이전트 컬렉션**이다. **이 레포에서 직접 작업할 때 로드되는 자산**이며, 배포 수단은 두지 않는다 — `install.sh` 와 그 설정 표면(`plugins/` · `.claude/workflows/`)은 2026-08-26 에 제거됐다 ([ADR 0011](docs/adr/0011-remove-install-sh.md)). 다른 프로젝트에서 쓰려면 필요한 파일을 직접 가져간다.
+이 레포는 **AI 코딩 에이전트용 룰/스킬/에이전트 컬렉션**이다. 자산은 영역별 plugin 으로 나뉘어 있어 필요한 영역만 설치하거나 폴더를 복사해 가져간다 ([ADR 0012](docs/adr/0012-native-plugin-structure.md)). 이 레포에서는 `dx` 만 켠다. 다른 plugin 을 여기서 쓰려면 `claude --plugin-dir plugins/<plugin>` 으로 띄운다.
 
 > **개수는 여기 쓰지 않는다.** CI 는 [inventory.yml](.claude/inventory.yml) 신선도는 검사하지만 산문에 박힌 숫자는 검사하지 않아 반드시 drift 한다 — 실제로 "274 skills"(실제 260) / "25 rules"(실제 26) 가 각각 방치됐다. 현재 수치는 `summary` 참조: `yq '.summary' .claude/inventory.yml`
 
 | 자산 | 위치 | 내용 |
 |---|---|---|
-| Skills (도메인 패턴) | `.claude/skills/` | 22 카테고리 — Go, Java/Spring, K8s, MSA, observability, business, legal, operations 등 |
-| Agents (전문 에이전트) | `.claude/agents/` | code-reviewer, k8s-troubleshooter, architect-agent, business-decision-agent 등 |
+| Skills, Agents, Commands (영역별) | `plugins/<plugin>/` | 언어 `go` `java` `python` `frontend` · 설계 `architecture` `messaging` · 인프라 `k8s` `service-mesh` `infra` `cicd` · 운영 `observability` `sre` `platform` · 보안·제품 `security` `saas` `ai` · 공통 `dx` |
 | Rules (코딩/보안/워크플로우) | `.claude/rules/` | 이 AGENTS.md의 상세판. effort-guide, multi-tool-adapter 포함 |
 | Templates (작성 표준) | `.claude/templates/` | SKILL-SPEC, AGENT-SPEC + 문서 template (신규 자산 작성 spec) |
 
@@ -192,10 +191,10 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 | 언어 | Rules | Skills |
 |---|---|---|
-| Go | [.claude/rules/lang/go.md](.claude/rules/lang/go.md) | `.claude/skills/go/` |
-| Java/Spring | [.claude/rules/lang/java.md](.claude/rules/lang/java.md), [spring.md](.claude/rules/lang/spring.md) | `.claude/skills/spring/` |
-| Python | — | `.claude/skills/python/` |
-| Frontend (React/Next.js/TS) | — | `.claude/skills/frontend/` |
+| Go | [.claude/rules/lang/go.md](.claude/rules/lang/go.md) | `plugins/go/` |
+| Java/Spring | [.claude/rules/lang/java.md](.claude/rules/lang/java.md), [spring.md](.claude/rules/lang/spring.md) | `plugins/java/` |
+| Python | — | `plugins/python/` |
+| Frontend (React/Next.js/TS) | — | `plugins/frontend/` |
 
 ---
 
@@ -206,10 +205,10 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 | 영역 | Skill | 핵심 |
 |---|---|---|
-| 멀티테넌시 | [`multi-tenancy`](.claude/skills/multi-tenancy/SKILL.md) | Team/Org, 데이터 격리(Row/Schema/DB), RBAC, 초대 |
-| 인증 | [`auth-oauth-social`](.claude/skills/auth-oauth-social/SKILL.md) | Google/Apple/Kakao, PKCE, Magic Link, 2FA |
-| 결제 | [`payment-integration`](.claude/skills/payment-integration/SKILL.md) | Stripe/Toss/PortOne, Token-first, Webhook, Saga |
-| 알림 | [`notification-multichannel`](.claude/skills/notification-multichannel/SKILL.md) | Push/Email/SMS, Fallback, Notification Center |
+| 멀티테넌시 | [`multi-tenancy`](plugins/saas/skills/multi-tenancy/SKILL.md) | Team/Org, 데이터 격리(Row/Schema/DB), RBAC, 초대 |
+| 인증 | [`auth-oauth-social`](plugins/saas/skills/auth-oauth-social/SKILL.md) | Google/Apple/Kakao, PKCE, Magic Link, 2FA |
+| 결제 | [`payment-integration`](plugins/saas/skills/payment-integration/SKILL.md) | Stripe/Toss/PortOne, Token-first, Webhook, Saga |
+| 알림 | [`notification-multichannel`](plugins/saas/skills/notification-multichannel/SKILL.md) | Push/Email/SMS, Fallback, Notification Center |
 
 **신규 프로젝트 시작 시 ADR 작성 순서** (이 순서대로 결정해야 변경 비용 ↓):
 1. 멀티테넌시 격리 모델 (가장 비싼 결정)
@@ -225,7 +224,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 | 도구 | 추가 설정 | 변환 |
 |---|---|---|
-| **Claude Code** | 본 파일 §Claude Code-Specific + `.claude/rules/`, `.claude/skills/`, `.claude/agents/` 자동 로딩 | 원본 |
+| **Claude Code** | 본 파일 §Claude Code-Specific + `.claude/rules/`, `plugins/dx/` 자동 로딩 | 원본 |
 | **Cursor** | 본 파일 자동 인식 + `.cursor/rules/*.mdc` | 자동 (adapter) |
 | **Kiro** | 본 파일 루트 자동 인식 + `.kiro/{skills,agents,steering}/` | **수동** ([ADR 0006](docs/adr/0006-kiro-adapter-strategy.md) Option 1) |
 | **Codex / Copilot / Gemini CLI / Windsurf** | 본 파일 자동 인식 — 추가 설정 불필요 | 불필요 |
@@ -286,15 +285,15 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 | Feature | 위치 | 호출 |
 |---|---|---|
-| Skills | `.claude/skills/<name>/SKILL.md` | 자동 발견 (description 매칭) 또는 `/<name>` |
-| Subagents | `.claude/agents/` | `Agent` 도구 (`subagent_type=...`) |
-| Slash Commands | `.claude/commands/` | `/command-name` — skills 로 병합됨 (기존 파일은 계속 동작) |
+| Skills | `plugins/<plugin>/skills/<name>/SKILL.md` | 자동 발견 (description 매칭) 또는 `/<plugin>:<name>` |
+| Subagents | `plugins/<plugin>/agents/` | `Agent` 도구 (`subagent_type=<plugin>:<name>`) |
+| Slash Commands | `plugins/<plugin>/commands/` | `/<plugin>:<name>` — skills 로 병합됨 (기존 파일은 계속 동작) |
 
 자산 통계는 [.claude/inventory.yml](.claude/inventory.yml) 의 `summary` 가 유일한 출처다 (`scripts/generate-inventory.sh` 로 자동 재생성, CI `Inventory Freshness` job 이 신선도 검증).
 
 > **개수를 산문에 쓰지 않는다.** CI 는 inventory 신선도는 검사하지만 문서 본문에 박힌 숫자는 검사하지 않아 반드시 drift 한다. 실제로 이 문단의 이전 버전이 "274 skills / 43 commands" 로 3개월간 틀린 값을 유지했다 (실제 260 / 51). 근거: [2026-08-15 audit §2](docs/audit/2026-08-15-asset-tier-rebalance.md#2-사실-오류--drift-수정은-백로그).
 
-> ⚠️ **skill 경로 규격 (문서 재확인 2026-11-04)**: 문서화된 형태는 `.claude/skills/<skill-name>/SKILL.md` — **한 단계 디렉토리 + `SKILL.md`** 다. 카테고리 하위 디렉토리는 문서에 없다. 2026-08 이전 이 레포의 `<카테고리>/<이름>.md` 형태는 로드되지 않았다: [2026-08-24 audit §6 Step 2](docs/audit/2026-08-24-agent-harness-readiness.md).
+> ⚠️ **skill 경로 규격 (문서 재확인 2026-11-04)**: 문서화된 형태는 `.claude/skills/<skill-name>/SKILL.md`, plugin 에서는 `skills/<skill-name>/SKILL.md` — **한 단계 디렉토리 + `SKILL.md`** 다. 카테고리 하위 디렉토리는 문서에 없다. 2026-08 이전 이 레포의 `<카테고리>/<이름>.md` 형태는 로드되지 않았다: [2026-08-24 audit §6 Step 2](docs/audit/2026-08-24-agent-harness-readiness.md).
 >
 > Custom commands 는 skills 로 병합됐다 — `.claude/commands/x.md` 와 `.claude/skills/x/SKILL.md` 는 둘 다 `/x` 를 만들고, 이름이 겹치면 skill 이 우선한다.
 

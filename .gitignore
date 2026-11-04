@@ -33,7 +33,7 @@ tmp/
 # .codex/ 는 2026-08-25 제거 (ADR 0010) — ignore 규칙도 불필요.
 .agents/
 
-# .claude/skills/<name>/SKILL.md 는 2026-08-24 부터 SSOT 다 — commit 대상.
+# plugins/<plugin>/skills/<name>/SKILL.md 가 SSOT 다 — commit 대상 (ADR 0012).
 #
 # 이전에는 `.claude/skills/*/*/SKILL.md` 를 ignore 했다. 그 경로(= skills/ 아래 두 단계)는
 # Claude Code 가 로드하지 않는 경로였고, 단일 파일 형식(<cat>/<n>.md) 역시 로드되지 않았다.
