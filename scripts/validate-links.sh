@@ -6,7 +6,10 @@
 # 79개 링크가 깨진 채 3일간 남아 있었고, 그중 4개는 매 세션 로드되는 AGENTS.md
 # 안에 있었다. 링크를 보는 CI job 이 하나도 없어 아무도 몰랐다 — PR #36 리뷰.
 #
-# 검증 범위: AGENTS.md / rules / skills / agents / commands / templates
+# 검증 범위: AGENTS.md / rules / skills / agents / commands / templates / plugin README /
+#            살아 있는 docs (architecture, guides, onboarding)
+# 원격 링크: 이 레포의 blob/main URL 은 실제 경로로 바꿔 검사한다. plugin 에 실리지 않는 rule 을
+# 가리키는 링크라서, 파일을 옮기면 조용히 404 가 된다.
 # plugin 경계: plugins/<plugin>/ 밖으로 나가는 링크는 실패다. 설치본은 plugin 별로
 # 캐시되므로 대상 파일이 레포에 있어도 설치하면 깨진다. `/plugin:skill` 표기로 대체한다.
 # 제외: 외부 URL, 코드 펜스(```) 안, 인라인 코드(`...`) 안 — 예시 링크는 링크가 아니다.
@@ -36,12 +39,17 @@ trap 'rm -f "$TARGETS_FILE"' EXIT
     command_files
     rule_files
     find .claude/templates -maxdepth 1 -type f -name '*.md'
+    if [ -d plugins ]; then
+        find plugins -mindepth 2 -maxdepth 2 -type f -name README.md
+    fi
+    find docs/architecture docs/guides docs/onboarding -type f -name '*.md'
 } >"$TARGETS_FILE"
 
 TARGETS_FILE="$TARGETS_FILE" python3 - <<'PY'
 import io, os, re, sys
 
 TARGETS = io.open(os.environ["TARGETS_FILE"], encoding="utf-8").read().split()
+REPO_URL = "https://github.com/ressKim-io/ress-claude-agents/blob/main/"
 
 LINK = re.compile(r'\]\(([^)\s]+?\.(?:md|json|ya?ml|sh|ts|mjs))(#[^)]*)?\)')
 broken = []
@@ -71,6 +79,11 @@ for f in sorted(TARGETS):
         line = re.sub(r'`[^`]*`', '', raw)
         for m in LINK.finditer(line):
             link = m.group(1)
+            if link.startswith(REPO_URL):
+                checked += 1
+                if not os.path.exists(link[len(REPO_URL):]):
+                    broken.append((f, lineno, link))
+                continue
             if link.startswith(("http://", "https://", "mailto:")):
                 continue
             checked += 1
