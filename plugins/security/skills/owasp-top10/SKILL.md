@@ -1,6 +1,6 @@
 ---
 name: owasp-top10
-description: "OWASP Top 10 방어 가이드 — OWASP Top 10 (2021) 취약점 상세 설명과 언어별 실전 방어 패턴 Use when working with security 도메인의 패턴 / 구현 선택."
+description: "OWASP Top 10(2021) A01~A10 취약점 설명과 언어별 방어 패턴 — Broken Access Control, Injection, SSRF, 암호화 실패 등. Use when 웹·API 코드를 보안 관점으로 리뷰하거나 취약점 유형별 대응법을 찾을 때."
 ---
 
 # OWASP Top 10 방어 가이드

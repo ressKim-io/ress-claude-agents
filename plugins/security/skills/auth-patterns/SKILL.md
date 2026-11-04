@@ -1,6 +1,6 @@
 ---
 name: auth-patterns
-description: "Authentication & Authorization Patterns 가이드 — OAuth2/OIDC, PKCE, JWT, Session, API Key 인증/인가 패턴 및 구현 가이드 Use when working with security 도메인의 패턴 / 구현 선택."
+description: "인증·인가 설계 — OAuth2 flow, OIDC, PKCE, JWT, 세션, API Key, RBAC/ABAC/ReBAC, 멀티테넌시 인증. Use when 로그인·토큰 방식을 고르거나 권한 모델을 설계하고 인증 보안 헤더를 점검할 때."
 ---
 
 # Authentication & Authorization Patterns 가이드

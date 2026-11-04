@@ -1,6 +1,6 @@
 ---
 name: agentic-ai-architecture
-description: "Agentic AI Architecture 가이드 — AI Agent 시스템 설계, MCP/A2A 프로토콜, Multi-Agent 오케스트레이션, Spring AI/Go 구현 패턴 Use when working with architecture 도메인의 패턴 / 구현 선택."
+description: "AI Agent 시스템 설계 — MCP·A2A 프로토콜 비교, multi-agent 오케스트레이션 패턴, Spring AI·Go 구현, 가드레일 아키텍처. Use when 제품에 들어갈 LLM agent 구조와 도구 연동 프로토콜을 설계할 때."
 ---
 
 # Agentic AI Architecture 가이드

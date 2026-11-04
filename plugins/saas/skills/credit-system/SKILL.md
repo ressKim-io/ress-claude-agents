@@ -1,6 +1,6 @@
 ---
 name: credit-system
-description: AI/사용량 모네타이징 — 토큰/API 호출 과금, prepaid credit, 잔액 원장, threshold 알림, free tier 차감, hybrid(seat+usage), LLM provider 비용 추적. subscription-billing의 metered 섹션 자연 연장.
+description: "AI 사용량 과금 — 크레딧 모델, idempotent UsageRecord, 한도·auto-refill, LLM 원가+마진 가격, Free Tier, immutable ledger 환불. Use when 토큰·API 호출 단위 종량제나 충전식 크레딧을 설계할 때."
 license: MIT
 ---
 

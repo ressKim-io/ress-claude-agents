@@ -1,6 +1,6 @@
 ---
 name: admin-api-keys
-description: "Admin API Keys — API Keys / Personal Access Tokens / Service Tokens — 외부 통합·CLI·자동화·서비스 간 인증. 발급/회전/폐기, scope 권한, 안전 저장(hashing), prefix 노출, 이벤트 추적, Use when working with business 도메인의 패턴 / 구현 선택."
+description: "API Key·Personal Access Token·Service Token — 발급·회전·폐기, scope 설계, 해시 저장, prefix 노출, rate limit, 유출 대응. Use when SaaS 에 외부 통합·CLI 용 토큰 발급 기능을 설계할 때."
 ---
 
 # Admin API Keys

@@ -1,6 +1,6 @@
 ---
 name: dx-ai-agents
-description: "AI Agents 플랫폼 통합 가이드 — AI 코딩 에이전트 거버넌스, Copilot/Claude 통합, 엔터프라이즈 AI 정책 Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "AI 코딩 에이전트 거버넌스 — 엔지니어 역할 변화, 성숙도 모델, Copilot·Claude Code 통합, 권한 범위, 금지 사항, 작업 완료 기준. Use when 조직의 AI 에이전트 사용 정책과 규칙을 정할 때, 협업 구성은 dx-ai-agents-orchestration 을 쓴다."
 ---
 
 # AI Agents 플랫폼 통합 가이드

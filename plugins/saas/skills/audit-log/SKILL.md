@@ -1,6 +1,6 @@
 ---
 name: audit-log
-description: "Audit Log — Audit Log — 누가 언제 무엇을 어떻게 변경했는가. Append-only 이벤트 로그, tenant-scoped 격리, 규제 대응(GDPR/SOC2/HIPAA), 검색·필터·export. SaaS 부트스트랩 필수 Use when working with business 도메인의 패턴 / 구현 선택."
+description: "감사 로그 — append-only 이벤트 모델, action 네이밍, tenant 격리, 저장소 선택, 보존·삭제, 검색·export UI. Use when 누가 언제 무엇을 바꿨는지 추적하는 기능을 SaaS 에 넣거나 규제 대응 로그를 설계할 때."
 ---
 
 # Audit Log

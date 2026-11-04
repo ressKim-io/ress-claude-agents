@@ -1,6 +1,6 @@
 ---
 name: search-recommend
-description: 사용자 노출용 검색 + 추천 — Elasticsearch/OpenSearch/Algolia/Typesense Provider, 한국어 형태소 분석(nori), Saga 기반 인덱스 sync, BM25+벡터 하이브리드, 협업 필터링/content-based 추천. ai/vector-db(RAG/임베딩)와 별개. SearchGateway 추상화.
+description: "사용자 노출 검색·추천 — 검색 엔진 선택, SearchGateway, 한국어 형태소 분석, DB↔검색 인덱스 일관성, 추천 3패턴, 검색 분석. Use when 서비스에 검색창이나 추천 기능을 만들 때, RAG 용 검색은 rag-patterns 를 쓴다."
 license: MIT
 ---
 

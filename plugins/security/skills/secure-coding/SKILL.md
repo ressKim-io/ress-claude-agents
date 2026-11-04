@@ -1,6 +1,6 @@
 ---
 name: secure-coding
-description: "Secure Coding Practices 가이드 — 언어별 시큐어 코딩, 입력 검증, 암호화 패턴, 에러 처리, 보안 헤더 Use when working with security 도메인의 패턴 / 구현 선택."
+description: "시큐어 코딩 — 입력 검증, 출력 인코딩, 암호화, 안전한 에러 처리, 파일 업로드, HTTP 보안 헤더, secure random, CI 보안 테스트. Use when 코드 작성·리뷰 중 언어별 보안 체크리스트가 필요할 때."
 ---
 
 # Secure Coding Practices 가이드

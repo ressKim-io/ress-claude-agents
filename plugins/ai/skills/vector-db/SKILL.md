@@ -1,6 +1,6 @@
 ---
 name: vector-db
-description: "Vector Database — 벡터 데이터베이스 비교, 인덱싱 전략, ANN 알고리즘, 운영 패턴 Use when working with ai 도메인의 패턴 / 구현 선택."
+description: "벡터 DB — 제품 비교 매트릭스, ANN 인덱싱 알고리즘, pgvector·Weaviate·Pinecone, 성능 튜닝, 비용 분석. Use when 임베딩 저장소를 고르거나 벡터 검색 인덱스·지연을 튜닝할 때."
 ---
 
 # Vector Database

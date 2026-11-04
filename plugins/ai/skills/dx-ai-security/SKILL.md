@@ -1,6 +1,6 @@
 ---
 name: dx-ai-security
-description: "AI 코드 보안 & 품질 보증 가이드 — AI 생성 코드 보안 검증, 품질 게이트, 비용 관리 Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "AI 생성 코드의 보안 검증과 품질 게이트 — 보안 가이드라인, 품질 보증, AI 비용(FinOps) 관리, 메트릭·모니터링. Use when AI 가 작성한 코드를 머지하기 전에 보안·품질을 점검하거나 AI 사용 비용을 통제할 때."
 ---
 
 # AI 코드 보안 & 품질 보증 가이드

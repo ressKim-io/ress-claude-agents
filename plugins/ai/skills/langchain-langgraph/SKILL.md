@@ -1,6 +1,6 @@
 ---
 name: langchain-langgraph
-description: "LangChain & LangGraph — LangChain v0.3 LCEL, LangGraph 에이전트, 멀티 에이전트 오케스트레이션 Use when working with ai 도메인의 패턴 / 구현 선택."
+description: "LangChain v0.3 LCEL, tool calling, LangGraph 에이전트, multi-agent 패턴, RAG, streaming, 프로덕션 배포. Use when LangChain 이나 LangGraph 로 체인·에이전트 워크플로를 구현할 때."
 ---
 
 # LangChain & LangGraph
