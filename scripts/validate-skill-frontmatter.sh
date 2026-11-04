@@ -136,29 +136,35 @@ validate_agent() {
     return 0
 }
 
-# frontmatter category 파서는 scripts/lib/skill-category.sh 가 단일 구현.
-# shellcheck source=scripts/lib/skill-category.sh
+# 자산 위치와 하한은 scripts/lib/layout.sh 가 단일 구현.
+# shellcheck source=scripts/lib/layout.sh
 # shellcheck disable=SC1091
-source "$(dirname "$0")/lib/skill-category.sh"
+source "$ROOT/scripts/lib/layout.sh"
+
+skill_area_or_unknown() {
+    skill_area "$1" 2>/dev/null || printf 'unknown\n'
+}
 
 skill_categories() {
     local f
-    for f in .claude/skills/*/SKILL.md; do
-        [[ -f "$f" ]] || continue
-        skill_frontmatter_category "$f"
-    done | sort -u
+    while IFS= read -r f; do
+        skill_area_or_unknown "$f"
+    done < <(skill_files) | sort -u
 }
 
 skill_files_in_category() {
     local want="$1" f
-    for f in .claude/skills/*/SKILL.md; do
-        [[ -f "$f" ]] || continue
-        [[ "$(skill_frontmatter_category "$f")" == "$want" ]] && printf '%s\n' "$f"
-    done
+    while IFS= read -r f; do
+        if [[ "$(skill_area_or_unknown "$f")" == "$want" ]]; then
+            printf '%s\n' "$f"
+        fi
+    done < <(skill_files)
 }
 
 check_agents() {
-    section "Agents (.claude/agents/) frontmatter 검증"
+    section "Agents frontmatter 검증"
+
+    assert_floor agents || log_fail "agents 개수 하한 미달"
 
     local total=0 pass=0 fail=0
     local violations=()
@@ -197,7 +203,7 @@ check_agents() {
             fail=$((fail + 1))
             violations+=("$file|$issues")
         fi
-    done < <(find .claude/agents -type f -name "*.md" | sort)
+    done < <(agent_files)
 
     if [[ $fail -gt 0 ]]; then
         log_fail "Agents: ${fail}/${total} 위반"
@@ -270,7 +276,9 @@ validate_skill() {
 }
 
 check_skills() {
-    section "Skills (.claude/skills/) 형식 검증"
+    section "Skills 형식 검증"
+
+    assert_floor skills || log_fail "skills 개수 하한 미달"
 
     local total=0 pass=0 fail=0
     local with_fm=0 without_fm=0
@@ -291,7 +299,7 @@ check_skills() {
             fail=$((fail + 1))
             violations+=("$file|$issues")
         fi
-    done < <(find .claude/skills -type f -name "*.md" | sort)
+    done < <(skill_files)
 
     printf '  통계  total=%d  frontmatter=%d  convention=%d\n' "$total" "$with_fm" "$without_fm"
 
@@ -385,18 +393,24 @@ report_stats() {
     section "Frontmatter 채택 현황"
 
     local agents_total agents_fm
-    agents_total=$(find .claude/agents -type f -name "*.md" | wc -l | tr -d ' ')
+    agents_total=$(asset_count agents)
     agents_fm=0
     while IFS= read -r f; do
         [[ "$(head -1 "$f")" == "---" ]] && agents_fm=$((agents_fm + 1))
-    done < <(find .claude/agents -type f -name "*.md")
+    done < <(agent_files)
 
     local skills_total skills_fm
-    skills_total=$(find .claude/skills -type f -name "*.md" | wc -l | tr -d ' ')
+    skills_total=$(asset_count skills)
     skills_fm=0
     while IFS= read -r f; do
         [[ "$(head -1 "$f")" == "---" ]] && skills_fm=$((skills_fm + 1))
-    done < <(find .claude/skills -type f -name "*.md")
+    done < <(skill_files)
+
+    # 0개면 나눗셈에서 죽는다. 이미 하한 검사가 실패로 기록했으니 통계만 건너뛴다.
+    if (( agents_total == 0 || skills_total == 0 )); then
+        printf '  통계 생략: agents=%d skills=%d\n' "$agents_total" "$skills_total"
+        return 0
+    fi
 
     printf '  Agents  : %d/%d (%d%%)\n' "$agents_fm" "$agents_total" $((agents_fm * 100 / agents_total))
     printf '  Skills  : %d/%d (%d%%)\n' "$skills_fm" "$skills_total" $((skills_fm * 100 / skills_total))

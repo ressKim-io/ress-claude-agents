@@ -18,15 +18,13 @@
 
 set -euo pipefail
 
-# frontmatter category 파서 (단일 구현)
-# shellcheck source=scripts/lib/skill-category.sh
-# shellcheck disable=SC1091
-source "$(dirname "$0")/lib/skill-category.sh"
-
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SKILLS_DIR="$REPO_ROOT/.claude/skills"
-AGENTS_DIR="$REPO_ROOT/.claude/agents"
 OUTPUT="$REPO_ROOT/.claude/inventory-labels.yml"
+
+# 자산 위치와 하한의 단일 구현
+# shellcheck source=scripts/lib/layout.sh
+# shellcheck disable=SC1091
+source "$REPO_ROOT/scripts/lib/layout.sh"
 
 cd "$REPO_ROOT"
 
@@ -64,13 +62,13 @@ classify_model_dependency() {
 # claude-only 조건 (cross-link은 제외, 진짜 의존만 카운트):
 #   - subagent_type (Agent tool 호출)
 #   - Agent(...) / Skill(...) 직접 호출
-#   - .claude/agents/ 또는 .claude/commands/ 참조 (commands는 Claude-only)
+#   - agents/ 또는 commands/ 경로 참조 (.claude/ 또는 plugins/<plugin>/, commands는 Claude-only)
 #   - 본문에서 ^/명령어 형태 슬래시 커맨드
 # .claude/skills/...는 cross-link이라 제외 — 모든 도구가 같은 디렉토리 쓸 수 있음
 classify_portability() {
     local file="$1"
     local hits
-    hits=$(grep -cE 'subagent_type|Agent\(|Skill\(|\.claude/(agents|commands)/|^/[a-z][a-z0-9_-]+($|[ :])' "$file" 2>/dev/null || echo 0)
+    hits=$(grep -cE 'subagent_type|Agent\(|Skill\(|(\.claude|plugins/[a-z0-9-]+)/(agents|commands)/|^/[a-z][a-z0-9_-]+($|[ :])' "$file" 2>/dev/null || echo 0)
     hits=${hits//[^0-9]/}
     if [[ -n "$hits" && "$hits" -ge 2 ]]; then
         echo "claude-only"
@@ -94,6 +92,9 @@ classify_domain_specificity() {
 # Main: skills/agents 순회하며 라벨 부여
 # ---------------------------------------------------------------------------
 generate_labels() {
+    assert_floor skills || exit 1
+    assert_floor agents || exit 1
+
     local timestamp
     timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
@@ -117,8 +118,7 @@ generate_labels() {
         local entries=()
         while IFS= read -r file; do
             local category
-            category=$(skill_frontmatter_category "$file")
-            [[ -n "$category" ]] || category="other"
+            category=$(skill_area "$file") || { printf '%s\n' "$category" >&2; exit 1; }
             local name
             name=$(basename "$(dirname "$file")")
 
@@ -128,8 +128,7 @@ generate_labels() {
             ds=$(classify_domain_specificity "$category")
 
             entries+=("${category}|${name}|${md}|${po}|${ds}")
-        done < <(find "$SKILLS_DIR" -type f -name "SKILL.md" | sort)
-        # 레이아웃: .claude/skills/<name>/SKILL.md — 카테고리는 frontmatter category: 에서 읽는다.
+        done < <(skill_files)
 
         local prev_cat=""
         printf '%s\n' "${entries[@]}" | sort -t'|' -k1,1 -k2,2 | while IFS='|' read -r cat name md po ds; do
@@ -147,8 +146,7 @@ generate_labels() {
         echo "agents:"
 
         local agent_entries=()
-        for file in "$AGENTS_DIR"/*.md; do
-            [[ -f "$file" ]] || continue
+        while IFS= read -r file; do
             local name
             name=$(basename "$file" .md)
             local category="agent"
@@ -156,7 +154,7 @@ generate_labels() {
             md=$(classify_model_dependency "$file" "$category")
             # agents는 모두 claude-only로 단정 (Subagent는 Claude 고유 메커니즘)
             agent_entries+=("${name}|${md}|claude-only")
-        done
+        done < <(agent_files)
 
         printf '%s\n' "${agent_entries[@]}" | sort -t'|' -k1,1 | while IFS='|' read -r name md po; do
             echo "  - name: $name"
@@ -226,7 +224,13 @@ report() {
 validate() {
     local tmp
     tmp=$(mktemp)
-    OUTPUT="$tmp" generate_labels >/dev/null 2>&1
+    # 생성 실패를 숨기면 원인이 "outdated" 로 둔갑한다.
+    local gen_output
+    if ! gen_output=$(OUTPUT="$tmp"; generate_labels 2>&1); then
+        printf '%s\n' "$gen_output"
+        rm -f "$tmp"
+        return 1
+    fi
 
     local old_no_ts new_no_ts
     old_no_ts=$(grep -v '^generated:' "$REPO_ROOT/.claude/inventory-labels.yml" 2>/dev/null || true)

@@ -19,10 +19,10 @@
 
 set -euo pipefail
 
-# frontmatter category 파서 (install.sh 와 단일 구현 공유)
-# shellcheck source=scripts/lib/skill-category.sh
+# 자산 위치와 하한의 단일 구현
+# shellcheck source=scripts/lib/layout.sh
 # shellcheck disable=SC1091
-source "$(dirname "$0")/lib/skill-category.sh"
+source "$(cd "$(dirname "$0")" && pwd)/lib/layout.sh"
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -84,8 +84,10 @@ get_agent_field() {
 check_agents_registered() {
     section "Agent registration (_handoff.yml ↔ .claude/agents/)"
 
+    assert_floor agents || log_fail "agent 개수 하한 미달"
+
     local actual_agents handoff_agents missing extra
-    actual_agents=$(find .claude/agents -maxdepth 1 -type f -name "*.md" -exec basename {} .md \; | sort -u)
+    actual_agents=$(agent_files | sed -e 's#.*/##' -e 's/\.md$//' | sort -u)
     handoff_agents=$(get_handoff_agents | sort -u)
 
     missing=$(comm -23 <(printf '%s\n' "$actual_agents") <(printf '%s\n' "$handoff_agents"))

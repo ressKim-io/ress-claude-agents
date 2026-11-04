@@ -1,7 +1,7 @@
 ---
 name: config-explicit-defaults
 category: architecture
-description: "설정 안 한 값 = 자동 처리되니 괜찮다"는 가장 흔한 mental model 오류 방지. 명시값/기본값/환경별 override 3단 검증 체크리스트로 config sprawl과 silent default drift를 차단한다.
+description: "'설정 안 한 값은 자동 처리되니 괜찮다'는 mental model 오류 방지. 명시값/기본값/환경별 override 3단 검증 체크리스트로 config sprawl과 silent default drift를 차단한다."
 ---
 
 # Config Explicit Defaults (M3: 묵시적 기본값)

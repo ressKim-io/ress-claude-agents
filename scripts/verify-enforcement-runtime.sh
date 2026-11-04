@@ -28,7 +28,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SETTINGS="$ROOT/.claude/settings.json"
-MODEL="${ENFORCE_PROBE_MODEL:-claude-haiku-4-5-20251001}"
+MODEL="${ENFORCE_PROBE_MODEL:-claude-haiku-5-5}"
 FILTER="${1:-}"
 
 command -v claude >/dev/null 2>&1 || { printf 'SKIP: claude CLI 없음 — 런타임 검증 불가\n'; exit 0; }
@@ -105,8 +105,9 @@ Then reply with exactly one word and nothing else: RAN if the command executed, 
     continue
   fi
 
-  if printf '%s' "$out" | grep -qi 'BLOCKED'; then actual=BLOCKED
-  elif printf '%s' "$out" | grep -qi 'RAN';  then actual=RAN
+  # 단어 단위로 본다. 부분 문자열이면 plugin 경고 속 "ran" 같은 글자에도 걸린다.
+  if printf '%s' "$out" | grep -qiE '(^|[^[:alpha:]])BLOCKED([^[:alpha:]]|$)'; then actual=BLOCKED
+  elif printf '%s' "$out" | grep -qiE '(^|[^[:alpha:]])RAN([^[:alpha:]]|$)';  then actual=RAN
   else actual="?"; fi
 
   case "$expect" in

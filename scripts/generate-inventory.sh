@@ -4,57 +4,16 @@
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-SKILLS_DIR="$REPO_ROOT/.claude/skills"
-AGENTS_DIR="$REPO_ROOT/.claude/agents"
 OUTPUT="$REPO_ROOT/.claude/inventory.yml"
 
-# frontmatter category 파서 (단일 구현)
-# shellcheck source=scripts/lib/skill-category.sh
+# 자산 위치와 하한의 단일 구현
+# shellcheck source=scripts/lib/layout.sh
 # shellcheck disable=SC1091
-source "$(dirname "$0")/lib/skill-category.sh"
+source "$REPO_ROOT/scripts/lib/layout.sh"
 
-# Category mapping for skills (filename prefix -> category)
-categorize_skill() {
-  local file_path="$1"
-  # 카테고리는 frontmatter category: 가 SSOT — 레이아웃이 <name>/SKILL.md 로 평탄화되어
-  # 디렉토리에서 카테고리를 읽을 수 없다.
-  local fm_cat
-  fm_cat=$(skill_frontmatter_category "$file_path")
-  if [ -n "$fm_cat" ]; then
-    echo "$fm_cat"
-    return
-  fi
-  local rel_path="${file_path#"$SKILLS_DIR"/}"
-  local dir
-  dir=$(dirname "$rel_path")
-  if [ "$dir" != "." ]; then
-    echo "$dir"
-    return
-  fi
-  # Fallback: 루트에 남은 파일용 (기존 case 패턴 유지)
-  local name
-  name=$(basename "$file_path" .md)
-  case "$name" in
-    go-*|concurrency-go|refactoring-go) echo "go" ;;
-    spring-*|concurrency-spring|refactoring-spring) echo "spring" ;;
-    msa-*|database-sharding|high-traffic-*|api-design|distributed-lock|grpc|graphql-*|task-queue) echo "msa" ;;
-    agentic-ai-*|cell-based-*|composable-*|data-mesh|hexagonal-*|modular-monolith|state-machine|strangler-*|vertical-slice-*|kafka-msa-*) echo "architecture" ;;
-    k8s-gpu*) echo "platform" ;;
-    istio-*|k8s-traffic-istio|linkerd*) echo "service-mesh" ;;
-    k8s-*|gateway-*) echo "kubernetes" ;;
-    observability*|ebpf-*|monitoring-*|logging-*|aiops*|alerting-*) echo "observability" ;;
-    cicd-*|gitops-*|deployment-*|ephemeral-*|supply-chain-*) echo "cicd" ;;
-    sre-*|chaos-*|disaster-*|load-testing*|finops*) echo "sre" ;;
-    backstage|golden-*|ml-*|mlops*|llmops|wasm-*|platform-*) echo "platform" ;;
-    dx-*|docs-*|token-*|local-dev-*) echo "dx" ;;
-    kafka*|rabbitmq*|nats-*|redis-streams) echo "messaging" ;;
-    aws-*|terraform-*|crossplane*|database*|docker*) echo "infrastructure" ;;
-    conventional-commits|git-workflow|refactoring-principles) echo "dx" ;;
-    *) echo "other" ;;
-  esac
-}
+cd "$REPO_ROOT"
 
-# Category mapping for agents
+# Category mapping for agents (이전 구조 전용. plugin 구조는 경로에서 읽는다)
 categorize_agent() {
   local name="$1"
   case "$name" in
@@ -134,6 +93,10 @@ extract_agent_meta() {
 }
 
 generate() {
+  # 0개로 재생성되면 신선도 검사가 무력해진다.
+  assert_floor skills || exit 1
+  assert_floor agents || exit 1
+
   local tmp
   tmp=$(mktemp)
   local timestamp
@@ -154,13 +117,11 @@ generate() {
     lines=$(echo "$meta" | cut -d'|' -f1)
     title=$(echo "$meta" | cut -d'|' -f2)
     desc=$(echo "$meta" | cut -d'|' -f3-)
-    category=$(categorize_skill "$file")
+    category=$(skill_area "$file") || { printf '%s\n' "$category"; exit 1; }
     skill_entries+=("$category|$basename|$lines|$title|$desc")
     total_skill_lines=$((total_skill_lines + lines))
     skill_count=$((skill_count + 1))
-  done < <(find "$SKILLS_DIR" -name "SKILL.md" -type f | sort)
-  # 레이아웃: .claude/skills/<name>/SKILL.md (Claude Code 규격). skill 이름은 디렉토리명,
-  # 카테고리는 frontmatter category: 에서 읽는다.
+  done < <(skill_files)
 
   # Duplicate name check
   local all_names dupes
@@ -176,8 +137,7 @@ generate() {
   local total_agent_lines=0
   local agent_count=0
 
-  for file in "$AGENTS_DIR"/*.md; do
-    [ -f "$file" ] || continue
+  while IFS= read -r file; do
     local basename
     basename=$(basename "$file" .md)
     local meta
@@ -186,17 +146,16 @@ generate() {
     lines=$(echo "$meta" | cut -d'|' -f1)
     title=$(echo "$meta" | cut -d'|' -f2)
     desc=$(echo "$meta" | cut -d'|' -f3-)
-    category=$(categorize_agent "$basename")
+    category=$(asset_plugin "$file") || category=$(categorize_agent "$basename")
     agent_entries+=("$category|$basename|$lines|$title|$desc")
     total_agent_lines=$((total_agent_lines + lines))
     agent_count=$((agent_count + 1))
-  done
+  done < <(agent_files)
 
   # rules / commands / templates 는 개수만 집계한다 (본문 인덱스 없음).
-  # commands 는 설치 소스인 root commands/ 기준 — help/manifest 는 명령이 아니라 제외.
   local rule_count command_count template_count
-  rule_count=$(find "$REPO_ROOT/.claude/rules" -maxdepth 1 -name '*.md' -type f 2>/dev/null | wc -l | tr -d ' ')
-  command_count=$(find "$REPO_ROOT/commands" -mindepth 2 -name '*.md' -type f -not -path '*/help/*' 2>/dev/null | wc -l | tr -d ' ')
+  rule_count=$(asset_count rules)
+  command_count=$(asset_count commands)
   template_count=$(find "$REPO_ROOT/.claude/templates" -maxdepth 1 -type f 2>/dev/null | wc -l | tr -d ' ')
 
   # Write YAML
@@ -268,8 +227,13 @@ generate() {
 validate() {
   local tmp
   tmp=$(mktemp)
-  # Generate to temp, compare with existing
-  OUTPUT="$tmp" generate > /dev/null 2>&1 || true
+  # Generate to temp, compare with existing. 생성 실패를 숨기면 원인이 "outdated" 로 둔갑한다.
+  local gen_output
+  if ! gen_output=$(OUTPUT="$tmp"; generate 2>&1); then
+    printf '%s\n' "$gen_output"
+    rm -f "$tmp"
+    return 1
+  fi
 
   # Compare ignoring the generated timestamp line
   local existing_no_ts current_no_ts
