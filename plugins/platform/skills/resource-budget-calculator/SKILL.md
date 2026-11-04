@@ -1,6 +1,6 @@
 ---
 name: resource-budget-calculator
-description: 메모리/CPU/connection pool/disk budget을 per-instance와 cluster 합계로 계산하는 공식과 체크리스트. HikariCP formula, K8s requests/limits, DB max_connections 산정. Vlad Mihalcea + HikariCP wiki 기반.
+description: "리소스 budget 계산 — 4영역 공식, 인스턴스별 vs 클러스터 합계 점검, 미계산 안티패턴, 자가 검증 체크리스트. Use when DB·캐시·Mimir 등의 메모리를 default 나 넉넉히 잡기 전에 합계 한도로 OOM·커넥션 고갈을 막을 때."
 ---
 
 # Resource Budget Calculator (M9: 메모리/리소스 budget 계산 부재)

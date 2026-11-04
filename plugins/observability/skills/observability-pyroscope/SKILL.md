@@ -1,6 +1,6 @@
 ---
 name: observability-pyroscope
-description: "Continuous Profiling with Pyroscope — Pyroscope 기반 Continuous Profiling: eBPF/SDK/Java Agent 통합, Span Profiles, FlameQL 가이드 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "Pyroscope continuous profiling — eBPF·SDK·Java Agent 연동, Alloy 통합, Span Profiles(trace-profile 연결), OTLP ingestion, FlameQL. Use when 상시 프로파일링과 flame graph 로 CPU·메모리 병목을 트레이스와 함께 찾을 때."
 ---
 
 # Continuous Profiling with Pyroscope

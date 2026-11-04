@@ -1,6 +1,6 @@
 ---
 name: finops-tools
-description: "FinOps Tools 가이드 — Kubecost, OpenCost, Infracost 비교 및 설정, KEDA+Karpenter 통합 Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "FinOps 도구 비교와 설치 — OpenCost, Kubecost, Infracost 설정, KEDA+Karpenter 통합. Use when Kubernetes 비용 도구를 고르고 설치하거나 오토스케일링과 묶을 때. 고급 자동화는 finops-tools-advanced."
 ---
 
 # FinOps Tools 가이드

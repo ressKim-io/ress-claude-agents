@@ -1,6 +1,6 @@
 ---
 name: observability-otel-optimization
-description: "OpenTelemetry 비용 최적화 가이드 — Kafka 버퍼 아키텍처, 데이터 볼륨 절감, Collector 모니터링 & 알림 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "OTel 비용·안정성 최적화 — Kafka 버퍼 아키텍처, 데이터 볼륨 절감, Collector 모니터링·알림, Alloy 알려진 이슈, HikariCP 메트릭. Use when Collector 앞뒤에 Kafka 를 두거나 텔레메트리 볼륨을 줄일 때."
 ---
 
 # OpenTelemetry 비용 최적화 가이드

@@ -1,6 +1,6 @@
 ---
 name: finops-automation
-description: "FinOps: 자동화 가이드 — Infracost PR 통합, 유휴 리소스 자동 정리, 비용 최적화 자동화 Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "FinOps 자동화 — Infracost PR 비용 리뷰, 유휴 리소스 자동 정리, 비정상 리소스 알림. Use when PR 에서 인프라 변경 비용을 미리 보거나 쓰지 않는 리소스를 자동으로 치울 때."
 ---
 
 # FinOps: 자동화 가이드

@@ -1,6 +1,6 @@
 ---
 name: logging-elk
-description: "ELK Stack Log Analysis Guide — Elasticsearch + Kibana를 활용한 로그 검색/분석 가이드 (보안팀/개발팀용) Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "ELK 로그 분석 — Elasticsearch Query DSL, 역할별 쿼리, Kibana 대시보드·알림, 인덱스 수명 관리, 보안 설정. Use when Elasticsearch·Kibana 로 로그를 검색하거나 인덱스·알림을 구성할 때. Loki 쪽은 logging-loki."
 ---
 
 # ELK Stack Log Analysis Guide

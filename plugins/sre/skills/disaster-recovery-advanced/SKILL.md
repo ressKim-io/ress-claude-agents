@@ -1,6 +1,6 @@
 ---
 name: disaster-recovery-advanced
-description: "Disaster Recovery 고급 가이드 — 멀티 클러스터 DR, 데이터베이스 DR, 테스트 Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "DR 심화 — 멀티 클러스터 DR, 데이터베이스 DR, 정기 DR 테스트(월간), 안티패턴. Use when 클러스터를 넘는 재해 복구나 DB 복제·failover 를 설계하고 훈련할 때. RTO/RPO·Velero 기본은 disaster-recovery."
 ---
 
 # Disaster Recovery 고급 가이드

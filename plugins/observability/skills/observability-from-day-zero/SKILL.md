@@ -1,6 +1,6 @@
 ---
 name: observability-from-day-zero
-description: 관찰성을 사후 조립하지 않고 코드 작성 첫 줄부터 trace/metric/log 3-pillar를 설계하는 ODD(Observability-Driven Development) 체크리스트. TraceID 누락, label cardinality 폭발, signal silo 방지.
+description: "관찰성 선설계(ODD) — 3-Pillar 상관관계, 코드 작성 전 결정 사항, 사후 보강 안티패턴(TraceID 누락·cardinality 폭발). Use when 신규 서비스를 시작하며 관측 설계를 앞당기거나 사후 보강 비용을 줄이려 할 때."
 ---
 
 # Observability from Day Zero (M6: 관찰성 사후 조립)

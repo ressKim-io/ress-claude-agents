@@ -1,6 +1,6 @@
 ---
 name: chaos-engineering
-description: "Chaos Engineering 가이드 — LitmusChaos를 활용한 시스템 복원력 테스트 및 GameDay 운영 Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "LitmusChaos 카오스 엔지니어링 — 원칙, 설치, 기본 실험, Probe 검증, 안티패턴. Use when Kubernetes 에서 장애 주입 실험으로 복원력을 검증하려 할 때. 팀 훈련 운영은 chaos-engineering-gameday."
 ---
 
 # Chaos Engineering 가이드

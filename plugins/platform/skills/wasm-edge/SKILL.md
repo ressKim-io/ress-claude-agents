@@ -1,6 +1,6 @@
 ---
 name: wasm-edge
-description: "WebAssembly Edge 가이드 — WASM/WASI, WasmEdge, Spin, Kubernetes WASM 워크로드 실행 Use when working with platform 도메인의 패턴 / 구현 선택."
+description: "WebAssembly 엣지 런타임 — WASM/WASI 기초, 컨테이너와 비교, WasmEdge, Spin(Fermyon), Kubernetes WASM 워크로드. Use when WASM 으로 서버리스·엣지 워크로드를 돌릴지 판단하거나 K8s 에 올릴 때. IoT 는 wasm-edge-iot."
 ---
 
 # WebAssembly Edge 가이드

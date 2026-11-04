@@ -1,6 +1,6 @@
 ---
 name: observability-alloy-to-otel
-description: "Alloy → OTel Collector 마이그레이션 가이드 — Grafana Alloy에서 표준 OTel Collector로 전환하기 위한 컴포넌트 매핑, 설정 변환, 영향 분석 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "Grafana Alloy 를 표준 OTel Collector 로 전환 — 컴포넌트 매핑, 설정 변환 도구·예시, 메트릭 호환성, 전환 시 잃는 기능. Use when Alloy 설정을 OTel Collector 로 옮기거나 전환 영향을 평가할 때."
 ---
 
 # Alloy → OTel Collector 마이그레이션 가이드

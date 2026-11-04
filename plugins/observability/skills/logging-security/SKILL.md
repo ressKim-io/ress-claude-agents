@@ -1,6 +1,6 @@
 ---
 name: logging-security
-description: "Security & Bot Detection Logging — 보안 감사, 봇/매크로 탐지, AI 공격 방어를 위한 로그 패턴 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "보안 감사 로그 — 봇·매크로 탐지 신호, AI 공격 로그, 인증·인가 보안 로그, SIEM 연동, 실시간 쿼리. Use when 예매 봇이나 비정상 접근을 로그로 탐지하거나 보안 감사용 로그 항목을 설계할 때."
 ---
 
 # Security & Bot Detection Logging

@@ -1,6 +1,6 @@
 ---
 name: observability
-description: "Observability Patterns — 로깅, 트레이싱, 메트릭을 위한 기본 패턴 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "관측 기본 패턴 — 3 Pillars, 구조화 로깅, RED 메트릭, Context Propagation, OpenTelemetry 입문, 안티패턴. Use when 로그·트레이스·메트릭 설계를 처음 정하거나 어떤 observability skill 로 갈지 고를 때."
 ---
 
 # Observability Patterns

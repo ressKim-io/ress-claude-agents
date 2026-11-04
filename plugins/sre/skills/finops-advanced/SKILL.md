@@ -1,6 +1,6 @@
 ---
 name: finops-advanced
-description: "FinOps Advanced 가이드 — 태그 기반 비용 할당, FinOps 성숙도 모델, 기업 비용 거버넌스 Use when working with sre 도메인의 패턴 / 구현 선택."
+description: "FinOps 거버넌스 — 성숙도 모델, 태그 기반 비용 할당, 비용 이상 탐지, 안티패턴. Use when 조직 단위로 비용 태그 체계와 이상 탐지를 세우고 성숙도를 끌어올릴 때. 기본 절감 기법은 finops."
 ---
 
 # FinOps Advanced 가이드

@@ -1,6 +1,6 @@
 ---
 name: monitoring-grafana
-description: "Grafana Monitoring Patterns — Grafana 대시보드, 알림, RBAC 설정 가이드 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "Grafana 운영 — 역할별 RBAC, 데이터소스, 대시보드 템플릿, 알림, Cross-Datasource 변수, Reverse Proxy 뒤 보안 설정. Use when Grafana 권한·대시보드·데이터소스를 구성하거나 변수가 안 맞을 때."
 ---
 
 # Grafana Monitoring Patterns

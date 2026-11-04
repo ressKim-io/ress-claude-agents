@@ -1,6 +1,6 @@
 ---
 name: alerting-discord
-description: "Alerting & Discord 가이드 — Prometheus AlertManager 설정 및 Discord 웹훅 연동 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "Prometheus AlertManager 설정과 Discord 웹훅 연동 — receiver, route, inhibit, silence, 알림 템플릿, alert rule. Use when AlertManager 라우팅을 짜거나 알림을 Discord 로 보내고 음소거·중복 억제를 설정할 때."
 ---
 
 # Alerting & Discord 가이드

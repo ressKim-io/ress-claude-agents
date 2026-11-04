@@ -1,6 +1,6 @@
 ---
 name: monitoring-troubleshoot
-description: "Monitoring Troubleshooting Guide — 알림 대응, 역할별 가이드, 트러블슈팅 패턴 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "모니터링 알림 대응 — 알림 대응 프로세스, 역할별 가이드, 흔한 문제와 해결, 로그 기반 디버깅, Grafana RBAC 빠른 설정. Use when 알림을 받고 어디부터 볼지 정하거나 모니터링 도구 사용 중 문제를 풀 때."
 ---
 
 # Monitoring Troubleshooting Guide

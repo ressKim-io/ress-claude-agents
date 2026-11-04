@@ -1,6 +1,6 @@
 ---
 name: logging-loki
-description: "Loki Log Analysis Guide — Grafana Loki + LogQL을 활용한 로그 검색/분석 가이드 (보안팀/개발팀용) Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "Loki 로그 분석 — LogQL 문법과 역할별 쿼리, Native OTLP vs LokiExporter, Grafana 대시보드·Alerting. Use when Loki 에서 LogQL 로 로그를 검색·집계하거나 로그 기반 알림을 만들 때. ELK 쪽은 logging-elk."
 ---
 
 # Loki Log Analysis Guide

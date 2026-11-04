@@ -1,6 +1,6 @@
 ---
 name: platform-backstage
-description: "Backstage Platform Engineering 가이드 — Golden Paths, Software Templates, 셀프서비스 인프라 프로비저닝 Use when working with platform 도메인의 패턴 / 구현 선택."
+description: "Backstage 기반 플랫폼 엔지니어링 — Software Templates(Golden Path), 셀프서비스 인프라 프로비저닝, 고급 Catalog 구성, TechDocs CI 빌드. Use when Backstage 템플릿으로 서비스·인프라 생성 흐름을 만들 때. 기본 설치는 backstage."
 ---
 
 # Backstage Platform Engineering 가이드

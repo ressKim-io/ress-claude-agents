@@ -1,6 +1,6 @@
 ---
 name: monitoring-metrics
-description: "Metrics Monitoring Patterns — Prometheus 스케일링, Thanos, VictoriaMetrics 설정 가이드 Use when working with observability 도메인의 패턴 / 구현 선택."
+description: "메트릭 스케일링 — Prometheus 장기 저장을 위한 Thanos·VictoriaMetrics 비교와 설정, OTel→Prometheus 메트릭, cardinality 관리. Use when Prometheus 용량·보존 한계에 부딪히거나 high-cardinality 를 줄여야 할 때."
 ---
 
 # Metrics Monitoring Patterns

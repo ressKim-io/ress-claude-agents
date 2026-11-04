@@ -35,37 +35,37 @@ cp -r plugins/observability/skills/<이름> <프로젝트>/.claude/skills/
 
 | 이름 | 설명 |
 |---|---|
-| `/observability:aiops` | AIOps 가이드 — AI 기반 IT 운영: 이상 탐지, OpenTelemetry 통합 |
-| `/observability:aiops-remediation` | AIOps: RCA & 자동 복구 — 근본 원인 분석 (RCA), 자동 복구 (Auto-Remediation) |
-| `/observability:alerting-discord` | Alerting & Discord 가이드 — Prometheus AlertManager 설정 및 Discord 웹훅 연동 |
-| `/observability:ebpf-observability` | eBPF Observability 가이드 — Zero-code 분산 추적: Grafana Beyla, Odigos, Cilium Hubble 활용 |
-| `/observability:ebpf-observability-advanced` | eBPF Observability 고급 가이드 — Cilium Hubble, DeepFlow, 프로덕션 요구사항, OpenTelemetry 연동 |
-| `/observability:kube-prometheus-stack` | kube-prometheus-stack 가이드 — Helm chart 설치, values 커스터마이징, Phase별 환경 overlay, ArgoCD 통합 |
-| `/observability:logging-application-convention` | Application Logging Convention — 애플리케이션 코드에서 로그를 작성할 때 따라야 할 양식과 패턴 |
-| `/observability:logging-compliance` | Compliance Logging Patterns — 결제, 개인정보, 법적 요구사항을 충족하는 로그 저장 가이드 |
-| `/observability:logging-elk` | ELK Stack Log Analysis Guide — Elasticsearch + Kibana를 활용한 로그 검색/분석 가이드 (보안팀/개발팀용) |
-| `/observability:logging-loki` | Loki Log Analysis Guide — Grafana Loki + LogQL을 활용한 로그 검색/분석 가이드 (보안팀/개발팀용) |
-| `/observability:logging-security` | Security & Bot Detection Logging — 보안 감사, 봇/매크로 탐지, AI 공격 방어를 위한 로그 패턴 |
-| `/observability:monitoring-grafana` | Grafana Monitoring Patterns — Grafana 대시보드, 알림, RBAC 설정 가이드 |
-| `/observability:monitoring-logs` | Log Monitoring Patterns — Fluent Bit, Loki, 로그 파이프라인 설정 가이드 |
-| `/observability:monitoring-metrics` | Metrics Monitoring Patterns — Prometheus 스케일링, Thanos, VictoriaMetrics 설정 가이드 |
-| `/observability:monitoring-prometheus-operator` | Prometheus Operator CRD 패턴 가이드 — ServiceMonitor, PodMonitor, PrometheusRule CRD 패턴 및 앱 Helm chart 통합 |
-| `/observability:monitoring-self-monitoring` | Observability Stack Self-Monitoring — Who watches the watchmen? — 모니터링 스택 자체의 건강 상태를 감시하는 전략과 패턴 |
-| `/observability:monitoring-troubleshoot` | Monitoring Troubleshooting Guide — 알림 대응, 역할별 가이드, 트러블슈팅 패턴 |
-| `/observability:observability` | Observability Patterns — 로깅, 트레이싱, 메트릭을 위한 기본 패턴 |
-| `/observability:observability-alloy-to-otel` | Alloy → OTel Collector 마이그레이션 가이드 — Grafana Alloy에서 표준 OTel Collector로 전환하기 위한 컴포넌트 매핑, 설정 변환, 영향 분석 |
-| `/observability:observability-cost` | Observability Cost Management — Metrics, Traces, Logs, Profiles 스택 전반의 비용 최적화 전략과 실행 가이드 |
-| `/observability:observability-from-day-zero` | 관찰성을 사후 조립하지 않고 코드 작성 첫 줄부터 trace/metric/log 3-pillar를 설계하는 ODD(Observability-Driven Development) 체크리스트. … |
-| `/observability:observability-genai` | GenAI Observability — OTel GenAI Semantic Conventions, LLM 호출 Tracing, Token Usage Metrics, Quality Metrics, … |
-| `/observability:observability-incident-playbook` | Observability Incident Playbook — Alert 수신 -> 진단 -> RCA -> 복구 -> 포스트모템까지 E2E 인시던트 대응 워크플로우 |
-| `/observability:observability-mimir-monolithic` | Mimir 싱글바이너리 (Monolithic) 모드 가이드 — 분산 모드 대비 경량, 중소 규모 배포를 위한 Mimir 모놀리식 설정 |
-| `/observability:observability-otel` | OpenTelemetry Patterns — Spring Boot, Go를 위한 OpenTelemetry 설정 및 Collector 구성 |
-| `/observability:observability-otel-collector-helm` | OTel Collector Helm Chart 패턴 — Kubernetes 환경별 OTel Collector 배포, ArgoCD 통합, TLS/인증 설정 |
-| `/observability:observability-otel-migration` | OTel Migration Patterns — Grafana Agent → Alloy, Zipkin → OTLP, Semantic Conventions 마이그레이션 전략 및 Declarative … |
-| `/observability:observability-otel-optimization` | OpenTelemetry 비용 최적화 가이드 — Kafka 버퍼 아키텍처, 데이터 볼륨 절감, Collector 모니터링 & 알림 |
-| `/observability:observability-otel-scale` | OpenTelemetry 대규모 트래픽 설정 가이드 — 초당 수만~수십만 요청 환경을 위한 OTel Collector 스케일링, 샘플링 전략, 비용 최적화 |
-| `/observability:observability-pyroscope` | Continuous Profiling with Pyroscope — Pyroscope 기반 Continuous Profiling: eBPF/SDK/Java Agent 통합, Span … |
-| `/observability:otel-pitfalls` | OTel 실전 Pitfalls — 실전 트러블슈팅 기반 OpenTelemetry 실전 함정. SDK 버전 충돌 / label cardinality / exporter protocol / agent … |
+| `/observability:aiops` | AIOps 개요 — 성숙도 모델, ML 기반 이상 탐지(Anomaly Detection), OpenTelemetry 통합, 핵심 메트릭 |
+| `/observability:aiops-remediation` | AIOps 근본 원인 분석(RCA)과 자동 복구 — 이벤트 상관 분석, auto-remediation 실행·안전장치, 복구 대시보드 |
+| `/observability:alerting-discord` | Prometheus AlertManager 설정과 Discord 웹훅 연동 — receiver, route, inhibit, silence, 알림 템플릿, alert rule |
+| `/observability:ebpf-observability` | eBPF 기반 zero-code 분산 추적 — Grafana Beyla, Odigos, 기존 agent 계측과의 비교, eBPF 기초 개념 |
+| `/observability:ebpf-observability-advanced` | eBPF 관측 심화 — Cilium Hubble 네트워크 흐름 가시성, DeepFlow, 커널 버전 등 프로덕션 요구사항, OTel 연동 |
+| `/observability:kube-prometheus-stack` | kube-prometheus-stack Helm chart — ArgoCD Application 설치, values 커스터마이징, Phase별 환경 overlay, EKS·GKE 차이, 트러블슈팅 |
+| `/observability:logging-application-convention` | 애플리케이션 로깅 컨벤션 — Java·Go·Python 공통 로그 양식, 레벨 규칙, 금지 패턴, OTel TraceID 연동, 모듈별 필수 로그 포인트 |
+| `/observability:logging-compliance` | 규제 대응 로그 저장 — 결제 로그(PCI-DSS, 전자금융거래법), 개인정보 접속기록(개인정보보호법), 보존·분리 아키텍처, 감사 대응 |
+| `/observability:logging-elk` | ELK 로그 분석 — Elasticsearch Query DSL, 역할별 쿼리, Kibana 대시보드·알림, 인덱스 수명 관리, 보안 설정 |
+| `/observability:logging-loki` | Loki 로그 분석 — LogQL 문법과 역할별 쿼리, Native OTLP vs LokiExporter, Grafana 대시보드·Alerting |
+| `/observability:logging-security` | 보안 감사 로그 — 봇·매크로 탐지 신호, AI 공격 로그, 인증·인가 보안 로그, SIEM 연동, 실시간 쿼리 |
+| `/observability:monitoring-grafana` | Grafana 운영 — 역할별 RBAC, 데이터소스, 대시보드 템플릿, 알림, Cross-Datasource 변수, Reverse Proxy 뒤 보안 설정 |
+| `/observability:monitoring-logs` | 로그 파이프라인 — Fluent Bit 설정, Loki 설정, LogQL 패턴, OTel Collector 로그 처리, 로그 비용 최적화 |
+| `/observability:monitoring-metrics` | 메트릭 스케일링 — Prometheus 장기 저장을 위한 Thanos·VictoriaMetrics 비교와 설정, OTel→Prometheus 메트릭, cardinality 관리 |
+| `/observability:monitoring-prometheus-operator` | Prometheus Operator CRD — ServiceMonitor, PodMonitor, PrometheusRule 작성과 앱 Helm chart 통합, 메트릭 노출 |
+| `/observability:monitoring-self-monitoring` | 모니터링 스택 자체 감시 — 독립 알림 채널, Prometheus·OTel Collector·Grafana·Loki·Tempo 헬스 점검, 증상별 컴포넌트 매핑 |
+| `/observability:monitoring-troubleshoot` | 모니터링 알림 대응 — 알림 대응 프로세스, 역할별 가이드, 흔한 문제와 해결, 로그 기반 디버깅, Grafana RBAC 빠른 설정 |
+| `/observability:observability` | 관측 기본 패턴 — 3 Pillars, 구조화 로깅, RED 메트릭, Context Propagation, OpenTelemetry 입문, 안티패턴 |
+| `/observability:observability-alloy-to-otel` | Grafana Alloy 를 표준 OTel Collector 로 전환 — 컴포넌트 매핑, 설정 변환 도구·예시, 메트릭 호환성, 전환 시 잃는 기능 |
+| `/observability:observability-cost` | 관측 비용 절감 — 메트릭·트레이스·로그·프로파일별 비용 드라이버, cardinality·샘플링·보존 최적화, 클라우드 벤더 비용 비교 |
+| `/observability:observability-from-day-zero` | 관찰성 선설계(ODD) — 3-Pillar 상관관계, 코드 작성 전 결정 사항, 사후 보강 안티패턴(TraceID 누락·cardinality 폭발) |
+| `/observability:observability-genai` | GenAI 관측 — OTel GenAI Semantic Conventions, LLM 호출 tracing, token usage 메트릭, RAG 파이프라인 tracing, 품질·안전 메트릭 |
+| `/observability:observability-incident-playbook` | 인시던트 대응 플레이북 — 증상별 시작 도구 결정 트리, 5단계 대응 흐름, 시그널 기반 조사, runbook·회고 템플릿 |
+| `/observability:observability-mimir-monolithic` | Mimir 싱글바이너리(monolithic) 모드 — 분산 모드와 선택 기준, dev·prod Helm values, OTel Collector 연동, 전환 주의점, 스케일링 한계 |
+| `/observability:observability-otel` | OTel 기본 설정 — Spring Boot·Go 계측, Collector 구성, 샘플링 전략, Collector 버전 관리, Tempo v2 Scoped Tag API |
+| `/observability:observability-otel-collector-helm` | OTel Collector Helm chart — 환경별 values, ArgoCD Application 통합, presets, ServiceMonitor, Kafka TLS·SASL 인증 |
+| `/observability:observability-otel-migration` | OTel 마이그레이션 — Grafana Agent→Alloy, Zipkin→OTLP, Semantic Conventions 전환, Declarative Configuration 1.0.0 |
+| `/observability:observability-otel-optimization` | OTel 비용·안정성 최적화 — Kafka 버퍼 아키텍처, 데이터 볼륨 절감, Collector 모니터링·알림, Alloy 알려진 이슈, HikariCP 메트릭 |
+| `/observability:observability-otel-scale` | OTel 대규모 트래픽 구성 — 규모별 아키텍처, Agent DaemonSet·Gateway Deployment+HPA, tail-based sampling 설정 |
+| `/observability:observability-pyroscope` | Pyroscope continuous profiling — eBPF·SDK·Java Agent 연동, Alloy 통합, Span Profiles(trace-profile 연결), OTLP … |
+| `/observability:otel-pitfalls` | OpenTelemetry 실전 함정 — Spring Boot BOM 버전 충돌, Java Agent 메모리, OTLP protocol 변경, HikariCP 초기화 순서, Agent·Starter … |
 
 ## Agents (1)
 
