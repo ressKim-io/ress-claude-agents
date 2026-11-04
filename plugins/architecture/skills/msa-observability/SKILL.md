@@ -1,6 +1,6 @@
 ---
 name: msa-observability
-description: "MSA 분산 추적 & 관측성 가이드 — Distributed Tracing, Correlation ID, Service Topology, Trace Context, Baggage Propagation Use when working with msa 도메인의 패턴 / 구현 선택."
+description: "MSA 분산 추적 — Distributed Tracing, Trace Context 전파, Correlation ID, Baggage, Span Attributes, Exemplar, 서비스 토폴로지. Use when 여러 서비스에 걸친 요청 흐름을 추적하거나 trace 가 끊기는 문제를 풀 때."
 ---
 
 # MSA 분산 추적 & 관측성 가이드

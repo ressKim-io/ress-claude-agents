@@ -1,6 +1,6 @@
 ---
 name: nats-messaging
-description: "NATS 메시징 가이드 — NATS v2.10+ Core NATS, JetStream, Key-Value Store, Object Store, K8s 운영 Use when working with messaging 도메인의 패턴 / 구현 선택."
+description: "NATS 메시징 — Core NATS, JetStream, Key-Value·Object Store, subject 설계, Go 클라이언트, K8s 배포, Kafka·RabbitMQ 비교. Use when 가벼운 pub/sub 이나 JetStream 기반 영속 메시징을 도입할 때."
 ---
 
 # NATS 메시징 가이드

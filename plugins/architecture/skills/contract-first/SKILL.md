@@ -1,6 +1,6 @@
 ---
 name: contract-first
-description: "Contract-First Development — API 계약을 먼저 정의하고 코드를 생성하는 개발 방법론 — OpenAPI, Protobuf, AsyncAPI, Pact Use when working with msa 도메인의 패턴 / 구현 선택."
+description: "Contract-First 개발 — OpenAPI 3.1 spec-first, Protobuf/gRPC, AsyncAPI, Schema Registry, 코드 생성 CI 파이프라인. Use when 구현 전에 API·이벤트 스키마를 먼저 정의하고 서버·클라이언트 코드를 생성할 때."
 ---
 
 # Contract-First Development

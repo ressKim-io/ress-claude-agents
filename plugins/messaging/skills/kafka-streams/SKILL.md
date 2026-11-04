@@ -1,6 +1,6 @@
 ---
 name: kafka-streams
-description: "Kafka Streams 가이드 — KTable, GlobalKTable, Windowing, Interactive Queries, Stateful Processing, RocksDB 튜닝 Use when working with messaging 도메인의 패턴 / 구현 선택."
+description: "Kafka Streams — KTable, GlobalKTable, Windowing, Interactive Queries, stateful 처리, RocksDB 튜닝. Use when Kafka 토픽을 실시간 집계·조인하는 스트림 처리 앱을 만들 때."
 ---
 
 # Kafka Streams 가이드

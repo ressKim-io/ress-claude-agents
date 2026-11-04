@@ -1,6 +1,6 @@
 ---
 name: api-design
-description: "REST API Design Patterns — REST API 설계 원칙, RFC 9457 에러 처리, 페이지네이션, 버저닝 Use when working with msa 도메인의 패턴 / 구현 선택."
+description: "REST API 설계 — URL 규칙, RFC 9457 Problem Details 에러 응답, 페이지네이션, 필터링·정렬, 버저닝. Use when 새 REST 엔드포인트와 에러·페이징·버전 정책을 설계하거나 기존 API 를 리뷰할 때."
 ---
 
 # REST API Design Patterns

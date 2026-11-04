@@ -1,6 +1,6 @@
 ---
 name: msa-cqrs-eventsourcing
-description: "CQRS & Event Sourcing 가이드 — Command/Query 분리와 이벤트 기반 상태 관리로 확장 가능한 마이크로서비스를 구축하는 실전 가이드 Use when working with msa 도메인의 패턴 / 구현 선택."
+description: "CQRS 와 Event Sourcing — Command/Query 분리, 이벤트 저장소, Eventual Consistency, Axon Framework. Use when 읽기·쓰기 모델을 분리하거나 상태 변경 이력을 이벤트로 저장하는 구조를 검토할 때."
 ---
 
 # CQRS & Event Sourcing 가이드

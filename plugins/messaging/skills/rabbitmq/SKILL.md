@@ -1,6 +1,6 @@
 ---
 name: rabbitmq
-description: "RabbitMQ 가이드 — RabbitMQ v4.1 Quorum Queues, AMQP 1.0, Exchange 패턴, Publisher Confirms, DLX, K8s 운영 Use when working with messaging 도메인의 패턴 / 구현 선택."
+description: "RabbitMQ — Quorum Queues, AMQP 1.0, Exchange 패턴, Publisher Confirms, Dead Letter Exchange, Go·Spring AMQP, KEDA. Use when RabbitMQ 큐 신뢰성 설정이나 DLX 재처리, 클러스터 운영을 구성할 때."
 ---
 
 # RabbitMQ 가이드

@@ -1,6 +1,6 @@
 ---
 name: config-explicit-defaults
-description: "'설정 안 한 값은 자동 처리되니 괜찮다'는 mental model 오류 방지. 명시값/기본값/환경별 override 3단 검증 체크리스트로 config sprawl과 silent default drift를 차단한다."
+description: "묵시적 기본값 방지 — 명시값·라이브러리 기본값·환경별 override 3단 검증과 silent default drift 점검. Use when 설정·환경변수를 추가하거나 버전업 후 기본값 변경으로 동작이 달라질 위험을 점검할 때."
 ---
 
 # Config Explicit Defaults (M3: 묵시적 기본값)

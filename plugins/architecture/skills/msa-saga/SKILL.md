@@ -1,6 +1,6 @@
 ---
 name: msa-saga
-description: "Saga 패턴 가이드 — 분산 트랜잭션의 일관성을 보장하는 Saga 패턴 구현 전략 (Choreography, Orchestration, Compensation) Use when working with msa 도메인의 패턴 / 구현 선택."
+description: "Saga 패턴 — Choreography vs Orchestration, 보상 트랜잭션, 실패 처리. Use when 여러 서비스에 걸친 분산 트랜잭션의 일관성과 롤백(compensation)을 설계할 때."
 ---
 
 # Saga 패턴 가이드

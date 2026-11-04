@@ -1,6 +1,6 @@
 ---
 name: kafka-connect-cdc
-description: "Kafka Connect & CDC (Debezium) 가이드 — Source/Sink Connector, Debezium CDC, Outbox Event Router, Schema Registry 심화, Strimzi 운영 Use when working with messaging 도메인의 패턴 / 구현 선택."
+description: "Kafka Connect 와 CDC — Source/Sink Connector, Debezium, Outbox Event Router, Schema Registry, Strimzi 운영. Use when DB 변경을 Debezium 으로 Kafka 에 흘리거나 Outbox 패턴을 구성할 때."
 ---
 
 # Kafka Connect & CDC (Debezium) 가이드
