@@ -24,7 +24,7 @@ assets/skills/**/SKILL.md    ← tool-agnostic source. adapter 입력 (Migration
 
 - **Kiro** 는 의도적으로 제외됐다 (ADR 0006 Option 1 — AGENTS.md·SKILL.md 표준을 그대로 인식해 변환 ROI 가 낮다)
 - **Codex** 는 2026-08-25 에 제거됐다 ([ADR 0010](../adr/0010-drop-codex-support.md) — 같은 이유 + 유지 실패 실적)
-- **`claude` 는 애초에 adapter 대상이 아니다.** `.claude/**` 는 view 가 아니라 SSOT 다 (AGENTS.md §Governance). 이전 구현은 `.claude/skills/<category>/<name>/SKILL.md` 라는 **Claude Code 가 로드하지 않는 2단계 경로**(audit F1/F2)에 파일을 만들었고, Step 2 가 그 경로의 `.gitignore` 규칙까지 지워서 `init` 한 번에 죽은 파일이 커밋 대상이 됐다 — 2026-08-26 PR #36 리뷰에서 제거
+- **`claude` 는 애초에 adapter 대상이 아니다.** `.claude/**` 와 `plugins/**` 는 view 가 아니라 SSOT 다 (AGENTS.md §Governance). 이전 구현은 `.claude/skills/<category>/<name>/SKILL.md` 라는 **Claude Code 가 로드하지 않는 2단계 경로**(audit F1/F2)에 파일을 만들었고, Step 2 가 그 경로의 `.gitignore` 규칙까지 지워서 `init` 한 번에 죽은 파일이 커밋 대상이 됐다 — 2026-08-26 PR #36 리뷰에서 제거
 
 ---
 
@@ -35,18 +35,20 @@ assets/skills/**/SKILL.md    ← tool-agnostic source. adapter 입력 (Migration
 | 자산 | Claude Code | Cursor | Kiro | Codex / Copilot / Gemini CLI / Windsurf |
 |---|---|---|---|---|
 | **보편 가이드** | `AGENTS.md` (`CLAUDE.md` symlink) | `AGENTS.md` 자동 인식 | `AGENTS.md` 워크스페이스 루트 자동 인식 | `AGENTS.md` 자동 인식 |
-| **Agent** | `.claude/agents/*.md` | — (대응 개념 없음) | `.kiro/agents/*.{md,json}` (수동) | — |
-| **Skill** | `.claude/skills/<name>/SKILL.md` | `.cursor/rules/*.mdc` | `.kiro/skills/<name>/SKILL.md` (수동) | — |
+| **Agent** | `plugins/<plugin>/agents/*.md` | — (대응 개념 없음) | `.kiro/agents/*.{md,json}` (수동) | — |
+| **Skill** | `plugins/<plugin>/skills/<name>/SKILL.md` | `.cursor/rules/*.mdc` | `.kiro/skills/<name>/SKILL.md` (수동) | — |
 | **Rule** | `.claude/rules/**/*.md` | `.mdc` frontmatter `globs`/`alwaysApply` | `.kiro/steering/*.md` (`inclusion` 4 모드) | AGENTS.md 에 흡수 |
-| **Command** | `.claude/commands/**/*.md` | — | — | — |
-| **MCP** | `mcp-configs/settings.json` (설치용 템플릿, `mcpServers` 키) | — | `.kiro/settings/mcp.json` (workspace) / `~/.kiro/settings/mcp.json` (global) | 도구별 자체 설정 |
-| **Spec/워크플로우** | `.claude/workflows/*.yml` | — | `.kiro/specs/<feat>/` (requirements/design/tasks) ⚠️ | — |
+| **Command** | `plugins/<plugin>/commands/*.md` | — | — | — |
+| **MCP** | — (2026-08-26 `mcp-configs/` 제거) | — | `.kiro/settings/mcp.json` (workspace) / `~/.kiro/settings/mcp.json` (global) | 도구별 자체 설정 |
+| **Spec/워크플로우** | — (2026-08-26 `.claude/workflows/` 제거) | — | `.kiro/specs/<feat>/` (requirements/design/tasks) ⚠️ | — |
 
 ### 개수 격차의 원인
 
 Cursor 쪽 `.mdc` 가 Claude 쪽 skill 보다 훨씬 적은 것은 누락이 아니다. adapter 는 `assets/skills/` 를 입력으로 받는데 **Migration 0002 P7(전체 변환)이 미완**이라 일부만 변환돼 있다.
 
-**2026-08-24 갱신**: Claude 쪽 260개는 `.claude/skills/<name>/SKILL.md` 규격으로 이관을 마쳤다. 이전의 `<카테고리>/<이름>.md` 레이아웃은 Claude Code 가 로드하지 않는 경로였다 — 즉 260개가 실제로는 동작하지 않았다. 카테고리는 frontmatter `category:` 로 보존한다.
+**2026-08-24 갱신**: Claude 쪽 260개는 `.claude/skills/<name>/SKILL.md` 규격으로 이관을 마쳤다. 이전의 `<카테고리>/<이름>.md` 레이아웃은 Claude Code 가 로드하지 않는 경로였다 — 즉 260개가 실제로는 동작하지 않았다.
+
+**2026-11-04 갱신**: 영역별 plugin 으로 옮겼다. 영역은 경로에서 얻고 frontmatter `category` 는 없앴다 ([ADR 0012](../adr/0012-native-plugin-structure.md)).
 
 따라서 P7 의 남은 범위는 **Claude 레이아웃 이관이 아니라 `assets/skills/` → cursor 변환분 확대**뿐이다 (codex 는 ADR 0010 으로 범위에서 빠졌다).
 
@@ -61,7 +63,7 @@ Kiro 는 Anthropic Agent Skills 표준과 AGENTS.md 표준을 그대로 인식�
 ### 3.1 Skill → `.kiro/skills/`
 
 ```
-.claude/skills/<cat>/<name>.md   →   .kiro/skills/<name>/SKILL.md
+plugins/<plugin>/skills/<name>/SKILL.md  →  .kiro/skills/<name>/SKILL.md   (그대로 복사)
 assets/skills/<cat>/<name>/SKILL.md →  .kiro/skills/<name>/SKILL.md   (그대로 복사)
 ```
 
@@ -72,7 +74,7 @@ assets/skills/<cat>/<name>/SKILL.md →  .kiro/skills/<name>/SKILL.md   (그대�
 | `description` 필수, ≤1024자 | 동일 schema 에 `maxLength: 1024` | **호환** |
 | 선택 필드 `license` / `compatibility` / `metadata` | `license` 만 대응 | 나머지 무시 |
 
-> 이 레포의 skill schema 가 Kiro 요구사항의 상위집합이라 **`assets/skills/` 자산은 무변환 복사로 동작한다.** 단일 파일 형식(`.claude/skills/<cat>/<name>.md`)은 폴더로 감싸야 한다.
+> 이 레포의 skill schema 가 Kiro 요구사항의 상위집합이라 **`assets/skills/` 자산은 무변환 복사로 동작한다.**
 
 ### 3.2 Rule → `.kiro/steering/`
 
@@ -91,7 +93,7 @@ AGENTS.md §Auto-Loaded Rules 표의 "path-scoped" 표기가 `fileMatchPattern` 
 
 `.kiro/agents/` 는 **JSON 과 Markdown 양쪽**을 지원한다. Markdown 형식이 이 레포 자산과 가깝다.
 
-| 이 레포 (`.claude/agents/*.md`) | Kiro | 비고 |
+| 이 레포 (`plugins/<plugin>/agents/*.md`) | Kiro | 비고 |
 |---|---|---|
 | `name` | `name` | 생략 시 파일명에서 유도 |
 | `description` | `description` | 그대로 |

@@ -8,7 +8,7 @@
 
 ## 설치 후 첫 5분
 
-- [ ] `./install.sh --global --all --with-skills` 실행
+- [ ] `/plugin marketplace add ressKim-io/ress-claude-agents` 후 `go@ress`, `java@ress`, `architecture@ress`, `dx@ress` 를 `/plugin install`
 - [ ] Claude Code에서 `/agents` 입력 → 에이전트 목록 확인
 - [ ] `"Java 코드 리뷰해줘"` 또는 `"Go 코드 리뷰해줘"` 시도
 - [ ] `"보안 취약점 검사해줘"` 시도

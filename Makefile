@@ -64,7 +64,7 @@ verify-plugins:
 lint:
 	@echo "Running shellcheck..."
 	@if command -v shellcheck >/dev/null 2>&1; then \
-		find . -name "*.sh" -type f -not -path "./.git/*" -exec shellcheck {} +; \
+		find . -name "*.sh" -type f -not -path "./.git/*" -exec shellcheck {} + && \
 		echo "Shellcheck completed successfully."; \
 	else \
 		echo "Error: shellcheck is not installed. Install with: brew install shellcheck"; \

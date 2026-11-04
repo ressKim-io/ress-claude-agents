@@ -5,9 +5,6 @@
 # ress-claude-agents
 
 ![Claude](https://img.shields.io/badge/Claude_Code-D97757?style=for-the-badge&logo=claude&logoColor=white)
-![Skills](https://img.shields.io/badge/Skills-254-2563EB?style=for-the-badge)
-![Agents](https://img.shields.io/badge/Agents-46-F97316?style=for-the-badge)
-![Lines](https://img.shields.io/badge/122K+_Lines-4F46E5?style=for-the-badge)
 
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -15,9 +12,9 @@
 
 ### AI가 동료가 되는 개발 환경을 설계합니다
 
-DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
+DevOps · Backend · SRE · MLOps를 위한 Claude Code plugin 모음. 필요한 영역만 골라 설치합니다.
 
-[Why AI-First](#-why-ai-first) · [By Numbers](#-by-numbers) · [Quick Start](#-quick-start) · [Guides](#-사용-가이드) · [Agents](#-agents) · [Skills](#-skills) · [Automation](#-automation-infrastructure)
+[Why AI-First](#-why-ai-first) · [어떤 plugin 을 가져갈까](#-어떤-plugin-을-가져갈까) · [설치](#-설치) · [Guides](#-사용-가이드) · [Rules](#-rules) · [Automation](#-automation-infrastructure)
 
 </div>
 
@@ -29,14 +26,14 @@ DevOps · Backend · SRE · MLOps를 위한 Production-ready Claude Code 확장
 > *이 반복 루프를 끊을 수 있다면?*
 
 저는 Claude Code를 단순 코드 자동완성이 아닌, **도메인 전문가로** 만들어 함께 일하는 방식을 실험합니다.
-254개의 Skills에 각 분야의 Best Practices를 구조화하고, 46개의 Agents가 자율적으로 판단하고 실행합니다.
+각 분야의 Best Practices를 Skills로 구조화하고, 전문 Agents가 판단하고 실행합니다.
 
 ```
 🔄 기존 방식                          ⚡ AI-Augmented 방식
 ──────────────────                    ──────────────────
 Google/StackOverflow 검색              → /k8s:k8s-security 로 즉시 패턴 적용
 Runbook 찾아서 수동 실행               → incident-responder 가 자동 진단
-"이거 어떻게 해요?" 반복 질문          → 122,000줄의 지식 베이스가 즉시 답변
+"이거 어떻게 해요?" 반복 질문          → 요청에 맞는 skill 을 골라 답변
 100만 VU 테스트 시나리오 수동 작성     → /sre:load-testing skill 이 템플릿 제공
 ```
 
@@ -48,62 +45,78 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 
 ---
 
-## 📊 By Numbers
+## 🧭 어떤 plugin 을 가져갈까
 
-<div align="center">
+각 plugin 의 README 에 skill, agent, command 목록과 함께 쓰면 좋은 plugin, 복사해 갈 rule 이 있습니다.
 
-| | Metric | Value | Description |
-|---|--------|-------|-------------|
-| 🤖 | **Agents** | 46 (~18,800줄) | 전략, 프론트엔드, 보안, SRE, MLOps 등 자율 실행 전문가 |
-| 💡 | **Skills** | 254 (~97,500줄) | Go, Spring, Python, React/Next.js, K8s, MSA, AI/LLM, 비즈니스/법무/운영 등 온디맨드 도메인 지식 |
-| 📏 | **Rules** | 15 (~1,840줄) | Git, 테스트, 보안, 클라우드 CLI, 모니터링, 코드리뷰, 문서화, 토큰 예산 등 자동 적용 규칙 |
-| ⚡ | **Commands** | 43 (~4,000줄) | `/go review`, `/java lint`, `/dx:review-pr` 등 자동화 워크플로우 |
-| 🔒 | **Enforcement** | deny/ask 규칙 | `git push` / `gh pr` / 변경형 `kubectl` 을 산문이 아니라 설정으로 막는다 |
-| 📏 | **Total** | **122,000+ lines** | 20개 카테고리로 체계화된 AI 지식 체계 |
-
-</div>
+| 영역 | Plugin | 이런 일을 할 때 |
+|---|---|---|
+| 언어 | [`go`](plugins/go/README.md) | Go 동시성, DB 접근, Gin, 마이크로서비스, 성능, 테스트 |
+| | [`java`](plugins/java/README.md) | Java·Spring Data·Security·Cache, jOOQ, JVM 성능, 테스트 |
+| | [`python`](plugins/python/README.md) | FastAPI, Django, asyncio, 성능, 테스트 |
+| | [`frontend`](plugins/frontend/README.md) | React, Next.js, TypeScript, 상태 관리, CSS, 웹 성능 |
+| 설계 | [`architecture`](plugins/architecture/README.md) | MSA, DDD, Saga, CQRS, API 설계, gRPC, 모듈러 모놀리스, 대규모 트래픽 |
+| | [`messaging`](plugins/messaging/README.md) | Kafka, RabbitMQ, NATS, Redis Streams, AWS 메시징, 브로커 장애 |
+| 인프라 | [`k8s`](plugins/k8s/README.md) | 스케줄링, 오토스케일링, 트래픽, Helm, 보안, GPU, manifest 리뷰 |
+| | [`service-mesh`](plugins/service-mesh/README.md) | Istio Core·Ambient·Gateway·보안·관측, Linkerd |
+| | [`infra`](plugins/infra/README.md) | Terraform, AWS·EKS, Docker, Crossplane, DB 운영, 클라우드 CLI 안전 |
+| | [`cicd`](plugins/cicd/README.md) | GitHub Actions, ArgoCD, 배포 전략, 프리뷰 환경, 파이프라인 리뷰 |
+| 운영 | [`observability`](plugins/observability/README.md) | OpenTelemetry, Prometheus, Grafana, Loki, eBPF, AIOps |
+| | [`sre`](plugins/sre/README.md) | SLI/SLO, 장애 대응, 포스트모템, 카오스, DR, 부하 테스트, FinOps |
+| | [`platform`](plugins/platform/README.md) | Backstage, Golden Path, 셀프서비스, Kratix, IDP 전략 |
+| 보안·제품 | [`security`](plugins/security/README.md) | OWASP, 위협 모델링, 인증 패턴, 공급망, 시크릿, PIPA·GDPR·SOC2 |
+| | [`saas`](plugins/saas/README.md) | 멀티테넌시, 소셜 로그인, 결제, 구독, 알림, Webhook |
+| | [`ai`](plugins/ai/README.md) | RAG, Vector DB, LLMOps, MLOps, 모델 서빙, Agentic 아키텍처 |
+| 공통 | [`dx`](plugins/dx/README.md) | 코드 리뷰, Git·PR 워크플로우, ADR·문서 템플릿, dev-log, 토큰 운영 |
 
 ---
 
-## 🚀 Quick Start
+## 🚀 설치
 
-```bash
-git clone https://github.com/ressKim-io/ress-claude-agents.git
-cd ress-claude-agents
+Claude Code 안에서:
+
+```
+/plugin marketplace add ressKim-io/ress-claude-agents
+/plugin install go@ress
 ```
 
-이게 전부다. `.claude/` 아래 자산은 **이 레포에서 작업할 때** 자동으로 로드된다.
+터미널에서는 `claude plugin marketplace add`, `claude plugin install` 을 씁니다.
 
-**설치 스크립트는 없다.** `install.sh` 와 그 설정 표면(`plugins/` · `.claude/workflows/`)은
-아무도 쓰지 않아 2026-08-26 에 제거했다 ([ADR 0011](docs/adr/0011-remove-install-sh.md)).
-다른 프로젝트에서 쓰려면 필요한 파일만 직접 가져간다.
+skill 은 description 을 보고 자동으로 선택되고, `/go:go-testing` 처럼 직접 부를 수도 있습니다. agent 이름은 `<plugin>:<agent>` 입니다.
 
 ```bash
-cp -r plugins/go/skills/go-performance   /path/to/project/.claude/skills/
-cp    plugins/dx/agents/code-reviewer.md /path/to/project/.claude/agents/
-cp    .claude/rules/core/security.md       /path/to/project/.claude/rules/
-```
-
-> skill 은 `<skill-name>/SKILL.md` 레이아웃을 유지해야 한다 — Claude Code 는 다른 형태를 로드하지 않는다.
-
-### 사용 예시
-
-```bash
-# Claude Code에서 agents 확인
-/agents
-
-# Agent 자동 선택 (자연어로 요청)
-"보안 취약점 검사해줘"           → security-scanner
-"프로덕션 파드가 죽어요"         → k8s-troubleshooter
+"보안 취약점 검사해줘"             → dx:security-scanner
+"프로덕션 파드가 죽어요"           → k8s:k8s-troubleshooter
 "100만 동시접속 아키텍처 설계해줘" → /saas:virtual-waiting-room
 "K6로 부하테스트 시나리오 작성해줘" → /sre:load-testing
 ```
+
+**쓰는 것만 설치합니다.** 켠 plugin 은 매 세션 skill 목록을 추가하고(`claude plugin details <plugin>` 으로 비용 확인), 목록이 예산을 넘으면 description 이 빠지기 시작합니다.
+
+### 하나만 복사하기
+
+```bash
+cp -r plugins/go/skills/go-testing       /path/to/project/.claude/skills/
+cp    plugins/dx/agents/code-reviewer.md /path/to/project/.claude/agents/
+cp    .claude/rules/core/security.md     /path/to/project/.claude/rules/
+```
+
+복사한 skill 에는 plugin 접두사가 붙지 않고(`/go-testing`), 원본 변경을 따라가지 않습니다. skill 은 `<skill-name>/SKILL.md` 레이아웃을 유지해야 합니다. Claude Code 는 다른 형태를 로드하지 않습니다.
+
+### plugin 에 실리지 않는 것
+
+- **Rules**: [`.claude/rules/`](.claude/rules/) 에서 복사합니다. plugin README 에 관련 rule 을 적어 두었습니다.
+- **권한 규칙** (`permissions.deny`): 설치본에서 agent 의 Permission Boundary 는 강제되지 않는 안내문입니다.
+
+### 이 레포에서 작업할 때
+
+폴더를 신뢰하면 `dx` 만 켜집니다. 다른 plugin 은 `claude --plugin-dir plugins/<plugin>` 으로 띄웁니다. 클라우드 세션과 worktree 의 수정분도 `--plugin-dir plugins/dx` 가 필요합니다. 구조를 이렇게 정한 이유는 [ADR 0012](docs/adr/0012-native-plugin-structure.md) 에 있습니다.
 
 ---
 
 ## 📖 사용 가이드
 
-> "254개 스킬 중 내 상황에 뭘 써야 하지?" — 페르소나별 추천 조합 + 실전 시나리오
+> "내 상황에 뭘 써야 하지?" — 페르소나별 추천 조합 + 실전 시나리오
 
 | 페르소나 | 가이드 | 핵심 도구 |
 |----------|--------|----------|
@@ -121,485 +134,9 @@ cp    .claude/rules/core/security.md       /path/to/project/.claude/rules/
 
 ---
 
-## 🤖 Agents
-
-Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트 (46 files, ~18,800줄).
-
-> **Skills**는 "지식"이고, **Agents**는 "전문가"입니다. 자율적으로 판단하고 작업을 수행합니다.
-
-### Strategy & Planning
-
-| Agent | Description | Auto-trigger |
-|-------|-------------|--------------|
-| 👔 `tech-lead` | 기술 전략 수립, RFC/ADR 주도, Claude Code Team 오케스트레이션 | 아키텍처 결정, 팀 협업 시 |
-| 📋 `product-engineer` | 요구사항 분석, JTBD/RICE/Shape Up, MVP 스코핑 | 기능 기획, 우선순위 결정 시 |
-| 🔄 `migration-expert` | 프레임워크/DB/K8s 버전 업그레이드, 영향 분석, 마이그레이션 계획 | 메이저 업그레이드 시 |
-
-### Frontend
-
-| Agent | Description | Auto-trigger |
-|-------|-------------|--------------|
-| ⚛️ `frontend-expert` | React/Next.js/TypeScript 전문가, App Router, Core Web Vitals | 프론트엔드 코드 리뷰, 아키텍처 시 |
-
-### DevOps & SRE
-
-| Agent | Description | Auto-trigger |
-|-------|-------------|--------------|
-| 🔒 `security-scanner` | OWASP Top 10, 시크릿 탐지, 취약점 분석 | 코드 변경 후 |
-| 🔧 `k8s-troubleshooter` | K8s 문제 진단, 근본 원인 분석, AIOps | 장애 발생 시 |
-| 📋 `terraform-reviewer` | IaC 보안/비용/신뢰성 11개 도메인 리뷰 | `terraform plan` 전 |
-| 🚨 `incident-responder` | 장애 대응 자동화, MTTR 단축, 런북 실행 | 인시던트 발생 시 |
-| 👀 `code-reviewer` | 멀티 언어 코드 리뷰, 버그/성능/보안 탐지 | PR 생성 후 |
-| 💰 `cost-analyzer` | FinOps 분석, 비용 이상 탐지, 최적화 제안 | 비용 리뷰 시 |
-| 📈 `finops-advisor` | FinOps 전략, 성숙도 평가, 도구 선택, GreenOps | 비용 전략 수립 시 |
-| 🐛 `debugging-expert` | Cascade failure 분석, cross-service 디버깅 | 연쇄 장애 발생 시 |
-| 📜 `compliance-auditor` | SOC2/HIPAA/GDPR/PCI-DSS 컴플라이언스 감사 | 보안 감사 시 |
-
-### DevOps Reviewers (Category Budget System)
-
-| Agent | Description | Auto-trigger |
-|-------|-------------|--------------|
-| 📋 `k8s-reviewer` | K8s manifest, Helm, Kustomize 종합 리뷰 (9 도메인) | K8s manifest 변경 후 |
-| 🐳 `dockerfile-reviewer` | Dockerfile, docker-compose 종합 리뷰 (8 도메인) | Dockerfile 변경 후 |
-| ⚙️ `cicd-reviewer` | GitHub Actions, GitLab CI 종합 리뷰 (8 도메인) | 워크플로우 변경 후 |
-| 🔄 `gitops-reviewer` | ArgoCD/Flux 설정 종합 리뷰 (8 도메인) | GitOps 설정 변경 후 |
-| 📡 `observability-reviewer` | Prometheus/Alertmanager/OTel/Grafana 리뷰 (9 도메인) | 관측성 설정 변경 후 |
-
-### Security Reviewers (Attack Surface Focus — Red Team 대비)
-
-| Agent | Description | Auto-trigger |
-|-------|-------------|--------------|
-| 🛡️ `k8s-security-reviewer` | CIS K8s Benchmark + MITRE ATT&CK 기반 공격자 관점 K8s 보안 | 보안 감사, 펜테스트 대비 |
-| 🔒 `container-security-reviewer` | CIS Docker Benchmark + 공급망 공격 방지 컨테이너 보안 | 이미지 보안 검증 시 |
-| 🔐 `cicd-security-reviewer` | OWASP CI/CD Top 10 + SLSA 파이프라인 보안 | CI/CD 보안 검증 시 |
-| 🌐 `network-security-reviewer` | Zero Trust + Lateral Movement 방지 네트워크 보안 | 네트워크 정책 리뷰 시 |
-
-### Architecture & Distributed Systems
-
-| Agent | Description | Auto-trigger |
-|-------|-------------|--------------|
-| 🏛️ `architect-agent` | MSA 설계, 서비스 경계, API 계약(protobuf/OpenAPI) 정의 | 아키텍처 설계 시 |
-
-### Platform & MLOps
-
-| Agent | Description | Auto-trigger |
-|-------|-------------|--------------|
-| 🏗️ `platform-engineer` | IDP 설계, Backstage, Golden Path, DX 최적화 | 플랫폼 구축 시 |
-| 🧠 `mlops-expert` | GPU 스케줄링, 분산 학습, 모델 서빙, LLM 배포 | AI/ML 워크로드 시 |
-
-### Service Mesh & Messaging
-
-| Agent | Description | Auto-trigger |
-|-------|-------------|--------------|
-| 🕸️ `service-mesh-expert` | Istio/Linkerd 디버깅, mTLS, 트래픽 관리 | Service Mesh 이슈 시 |
-
-### Language Experts (High-Traffic)
-
-| Agent | Expertise | Key Patterns |
-|-------|-----------|--------------|
-
-### Ticketing Platform (1M+ Concurrent Users)
-
-| Agent | Purpose | Core Features |
-|-------|---------|---------------|
-| 📊 `load-tester` | 부하 테스트 허브 | 도구 비교, 선택 가이드 |
-
-### Workflow Automation
-
-| Agent | Purpose | Features |
-|-------|---------|----------|
-| 📝 `git-workflow` | Git 워크플로우 자동화 | 커밋 메시지 생성, PR 자동화 |
-| ⚙️ `ci-optimizer` | CI/CD 최적화 | 빌드 시간 분석, DORA 메트릭 |
-| 📓 `dev-logger` | 개발 과정 기록 | AI 수정 요청, 의사결정, 트러블슈팅 로깅 |
-
----
-
-## 💡 Skills
-
-필요할 때만 로드되는 도메인 지식 (254 files, ~97,500줄). 20개 카테고리 서브디렉토리로 체계화.
-
-<details>
-<summary><b>Go (14 files)</b></summary>
-
-```
-/go:effective-go          # Error handling patterns
-/go:go-gin             # Gin framework
-/go:go-testing         # Table-driven testing
-/go:go-database        # pgx, sqlc, sqlx, ent, bun 패턴
-/go:go-microservice    # Go MSA 프로젝트 구조, 헥사고날 아키텍처, 미들웨어
-/go:go-ai              # Genkit Go, LangChainGo, Eino, mcp-go, Tool Calling, RAG
-/go:concurrency-go     # Mutex, Channel, Worker Pool
-/go:refactoring-go     # Go 리팩토링, 코드 개선
-/go:effective-go       # Go Proverbs, 패턴 결정 가이드, Modern Go (1.21+)
-# + 추가 패턴: streaming, observability, security 등
-```
-</details>
-
-<details>
-<summary><b>Spring (12 files)</b></summary>
-
-```
-/java:spring-data        # JPA, QueryDSL
-/java:spring-jooq        # jOOQ DSL, 코드 생성, MULTISET, Keyset Pagination
-/java:spring-cache       # Redis 캐싱
-/java:spring-security    # Security, Method Security
-/java:spring-oauth2      # OAuth2, JWT
-/java:spring-testing     # JUnit, Mockito
-/java:spring-testcontainers  # Testcontainers
-/java:concurrency-spring # Spring 동시성, @Async, Virtual Threads
-/java:refactoring-spring # Spring 리팩토링, 코드 개선
-/java:effective-java     # Effective Java, Modern Java (Record, Sealed, VT)
-/java:spring-patterns    # Spring Boot 핵심 패턴 결정 가이드
-/java:spring-ai          # Spring AI 1.1, Advisors, Structured Output, MCP
-```
-</details>
-
-<details>
-<summary><b>MSA (15 files) — 런타임 구현 패턴</b></summary>
-
-```
-/architecture:api-design             # RESTful API 설계, 버저닝, 페이징
-/architecture:contract-first         # Contract-First: OpenAPI, Protobuf, AsyncAPI, Pact, Schema Registry
-/architecture:msa-saga               # Saga 패턴 (Choreography/Orchestration, Temporal.io)
-/architecture:msa-cqrs-eventsourcing # CQRS + Event Sourcing, Eventual Consistency
-/architecture:msa-resilience         # Circuit Breaker, Bulkhead, Retry/Timeout (Resilience4j)
-/architecture:msa-event-driven       # EDA, Transactional Outbox, Idempotent Consumer, DLQ
-/architecture:msa-ddd                # DDD, Bounded Context, Aggregate, Event Storming
-/architecture:msa-api-gateway-patterns # BFF, Gateway Aggregation, API Versioning, gRPC-REST
-/architecture:msa-observability      # Distributed Tracing, Correlation ID, Exemplar, Tempo
-/infra:database-sharding      # 샤딩 전략, Citus, Vitess, Read Replica
-/architecture:high-traffic-design    # Backpressure, CDN, Connection Pool, Rate Limiting 심화
-/architecture:distributed-lock       # Redis, Redisson, Distributed Lock 패턴
-/architecture:grpc                   # gRPC 서비스 설계, Protocol Buffers, 스트리밍
-/architecture:graphql-federation     # Apollo Federation v2, GraphOS Router, Subgraph 설계
-/architecture:task-queue             # Celery, BullMQ, Go asynq, Priority Queue 패턴
-```
-</details>
-
-<details>
-<summary><b>Architecture (10 files) — 아키텍처 스타일 & 설계 패턴</b></summary>
-
-```
-/architecture:hexagonal-clean-architecture # 헥사고날/클린 아키텍처, Ports & Adapters
-/architecture:vertical-slice-architecture  # Vertical Slice, Feature 단위 조직, MediatR
-/architecture:cell-based-architecture     # Cell-Based Architecture, Blast Radius 격리
-/architecture:modular-monolith       # Modular Monolith, Spring Modulith, Schema per Module
-/architecture:strangler-fig-pattern  # Strangler Fig, 레거시 점진적 현대화, CDC
-/architecture:composable-architecture # Composable/MACH, PBC, Micro-Frontends
-/architecture:data-mesh              # Data Mesh, Data Product, Federated Governance
-/ai:agentic-ai-architecture # Agentic AI, MCP/A2A 프로토콜, Multi-Agent
-/messaging:kafka-msa-patterns     # Kafka 기반 MSA 통합 패턴
-/architecture:state-machine          # 도메인 상태머신, FSM, Event Sourcing 통합
-```
-</details>
-
-<details>
-<summary><b>Kubernetes (20 files) — K8s Core & Gateway API</b></summary>
-
-```
-/k8s:k8s-security       # Pod Security, RBAC, Kyverno, Trivy
-/k8s:k8s-helm           # Helm chart best practices
-/k8s:k8s-autoscaling    # HPA, VPA, KEDA
-/k8s:k8s-autoscaling-advanced # Karpenter, 조합 전략, 모니터링
-/k8s:k8s-scheduling     # Node Affinity, Taint, Pod Affinity
-/k8s:k8s-scheduling-advanced # 실전 시나리오, Topology Spread, 디버깅
-/k8s:k8s-traffic        # Rate Limiting, 대기열
-/k8s:k8s-traffic-ingress # Ingress 트래픽 관리
-/k8s:gateway-api        # Gateway API vs Ingress, Envoy, Kong
-/k8s:gateway-api-migration # Ingress NGINX 마이그레이션, Istio Gateway
-# + 10개 추가: 트러블슈팅, GitOps 정책, advanced workload, multi-cluster 등
-```
-</details>
-
-<details>
-<summary><b>Service Mesh (17 files) — Istio & Linkerd</b></summary>
-
-```
-/service-mesh:istio-core         # Sidecar vs Ambient, mTLS
-/service-mesh:istio-ambient      # Ambient GA (1.24+), ztunnel, HBONE, Waypoint, targetRefs
-/service-mesh:istio-security     # PeerAuth, AuthorizationPolicy
-/service-mesh:istio-advanced-traffic # Fault Injection, Traffic Mirroring, Retry/Timeout, JWT Claim 라우팅
-/service-mesh:istio-ext-authz    # CUSTOM AuthorizationPolicy, OPA, ext-authz
-/service-mesh:istio-otel         # Telemetry API v1, ExtensionProviders, W3C Trace Context
-/service-mesh:istio-multicluster # Multi-Primary, Primary-Remote, East-West Gateway, Shared Root CA
-/service-mesh:istio-gateway      # Classic vs Gateway API
-/service-mesh:istio-gateway-api  # Gateway API with Istio
-/service-mesh:istio-gateway-classic # Classic Istio Gateway
-/service-mesh:istio-observability # Metrics, Tracing, Kiali
-/service-mesh:istio-metrics      # Istio 메트릭 수집, Prometheus
-/service-mesh:istio-tracing      # Istio 분산 트레이싱, Jaeger
-/service-mesh:istio-observability        # Kiali 서비스 그래프, 시각화
-/service-mesh:k8s-traffic-istio  # Istio 트래픽 관리
-/service-mesh:linkerd            # Linkerd v2.17, Rust micro-proxy, 자동 mTLS, vs Istio 비교
-```
-</details>
-
-<details>
-<summary><b>Monitoring & Observability (28 files)</b></summary>
-
-```
-/observability:observability      # 로깅, RED Method
-/observability:observability-otel # OpenTelemetry SDK/Collector, Declarative Config
-/observability:observability-otel-scale # 대규모 OTel 아키텍처 (10K+ RPS)
-/observability:observability-otel-optimization # OTel 비용 최적화, 샘플링, 스케일링
-/observability:observability-otel-migration # Alloy/Zipkin/SemConv 마이그레이션 (NEW)
-/observability:observability-pyroscope # Continuous Profiling, Span Profiles (NEW)
-/observability:observability-incident-playbook # 인시던트 대응 워크플로우 (NEW)
-/observability:observability-cost # 관측 스택 비용 관리 (NEW)
-/observability:monitoring-self-monitoring # 관측 스택 자체 모니터링 (NEW)
-/observability:ebpf-observability # eBPF, Grafana Beyla, Odigos
-/observability:ebpf-observability-advanced # Cilium Hubble, DeepFlow, 프로덕션 요구사항
-/observability:monitoring-grafana # 대시보드, 알림, RBAC
-/observability:monitoring-metrics # Prometheus, Thanos, VictoriaMetrics
-/observability:monitoring-logs    # Fluent Bit, Loki
-/observability:monitoring-troubleshoot # 모니터링 트러블슈팅
-/observability:monitoring-prometheus-operator # kube-prometheus-stack 운영
-/observability:logging-compliance # PCI-DSS, 전자금융거래법
-/observability:logging-security   # 봇/매크로 탐지
-/observability:logging-elk        # ELK Stack, Elasticsearch
-/observability:logging-loki       # Grafana Loki, LogQL
-/observability:alerting-discord   # Discord 알림 연동
-/observability:kube-prometheus-stack # kube-prometheus-stack Helm 설정
-/observability:aiops              # AIOps, 이상 탐지, 자동 복구
-/observability:aiops-remediation  # AIOps 자동 복구, Runbook 자동화
-/observability:observability-genai # OTel GenAI Conventions, LLM Tracing
-# + 추가 3개: cardinality 관리, retention 전략, dashboard 운영
-```
-</details>
-
-<details>
-<summary><b>CI/CD & GitOps (12 files) — 배포 파이프라인</b></summary>
-
-```
-/cicd:cicd-devsecops     # GitHub Actions, Trivy, SonarQube
-/cicd:cicd-policy        # CI/CD 정책, OPA Gatekeeper
-/cicd:gitops-argocd      # ArgoCD, App of Apps
-/cicd:gitops-argocd-advanced # ApplicationSet, Sync 전략, 시크릿
-/cicd:gitops-argocd-ai   # AI-assisted GitOps, Spacelift, 예측적 배포
-/cicd:deployment-strategies # Canary, Blue-Green
-/cicd:deployment-canary  # Canary 배포 심화, Flagger
-/cicd:ephemeral-environments # PR Preview, ArgoCD ApplicationSet
-/cicd:ephemeral-environments-advanced # Qovery, DB 전략, 비용 최적화
-/cicd:supply-chain-security # SBOM, SLSA, Sigstore
-/cicd:supply-chain-compliance # EU CRA, SBOM 자동화, VEX
-```
-</details>
-
-<details>
-<summary><b>SRE (15 files) — 운영 안정성</b></summary>
-
-```
-/sre:sre-sli-slo        # SLI/SLO, 에러 버짓
-/sre:chaos-engineering  # LitmusChaos, Probe, 기본 실험
-/sre:chaos-engineering-gameday # GameDay 운영, 모니터링, 알림
-/sre:disaster-recovery  # Velero, 백업, 복구 절차
-/sre:disaster-recovery-advanced # 멀티 클러스터 DR, DB DR, 테스트
-/sre:load-testing       # K6 기본/고급, K6 on Kubernetes
-/sre:load-testing-analysis # nGrinder, 결과 분석, SLO Threshold
-/sre:finops             # Kubecost, Right-sizing, Spot
-/sre:finops-advanced    # Showback/Chargeback, 이상 탐지
-/sre:finops-automation  # FinOps 자동화, 비용 알림
-/sre:finops-showback    # Showback/Chargeback 구현
-/sre:finops-tools       # OpenCost, Kubecost, Infracost, KEDA+Karpenter
-/sre:finops-tools-advanced # Cast AI, Kubecost 고급, 4Rs Framework
-/sre:finops-greenops    # 탄소 발자국, 지속가능성, SCI
-/sre:finops-ai          # AI FinOps, Token Economics, Model Routing
-```
-</details>
-
-<details>
-<summary><b>Platform & MLOps (16 files)</b></summary>
-
-```
-/platform:backstage          # Developer Portal, Software Catalog
-/platform:platform-backstage # Backstage 플러그인, TechDocs 심화
-/platform:golden-paths       # 표준화 경로, 템플릿 패턴
-/platform:golden-paths-infra # 인프라 Golden Path, Terraform 템플릿
-/platform:developer-self-service # 개발자 셀프서비스 플랫폼, Backstage Templates, Crossplane Claims
-/security:secrets-management # 시크릿 관리, ESO, Vault VSO, SOPS+age, 자동 로테이션
-/platform:kratix             # Kratix Promise 기반 플랫폼 오케스트레이터, 소규모 적용 가능성
-/k8s:k8s-gpu            # NVIDIA Operator, MIG, Kueue, Volcano
-/k8s:k8s-gpu-scheduling # GPU 스케줄링, MPS, 분산 학습
-/ai:ml-serving         # KServe, vLLM, TensorRT-LLM
-/ai:mlops              # Kubeflow, KServe 배포
-/ai:mlops-tracking     # MLflow, 실험 추적, Model Registry
-/ai:llmops       # LLMOps, RAG 파이프라인, 프롬프트 관리
-/ai:llmops             # RAG 아키텍처, 프롬프트 관리, LLM 가드레일
-/platform:wasm-edge          # WebAssembly, WasmEdge, Spin, K8s 통합
-/platform:wasm-edge-iot      # Edge/IoT 활용, 성능 최적화
-```
-</details>
-
-<details>
-<summary><b>Developer Experience (26 files)</b></summary>
-
-```
-/dx:spec-driven-development # SDD, PRD, Design Doc, Shape Up — 계획 방법론 비교 및 템플릿
-/dx:dx-metrics         # DORA, SPACE, DevEx
-/ai:dx-ai-agents       # AI 에이전트 거버넌스, Copilot/Claude 통합
-/ai:dx-ai-agents-orchestration # 멀티 에이전트, 가드레일, Self-Healing
-/ai:dx-ai-security     # AI 보안, Prompt Injection 방어
-/ai:ai-first-playbook  # AI-First 조직 전환, ROI 측정, Shopify 모델
-/dx:dx-onboarding      # Time-to-First-Deploy
-/dx:dx-onboarding-deploy # 배포 파이프라인 온보딩
-/dx:dx-onboarding-environment # 개발 환경 자동화
-/dx:dx-onboarding-gitpod # Gitpod/Codespaces 클라우드 IDE
-/dx:local-dev-makefile # make up으로 풀스택 실행, Hot Reload, Dockerfile.dev
-/dx:docs-as-code       # MkDocs, Docusaurus, TechDocs
-/dx:docs-as-code-automation # API 문서 자동화, CI/CD, 품질 측정
-/dx:documentation-templates # 12종 문서 템플릿 (ADR, postmortem, migration 등)
-/dx:conventional-commits # Conventional Commits, Changelog 자동화
-/dx:git-workflow       # Git 브랜칭 전략, Trunk-based
-/dx:refactoring-principles # 리팩토링 원칙, Code Smells
-/dx:clean-code         # Composed Method, Cognitive Complexity, Guard Clause, 네이밍
-/dx:token-efficiency   # 토큰 & 컨텍스트 효율화, 낭비 패턴 방지
-/dx:token-budget       # Opus 4.7 effort/caching, Adaptive Thinking, 비용 계산
-/dx:rfc-adr            # RFC/ADR 워크플로우, 템플릿, 라이프사이클
-/dx:adr-retrospective  # 6/12개월 ADR 재평가, hit rate, supersede frequency
-/dx:quarterly-review   # DORA SQL, SLO burn rate, FinOps unit economics, 회고 facilitation
-/dx:engineering-strategy # Tech Radar, Build vs Buy, OKR, 로드맵
-/dx:team-topologies    # Team Topologies, Conway's Law, 인터랙션 모드
-/dx:product-thinking   # RICE, MoSCoW, Shape Up, JTBD, Story Mapping
-```
-</details>
-
-<details>
-<summary><b>Infrastructure (16 files) — AWS, Terraform, Docker, IaC</b></summary>
-
-```
-/infra:aws-eks            # EKS Terraform, IRSA, Add-ons
-/infra:aws-eks-advanced   # Karpenter, 보안 강화, 운영 최적화
-/infra:aws-lambda         # Serverless, 콜드 스타트 최적화, SnapStart
-/messaging:aws-messaging      # SQS, SNS, EventBridge, 선택 가이드
-/infra:terraform-modules  # Module patterns
-/infra:terraform-security # Security best practices
-/infra:crossplane         # Multi-cloud IaC, Compositions, XRDs
-/infra:crossplane-advanced # 멀티클라우드 패턴, GitOps 통합, Drift Detection
-/infra:docker             # Dockerfile, 멀티스테이지 빌드
-/infra:database           # 인덱스, N+1, 쿼리 최적화
-/infra:database-migration # Flyway, Liquibase
-/cicd:ec2-cd-pipeline    # EC2 CD 파이프라인, GitHub Actions → SSM
-/infra:compose-to-k8s     # Docker Compose → Kubernetes 전환 패턴
-/k8s:helm-environment-strategy # Helm values 환경 전략, multi-env
-/infra:terraform-k8s-bootstrap # Terraform → K8s 부트스트랩 (EKS/GKE)
-/infra:compatibility-matrix # 인프라 버전 호환성 매트릭스
-```
-</details>
-
-<details>
-<summary><b>Messaging (9 files) — Kafka, RabbitMQ, NATS</b></summary>
-
-```
-/messaging:kafka              # Strimzi, KEDA 연동
-/messaging:kafka-advanced     # Transactional API, Exactly-Once, KIP-848, Inbox 패턴
-/messaging:kafka-patterns     # Producer/Consumer 패턴, 모니터링
-/messaging:kafka-streams      # KTable, Windowing, Interactive Queries, RocksDB 튜닝
-/messaging:kafka-connect-cdc  # Debezium CDC, Source/Sink Connectors, Schema Registry
-/messaging:rabbitmq           # RabbitMQ v4.1, Quorum Queues, AMQP 1.0
-/messaging:nats-messaging     # NATS JetStream, KV Store, Consumer 패턴
-/messaging:redis-streams      # Redis Streams, Consumer Groups, PEL 관리
-/messaging:kafka-k8s-operations # Strimzi 운영, K8s에서의 Kafka 관리
-```
-</details>
-
-<details>
-<summary><b>Security (5 files) — 보안 패턴, 컴플라이언스, 위협 모델링</b></summary>
-
-```
-/security:compliance-frameworks # SOC2, HIPAA, GDPR, PCI-DSS 프레임워크 매핑
-/security:threat-modeling       # STRIDE, DREAD, K8s Threat Matrix
-/security:owasp-top10           # OWASP Top 10 2021 + 실전 방어 패턴
-/security:auth-patterns         # OAuth2/OIDC/PKCE, JWT, Session, API Key
-/security:secure-coding         # 언어별 시큐어 코딩, 입력 검증, 암호화 패턴
-```
-</details>
-
-<details>
-<summary><b>Python (6 files) — FastAPI, Django, 비동기 패턴</b></summary>
-
-```
-/python:fastapi               # FastAPI 고성능 패턴, Pydantic v2, 미들웨어
-/python:django                # Django ORM, DRF, 캐싱, 시그널
-/python:python-testing        # pytest, pytest-asyncio, testcontainers-python
-/python:python-async          # asyncio, TaskGroup, aiohttp, 동시성 패턴
-/python:python-patterns       # Type Safety, Pydantic, 디자인 패턴
-/python:python-performance    # cProfile, py-spy, tracemalloc, 최적화
-```
-</details>
-
-<details>
-<summary><b>Frontend (7 files) — React, Next.js, TypeScript, 테스트, 성능</b></summary>
-
-```
-/frontend:react-patterns        # React 19, Server Components, Suspense, 상태관리
-/frontend:nextjs                # Next.js 15 App Router, RSC, ISR, Middleware
-/frontend:typescript            # TypeScript 5.x 심화, 타입 패턴, 제네릭, Utility Types
-/frontend:frontend-testing      # Vitest, Playwright, Testing Library, MSW
-/frontend:frontend-performance  # Core Web Vitals, Bundle 최적화, Lazy Loading
-/frontend:css-design-system     # Tailwind CSS, Design System, Radix UI, Shadcn
-/frontend:state-management      # Zustand, Jotai, TanStack Query, React Context
-```
-</details>
-
-<details>
-<summary><b>AI/LLM (5 files) — RAG, 프롬프트 엔지니어링, 벡터 DB</b></summary>
-
-```
-/ai:rag-patterns          # RAG 아키텍처, Chunking, Hybrid Search, 평가
-/ai:prompt-engineering    # 프롬프트 엔지니어링, Chain-of-Thought, Few-Shot, Opus 4.7 주의사항
-/ai:vector-db             # Pinecone, Weaviate, pgvector, 인덱스 전략
-/ai:langchain-langgraph   # LangChain, LangGraph, 멀티 에이전트 워크플로우
-/ai:agentic-coding        # Agentic Coding 4 모드, Agent Supervision, Code Review
-```
-</details>
-
-<details>
-<summary><b>Business (16 files) — 멀티테넌시, 결제, 인증, 알림 등 SaaS 비즈니스 패턴</b></summary>
-
-```
-/saas:multi-tenancy            # Team/Org, 데이터 격리(Row/Schema/DB), RBAC, 초대
-/saas:auth-oauth-social        # Google/Apple/Kakao, PKCE, Magic Link, 2FA
-/saas:payment-integration      # Stripe/Toss/PortOne, Token-first, Webhook, Saga
-/saas:notification-multichannel # Push/Email/SMS, Fallback, Notification Center
-/saas:subscription-billing     # 구독 관리, 가격 정책, MRR/ARR
-/saas:subscription-billing-metrics # MRR Movement, Churn, LTV/CAC SQL
-/saas:credit-system            # 크레딧 시스템, 충전/소진, idempotency
-/storage-handling         # 파일 업로드/CDN, presigned URL
-/saas:media-handling           # 이미지/영상 처리, AVIF, 정통망법 차단 의무
-/saas:media-streaming          # LL-HLS/WebRTC/RTMP/SRT, DRM, Multi-CDN
-/saas:search-recommend         # SearchGateway, 한국어 nori, Hybrid 검색, 추천
-/saas:webhook-delivery         # 발신자 관점 webhook, HMAC, retry, SSRF 방지
-/saas:audit-log                # PII/legal 감사 로그, Append-only, 보존 정책
-/feature-flag             # LaunchDarkly/Unleash, gradual rollout, A/B
-/saas:rate-limiting            # Token bucket, sliding window, 분산 rate limit
-/admin-panel              # 어드민 패널 패턴, 권한 모델, audit
-```
-</details>
-
-<details>
-<summary><b>Legal (3 files) — 한국 PIPA/위치정보법, 글로벌 GDPR/SOC2</b></summary>
-
-```
-/korea-privacy-law      # 한국 개인정보보호법, 위치정보법, 정보통신망법
-/child-protection       # 아동·청소년 보호, 14세 미만 동의, 컨텐츠 필터
-/gdpr-soc2-mapping      # GDPR ↔ 한국 PIPA ↔ SOC2 매핑, DSR 자동화
-```
-</details>
-
-<details>
-<summary><b>Operations (2 files) — Runbook, Postmortem 운영 표준</b></summary>
-
-```
-/runbook-standard       # Runbook 표준 포맷, 실행 자동화
-/sre:incident-postmortem    # Blameless 회고, 5 Whys, PIPA 24h 신고
-```
-</details>
-
----
-
 ## 📏 Rules
 
-파일 경로 기반으로 **자동 적용**되는 코드 규칙 (15 files, ~1,840줄). Skills와 달리 명시적 호출 없이 항상 활성화됩니다.
+**자동 적용**되는 규칙입니다. Skills와 달리 호출하지 않아도 활성화되고, plugin 에는 실리지 않아 필요하면 복사합니다. 폴더: `core/` · `process/` · `lang/` · `infra/` · `harness/`.
 
 ### Project Workflow (전체 적용)
 
@@ -616,7 +153,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | 📚 `documentation` | 문서 자동 트리거 | ADR/postmortem/migration/load-test 자동 작성 |
 | ☁️ `cloud-cli-safety` | 클라우드 CLI 안전 | AWS/GCP 위험 명령 차단 (사고 사례 기반) |
 | ✅ `user-approval` | 외부 작업 승인 | gh/git push, ArgoCD sync 등 사전 승인 |
-| 🪙 `token-budget` | Opus 4.7 토큰 운영 | context 80%, subagent 명시 spawn, effort 레벨 |
+| 🪙 `token-budget` | 토큰 운영 | context 80%, subagent 명시 spawn, effort 레벨 |
 
 ### Language-Specific (경로 자동 매칭)
 
@@ -631,35 +168,18 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 
 ---
 
-## ⚡ Commands
-
-| Category | Commands |
-|----------|----------|
-| **Go** | `/go review`, `/go test-gen`, `/go lint`, `/go refactor` |
-| **Java** | `/java review`, `/java test-gen`, `/java lint`, `/java refactor`, `/java performance` |
-| **Backend** | `/backend review`, `/backend test-gen`, `/backend api-doc`, `/backend refactor` |
-| **K8s** | `/k8s validate`, `/k8s secure`, `/k8s netpol`, `/k8s helm-check` |
-| **Terraform** | `/terraform plan-review`, `/terraform security`, `/terraform module-gen` |
-| **DX** | `/dx pr-create`, `/dx issue-create`, `/dx changelog`, `/dx release` |
-| **Log** | `/dx:log-feedback`, `/dx:log-decision`, `/dx:log-meta`, `/dx:log-trouble`, `/dx:log-summary` |
-| **Session** | `/session save`, `/session end` |
-
----
-
 ## 🏗️ Automation Infrastructure
 
 이 레포는 컨텐츠만이 아니라, **컨텐츠를 관리하는 시스템** 자체도 자동화했습니다.
 
-### Inventory 자동 생성
+### 자동 생성
 
 ```bash
-./scripts/generate-inventory.sh generate
-# → .claude/inventory.yml 자동 생성
-# → 모든 Skills/Agents 목록 + 줄 수 + 카테고리
-# → CI에서 freshness 검증 (outdated 시 빌드 실패)
+make inventory        # .claude/inventory.yml: 전체 skill·agent 목록
+make plugin-readmes   # plugins/*/README.md: frontmatter 에서 생성
 ```
 
-Claude Code 세션 시작 시 `inventory.yml`만 읽으면 전체 구조를 파악할 수 있어, **세션 시작 비용을 최소화**합니다.
+손으로 쓴 목록과 개수는 반드시 어긋납니다. 생성물은 CI 가 신선도를 검사합니다.
 
 ### CI/CD Pipeline
 
@@ -667,21 +187,18 @@ GitHub Actions 가 PR 마다 4개 Job 을 실행합니다:
 
 | Job | Description |
 |-----|-------------|
-| **Docs** | README ↔ 실제 파일 정합성 검증 |
-| **Inventory** | `inventory.yml` freshness 체크 |
+| **Docs** | 자산 목록, plugin 구성, 참조, 내부 링크 |
+| **Inventory** | `inventory.yml`, plugin README 신선도 |
 | **Lint** | ShellCheck으로 모든 스크립트 정적 분석 |
-| **Drift** | rules ↔ AGENTS.md, frontmatter, 스키마, 강제 규칙, 내부 링크, control-plane 테스트, adapter parity |
+| **Drift** | rules ↔ AGENTS.md, frontmatter, 스키마, 강제 규칙, control-plane 테스트, 게이트 음성 테스트, adapter parity |
 
 ### Pre-commit Hooks & Quality Gates
 
 ```bash
 make setup-hooks   # validate + lint 자동 실행
-make all           # 전체 검증 (validate + test)
+make all           # 전체 검증
+make test-gates    # 사본을 일부러 망가뜨려 게이트가 의도한 사유로 실패하는지 확인
 ```
-
-- 모든 Skill 파일 **500줄 미만** (Anthropic guidelines)
-- 모든 Agent 파일 **600줄 미만**
-- Smart installer: `--global` / `--local` / `--with-skills` / `--plugin` / `--workflow` 옵션 지원
 
 ---
 
@@ -750,12 +267,12 @@ make all           # 전체 검증 (validate + test)
 ### Progressive Disclosure
 
 ```
-세션 시작 → CLAUDE.md (~100 tokens)
-         → inventory.yml 참조로 전체 구조 파악
-         → 필요한 Skill만 로드 (<5,000 tokens)
+세션 시작 → AGENTS.md + 상시 rule
+         → 켠 plugin 의 skill 이름과 description 목록
+         → 요청과 맞는 skill 본문만 로드
 ```
 
-매 세션마다 122,000줄을 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
+매 세션 전체를 읽는 대신, **필요한 순간에 필요한 지식만** 로드합니다.
 
 ### Token Efficiency
 
@@ -766,12 +283,12 @@ make all           # 전체 검증 (validate + test)
 | Write 검증 | `wc -l` + `head`/`tail` (전체 Read-back 금지) |
 | 동일 파일 | 2회 이상 읽기 금지 (1회 Read + Edit 패턴) |
 
-### Anthropic Guidelines 준수
+### 설계 원칙
 
-- **모든 Skill 파일 500줄 미만** - Claude가 효율적으로 처리할 수 있는 크기
-- **Compact CLAUDE.md** - 50-80줄, 핵심 규칙만 포함
+- **영역별 plugin** - 켠 영역만 목록 예산을 쓴다
+- **Description 규칙** - `무엇. Use when 상황.` 을 게이트가 강제한다
 - **Multi-Agent Architecture** - 전문화된 에이전트가 협력
-- **Inventory 시스템** - 세션 시작 비용 최소화
+- **실행 강제** - `git push`, 변경형 `kubectl` 을 산문이 아니라 `deny`/`ask` 규칙으로 막는다
 
 > *"For each line, ask: 'Would removing this cause Claude to make mistakes?'"*
 
@@ -782,25 +299,30 @@ make all           # 전체 검증 (validate + test)
 ```
 ress-claude-agents/
 ├── AGENTS.md                 # 보편 룰 (CLAUDE.md 는 이 파일의 symlink)
+├── .claude-plugin/
+│   └── marketplace.json      # marketplace: ress
+├── plugins/<plugin>/
+│   ├── .claude-plugin/plugin.json
+│   ├── skills/<name>/SKILL.md  # 한 단계 디렉터리 + SKILL.md 만 로드된다
+│   ├── agents/
+│   ├── commands/
+│   └── README.md             # frontmatter 에서 자동 생성
 ├── .claude/
-│   ├── agents/               # 전문 subagent (+ _handoff.yml)
-│   ├── skills/<name>/SKILL.md  # 도메인 지식 — 한 단계 디렉터리 + SKILL.md 만 로드된다
-│   ├── rules/                # 자동 로딩 룰 (paths: frontmatter 로 조건부 로딩)
-│   ├── commands/             # 슬래시 커맨드
+│   ├── rules/<그룹>/         # 자동 로딩 룰 (paths: frontmatter 로 조건부 로딩)
 │   ├── templates/            # SKILL-SPEC / AGENT-SPEC / 문서 템플릿
-│   ├── settings.json         # permissions deny/ask — 외부 작업 실행 강제
+│   ├── settings.json         # permissions deny/ask, dx 활성화
+│   ├── agent-handoff.yml     # agent 산출물 어휘
 │   ├── inventory.yml         # 자산 인덱스 (자동 생성)
 │   └── standards.yml
-├── .cursor/rules/            # Cursor view (adapter 산출물 — 직접 편집 금지)
+├── .cursor/rules/            # Cursor view (adapter 산출물, 직접 편집 금지)
 ├── control-plane/            # probe / match / init / lint / adapter (TypeScript)
 ├── scripts/                  # validator + generator
-│   └── lib/skill-category.sh # 공유 파서 (복제 금지)
-├── docs/                     # adr / audit / migration / dev-logs / architecture
+├── docs/                     # adr / audit / migration / dev-logs / architecture / guides
 ├── project-templates/        # Go, Java, K8s, Terraform
 └── global/CLAUDE.md
 ```
 
-> **개수는 여기 쓰지 않는다** — 산문에 박힌 숫자는 CI 가 검사하지 않아 반드시 drift 한다.
+> **개수는 여기 쓰지 않는다** — 산문에 박힌 숫자는 CI 가 검사하지 않아 반드시 어긋난다.
 > 현재 수치: `yq '.summary' .claude/inventory.yml`
 
 ---
@@ -808,14 +330,17 @@ ress-claude-agents/
 ## 🧪 Development
 
 ```bash
-make validate             # README ↔ 파일 정합성 검증
+make validate             # 자산 목록, plugin 구성, 참조
 make validate-enforcement # settings.json ↔ user-approval.md 규칙 드리프트
-make validate-links       # 내부 마크다운 링크 유효성
+make validate-links       # 내부 링크 유효성
+make test-gates           # 게이트 음성 테스트
 make inventory            # .claude/inventory.yml 재생성
+make plugin-readmes       # plugins/*/README.md 재생성
 make lint                 # ShellCheck 정적 분석
 make all                  # validate + enforcement + links
 make setup-hooks          # Pre-commit hook 설치
 
+make verify-plugins       # 실제 로드 확인 (claude CLI 필요, 모델 호출 없음)
 make verify-enforcement   # 규칙이 실제로 발동하는지 (claude CLI 필요, 로컬 전용)
 ```
 
@@ -831,14 +356,14 @@ make verify-enforcement   # 규칙이 실제로 발동하는지 (claude CLI 필�
 
 ### Official Documentation
 - [Claude Code Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices) - Anthropic 공식 가이드
-- [Claude Code Docs](https://docs.anthropic.com/claude-code) - Skills, Commands, MCP
+- [Claude Code Docs](https://code.claude.com/docs) - Skills, Plugins, MCP
 - [Agent Skills Standard](https://agentskills.io/) - Skills 표준
 
 ---
 
 ## 🤝 Contributing
 
-AI-augmented development에 관심이 있다면 이슈나 PR 환영합니다.
+AI-augmented development에 관심이 있다면 이슈나 PR 환영합니다. 작성 표준: [SKILL-SPEC](.claude/templates/SKILL-SPEC.md), [AGENT-SPEC](.claude/templates/AGENT-SPEC.md).
 
 ```bash
 # Fork and clone
@@ -855,7 +380,7 @@ make all
 
 ## 📜 License
 
-MIT License - see [LICENSE](LICENSE) for details.
+MIT
 
 ---
 
@@ -863,7 +388,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Built with Claude Code**
 
-*AI를 도구가 아닌 동료로 — 122,000줄의 AI 지식 체계*
+*AI를 도구가 아닌 동료로*
 
 [![GitHub Stars](https://img.shields.io/github/stars/ressKim-io/ress-claude-agents?style=for-the-badge&color=yellow)](https://github.com/ressKim-io/ress-claude-agents)
 

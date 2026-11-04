@@ -8,7 +8,7 @@
 
 ## 설치 후 첫 5분
 
-- [ ] `./install.sh --global --all --with-skills` 실행
+- [ ] `/plugin marketplace add ressKim-io/ress-claude-agents` 후 `frontend@ress`, `architecture@ress`, `dx@ress` 및 쓰는 언어 plugin 를 `/plugin install`
 - [ ] Claude Code에서 `/agents` 입력 → 에이전트 목록 확인
 - [ ] `"이 프로젝트 구조 분석해줘"` 시도
 - [ ] `"코드 리뷰해줘"` 시도

@@ -8,7 +8,7 @@
 
 ## First 5 Minutes After Install
 
-- [ ] Run `./install.sh --global --all --with-skills`
+- [ ] Run `/plugin marketplace add ressKim-io/ress-claude-agents`, then `/plugin install` `k8s@ress`, `infra@ress`, `cicd@ress`, `observability@ress`, `sre@ress`, `dx@ress`
 - [ ] Type `/agents` in Claude Code to see the agent list
 - [ ] Try `"Check K8s cluster status"`
 - [ ] Try `"Review my Terraform plan"`
