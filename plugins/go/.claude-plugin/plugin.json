@@ -1,0 +1,6 @@
+{
+  "name": "go",
+  "description": "Go — 동시성, DB 접근, Gin, 마이크로서비스, 성능, 보안, 테스트, 리팩터링",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

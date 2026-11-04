@@ -1,0 +1,6 @@
+{
+  "name": "infra",
+  "description": "인프라 — Terraform, AWS·EKS, Docker, Crossplane, DB 운영·마이그레이션, 클라우드 CLI 안전",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

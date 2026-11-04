@@ -1,0 +1,6 @@
+{
+  "name": "messaging",
+  "description": "메시징 — Kafka, RabbitMQ, NATS, Redis Streams, AWS 메시징, 브로커 장애 진단",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

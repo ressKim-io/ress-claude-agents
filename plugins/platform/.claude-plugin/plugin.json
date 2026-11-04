@@ -1,0 +1,6 @@
+{
+  "name": "platform",
+  "description": "Platform Engineering — Backstage, Golden Path, 셀프서비스, Kratix, IDP 전략",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

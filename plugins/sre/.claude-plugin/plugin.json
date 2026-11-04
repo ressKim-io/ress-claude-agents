@@ -1,0 +1,6 @@
+{
+  "name": "sre",
+  "description": "SRE — SLI/SLO, 장애 대응, 포스트모템, 카오스, DR, 부하 테스트, FinOps",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

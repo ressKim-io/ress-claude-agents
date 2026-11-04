@@ -1,0 +1,6 @@
+{
+  "name": "cicd",
+  "description": "CI/CD — GitHub Actions, ArgoCD, 배포 전략, Ephemeral 환경, 파이프라인 리뷰와 최적화",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

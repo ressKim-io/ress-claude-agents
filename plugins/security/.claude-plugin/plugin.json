@@ -1,0 +1,6 @@
+{
+  "name": "security",
+  "description": "보안·컴플라이언스 — OWASP, 위협 모델링, 인증 패턴, 공급망, 시크릿, PIPA·GDPR·SOC2",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

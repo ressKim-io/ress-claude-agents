@@ -1,0 +1,6 @@
+{
+  "name": "saas",
+  "description": "SaaS 비즈니스 — 멀티테넌시, 소셜 로그인, 결제, 구독, 알림, Webhook, Audit Log, Feature Flag",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}
