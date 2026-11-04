@@ -112,6 +112,14 @@ jobs:
         working-directory: control-plane
         run: npm test
 
+      # 기존 validator 는 line 기반이라 깨진 YAML 을 통과시킨다. 런타임은 그 frontmatter 를 버린다.
+      - name: Validate frontmatter YAML
+        run: node scripts/validate-frontmatter-yaml.mjs
+
+      # 초록불만으로는 게이트가 동작한다는 증거가 되지 않는다.
+      - name: Test validation gates
+        run: ./scripts/test-gates.sh
+
       - name: Adapter parity drift (P4 — cursor only; codex 지원 중단 2026-08-25, ADR 0010)
         run: |
           for tool in cursor; do
