@@ -1,6 +1,6 @@
 ---
 name: rfc-adr
-description: "RFC/ADR 워크플로우 — RFC(Request for Comments)와 ADR(Architecture Decision Record) 작성, 리뷰, 관리 프로세스 가이드 Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "RFC·ADR 작성 워크플로우 — RFC vs ADR 비교, Google Design Doc·Uber 스타일 RFC 템플릿, 리뷰·관리 프로세스. Use when 설계 제안서(RFC)나 아키텍처 결정 기록(ADR)을 작성하고 리뷰받을 때 (사후 재평가는 adr-retrospective)."
 ---
 
 # RFC/ADR 워크플로우

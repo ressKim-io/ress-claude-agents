@@ -1,6 +1,6 @@
 ---
 name: dx-onboarding-gitpod
-description: "Developer Onboarding: Gitpod & 셀프서비스 포털 — Gitpod 설정, Backstage 온보딩 템플릿, TechDocs 자동화 Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "클라우드 개발 환경·셀프서비스 포털 — Gitpod 설정, Backstage 온보딩 템플릿, TechDocs 문서 자동화. Use when Gitpod 워크스페이스나 Backstage 기반 온보딩 포털을 구축할 때."
 ---
 
 # Developer Onboarding: Gitpod & 셀프서비스 포털

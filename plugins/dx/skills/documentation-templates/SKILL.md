@@ -1,6 +1,6 @@
 ---
 name: documentation-templates
-description: 프로젝트 문서 템플릿 모음 — ADR, 부하테스트, 포스트모템, 마이그레이션, CI/CD, SLI/SLO 등 14종
+description: "프로젝트 문서 템플릿 — ADR, 프로젝트 개요서, 부하테스트, 포스트모템, 마이그레이션, CI/CD, SLI/SLO 등. Use when docs/ 아래에 ADR·포스트모템·부하테스트 결과 같은 문서를 새로 작성할 때."
 ---
 
 # Documentation Templates

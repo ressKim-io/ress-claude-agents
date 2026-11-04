@@ -1,6 +1,6 @@
 ---
 name: team-topologies
-description: "Team Topologies 가이드 — Team Topologies, Conway's Law, 팀 구조 설계, 인터랙션 모드 Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "Team Topologies — 4가지 팀 유형, 3가지 인터랙션 모드, Conway's Law, 인지 부하, Team API, 팀 구조 진화. Use when 조직·팀 경계를 설계하거나 플랫폼 팀과 스트림 얼라인드 팀의 협업 방식을 정할 때."
 ---
 
 # Team Topologies 가이드

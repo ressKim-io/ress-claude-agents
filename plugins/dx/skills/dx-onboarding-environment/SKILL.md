@@ -1,6 +1,6 @@
 ---
 name: dx-onboarding-environment
-description: "Developer Onboarding: 개발 환경 자동화 — Dev Container를 활용한 개발 환경 자동화 Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "개발 환경 자동화 — Dev Container 설정(devcontainer.json)과 셋업 스크립트. Use when 신규 개발자가 로컬 환경을 수동 설치하지 않고 Dev Container로 바로 개발을 시작하게 만들 때."
 ---
 
 # Developer Onboarding: 개발 환경 자동화

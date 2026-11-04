@@ -1,6 +1,6 @@
 ---
 name: refactoring-principles
-description: "Refactoring Principles — 리팩토링 기본 원칙, 코드 스멜 식별, 점진적 개선 전략. Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "리팩토링 기본 — 황금률, 코드 스멜 카탈로그, SOLID 적용, 점진적 리팩토링, 테스트 주도 리팩토링, 우선순위. Use when 레거시 코드의 스멜을 식별하고 안전하게 단계적으로 개선할 때."
 ---
 
 # Refactoring Principles

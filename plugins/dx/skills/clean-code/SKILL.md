@@ -1,6 +1,6 @@
 ---
 name: clean-code
-description: "Clean Code 실전 가이드. Composed Method, Cognitive Complexity, Guard Clause, 네이밍, 주석 철학, Tell Don't Ask 패턴을 언어별 BAD/GOOD 예시와 함께 제공."
+description: "Clean Code 실전 — Composed Method, Cognitive Complexity, Guard Clause, 네이밍, WHY 주석, Tell Don't Ask 를 BAD/GOOD 예시로 정리. Use when 읽기 어려운 긴 메서드·깊은 중첩을 정리하거나 코드 가독성을 리뷰할 때."
 ---
 
 # Clean Code 실전 가이드
