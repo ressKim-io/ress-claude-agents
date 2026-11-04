@@ -11,7 +11,7 @@ depends_on: []
 
 # SDD: {Phase 제목 — 동사형 / 명확한 목표}
 
-> Software Design Document. `.claude/rules/phase-workflow.md` Gate 1-5 강제 대상.
+> Software Design Document. `.claude/rules/process/phase-workflow.md` Gate 1-5 강제 대상.
 > 이 문서가 없으면 코드 구현 금지. 작성 후 `code-reviewer` 에이전트 리뷰 필수 (Gate 2).
 
 ---

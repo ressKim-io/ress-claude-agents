@@ -210,7 +210,7 @@ description: "예시 도메인의 패턴 가이드. Use when 예시 작업을 �
 
 ## 관련 문서
 
-- Effort 매핑: [`../rules/effort-guide.md`](../rules/effort-guide.md)
+- Effort 매핑: [`../rules/harness/effort-guide.md`](../rules/harness/effort-guide.md)
 - Agent spec: [`AGENT-SPEC.md`](AGENT-SPEC.md)
-- Token / context 룰: [`../rules/token-budget.md`](../rules/token-budget.md)
-- 검증 의무: [`../rules/deep-thinking.md`](../rules/deep-thinking.md)
+- Token / context 룰: [`../rules/harness/token-budget.md`](../rules/harness/token-budget.md)
+- 검증 의무: [`../rules/core/deep-thinking.md`](../rules/core/deep-thinking.md)

@@ -73,6 +73,7 @@
 | Skill | `.claude/skills/<카테고리>/<이름>/` 중첩 탐색 | ⚠️ 문서에 없음 |
 | Agent | 공식 frontmatter 19개. 하위 디렉터리는 재귀 탐색된다. 이름은 경로가 아니라 `name` 에서 온다 | ✅ |
 | Rule | 하위 디렉터리는 재귀 탐색된다. `paths` 가 유일한 frontmatter 다 | ✅ |
+| Rule | 사본의 `core/git.md` 에 심은 문자열이 세션 시작 시 보이고, `paths:` 가 있는 `lang/go.md` 의 문자열은 보이지 않는다. 평탄 구조 대조군과 결과가 같다 (`claude -p`, Haiku 5.5) | 🧪 |
 | AGENTS.md | v2.1.277 부터 직접 읽되, `CLAUDE.md` 가 없을 때만이다. symlink 는 한 번만 읽힌다 | ✅ |
 | Plugin | 한 레포에 여러 plugin 을 담는 marketplace 가 가능하다. 설치는 `/plugin marketplace add`, `/plugin install x@y` | ✅ |
 | Plugin | rules 와 root `CLAUDE.md` 는 실리지 않는다. plugin `settings.json` 은 `agent`, `subagentStatusLine` 만 적용된다 | ✅ |

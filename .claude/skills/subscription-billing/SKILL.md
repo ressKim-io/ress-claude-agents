@@ -335,7 +335,7 @@ stripe test_clocks advance --frozen-time=$(date -d "+15 days" +%s)
 - `agents/tech-lead` — 구독 모델 ADR
 - [`postgresql-operations`](../postgresql-operations/SKILL.md) — invoice partition, archival
 - [`anti-bot`](../anti-bot/SKILL.md) — trial 어뷰즈 탐지
-- `rules/security.md`, `rules/documentation.md` — ADR/회계 문서
+- `rules/core/security.md`, `rules/process/documentation.md` — ADR/회계 문서
 
 **외부 표준 / 도구**:
 - Stripe Billing, Stripe Tax, Stripe Meters, Stripe Test Clocks

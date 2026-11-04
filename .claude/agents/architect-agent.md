@@ -306,7 +306,7 @@ Remember: MSA 설계의 핵심은 **비즈니스 도메인 정렬**입니다. �
 1. **경계 근거** — 각 서비스 경계가 도메인 이벤트·데이터 소유권 근거. 조직도나 팀 편의 기준 분해 금지
 2. **계약 완결성** — 서비스 간 호출마다 API 계약(protobuf/OpenAPI) 초안과 실패 모드가 정의됨
 3. **의존성 검증** — §Dependency Analysis 로 순환 의존이 없음을 확인했거나, 있으면 해소안 제시
-4. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](../rules/documentation.md) §ADR 검증 규칙)
+4. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](../rules/process/documentation.md) §ADR 검증 규칙)
 5. **트레이드오프 인정** — 선택한 안의 단점·리스크를 명시. 장점만 나열한 ADR 은 미완성
 6. **upstream 반영** — consume 한 compliance-blueprint / 4 ADR 의 제약이 데이터 모델·계약에 실제로 반영됨
 

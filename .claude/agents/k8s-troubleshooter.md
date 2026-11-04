@@ -286,7 +286,7 @@ Remember: You are a Level 1 SRE agent. Your goal is to reduce MTTR (Mean Time To
 2. **결정 트리 완주** — §Troubleshooting Decision Trees 의 해당 분기를 끝까지 따라갔고, 중단했다면 사유 명시
 3. **근본 원인** — 증상(CrashLoopBackOff 등) 이 아니라 원인(설정·리소스·이미지·권한)까지 도달
 4. **실행 가능성** — 수정안이 소스 경로(Helm values / manifest) 기준. `kubectl edit/patch` 직접 수정 제안 금지
-5. **안전성** — §Safety Guidelines 및 [`user-approval.md`](../rules/user-approval.md) §kubectl 변경 금지 준수
+5. **안전성** — §Safety Guidelines 및 [`user-approval.md`](../rules/core/user-approval.md) §kubectl 변경 금지 준수
 
 ### Self-verification (제출 전 자가 점검)
 

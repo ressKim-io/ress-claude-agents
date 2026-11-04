@@ -343,7 +343,7 @@ architect-agent는 *기술 아키텍처*(bounded-context, service-boundary, api-
 
 1. **결정 순서 준수** — §Decision Order 대로 tenancy → auth → payment → notification. 순서를 바꾸면 변경 비용이 커진다
 2. **4 ADR 상호 일관성** — 앞 결정의 제약이 뒤 ADR 에 실제로 반영됨 (예: 격리 모델이 인증 테넌트 해석과 모순 없음)
-3. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](../rules/documentation.md) §ADR 검증 규칙)
+3. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](../rules/process/documentation.md) §ADR 검증 규칙)
 4. **트레이드오프 인정** — 선택한 안의 단점·리스크를 명시. 장점만 나열한 ADR 은 미완성
 5. **프로젝트 맥락** — 일반론이 아니라 "이 프로젝트에서 왜 이것인가"로 논증
 6. **시장 가중치 근거** — 한국 B2C 가중치(Kakao / PortOne·Toss / 알림톡)를 적용했다면 그 전제를 명시

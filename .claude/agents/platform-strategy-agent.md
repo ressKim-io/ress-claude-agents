@@ -337,7 +337,7 @@ infra-roadmap-planner는 *인프라 단계별 진화* (EC2 → kind → EKS). pl
 이 agent 의 산출물이 다음을 만족해야 한다:
 
 1. **도입 판정 근거** — IDP / MLOps / GPU / WASM 각 항목이 "도입 / 보류 / 평가" 중 하나로 판정되고 근거가 조직 수치 기반
-2. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](../rules/documentation.md) §ADR 검증 규칙)
+2. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](../rules/process/documentation.md) §ADR 검증 규칙)
 3. **트레이드오프 인정** — 선택한 안의 단점·리스크를 명시. 장점만 나열한 ADR 은 미완성
 4. **프로젝트 맥락** — 일반론이 아니라 "이 프로젝트에서 왜 이것인가"로 논증
 5. **Golden Path 검증 가능성** — 정의한 path 마다 "성공했다"를 판정할 수 있는 기준이 있음

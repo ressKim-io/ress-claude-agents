@@ -454,7 +454,7 @@ audit-log + 사용자 알림
 - [`postgresql-operations`](../postgresql-operations/SKILL.md) — ledger 파티셔닝/아카이빙
 - `agents/cost-analyzer` — provider 원가 추적 + markup 분석
 - [`redis-operations`](../redis-operations/SKILL.md) — atomic decrement, 잔액 캐시
-- `rules/security.md`, `rules/documentation.md` — ADR/회계 문서
+- `rules/core/security.md`, `rules/process/documentation.md` — ADR/회계 문서
 
 **외부 표준 / 도구**:
 - Stripe Meters + Events (2025+) — postpaid usage billing

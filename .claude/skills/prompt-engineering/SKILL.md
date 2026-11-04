@@ -46,7 +46,7 @@ Opus 5.5·Sonnet 5.5 공식 prompting 가이드 기준.
 - **완료 보고를 완료의 증거로 삼지 않는다** — Opus 5.5: "Treat a text-only end of turn as a report rather than as proof the task is done." Sonnet 5.5 는 낮은 effort 에서 "sometimes reports a change as done without running a check" 하므로 검증 지시를 넣는다
 - **긴 작업의 중간 확인** — Sonnet 5.5 는 low·medium 의 긴 agentic 작업에서 "more likely to stop and check in". 자율 진행이 필요하면 프롬프트에 명시한다
 - **샘플링 파라미터를 못 쓴다** — Opus·Sonnet 5.5 는 `temperature`·`top_p`·`top_k` 를 400 으로 거부한다. 아래 Self-Consistency 처럼 temperature 로 추론 경로를 흩뜨리는 기법은 다른 모델에서만 가능하다
-- **prefill 불가** — 지원 모델별 차이는 `rules/token-budget.md` 참조
+- **prefill 불가** — 지원 모델별 차이는 `rules/harness/token-budget.md` 참조
 
 세부: [Opus 5.5 가이드](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5) · [Sonnet 5.5 가이드](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-sonnet-5-5)
 

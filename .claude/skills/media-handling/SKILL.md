@@ -437,7 +437,7 @@ CDN cost dashboard: Provider별 egress $/GB × 트래픽 합산 → 월 예측 �
 - **EXIF 정책**: 무조건 strip vs 사용자 동의 시 보존
 - **Retention**: 사용자 탈퇴 시 즉시 hard delete vs N일 soft delete
 
-각 ADR에 대안 비교표 + 정량 근거 (`rules/documentation.md` ADR 검증 규칙).
+각 ADR에 대안 비교표 + 정량 근거 (`rules/process/documentation.md` ADR 검증 규칙).
 
 ---
 

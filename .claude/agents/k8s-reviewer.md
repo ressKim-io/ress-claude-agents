@@ -506,7 +506,7 @@ pluto detect-files -d .
 2. **완전성** — §Review Domains 9개 도메인을 모두 훑었고, 훑지 못한 도메인은 사유와 함께 명시
 3. **실행 가능성** — Critical / High 지적마다 구체 수정안(패치 diff 또는 대체 설정) 동반. "검토하세요" 수준 금지
 4. **등급 산정** — Category Budget 점수가 실제 발견 건수·심각도에서 계산됐고, 임의 조정이 없음
-5. **일관성** — [`k8s-manifest.md`](../rules/k8s-manifest.md) / [`security.md`](../rules/security.md) 와 모순 없음
+5. **일관성** — [`k8s-manifest.md`](../rules/infra/k8s-manifest.md) / [`security.md`](../rules/core/security.md) 와 모순 없음
 
 ### Self-verification (제출 전 자가 점검)
 

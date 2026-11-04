@@ -1,7 +1,7 @@
 # Multi-Tool Adapter Rules
 
 이 레포의 자산을 여러 AI 코딩 도구(Claude Code / Codex / Cursor / Kiro 등)에 배치할 때 지키는 거버넌스 원칙.
-상세 매핑 표와 도구별 변환 규칙은 [`docs/architecture/multi-tool-mapping.md`](../../docs/architecture/multi-tool-mapping.md) 참조.
+상세 매핑 표와 도구별 변환 규칙은 [`docs/architecture/multi-tool-mapping.md`](../../../docs/architecture/multi-tool-mapping.md) 참조.
 
 ---
 
@@ -17,7 +17,7 @@
 | 도구 | 방식 | 근거 |
 |---|---|---|
 | Cursor | **자동** — `control-plane/src/adapter.ts` | 형식 변환 필요 (`.mdc`) |
-| Kiro | **수동** | AGENTS.md·SKILL.md 표준을 그대로 인식 → 자동화 ROI 낮음 ([ADR 0006](../../docs/adr/0006-kiro-adapter-strategy.md) Option 1) |
+| Kiro | **수동** | AGENTS.md·SKILL.md 표준을 그대로 인식 → 자동화 ROI 낮음 ([ADR 0006](../../../docs/adr/0006-kiro-adapter-strategy.md) Option 1) |
 | Codex / Copilot / Gemini CLI / Windsurf | **불필요** | `AGENTS.md` 자동 인식 |
 
 ```bash
@@ -30,7 +30,7 @@ node control-plane/dist/cli.js adapter --tool=cursor  # 반영
 
 ### 도구를 뺄 때도 ADR 을 쓴다
 
-Codex 는 2026-08-25 에 제거됐다 ([ADR 0010](../../docs/adr/0010-drop-codex-support.md)). **추가할 때만 판단하고 뺄 때는 방치하면, 유지되지 않는 산출물이 SSOT 인 척 남는다** — 실제로 `.codex/agents/` 는 3개월간 재생성되지 않아 원본과 다른 내용을 담고 있었다. 도구별 view 는 **재생성 실적이 유지 근거**다. 분기 review 에서 "이 도구의 산출물이 최근 원본 변경을 따라갔는가" 를 함께 본다.
+Codex 는 2026-08-25 에 제거됐다 ([ADR 0010](../../../docs/adr/0010-drop-codex-support.md)). **추가할 때만 판단하고 뺄 때는 방치하면, 유지되지 않는 산출물이 SSOT 인 척 남는다** — 실제로 `.codex/agents/` 는 3개월간 재생성되지 않아 원본과 다른 내용을 담고 있었다. 도구별 view 는 **재생성 실적이 유지 근거**다. 분기 review 에서 "이 도구의 산출물이 최근 원본 변경을 따라갔는가" 를 함께 본다.
 
 ## 신규 도구 합류 절차
 
@@ -52,8 +52,8 @@ MUST 매핑 문서의 각 항목에 **✅ verified / ⚠️ unverified + 사유*
 
 ## 자산 단위로 가져간다 (picky 운영)
 
-- PREFER 도구에 자산을 옮길 때 **필요한 것만** 고른다. 묶음 전체 복사 금지 — "안 쓰는 것까지 다 깔린다" 가 [ADR 0007](../../docs/adr/0007-install-sh-narrow-scope.md) 의 출발점이었다.
-- 수단은 **직접 복사**다. `install.sh` 는 2026-08-26 에 제거됐고 자산 단위 옵션(PR-8)은 착수되지 않은 채 끝났다 ([ADR 0011](../../docs/adr/0011-remove-install-sh.md)).
+- PREFER 도구에 자산을 옮길 때 **필요한 것만** 고른다. 묶음 전체 복사 금지 — "안 쓰는 것까지 다 깔린다" 가 [ADR 0007](../../../docs/adr/0007-install-sh-narrow-scope.md) 의 출발점이었다.
+- 수단은 **직접 복사**다. `install.sh` 는 2026-08-26 에 제거됐고 자산 단위 옵션(PR-8)은 착수되지 않은 채 끝났다 ([ADR 0011](../../../docs/adr/0011-remove-install-sh.md)).
 
 ## 도구 간 강제력 차이 인지
 
@@ -70,10 +70,10 @@ MUST port 시 산문 규약을 대상 도구의 **강제 메커니즘으로 승�
 
 ## 관련 문서
 
-- [`docs/architecture/multi-tool-mapping.md`](../../docs/architecture/multi-tool-mapping.md) — 3 도구 매핑 표 + Kiro port 규칙 + 검증 상태
-- [ADR 0006](../../docs/adr/0006-kiro-adapter-strategy.md) — Kiro 수동 매핑 결정 + 분기 review 기록
-- [ADR 0007](../../docs/adr/0007-install-sh-narrow-scope.md) — install.sh 자산 단위 옵션 (Superseded)
-- [ADR 0011](../../docs/adr/0011-remove-install-sh.md) — install.sh 제거
-- [ADR 0010](../../docs/adr/0010-drop-codex-support.md) — Codex 지원 중단
-- [`deep-thinking.md`](deep-thinking.md) — 외부 사양 검증 의무
+- [`docs/architecture/multi-tool-mapping.md`](../../../docs/architecture/multi-tool-mapping.md) — 3 도구 매핑 표 + Kiro port 규칙 + 검증 상태
+- [ADR 0006](../../../docs/adr/0006-kiro-adapter-strategy.md) — Kiro 수동 매핑 결정 + 분기 review 기록
+- [ADR 0007](../../../docs/adr/0007-install-sh-narrow-scope.md) — install.sh 자산 단위 옵션 (Superseded)
+- [ADR 0011](../../../docs/adr/0011-remove-install-sh.md) — install.sh 제거
+- [ADR 0010](../../../docs/adr/0010-drop-codex-support.md) — Codex 지원 중단
+- [`deep-thinking.md`](../core/deep-thinking.md) — 외부 사양 검증 의무
 - `control-plane/src/adapter.ts` — 자동 변환 구현

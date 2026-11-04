@@ -336,7 +336,7 @@ Endpoint: https://nid.naver.com/oauth2.0/authorize
 - `skills/platform/secrets-management.md` — Provider Secret 관리
 - `skills/business/multi-tenancy.md` — Org 컨텍스트와 결합 (P1)
 - `agents/security-scanner` — 구현 후 보안 검증
-- `rules/security.md` — 보안 룰
+- `rules/core/security.md` — 보안 룰
 
 **외부 표준**:
 - OAuth 2.1 (RFC 9700, 2025) — Implicit/Password Flow deprecated 명시

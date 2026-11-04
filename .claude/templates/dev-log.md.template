@@ -61,7 +61,7 @@ related:
 
 ## Failure Type Tags
 
-> `.claude/rules/debugging.md` §실패 유형 분류 참조
+> `.claude/rules/process/debugging.md` §실패 유형 분류 참조
 
 - [ ] `context-missing`
 - [ ] `manual-config-blind`

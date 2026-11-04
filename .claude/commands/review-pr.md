@@ -185,7 +185,7 @@ Confidence Score 기준:
 2. **중복 제거**: 같은 파일/라인의 동일 이슈는 하나로 병합
 3. **severity 조정**: 여러 관점에서 동시 지적된 이슈는 severity 상향 고려. 기존 이슈라도 PR 변경으로 공격 표면이 확대된 경우 severity 재평가.
 4. **CR-ID 순차 부여**: [CR-001]부터 번호 매김
-5. **코멘트 양식**: `.claude/rules/code-review.md`의 PR 코멘트 양식을 따름
+5. **코멘트 양식**: `.claude/rules/process/code-review.md`의 PR 코멘트 양식을 따름
 6. **관점 태그 추가**: 각 이슈에 어떤 관점에서 발견됐는지 표시
 
 최종 코멘트 헤더:

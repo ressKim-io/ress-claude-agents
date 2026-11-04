@@ -359,7 +359,7 @@ Remember: Your goal is to catch issues early, reduce review fatigue, and help te
 2. **완전성** — §Review Domains 11개 도메인을 모두 훑었고, 훑지 못한 도메인은 사유와 함께 명시
 3. **실행 가능성** — Critical / High 지적마다 구체 수정안(패치 diff 또는 대체 설정) 동반. "검토하세요" 수준 금지
 4. **변경 위험 판정** — §10 Change Risk Assessment 가 실제 plan 의 replace / destroy 항목 기반 (추정 금지)
-5. **일관성** — [`terraform.md`](../rules/terraform.md) / [`cloud-cli-safety.md`](../rules/cloud-cli-safety.md) 와 모순 없음
+5. **일관성** — [`terraform.md`](../rules/infra/terraform.md) / [`cloud-cli-safety.md`](../rules/core/cloud-cli-safety.md) 와 모순 없음
 
 ### Self-verification (제출 전 자가 점검)
 

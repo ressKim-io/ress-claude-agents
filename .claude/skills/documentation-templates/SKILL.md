@@ -6,7 +6,7 @@ description: 프로젝트 문서 템플릿 모음 — ADR, 부하테스트, 포�
 
 # Documentation Templates
 
-문서 작성 시 아래 템플릿을 사용한다. 트리거 규칙은 `.claude/rules/documentation.md` 참조.
+문서 작성 시 아래 템플릿을 사용한다. 트리거 규칙은 `.claude/rules/process/documentation.md` 참조.
 
 ---
 

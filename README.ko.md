@@ -81,7 +81,7 @@ cd ress-claude-agents
 ```bash
 cp -r .claude/skills/go-performance   /path/to/project/.claude/skills/
 cp    .claude/agents/code-reviewer.md /path/to/project/.claude/agents/
-cp    .claude/rules/security.md       /path/to/project/.claude/rules/
+cp    .claude/rules/core/security.md       /path/to/project/.claude/rules/
 ```
 
 > skill 은 `<skill-name>/SKILL.md` 레이아웃을 유지해야 한다 — Claude Code 는 다른 형태를 로드하지 않는다.

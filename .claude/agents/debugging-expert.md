@@ -483,5 +483,5 @@ kubectl logs -n production deploy/order-service --since=1h --timestamps | \
 
 - [ ] 가설을 검증 없이 결론으로 승격하지 않았음
 - [ ] 확인 못 한 구간은 "미확인"으로 표기하고 확인 경로를 제시
-- [ ] 회귀 방지 SOP([`workflow.md`](../rules/workflow.md) §Trouble → 회귀 방지)를 결과에 포함
+- [ ] 회귀 방지 SOP([`workflow.md`](../rules/core/workflow.md) §Trouble → 회귀 방지)를 결과에 포함
 - [ ] §Permission Boundary 위반 명령을 직접 실행하지 않았음

@@ -23,7 +23,7 @@ Phase 기반 작업 시 반드시 따라야 할 게이트 규칙.
 
 ## 적용 대상 아님
 
-- 버그 수정, 문서 수정, 설정 변경 등 소규모 작업 → `rules/workflow.md`의 일반 작업 순서
+- 버그 수정, 문서 수정, 설정 변경 등 소규모 작업 → `rules/core/workflow.md`의 일반 작업 순서
 - SDD/마이그레이션 문서의 오타 수정, 참조 링크 추가
 
 ## spec-driven-development.md와의 관계
@@ -116,7 +116,7 @@ Phase 시작 시 아래 체크리스트를 출력하고 진행 상황을 추적�
 ## 트러블슈팅 연계
 
 Phase 진행 중 문제 발생 시:
-1. `rules/debugging.md`의 가설-검증 루프를 따른다
+1. `rules/process/debugging.md`의 가설-검증 루프를 따른다
 2. 해결 후 `/log-trouble`로 기록한다 (failure_type 태그 포함)
 3. SDD에 영향이 있으면 SDD를 업데이트한다
 
@@ -125,7 +125,7 @@ Phase 진행 중 문제 발생 시:
 ## 관련 파일
 
 - 범용 SDD 템플릿: `.claude/templates/sdd.md.template`
-- 일반 작업 순서: `.claude/rules/workflow.md`
-- 디버깅 프로토콜: `.claude/rules/debugging.md`
-- PR 리뷰 프로세스: `.claude/rules/code-review.md`
+- 일반 작업 순서: `.claude/rules/core/workflow.md`
+- 디버깅 프로토콜: `.claude/rules/process/debugging.md`
+- PR 리뷰 프로세스: `.claude/rules/process/code-review.md`
 - Phase 시작 커맨드: `/phase-start`

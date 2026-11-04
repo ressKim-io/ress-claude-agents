@@ -284,7 +284,7 @@ Server: Order amount == Webhook amount 비교 → 불일치면 alert
 - `skills/messaging/redis-streams.md` — Webhook 큐
 - [`msa-saga`](../msa-saga/SKILL.md) — Saga 오케스트레이션
 - `agents/tech-lead` — 결제 ADR 작성
-- `rules/security.md` — 보안 룰 (PCI 관련)
+- `rules/core/security.md` — 보안 룰 (PCI 관련)
 
 **외부 표준**:
 - PCI-DSS v4.0
