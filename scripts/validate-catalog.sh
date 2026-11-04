@@ -9,6 +9,7 @@
 #   2. locations : 로드되지 않는 위치의 SKILL.md, 옛 구조의 자산 폴더 금지
 #   3. commands  : 모든 command 에 frontmatter description 존재
 #   4. refs      : 문서의 `/plugin:이름`, subagent_type 이 실제 자산으로 해석됨
+#   7. skills    : description 이 '무엇. Use when 상황.' 형식, 250자 이내, 템플릿 문구·중복 없음
 #   5. plugins   : marketplace, plugin 폴더, plugin.json, enabledPlugins 가 서로 일치
 #   6. paths     : 본문에 적은 rule·plugin 경로가 실제로 존재
 #
@@ -88,6 +89,54 @@ check_legacy_directories() {
         printf '%s\n' "$dirs" | sed 's/^/        옛 구조: /'
     else
         log_pass "옛 구조의 자산 폴더 없음"
+    fi
+}
+
+check_skill_descriptions() {
+    section "skill description"
+    local list
+    list=$(mktemp)
+    # shellcheck disable=SC2064
+    trap "rm -f '$list'" RETURN
+    skill_files >"$list"
+
+    if ! LIST_FILE="$list" python3 - <<'PY'
+import io, os, re, sys
+
+# 목록 예산이 컨텍스트의 1% 라 길수록 뒤쪽 skill 의 description 이 먼저 빠진다.
+LIMIT = 250
+TEMPLATE = re.compile(r"Use when working with|도메인의 패턴|구현 선택")
+problems = []
+seen = {}
+paths = io.open(os.environ["LIST_FILE"], encoding="utf-8").read().split()
+for path in paths:
+    name = path.split("/")[3]
+    head = io.open(path, encoding="utf-8").read().split("\n---", 1)[0]
+    match = re.search(r"^description:[ \t]*(.*)$", head, re.M)
+    description = match.group(1).strip().strip('"') if match else ""
+    if TEMPLATE.search(description):
+        problems.append(f"템플릿 문구: {name}")
+    if description.count(". Use when ") != 1 or not description.endswith("."):
+        problems.append(f"'무엇. Use when 상황.' 형식이 아니다: {name}")
+    if len(description) > LIMIT:
+        problems.append(f"{LIMIT}자 초과 ({len(description)}자): {name}")
+    if description in seen:
+        problems.append(f"중복: {seen[description]} / {name}")
+    seen.setdefault(description, name)
+
+if not paths:
+    print("        대상 0건 — 목록이 비었다")
+    sys.exit(1)
+for problem in problems:
+    print(f"        {problem}")
+if problems:
+    sys.exit(1)
+print(f"        {len(paths)}건 형식 통과")
+PY
+    then
+        log_fail "description 규칙 위반"
+    else
+        log_pass "description 규칙 통과"
     fi
 }
 
@@ -290,6 +339,7 @@ check_floors
 check_skill_locations
 check_legacy_directories
 check_command_descriptions
+check_skill_descriptions
 check_references
 check_plugins
 check_path_mentions

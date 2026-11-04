@@ -365,6 +365,63 @@ should_fail_catalog_when_skill_is_nested_under_category() {
 }
 
 # ---------------------------------------------------------------------------
+# skill description
+# ---------------------------------------------------------------------------
+set_description() {
+    python3 - "$CASE_DIR/plugins/$1/skills/$2/SKILL.md" "$3" <<'PY'
+import re, sys
+path, description = sys.argv[1:]
+text = open(path, encoding="utf-8").read()
+text = re.sub(r"^description:.*$", lambda _: f'description: "{description}"', text, count=1, flags=re.M)
+open(path, "w", encoding="utf-8").write(text)
+PY
+}
+
+should_fail_descriptions_when_template_phrase_returns() {
+    # Given: 무엇도 언제도 말하지 않아 224개를 다시 쓰게 만든 문구
+    add_plugin_skill go brand-new
+    set_description go brand-new "Go 패턴. Use when working with go 도메인의 패턴 / 구현 선택."
+    # When/Then
+    expect_fail '템플릿 문구.*brand-new' ./scripts/validate-catalog.sh
+}
+
+should_fail_descriptions_when_use_when_is_missing() {
+    # Given
+    add_plugin_skill go brand-new
+    set_description go brand-new "Go 패턴 모음이다."
+    # When/Then
+    expect_fail 'Use when.*brand-new' ./scripts/validate-catalog.sh
+}
+
+should_fail_descriptions_when_longer_than_limit() {
+    # Given: 길면 목록 예산을 먼저 다 쓴다
+    local long
+    long=$(python3 -c 'print("가" * 240)')
+    add_plugin_skill go brand-new
+    set_description go brand-new "$long. Use when 길 때 쓴다."
+    # When/Then
+    expect_fail '250자.*brand-new' ./scripts/validate-catalog.sh
+}
+
+should_pass_descriptions_when_multibyte_text_is_within_limit() {
+    # Given: 바이트로 세면 한글 90자도 넘는다
+    local text
+    text=$(python3 -c 'print("가" * 220)')
+    add_plugin_skill go brand-new
+    set_description go brand-new "$text. Use when 짧을 때 쓴다."
+    # When/Then
+    expect_pass ./scripts/validate-catalog.sh
+}
+
+should_fail_descriptions_when_two_skills_share_one() {
+    # Given: 같으면 모델이 둘을 구분할 수 없다
+    add_plugin_skill go brand-new
+    add_plugin_skill java other-new
+    # When/Then
+    expect_fail '중복.*other-new' ./scripts/validate-catalog.sh
+}
+
+# ---------------------------------------------------------------------------
 # validate-frontmatter-yaml.mjs
 # ---------------------------------------------------------------------------
 should_fail_yaml_when_skill_frontmatter_is_invalid() {
