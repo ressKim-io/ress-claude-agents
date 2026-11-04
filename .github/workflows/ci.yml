@@ -35,6 +35,9 @@ jobs:
       - name: Validate inventory freshness
         run: ./scripts/generate-inventory.sh validate
 
+      - name: Validate plugin README freshness
+        run: python3 scripts/generate-plugin-readmes.py validate
+
   lint:
     name: Shellcheck
     runs-on: ubuntu-latest

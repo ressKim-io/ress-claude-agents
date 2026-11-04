@@ -137,7 +137,8 @@ should_pass_every_gate_when_repo_is_unmodified() {
         expect_pass ./scripts/validate-catalog.sh &&
         expect_pass ./scripts/generate-inventory.sh validate &&
         expect_pass ./scripts/generate-inventory-labels.sh validate &&
-        expect_pass node scripts/validate-frontmatter-yaml.mjs
+        expect_pass node scripts/validate-frontmatter-yaml.mjs &&
+        expect_pass python3 scripts/generate-plugin-readmes.py validate
 }
 
 # ---------------------------------------------------------------------------
@@ -372,6 +373,95 @@ should_fail_yaml_when_no_files_are_found() {
     remove_skills
     # When/Then
     expect_fail '하한' node scripts/validate-frontmatter-yaml.mjs
+}
+
+# ---------------------------------------------------------------------------
+# plugin 구조
+# ---------------------------------------------------------------------------
+should_fail_plugin_catalog_when_marketplace_entry_has_no_directory() {
+    # Given
+    python3 - "$CASE_DIR/.claude-plugin/marketplace.json" <<'PY'
+import json, sys
+path = sys.argv[1]
+data = json.load(open(path, encoding="utf-8"))
+data["plugins"].append({"name": "ghost", "source": "./plugins/ghost"})
+json.dump(data, open(path, "w", encoding="utf-8"))
+PY
+    # When/Then
+    expect_fail 'marketplace.*ghost' ./scripts/validate-catalog.sh
+}
+
+should_fail_plugin_catalog_when_directory_is_not_in_marketplace() {
+    # Given: 있어도 설치할 수 없는 plugin
+    add_plugin_skill stray from
+    mkdir -p "$CASE_DIR/plugins/stray/.claude-plugin"
+    printf '{"name": "stray"}\n' >"$CASE_DIR/plugins/stray/.claude-plugin/plugin.json"
+    # When/Then
+    expect_fail 'marketplace 에 없다.*stray' ./scripts/validate-catalog.sh
+}
+
+should_fail_plugin_catalog_when_manifest_is_missing() {
+    # Given
+    rm -f "$CASE_DIR/plugins/dx/.claude-plugin/plugin.json"
+    # When/Then
+    expect_fail 'plugin\.json.*dx' ./scripts/validate-catalog.sh
+}
+
+should_fail_plugin_catalog_when_manifest_name_differs() {
+    # Given
+    printf '{"name": "other"}\n' >"$CASE_DIR/plugins/dx/.claude-plugin/plugin.json"
+    # When/Then
+    expect_fail 'plugin\.json.*dx' ./scripts/validate-catalog.sh
+}
+
+should_fail_plugin_catalog_when_enabled_plugin_is_unknown() {
+    # Given
+    python3 - "$CASE_DIR/.claude/settings.json" <<'PY'
+import json, sys
+path = sys.argv[1]
+data = json.load(open(path, encoding="utf-8"))
+data["enabledPlugins"]["ghost@ress"] = True
+json.dump(data, open(path, "w", encoding="utf-8"))
+PY
+    # When/Then
+    expect_fail 'enabledPlugins.*ghost' ./scripts/validate-catalog.sh
+}
+
+should_fail_plugin_catalog_when_plain_rule_path_is_dangling() {
+    # Given: 링크가 아닌 경로 표기도 옮길 때 자주 빠진다
+    # shellcheck disable=SC2016  # 백틱은 실행이 아니라 문서 표기다
+    printf '\n자세한 내용은 `.claude/rules/core/no-such-rule.md` 를 본다\n' >>"$CASE_DIR/AGENTS.md"
+    # When/Then
+    expect_fail '없는 경로.*no-such-rule' ./scripts/validate-catalog.sh
+}
+
+should_fail_plugin_links_when_repo_url_target_is_missing() {
+    # Given: 설치본에서 쓰는 원격 링크. 파일을 옮기면 조용히 404 가 된다
+    printf '\n[x](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/no-such.md)\n' \
+        >>"$CASE_DIR/$(first_asset command_files)"
+    # When/Then
+    expect_fail 'no-such\.md' ./scripts/validate-links.sh
+}
+
+should_fail_plugin_links_when_living_doc_has_broken_link() {
+    # Given: 살아 있는 문서의 옛 경로가 게이트에 안 잡혀 실제로 깨진 채 남았었다
+    printf '\n[x](../../.claude/rules/no-such-rule.md)\n' >>"$CASE_DIR/docs/architecture/multi-tool-mapping.md"
+    # When/Then
+    expect_fail 'multi-tool-mapping' ./scripts/validate-links.sh
+}
+
+should_fail_plugin_readme_when_stale() {
+    # Given
+    printf '\n손으로 고친 줄\n' >>"$CASE_DIR/plugins/dx/README.md"
+    # When/Then
+    expect_fail 'README 가 오래됐다.*dx' python3 scripts/generate-plugin-readmes.py validate
+}
+
+should_fail_plugin_readme_when_new_skill_is_not_listed() {
+    # Given
+    add_plugin_skill dx brand-new-skill
+    # When/Then
+    expect_fail 'README 가 오래됐다.*dx' python3 scripts/generate-plugin-readmes.py validate
 }
 
 # ---------------------------------------------------------------------------

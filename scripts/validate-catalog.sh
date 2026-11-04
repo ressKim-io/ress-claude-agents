@@ -9,6 +9,8 @@
 #   2. locations : 로드되지 않는 위치의 SKILL.md 금지
 #   3. commands  : 모든 command 에 frontmatter description 존재
 #   4. refs      : rule 과 AGENTS.md 의 `/명령` 표기가 실제 자산으로 해석됨
+#   5. plugins   : marketplace, plugin 폴더, plugin.json, enabledPlugins 가 서로 일치
+#   6. paths     : 본문에 적은 rule·plugin 경로가 실제로 존재
 #
 # 사용: ./scripts/validate-catalog.sh
 # Exit code: 0 = 통과, 1 = 실패
@@ -146,10 +148,118 @@ PY
     fi
 }
 
+check_plugins() {
+    section "plugin 구성"
+    if ! python3 - <<'PY'
+import json, os, sys
+
+MARKETPLACE = ".claude-plugin/marketplace.json"
+SETTINGS = ".claude/settings.json"
+problems = []
+
+if not os.path.exists(MARKETPLACE):
+    if os.path.isdir("plugins"):
+        print(f"        {MARKETPLACE} 가 없는데 plugins/ 가 있다")
+        sys.exit(1)
+    print("        plugin 구조 아님")
+    sys.exit(0)
+
+marketplace = json.load(open(MARKETPLACE, encoding="utf-8"))
+names = set()
+for entry in marketplace.get("plugins", []):
+    name = entry["name"]
+    names.add(name)
+    if entry.get("source") != f"./plugins/{name}" or not os.path.isdir(f"plugins/{name}"):
+        problems.append(f"marketplace 항목의 경로가 없다: {name}")
+        continue
+    manifest = f"plugins/{name}/.claude-plugin/plugin.json"
+    if not os.path.exists(manifest):
+        problems.append(f"plugin.json 없음: {name}")
+    elif json.load(open(manifest, encoding="utf-8")).get("name") != name:
+        problems.append(f"plugin.json 의 name 이 폴더와 다르다: {name}")
+    if not any(os.path.isdir(f"plugins/{name}/{kind}") for kind in ("skills", "agents", "commands")):
+        problems.append(f"자산이 없는 plugin: {name}")
+
+for name in sorted(os.listdir("plugins")) if os.path.isdir("plugins") else []:
+    if os.path.isdir(f"plugins/{name}") and name not in names:
+        problems.append(f"marketplace 에 없다: {name}")
+
+settings = json.load(open(SETTINGS, encoding="utf-8"))
+marketplace_name = marketplace["name"]
+for key in settings.get("enabledPlugins", {}):
+    plugin, _, source = key.partition("@")
+    if source == marketplace_name and plugin not in names:
+        problems.append(f"enabledPlugins 항목이 marketplace 에 없다: {key}")
+if settings.get("enabledPlugins") and marketplace_name not in settings.get("extraKnownMarketplaces", {}):
+    problems.append(f"extraKnownMarketplaces 에 {marketplace_name} 이 없다")
+
+for problem in problems:
+    print(f"        {problem}")
+if problems:
+    sys.exit(1)
+print(f"        plugin {len(names)}개 일치")
+PY
+    then
+        log_fail "plugin 구성이 맞지 않다"
+    else
+        log_pass "plugin 구성 일치"
+    fi
+}
+
+check_path_mentions() {
+    section "본문의 경로 표기"
+    local targets
+    targets=$(mktemp)
+    # shellcheck disable=SC2064
+    trap "rm -f '$targets'" RETURN
+    {
+        printf 'AGENTS.md\n'
+        skill_files
+        agent_files
+        command_files
+        rule_files
+        find .claude/templates -maxdepth 1 -type f
+        find docs/architecture docs/guides docs/onboarding -type f -name '*.md'
+    } >"$targets"
+
+    if ! TARGETS_FILE="$targets" python3 - <<'PY'
+import io, os, re, sys
+
+MENTION = re.compile(
+    r"(?<![\w/.-])(\.claude/rules/[a-z0-9/-]+\.md"
+    r"|plugins/[a-z0-9-]+/(?:skills|agents|commands|templates)/[A-Za-z0-9._/-]+)"
+)
+missing = []
+checked = 0
+for path in io.open(os.environ["TARGETS_FILE"], encoding="utf-8").read().split():
+    for lineno, line in enumerate(io.open(path, encoding="utf-8"), 1):
+        for mention in MENTION.findall(line):
+            mention = mention.rstrip("./")
+            checked += 1
+            if not os.path.exists(mention):
+                missing.append((path, lineno, mention))
+if checked == 0:
+    print("        경로 표기 0건 — 패턴이 깨졌다")
+    sys.exit(1)
+for path, lineno, mention in missing:
+    print(f"        없는 경로: {path}:{lineno}  {mention}")
+if missing:
+    sys.exit(1)
+print(f"        경로 표기 {checked}건 존재")
+PY
+    then
+        log_fail "없는 경로를 가리키는 표기가 있다"
+    else
+        log_pass "경로 표기 전부 존재"
+    fi
+}
+
 check_floors
 check_skill_locations
 check_command_descriptions
 check_references
+check_plugins
+check_path_mentions
 
 printf '\n'
 if [[ $EXIT_CODE -eq 0 ]]; then
