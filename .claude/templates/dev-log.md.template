@@ -74,7 +74,7 @@ related:
 ## Learning / Universal Lesson
 
 > 이 사고가 다른 프로젝트에도 적용 가능한 일반 교훈인가?
-> Yes 면 `/promote-devlog <slug>` 로 ADR/skill 승격 후보.
+> Yes 면 `/dx:promote-devlog <slug>` 로 ADR/skill 승격 후보.
 
 - {1~2줄 교훈}
 - 일반화 가능 여부: {Yes/No/Maybe — 같은 패턴 3건 누적 시 promote}

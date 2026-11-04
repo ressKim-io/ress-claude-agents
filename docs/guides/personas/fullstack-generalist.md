@@ -47,22 +47,22 @@ Load specific skills directly with slash commands:
 
 | Skill | Use Case |
 |-------|----------|
-| `/local-dev-makefile` | `make up` for full-stack run, Hot Reload |
+| `/dx:local-dev-makefile` | `make up` for full-stack run, Hot Reload |
 | `/docker` | Dockerfile optimization, multi-stage builds |
-| `/dx-onboarding-environment` | Dev Container automation |
+| `/dx:dx-onboarding-environment` | Dev Container automation |
 
 ```
 "Set up my local dev environment with Docker"
-→ /local-dev-makefile + /docker
+→ /dx:local-dev-makefile + /docker
 ```
 
 ### Cloud IDE
 
 | Skill | Use Case |
 |-------|----------|
-| `/dx-onboarding-gitpod` | Gitpod/Codespaces setup |
-| `/dx-onboarding` | Time-to-First-Deploy optimization |
-| `/dx-onboarding-deploy` | First deployment guide |
+| `/dx:dx-onboarding-gitpod` | Gitpod/Codespaces setup |
+| `/dx:dx-onboarding` | Time-to-First-Deploy optimization |
+| `/dx:dx-onboarding-deploy` | First deployment guide |
 
 ---
 
@@ -80,17 +80,17 @@ Load specific skills directly with slash commands:
 
 | Skill | Target |
 |-------|--------|
-| `/clean-code` | Composed Method, Cognitive Complexity, Guard Clause, naming |
-| `/refactoring-principles` | Language-agnostic fundamentals |
+| `/dx:clean-code` | Composed Method, Cognitive Complexity, Guard Clause, naming |
+| `/dx:refactoring-principles` | Language-agnostic fundamentals |
 | `/refactoring-spring` | Spring Boot code |
 | `/refactoring-go` | Go code |
 
 ```
 Clean code review:
-  /jvm-performance or /go-performance → /clean-code → /refactoring-principles
+  /jvm-performance or /go-performance → /dx:clean-code → /dx:refactoring-principles
 
 "Check my code readability"
-→ /clean-code + code-reviewer
+→ /dx:clean-code + code-reviewer
 ```
 
 ### Tech Decisions
@@ -118,15 +118,15 @@ Records your development process as structured markdown.
 
 | Command | Use Case | Example |
 |---------|----------|---------|
-| `/log-feedback` | Record AI correction requests | Pattern mismatch, omissions |
-| `/log-decision` | Record tech decisions | A vs B selection rationale |
-| `/log-meta` | Record rule/skill changes | Workflow improvements |
-| `/log-trouble` | Record troubleshooting | Error cause, resolution |
-| `/log-summary` | Session summary | Run before ending a session |
+| `/dx:log-feedback` | Record AI correction requests | Pattern mismatch, omissions |
+| `/dx:log-decision` | Record tech decisions | A vs B selection rationale |
+| `/dx:log-meta` | Record rule/skill changes | Workflow improvements |
+| `/dx:log-trouble` | Record troubleshooting | Error cause, resolution |
+| `/dx:log-summary` | Session summary | Run before ending a session |
 
 ```
 Before ending a session:
-  /log-summary → Auto-generates today's work summary
+  /dx:log-summary → Auto-generates today's work summary
 ```
 
 ---
@@ -135,10 +135,10 @@ Before ending a session:
 
 | Skill | Use Case |
 |-------|----------|
-| `/docs-as-code` | MkDocs, Docusaurus, TechDocs |
-| `/docs-as-code-automation` | API doc automation, Vale linter |
-| `/conventional-commits` | Commit message rules, Changelog automation |
-| `/token-efficiency` | Claude Code session token efficiency |
+| `/dx:docs-as-code` | MkDocs, Docusaurus, TechDocs |
+| `/dx:docs-as-code-automation` | API doc automation, Vale linter |
+| `/dx:conventional-commits` | Commit message rules, Changelog automation |
+| `/dx:token-efficiency` | Claude Code session token efficiency |
 
 ---
 
@@ -160,10 +160,10 @@ Before ending a session:
 ```
 Week 1: Learn the basic cycle
   - code-reviewer, security-scanner, git-workflow
-  - /effective-java or /effective-go, /clean-code
+  - /effective-java or /effective-go, /dx:clean-code
 
 Week 2: Project structure
-  - /api-design, /docker, /local-dev-makefile
+  - /api-design, /docker, /dx:local-dev-makefile
   - Using architect-agent
 
 Week 3: Testing + Observability

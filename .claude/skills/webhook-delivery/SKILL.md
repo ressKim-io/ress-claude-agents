@@ -342,7 +342,7 @@ API 인증은 [`business/admin-api-keys.md`](../admin-api-keys/SKILL.md) 패턴 
 - `circuit_open count > N` → endpoint 품질 저하 (대규모 사고 가능)
 - `p95 duration > 10s` → 수신자 felomada 또는 우리 worker 부하
 
-분기 회고에서 delivery 성공률, MTTR을 [`dx/quarterly-review.md`](../quarterly-review/SKILL.md)에 통합.
+분기 회고에서 delivery 성공률, MTTR을 [`dx/quarterly-review.md`](../../../plugins/dx/skills/quarterly-review/SKILL.md)에 통합.
 
 ---
 
@@ -415,7 +415,7 @@ C. Hookdeck — destination-side queue
 - Auto-trigger: 실패율 5%+, 비용 2x, scale 10x
 ```
 
-[`dx/adr-retrospective.md`](../adr-retrospective/SKILL.md) 참조.
+[`dx/adr-retrospective.md`](../../../plugins/dx/skills/adr-retrospective/SKILL.md) 참조.
 
 ---
 

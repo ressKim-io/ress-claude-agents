@@ -17,7 +17,7 @@ dev-logs (`docs/dev-logs/*.md`) 작성·갱신·정리 시 반드시 따라야 �
 
 | Tier | 이름 | 조건 | 위치 | 검색 우선순위 |
 |------|------|------|------|---------------|
-| **1** | Active | `status: open` OR active 메모리/카드와 연결 | `docs/dev-logs/` | 최상위 (`/where`, `/related`) |
+| **1** | Active | `status: open` OR active 메모리/카드와 연결 | `docs/dev-logs/` | 최상위 (`/dx:where`, `/dx:related`) |
 | **2** | Reference | `status: resolved` + (`importance: critical\|major` OR ADR/카드/메모리에서 인용) | `docs/dev-logs/` | 2순위 |
 | **3** | Historical | `status: resolved` + 60일+ 미참조 + `importance: minor` | `docs/dev-logs/` | grep으로만 발견 |
 | **4** | Superseded | `status: superseded` + `replaced_by` 명시 | `docs/dev-logs/_archive/` | 인덱스 제거, forward link만 보존 |
@@ -57,13 +57,13 @@ replaced_by: dev-logs/YYYY-MM-DD-...md   # superseded 만
 
 - `date`: 파일명 날짜와 일치 (YYYY-MM-DD ISO 8601)
 - `category`: 4종 (troubleshoot/decision/migration/meta)
-- `tier`: 작성 시점 산출값. 자동 산출은 `/consolidate-devlogs` 사용
+- `tier`: 작성 시점 산출값. 자동 산출은 `/dx:consolidate-devlogs` 사용
 - `importance`: 영향도 (critical: 프로덕션 장애·아키텍처 결정 / major: 의미 있는 패턴·교훈 / minor: 단순 작업 기록)
 - `status`: open(진행 중) / resolved(완료) / superseded(대체됨)
 
 ### 선택 필드
 
-- `tags`: 검색용 키워드. `/where`, `/related`에서 매칭 우선순위 +5점
+- `tags`: 검색용 키워드. `/dx:where`, `/dx:related`에서 매칭 우선순위 +5점
 - `related`: 다른 dev-log/ADR/메모리 forward link
 - `replaced_by`: `status: superseded` 일 때만 필수
 
@@ -100,7 +100,7 @@ dev-log 작성이 의무인 상황:
 - rules/skills/commands/agents 추가·변경 → `category: meta`
 
 각 트리거의 상세 양식:
-- `/log-trouble`, `/log-decision`, `/log-meta` 슬래시 커맨드 사용
+- `/dx:log-trouble`, `/dx:log-decision`, `/dx:log-meta` 슬래시 커맨드 사용
 
 ---
 
@@ -115,7 +115,7 @@ dev-log 작성이 의무인 상황:
 
 ### Tier 2 → ADR/skill 승격
 
-같은 주제 dev-log 3건+ 누적 시 패턴 정착 신호. **`/promote-devlog <slug>`** 사용:
+같은 주제 dev-log 3건+ 누적 시 패턴 정착 신호. **`/dx:promote-devlog <slug>`** 사용:
 - ADR 생성 (decision 패턴) 또는 skill 보강 (반복 절차)
 - 원본 dev-logs는 `replaced_by: adr/NNNN-...md` 메타 추가
 
@@ -123,7 +123,7 @@ dev-log 작성이 의무인 상황:
 
 대체 결정이 명확한 경우:
 1. `status: superseded` + `replaced_by: dev-logs/...` 또는 `adr/...`
-2. **`/archive-devlog <slug>`** 사용 → `_archive/` 이동
+2. **`/dx:archive-devlog <slug>`** 사용 → `_archive/` 이동
 3. forward link는 신규 자료에 보존, INDEX 제거
 
 ---
@@ -144,9 +144,9 @@ dev-log 작성이 의무인 상황:
 
 | 커맨드 | 효과 | 빈도 |
 |--------|------|------|
-| `/consolidate-devlogs` | frontmatter 기반 tier 자동 산출, 클러스터 발견, superseded 식별 (dry-run) | 주 1회 |
-| `/promote-devlog <slug>` | Tier 2 → ADR/skill 승격 (semantic 정착) | 패턴 발견 시 |
-| `/archive-devlog <slug>` | Tier 4 이동, replaced_by 링크 보존 | superseded 발견 시 |
+| `/dx:consolidate-devlogs` | frontmatter 기반 tier 자동 산출, 클러스터 발견, superseded 식별 (dry-run) | 주 1회 |
+| `/dx:promote-devlog <slug>` | Tier 2 → ADR/skill 승격 (semantic 정착) | 패턴 발견 시 |
+| `/dx:archive-devlog <slug>` | Tier 4 이동, replaced_by 링크 보존 | superseded 발견 시 |
 
 ---
 
@@ -154,8 +154,8 @@ dev-log 작성이 의무인 상황:
 
 - **FadeMem (LML/SML)**: Tier 1+2 (보존) / Tier 3+4 (빠른 demote) 매핑
 - **Importance Score**: frontmatter `importance` 필드와 동형
-- **Sleep-time computation**: `/consolidate-devlogs` 패턴
-- **Episodic → Semantic**: `/promote-devlog` (dev-log → ADR/skill)
+- **Sleep-time computation**: `/dx:consolidate-devlogs` 패턴
+- **Episodic → Semantic**: `/dx:promote-devlog` (dev-log → ADR/skill)
 - **OS memory hierarchy**: Tier 1 (RAM) / Tier 2-3 (disk) / Tier 4 (cold storage)
 
 상세: `docs/dev-logs/2026-04-29-devlog-tier-policy.md` 끝 섹션.

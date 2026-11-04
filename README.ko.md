@@ -57,7 +57,7 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 | 🤖 | **Agents** | 46 (~18,800줄) | 전략, 프론트엔드, 보안, SRE, MLOps 등 자율 실행 전문가 |
 | 💡 | **Skills** | 254 (~97,500줄) | Go, Spring, Python, React/Next.js, K8s, MSA, AI/LLM, 비즈니스/법무/운영 등 온디맨드 도메인 지식 |
 | 📏 | **Rules** | 15 (~1,840줄) | Git, 테스트, 보안, 클라우드 CLI, 모니터링, 코드리뷰, 문서화, 토큰 예산 등 자동 적용 규칙 |
-| ⚡ | **Commands** | 43 (~4,000줄) | `/go review`, `/java lint`, `/review-pr` 등 자동화 워크플로우 |
+| ⚡ | **Commands** | 43 (~4,000줄) | `/go review`, `/java lint`, `/dx:review-pr` 등 자동화 워크플로우 |
 | 🔒 | **Enforcement** | deny/ask 규칙 | `git push` / `gh pr` / 변경형 `kubectl` 을 산문이 아니라 설정으로 막는다 |
 | 📏 | **Total** | **122,000+ lines** | 20개 카테고리로 체계화된 AI 지식 체계 |
 
@@ -80,7 +80,7 @@ cd ress-claude-agents
 
 ```bash
 cp -r .claude/skills/go-performance   /path/to/project/.claude/skills/
-cp    .claude/agents/code-reviewer.md /path/to/project/.claude/agents/
+cp    plugins/dx/agents/code-reviewer.md /path/to/project/.claude/agents/
 cp    .claude/rules/core/security.md       /path/to/project/.claude/rules/
 ```
 
@@ -434,32 +434,32 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 <summary><b>Developer Experience (26 files)</b></summary>
 
 ```
-/spec-driven-development # SDD, PRD, Design Doc, Shape Up — 계획 방법론 비교 및 템플릿
-/dx-metrics         # DORA, SPACE, DevEx
+/dx:spec-driven-development # SDD, PRD, Design Doc, Shape Up — 계획 방법론 비교 및 템플릿
+/dx:dx-metrics         # DORA, SPACE, DevEx
 /dx-ai-agents       # AI 에이전트 거버넌스, Copilot/Claude 통합
 /dx-ai-agents-orchestration # 멀티 에이전트, 가드레일, Self-Healing
 /dx-ai-security     # AI 보안, Prompt Injection 방어
 /ai-first-playbook  # AI-First 조직 전환, ROI 측정, Shopify 모델
-/dx-onboarding      # Time-to-First-Deploy
-/dx-onboarding-deploy # 배포 파이프라인 온보딩
-/dx-onboarding-environment # 개발 환경 자동화
-/dx-onboarding-gitpod # Gitpod/Codespaces 클라우드 IDE
-/local-dev-makefile # make up으로 풀스택 실행, Hot Reload, Dockerfile.dev
-/docs-as-code       # MkDocs, Docusaurus, TechDocs
-/docs-as-code-automation # API 문서 자동화, CI/CD, 품질 측정
-/documentation-templates # 12종 문서 템플릿 (ADR, postmortem, migration 등)
-/conventional-commits # Conventional Commits, Changelog 자동화
-/git-workflow       # Git 브랜칭 전략, Trunk-based
-/refactoring-principles # 리팩토링 원칙, Code Smells
-/clean-code         # Composed Method, Cognitive Complexity, Guard Clause, 네이밍
-/token-efficiency   # 토큰 & 컨텍스트 효율화, 낭비 패턴 방지
-/token-budget       # Opus 4.7 effort/caching, Adaptive Thinking, 비용 계산
-/rfc-adr            # RFC/ADR 워크플로우, 템플릿, 라이프사이클
-/adr-retrospective  # 6/12개월 ADR 재평가, hit rate, supersede frequency
-/quarterly-review   # DORA SQL, SLO burn rate, FinOps unit economics, 회고 facilitation
-/engineering-strategy # Tech Radar, Build vs Buy, OKR, 로드맵
-/team-topologies    # Team Topologies, Conway's Law, 인터랙션 모드
-/product-thinking   # RICE, MoSCoW, Shape Up, JTBD, Story Mapping
+/dx:dx-onboarding      # Time-to-First-Deploy
+/dx:dx-onboarding-deploy # 배포 파이프라인 온보딩
+/dx:dx-onboarding-environment # 개발 환경 자동화
+/dx:dx-onboarding-gitpod # Gitpod/Codespaces 클라우드 IDE
+/dx:local-dev-makefile # make up으로 풀스택 실행, Hot Reload, Dockerfile.dev
+/dx:docs-as-code       # MkDocs, Docusaurus, TechDocs
+/dx:docs-as-code-automation # API 문서 자동화, CI/CD, 품질 측정
+/dx:documentation-templates # 12종 문서 템플릿 (ADR, postmortem, migration 등)
+/dx:conventional-commits # Conventional Commits, Changelog 자동화
+/dx:git-workflow       # Git 브랜칭 전략, Trunk-based
+/dx:refactoring-principles # 리팩토링 원칙, Code Smells
+/dx:clean-code         # Composed Method, Cognitive Complexity, Guard Clause, 네이밍
+/dx:token-efficiency   # 토큰 & 컨텍스트 효율화, 낭비 패턴 방지
+/dx:token-budget       # Opus 4.7 effort/caching, Adaptive Thinking, 비용 계산
+/dx:rfc-adr            # RFC/ADR 워크플로우, 템플릿, 라이프사이클
+/dx:adr-retrospective  # 6/12개월 ADR 재평가, hit rate, supersede frequency
+/dx:quarterly-review   # DORA SQL, SLO burn rate, FinOps unit economics, 회고 facilitation
+/dx:engineering-strategy # Tech Radar, Build vs Buy, OKR, 로드맵
+/dx:team-topologies    # Team Topologies, Conway's Law, 인터랙션 모드
+/dx:product-thinking   # RICE, MoSCoW, Shape Up, JTBD, Story Mapping
 ```
 </details>
 
@@ -641,7 +641,7 @@ Claude Code의 **Subagent 시스템**을 활용한 자율 실행 AI 에이전트
 | **K8s** | `/k8s validate`, `/k8s secure`, `/k8s netpol`, `/k8s helm-check` |
 | **Terraform** | `/terraform plan-review`, `/terraform security`, `/terraform module-gen` |
 | **DX** | `/dx pr-create`, `/dx issue-create`, `/dx changelog`, `/dx release` |
-| **Log** | `/log-feedback`, `/log-decision`, `/log-meta`, `/log-trouble`, `/log-summary` |
+| **Log** | `/dx:log-feedback`, `/dx:log-decision`, `/dx:log-meta`, `/dx:log-trouble`, `/dx:log-summary` |
 | **Session** | `/session save`, `/session end` |
 
 ---

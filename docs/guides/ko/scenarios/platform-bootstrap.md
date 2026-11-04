@@ -45,7 +45,7 @@
                                         │  Step 7     │
                                         │  DX 측정    │
                                         │             │
-                                        │ /dx-metrics │
+                                        │ /dx:dx-metrics │
                                         │ finops-     │
                                         │ advisor     │
                                         └─────────────┘
@@ -246,7 +246,7 @@ IDP Architecture:
 
 ## Step 7: DX 측정 + 비용 전략
 
-**사용 도구**: `/dx-metrics` + `finops-advisor`
+**사용 도구**: `/dx:dx-metrics` + `finops-advisor`
 
 ### 이렇게 요청하세요
 
@@ -314,4 +314,4 @@ Level 3 (최적화):
 - `/kratix` — Kratix Promise 기반 플랫폼 API
 - `/secrets-management` — 시크릿 관리 고도화
 - `/ephemeral-environments` — PR별 프리뷰 환경
-- `/dx-onboarding` — 신규 개발자 온보딩 자동화
+- `/dx:dx-onboarding` — 신규 개발자 온보딩 자동화

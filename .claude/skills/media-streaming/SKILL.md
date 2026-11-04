@@ -321,7 +321,7 @@ Cloudflare:  포함 (구독 모델)
 5. **Replay 캐싱** — Live → VOD CDN cache 90%+ hit
 6. **시청자 cap** — 무료 ≤ N명, premium 이상 추가
 
-분기 비용 추적: [`observability/observability-cost.md`](../observability-cost/SKILL.md), [`dx/quarterly-review.md`](../quarterly-review/SKILL.md).
+분기 비용 추적: [`observability/observability-cost.md`](../observability-cost/SKILL.md), [`dx/quarterly-review.md`](../../../plugins/dx/skills/quarterly-review/SKILL.md).
 
 ---
 
@@ -382,7 +382,7 @@ D. Cloudflare Stream (단순, $1/1K min)
 - Tier 1, 6개월 (트래픽 5x 시 즉시)
 ```
 
-[`dx/adr-retrospective.md`](../adr-retrospective/SKILL.md) 참조.
+[`dx/adr-retrospective.md`](../../../plugins/dx/skills/adr-retrospective/SKILL.md) 참조.
 
 ---
 

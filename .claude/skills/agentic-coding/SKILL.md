@@ -298,7 +298,7 @@ Opus 5.5·Sonnet 5.5 공식 가이드 기준. 하네스나 orchestrator 를 만�
 - **대화 기록은 append-only** — Opus 5.5 는 앞선 기록을 수정한 뒤 thinking block 을 재전송하면 400 을 반환한다 (2026-08-31 이후 생성 계정)
 - **effort 변경은 캐시를 깨뜨린다** — "Changing the top-level effort value between requests invalidates the prompt cache"
 
-세부: `/token-budget` · `rules/harness/token-budget.md`
+세부: `/dx:token-budget` · `rules/harness/token-budget.md`
 
 ---
 

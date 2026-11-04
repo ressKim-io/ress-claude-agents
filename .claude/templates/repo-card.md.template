@@ -1,6 +1,6 @@
 # {REPO_NAME}
 
-> 레포 1페이지 요약. `/where` `/related` 가 hotspot 검색 시 참조.
+> 레포 1페이지 요약. `/dx:where` `/dx:related` 가 hotspot 검색 시 참조.
 > 5분 작성, 분기 1회 갱신.
 
 ## Overview
@@ -39,7 +39,7 @@
 ## Hotspot (트러블 빈도 높은 영역)
 
 > dev-logs 중 이 레포 태그가 붙은 트러블의 영역을 1줄씩 기록.
-> `/where <키워드>` 가 이 섹션에서 hit 검색.
+> `/dx:where <키워드>` 가 이 섹션에서 hit 검색.
 
 - {모듈 A — 인증/JWT 관련 트러블 N건}
 - {모듈 B — DB 쿼리 성능 / connection pool}

@@ -380,7 +380,7 @@ jobs:
 - `spring-ai.md` — Spring AI 기반 LLM 통합, MCP, Advisors
 - `finops-ai.md` — AI 비용 관리, Model Routing 비용 최적화
 - `/dx-ai-security` — 보안/품질
-- `/dx-metrics` — 메트릭 수집
+- `/dx:dx-metrics` — 메트릭 수집
 
 ---
 

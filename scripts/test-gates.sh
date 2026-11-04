@@ -91,6 +91,29 @@ run_test() {
     fi
 }
 
+# layout.sh 기준 첫 자산. 자산이 어느 구조에 있든 테스트가 따라간다.
+first_asset() {
+    # shellcheck disable=SC1091
+    (cd "$CASE_DIR" && source scripts/lib/layout.sh && "$1" | head -1)
+}
+
+remove_skills() {
+    rm -rf "$CASE_DIR/.claude/skills"
+    rm -rf "$CASE_DIR"/plugins/*/skills
+}
+
+remove_agents() {
+    rm -f "$CASE_DIR"/.claude/agents/*.md
+    rm -f "$CASE_DIR"/plugins/*/agents/*.md
+}
+
+# plugin 밖에 있고 category 도 없는 skill. 영역을 알 수 없어야 한다.
+add_orphan_skill() {
+    mkdir -p "$CASE_DIR/.claude/skills/orphan-skill"
+    printf -- '---\nname: orphan-skill\ndescription: "테스트"\n---\n\n# Test\n' \
+        >"$CASE_DIR/.claude/skills/orphan-skill/SKILL.md"
+}
+
 # plugin 구조의 최소 skill 을 만든다. $1=plugin $2=skill $3=frontmatter name (기본 $2)
 add_plugin_skill() {
     local dir="$CASE_DIR/plugins/$1/skills/$2"
@@ -122,21 +145,21 @@ should_pass_every_gate_when_repo_is_unmodified() {
 # ---------------------------------------------------------------------------
 should_fail_links_when_no_skills_exist() {
     # Given
-    rm -rf "$CASE_DIR/.claude/skills"
+    remove_skills
     # When/Then
     expect_fail '하한' ./scripts/validate-links.sh
 }
 
 should_fail_links_when_agent_has_broken_link() {
     # Given
-    printf '\n[x](./no-such-file.md)\n' >>"$CASE_DIR/.claude/agents/code-reviewer.md"
+    printf '\n[x](./no-such-file.md)\n' >>"$CASE_DIR/$(first_asset agent_files)"
     # When/Then
     expect_fail '깨진 내부 링크' ./scripts/validate-links.sh
 }
 
 should_fail_links_when_command_has_broken_link() {
     # Given
-    printf '\n[x](./no-such-file.md)\n' >>"$CASE_DIR/.claude/commands/where.md"
+    printf '\n[x](./no-such-file.md)\n' >>"$CASE_DIR/$(first_asset command_files)"
     # When/Then
     expect_fail '깨진 내부 링크' ./scripts/validate-links.sh
 }
@@ -217,14 +240,14 @@ should_pass_drift_when_critical_rule_changes_group() {
 # ---------------------------------------------------------------------------
 should_fail_frontmatter_when_no_agents_exist() {
     # Given
-    rm -f "$CASE_DIR"/.claude/agents/*.md
+    remove_agents
     # When/Then
     expect_fail '하한' ./scripts/validate-skill-frontmatter.sh agents
 }
 
 should_fail_frontmatter_when_no_skills_exist() {
     # Given
-    rm -rf "$CASE_DIR/.claude/skills"
+    remove_skills
     # When/Then
     expect_fail '하한' ./scripts/validate-skill-frontmatter.sh skills
 }
@@ -241,21 +264,21 @@ should_fail_frontmatter_when_plugin_skill_name_mismatches() {
 # ---------------------------------------------------------------------------
 should_fail_inventory_generate_when_no_skills_exist() {
     # Given
-    rm -rf "$CASE_DIR/.claude/skills"
+    remove_skills
     # When/Then: 0개 재생성이 깨끗하게 끝나면 신선도 검사가 무력해진다
     expect_fail '하한' ./scripts/generate-inventory.sh generate
 }
 
 should_fail_inventory_validate_when_generate_fails() {
     # Given
-    rm -rf "$CASE_DIR/.claude/skills"
+    remove_skills
     # When/Then
     expect_fail '하한' ./scripts/generate-inventory.sh validate
 }
 
 should_fail_inventory_when_skill_has_no_area() {
     # Given
-    sed -i.bak '/^category:/d' "$CASE_DIR/.claude/skills/go-testing/SKILL.md"
+    add_orphan_skill
     # When/Then: 빈 값이 자기 이름을 카테고리로 삼으면 안 된다
     expect_fail '영역을 알 수 없' ./scripts/generate-inventory.sh generate
 }
@@ -269,14 +292,14 @@ should_keep_inventory_fresh_when_rule_changes_group() {
 
 should_fail_labels_when_skill_has_no_area() {
     # Given
-    sed -i.bak '/^category:/d' "$CASE_DIR/.claude/skills/go-testing/SKILL.md"
+    add_orphan_skill
     # When/Then
     expect_fail '영역을 알 수 없' ./scripts/generate-inventory-labels.sh generate
 }
 
 should_fail_labels_when_no_agents_exist() {
     # Given
-    rm -f "$CASE_DIR"/.claude/agents/*.md
+    remove_agents
     # When/Then
     expect_fail '하한' ./scripts/generate-inventory-labels.sh generate
 }
@@ -286,7 +309,7 @@ should_fail_labels_when_no_agents_exist() {
 # ---------------------------------------------------------------------------
 should_fail_schemas_when_one_agent_disappears() {
     # Given
-    rm -f "$CASE_DIR/.claude/agents/code-reviewer.md"
+    rm -f "$CASE_DIR/$(first_asset agent_files)"
     # When/Then
     expect_fail '하한' ./scripts/validate-schemas.sh
 }
@@ -294,7 +317,7 @@ should_fail_schemas_when_one_agent_disappears() {
 should_fail_handoff_when_plugin_agent_is_unregistered() {
     # Given
     mkdir -p "$CASE_DIR/plugins/a/agents"
-    cp "$CASE_DIR/.claude/agents/code-reviewer.md" "$CASE_DIR/plugins/a/agents/brand-new-agent.md"
+    cp "$CASE_DIR/$(first_asset agent_files)" "$CASE_DIR/plugins/a/agents/brand-new-agent.md"
     # When/Then
     expect_fail '미등록' ./scripts/validate-agent-handoff.sh all
 }
@@ -311,7 +334,7 @@ should_fail_catalog_when_rule_disappears() {
 
 should_fail_catalog_when_command_has_no_description() {
     # Given
-    printf '# no frontmatter\n' >"$CASE_DIR/.claude/commands/where.md"
+    printf '# no frontmatter\n' >"$CASE_DIR/$(first_asset command_files)"
     # When/Then
     expect_fail 'description 없음' ./scripts/validate-catalog.sh
 }
@@ -337,15 +360,16 @@ should_fail_catalog_when_skill_is_nested_under_category() {
 # ---------------------------------------------------------------------------
 should_fail_yaml_when_skill_frontmatter_is_invalid() {
     # Given: line 기반 파서는 통과시키지만 런타임에는 frontmatter 가 버려진다
-    printf -- '---\nname: go-testing\ndescription: "앞부분"뒷부분\n---\n\n# x\n' \
-        >"$CASE_DIR/.claude/skills/go-testing/SKILL.md"
+    local skill
+    skill=$(first_asset skill_files)
+    printf -- '---\nname: x\ndescription: "앞부분"뒷부분\n---\n\n# x\n' >"$CASE_DIR/$skill"
     # When/Then
-    expect_fail 'YAML 오류.*go-testing' node scripts/validate-frontmatter-yaml.mjs
+    expect_fail "YAML 오류.*$skill" node scripts/validate-frontmatter-yaml.mjs
 }
 
 should_fail_yaml_when_no_files_are_found() {
     # Given
-    rm -rf "$CASE_DIR/.claude/skills"
+    remove_skills
     # When/Then
     expect_fail '하한' node scripts/validate-frontmatter-yaml.mjs
 }

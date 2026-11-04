@@ -45,7 +45,7 @@
                                         │  Step 7     │
                                         │  DX Metrics │
                                         │             │
-                                        │ /dx-metrics │
+                                        │ /dx:dx-metrics │
                                         │ finops-     │
                                         │ advisor     │
                                         └─────────────┘
@@ -246,7 +246,7 @@ IDP Architecture:
 
 ## Step 7: DX Metrics + Cost Strategy
 
-**Tools**: `/dx-metrics` + `finops-advisor`
+**Tools**: `/dx:dx-metrics` + `finops-advisor`
 
 ### How to Request
 
@@ -314,4 +314,4 @@ Level 3 (Optimization):
 - `/kratix` — Kratix Promise-based platform API
 - `/secrets-management` — Advanced secret management
 - `/ephemeral-environments` — Per-PR preview environments
-- `/dx-onboarding` — New developer onboarding automation
+- `/dx:dx-onboarding` — New developer onboarding automation

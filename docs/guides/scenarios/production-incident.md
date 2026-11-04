@@ -40,7 +40,7 @@
                     │  Apply Fix  │────►│  Record &   │
                     │             │     │  Retro      │
                     │ code-review │     │ dev-logger  │
-                    │ /k8s-auto   │     │ /log-trouble│
+                    │ /k8s-auto   │     │ /dx:log-trouble│
                     └─────────────┘     └─────────────┘
 ```
 
@@ -211,12 +211,12 @@ kubectl top pods -n production -l app=order-service
 
 ## Step 5: Record & Retrospective
 
-**Tools**: `dev-logger` (`/log-trouble`)
+**Tools**: `dev-logger` (`/dx:log-trouble`)
 
 ### How to Request
 
 ```
-/log-trouble
+/dx:log-trouble
 ```
 
 ### What Claude Does

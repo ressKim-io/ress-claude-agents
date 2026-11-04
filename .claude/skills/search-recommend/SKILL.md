@@ -388,7 +388,7 @@ ORDER BY position;
 
 **no-result top 100** → 동의어 사전 보강 / 인덱스 누락 / spelling.
 
-분석 결과는 [`dx/quarterly-review.md`](../quarterly-review/SKILL.md)에 통합 권장.
+분석 결과는 [`dx/quarterly-review.md`](../../../plugins/dx/skills/quarterly-review/SKILL.md)에 통합 권장.
 
 ---
 
@@ -500,7 +500,7 @@ D. PostgreSQL FTS (DB만, ≤100K)
 - Auto-trigger: 트래픽 5x, no-result 10%+, 비용 1.5x
 ```
 
-자세한 retrospective 흐름은 [`dx/adr-retrospective.md`](../adr-retrospective/SKILL.md).
+자세한 retrospective 흐름은 [`dx/adr-retrospective.md`](../../../plugins/dx/skills/adr-retrospective/SKILL.md).
 
 ---
 
@@ -530,7 +530,7 @@ D. PostgreSQL FTS (DB만, ≤100K)
 - LLM 기반 query understanding (typo, intent, entity extraction)
 - 한국어 spell correction (한컴 사전 + 사용자 로그 기반)
 - Vector reranking (BM25 top 100 → embedding rerank top 10)
-- 검색 분석을 분기 회고에 통합 ([`dx/quarterly-review.md`](../quarterly-review/SKILL.md))
+- 검색 분석을 분기 회고에 통합 ([`dx/quarterly-review.md`](../../../plugins/dx/skills/quarterly-review/SKILL.md))
 
 ---
 

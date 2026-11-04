@@ -1,7 +1,7 @@
 # Token Budget 원칙 (Claude 5.5 세대 기준)
 
 모든 대화에서 공통 적용되는 컨텍스트·토큰 운영 원칙.
-Rules는 매 대화마다 주입되므로 핵심만 유지 — 상세는 `/token-budget` 스킬 참조.
+Rules는 매 대화마다 주입되므로 핵심만 유지 — 상세는 `/dx:token-budget` 스킬 참조.
 
 > 출처·검증 상태: [2026-11-04 사양 검증](../../../docs/audit/2026-11-04-claude-spec-verification.md)
 
@@ -75,4 +75,4 @@ Claude Code 는 런타임이 관리하므로 **신경 쓰지 않는다.** Messag
 
 ---
 
-상세 가이드, 코드 예시, Task Budget API, Prompt Caching 구조: `/token-budget` 스킬 참조
+상세 가이드, 코드 예시, Task Budget API, Prompt Caching 구조: `/dx:token-budget` 스킬 참조

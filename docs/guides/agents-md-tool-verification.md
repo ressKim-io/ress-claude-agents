@@ -121,7 +121,7 @@ gemini "이 레포의 코딩 룰을 요약해줘"
 
 실패 신호:
 - AGENTS.md §Security 짧은 내용만 (~10줄) 답변
-- .claude/rules/security.md를 읽지 않음
+- .claude/rules/core/security.md를 읽지 않음
 ```
 
 ### Test 4: 코드 작성 룰 적용

@@ -47,8 +47,8 @@
 | Redis 캐싱 | — | `/redis-operations`, `/spring-cache`, `/distributed-lock` | "Redis 캐싱 전략 설계해줘" |
 | 부하 테스트 | `load-tester` | `/load-testing` | "K6로 부하테스트 시나리오 작성해줘" |
 | 테스트 작성 | `code-reviewer` | `/spring-testing`, `/go-testing` | "테스트 코드 작성해줘" |
-| 클린 코드 리뷰 | `/clean-code` | `/clean-code`, `/refactoring-principles` | "클린 코드 품질 확인해줘" |
-| 보안 코드 리뷰 | `/clean-code` | `/effective-java` 또는 `/effective-go` | "Java/Go 보안 리뷰해줘" |
+| 클린 코드 리뷰 | `/dx:clean-code` | `/dx:clean-code`, `/dx:refactoring-principles` | "클린 코드 품질 확인해줘" |
+| 보안 코드 리뷰 | `/dx:clean-code` | `/effective-java` 또는 `/effective-go` | "Java/Go 보안 리뷰해줘" |
 
 ### Java 전용 콤보
 
@@ -60,7 +60,7 @@ Spring 성능 최적화:
   /jvm-performance → /concurrency-spring → /spring-cache → /spring-jooq
 
 클린 코드 + 리팩토링:
-  /jvm-performance → /clean-code → /refactoring-principles → /refactoring-spring
+  /jvm-performance → /dx:clean-code → /dx:refactoring-principles → /refactoring-spring
 
 보안 강화:
   /spring-security-review → security-scanner → /spring-security
@@ -76,7 +76,7 @@ Go 성능 최적화:
   /go-performance → /concurrency-go → /go-database → /refactoring-go
 
 클린 코드 + 리팩토링:
-  /go-performance → /clean-code → /refactoring-principles → /refactoring-go
+  /go-performance → /dx:clean-code → /dx:refactoring-principles → /refactoring-go
 
 에러 핸들링 + OTel:
   /go-performance → /observability-otel → /go-errors
@@ -151,11 +151,11 @@ eBPF 기반 Zero-Code:
 | 상황 | 핵심 에이전트 | 지원 스킬 | 이렇게 요청하세요 |
 |------|-------------|----------|-----------------|
 | 새 프로젝트 시작 | `architect-agent` | `/api-design`, `/docker` | "프로젝트 구조 설계해줘" |
-| 코드 정리 | `code-reviewer` | `/clean-code`, `/refactoring-principles` | "코드 리팩토링해줘" |
-| 클린 코드 점검 | `/clean-code` | `/clean-code` | "코드 가독성 확인해줘" |
-| PR 자동화 | `git-workflow` | `/conventional-commits`, `/git-workflow` | "PR 만들어줘" |
-| 개발환경 구축 | `platform-engineer` | `/local-dev-makefile`, `/docker` | "로컬 개발환경 설정해줘" |
-| 문서화 | `dev-logger` | `/docs-as-code` | "API 문서 생성해줘" |
+| 코드 정리 | `code-reviewer` | `/dx:clean-code`, `/dx:refactoring-principles` | "코드 리팩토링해줘" |
+| 클린 코드 점검 | `/dx:clean-code` | `/dx:clean-code` | "코드 가독성 확인해줘" |
+| PR 자동화 | `git-workflow` | `/dx:conventional-commits`, `/dx:git-workflow` | "PR 만들어줘" |
+| 개발환경 구축 | `platform-engineer` | `/dx:local-dev-makefile`, `/docker` | "로컬 개발환경 설정해줘" |
+| 문서화 | `dev-logger` | `/dx:docs-as-code` | "API 문서 생성해줘" |
 | 보안 점검 | `security-scanner` | `/k8s-security`, `/terraform-security` | "보안 취약점 검사해줘" |
 | 기술 의사결정 | `architect-agent` | 해당 도메인 스킬 | "A vs B 비교해줘" |
 
@@ -198,7 +198,7 @@ eBPF 기반 Zero-Code:
       ↓
 4. /observability-otel → 트레이스/메트릭 분석
       ↓
-5. dev-logger         → 인시던트 기록 (/log-trouble)
+5. dev-logger         → 인시던트 기록 (/dx:log-trouble)
 ```
 
 ### IDP 구축 (Platform Bootstrap)
