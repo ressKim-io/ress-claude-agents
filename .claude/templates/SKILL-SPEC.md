@@ -38,6 +38,8 @@ description: "[What it does in 1 sentence]. Use when the user asks [trigger phra
 
 ### description 패턴 (의무)
 
+형식은 `무엇. Use when 상황.` 이고 한 줄, 250자 이내다. 템플릿 문구와 중복은 `scripts/validate-catalog.sh` 가 실패시킨다. `Use when` 뒤에는 도메인 이름이 아니라 사용자가 하고 있는 일이나 겪는 증상을 쓴다.
+
 ✅ **Good**:
 ```
 description: "Go 백엔드 LLM 통합 패턴, 프레임워크 선택 (Genkit/LangChainGo/Eino), Tool Calling, RAG. Use when Go 프로젝트에 AI 기능을 도입하거나 LLM 통합 패턴을 선택할 때."
