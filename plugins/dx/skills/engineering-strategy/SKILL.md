@@ -1,6 +1,6 @@
 ---
 name: engineering-strategy
-description: "Engineering Strategy 가이드 — 기술 전략 수립: Tech Radar, Build vs Buy, OKR, 로드맵, 기술 부채 관리 Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "기술 전략 수립 — Tech Radar, Build vs Buy 분석, Engineering OKR, Strategy Doc, Now/Next/Later 로드맵, 기술 부채 관리. Use when 연간·분기 기술 계획을 세우거나 직접 만들지 사서 쓸지 판단할 때."
 ---
 
 # Engineering Strategy 가이드

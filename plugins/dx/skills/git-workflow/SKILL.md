@@ -1,6 +1,6 @@
 ---
 name: git-workflow
-description: "Git Workflow Patterns — Git 워크플로우 패턴 및 best practices. Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "Git 워크플로우 — 브랜치 네이밍, 커밋 가이드라인, PR 템플릿(Summary·Test Plan), 유용한 git 명령, 안티패턴. Use when 브랜치 전략을 정하거나 PR을 작성하고 git 협업 규칙을 정리할 때."
 ---
 
 # Git Workflow Patterns

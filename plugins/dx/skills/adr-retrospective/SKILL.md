@@ -1,6 +1,6 @@
 ---
 name: adr-retrospective
-description: ADR 사후 검토 패턴 — 6/12개월 재평가, Superseded 트리거 결정, 예측 vs 실측 검증, decision log 누적 분석. dx/rfc-adr (작성)의 짝, "이 결정이 옳았나?"를 데이터로 답한다.
+description: "Accepted ADR 사후 검토 — 6/12개월 재평가 트리거, 예측 vs 실측 비교, Superseded·Deprecated 판단, decision log 누적 분석. Use when 이미 채택한 ADR이 지금도 옳은지 재평가하거나 결정 회고를 할 때."
 license: MIT
 ---
 

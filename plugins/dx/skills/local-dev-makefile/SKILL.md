@@ -1,6 +1,6 @@
 ---
 name: local-dev-makefile
-description: "Local Dev with Makefile: make up으로 풀스택 실행 — Docker를 몰라도 `make up` 하나로 프론트+백엔드+DB가 로컬에서 실행되는 환경 구축 가이드 Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "Makefile 로컬 개발 — make up 한 번으로 프론트·백엔드·DB 실행, self-documenting Makefile, docker-compose, Dockerfile.dev, hot reload, .env 관리. Use when Docker를 몰라도 쓸 로컬 풀스택 환경을 구성할 때."
 ---
 
 # Local Dev with Makefile: make up으로 풀스택 실행

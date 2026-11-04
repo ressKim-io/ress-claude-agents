@@ -1,6 +1,6 @@
 ---
 name: docs-as-code
-description: "Docs as Code 가이드 — MkDocs, Docusaurus, Backstage TechDocs, API 문서 자동화 Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "Docs as Code 사이트 구축 — MkDocs Material, Docusaurus, Backstage TechDocs, Mermaid 다이어그램, 문서 CI. Use when 코드와 함께 버전 관리되는 문서 사이트를 만들거나 도구를 고를 때 (자동화·린트는 docs-as-code-automation)."
 ---
 
 # Docs as Code 가이드

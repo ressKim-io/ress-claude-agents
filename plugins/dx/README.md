@@ -57,30 +57,30 @@ cp -r plugins/dx/skills/<이름> <프로젝트>/.claude/skills/
 
 | 이름 | 설명 |
 |---|---|
-| `/dx:adr-retrospective` | ADR 사후 검토 패턴 — 6/12개월 재평가, Superseded 트리거 결정, 예측 vs 실측 검증, decision log 누적 분석. dx/rfc-adr (작성)의 짝, "이 결정이 … |
-| `/dx:clean-code` | Clean Code 실전 가이드. Composed Method, Cognitive Complexity, Guard Clause, 네이밍, 주석 철학, Tell Don't Ask 패턴을 언어별 … |
-| `/dx:conventional-commits` | Conventional Commits — 커밋 메시지 규칙 및 자동화 패턴 |
-| `/dx:docs-as-code` | Docs as Code 가이드 — MkDocs, Docusaurus, Backstage TechDocs, API 문서 자동화 |
-| `/dx:docs-as-code-automation` | Docs as Code 자동화 가이드 — API 문서 자동화 (OpenAPI), 문서 품질 측정, Vale 린터 |
-| `/dx:documentation-templates` | 프로젝트 문서 템플릿 모음 — ADR, 부하테스트, 포스트모템, 마이그레이션, CI/CD, SLI/SLO 등 14종 |
-| `/dx:dx-metrics` | Developer Experience Metrics 가이드 — DORA, SPACE, DevEx, DX Core 4 프레임워크를 활용한 개발자 생산성 측정 |
-| `/dx:dx-onboarding` | Developer Onboarding 자동화 가이드 — 개발자 온보딩 자동화, Time-to-First-Deploy 최적화, 셀프서비스 환경 구축 |
-| `/dx:dx-onboarding-deploy` | Developer Onboarding: 첫 배포 가이드 — Day 1 Deploy 실현을 위한 첫 과제 템플릿, 안전장치, AI 어시스트 |
-| `/dx:dx-onboarding-environment` | Developer Onboarding: 개발 환경 자동화 — Dev Container를 활용한 개발 환경 자동화 |
-| `/dx:dx-onboarding-gitpod` | Developer Onboarding: Gitpod & 셀프서비스 포털 — Gitpod 설정, Backstage 온보딩 템플릿, TechDocs 자동화 |
-| `/dx:engineering-strategy` | Engineering Strategy 가이드 — 기술 전략 수립: Tech Radar, Build vs Buy, OKR, 로드맵, 기술 부채 관리 |
-| `/dx:git-workflow` | Git Workflow Patterns — Git 워크플로우 패턴 및 best practices |
-| `/dx:local-dev-makefile` | Local Dev with Makefile: make up으로 풀스택 실행 — Docker를 몰라도 `make up` 하나로 프론트+백엔드+DB가 로컬에서 실행되는 환경 구축 가이드 |
-| `/dx:negative-path-coverage` | Happy path bias로 인한 운영 사고 방지. 에러 경로/장애 시나리오/리소스 한계/타이밍 race를 명시적으로 테스트 케이스화하는 체크리스트. Wikipedia "Happy path" + … |
+| `/dx:adr-retrospective` | Accepted ADR 사후 검토 — 6/12개월 재평가 트리거, 예측 vs 실측 비교, Superseded·Deprecated 판단, decision log 누적 분석 |
+| `/dx:clean-code` | Clean Code 실전 — Composed Method, Cognitive Complexity, Guard Clause, 네이밍, WHY 주석, Tell Don't Ask 를 BAD/GOOD … |
+| `/dx:conventional-commits` | Conventional Commits — type·scope 규칙, 커밋 메시지 포맷, commitlint·semantic-release 자동화, Go 프로젝트 설정, PR 전략 |
+| `/dx:docs-as-code` | Docs as Code 사이트 구축 — MkDocs Material, Docusaurus, Backstage TechDocs, Mermaid 다이어그램, 문서 CI |
+| `/dx:docs-as-code-automation` | 문서 자동화 — OpenAPI 기반 API 문서 생성, 문서 품질 측정, Vale 린터 |
+| `/dx:documentation-templates` | 프로젝트 문서 템플릿 — ADR, 프로젝트 개요서, 부하테스트, 포스트모템, 마이그레이션, CI/CD, SLI/SLO 등 |
+| `/dx:dx-metrics` | 개발자 생산성 측정 — DORA, SPACE, DevEx, DX Core 4 프레임워크 비교와 메트릭 수집 구조 |
+| `/dx:dx-onboarding` | 개발자 온보딩 자동화 전체 개요 — Time-to-First-Deploy 등 온보딩 메트릭 수집, 안티패턴, 체크리스트 |
+| `/dx:dx-onboarding-deploy` | 신규 개발자 첫 배포 — 첫 과제 템플릿, 안전장치, AI 어시스트 온보딩, Grafana 대시보드 |
+| `/dx:dx-onboarding-environment` | 개발 환경 자동화 — Dev Container 설정(devcontainer.json)과 셋업 스크립트 |
+| `/dx:dx-onboarding-gitpod` | 클라우드 개발 환경·셀프서비스 포털 — Gitpod 설정, Backstage 온보딩 템플릿, TechDocs 문서 자동화 |
+| `/dx:engineering-strategy` | 기술 전략 수립 — Tech Radar, Build vs Buy 분석, Engineering OKR, Strategy Doc, Now/Next/Later 로드맵, 기술 부채 관리 |
+| `/dx:git-workflow` | Git 워크플로우 — 브랜치 네이밍, 커밋 가이드라인, PR 템플릿(Summary·Test Plan), 유용한 git 명령, 안티패턴 |
+| `/dx:local-dev-makefile` | Makefile 로컬 개발 — make up 한 번으로 프론트·백엔드·DB 실행, self-documenting Makefile, docker-compose, Dockerfile.dev, hot … |
+| `/dx:negative-path-coverage` | Happy path bias 방지 — 에러 경로·장애 시나리오·리소스 한계·타이밍 race 를 테스트 케이스로 만드는 체크리스트와 에러 경로 카탈로그 |
 | `/dx:pr-review-automation` | AI PR 자동 리뷰 도입 — GitHub Copilot Code Review / CodeRabbit / Claude Code Action / Claude Security Review / Qodo … |
-| `/dx:product-thinking` | Product Thinking 가이드 — RICE, MoSCoW, Shape Up, JTBD, Story Mapping 기반 프로덕트 사고 |
-| `/dx:quarterly-review` | 분기 엔지니어링 회고 패턴 — DORA 4 metrics 추이, SLI/SLO 달성률, 인시던트 패턴, ADR hit rate, FinOps 추이, MRR cohort. … |
-| `/dx:refactoring-principles` | Refactoring Principles — 리팩토링 기본 원칙, 코드 스멜 식별, 점진적 개선 전략 |
-| `/dx:rfc-adr` | RFC/ADR 워크플로우 — RFC(Request for Comments)와 ADR(Architecture Decision Record) 작성, 리뷰, 관리 프로세스 가이드 |
-| `/dx:spec-driven-development` | Spec-Driven Development with Claude Code — Claude Code에서 명세 기반 개발 워크플로우. Research → Spec → Plan → Execute → … |
-| `/dx:team-topologies` | Team Topologies 가이드 — Team Topologies, Conway's Law, 팀 구조 설계, 인터랙션 모드 |
+| `/dx:product-thinking` | 프로덕트 사고 프레임워크 — RICE 스코어링, MoSCoW, Shape Up, JTBD, Story Mapping, MVP 정의, A/B 테스트 기초 |
+| `/dx:quarterly-review` | 분기 엔지니어링 회고 — DORA 4 metrics 추이, SLO 달성률, 인시던트 패턴, ADR hit rate, FinOps·MRR cohort, 회고 미팅 진행, 1페이지 보고서 |
+| `/dx:refactoring-principles` | 리팩토링 기본 — 황금률, 코드 스멜 카탈로그, SOLID 적용, 점진적 리팩토링, 테스트 주도 리팩토링, 우선순위 |
+| `/dx:rfc-adr` | RFC·ADR 작성 워크플로우 — RFC vs ADR 비교, Google Design Doc·Uber 스타일 RFC 템플릿, 리뷰·관리 프로세스 |
+| `/dx:spec-driven-development` | 명세 기반 개발 — Research → Spec → Plan → Execute → Review 흐름, SPEC.md 작성(Problem·Solution·Non-Goals·Success … |
+| `/dx:team-topologies` | Team Topologies — 4가지 팀 유형, 3가지 인터랙션 모드, Conway's Law, 인지 부하, Team API, 팀 구조 진화 |
 | `/dx:token-budget` | Claude 5.5 세대 토큰·컨텍스트·effort 운영 심화 가이드 — Subagent 위임, Effort, Task Budget, Prompt Caching, Thinking, … |
-| `/dx:token-efficiency` | Token & Context Efficiency — Claude Code 세션에서 토큰 낭비를 줄이고 컨텍스트 윈도우를 효율적으로 사용하는 패턴 |
+| `/dx:token-efficiency` | Claude Code 토큰 절약 — 컨텍스트 윈도우 관리, 파일 읽기·쓰기·검색 최적화, Agent 위임, 프롬프트 효율, 세션 관리 |
 
 ## Agents (6)
 

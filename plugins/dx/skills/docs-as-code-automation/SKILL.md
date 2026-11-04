@@ -1,6 +1,6 @@
 ---
 name: docs-as-code-automation
-description: "Docs as Code 자동화 가이드 — API 문서 자동화 (OpenAPI), 문서 품질 측정, Vale 린터 Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "문서 자동화 — OpenAPI 기반 API 문서 생성, 문서 품질 측정, Vale 린터. Use when API 문서를 코드에서 자동 생성하거나 CI에서 문서 품질·스타일을 검사할 때 (사이트 구축은 docs-as-code)."
 ---
 
 # Docs as Code 자동화 가이드

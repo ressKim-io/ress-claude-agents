@@ -1,6 +1,6 @@
 ---
 name: negative-path-coverage
-description: Happy path bias로 인한 운영 사고 방지. 에러 경로/장애 시나리오/리소스 한계/타이밍 race를 명시적으로 테스트 케이스화하는 체크리스트. Wikipedia "Happy path" + Postman negative testing 기반.
+description: "Happy path bias 방지 — 에러 경로·장애 시나리오·리소스 한계·타이밍 race 를 테스트 케이스로 만드는 체크리스트와 에러 경로 카탈로그. Use when 정상 흐름만 테스트된 코드에 timeout·retry·부분 실패 케이스를 점검할 때."
 ---
 
 # Negative Path Coverage (M4: Happy path bias)

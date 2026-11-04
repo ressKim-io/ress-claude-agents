@@ -1,6 +1,6 @@
 ---
 name: conventional-commits
-description: "Conventional Commits — 커밋 메시지 규칙 및 자동화 패턴 Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "Conventional Commits — type·scope 규칙, 커밋 메시지 포맷, commitlint·semantic-release 자동화, Go 프로젝트 설정, PR 전략. Use when 커밋 메시지를 작성하거나 커밋 규칙 검증·릴리스 자동화를 설정할 때."
 ---
 
 # Conventional Commits
