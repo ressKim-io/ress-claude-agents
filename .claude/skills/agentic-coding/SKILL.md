@@ -286,15 +286,17 @@ Level 2 (Agent 주도) 권장: 대부분 자율 실행하되 전략적 지점에
 
 ---
 
-## Opus 4.7 Behavior Changes (2026-04)
+## Claude 5.5 Agentic 작업 (2026-11 검증)
 
-Claude Opus 4.7은 agentic 작업에 맞게 기본 행동이 조정되었다. 기존 패턴에서 조정 필요.
+Opus 5.5·Sonnet 5.5 공식 가이드 기준. 하네스나 orchestrator 를 만들 때 조정할 점이다.
 
-- **Subagent 덜 spawn** — Orchestrator 모드에서 병렬 fan-out이 필요하면 명시 ("Use subagents for each of: frontend, backend, database")
-- **Literal instruction following** — 한 항목에 대한 지시를 다른 항목에 자동 일반화하지 않음. 필요하면 "유사 케이스에도 적용" 명시
-- **자체 검증 내장** — Evaluator-Optimizer Loop에서 "반드시 재확인" 같은 scaffolding 제거 권장
-- **Progress update 내장** — "N개마다 요약" 같은 강제 지시 제거, 필요한 형식만 예시로 제공
-- **Effort level `xhigh` 기본** — 코딩·agentic 기본값. frontier 문제만 `max`, 단순·속도 우선만 `low`
+- **Effort** — 범위가 명확하면 `medium`, 어렵거나 길면 `high`. `xhigh`·`max` 는 품질 향상을 측정한 작업에만
+- **완료 판정은 따로 검증한다** — Opus 5.5: "Treat a text-only end of turn as a report rather than as proof the task is done." Sonnet 5.5 는 낮은 effort 에서 검증 없이 완료를 보고할 수 있다. Evaluator-Optimizer Loop 의 검증 단계를 남겨 둔다
+- **Fan-out 은 명시한다** — 기본 spawn 빈도는 문서에 없다. 병렬 작업이 필요하면 프롬프트에 적는다 ("Use subagents for each of: frontend, backend, database")
+- **중간 확인** — Sonnet 5.5 는 low·medium 의 긴 작업에서 멈추고 확인하는 경우가 늘어난다. 자율 진행이 필요하면 프롬프트에 명시한다
+- **Progress 표시** — Opus 5.5 의 진행 메모는 thinking block 으로 오며 "their text is empty at the default thinking.display". UI 에 보이려면 `display` 를 지정한다
+- **대화 기록은 append-only** — Opus 5.5 는 앞선 기록을 수정한 뒤 thinking block 을 재전송하면 400 을 반환한다 (2026-08-31 이후 생성 계정)
+- **effort 변경은 캐시를 깨뜨린다** — "Changing the top-level effort value between requests invalidates the prompt cache"
 
 세부: `/token-budget` · `rules/token-budget.md`
 

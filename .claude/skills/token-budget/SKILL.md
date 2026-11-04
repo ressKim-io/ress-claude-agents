@@ -1,12 +1,13 @@
 ---
 name: token-budget
-description: "Claude Opus 4.7 토큰·컨텍스트·effort 운영 심화 가이드. Context Window(1M), Subagent 위임 전략, Effort Level, Task Budget API, Prompt Caching, Adaptive Thinking, Tokenizer 변경 대응을 공식 문서 기반 코드 예시와 함께 제공."
+description: "Claude 5.5 세대 토큰·컨텍스트·effort 운영 심화 가이드 — Subagent 위임, Effort, Task Budget, Prompt Caching, Thinking, Tokenizer 를 코드 예시와 비용 계산으로 설명. Use when API 비용을 줄이거나 effort·캐시 설정을 정할 때."
 category: dx
 ---
 
-# Token Budget 심화 가이드 (Opus 4.7)
+# Token Budget 심화 가이드 (Claude 5.5 세대)
 
 `.claude/rules/token-budget.md`의 상세판. API 파라미터, 코드 예시, 비용 계산 포함.
+가격·파라미터는 2026-11-04 공식 문서 기준이다. 사용 전 [공식 가격표](https://platform.claude.com/docs/en/about-claude/pricing)를 다시 확인한다.
 Claude Code 세션 내 도구 사용 효율은 `/token-efficiency` 참조.
 
 ## Quick Reference
@@ -15,9 +16,9 @@ Claude Code 세션 내 도구 사용 효율은 `/token-efficiency` 참조.
 |------|------|------|
 | context 80% 도달 | `/clear` 또는 세션 재시작 | #context-window |
 | 탐색성 작업 10+ 파일 | subagent 위임 | #subagent-delegation |
-| 코딩/agentic 작업 | effort `xhigh` | #effort-level |
+| 코딩/agentic 작업 | effort `medium`, 어렵거나 길면 `high` | #effort-level |
 | agentic loop 비용 제어 | Task Budget (beta) | #task-budget |
-| 반복 prompt 90% 절감 | Prompt Caching | #prompt-caching |
+| 반복 prompt 입력 비용 절감 (읽기 0.025x~0.1x) | Prompt Caching | #prompt-caching |
 | 모델 전환 후 캐시 무효화 | tokenizer 변경 대응 | #tokenizer-change |
 
 ---
@@ -60,11 +61,9 @@ claude --resume
 
 ---
 
-## Subagent Delegation (Opus 4.7 특화)
+## Subagent Delegation
 
-### 핵심 변화
-
-Opus 4.7은 subagent를 **기본적으로 덜 spawn**한다. 필요 시 명시 지시.
+기본 spawn 빈도는 공식 문서에 없다. fan-out 이 필요하면 프롬프트에 명시한다.
 
 ### 위임 기준
 
@@ -86,7 +85,7 @@ Opus 4.7은 subagent를 **기본적으로 덜 spawn**한다. 필요 시 명시 �
 # ✅ Context 격리
 "Use a subagent to explore the auth system and summarize findings"
 
-# ❌ 모호 (4.7은 spawn 안 함)
+# ❌ 모호 — fan-out 여부를 모델 판단에 맡긴다
 "Look into this codebase"
 ```
 
@@ -102,17 +101,18 @@ Fresh context = 편향 없는 리뷰.
 
 ---
 
-## Effort Level (Opus 4.7)
+## Effort Level
 
-### 레벨별 특성
+### 레벨별 사용 상황
 
-| 레벨 | 비용 | 사용 상황 |
-|------|------|---------|
-| `max` | xhigh 대비 2x, +3%p만 | 진짜 frontier 문제만. 일반 코딩 금지 (overthinking 위험) |
-| `xhigh` | high 대비 ~2x | **코딩/agentic 기본** (권장) |
-| `high` | 기본값 | 지능 민감 작업 최소 기준 |
-| `medium` | ~50% | 비용 민감 + 품질 타협 |
-| `low` | ~25% | 단순 조회·subagent·속도 우선 |
+| 레벨 | 사용 상황 |
+|------|---------|
+| `low` | 단순 조회·분류·속도 우선 |
+| `medium` | 범위가 명확한 코딩·분석. **Opus 5.5 시작점** |
+| `high` | 어렵거나 긴 작업, 리뷰, 조사 |
+| `xhigh` / `max` | "where you've measured a quality gain" 인 작업만 |
+
+레벨 간 비용 배수는 공식 문서에 없다. "It shapes behavior but doesn't guarantee a token count." 모델별 지원과 기본값은 [`effort-guide.md`](../../rules/effort-guide.md) 참조.
 
 ### API 코드 예시
 
@@ -121,17 +121,17 @@ import anthropic
 
 client = anthropic.Anthropic()
 
-# 코딩/agentic → xhigh
+# 코딩/agentic → medium 부터, 어렵거나 길면 high
 response = client.messages.create(
-    model="claude-opus-4-7",
-    max_tokens=64000,  # xhigh는 64k 이상 권장
-    output_config={"effort": "xhigh"},
+    model="claude-opus-5-5",
+    max_tokens=128000,  # 공식 제안: agentic 코딩 128,000
+    output_config={"effort": "medium"},
     messages=[{"role": "user", "content": "..."}],
 )
 
 # 분류·단순 추출 → low
 response = client.messages.create(
-    model="claude-opus-4-7",
+    model="claude-opus-5-5",
     max_tokens=2048,
     output_config={"effort": "low"},
     messages=[{"role": "user", "content": "..."}],
@@ -145,7 +145,7 @@ response = client.messages.create(
 "This is complex. Think very carefully..."
 
 # ✅ effort 레벨 상향
-output_config={"effort": "xhigh"}
+output_config={"effort": "high"}
 ```
 
 단, `low`를 유지해야 할 이유(지연)가 있으면 타겟팅된 가이드 추가:
@@ -158,6 +158,8 @@ output_config={"effort": "xhigh"}
 ## Task Budget (beta, API only)
 
 > **Claude Code 미지원**. Messages API 직접 호출 시만 해당.
+>
+> 지원 모델: Fable 5.1, Fable 5, Mythos 5.1, Mythos 5, Opus 5.5, Opus 5, Sonnet 5.5, Haiku 5.5, Opus 4.8, Opus 4.7. Sonnet 5, Opus 4.6, Sonnet 4.6, Haiku 4.5 는 미지원.
 
 ### 핵심 특성
 
@@ -170,7 +172,7 @@ output_config={"effort": "xhigh"}
 
 ```python
 response = client.beta.messages.create(
-    model="claude-opus-4-7",
+    model="claude-opus-5-5",
     max_tokens=128000,  # per-request hard cap
     output_config={
         "effort": "high",
@@ -213,14 +215,16 @@ output_config = {"task_budget": {"total": 128000, "remaining": 89000}}  # 매 tu
 
 ## Prompt Caching
 
-### 경제학 (Opus 4.7 $5/MTok 기준)
+### 경제학 (Opus 5.5 $4/MTok 기준)
 
 | 비용 | 배수 | 실제 |
 |------|------|------|
-| 기본 입력 | 1.0x | $5/MTok |
-| 5분 캐시 쓰기 | 1.25x | $6.25/MTok |
-| 1시간 캐시 쓰기 | 2.0x | $10/MTok |
-| **캐시 읽기** | **0.1x** | **$0.50/MTok (90% 절감)** |
+| 기본 입력 | 1.0x | $4/MTok |
+| 5분 캐시 쓰기 | 1.25x | $5/MTok |
+| 1시간 캐시 쓰기 | 2.0x | $8/MTok |
+| **캐시 읽기** | **0.05x** | **$0.20/MTok (95% 절감)** |
+
+읽기 배수는 모델마다 다르다: Opus·Sonnet 5.5 는 0.05x, Fable 5.1 은 0.025x, Haiku 5.5 와 그 이전 모델은 0.1x.
 
 ROI: 1회 재사용만 해도 5분 TTL 회수, 2회면 1시간 TTL 회수.
 
@@ -229,7 +233,7 @@ ROI: 1회 재사용만 해도 5분 TTL 회수, 2회면 1시간 TTL 회수.
 ```python
 # ✅ 정적 → 동적 순서, 캐시 지점은 불변 블록
 response = client.messages.create(
-    model="claude-opus-4-7",
+    model="claude-opus-5-5",
     max_tokens=1024,
     system=[
         {
@@ -277,6 +281,8 @@ system=[
 | 이미지 추가/제거 | ✓ | ✓ | ✘ |
 | thinking 파라미터 | ✓ | ✓ | ✘ |
 
+요청 사이에 top-level effort 를 바꿔도 캐시가 깨진다: "Changing the top-level effort value between requests invalidates the prompt cache."
+
 ### 성능 모니터링
 
 ```python
@@ -288,7 +294,7 @@ print(response.usage)
 # }
 ```
 
-`cache_read_input_tokens`와 `cache_creation_input_tokens` 모두 0이면 캐시 미작동 — 최소 토큰 길이(1024~4096), 캐시 지점 위치, TTL 내 재요청 여부 점검.
+`cache_read_input_tokens`와 `cache_creation_input_tokens` 모두 0이면 캐시 미작동 — 최소 토큰 길이(모델별 512~4,096), 캐시 지점 위치, TTL 내 재요청 여부 점검.
 
 ### Workspace Isolation (2026-02-05부터)
 
@@ -298,29 +304,26 @@ print(response.usage)
 
 ---
 
-## Adaptive Thinking
+## Thinking
 
-### 4.6 → 4.7 변경
+### Opus 5.5
 
 ```python
-# ❌ Before (Opus 4.6) — 4.7에서 400 에러
+# ❌ 구 방식 — 400 에러
 thinking = {"type": "enabled", "budget_tokens": 32000}
 
-# ✅ After (Opus 4.7)
-thinking = {"type": "adaptive"}
-output_config = {"effort": "high"}  # 깊이는 effort로 제어
+# ✅ thinking 필드 생략 (adaptive 와 동일), 깊이는 effort 로 제어
+output_config = {"effort": "high"}
 ```
 
-### 기본값 주의
-
-- Opus 4.7에서 **adaptive thinking은 기본 off**
-- `thinking` 필드 없으면 사고 안 함 (4.6 default와 동일)
-- 필요 시 `thinking: {"type": "adaptive"}` 명시
+- thinking 은 **항상 켜져 있다.** `{"type": "adaptive"}` 를 보내도 되지만 생략과 같다
+- `{"type": "disabled"}` 는 400 이다
+- Sonnet 5.5 에서 끄려면 `{"type": "between_tools"}` 를 쓴다 (xhigh·max 와 함께 쓰면 400)
 
 ### Thinking 표시
 
 ```python
-# 기본: omitted (응답 속도 향상)
+# 기본 display 에서는 thinking text 가 비어 있다. Opus 5.5 의 진행 메모도 여기에 온다
 # UI에 표시하려면:
 thinking = {
     "type": "adaptive",
@@ -328,29 +331,33 @@ thinking = {
 }
 ```
 
-### 제거된 파라미터 (4.7)
+### 거부되는 파라미터
 
-- `temperature`, `top_p`, `top_k` — 400 에러
-- `thinking.budget_tokens` — 400 에러
-- assistant message prefill — 400 에러
+| 파라미터 | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 | Fable 5.1 |
+|---|---|---|---|---|
+| `temperature` / `top_p` / `top_k` | 400 | 400 | 생략 권장 (400 여부 ⚠️ 문서 미기재) | 400 |
+| `thinking.budget_tokens` | 400 | 400 | ⚠️ 문서 미확인 | ⚠️ 문서 미확인 |
+| assistant prefill | 400 | 400 | 400 | 400 |
+| forced `tool_choice` (`any`, `tool`) | 400 | 400 | **허용** | 400 |
+
+API version `2026-10-21` 에서는 샘플링 파라미터를 기본값으로 보내도 거부된다. `2023-06-01` 에서는 기본값이 아닌 값만 거부된다.
 
 ---
 
-## Tokenizer 변경 (4.6 → 4.7)
+## Tokenizer (Opus 4.7 부터)
 
 ### 영향
 
-- 같은 텍스트 **1.0~1.35x 토큰** 사용 (content type 따라)
+- 같은 텍스트가 이전 모델보다 **최대 약 35% 더 많은 토큰**을 쓴다 (content type 에 따라 다름). Sonnet 5.5 는 Sonnet 4.6 대비 약 30%
+- Opus 5.5 와 Sonnet 5.5 모두 이 tokenizer 를 쓴다
 - `/v1/messages/count_tokens` 결과값 변화
-- 4.6 prompt cache 전부 **무효화** (tokenizer 경계 변경)
 
 ### 대응 체크리스트
 
-- [ ] `max_tokens` 파라미터 **35% headroom** 추가
+- [ ] `max_tokens` 에 여유를 둔다. 공식 문서의 표현은 "give additional headroom" 이고 agentic 코딩에는 128,000 을 제안한다 (상한 128K)
 - [ ] Compaction 트리거 임계값 재조정
 - [ ] 클라이언트 쪽 토큰 추정 로직 재검증
 - [ ] 모델 전환 후 cache 재빌드 가정
-- [ ] xhigh/max effort에서 `max_tokens` 64k 이상
 
 ---
 
@@ -370,31 +377,31 @@ thinking = {
 ### Prompt Caching 적용 전
 
 ```
-입력:  55,500 × $5/M    = $0.278/회
-출력:  10,000 × $25/M   = $0.250/회
+입력:  55,500 × $4/M    = $0.222/회
+출력:  10,000 × $20/M   = $0.200/회
 ──────────────────────────
-회당: $0.528
-일:   $52.80 (100회)
-월:   $1,584
+회당: $0.422
+일:   $42.20 (100회)
+월:   $1,266
 ```
 
 ### Prompt Caching 적용 후 (5분 TTL)
 
 ```
 첫 요청 (cache write):
-  입력 cache write: 55,000 × $6.25/M = $0.344
-  입력 basic:          500 × $5/M     = $0.003
-  출력:             10,000 × $25/M    = $0.250
-  = $0.597
+  입력 cache write: 55,000 × $5/M    = $0.275
+  입력 basic:          500 × $4/M     = $0.002
+  출력:             10,000 × $20/M    = $0.200
+  = $0.477
 
 이후 99회 (cache hit):
-  입력 cache read:  55,000 × $0.50/M  = $0.0275
-  입력 basic:          500 × $5/M     = $0.003
-  출력:             10,000 × $25/M    = $0.250
-  = $0.281/회
+  입력 cache read:  55,000 × $0.20/M  = $0.011
+  입력 basic:          500 × $4/M     = $0.002
+  출력:             10,000 × $20/M    = $0.200
+  = $0.213/회
 
-일 총:  $0.597 + ($0.281 × 99) = $28.4 (46% 절감)
-월:     $852 (연 $8,784 절감)
+일 총:  $0.477 + ($0.213 × 99) = $21.56 (49% 절감)
+월:     $647 (연 $7,428 절감)
 ```
 
 ---
@@ -408,13 +415,13 @@ thinking = {
 
 ### 프롬프트 작성
 - [ ] 의도·제약·수락 기준·파일 경로 첫 턴에 완전 명세
-- [ ] Opus 4.7 literal 해석 대응 (일반화 필요 시 명시)
+- [ ] 일반화가 필요하면 명시 ("유사 케이스에도 적용")
 - [ ] Positive framing 선호 ("Don't X" → "Do Y")
 
 ### API 호출
-- [ ] `effort` 명시 (`xhigh` 기본)
-- [ ] `max_tokens` 64k 이상 (xhigh/max)
-- [ ] 제거된 파라미터 확인 (`temperature`, `budget_tokens` 등)
+- [ ] `effort` 명시 (`medium` 에서 시작, 어렵거나 길면 `high`)
+- [ ] `max_tokens` 여유 확보 (agentic 코딩 128,000)
+- [ ] 거부되는 파라미터 확인 (`temperature`, `budget_tokens`, prefill, forced `tool_choice`)
 - [ ] Prompt cache 구조 정적→동적 순서
 
 ### Task Budget (해당 시)
@@ -429,7 +436,10 @@ thinking = {
 - `rules/token-budget.md` — 핵심 원칙 (auto-load)
 - `/token-efficiency` — Claude Code 세션 내 도구 사용 효율
 - `/clean-code` — 코드 가독성 원칙
-- [공식: What's new in Claude Opus 4.7](https://platform.claude.com/docs/en/about-claude/models/whats-new-claude-4-7)
+- [공식: What's new in Opus 5.5](https://platform.claude.com/docs/en/models/opus-5-5/whats-new-opus-5-5)
+- [공식: Opus 5.5 migration guide](https://platform.claude.com/docs/en/models/opus-5-5/migration-guide)
+- [공식: Sonnet 5.5 migration guide](https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide)
+- [공식: Pricing](https://platform.claude.com/docs/en/about-claude/pricing)
 - [공식: Task budgets](https://platform.claude.com/docs/en/build-with-claude/task-budgets)
 - [공식: Effort parameter](https://platform.claude.com/docs/en/build-with-claude/effort)
 - [공식: Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching)

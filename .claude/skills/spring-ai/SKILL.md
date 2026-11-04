@@ -115,8 +115,8 @@ spring:
       api-key: ${ANTHROPIC_API_KEY}
       chat:
         options:
-          model: claude-sonnet-4-6
-          temperature: 0.7
+          model: claude-sonnet-5-5
+          # temperature 는 지정하지 않는다 — Sonnet 5.5 는 400 으로 거부한다
           max-tokens: 4096
 
     # 또는 OpenAI

@@ -110,9 +110,9 @@ UsageEvent (raw, billing 전 단계)
 
 PriceBook (시간 가변, immutable version)
   ├─ id, effective_at
-  ├─ meter, model                 (예: meter=llm_tokens, model=claude-opus-4-7)
+  ├─ meter, model                 (예: meter=llm_tokens, model=claude-opus-5-5)
   ├─ unit                         (1000 tokens / 1 image / 1 GB-month)
-  ├─ unit_amount, currency        (예: USD 0.015)
+  ├─ unit_amount, currency        (예: USD 0.02 — Opus 5.5 output, 2026-11 공시가)
   ├─ markup_percent               (provider 원가 대비 마진)
   └─ cost_basis_amount            (provider 원가, 회계용)
 ```
@@ -138,7 +138,7 @@ def record_usage(
     meter: str,                         # "llm_tokens"
     quantity: int,                      # 12500
     request_id: str,                    # 상위 요청 ID — idempotency 기반
-    model: str,                         # "claude-opus-4-7"
+    model: str,                         # "claude-opus-5-5"
     metadata: dict,
 ):
     idem_key = f"usage:{request_id}:{meter}"  # 한 요청 = 한 차감
@@ -269,8 +269,8 @@ LLM 사용량 가격 = **provider 원가 + 마진(markup)**. provider 가격이 
 | **Cost basis (provider 원가)** | OpenAI/Anthropic/Google 공시 단가 + cache hit 할인 + batch API 할인 | input/output 단가 다름. cache hit ratio가 평균 원가 좌우. |
 | **Markup %** | 보통 30~200% (prompt 가공 + 인프라 + 마진) | 너무 낮으면 운영 적자, 너무 높으면 사용자가 직접 OpenAI 가입 |
 | **표시 단위** | 사용자 친화 단위 ("크레딧" / "토큰") | provider raw 토큰을 그대로 노출하면 모델 변경 시 사용자 혼란 |
-| **모델별 가격** | Opus = Sonnet × 5, Haiku = Sonnet ÷ 3 등 비례 | 모델 라우팅(downgrade) 시 사용자 경험 통일 |
-| **Cache hit 처리** | 할인 (예: 90% 절감) 사용자에게 일부 환급 / 자체 마진 흡수 | 회계 분리 (cost_basis 기록) 필수 |
+| **모델별 가격** | Opus = Sonnet × 2, Haiku = Sonnet ÷ 20 등 비례 (Claude 5.5 공시가, 2026-11 기준) | 모델 라우팅(downgrade) 시 사용자 경험 통일 |
+| **Cache hit 처리** | 할인 (예: Opus·Sonnet 5.5 95%, Haiku 5.5 90% 절감) 사용자에게 일부 환급 / 자체 마진 흡수 | 회계 분리 (cost_basis 기록) 필수 |
 | **Batch API 할인** | 50% 할인 (Anthropic/OpenAI batch). 사용자가 비동기 동의 시 적용 | UX: 동기/배치 옵션 명시 |
 
 ### Multi-currency / 통화별 토큰 가격 ADR
