@@ -1,3 +1,7 @@
+---
+description: "버전 태그 및 GitHub Release를 생성합니다"
+---
+
 # Release Manager
 
 버전 태그 및 GitHub Release를 자동 생성합니다.

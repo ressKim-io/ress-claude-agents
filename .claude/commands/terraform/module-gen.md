@@ -1,3 +1,7 @@
+---
+description: "Terraform: 재사용 가능한 모듈을 생성합니다"
+---
+
 # Terraform Module Generator
 
 새로운 Terraform 모듈 스케폴드를 생성합니다.

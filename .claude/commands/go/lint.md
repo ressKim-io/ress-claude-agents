@@ -1,3 +1,7 @@
+---
+description: "golangci-lint를 실행하고 이슈를 수정합니다"
+---
+
 # Go Lint
 
 golangci-lint를 실행하고 발견된 이슈를 수정합니다.

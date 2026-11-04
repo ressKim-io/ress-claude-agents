@@ -1,3 +1,7 @@
+---
+description: "OpenAPI/Swagger 어노테이션을 추가합니다"
+---
+
 # API Documentation Generator
 
 OpenAPI/Swagger 어노테이션을 추가하거나 검증합니다.

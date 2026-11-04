@@ -1,3 +1,7 @@
+---
+description: "Java/Kotlin 백엔드 코드를 리뷰합니다"
+---
+
 # Backend Code Review
 
 변경된 코드를 리뷰하고 개선점을 제안합니다.

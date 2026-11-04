@@ -1,7 +1,7 @@
 # Makefile for ress-claude-agents
 # Claude Code Custom Commands & Skills Management
 
-.PHONY: help validate validate-enforcement validate-links verify-enforcement generate inventory lint setup-hooks clean all
+.PHONY: help validate validate-enforcement validate-links verify-enforcement inventory lint setup-hooks all
 
 # Default target
 help:
@@ -9,21 +9,18 @@ help:
 	@echo ""
 	@echo "Available targets:"
 	@echo "  help           Show this help message (default)"
-	@echo "  validate       Validate documentation consistency"
+	@echo "  validate       Validate asset catalog (floors, locations, command refs)"
 	@echo "  validate-enforcement  Check settings.json <-> user-approval.md rule drift (static, CI)"
 	@echo "  validate-links        Check internal markdown links resolve"
 	@echo "  verify-enforcement    Check permission rules actually fire (runtime, needs claude CLI)"
-	@echo "  generate       Generate documentation (help/index.md)"
 	@echo "  inventory      Generate .claude/inventory.yml"
 	@echo "  lint           Run shellcheck on shell scripts"
 	@echo "  setup-hooks    Setup pre-commit git hooks"
-	@echo "  clean          Remove generated files"
 	@echo "  all            Run validate + enforcement + links"
 
-# Validate documentation consistency
+# Validate asset catalog
 validate:
-	@echo "Validating documentation..."
-	@./scripts/generate-docs.sh validate
+	@./scripts/validate-catalog.sh
 
 # 강제 규칙 정적 검증 (CI 에서도 돈다)
 validate-enforcement:
@@ -37,11 +34,6 @@ validate-links:
 # 규칙을 추가·변경한 커밋에서 1회 실행한다 (ADR 0009 §Consequences).
 verify-enforcement:
 	@./scripts/verify-enforcement-runtime.sh
-
-# Generate documentation
-generate:
-	@echo "Generating documentation..."
-	@./scripts/generate-docs.sh generate
 
 # Generate inventory
 inventory:
@@ -68,12 +60,6 @@ setup-hooks:
 	@echo 'make lint' >> .git/hooks/pre-commit
 	@chmod +x .git/hooks/pre-commit
 	@echo "Pre-commit hook installed successfully."
-
-# Clean generated files
-clean:
-	@echo "Cleaning generated files..."
-	@rm -f commands/help/index.md
-	@echo "Clean completed."
 
 # Run all checks
 all: validate validate-enforcement validate-links

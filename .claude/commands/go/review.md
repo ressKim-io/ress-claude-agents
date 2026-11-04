@@ -1,3 +1,7 @@
+---
+description: "Go 코드를 리뷰하고 개선점을 제안합니다"
+---
+
 # Go Code Review
 
 변경된 Go 코드를 리뷰합니다.

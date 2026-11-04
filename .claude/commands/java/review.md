@@ -1,3 +1,7 @@
+---
+description: "Java/Spring 코드를 리뷰합니다 (Virtual Threads, DI, Security)"
+---
+
 # Java/Spring Code Review
 
 변경된 Java/Spring 코드를 리뷰합니다.

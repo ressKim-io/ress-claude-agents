@@ -1,3 +1,7 @@
+---
+description: "K8s: 매니페스트의 best practice를 검증합니다"
+---
+
 # Kubernetes Manifest Validator
 
 Kubernetes manifest의 보안 및 best practice를 검증합니다.

@@ -1,3 +1,7 @@
+---
+description: "K8s: 보안 설정을 자동으로 추가합니다"
+---
+
 # Kubernetes Security Hardening
 
 Kubernetes manifest에 보안 설정을 자동으로 추가합니다.

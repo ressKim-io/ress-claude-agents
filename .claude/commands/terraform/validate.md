@@ -1,3 +1,7 @@
+---
+description: "Terraform: best practice 및 품질을 검증합니다"
+---
+
 # Terraform Validation
 
 Terraform 코드의 best practice 및 품질을 검증합니다.

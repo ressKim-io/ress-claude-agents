@@ -1,3 +1,7 @@
+---
+description: "SonarQube/Qodana 정적 분석을 수행합니다"
+---
+
 # Java/Spring Static Analysis
 
 Java/Spring 프로젝트의 정적 분석을 수행합니다.

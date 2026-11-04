@@ -1,3 +1,7 @@
+---
+description: "Table-driven 테스트 코드를 생성합니다"
+---
+
 # Go Test Generator
 
 Go 코드에 대한 테이블 기반 테스트 코드를 생성합니다.

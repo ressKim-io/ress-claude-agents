@@ -1,3 +1,7 @@
+---
+description: "JUnit 5 + Testcontainers 테스트를 생성합니다"
+---
+
 # Java/Spring Test Generation
 
 Java/Spring 코드에 대한 테스트를 생성합니다.

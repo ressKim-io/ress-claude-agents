@@ -1,3 +1,7 @@
+---
+description: "커밋 기반으로 PR을 자동 생성합니다"
+---
+
 # Pull Request Creator
 
 커밋 히스토리를 기반으로 PR을 자동 생성합니다.

@@ -1,3 +1,7 @@
+---
+description: "JUnit 테스트 코드를 생성합니다"
+---
+
 # Test Code Generator
 
 지정된 클래스/메서드에 대한 테스트 코드를 자동 생성합니다.

@@ -1,3 +1,7 @@
+---
+description: "Native Image, CDS, GC 튜닝 등 성능 최적화를 제안합니다"
+---
+
 # Java/Spring Performance Optimization
 
 Java/Spring 애플리케이션 성능을 최적화합니다.

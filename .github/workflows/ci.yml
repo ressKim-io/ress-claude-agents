@@ -12,6 +12,7 @@ permissions:
   contents: read
 
 jobs:
+  # job 이름은 main 의 required status check 다. 바꾸면 PR 이 머지 불가 상태로 멈춘다.
   docs:
     name: Documentation Validation
     runs-on: ubuntu-latest
@@ -20,13 +21,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Install yq
-        run: |
-          sudo wget -qO /usr/local/bin/yq https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64
-          sudo chmod +x /usr/local/bin/yq
-
-      - name: Validate documentation consistency
-        run: ./scripts/generate-docs.sh validate
+      - name: Validate asset catalog
+        run: ./scripts/validate-catalog.sh
 
   inventory:
     name: Inventory Freshness
@@ -67,9 +63,6 @@ jobs:
 
       - name: Validate AGENTS.md ↔ rules drift
         run: ./scripts/validate-rules-drift.sh all
-
-      - name: Validate commands/ ↔ .claude/commands/ drift
-        run: ./scripts/validate-commands-drift.sh all
 
       - name: Validate skill/agent frontmatter
         run: ./scripts/validate-skill-frontmatter.sh all

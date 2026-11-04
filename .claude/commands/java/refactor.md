@@ -1,3 +1,7 @@
+---
+description: "Modern Java 패턴 및 Virtual Threads 리팩토링을 제안합니다"
+---
+
 # Java/Spring Refactoring
 
 Java/Spring 코드 리팩토링 패턴을 적용합니다.

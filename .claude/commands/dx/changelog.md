@@ -1,3 +1,7 @@
+---
+description: "커밋 히스토리 기반으로 CHANGELOG를 생성합니다"
+---
+
 # Changelog Generator
 
 커밋 히스토리를 기반으로 CHANGELOG를 자동 생성합니다.

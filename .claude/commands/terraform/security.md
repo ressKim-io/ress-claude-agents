@@ -1,3 +1,7 @@
+---
+description: "Terraform: 보안 취약점을 검사합니다"
+---
+
 # Terraform Security Check
 
 tfsec 기반으로 Terraform 코드의 보안을 검사합니다.

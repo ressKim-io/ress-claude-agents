@@ -1,3 +1,7 @@
+---
+description: "Terraform: terraform plan 결과를 분석합니다"
+---
+
 # Terraform Plan Review
 
 terraform plan 결과를 분석하고 리뷰합니다.

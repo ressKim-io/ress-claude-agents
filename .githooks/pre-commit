@@ -34,18 +34,17 @@ log_error() {
 # -----------------------------------------------------------------------------
 
 validate_docs() {
-    log_info "Validating documentation consistency..."
+    log_info "Validating asset catalog..."
 
-    local generate_docs="${PROJECT_ROOT}/scripts/generate-docs.sh"
+    local validate_catalog="${PROJECT_ROOT}/scripts/validate-catalog.sh"
 
-    if [[ ! -x "${generate_docs}" ]]; then
-        log_error "generate-docs.sh not found or not executable"
+    if [[ ! -x "${validate_catalog}" ]]; then
+        log_error "validate-catalog.sh not found or not executable"
         return 1
     fi
 
-    if ! "${generate_docs}" validate; then
-        log_error "Documentation validation failed"
-        log_info "Run './scripts/generate-docs.sh' to see details and fix issues"
+    if ! "${validate_catalog}"; then
+        log_error "Asset catalog validation failed"
         return 1
     fi
 
