@@ -1,6 +1,6 @@
 ---
 name: go-gin
-description: "Gin Framework Patterns — Gin 웹 프레임워크 패턴 및 best practices. Use when working with go 도메인의 패턴 / 구현 선택."
+description: "Gin 웹 프레임워크 — Handler 구조, Router 설정, Middleware, Request Binding, Response 패턴. Use when Gin 으로 Go HTTP API 의 핸들러·라우팅·미들웨어를 작성하거나 요청 바인딩을 구성할 때."
 ---
 
 # Gin Framework Patterns

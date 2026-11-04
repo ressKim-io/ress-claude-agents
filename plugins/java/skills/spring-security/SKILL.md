@@ -1,6 +1,6 @@
 ---
 name: spring-security
-description: "Spring Security Patterns — Spring Security 기본 설정 및 Method Security 패턴 Use when working with spring 도메인의 패턴 / 구현 선택."
+description: "Spring Security 기본 설정 — SecurityFilterChain, Method Security(@PreAuthorize), CORS, 설정 우선순위, Authorization Server. Use when Spring 앱의 인증·인가 필터와 CORS 를 구성하거나 메서드 단위 권한을 걸 때."
 ---
 
 # Spring Security Patterns

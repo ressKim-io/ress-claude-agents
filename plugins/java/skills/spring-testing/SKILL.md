@@ -1,6 +1,6 @@
 ---
 name: spring-testing
-description: "Spring Testing Patterns — JUnit 5, Mockito를 활용한 테스트 패턴 Use when working with spring 도메인의 패턴 / 구현 선택."
+description: "Spring 단위·슬라이스 테스트 — JUnit 5, Mockito, @WebMvcTest, @DataJpaTest, 테스트 픽스처, 네이밍 규칙, 테스트 피라미드. Use when Spring 서비스·컨트롤러·리포지토리 테스트를 작성하거나 mock 범위를 정할 때."
 ---
 
 # Spring Testing Patterns

@@ -1,6 +1,6 @@
 ---
 name: refactoring-go
-description: "Go Refactoring Patterns — Go 코드 리팩토링 패턴 및 best practices. Use when working with go 도메인의 패턴 / 구현 선택."
+description: "Go 리팩토링 — Early Return, 함수·인터페이스 추출, 의존성 주입, 에러 처리 개선, goroutine·channel 정리. Use when 동작을 유지한 채 Go 코드의 복잡도를 줄이거나 구조를 개선할 때."
 ---
 
 # Go Refactoring Patterns

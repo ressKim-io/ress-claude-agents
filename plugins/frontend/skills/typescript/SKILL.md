@@ -1,6 +1,6 @@
 ---
 name: typescript
-description: "TypeScript 심화 가이드 — TypeScript 5.x 타입 시스템 심화, 제네릭 패턴, Utility Types, 타입 안전성 종합 가이드. Use when working with frontend 도메인의 패턴 / 구현 선택."
+description: "TypeScript 타입 시스템 — Generic, Utility Types, Discriminated Union, Type Narrowing, Branded Type, Zod 스키마 검증, tsconfig 설정. Use when 복잡한 타입을 설계하거나 타입 안전성을 높이고 tsconfig 를 정할 때."
 ---
 
 # TypeScript 심화 가이드

@@ -1,6 +1,6 @@
 ---
 name: react-patterns
-description: "React Patterns 가이드 — React 19+, Server Components, Suspense, 상태관리, 컴포넌트 설계 패턴 종합 가이드. Use when working with frontend 도메인의 패턴 / 구현 선택."
+description: "React 설계 패턴 — React 19 기능, Server vs Client Component, Suspense·Error Boundary, 컴포넌트 설계, Form 처리. Use when React 컴포넌트를 설계하거나 Server Component 경계와 비동기 UI 를 구성할 때."
 ---
 
 # React Patterns 가이드

@@ -1,6 +1,6 @@
 ---
 name: frontend-testing
-description: "Frontend Testing 가이드 — Vitest, Playwright, Testing Library, MSW를 활용한 프론트엔드 테스트 전략 종합 가이드. Use when working with frontend 도메인의 패턴 / 구현 선택."
+description: "프론트엔드 테스트 — Vitest, Testing Library, MSW, Playwright E2E, React Server Component 테스트, Test ID 전략, CI. Use when React 컴포넌트·API mock·E2E 테스트를 작성하거나 테스트 도구를 구성할 때."
 ---
 
 # Frontend Testing 가이드

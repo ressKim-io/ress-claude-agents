@@ -24,13 +24,13 @@ cp -r plugins/frontend/skills/<이름> <프로젝트>/.claude/skills/
 
 | 이름 | 설명 |
 |---|---|
-| `/frontend:css-design-system` | CSS & Design System 가이드 — Tailwind CSS, Design System 구축, Radix UI, Shadcn/ui, 접근성 종합 가이드 |
-| `/frontend:frontend-performance` | Frontend Performance 가이드 — Core Web Vitals 최적화, 번들 분석, Code Splitting, Image/Font 최적화 종합 가이드 |
-| `/frontend:frontend-testing` | Frontend Testing 가이드 — Vitest, Playwright, Testing Library, MSW를 활용한 프론트엔드 테스트 전략 종합 가이드 |
-| `/frontend:nextjs` | Next.js 가이드 — Next.js 15 App Router, React Server Components, ISR, Middleware, 라우팅 전략 종합 가이드 |
-| `/frontend:react-patterns` | React Patterns 가이드 — React 19+, Server Components, Suspense, 상태관리, 컴포넌트 설계 패턴 종합 가이드 |
-| `/frontend:state-management` | State Management 가이드 — Zustand, Jotai, TanStack Query, React Context 기반 상태관리 선택 및 패턴 |
-| `/frontend:typescript` | TypeScript 심화 가이드 — TypeScript 5.x 타입 시스템 심화, 제네릭 패턴, Utility Types, 타입 안전성 종합 가이드 |
+| `/frontend:css-design-system` | CSS 와 디자인 시스템 — Tailwind CSS 4, Design Token, Shadcn/ui, Radix UI, Atomic Design, Dark Mode, 반응형, a11y |
+| `/frontend:frontend-performance` | 프론트엔드 성능 — Core Web Vitals(LCP·INP·CLS), 번들 분석, Code Splitting, 이미지·폰트·스크립트 최적화, Prefetching |
+| `/frontend:frontend-testing` | 프론트엔드 테스트 — Vitest, Testing Library, MSW, Playwright E2E, React Server Component 테스트, Test ID 전략, CI |
+| `/frontend:nextjs` | Next.js App Router — React Server Components, Data Fetching, ISR, Route Handlers, Middleware, … |
+| `/frontend:react-patterns` | React 설계 패턴 — React 19 기능, Server vs Client Component, Suspense·Error Boundary, 컴포넌트 설계, Form 처리 |
+| `/frontend:state-management` | React 상태관리 — TanStack Query, Zustand, Jotai, Context, URL state 선택 기준 |
+| `/frontend:typescript` | TypeScript 타입 시스템 — Generic, Utility Types, Discriminated Union, Type Narrowing, Branded Type, Zod 스키마 검증, … |
 
 ## Agents (1)
 

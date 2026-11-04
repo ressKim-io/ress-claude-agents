@@ -1,6 +1,6 @@
 ---
 name: viper-config-binding
-description: Go Viper의 설정 바인딩 함정과 정답 패턴. SetDefault + AutomaticEnv + Unmarshal 조합의 silent skip 동작과 mapstructure tag 매핑. 신규 config 추가 시 3곳 동시 갱신.
+description: "Viper 설정 바인딩 함정 — AutomaticEnv 는 SetDefault 한 key만 인식, env 이름 매핑, nested struct·slice·map 바인딩. Use when Go 설정이 dev에선 되는데 prod 에서 zero value 로 나오거나 신규 config key 를 추가할 때."
 ---
 
 # Viper Config Binding — 함정과 정답 패턴

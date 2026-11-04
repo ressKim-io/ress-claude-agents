@@ -1,6 +1,6 @@
 ---
 name: spring-oauth2
-description: "Spring OAuth2 & JWT Patterns — JWT 토큰 발급/검증 및 OAuth2 Resource Server 설정 Use when working with spring 도메인의 패턴 / 구현 선택."
+description: "Spring JWT 와 OAuth2 — JWT 발급·검증, JWT Filter, Auth Controller, Resource Server 설정, Token TTL. Use when Spring 서비스에 JWT 로그인을 구현하거나 OAuth2 Resource Server 로 API 를 보호할 때."
 ---
 
 # Spring OAuth2 & JWT Patterns

@@ -1,6 +1,6 @@
 ---
 name: refactoring-spring
-description: "Spring Refactoring Patterns — Spring Boot 코드 리팩토링 패턴 및 best practices. Use when working with spring 도메인의 패턴 / 구현 선택."
+description: "Spring Boot 리팩토링 — Extract Method, God Class 분해, 계층 분리, N+1 쿼리 개선, DI 개선, 테스트 용이성 향상. Use when 비대한 Service·Controller 를 나누거나 Spring 코드 구조를 안전하게 개선할 때."
 ---
 
 # Spring Refactoring Patterns

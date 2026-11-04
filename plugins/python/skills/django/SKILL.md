@@ -1,6 +1,6 @@
 ---
 name: django
-description: "Django Production Patterns — Django + DRF + Celery 기반 풀스택 웹 애플리케이션 구축 가이드. Use when working with python 도메인의 패턴 / 구현 선택."
+description: "Django 웹 앱 — Django ORM, DRF, Middleware, Signals, Admin 커스터마이징, Celery, Migration, 배포. Use when Django·DRF 로 API 와 백그라운드 작업을 구현하거나 프로젝트 구조를 잡을 때."
 ---
 
 # Django Production Patterns

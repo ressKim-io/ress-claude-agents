@@ -1,6 +1,6 @@
 ---
 name: python-testing
-description: "Python Testing Patterns — pytest 기반 테스트 전략. 단위/통합/E2E 테스트와 async 테스트 패턴. Use when working with python 도메인의 패턴 / 구현 선택."
+description: "pytest 테스트 전략 — fixture·mocking, async 테스트, Testcontainers 통합 테스트, coverage, Hypothesis 속성 기반 테스트, CI. Use when Python 단위·통합 테스트를 작성하거나 pytest 구성을 정할 때."
 ---
 
 # Python Testing Patterns

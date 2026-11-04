@@ -38,17 +38,17 @@ cp -r plugins/go/skills/<이름> <프로젝트>/.claude/skills/
 
 | 이름 | 설명 |
 |---|---|
-| `/go:concurrency-go` | Go Concurrency Patterns — MSA/대규모 트래픽 환경에서의 Go 동시성 문제 해결 패턴 |
-| `/go:effective-go` | Effective Go — 패턴 결정 가이드 — Rob Pike의 Go Proverbs + Modern Go (1.21+) 기반 실전 결정 가이드 |
-| `/go:go-ai` | Go AI Integration Patterns — Go 백엔드에서 LLM 통합, 프레임워크 선택 (Genkit/LangChainGo/Eino), Tool Calling, RAG, MCP 서버 구현 |
-| `/go:go-database` | Go Database Access Patterns — Go DB 라이브러리 선택 가이드 및 production-ready 패턴. ORM 없이 SQL 중심 개발 |
-| `/go:go-gin` | Gin Framework Patterns — Gin 웹 프레임워크 패턴 및 best practices |
-| `/go:go-microservice` | Go 마이크로서비스 가이드 — Go 기반 MSA 프로젝트 구조, 레이어드/헥사고날 아키텍처, 미들웨어 체인, DI 패턴, 운영 패턴 |
+| `/go:concurrency-go` | Go 동시성 패턴 — race detector, Mutex·RWMutex, channel 설계, DB 동시성, goroutine 누수 방지 |
+| `/go:effective-go` | Go 관용 패턴 결정 기준 — 인터페이스 설계, 에러 처리(wrapping), Functional Options, 동시성 기본기, Modern Go 문법 |
+| `/go:go-ai` | Go 백엔드 AI 통합 — Genkit·LangChainGo·Eino 비교, Tool Calling, RAG(PgVector), mcp-go 로 MCP 서버 구현 |
+| `/go:go-database` | Go DB 접근 — pgx, sqlc, sqlx 선택, Connection Pool 설정, pgx 에러 처리, 테스트, Graceful Shutdown |
+| `/go:go-gin` | Gin 웹 프레임워크 — Handler 구조, Router 설정, Middleware, Request Binding, Response 패턴 |
+| `/go:go-microservice` | Go MSA 서비스 구조 — Standard Layout, 레이어드·헥사고날 아키텍처, 미들웨어 체인, DI, Viper 설정, Health Check |
 | `/go:go-performance` | Go 고성능 패턴 — sync.Pool 오브젝트 풀링, zero-allocation 기법, GC 튜닝(GOGC/GOMEMLIMIT), DB·HTTP 커넥션 관리, Graceful Shutdown, … |
 | `/go:go-security` | Go 보안 리뷰 — 입력 검증·SQL/Command injection, 시크릿·인증 처리, 동시성 안전성, crypto/TLS 설정, 에러 정보 노출, path traversal, … |
-| `/go:go-testing` | Go Testing Patterns — Go 테스트 패턴 및 best practices |
-| `/go:refactoring-go` | Go Refactoring Patterns — Go 코드 리팩토링 패턴 및 best practices |
-| `/go:viper-config-binding` | Go Viper의 설정 바인딩 함정과 정답 패턴. SetDefault + AutomaticEnv + Unmarshal 조합의 silent skip 동작과 mapstructure tag 매핑. 신규 … |
+| `/go:go-testing` | Go 테스트 — table-driven test, 네이밍 규칙, go test 명령, mock 생성, HTTP handler 테스트, 테스트 파일 구조 |
+| `/go:refactoring-go` | Go 리팩토링 — Early Return, 함수·인터페이스 추출, 의존성 주입, 에러 처리 개선, goroutine·channel 정리 |
+| `/go:viper-config-binding` | Viper 설정 바인딩 함정 — AutomaticEnv 는 SetDefault 한 key만 인식, env 이름 매핑, nested struct·slice·map 바인딩 |
 
 ## Commands (4)
 

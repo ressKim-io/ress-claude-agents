@@ -1,6 +1,6 @@
 ---
 name: effective-java
-description: "Effective Java — 패턴 결정 가이드 — Effective Java + Modern Java (17+, 21+) 기반 설계 결정 가이드. Use when working with spring 도메인의 패턴 / 구현 선택."
+description: "Effective Java 설계 결정 — 객체 생성 패턴, Modern Java(17·21) 기능, 제네릭·enum, Stream vs for loop, 예외 처리. Use when Java 클래스·API 를 설계하거나 코드 리뷰에서 관용적 Java 구현을 고를 때."
 ---
 
 # Effective Java — 패턴 결정 가이드

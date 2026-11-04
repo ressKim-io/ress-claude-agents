@@ -1,6 +1,6 @@
 ---
 name: concurrency-go
-description: "Go Concurrency Patterns — MSA/대규모 트래픽 환경에서의 Go 동시성 문제 해결 패턴 Use when working with go 도메인의 패턴 / 구현 선택."
+description: "Go 동시성 패턴 — race detector, Mutex·RWMutex, channel 설계, DB 동시성, goroutine 누수 방지. Use when Go 코드의 data race·deadlock을 잡거나 mutex와 channel 중 무엇을 쓸지 정할 때."
 ---
 
 # Go Concurrency Patterns
