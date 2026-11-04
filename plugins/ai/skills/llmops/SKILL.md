@@ -1,6 +1,6 @@
 ---
 name: llmops
-description: "LLMOps 가이드 — RAG 운영, 프롬프트 버전 관리, LLM 평가(Ragas), 가드레일(NeMo) Use when working with platform 도메인의 패턴 / 구현 선택."
+description: "LLMOps — RAG 운영, 프롬프트 버전 관리, Ragas 기반 LLM 평가, NeMo 가드레일. Use when LLM 앱을 운영 환경에서 품질 평가하고 프롬프트 변경을 관리하거나 가드레일을 붙일 때."
 ---
 
 # LLMOps 가이드

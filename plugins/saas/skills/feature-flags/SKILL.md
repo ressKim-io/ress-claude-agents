@@ -1,6 +1,6 @@
 ---
 name: feature-flags
-description: "Feature Flags / Toggles — 코드 배포와 기능 노출 분리. Release toggle / Experiment / Ops kill-switch / Permissioning. Use when working with business 도메인의 패턴 / 구현 선택."
+description: "Feature Flag — release·experiment·ops kill-switch·permission 4종류, OpenFeature, LaunchDarkly·Unleash·Flagsmith, 점진 롤아웃, 거버넌스. Use when 배포와 기능 노출을 분리하거나 A/B 실험·긴급 차단 스위치를 도입할 때."
 ---
 
 # Feature Flags

@@ -1,6 +1,6 @@
 ---
 name: agentic-coding
-description: "Agentic Coding Patterns — AI 코딩 에이전트 활용 패턴, Agent Supervision, Multi-Agent 조율, Agentic Era 코드 리뷰 Use when working with ai 도메인의 패턴 / 구현 선택."
+description: "AI 코딩 에이전트 활용 — 4가지 agentic coding 모드, agent supervision, multi-agent 조율, 코드 리뷰 방식, 모델 라우팅. Use when Claude Code 같은 에이전트에 코딩을 맡기고 감독·검증 방식을 정할 때."
 ---
 
 # Agentic Coding Patterns

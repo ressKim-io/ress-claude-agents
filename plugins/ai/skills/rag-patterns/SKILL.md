@@ -1,6 +1,6 @@
 ---
 name: rag-patterns
-description: "RAG Patterns — RAG(Retrieval-Augmented Generation) 아키텍처, 청킹 전략, 임베딩 모델, 검색 최적화 Use when working with ai 도메인의 패턴 / 구현 선택."
+description: "RAG 아키텍처 — 청킹 전략, 임베딩 모델, 검색 최적화, vector store 연동, advanced RAG, RAGAS 평가. Use when 문서 기반 질의응답 시스템을 만들거나 검색 품질·환각 문제를 개선할 때."
 ---
 
 # RAG Patterns

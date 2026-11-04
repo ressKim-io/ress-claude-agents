@@ -1,6 +1,6 @@
 ---
 name: mlops
-description: "MLOps 가이드 — Kubeflow, KServe를 활용한 ML 파이프라인과 모델 서빙 Use when working with platform 도메인의 패턴 / 구현 선택."
+description: "MLOps — Kubeflow 로 ML 파이프라인을 구성하고 KServe 로 서빙, MLOps 와 LLMOps 비교. Use when 학습부터 배포까지 ML 파이프라인을 설계할 때, 실험 추적은 mlops-tracking 을 쓴다."
 ---
 
 # MLOps 가이드

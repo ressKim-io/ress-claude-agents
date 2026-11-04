@@ -1,6 +1,6 @@
 ---
 name: auth-oauth-social
-description: "OAuth Social Login — OAuth 2.0 / OIDC 소셜 로그인 통합 — Google/Apple/Kakao, PKCE, State CSRF 방지, Magic Link, 2FA. 한국 시장 우선 (Kakao) + 글로벌. 신규 SaaS 인증 부트스트랩. Use when working with business 도메인의 패턴 / 구현 선택."
+description: "소셜 로그인 — Google·Apple·Kakao OAuth 2.0/OIDC, PKCE, state CSRF 방지, id_token 검증, Magic Link, 2FA·Passkey. Use when 신규 SaaS 의 인증 provider 를 고르고 로그인 흐름을 구현할 때."
 ---
 
 # OAuth Social Login

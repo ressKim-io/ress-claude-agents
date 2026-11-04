@@ -1,6 +1,6 @@
 ---
 name: threat-modeling
-description: "Threat Modeling Guide — STRIDE/DREAD 위협 모델링, Microsoft Kubernetes Threat Matrix, 위협 분석 프로세스 Use when working with security 도메인의 패턴 / 구현 선택."
+description: "위협 모델링 — STRIDE, DREAD 점수화, Microsoft Kubernetes Threat Matrix, 4단계 분석 프로세스, 위협별 완화책. Use when 새 시스템이나 마이크로서비스의 공격 표면을 분석하고 위협 모델 문서를 만들 때."
 ---
 
 # Threat Modeling Guide

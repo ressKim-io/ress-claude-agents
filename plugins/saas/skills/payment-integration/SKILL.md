@@ -1,6 +1,6 @@
 ---
 name: payment-integration
-description: "Payment Integration — 결제 통합 패턴 — Stripe/Toss/PortOne, Token-first, Webhook 처리, 분산 트랜잭션. 한국 시장 우선 + 글로벌 옵션. SaaS 신규 프로젝트의 수익화 부트스트랩. Use when working with business 도메인의 패턴 / 구현 선택."
+description: "결제 통합 — Stripe·Toss·PortOne, token-first 구조, webhook 처리, Saga 분산 트랜잭션, 결제 도메인 모델, 보안 금지 사항. Use when SaaS 에 일회성 결제를 붙이고 provider 를 고를 때."
 ---
 
 # Payment Integration

@@ -41,15 +41,15 @@ cp -r plugins/security/skills/<이름> <프로젝트>/.claude/skills/
 | 이름 | 설명 |
 |---|---|
 | `/security:anti-bot` | 봇·매크로 방어 — 다층 방어 아키텍처, 행동 분석 기반 봇 탐지, Device/Browser Fingerprint, Headless 브라우저 탐지, JA3 TLS 지문, JS … |
-| `/security:auth-patterns` | Authentication & Authorization Patterns 가이드 — OAuth2/OIDC, PKCE, JWT, Session, API Key 인증/인가 패턴 및 구현 가이드 |
-| `/security:child-data-protection` | 만14세 미만 아동 개인정보·위치정보 처리 — 법정대리인 동의 검증, 추적 사실 가시화, 가족 계정 모델, 데이터 최소화, 미성년 채팅 모더레이션, 광고/마케팅 금지. 한국 PIPA 제22조의2 … |
-| `/security:compliance-frameworks` | Compliance Frameworks Guide — SOC2, HIPAA, GDPR, PCI-DSS 컴플라이언스 프레임워크 매핑 및 자동화 증거 수집 |
-| `/security:data-subject-rights` | 데이터 주체 권리(DSR) 운영 자동화 — 열람·정정·삭제·이동·처리정지·거부·자동결정거부, 본인 인증, 데이터 카탈로그, 백업/Kafka/캐시/검색 전파, Event Sourcing … |
-| `/security:kr-location-info-act` | 한국 위치정보법(「위치정보의 보호 및 이용 등에 관한 법률」) 운영 — 사업 신고/허가, 별도 동의(약관·개인정보와 분리), 만8세 이하/14세 미만 법정대리인 동의, 즉시 파기, 매년 통계 … |
-| `/security:owasp-top10` | OWASP Top 10 방어 가이드 — OWASP Top 10 (2021) 취약점 상세 설명과 언어별 실전 방어 패턴 |
-| `/security:secrets-management` | 시크릿 관리 가이드 — K8s 시크릿 자동 주입, External Secrets Operator, Vault, Infisical, SOPS — 개발자가 .env 없이 개발하는 환경 |
-| `/security:secure-coding` | Secure Coding Practices 가이드 — 언어별 시큐어 코딩, 입력 검증, 암호화 패턴, 에러 처리, 보안 헤더 |
-| `/security:threat-modeling` | Threat Modeling Guide — STRIDE/DREAD 위협 모델링, Microsoft Kubernetes Threat Matrix, 위협 분석 프로세스 |
+| `/security:auth-patterns` | 인증·인가 설계 — OAuth2 flow, OIDC, PKCE, JWT, 세션, API Key, RBAC/ABAC/ReBAC, 멀티테넌시 인증 |
+| `/security:child-data-protection` | 만14세 미만 아동 데이터 보호 — 검증 가능한 법정대리인 동의, COPPA·GDPR Art.8 비교, 가족 계정, 데이터 최소화, 광고 금지 |
+| `/security:compliance-frameworks` | SOC2, HIPAA, GDPR, PCI-DSS 컴플라이언스 프레임워크 비교와 통제 항목 매핑, K8s 적용, 자동 증거 수집 |
+| `/security:data-subject-rights` | 정보주체 권리 행사 DSR 자동화 — PIPA·GDPR·CCPA 열람·정정·삭제·이동, 본인 인증, 삭제 vs 익명화, Crypto-Shredding, 수탁자 통지 |
+| `/security:kr-location-info-act` | 위치정보법 운영 — 사업 신고·허가, 별도 동의(제18조), 보유·파기, 국외 이전, 위반 처벌, PIPA·GDPR 비교 |
+| `/security:owasp-top10` | OWASP Top 10(2021) A01~A10 취약점 설명과 언어별 방어 패턴 — Broken Access Control, Injection, SSRF, 암호화 실패 등 |
+| `/security:secrets-management` | 시크릿 관리 — External Secrets Operator, HashiCorp Vault, Infisical, SOPS+age, 로테이션 자동화, Go·Spring 연동 |
+| `/security:secure-coding` | 시큐어 코딩 — 입력 검증, 출력 인코딩, 암호화, 안전한 에러 처리, 파일 업로드, HTTP 보안 헤더, secure random, CI 보안 테스트 |
+| `/security:threat-modeling` | 위협 모델링 — STRIDE, DREAD 점수화, Microsoft Kubernetes Threat Matrix, 4단계 분석 프로세스, 위협별 완화책 |
 
 ## Agents (2)
 

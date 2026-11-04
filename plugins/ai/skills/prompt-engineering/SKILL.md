@@ -1,6 +1,6 @@
 ---
 name: prompt-engineering
-description: "Prompt Engineering — 프롬프트 설계 기법, 시스템 프롬프트, 가드레일, 평가 방법론 Use when working with ai 도메인의 패턴 / 구현 선택."
+description: "프롬프트 설계 — 기법 선택, 시스템 프롬프트 작성, structured output, 가드레일, 평가 방법론, Claude 5.5 프롬프팅 주의점. Use when 프롬프트를 새로 쓰거나 출력이 불안정해 개선하고 평가할 때."
 ---
 
 # Prompt Engineering

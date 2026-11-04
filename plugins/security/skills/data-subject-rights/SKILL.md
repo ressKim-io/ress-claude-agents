@@ -1,6 +1,6 @@
 ---
 name: data-subject-rights
-description: 데이터 주체 권리(DSR) 운영 자동화 — 열람·정정·삭제·이동·처리정지·거부·자동결정거부, 본인 인증, 데이터 카탈로그, 백업/Kafka/캐시/검색 전파, Event Sourcing crypto-shredding, 외부 수탁자 통지. PIPA(KR 10일) + 위치정보법 + GDPR(30일) + CCPA(45일) 통합.
+description: "정보주체 권리 행사 DSR 자동화 — PIPA·GDPR·CCPA 열람·정정·삭제·이동, 본인 인증, 삭제 vs 익명화, Crypto-Shredding, 수탁자 통지. Use when 이용자 삭제·열람 요청 처리 파이프라인을 구현할 때."
 license: MIT
 ---
 

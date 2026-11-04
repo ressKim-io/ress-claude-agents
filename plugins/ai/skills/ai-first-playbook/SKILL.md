@@ -1,6 +1,6 @@
 ---
 name: ai-first-playbook
-description: "AI-First Engineering Playbook — AI-First 조직 전환, 워크플로우 재설계, ROI 측정, Claude Code 운영 전략 Use when working with dx 도메인의 패턴 / 구현 선택."
+description: "AI-First 조직 전환 플레이북 — 파일럿(0-30일)→팀 확산→문화 정착 단계, ROI 측정 프레임워크, Claude Code 운영 전략. Use when 팀에 AI 도구를 도입하고 효과를 측정하는 로드맵을 세울 때."
 ---
 
 # AI-First Engineering Playbook

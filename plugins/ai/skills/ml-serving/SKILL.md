@@ -1,6 +1,6 @@
 ---
 name: ml-serving
-description: "ML Model Serving 가이드 — Kubernetes 기반 ML/LLM 모델 서빙, KServe, vLLM, TensorRT-LLM 최적화 Use when working with platform 도메인의 패턴 / 구현 선택."
+description: "K8s 기반 ML·LLM 모델 서빙 — 서빙 엔진 비교, KServe, vLLM, TensorRT-LLM, llm-d, KEDA 오토스케일링, 최적화. Use when 모델을 클러스터에 배포하고 추론 지연·처리량을 튜닝할 때."
 ---
 
 # ML Model Serving 가이드
