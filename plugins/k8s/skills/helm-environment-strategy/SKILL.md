@@ -1,6 +1,6 @@
 ---
 name: helm-environment-strategy
-description: "Helm & Kustomize 환경별 변수화 전략 — 환경별(dev/staging/prod) 설정 분리, Helm values overlay, Kustomize overlay 패턴 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "dev/staging/prod 환경별 설정 분리 — Helm values overlay, Kustomize overlay, ArgoCD 연동 변수화. Use when 환경마다 달라지는 값을 Helm 이나 Kustomize 로 나누는 구조를 설계할 때."
 ---
 
 # Helm & Kustomize 환경별 변수화 전략

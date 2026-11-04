@@ -1,6 +1,6 @@
 ---
 name: ephemeral-environments
-description: "Ephemeral Environments 가이드 — PR별 프리뷰 환경: Argo CD ApplicationSet, Qovery, Namespace 격리 패턴 Use when working with cicd 도메인의 패턴 / 구현 선택."
+description: "PR 별 프리뷰 환경 — Argo CD ApplicationSet PR generator, namespace 격리, Kyverno 자동 정리, static 과 비교. Use when PR 마다 임시 환경을 띄우고 자동으로 지우는 구조를 만들 때."
 ---
 
 # Ephemeral Environments 가이드

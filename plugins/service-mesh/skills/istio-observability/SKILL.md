@@ -1,6 +1,6 @@
 ---
 name: istio-observability
-description: "Istio Observability Patterns — Istio 모니터링 통합 허브: 메트릭, 트레이싱, Kiali 가이드 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "Istio 모니터링 허브 — 모드별(sidecar/ambient) 메트릭 수집 구조, 메트릭·트레이싱·Kiali 구성요소 안내. Use when Istio 관측 구성을 개괄하고 세부 skill 을 고를 때."
 ---
 
 # Istio Observability Patterns

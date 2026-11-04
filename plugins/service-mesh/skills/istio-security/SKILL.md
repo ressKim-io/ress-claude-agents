@@ -1,6 +1,6 @@
 ---
 name: istio-security
-description: "Istio Security 가이드 — mTLS, PeerAuthentication, AuthorizationPolicy, JWT 인증 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "Istio 보안 — mTLS, PeerAuthentication, AuthorizationPolicy, RequestAuthentication(JWT), Zero Trust. Use when 메시 내부 암호화와 서비스 간 인증·인가 정책을 작성하거나 디버깅할 때."
 ---
 
 # Istio Security 가이드

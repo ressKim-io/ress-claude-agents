@@ -1,6 +1,6 @@
 ---
 name: istio-gateway-api
-description: "Gateway API (K8s Native) — Kubernetes Gateway API + HTTPRoute 기반 트래픽 라우팅 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "Istio 에서 Kubernetes Gateway API 와 HTTPRoute 로 트래픽 라우팅 — ReferenceGrant 로 cross-namespace 허용. Use when Istio 를 Gateway API 방식으로 구성하고 HTTPRoute 를 작성할 때."
 ---
 
 # Gateway API (K8s Native)

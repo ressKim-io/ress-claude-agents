@@ -1,6 +1,6 @@
 ---
 name: terraform-security
-description: "Terraform Security Patterns — Terraform 보안 패턴 및 best practices. Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "Terraform 보안 — sensitive 변수, IAM 최소 권한, 암호화, Security Group, S3 버킷, tfsec 검사. Use when Terraform 코드의 보안 설정을 작성하거나 tfsec 결과를 고칠 때."
 ---
 
 # Terraform Security Patterns

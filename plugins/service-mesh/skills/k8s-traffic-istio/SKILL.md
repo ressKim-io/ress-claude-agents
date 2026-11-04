@@ -1,6 +1,6 @@
 ---
 name: k8s-traffic-istio
-description: "Istio Rate Limiting & Circuit Breaker — Istio 기반 Global/Local Rate Limiting, Circuit Breaker 패턴 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "Istio 기반 Global·Local Rate Limiting 과 Circuit Breaker 패턴. Use when 메시 안에서 EnvoyFilter 나 DestinationRule 로 요청 제한과 장애 격리를 설정할 때."
 ---
 
 # Istio Rate Limiting & Circuit Breaker

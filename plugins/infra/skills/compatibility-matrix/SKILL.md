@@ -1,6 +1,6 @@
 ---
 name: compatibility-matrix
-description: "Compatibility Matrix 가이드 — K8s 에코시스템 버전 호환성 매트릭스 관리. EKS/GKE/kind 간 전환 시 버전 조합 검증. Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "K8s 에코시스템 버전 호환성 매트릭스 — kind·EKS·GKE 버전 매핑, add-on 호환성, deprecated API 검증. Use when 클러스터 버전을 올리거나 EKS/GKE 간 전환 전에 버전 조합을 확인할 때."
 ---
 
 # Compatibility Matrix 가이드

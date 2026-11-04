@@ -1,6 +1,6 @@
 ---
 name: istio-ambient
-description: "Istio Ambient Mode 심화 가이드 — Ambient GA (Istio 1.24+), ztunnel, HBONE, Waypoint 고급 설정, targetRefs, Cilium 통합 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "Istio Ambient 모드 심화 — ztunnel, HBONE, Waypoint 설정, targetRefs 정책, Cilium 통합, 마이그레이션. Use when Ambient 를 실제로 활성화하고 waypoint 정책을 붙이거나 sidecar 에서 옮길 때."
 ---
 
 # Istio Ambient Mode 심화 가이드

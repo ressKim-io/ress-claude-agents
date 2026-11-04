@@ -1,6 +1,6 @@
 ---
 name: istio-core
-description: "Istio Core Patterns — Istio Service Mesh 핵심 개념: Sidecar vs Ambient 모드 비교 및 선택 가이드 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "Istio 핵심 개념 — Sidecar vs Ambient 비교표, Ambient 제한사항, 하이브리드 구성, mTLS 강제. Use when 서비스 메시 모드를 선택하거나 Istio 기본 구성을 처음 잡을 때."
 ---
 
 # Istio Core Patterns

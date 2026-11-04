@@ -1,6 +1,6 @@
 ---
 name: istio-metrics
-description: "Istio Metrics & Prometheus Integration — Istio Prometheus 연동, ServiceMonitor 설정, RED 메트릭 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "Istio 메트릭 수집 — Prometheus ServiceMonitor, RED 쿼리, Telemetry API 로 메트릭 커스터마이징, Grafana 대시보드. Use when 메시 트래픽의 요청률·에러·지연을 Prometheus 로 뽑을 때."
 ---
 
 # Istio Metrics & Prometheus Integration

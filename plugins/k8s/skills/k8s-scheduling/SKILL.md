@@ -1,6 +1,6 @@
 ---
 name: k8s-scheduling
-description: "Kubernetes Scheduling 가이드 — Node Affinity, Pod Affinity/Anti-Affinity, Taint & Toleration Use when working with kubernetes 도메인의 패턴 / 구현 선택."
+description: "파드 배치 기본 — nodeSelector, Node Affinity, Pod Affinity/Anti-Affinity, Taint & Toleration 비교. Use when 특정 노드에 파드를 두거나 떼어 놓는 규칙을 작성할 때."
 ---
 
 # Kubernetes Scheduling 가이드

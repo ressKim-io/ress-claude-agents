@@ -36,23 +36,23 @@ cp -r plugins/service-mesh/skills/<이름> <프로젝트>/.claude/skills/
 
 | 이름 | 설명 |
 |---|---|
-| `/service-mesh:istio-advanced-traffic` | Istio 고급 트래픽 관리 — Fault Injection, Traffic Mirroring, Retry/Timeout 심화, JWT Claim 라우팅, Blue-Green/Canary 패턴 |
-| `/service-mesh:istio-ambient` | Istio Ambient Mode 심화 가이드 — Ambient GA (Istio 1.24+), ztunnel, HBONE, Waypoint 고급 설정, targetRefs, Cilium 통합 |
-| `/service-mesh:istio-core` | Istio Core Patterns — Istio Service Mesh 핵심 개념: Sidecar vs Ambient 모드 비교 및 선택 가이드 |
-| `/service-mesh:istio-ext-authz` | Istio External Authorization (ext-authz) — CUSTOM AuthorizationPolicy, OPA/외부 인증 서버 연동, 다계층 정책 조합 |
-| `/service-mesh:istio-gateway` | Istio Gateway Patterns — Gateway API vs Istio Gateway 비교 허브, 트래픽 라우팅 선택 가이드 |
-| `/service-mesh:istio-gateway-api` | Gateway API (K8s Native) — Kubernetes Gateway API + HTTPRoute 기반 트래픽 라우팅 |
-| `/service-mesh:istio-gateway-classic` | Istio Gateway (Classic) — Istio Gateway + VirtualService 기반 트래픽 라우팅 |
-| `/service-mesh:istio-gitops` | Istio GitOps 통합 가이드 — ArgoCD로 Istio 설치/관리, CRD sync wave, kind 주의점, cert-manager 통합 |
-| `/service-mesh:istio-metrics` | Istio Metrics & Prometheus Integration — Istio Prometheus 연동, ServiceMonitor 설정, RED 메트릭 |
-| `/service-mesh:istio-multicluster` | Istio 멀티클러스터 가이드 — Multi-Primary vs Primary-Remote, East-West Gateway, Shared Root CA, Cross-Cluster Discovery |
-| `/service-mesh:istio-observability` | Istio Observability Patterns — Istio 모니터링 통합 허브: 메트릭, 트레이싱, Kiali 가이드 |
-| `/service-mesh:istio-otel` | Istio + OpenTelemetry 통합 가이드 — Telemetry API v1, ExtensionProviders, W3C Trace Context, OTel Collector 연동 |
-| `/service-mesh:istio-pitfalls` | Istio 실전 Pitfalls — 실전 트러블슈팅 + 보안 검증 기반 Istio 실전 함정. FQDN/AuthZ/PeerAuthentication/Gateway/sidecar injection |
-| `/service-mesh:istio-security` | Istio Security 가이드 — mTLS, PeerAuthentication, AuthorizationPolicy, JWT 인증 |
-| `/service-mesh:istio-tracing` | Istio Distributed Tracing — Jaeger/Tempo 연동, Span 생성, Access Logging |
-| `/service-mesh:k8s-traffic-istio` | Istio Rate Limiting & Circuit Breaker — Istio 기반 Global/Local Rate Limiting, Circuit Breaker 패턴 |
-| `/service-mesh:linkerd` | Linkerd Service Mesh 가이드 — Linkerd v2.17 핵심 운영 가이드: Rust micro-proxy 기반 경량 서비스 메시, 자동 mTLS, 멀티클러스터, Gateway … |
+| `/service-mesh:istio-advanced-traffic` | Istio 고급 트래픽 — Fault Injection, Traffic Mirroring, Retry/Timeout 심화, JWT claim 라우팅, Canary·Blue-Green |
+| `/service-mesh:istio-ambient` | Istio Ambient 모드 심화 — ztunnel, HBONE, Waypoint 설정, targetRefs 정책, Cilium 통합, 마이그레이션 |
+| `/service-mesh:istio-core` | Istio 핵심 개념 — Sidecar vs Ambient 비교표, Ambient 제한사항, 하이브리드 구성, mTLS 강제 |
+| `/service-mesh:istio-ext-authz` | Istio 외부 인증 — ExtensionProvider, CUSTOM AuthorizationPolicy, OPA·OAuth2 Proxy 연동, 다계층 정책 조합 |
+| `/service-mesh:istio-gateway` | Gateway API 와 Istio Gateway 비교 허브 — 기능 매핑, 선택 기준, 마이그레이션 |
+| `/service-mesh:istio-gateway-api` | Istio 에서 Kubernetes Gateway API 와 HTTPRoute 로 트래픽 라우팅 — ReferenceGrant 로 cross-namespace 허용 |
+| `/service-mesh:istio-gateway-classic` | Istio 고유 Gateway + VirtualService 기반 라우팅과 TLS 설정 |
+| `/service-mesh:istio-gitops` | ArgoCD 로 Istio 설치·업그레이드 — CRD sync wave, cert-manager 통합, kind 주의점, ignoreDifferences |
+| `/service-mesh:istio-metrics` | Istio 메트릭 수집 — Prometheus ServiceMonitor, RED 쿼리, Telemetry API 로 메트릭 커스터마이징, Grafana 대시보드 |
+| `/service-mesh:istio-multicluster` | Istio 멀티클러스터 — Multi-Primary, Primary-Remote, East-West Gateway, Shared Root CA, cross-cluster discovery |
+| `/service-mesh:istio-observability` | Istio 모니터링 허브 — 모드별(sidecar/ambient) 메트릭 수집 구조, 메트릭·트레이싱·Kiali 구성요소 안내 |
+| `/service-mesh:istio-otel` | Istio 와 OpenTelemetry 통합 — Telemetry API v1, ExtensionProvider, W3C Trace Context 전파, access log 를 OTel … |
+| `/service-mesh:istio-pitfalls` | Istio 실전 함정 — VirtualService FQDN, AuthorizationPolicy 경로 매칭, PeerAuthentication selector, JWKS, native … |
+| `/service-mesh:istio-security` | Istio 보안 — mTLS, PeerAuthentication, AuthorizationPolicy, RequestAuthentication(JWT), Zero Trust |
+| `/service-mesh:istio-tracing` | Istio 분산 트레이싱 — Jaeger·Tempo 연동, span 생성, Ambient 트레이싱, access logging |
+| `/service-mesh:k8s-traffic-istio` | Istio 기반 Global·Local Rate Limiting 과 Circuit Breaker 패턴 |
+| `/service-mesh:linkerd` | Linkerd 서비스 메시 — Rust micro-proxy, 자동 mTLS, ServiceProfile, TrafficSplit 카나리, 멀티클러스터, Istio Ambient 와 비교 |
 
 ## Agents (1)
 

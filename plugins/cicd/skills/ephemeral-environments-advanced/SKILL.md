@@ -1,6 +1,6 @@
 ---
 name: ephemeral-environments-advanced
-description: "Ephemeral Environments 고급 가이드 — Qovery 설정, 데이터베이스 전략, Spot 인스턴스 비용 최적화 Use when working with cicd 도메인의 패턴 / 구현 선택."
+description: "임시 환경 심화 — Qovery 설정, 환경별 데이터베이스 전략, Spot 인스턴스 비용 최적화. Use when 프리뷰 환경의 DB 처리와 비용을 줄이거나 Qovery 를 세팅할 때."
 ---
 
 # Ephemeral Environments 고급 가이드

@@ -1,6 +1,6 @@
 ---
 name: k8s-helm
-description: "Helm Best Practices — Helm chart 개발 패턴 및 best practices. Use when working with kubernetes 도메인의 패턴 / 구현 선택."
+description: "Helm chart 개발 — 구조, values.yaml·values.schema.json, _helpers.tpl, Library Chart, YAML anchor, 멀티 환경 values. Use when Helm chart 를 새로 작성하거나 템플릿·검증 명령을 정리할 때."
 ---
 
 # Helm Best Practices

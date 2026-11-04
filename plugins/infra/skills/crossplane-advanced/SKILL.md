@@ -1,6 +1,6 @@
 ---
 name: crossplane-advanced
-description: "Crossplane 고급 패턴 가이드 — 멀티클라우드 패턴, GitOps 통합, Drift Detection, Crossplane v2 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "Crossplane 심화 — GCP·Azure ProviderConfig, ArgoCD 연동, drift 감지와 수정, Crossplane v2. Use when Crossplane 을 멀티클라우드로 확장하거나 GitOps 와 drift 를 다룰 때."
 ---
 
 # Crossplane 고급 패턴 가이드

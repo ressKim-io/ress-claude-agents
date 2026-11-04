@@ -1,6 +1,6 @@
 ---
 name: aws-eks-advanced
-description: "AWS EKS 고급 가이드 — Karpenter 설정, 보안 강화, 운영 최적화 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "EKS 심화 — Karpenter 설정, 보안 강화, 운영 최적화. Use when 이미 만든 EKS 클러스터에 Karpenter 를 붙이거나 보안·운영 설정을 다듬을 때."
 ---
 
 # AWS EKS 고급 가이드

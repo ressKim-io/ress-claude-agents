@@ -37,19 +37,19 @@ cp -r plugins/cicd/skills/<이름> <프로젝트>/.claude/skills/
 
 | 이름 | 설명 |
 |---|---|
-| `/cicd:cicd-devsecops` | CI/CD & DevSecOps 가이드 — GitHub Actions, 보안 스캔(Trivy, SonarQube), 통합 파이프라인 |
-| `/cicd:cicd-policy` | CI/CD Policy as Code 가이드 — Kyverno 정책, 보안 점수 대시보드, 통합 DevSecOps 파이프라인 |
-| `/cicd:deployment-canary` | Canary & A/B Testing 배포 가이드 — Argo Rollouts Canary, AnalysisTemplate, Istio 트래픽 라우팅 |
-| `/cicd:deployment-strategies` | 배포 전략 가이드 — Rolling Update, Blue-Green 배포 및 기본 전략 개요 |
-| `/cicd:ec2-cd-pipeline` | EC2 기반 CD 파이프라인 패턴 — GitHub Actions + SSM + ALB + CloudFront 기반 EC2 배포 실무 패턴 |
-| `/cicd:ephemeral-environments` | Ephemeral Environments 가이드 — PR별 프리뷰 환경: Argo CD ApplicationSet, Qovery, Namespace 격리 패턴 |
-| `/cicd:ephemeral-environments-advanced` | Ephemeral Environments 고급 가이드 — Qovery 설정, 데이터베이스 전략, Spot 인스턴스 비용 최적화 |
-| `/cicd:gitops-argocd` | GitOps & ArgoCD 가이드 — ArgoCD를 활용한 선언적 GitOps 배포 및 App of Apps 패턴 |
-| `/cicd:gitops-argocd-advanced` | GitOps ArgoCD 고급 패턴 — ApplicationSet, Sync 전략, 프로젝트/RBAC, 시크릿 관리 |
-| `/cicd:gitops-argocd-ai` | AI-assisted GitOps 가이드 — AI 기반 GitOps 자동화: Spacelift Intent, ArgoCD AI 분석, 예측적 배포, Drift 수정 |
-| `/cicd:gitops-argocd-helm` | ArgoCD + Helm 통합 패턴 가이드 — ArgoCD Image Updater, Multi-source Application, Helm hooks 비교, Secrets+Helm 통합 |
-| `/cicd:supply-chain-compliance` | Supply Chain 컴플라이언스 가이드 — EU Cyber Resilience Act, SBOM 자동화, VEX, 중앙 저장소 아키텍처 |
-| `/cicd:supply-chain-security` | Supply Chain Security 가이드 — SBOM, SLSA, Sigstore를 활용한 소프트웨어 공급망 보안 |
+| `/cicd:cicd-devsecops` | CI/CD 보안 파이프라인 — GitHub Actions, Trivy 취약점 스캔, SonarQube, secret 관리 |
+| `/cicd:cicd-policy` | CI/CD 정책 자동화 — Kyverno 정책과 CLI 검증, 보안 점수 대시보드, 통합 DevSecOps 파이프라인 |
+| `/cicd:deployment-canary` | Canary·A/B 배포 — Argo Rollouts, AnalysisTemplate, Istio 트래픽 분할, 자동 롤백, progressive delivery |
+| `/cicd:deployment-strategies` | 기본 배포 전략 — Rolling Update, Blue-Green, 전략 비교, Argo Rollouts 설치와 CLI |
+| `/cicd:ec2-cd-pipeline` | EC2 배포 파이프라인 — GitHub Actions + SSM, ALB 헬스체크, CloudFront behavior 라우팅, 배포 완료 대기 |
+| `/cicd:ephemeral-environments` | PR 별 프리뷰 환경 — Argo CD ApplicationSet PR generator, namespace 격리, Kyverno 자동 정리, static 과 비교 |
+| `/cicd:ephemeral-environments-advanced` | 임시 환경 심화 — Qovery 설정, 환경별 데이터베이스 전략, Spot 인스턴스 비용 최적화 |
+| `/cicd:gitops-argocd` | ArgoCD 기본 — GitOps 원칙, 설치, Application 정의, App of Apps, CLI, bootstrap sync-wave |
+| `/cicd:gitops-argocd-advanced` | ArgoCD 심화 — ApplicationSet 멀티 클러스터·환경, sync 전략, repo 구조, AppProject RBAC, 알림 |
+| `/cicd:gitops-argocd-ai` | AI 기반 GitOps — Spacelift Intent, ArgoCD AI 분석, 예측적 배포, 자동 drift 수정 |
+| `/cicd:gitops-argocd-helm` | ArgoCD 와 Helm 통합 — Image Updater, multi-source Application, Helm hooks vs ArgoCD hooks, secrets, ECR CronJob |
+| `/cicd:supply-chain-compliance` | 공급망 컴플라이언스 — EU Cyber Resilience Act, SBOM 자동화, VEX, 중앙 저장소 아키텍처 |
+| `/cicd:supply-chain-security` | 소프트웨어 공급망 보안 — SBOM, SLSA 레벨과 provenance, Sigstore/Cosign 서명, K8s 정책 적용 |
 
 ## Agents (4)
 

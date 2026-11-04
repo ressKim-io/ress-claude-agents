@@ -1,6 +1,6 @@
 ---
 name: k8s-traffic
-description: "Kubernetes Traffic Control Patterns — 인프라 레벨 트래픽 제어 허브: Rate Limiting, Circuit Breaker, 대기열 Use when working with kubernetes 도메인의 패턴 / 구현 선택."
+description: "인프라 트래픽 제어 허브 — Rate Limiting, Circuit Breaker, Virtual Waiting Room 대기열, 티켓팅 권장 구성. Use when 급증 트래픽을 제어할 방식을 고르고 세부 skill 로 갈라 들어갈 때."
 ---
 
 # Kubernetes Traffic Control Patterns

@@ -1,6 +1,6 @@
 ---
 name: istio-pitfalls
-description: "Istio 실전 Pitfalls — 실전 트러블슈팅 + 보안 검증 기반 Istio 실전 함정. FQDN/AuthZ/PeerAuthentication/Gateway/sidecar injection. Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "Istio 실전 함정 — VirtualService FQDN, AuthorizationPolicy 경로 매칭, PeerAuthentication selector, JWKS, native sidecar, forwardOriginalToken. Use when Istio 에서 장애나 보안 우회가 났거나 PR 전에 함정을 점검할 때."
 ---
 
 # Istio 실전 Pitfalls

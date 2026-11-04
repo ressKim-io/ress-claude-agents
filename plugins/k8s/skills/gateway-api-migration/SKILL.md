@@ -1,6 +1,6 @@
 ---
 name: gateway-api-migration
-description: "Gateway API 마이그레이션 가이드 — Ingress NGINX -> Gateway API 전환, Istio Gateway API 통합, Annotation 매핑 Use when working with kubernetes 도메인의 패턴 / 구현 선택."
+description: "Ingress NGINX 에서 Gateway API 로의 전환 절차 — Annotation 매핑, TCPRoute/UDPRoute, Istio Gateway API 모드. Use when 기존 Ingress 리소스를 Gateway API 로 옮기거나 annotation 대응 관계를 찾을 때."
 ---
 
 # Gateway API 마이그레이션 가이드

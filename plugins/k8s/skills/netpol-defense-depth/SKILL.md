@@ -1,6 +1,6 @@
 ---
 name: netpol-defense-depth
-description: Kubernetes NetworkPolicy + 서비스 메시 AuthorizationPolicy의 멀티 레이어 방어 체크리스트. ingress + egress + AuthZ 3중 구조 누락 검출. CNI 호환성과 default deny 정책 포함.
+description: "NetworkPolicy 와 서비스 메시 AuthorizationPolicy 의 3중 방어 체크리스트, CNI 호환성, 차단 시 트러블슈팅 순서. Use when 통신이 막히거나 한쪽 레이어만 설정돼 우회될 수 있는지 검증할 때."
 ---
 
 # NetworkPolicy Defense in Depth

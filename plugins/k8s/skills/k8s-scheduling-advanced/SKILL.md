@@ -1,6 +1,6 @@
 ---
 name: k8s-scheduling-advanced
-description: "Kubernetes Scheduling 고급 가이드 — 실전 시나리오, Topology Spread, 디버깅 Use when working with kubernetes 도메인의 패턴 / 구현 선택."
+description: "파드 스케줄링 심화 — Topology Spread Constraints, 실전 시나리오, 스케줄링 디버깅. Use when 파드를 존·노드에 고르게 분산하거나 Pending 원인을 스케줄러 관점에서 추적할 때."
 ---
 
 # Kubernetes Scheduling 고급 가이드

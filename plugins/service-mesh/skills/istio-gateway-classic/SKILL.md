@@ -1,6 +1,6 @@
 ---
 name: istio-gateway-classic
-description: "Istio Gateway (Classic) — Istio Gateway + VirtualService 기반 트래픽 라우팅 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "Istio 고유 Gateway + VirtualService 기반 라우팅과 TLS 설정. Use when 기존 Istio Gateway/VirtualService 리소스를 작성하거나 유지보수할 때."
 ---
 
 # Istio Gateway (Classic)

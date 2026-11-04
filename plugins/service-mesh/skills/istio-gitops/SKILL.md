@@ -1,6 +1,6 @@
 ---
 name: istio-gitops
-description: "Istio GitOps 통합 가이드 — ArgoCD로 Istio 설치/관리, CRD sync wave, kind 주의점, cert-manager 통합 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "ArgoCD 로 Istio 설치·업그레이드 — CRD sync wave, cert-manager 통합, kind 주의점, ignoreDifferences. Use when Istio 를 GitOps 로 배포하다 sync 순서나 OutOfSync 문제를 겪을 때."
 ---
 
 # Istio GitOps 통합 가이드

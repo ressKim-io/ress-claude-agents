@@ -1,6 +1,6 @@
 ---
 name: aws-lambda
-description: "AWS Lambda & Serverless Patterns — AWS Lambda 기반 서버리스 아키텍처 설계, 콜드 스타트 최적화, 이벤트 소스 통합 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "AWS Lambda 서버리스 — 콜드 스타트 최적화, 이벤트 소스 통합, VPC 연결, 비용 최적화. Use when Lambda 함수를 설계하거나 지연·비용 문제를 줄일 때."
 ---
 
 # AWS Lambda & Serverless Patterns

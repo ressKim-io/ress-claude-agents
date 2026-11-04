@@ -1,6 +1,6 @@
 ---
 name: cicd-devsecops
-description: "CI/CD & DevSecOps 가이드 — GitHub Actions, 보안 스캔(Trivy, SonarQube), 통합 파이프라인 Use when working with cicd 도메인의 패턴 / 구현 선택."
+description: "CI/CD 보안 파이프라인 — GitHub Actions, Trivy 취약점 스캔, SonarQube, secret 관리. Use when GitHub Actions 에 보안 스캔 단계를 넣어 파이프라인을 구성할 때."
 ---
 
 # CI/CD & DevSecOps 가이드

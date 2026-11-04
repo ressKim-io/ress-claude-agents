@@ -43,23 +43,23 @@ cp -r plugins/k8s/skills/<이름> <프로젝트>/.claude/skills/
 
 | 이름 | 설명 |
 |---|---|
-| `/k8s:defense-in-depth-layers` | Kubernetes 보안을 L3/L4 NetworkPolicy + L7 AuthorizationPolicy + Pod Security + Image policy 4중 레이어로 강제하는 체크리스트. … |
-| `/k8s:gateway-api` | Kubernetes Gateway API 가이드 — Ingress NGINX 지원 종료 대응: Gateway API, Envoy Gateway, Kong 마이그레이션 |
-| `/k8s:gateway-api-migration` | Gateway API 마이그레이션 가이드 — Ingress NGINX -> Gateway API 전환, Istio Gateway API 통합, Annotation 매핑 |
-| `/k8s:helm-environment-strategy` | Helm & Kustomize 환경별 변수화 전략 — 환경별(dev/staging/prod) 설정 분리, Helm values overlay, Kustomize overlay 패턴 |
-| `/k8s:k8s-autoscaling` | Kubernetes Autoscaling 가이드 — HPA, VPA, KEDA, Karpenter를 활용한 워크로드 자동 스케일링 |
-| `/k8s:k8s-autoscaling-advanced` | Kubernetes Autoscaling 고급 가이드 — Karpenter, 조합 전략, 모니터링 |
-| `/k8s:k8s-gpu` | Kubernetes GPU 가이드 — NVIDIA GPU Operator, MIG 파티셔닝, GPU 공유 전략 |
-| `/k8s:k8s-gpu-scheduling` | Kubernetes GPU 스케줄링 & 모니터링 — Kueue 큐 관리, Volcano Gang 스케줄링, GPU 모니터링 |
-| `/k8s:k8s-helm` | Helm Best Practices — Helm chart 개발 패턴 및 best practices |
-| `/k8s:k8s-scheduling` | Kubernetes Scheduling 가이드 — Node Affinity, Pod Affinity/Anti-Affinity, Taint & Toleration |
-| `/k8s:k8s-scheduling-advanced` | Kubernetes Scheduling 고급 가이드 — 실전 시나리오, Topology Spread, 디버깅 |
-| `/k8s:k8s-security` | Kubernetes Security Patterns — Kubernetes 보안 패턴 및 best practices |
-| `/k8s:k8s-traffic` | Kubernetes Traffic Control Patterns — 인프라 레벨 트래픽 제어 허브: Rate Limiting, Circuit Breaker, 대기열 |
-| `/k8s:k8s-traffic-ingress` | Ingress Rate Limiting — NGINX Ingress, Kong 기반 Rate Limiting |
-| `/k8s:k8s-troubleshoot-trees` | K8s Troubleshooting Decision Trees — 실전 트러블슈팅 기록 기반 K8s 디버깅 의사결정 트리. CrashLoopBackOff / ImagePullBackOff / … |
-| `/k8s:multi-env-diff-checklist` | dev / staging / prod 환경 manifest의 차이를 자동 검증하는 체크리스트. hardcoded 값과 환경별 override 누락을 사전에 검출. 멀티 클라우드(AWS/GCP) … |
-| `/k8s:netpol-defense-depth` | Kubernetes NetworkPolicy + 서비스 메시 AuthorizationPolicy의 멀티 레이어 방어 체크리스트. ingress + egress + AuthZ 3중 구조 누락 검출. … |
+| `/k8s:defense-in-depth-layers` | K8s 4중 방어 모델 — NetworkPolicy·Istio AuthorizationPolicy·PeerAuthentication 조합, OWASP K8s Top 10 안티패턴 |
+| `/k8s:gateway-api` | Kubernetes Gateway API 개념과 리소스, Envoy Gateway·Kong 설정, Ingress NGINX EOL 대응 결정 트리 |
+| `/k8s:gateway-api-migration` | Ingress NGINX 에서 Gateway API 로의 전환 절차 — Annotation 매핑, TCPRoute/UDPRoute, Istio Gateway API 모드 |
+| `/k8s:helm-environment-strategy` | dev/staging/prod 환경별 설정 분리 — Helm values overlay, Kustomize overlay, ArgoCD 연동 변수화 |
+| `/k8s:k8s-autoscaling` | HPA, VPA, KEDA, Karpenter 비교와 기본 설정, 워크로드 자동 스케일링 결정 트리 |
+| `/k8s:k8s-autoscaling-advanced` | Karpenter 노드 오토스케일링, HPA·VPA·KEDA 조합 전략, 스케일링 모니터링 |
+| `/k8s:k8s-gpu` | Kubernetes GPU 기본 구성 — NVIDIA GPU Operator, MIG 파티셔닝, GPU 공유 전략 |
+| `/k8s:k8s-gpu-scheduling` | GPU 워크로드 스케줄링 — Kueue 큐 관리, Volcano Gang 스케줄링, GPU 모니터링 |
+| `/k8s:k8s-helm` | Helm chart 개발 — 구조, values.yaml·values.schema.json, _helpers.tpl, Library Chart, YAML anchor, 멀티 환경 values |
+| `/k8s:k8s-scheduling` | 파드 배치 기본 — nodeSelector, Node Affinity, Pod Affinity/Anti-Affinity, Taint & Toleration 비교 |
+| `/k8s:k8s-scheduling-advanced` | 파드 스케줄링 심화 — Topology Spread Constraints, 실전 시나리오, 스케줄링 디버깅 |
+| `/k8s:k8s-security` | Kubernetes 보안 — Pod Security Standards, NetworkPolicy, RBAC, Secrets 관리, Kyverno 정책, Trivy 스캔, AppProject 최소 … |
+| `/k8s:k8s-traffic` | 인프라 트래픽 제어 허브 — Rate Limiting, Circuit Breaker, Virtual Waiting Room 대기열, 티켓팅 권장 구성 |
+| `/k8s:k8s-traffic-ingress` | Ingress 레벨 Rate Limiting — NGINX Ingress annotation, Kong rate-limiting 플러그인 |
+| `/k8s:k8s-troubleshoot-trees` | K8s 장애 디버깅 의사결정 트리 — CrashLoopBackOff, ImagePullBackOff, Pending, NetworkPolicy, DNS 실패, IMDS 접근 |
+| `/k8s:multi-env-diff-checklist` | dev/staging/prod 또는 멀티 클라우드 간 manifest·values·config diff 점검 — 의도된 차이와 실수 구분, CI 검출 스크립트 |
+| `/k8s:netpol-defense-depth` | NetworkPolicy 와 서비스 메시 AuthorizationPolicy 의 3중 방어 체크리스트, CNI 호환성, 차단 시 트러블슈팅 순서 |
 
 ## Agents (4)
 

@@ -1,6 +1,6 @@
 ---
 name: k8s-gpu-scheduling
-description: "Kubernetes GPU 스케줄링 & 모니터링 — Kueue 큐 관리, Volcano Gang 스케줄링, GPU 모니터링 Use when working with platform 도메인의 패턴 / 구현 선택."
+description: "GPU 워크로드 스케줄링 — Kueue 큐 관리, Volcano Gang 스케줄링, GPU 모니터링. Use when 여러 GPU 잡의 큐잉·우선순위를 관리하거나 분산 학습을 gang 으로 스케줄링할 때."
 ---
 
 # Kubernetes GPU 스케줄링 & 모니터링

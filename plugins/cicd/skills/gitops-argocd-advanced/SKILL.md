@@ -1,6 +1,6 @@
 ---
 name: gitops-argocd-advanced
-description: "GitOps ArgoCD 고급 패턴 — ApplicationSet, Sync 전략, 프로젝트/RBAC, 시크릿 관리 Use when working with cicd 도메인의 패턴 / 구현 선택."
+description: "ArgoCD 심화 — ApplicationSet 멀티 클러스터·환경, sync 전략, repo 구조, AppProject RBAC, 알림. Use when ApplicationSet 이나 sync·권한 정책을 설계할 때."
 ---
 
 # GitOps ArgoCD 고급 패턴

@@ -1,6 +1,6 @@
 ---
 name: database-sharding
-description: "데이터베이스 샤딩 가이드 — 대규모 트래픽 환경에서 수평 확장을 위한 샤딩 전략, Shard Key 선택, Citus/Vitess 구현, Read Replica 패턴 Use when working with msa 도메인의 패턴 / 구현 선택."
+description: "DB 샤딩 — Shard Key 선택, Citus·Vitess, Resharding, cross-shard 쿼리, Read Replica, hot shard 해결. Use when 단일 DB 가 한계라 수평 확장을 설계할 때."
 ---
 
 # 데이터베이스 샤딩 가이드

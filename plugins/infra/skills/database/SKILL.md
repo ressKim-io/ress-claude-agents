@@ -1,6 +1,6 @@
 ---
 name: database
-description: "Database Patterns — 인덱스 최적화, N+1 해결, 쿼리 성능, 마이그레이션 패턴 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "DB 성능 일반 — 인덱스 설계, N+1 해결, 쿼리 최적화, 커넥션 풀 설정. Use when 쿼리가 느리거나 인덱스·커넥션 풀을 점검할 때."
 ---
 
 # Database Patterns

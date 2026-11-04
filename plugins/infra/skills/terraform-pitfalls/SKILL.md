@@ -1,6 +1,6 @@
 ---
 name: terraform-pitfalls
-description: "Terraform 실전 Pitfalls — Terraform/OpenTofu 운영 중 발생하는 실전 함정. state 관리/모듈 설계/순환 의존/secret 노출. Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "Terraform/OpenTofu 운영 함정 — Security Group 인라인 규칙 충돌, ENI IP 계산, create_before_destroy, ignore_changes, state 보안. Use when apply 중 리소스가 삭제되거나 state·secret 노출을 점검할 때."
 ---
 
 # Terraform 실전 Pitfalls

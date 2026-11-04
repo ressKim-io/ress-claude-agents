@@ -1,6 +1,6 @@
 ---
 name: ec2-cd-pipeline
-description: "EC2 기반 CD 파이프라인 패턴 — GitHub Actions + SSM + ALB + CloudFront 기반 EC2 배포 실무 패턴. Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "EC2 배포 파이프라인 — GitHub Actions + SSM, ALB 헬스체크, CloudFront behavior 라우팅, 배포 완료 대기. Use when EC2 서버에 SSM 으로 배포하는 CD 를 만들거나 검증할 때."
 ---
 
 # EC2 기반 CD 파이프라인 패턴
