@@ -44,7 +44,9 @@ ADR 0011 은 "사용자가 쓰지 않는다" 는 이유로 배포 수단을 없�
 | 자체 활성화 `path: "."` | 레포 루트, `initialize` 응답 | 설정 있음 50·6 / 설정 제거한 사본 0·0 |
 | 실제 호출 | `claude -p`, Haiku 5.5 | skill, agent(`dx:dev-logger`), command(`/dx:where`) 성공 |
 | bare 이름 | `initialize` 응답 | `/log-trouble` 은 등록되지 않는다. `-p` 에서는 모델이 `dx:log-trouble` 로 찾아 실행했다 |
-| 상시 토큰 비용 | `claude plugin details` | `dx` 약 4,266 토큰 |
+| 상시 토큰 비용 | `claude plugin details` | `dx` 약 4,266 토큰 (파일럿 시점. 전체 수치는 [Migration 0003](../migration/0003-plugin-restructure.md)) |
+| GitHub 설치 | 격리한 설정 폴더, `claude plugin marketplace add <repo>#<브랜치>`, `claude plugin install go@ress` | 성공. 캐시에 그 plugin 폴더만 복사되고 skill·command 15개 로드, version 은 커밋 SHA |
+| 폴더 복사 | `plugins/go/skills/go-testing` 을 `.claude/skills/` 로 | 접두사 없이 `go-testing` 으로 로드 |
 
 `claude plugin details` 는 프로젝트 설정의 marketplace 를 읽지 않는 관리 명령이다. 자체 활성화 확인에는 쓸 수 없어 `initialize` 응답을 쓴다 (`scripts/verify-plugins.sh`).
 
@@ -68,6 +70,7 @@ ADR 0011 은 "사용자가 쓰지 않는다" 는 이유로 배포 수단을 없�
 
 **잃는 것 / 위험**
 - 호출명이 바뀐다: `/go-testing` → `/go:go-testing`, `/log-trouble` → `/dx:log-trouble`. 접두사 중복은 이번에 정리하지 않는다
+- 같은 plugin 에서 command 와 skill 의 이름이 겹치면 skill 이 이겨 command 가 사라진다. `/terraform:security` 가 이 경우라 `/infra:terraform-security-check` 로 바꿨고, 게이트가 검사한다
 - 설치본에는 rule 과 `permissions.deny` 가 없다. agent 의 Permission Boundary 는 설치본에서 안내문이다. plugin README 에 명시한다
 - plugin agent 에서 `permissionMode`, `hooks`, `mcpServers`, `initialPrompt` 는 무시된다. 현재 agent 34개는 쓰지 않는다
 - 이 레포의 `dx` 자체 활성화에는 제약이 있다: 신뢰한 폴더에서만 동작하고, 클라우드 세션은 레포의 marketplace 를 추가하지 않으며, 상대 경로는 main checkout 기준이라 worktree 수정분은 로드되지 않는다. 이 경우 `--plugin-dir plugins/dx` 를 쓴다

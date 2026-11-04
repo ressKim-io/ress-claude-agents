@@ -106,9 +106,9 @@ C 가 기술적으로 우월하다는 점은 인정한다 — 결정적 매칭�
 
 ## 검증
 
-- [ ] P1 완료 후 `grep -rl '도메인의 패턴 / 구현 선택' .claude/skills/ | wc -l` = 0
+- [x] P1 완료 후 템플릿 문구 0건 (2026-11-04. `plugins/` 로 옮긴 뒤 `scripts/validate-catalog.sh` 가 강제한다). [재측정 결과](../migration/0003-plugin-restructure.md#description-재작성-효과)
 - [ ] sweet spot(250-400줄) 비율 ≥ 60%
 - [ ] skill 총수 ≤ 160
 - [ ] 분할된 agent 전원이 역할 경계 / Permission Boundary / Escalation / Pair Patterns 보유
-- [ ] AGENTS.md 산문에 자산 개수 숫자 부재
+- [x] AGENTS.md 산문에 자산 개수 숫자 부재 (2026-11-04 확인)
 - [ ] 재점검 2026-11-15 ([audit §7](../audit/2026-08-15-asset-tier-rebalance.md#7-재점검-일정))
