@@ -98,20 +98,11 @@ first_asset() {
 }
 
 remove_skills() {
-    rm -rf "$CASE_DIR/.claude/skills"
     rm -rf "$CASE_DIR"/plugins/*/skills
 }
 
 remove_agents() {
-    rm -f "$CASE_DIR"/.claude/agents/*.md
     rm -f "$CASE_DIR"/plugins/*/agents/*.md
-}
-
-# plugin 밖에 있고 category 도 없는 skill. 영역을 알 수 없어야 한다.
-add_orphan_skill() {
-    mkdir -p "$CASE_DIR/.claude/skills/orphan-skill"
-    printf -- '---\nname: orphan-skill\ndescription: "테스트"\n---\n\n# Test\n' \
-        >"$CASE_DIR/.claude/skills/orphan-skill/SKILL.md"
 }
 
 # plugin 구조의 최소 skill 을 만든다. $1=plugin $2=skill $3=frontmatter name (기본 $2)
@@ -277,25 +268,11 @@ should_fail_inventory_validate_when_generate_fails() {
     expect_fail '하한' ./scripts/generate-inventory.sh validate
 }
 
-should_fail_inventory_when_skill_has_no_area() {
-    # Given
-    add_orphan_skill
-    # When/Then: 빈 값이 자기 이름을 카테고리로 삼으면 안 된다
-    expect_fail '영역을 알 수 없' ./scripts/generate-inventory.sh generate
-}
-
 should_keep_inventory_fresh_when_rule_changes_group() {
     # Given
     mv "$CASE_DIR/.claude/rules/core/git.md" "$CASE_DIR/.claude/rules/process/git.md"
     # When/Then: rule 개수는 재귀로 세므로 그대로여야 한다
     expect_pass ./scripts/generate-inventory.sh validate
-}
-
-should_fail_labels_when_skill_has_no_area() {
-    # Given
-    add_orphan_skill
-    # When/Then
-    expect_fail '영역을 알 수 없' ./scripts/generate-inventory-labels.sh generate
 }
 
 should_fail_labels_when_no_agents_exist() {
@@ -350,8 +327,8 @@ should_fail_catalog_when_rule_references_missing_command() {
 
 should_fail_catalog_when_skill_is_nested_under_category() {
     # Given: 문서에 없는 형태. 2026-08 에 260개가 이 형태로 로드되지 않았다
-    mkdir -p "$CASE_DIR/.claude/skills/go/nested-skill"
-    printf -- '---\nname: nested-skill\ndescription: "x"\n---\n' >"$CASE_DIR/.claude/skills/go/nested-skill/SKILL.md"
+    mkdir -p "$CASE_DIR/plugins/go/skills/testing/nested-skill"
+    printf -- '---\nname: nested-skill\ndescription: "x"\n---\n' >"$CASE_DIR/plugins/go/skills/testing/nested-skill/SKILL.md"
     # When/Then
     expect_fail '로드되지 않는 위치' ./scripts/validate-catalog.sh
 }
@@ -448,6 +425,60 @@ should_fail_plugin_links_when_living_doc_has_broken_link() {
     printf '\n[x](../../.claude/rules/no-such-rule.md)\n' >>"$CASE_DIR/docs/architecture/multi-tool-mapping.md"
     # When/Then
     expect_fail 'multi-tool-mapping' ./scripts/validate-links.sh
+}
+
+should_fail_plugin_catalog_when_command_is_shadowed_by_skill() {
+    # Given: 이름이 같으면 skill 이 이겨서 command 가 조용히 사라진다
+    printf -- '---\ndescription: "x"\n---\n' >"$CASE_DIR/plugins/go/commands/go-testing.md"
+    # When/Then
+    expect_fail '이름이 겹친다.*go-testing' ./scripts/validate-catalog.sh
+}
+
+should_fail_plugin_catalog_when_legacy_skills_directory_returns() {
+    # Given: Claude Code 는 이 경로도 읽는다. 이 레포에서는 plugin 밖에 skill 이 생기면 안 된다
+    mkdir -p "$CASE_DIR/.claude/skills/stray"
+    printf -- '---\nname: stray\ndescription: "x"\n---\n' >"$CASE_DIR/.claude/skills/stray/SKILL.md"
+    # When/Then
+    expect_fail '옛 구조.*\.claude/skills' ./scripts/validate-catalog.sh
+}
+
+should_fail_plugin_catalog_when_legacy_agents_directory_returns() {
+    # Given
+    mkdir -p "$CASE_DIR/.claude/agents"
+    printf -- '---\nname: stray\n---\n' >"$CASE_DIR/.claude/agents/stray.md"
+    # When/Then
+    expect_fail '옛 구조.*\.claude/agents' ./scripts/validate-catalog.sh
+}
+
+should_fail_plugin_refs_when_rule_uses_bare_skill_name() {
+    # Given: plugin 으로 옮긴 뒤로 bare 이름은 등록되지 않는다
+    # shellcheck disable=SC2016  # 백틱은 실행이 아니라 문서 표기다
+    printf '\n`/go-testing` 을 쓴다\n' >>"$CASE_DIR/.claude/rules/core/git.md"
+    # When/Then
+    expect_fail '해석되지 않는 명령.*go-testing' ./scripts/validate-catalog.sh
+}
+
+should_fail_plugin_refs_when_plugin_file_mentions_unknown_skill() {
+    # Given: 설치본에서 열리지 않는 참조. 이름을 바꾸거나 옮기면 조용히 깨진다
+    printf '\n자세한 내용은 /go:no-such-skill 참조\n' >>"$CASE_DIR/$(first_asset skill_files)"
+    # When/Then
+    expect_fail '해석되지 않는 명령.*go:no-such-skill' ./scripts/validate-catalog.sh
+}
+
+should_fail_plugin_refs_when_mention_has_double_prefix() {
+    # Given: skill 과 plugin 의 이름이 같아 이동 도구가 실제로 만든 형태
+    # shellcheck disable=SC2016  # 백틱은 실행이 아니라 문서 표기다
+    printf '\n`/observability:observability:observability-cost` 참조\n' >>"$CASE_DIR/docs/guides/quick-reference.md"
+    # When/Then
+    expect_fail '해석되지 않는 명령.*observability:observability:' ./scripts/validate-catalog.sh
+}
+
+should_fail_plugin_refs_when_subagent_type_has_no_plugin_prefix() {
+    # Given: plugin 의 agent 는 접두사 없이 부를 수 없다
+    # shellcheck disable=SC2016  # 백틱은 실행이 아니라 문서 표기다
+    printf '\n- subagent_type: `code-reviewer`\n' >>"$CASE_DIR/$(first_asset command_files)"
+    # When/Then
+    expect_fail '없는 agent.*code-reviewer' ./scripts/validate-catalog.sh
 }
 
 should_fail_plugin_readme_when_stale() {

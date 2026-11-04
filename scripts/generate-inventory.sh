@@ -13,33 +13,6 @@ source "$REPO_ROOT/scripts/lib/layout.sh"
 
 cd "$REPO_ROOT"
 
-# Category mapping for agents (이전 구조 전용. plugin 구조는 경로에서 읽는다)
-categorize_agent() {
-  local name="$1"
-  case "$name" in
-    go-expert) echo "go" ;;
-    java-expert) echo "spring" ;;
-    python-expert) echo "python" ;;
-    architect-agent|saga-agent) echo "architecture" ;;
-    k8s-*) echo "kubernetes" ;;
-    platform-engineer|platform-strategy-agent) echo "platform" ;;
-    otel-expert|observability-reviewer) echo "observability" ;;
-    security-scanner|anti-bot|terraform-reviewer|compliance-auditor|compliance-strategy-agent|dockerfile-reviewer|container-security-reviewer|network-security-reviewer) echo "security" ;;
-    ci-optimizer|git-workflow|pr-review-bot|cicd-reviewer|gitops-reviewer|cicd-security-reviewer) echo "cicd" ;;
-    code-reviewer|ticketing-expert|dev-logger|debugging-expert) echo "devops" ;;
-    tech-lead|product-engineer|migration-expert|business-decision-agent) echo "devops" ;;
-    frontend-expert) echo "frontend" ;;
-    incident-responder) echo "sre" ;;
-    load-tester*) echo "testing" ;;
-    database-expert*|redis-expert) echo "database" ;;
-    finops-*|cost-analyzer) echo "finops" ;;
-    mlops-expert) echo "platform" ;;
-    messaging-expert) echo "messaging" ;;
-    service-mesh-expert) echo "service-mesh" ;;
-    *) echo "other" ;;
-  esac
-}
-
 # Escape YAML special characters in a string
 yaml_escape() {
   local s="$1"
@@ -146,7 +119,7 @@ generate() {
     lines=$(echo "$meta" | cut -d'|' -f1)
     title=$(echo "$meta" | cut -d'|' -f2)
     desc=$(echo "$meta" | cut -d'|' -f3-)
-    category=$(asset_plugin "$file") || category=$(categorize_agent "$basename")
+    category=$(asset_plugin "$file") || { printf 'ERROR: plugin 을 알 수 없다: %s\n' "$file"; exit 1; }
     agent_entries+=("$category|$basename|$lines|$title|$desc")
     total_agent_lines=$((total_agent_lines + lines))
     agent_count=$((agent_count + 1))

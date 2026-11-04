@@ -6,9 +6,9 @@
 #
 # 검증 항목:
 #   1. floors    : 자산 종류별 개수 하한
-#   2. locations : 로드되지 않는 위치의 SKILL.md 금지
+#   2. locations : 로드되지 않는 위치의 SKILL.md, 옛 구조의 자산 폴더 금지
 #   3. commands  : 모든 command 에 frontmatter description 존재
-#   4. refs      : rule 과 AGENTS.md 의 `/명령` 표기가 실제 자산으로 해석됨
+#   4. refs      : 문서의 `/plugin:이름`, subagent_type 이 실제 자산으로 해석됨
 #   5. plugins   : marketplace, plugin 폴더, plugin.json, enabledPlugins 가 서로 일치
 #   6. paths     : 본문에 적은 rule·plugin 경로가 실제로 존재
 #
@@ -79,79 +79,106 @@ check_command_descriptions() {
     fi
 }
 
+check_legacy_directories() {
+    section "옛 구조"
+    local dirs
+    dirs=$(legacy_asset_dirs)
+    if [[ -n "$dirs" ]]; then
+        log_fail "옛 구조의 자산 폴더가 있다. plugins/<plugin>/ 으로 옮긴다:"
+        printf '%s\n' "$dirs" | sed 's/^/        옛 구조: /'
+    else
+        log_pass "옛 구조의 자산 폴더 없음"
+    fi
+}
+
 check_references() {
-    section "rule / AGENTS.md 의 명령 참조"
-    local names refs
-    names=$(mktemp)
-    refs=$(mktemp)
+    section "명령·skill·agent 참조"
+    local assets strict loose
+    assets=$(mktemp)
+    strict=$(mktemp)
+    loose=$(mktemp)
     # shellcheck disable=SC2064
-    trap "rm -f '$names' '$refs'" RETURN
+    trap "rm -f '$assets' '$strict' '$loose'" RETURN
 
+    { skill_files; command_files; agent_files; } >"$assets"
+    { printf 'AGENTS.md\n'; rule_files; } >"$strict"
     {
+        printf 'README.md\nREADME.ko.md\n'
         skill_files
+        agent_files
         command_files
-        if [[ -d .claude/commands/help ]]; then
-            find .claude/commands/help -type f -name '*.md'
-        fi
-    } >"$names"
-    { printf 'AGENTS.md\n'; rule_files; } >"$refs"
+        find docs/architecture docs/guides docs/onboarding -type f -name '*.md'
+        find .claude/templates -maxdepth 1 -type f
+    } >"$loose"
 
-    if ! NAMES_FILE="$names" REFS_FILE="$refs" python3 - <<'PY'
-import io, os, re, sys
+    if ! ASSETS_FILE="$assets" STRICT_FILE="$strict" LOOSE_FILE="$loose" python3 - <<'PY'
+import io, json, os, re, sys
 
 # 내장 명령과, 문서가 형식을 설명하려고 쓰는 자리표시자. 자산이 아니다.
 NOT_ASSETS = {
     "clear", "compact", "doctor", "skill-doctor", "plugin", "resume", "rename",
     "x", "command-name", "admin",
 }
+BUILTIN_AGENTS = {"general-purpose", "Explore", "Plan"}
 
-def asset_names(path):
-    parts = path[:-3].split("/")
-    if parts[0] == "plugins":
-        plugin = parts[1]
-        if parts[2] == "skills":
-            return {f"{plugin}:{parts[3]}", parts[3]}
-        return {":".join([plugin] + parts[3:])}
-    if parts[1] == "skills":
-        return {parts[2]}
-    return {":".join(parts[2:])}
+commands, agents = set(), set()
+for path in io.open(os.environ["ASSETS_FILE"], encoding="utf-8").read().split():
+    parts = path.split("/")
+    plugin, kind = parts[1], parts[2]
+    name = parts[3][:-3] if parts[3].endswith(".md") else parts[3]
+    (agents if kind == "agents" else commands).add(f"{plugin}:{name}")
 
-known = set()
-for path in io.open(os.environ["NAMES_FILE"], encoding="utf-8").read().split():
-    known |= asset_names(path)
+plugins = [e["name"] for e in json.load(open(".claude-plugin/marketplace.json", encoding="utf-8"))["plugins"]]
+QUALIFIED_PREFIX = "|".join(map(re.escape, plugins))
+# 규칙과 AGENTS.md: 백틱으로 적은 `/명령` 은 전부 실제 자산이어야 한다.
+STRICT = re.compile(r"`/([a-z][a-z0-9-]*(?::[a-z0-9-]+)*)(?:\s[^`]*)?`")
+# 그 밖의 문서: `/api` 같은 경로가 많아 plugin 접두사가 붙은 표기만 본다.
+QUALIFIED = re.compile(rf"(?<![\w/.<-])/((?:{QUALIFIED_PREFIX})(?::[a-z0-9-]+)+)")
+SUBAGENT = re.compile(r"subagent_type: `([^`]+)`")
 
-REF = re.compile(r"`/([a-z][a-z0-9-]*(?::[a-z0-9-]+)*)(?:\s[^`]*)?`")
-unresolved = []
+problems = []
 checked = 0
-for path in io.open(os.environ["REFS_FILE"], encoding="utf-8").read().split():
-    for lineno, line in enumerate(io.open(path, encoding="utf-8"), 1):
-        for name in REF.findall(line):
-            if name in NOT_ASSETS:
-                continue
-            checked += 1
-            if name not in known:
-                unresolved.append((path, lineno, name))
+
+
+def scan(listing, pattern, skip=()):
+    global checked
+    for path in io.open(os.environ[listing], encoding="utf-8").read().split():
+        for lineno, line in enumerate(io.open(path, encoding="utf-8"), 1):
+            for name in pattern.findall(line):
+                if name in skip:
+                    continue
+                checked += 1
+                if name not in commands:
+                    problems.append(f"해석되지 않는 명령: {path}:{lineno}  /{name}")
+            for name in SUBAGENT.findall(line):
+                checked += 1
+                if name not in agents and name not in BUILTIN_AGENTS:
+                    problems.append(f"없는 agent: {path}:{lineno}  {name}")
+
+
+scan("STRICT_FILE", STRICT, NOT_ASSETS)
+scan("LOOSE_FILE", QUALIFIED)
 
 if checked == 0:
-    print("        명령 참조 0건 — 패턴이 깨졌다")
+    print("        참조 0건 — 패턴이 깨졌다")
     sys.exit(1)
-if unresolved:
-    for path, lineno, name in unresolved:
-        print(f"        해석되지 않는 명령: {path}:{lineno}  /{name}")
+if problems:
+    for problem in problems:
+        print(f"        {problem}")
     sys.exit(1)
 print(f"        참조 {checked}건 해석됨")
 PY
     then
-        log_fail "해석되지 않는 명령 참조가 있다"
+        log_fail "해석되지 않는 참조가 있다"
     else
-        log_pass "명령 참조 전부 해석됨"
+        log_pass "참조 전부 해석됨"
     fi
 }
 
 check_plugins() {
     section "plugin 구성"
     if ! python3 - <<'PY'
-import json, os, sys
+import glob, json, os, sys
 
 MARKETPLACE = ".claude-plugin/marketplace.json"
 SETTINGS = ".claude/settings.json"
@@ -179,6 +206,11 @@ for entry in marketplace.get("plugins", []):
         problems.append(f"plugin.json 의 name 이 폴더와 다르다: {name}")
     if not any(os.path.isdir(f"plugins/{name}/{kind}") for kind in ("skills", "agents", "commands")):
         problems.append(f"자산이 없는 plugin: {name}")
+    # 이름이 같으면 skill 이 이겨 command 가 조용히 사라진다 (공식 문서)
+    skills = {p.split("/")[3] for p in glob.glob(f"plugins/{name}/skills/*/SKILL.md")}
+    commands = {os.path.basename(p)[:-3] for p in glob.glob(f"plugins/{name}/commands/*.md")}
+    for shadowed in sorted(skills & commands):
+        problems.append(f"command 와 skill 의 이름이 겹친다: {name}:{shadowed}")
 
 for name in sorted(os.listdir("plugins")) if os.path.isdir("plugins") else []:
     if os.path.isdir(f"plugins/{name}") and name not in names:
@@ -256,6 +288,7 @@ PY
 
 check_floors
 check_skill_locations
+check_legacy_directories
 check_command_descriptions
 check_references
 check_plugins
