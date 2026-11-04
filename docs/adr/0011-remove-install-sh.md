@@ -1,6 +1,6 @@
 # ADR 0011 — install.sh 및 배포 표면 제거
 
-- **Status**: Accepted
+- **Status**: Accepted. "배포 수단을 두지 않는다" 부분은 [ADR 0012](0012-native-plugin-structure.md) 로 대체됐다. `install.sh` 제거는 유지한다
 - **Date**: 2026-08-26
 - **Driver**: 사용자 결정 — "install 시리즈 전부 없애는 방향으로 가자. 리뷰가 문제가 아니라 install 이게 필요가없어 안써"
 - **Supersedes**: [ADR 0007](0007-install-sh-narrow-scope.md) (install.sh 자산 단위 옵션 — PR-8 미착수 상태로 종료)
