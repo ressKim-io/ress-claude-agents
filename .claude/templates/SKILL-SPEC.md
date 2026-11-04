@@ -3,7 +3,7 @@
 이 레포의 모든 `.claude/skills/**/*.md` 가 따라야 할 frontmatter / 본문 / trigger 표준.
 신규 skill 추가 시 본 spec 을 그대로 카피해 사용.
 
-> **출처 (F1)**: https://code.claude.com/docs/en/skills (검증일 2026-05-15)
+> **출처 (F1)**: https://code.claude.com/docs/en/skills (검증일 2026-11-04)
 >
 > 핵심: `description` 필드는 Claude Code 의 auto-invocation primary signal. 누락 시 skill 이 발견되지 않음.
 
@@ -15,8 +15,6 @@
 ---
 name: skill-slug                                # kebab-case, 파일명과 동일
 description: "[What it does in 1 sentence]. Use when the user asks [trigger phrases]."
-effort: xhigh                                   # low | medium | xhigh | max — effort-guide.md 매핑
-deprecated: false                               # 폐지 시 true + replaced_by 명시
 ---
 ```
 
@@ -25,10 +23,18 @@ deprecated: false                               # 폐지 시 true + replaced_by 
 | 필드 | 필수 | 길이 | 설명 |
 |---|---|---|---|
 | `name` | ✅ | ≤50 자 | kebab-case, 파일명 (확장자 제외) 과 동일. 슬래시 `category:name` 또는 폴더 매핑 |
-| `description` | ✅ | 50-300 자 | F1 패턴 — `What. Use when X.` 형식. description + when_to_use 합산 1536 자 한도 |
-| `effort` | 선택 | enum | 카테고리 default (`effort-guide.md`) 와 다른 경우만 명시. default 면 생략 가능 |
-| `deprecated` | 선택 | bool | 폐지 시 `true` + `replaced_by:` 메타 |
-| `replaced_by` | 조건부 | string | `deprecated: true` 일 때 필수 — 대체 skill 의 name |
+| `description` | ✅ | 50-250 자 | F1 패턴 — `What. Use when X.` 형식. 공식 한도는 description + when_to_use 합산 1,536 자지만, 목록 예산 때문에 짧게 쓴다 (아래) |
+
+### 공식 필드 (20개, 2026-11-04)
+
+`name`, `description`, `when_to_use`, `argument-hint`, `arguments`, `disable-model-invocation`, `user-invocable`, `allowed-tools`, `disallowed-tools`, `model`, `effort`, `context`, `agent`, `background`, `hooks`, `paths`, `shell`, `metadata`, `license`, `compatibility`
+
+- **그 밖의 필드는 Claude Code 가 조용히 무시한다.** Claude Code 밖으로 패키징·업로드할 때는 오류가 된다. 자유 형식 값은 `metadata` 에 넣는다
+- **`effort` 를 쓰지 않는다.** "Effort level for the rest of the current turn. Overrides the session effort level" — 지식 skill 하나가 로드되면 그 턴 전체의 비용과 캐시가 바뀐다
+
+### 목록 예산
+
+모든 skill 의 이름과 description 은 **컨텍스트의 1%** 안에 들어가야 한다 (`skillListingBudgetFraction`, 기본 `0.01`). 넘치면 이름은 남지만 **덜 쓰는 skill 부터 description 이 빠진다.** 빠진 skill 은 자동 호출되기 어렵다. `/doctor` 또는 `/skill-doctor` 로 확인한다.
 
 ### description 패턴 (의무)
 
@@ -37,11 +43,10 @@ deprecated: false                               # 폐지 시 true + replaced_by 
 description: "Go 백엔드 LLM 통합 패턴, 프레임워크 선택 (Genkit/LangChainGo/Eino), Tool Calling, RAG. Use when Go 프로젝트에 AI 기능을 도입하거나 LLM 통합 패턴을 선택할 때."
 ```
 
-❌ **Bad** (현재 273 중 ~227 의 패턴):
+❌ **Bad** (어떤 상황에 쓰는지 구별되지 않는다):
 ```
-# Go AI Integration Patterns
+description: "Go AI Integration Patterns. Use when working with go 도메인의 패턴 / 구현 선택."
 ```
-(frontmatter 없음 — auto-discovery 불가)
 
 ---
 
@@ -49,7 +54,7 @@ description: "Go 백엔드 LLM 통합 패턴, 프레임워크 선택 (Genkit/Lan
 
 ### 권장 줄 수: 250-400 줄
 
-> **이유**: `/compact` 후 skill content 는 첫 **5000 tokens/skill** 만 잔존, 25KB 총합 한도 (F1). 400 줄 초과 시 본문 후반이 compact 시 잘림.
+> **이유**: `/compact` 후 skill content 는 첫 **5,000 tokens/skill** 만 잔존하고, 다시 붙는 skill 전체가 **25,000 tokens** 를 공유한다 (2026-11-04 공식 docs, 이전 판의 25KB 는 오기). 400 줄 초과 시 본문 후반이 compact 시 잘림.
 
 | 길이 | 평가 |
 |---|---|
@@ -150,7 +155,6 @@ scripts/validate-skill-frontmatter.sh .claude/skills/go/effective-go.md
 - frontmatter 존재
 - `name` 필드 + 파일명 일치
 - `description` 존재 + 50-300 자 + "Use when" 패턴
-- `effort` 가 enum (`low|medium|xhigh|max` 또는 미명시)
 - `deprecated: true` 일 때 `replaced_by` 존재
 
 ---
@@ -173,8 +177,6 @@ scripts/validate-skill-frontmatter.sh .claude/skills/go/effective-go.md
 ---
 name: example-skill
 description: "예시 도메인의 패턴 가이드. Use when 예시 작업을 수행하거나 패턴 결정이 필요할 때."
-effort: xhigh
-deprecated: false
 ---
 
 # Example Skill

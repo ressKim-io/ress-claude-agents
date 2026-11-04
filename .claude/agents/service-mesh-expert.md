@@ -7,7 +7,7 @@ tools:
   - Grep
   - Glob
 model: sonnet
-effort: xhigh
+effort: high
 ---
 
 # Service Mesh Expert Agent

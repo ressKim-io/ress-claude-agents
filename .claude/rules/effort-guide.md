@@ -1,47 +1,54 @@
-# Effort Level Guide — Claude 4.x 단계별 사용 가이드
+# Effort Level Guide — Claude 5.5 세대 기준
 
-이 레포의 agents / skills 가 어떤 effort level 로 호출되어야 하는지의 카테고리별 매핑 표. 자산 개수는 `.claude/inventory.yml` `summary` 참조 (산문에 박지 않는다 — drift 원인).
-사용자가 새 작업 / 새 agent / 새 skill 을 작성할 때 "이거 effort 뭘 줘야 하지?" 의 답.
+이 레포의 agents 가 어떤 effort level 로 호출되어야 하는지의 매핑 표. 자산 개수는 `.claude/inventory.yml` `summary` 참조 (산문에 박지 않는다 — drift 원인).
+새 작업 / 새 agent 를 작성할 때 "이거 effort 뭘 줘야 하지?" 의 답.
 
-상세 룰 / Opus 4.7 전용 가이드는 [`token-budget.md`](token-budget.md) 참조. 이 문서는 매핑에 집중.
+상세 룰은 [`token-budget.md`](token-budget.md) 참조. 이 문서는 매핑에 집중.
 
-> **출처**
-> - effort 단계 정의: https://platform.claude.com/docs/en/build-with-claude/effort (검증일 **2026-08-25**, 직전 2026-05-15)
-> - subagent frontmatter `effort` 필드: https://code.claude.com/docs/en/sub-agents (검증일 **2026-08-24**)
+> **출처** (검증일 **2026-11-04**, 직전 2026-08-25). 검증 기록: [2026-11-04 사양 검증](../../docs/audit/2026-11-04-claude-spec-verification.md)
+> - effort 단계: https://platform.claude.com/docs/en/build-with-claude/effort
+> - Claude Code 기본값: https://code.claude.com/docs/en/model-config
+> - agent / skill frontmatter: https://code.claude.com/docs/en/sub-agents, https://code.claude.com/docs/en/skills
 
 ---
 
-## 단계 정의 (Anthropic 공식)
+## 단계 정의
 
-| 레벨 | 정의 | 비용 (high 대비) | 권장 사용 상황 |
-|---|---|---|---|
-| `low` | 최소 추론, 속도 우선 | ~25% | 단순 조회 / lookup / 단순 자동화 / subagent 일부 |
-| `medium` | 비용 민감 + 품질 타협 가능 | ~50% | 비용 민감 분석, FinOps 류 |
-| `high` | intelligence-sensitive 작업 최소 기준 (Claude 4.x 기본값) | 100% (기본) | 일반 코딩 minimum, 분석 |
-| `xhigh` | long-horizon 코딩/agentic 용 확장 단계 | ~200% | 일반 expert / review / 트레이드오프 분석 |
-| `max` | frontier 문제만 | xhigh 의 2x | cascade failure / cross-service / 트레이드오프 |
+| 레벨 | 권장 사용 상황 |
+|---|---|
+| `low` | 단순 조회, 분류, 템플릿 적용, 속도 우선 |
+| `medium` | 범위가 명확한 코딩·분석. Opus 5.5 의 시작점이자 기본값 |
+| `high` | 어렵거나 긴 작업, 리뷰, 조사. **본 레포 agent 기본** |
+| `xhigh` / `max` | **품질 향상을 측정한 작업에만.** "Reserve `xhigh` and `max` for work where you've measured a quality gain." |
 
-**모델별 지원** (✅ 2026-08-25 공식 docs 재확인):
+**effort 는 token budget 이 아니라 행동 신호다.** "It shapes behavior but doesn't guarantee a token count." 같은 이름이라도 모델마다 사고량이 다르다.
+
+> ⚠️ **정정 (2026-11-04)**: 이전 판은 레벨별 비용 배수와 "xhigh 대비 max 의 품질 향상폭" 을 "Anthropic 공식" 표로 실었다. 현행 공식 문서에는 그런 수치가 없어 삭제했다. `xhigh` 를 레포 기본으로 삼던 정책도 Opus 4.7 기준이어서 폐기했다.
+
+**모델별 지원** (✅ 2026-11-04 공식 docs):
 
 | 모델 | `low`/`medium`/`high` | `xhigh` | `max` |
 |---|---|---|---|
-| Fable 5 / Mythos 5 / Opus 5 / Opus 4.8 / Opus 4.7 | ✅ | ✅ | ✅ |
-| **Sonnet 5** | ✅ | ✅ | ✅ |
-| Opus 4.6 / Sonnet 4.6 / Opus 4.5 | ✅ | ❌ | ✅ |
-| **Haiku 4.5** | ❌ effort 파라미터 **지원 모델 목록에 없음** | ❌ | ❌ |
+| Fable 5.1 / Opus 5.5 / Sonnet 5.5 / Haiku 5.5 | ✅ | ✅ | ✅ |
+| Fable 5 / Opus 5 / Sonnet 5 / Opus 4.8 / Opus 4.7 | ✅ | ✅ | ✅ |
+| Opus 4.6 / Sonnet 4.6 | ✅ | ❌ (`high` 로 동작) | ✅ |
+| Haiku 4.5 | ❌ effort 자체 미지원 | ❌ | ❌ |
 
-> ⚠️ **정정 (2026-08-25)**: 직전 판(2026-05-15)은 "xhigh 는 Opus 4.7 만" / "Haiku 4.5 는 low~max 지원" 이라고 적고 있었다. 현행 docs 기준으로 **Sonnet 5 가 xhigh 를 지원**하고, **Haiku 4.5 는 effort 파라미터 자체의 supported models 목록에 없다**. 이 레포의 `model: sonnet` agent 에 `xhigh` 를 붙이는 것은 직전 판 기준으로는 무효였고 현행 기준으로는 유효하다.
->
-> ⚠️ `model: haiku` agent(`dev-logger` / `git-workflow`)의 `effort: low` 가 Claude Code 런타임에서 어떻게 처리되는지(무시 / 에러)는 **미검증** — API docs 의 supported models 목록에서만 부재를 확인했고 Claude Code 측 문서에 기술이 없다. 값은 의도 표기로 유지한다.
+미지원 레벨은 "falls back to the highest supported level at or below the one you set".
+
+> ⚠️ `sonnet` / `haiku` / `opus` alias 는 제공자마다 다른 모델을 가리킨다. `haiku` 는 Anthropic API 밖에서 Haiku 4.5 이고, `sonnet` 은 Bedrock·Agent Platform·Foundry 에서 Sonnet 4.5 다. Haiku 4.5 에서 frontmatter `effort` 가 어떻게 처리되는지는 **문서에 없다.**
 
 **기본값**:
-- API 기본 `high` — `effort: "high"` 는 파라미터 생략과 동일
-- **Claude Code 도 Sonnet 5 기준 기본 `high`** ("Claude Sonnet 5 defaults to `high` effort on the Claude API and Claude Code"). 따라서 **명시하지 않으면 xhigh 가 아니라 high 로 떨어진다** — 이것이 전 agent 에 `effort` 를 명시하는 이유다
-- Opus 4.7 / 4.8: 코딩·agentic 은 `xhigh` 로 시작 권장. Opus 5: `high` 로 시작해 eval 기반으로 조정
 
-**effort 는 token budget 이 아니라 behavioral signal 이다** — 낮은 단계에서도 어려운 문제에는 여전히 생각하되 덜 생각한다. 도구 호출 횟수에도 영향을 준다 (낮을수록 호출 병합·감소).
+| 모델 | API | Claude Code |
+|---|---|---|
+| Fable 5.1 | `high` | `high` |
+| Opus 5.5 | `medium` | `medium` |
+| Sonnet 5.5 | `high` | `medium` |
+| Haiku 5.5 | `medium` | `medium` |
+| 이전 모델 | — | `high` (Opus 4.7 만 `xhigh`) |
 
-**xhigh vs max 트레이드오프**: max 는 xhigh 대비 cost 2x 인데 quality 향상은 ~3%p. 비용 효율 대부분의 작업은 xhigh 가 sweet spot.
+명시하지 않으면 이 기본값으로 돈다. v2.1.317 부터 다른 모델로 도는 subagent 는 세션 effort 를 물려받지 않는다. **이것이 전 agent 에 `effort` 를 명시하는 이유다.**
 
 ---
 
@@ -50,54 +57,48 @@
 | Effort | 카테고리 | 대상 (model) | 정당화 |
 |---|---|---|---|
 | `low` | 로깅 / 단순 자동화 | dev-logger (haiku) / git-workflow (haiku) | 단순 기록 / commit msg — 깊은 추론 불필요 |
-| `medium` | 비용 민감 분석 | cost-analyzer / finops-advisor / compliance-auditor / ci-optimizer (sonnet) | 정량 분석은 model 자체 capability 충분, effort 절약 |
-| `xhigh` (본 레포 기본) | 일반 expert / reviewer | `model: sonnet` 대다수 (code-reviewer / k8s-reviewer / terraform-reviewer / gitops-reviewer / observability-reviewer ...) | 리뷰·조사는 반복 도구 호출이 필요한 long-horizon agentic 작업. Sonnet 5 가 xhigh 지원 |
-| `max` | frontier 추론 | architect-agent (opus) / debugging-expert (opus) / tech-lead (opus) | cascade failure / 트레이드오프 / 전사 RFC — opus + max 정당 |
+| `medium` | 비용 민감 분석 | cost-analyzer / finops-advisor / compliance-auditor / ci-optimizer (sonnet) | 범위가 명확한 정량 분석 |
+| `high` (본 레포 기본) | 일반 expert / reviewer, cascade·트레이드오프 분석 | 나머지 전부. `model: sonnet` 대다수와 architect-agent / debugging-expert / tech-lead (opus) | 리뷰·조사는 반복 도구 호출이 필요한 긴 작업 |
+| `xhigh` / `max` | 없음 | — | 측정 근거가 생긴 agent 만 올린다 |
 
-**`effort` 는 공식 frontmatter 필드다.** subagent frontmatter 의 `effort` 는 해당 agent 가 활성화된 동안 **세션 effort 를 override** 한다. 따라서 본 표는 "무엇을 고를지" 의 기준이고, **실제 강제는 각 agent 의 frontmatter 에서 일어난다** — 표만 맞추고 frontmatter 를 비워두면 세션 기본값이 그대로 적용된다.
-
-> ⚠️ **정정 (2026-08-24)**: 2026-05-15 ~ 2026-08-24 동안 본 문서는 "Claude Code 는 frontmatter 의 `effort` 필드를 직접 읽지 않으므로 본 표가 SOT" 라고 잘못 기술했다. 대부분의 agent 가 `effort` 미명시로 남아 세션 기본값에 방치된 원인이다.
-> 경위: [2026-08-24 audit F3](../../docs/audit/2026-08-24-agent-harness-readiness.md#4-발견-f1f10)
+**`effort` 는 공식 frontmatter 필드다.** subagent frontmatter 의 `effort` 는 해당 agent 가 활성화된 동안 **세션 effort 를 override** 한다. 따라서 본 표는 "무엇을 고를지" 의 기준이고, **실제 강제는 각 agent 의 frontmatter 에서 일어난다.**
 
 ---
 
-## Skills 매핑 (카테고리 default)
+## Skills: `effort` 를 두지 않는다
 
-| Effort | 카테고리 | 정당화 |
-|---|---|---|
-| `low` | `dx/` (changelog, commit, release notes) / `help:*` 슬래시 / 단순 lookup | template 적용 / 산식 조회 — 추론 불필요 |
-| `xhigh` (기본) | `go/` / `kubernetes/` / `architecture/` (대다수) / `business/` / `security/` / `spring/` / `cicd/` / `observability/` 등 | 일반 코딩 / 패턴 적용 / 설계 |
-| `max` | `architecture/cell-based-architecture` / `architecture/kafka-msa-patterns` / `migration/` (전 카테고리) | blast radius 큼 + 트레이드오프 cascade |
+"Effort level for the rest of the current turn. Overrides the session effort level" — skill 이 로드되면 **그 턴이 끝날 때까지** 세션 설정을 덮어쓴다.
 
-**예외**: `medium` skill 은 없음 — Skill 은 카테고리 default 또는 invoker 의 명시 override 로 충분.
+- 지식 skill 은 호출한 작업의 effort 를 따라야 한다. 높이면 비용이 늘고, 낮추면 진행 중인 작업의 품질이 떨어진다
+- API 에서는 top-level effort 변경이 prompt cache 를 깨뜨린다. Claude Code 의 skill effort 전환에도 적용되는지는 ⚠️ 문서에 없다
+- 예외 검토: `context: fork` 로 자기 subagent 에서 도는 skill. 이때 값은 fork 된 subagent 에만 적용된다
 
 ---
 
 ## 적용 방법
 
-### 1. Agent / Skill 호출 시
-- 본 매핑 표 default 사용 (예: `code-reviewer` → xhigh)
+### 1. Agent 호출 시
+- 본 매핑 표 default 사용 (예: `code-reviewer` → high)
 - 사용자가 override 명시한 경우 (예: "low effort 로 빠르게 훑어줘") 그대로 적용
 - agent frontmatter 에 `effort:` 가 있으면 **그것이 최우선** (세션 effort override)
 
-### 2. 새 agent / skill 추가 시
+### 2. 새 agent 추가 시
 - 본 표에서 effort 를 정한 뒤 **frontmatter `effort:` 에 명시**한다 — 표는 기준, frontmatter 가 강제
-- `model` 과의 정합성 확인: 위 **모델별 지원** 표 참조. `haiku` 는 effort 미지원, `sonnet 4.6` 이하는 `xhigh` 불가
+- 기준 모호 시 `high`
 - 새 카테고리면 본 표에 한 줄 추가 (작성자가 책임)
-- 기준 모호 시 `xhigh` (본 레포 리뷰·조사 agent 의 기본) 사용
 
 ### 3. 작업 복잡도별 직접 호출 (slash command / agent prompt)
 
 ```
-단순 lookup / 1-2 파일 조회                 → low
-정량 분석 / cost / FinOps                    → medium
-일반 코딩 / 단일 도메인 expert / review     → xhigh   (본 레포 기본 — 런타임 기본값은 high)
-cascade / cross-service / 트레이드오프      → max     (드물게)
+단순 lookup / 1-2 파일 조회                   → low
+범위가 명확한 코딩 / 정량 분석 / FinOps       → medium
+어렵거나 긴 작업 / 리뷰 / 조사 / 트레이드오프 → high    (본 레포 기본)
+품질 향상을 측정한 작업                       → xhigh / max
 ```
 
 ### 4. Subagent spawn 시
 - token-budget.md §"Subagent 를 Context 절약 도구로" 참조
-- **subagent 의 effort 는 main agent 와 독립** — 가벼운 fan-out 은 `low`, 깊은 분석은 `xhigh` 또는 `max`
+- **subagent 의 effort 는 main agent 와 독립** — 가벼운 fan-out 은 `low`, 깊은 분석은 `high`
 - 10+ 파일 탐색만 fan-out 으로 (단일 함수 리팩토링에 subagent 금지)
 
 ---
@@ -105,33 +106,31 @@ cascade / cross-service / 트레이드오프      → max     (드물게)
 ## Decision Tree
 
 ```
-이 작업이 단순 조회 / template 적용 / 산식 인가?
-├── YES ──────────────────────────────────────────→ low
+단순 조회 / template 적용 / 산식 인가?
+├── YES ──────────────────────────────→ low
 └── NO
     │
-    이 작업이 정량 분석 / 비용 계산 / 컴플라이언스 audit 인가?
-    ├── YES ──────────────────────────────────────→ medium
-    └── NO
-        │
-        이 작업이 cross-service / cascade / 트레이드오프 분석 인가?
-        ├── YES ──────────────────────────────────→ max
-        └── NO (일반 코딩 / 단일 도메인 분석 / review) → xhigh   ← 기본
+    범위가 명확하고 짧은 작업인가?
+    ├── YES ──────────────────────────→ medium
+    └── NO (어렵거나 길거나 리뷰·조사) → high   ← 기본
+                                          │
+                                          품질 향상을 측정했나?
+                                          └── YES → xhigh / max
 ```
 
 ---
 
 ## 자기 점검 (작업 시작 전)
 
-- [ ] 이 작업의 **blast radius** 가 큰가? (큼 → max / xhigh 상향)
-- [ ] **단순 lookup** 인데 xhigh 쓰고 있나? (낮춰서 25% 비용)
-- [ ] **subagent 에 max** 주고 있나? (대부분 low 로 충분, fan-out 의 합산 비용 고려)
-- [ ] **agent frontmatter 의 `model` 이 그 `effort` 를 지원하나?** (모델별 지원 표 — `haiku` 는 effort 자체 미지원, `sonnet 4.6` 이하는 `xhigh` 불가)
+- [ ] **단순 lookup** 인데 `high` 쓰고 있나? (낮춘다)
+- [ ] `xhigh` / `max` 를 쓰는데 **측정 근거**가 있나? (없으면 `high`)
+- [ ] **skill 에 `effort`** 를 넣지 않았나?
+- [ ] **agent frontmatter 의 `model` 이 그 `effort` 를 지원하나?** (모델별 지원 표)
 
 ---
 
 ## 참고 / cross-link
 
-- 단계 / 비용 / Adaptive thinking 상세: [`token-budget.md`](token-budget.md)
-- Subagent spawn 가이드: [`token-budget.md`](token-budget.md) §"Subagent 를 Context 절약 도구로"
+- 토큰 / 캐시 / API 파라미터: [`token-budget.md`](token-budget.md)
 - Token Budget skill (코드 예시 / 비용 계산): `/token-budget` 슬래시
-- 공식 출처: https://platform.claude.com/docs/en/build-with-claude/effort (2026-08-25 fetched) — **분기 재검증 대상, 다음 2026-11**
+- 공식 출처 분기 재검증 대상 — **다음 2027-02**

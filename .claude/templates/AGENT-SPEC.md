@@ -3,12 +3,12 @@
 이 레포의 모든 `.claude/agents/**/*.md` 가 따라야 할 frontmatter / description / hand-off / 본문 표준.
 신규 agent 추가 시 본 spec 을 그대로 카피해 사용.
 
-> **출처 (F6)**: https://code.claude.com/docs/en/sub-agents (검증일 **2026-08-24**, 직전 2026-05-15)
+> **출처 (F6)**: https://code.claude.com/docs/en/sub-agents (검증일 **2026-11-04**, 직전 2026-08-24)
 >
 > 핵심 1: sub-agent 의 `description` 은 Agent 도구가 invocation 결정 시 매칭하는 primary trigger. universal "always use sonnet" 룰 없음 — task 복잡도 기반 model 선택.
-> 핵심 2: frontmatter 는 **16개 필드**를 지원한다. 이 중 실행 강제력이 있는 것은 `disallowedTools` / `maxTurns` / `hooks` 이고, `permissionMode` 는 부모 세션에 따라 무시될 수 있다. **명령 단위 강제는 frontmatter 가 아니라 `.claude/settings.json` 의 `permissions` 에서 한다** — 경계는 §1.2 참조.
+> 핵심 2: frontmatter 는 **19개 필드**를 지원한다. 이 중 실행 강제력이 있는 것은 `disallowedTools` / `maxTurns` / `hooks` 이고, `permissionMode` 는 부모 세션에 따라 무시될 수 있다. **명령 단위 강제는 frontmatter 가 아니라 `.claude/settings.json` 의 `permissions` 에서 한다** — 경계는 §1.2 참조.
 >
-> ⚠️ 외부 사양은 분기별 재검증 대상이다 ([`multi-tool-adapter.md`](../rules/multi-tool-adapter.md) §외부 도구 사양). 2026-05-15 → 2026-08-24 사이에 실제로 `effort` 필드 관련 기술이 drift 했다 — 경위는 [2026-08-24 audit](../../docs/audit/2026-08-24-agent-harness-readiness.md) 참조. **다음 재검증 예정: 2026-11**.
+> ⚠️ 외부 사양은 분기별 재검증 대상이다 ([`multi-tool-adapter.md`](../rules/multi-tool-adapter.md) §외부 도구 사양). 2026-05-15 → 2026-08-24 사이에 실제로 `effort` 필드 관련 기술이 drift 했다 — 경위는 [2026-08-24 audit](../../docs/audit/2026-08-24-agent-harness-readiness.md) 참조. **다음 재검증 예정: 2027-02**.
 
 ---
 
@@ -22,7 +22,7 @@ description: |
   [Hand-off pair / 관련 agent 명시 — 필요 시].
 tools: Read, Grep, Glob, Bash                  # 명시적 listing (전체 `*` 회피)
 model: sonnet                                   # haiku | sonnet | opus | fable | inherit
-effort: xhigh                                   # 세션 effort 를 override — 본 레포는 전 agent 명시
+effort: high                                    # 세션 effort 를 override — 본 레포는 전 agent 명시
 # disallowedTools: [Write, Edit]                # 도구 단위 차단만 가능 — §1.2 의 경계를 읽고 쓸 것
 ---
 ```
@@ -55,6 +55,8 @@ effort: xhigh                                   # 세션 effort 를 override —
 >
 > 따라서 §Permission Boundary 의 승격 자리는 **agent frontmatter 가 아니라 세션 설정**이다. agent 마다 다른 경계가 정말 필요할 때만 frontmatter `hooks` 를 쓰고, 그때는 **위반 fixture 를 같은 커밋에** 둔다 (F11: fixture 없는 hook 은 3.5개월간 0% 로 작동했다).
 
+> **plugin 으로 배포된 agent** 에서는 `permissionMode` / `hooks` / `mcpServers` / `initialPrompt` 가 **무시된다** (2026-11-04 공식 docs). `settings.json` 의 `permissions` 도 plugin 에 실리지 않는다. 즉 설치본에서 §Permission Boundary 는 산문이다 — 그 사실을 plugin README 에 적는다.
+
 > MUST 신규 필드를 넣기 전에 **그게 실제로 무엇을 막는지** 확인한다. 막지 못하는 것을 막는다고 적은 frontmatter 는 산문보다 나쁘다 — 지켜지고 있다고 착각하게 만든다.
 
 ### 1.3 선택 필드 (필요 시)
@@ -69,8 +71,11 @@ effort: xhigh                                   # 세션 effort 를 override —
 | `background` | 항상 백그라운드 실행 |
 | `color` | 태스크 목록 표시 색 |
 | `initialPrompt` | `--agent` 로 메인 세션 agent 로 쓸 때의 첫 턴 |
+| `autoCompactWindow` | 이 agent 의 자동 compact 기준 |
+| `omitClaudeMd` | CLAUDE.md 로드 생략 |
+| `experimental` | 실험 옵션 (`cacheTtl`) |
 
-> 전체 16개 필드의 정확한 의미는 공식 문서를 확인한다 — 본 표는 **본 레포에서 쓰는 관점**의 요약이지 사양 사본이 아니다.
+> 전체 19개 필드의 정확한 의미는 공식 문서를 확인한다 — 본 표는 **본 레포에서 쓰는 관점**의 요약이지 사양 사본이 아니다.
 
 > **본문 필수 섹션**: frontmatter 외에, 본문에 `Permission Boundary` / `Escalation` /
 > `Verification Criteria` 3 개 H2 섹션이 필수다 (§5 표준 섹션 순서 + Verification 상세는 §6).
@@ -129,8 +134,10 @@ description: AI-powered FinOps cost analyzer. Use to analyze cloud spending.
 | Model | Effort | 사용 상황 | 본 레포 예 |
 |---|---|---|---|
 | `haiku` | `low` | 단순 자동화, 기록, template 적용 | dev-logger / git-workflow |
-| `sonnet` | `xhigh` (default) | 일반 expert / reviewer / 분석 (대다수) | code-reviewer / k8s-reviewer / terraform-reviewer 등 |
-| `opus` | `max` | cascade failure / 트레이드오프 / 전사 RFC | architect-agent / debugging-expert / tech-lead |
+| `sonnet` | `high` (default) | 일반 expert / reviewer / 분석 (대다수) | code-reviewer / k8s-reviewer / terraform-reviewer 등 |
+| `opus` | `high` | cascade failure / 트레이드오프 / 전사 RFC | architect-agent / debugging-expert / tech-lead |
+
+`xhigh` / `max` 는 품질 향상을 측정한 agent 에만 쓴다 ([`effort-guide.md`](../rules/effort-guide.md)).
 
 **model 선택 self-check**:
 - 단순 lookup / template 만? → haiku

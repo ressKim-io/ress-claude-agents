@@ -7,7 +7,7 @@ tools:
   - Glob
   - Bash
 model: sonnet
-effort: xhigh
+effort: high
 ---
 
 # Kubernetes Security Reviewer (Attack Surface Focus)

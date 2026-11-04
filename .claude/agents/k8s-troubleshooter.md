@@ -7,7 +7,7 @@ tools:
   - Grep
   - Glob
 model: sonnet
-effort: xhigh
+effort: high
 ---
 
 # Kubernetes Troubleshooter Agent

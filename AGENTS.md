@@ -240,7 +240,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 ## Claude Code-Specific
 
-> Claude Code가 본 파일을 읽는다 (Linux Foundation AGENTS.md 표준). `CLAUDE.md`는 본 파일의 symlink — 동일 내용을 본다. 다른 도구는 자기에게 무관한 본 섹션을 무시.
+> Claude Code가 본 파일을 읽는다 (Linux Foundation AGENTS.md 표준). `CLAUDE.md`는 본 파일의 symlink — 동일 내용을 보며 한 번만 읽힌다. Claude Code 는 v2.1.277 부터 `AGENTS.md` 를 직접 읽지만, `CLAUDE.md` 가 있으면 이 symlink 처럼 연결해 둬야 한다. 다른 도구는 자기에게 무관한 본 섹션을 무시.
 
 ### Auto-Loaded Rules
 
@@ -268,16 +268,16 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | `devlog-lifecycle.md` | dev-logs 4-Tier 정책 + frontmatter 표준 | (path-scoped: docs/dev-logs/*) |
 | `multi-tool-adapter.md` | 도구별 디렉토리=산출물 원칙, 자동/수동 변환 경계, 외부 사양 분기 재검증 | Tool-Specific Optimization |
 | `phase-workflow.md` | SDD Phase 게이트 워크플로우 | (path-scoped: sdd-*.md, phase-start*) |
-| `token-budget.md` | Opus 4.7 전용 | (아래) |
-| `effort-guide.md` | low/medium/xhigh/max 단계별 사용 가이드 + 카테고리별 effort 매핑 | (universal — 모든 작업) |
+| `token-budget.md` | Claude 5.5 세대 토큰·캐시·API 파라미터 | (아래) |
+| `effort-guide.md` | low/medium/high/xhigh/max 단계별 사용 가이드 + agent effort 매핑 | (universal — 모든 작업) |
 | `deep-thinking.md` | 얕은 추측 / 추정 명시 금지, WebFetch 검증 의무, ⚠️ unverified 마킹 | (universal — 모든 작업) |
 
-### Token Budget (Opus 4.7)
+### Token Budget (Claude 5.5 세대)
 
 - Context **80% 초과 → 세션 종료**, 무관 태스크 전환 시 `/clear`
-- Effort 는 본 레포 기본 `xhigh`, 단순 조회 `low`, frontier 문제만 `max` — **런타임 기본은 `high`** 라 agent frontmatter 에 명시해야 적용된다 (모델별 지원 표: [`effort-guide.md`](.claude/rules/effort-guide.md))
-- Tokenizer 4.6 → 4.7: `max_tokens` **35% headroom**, prompt cache 재빌드 가정 (최소 4096 tokens)
-- Subagent는 명시 spawn (Opus 4.7은 기본적으로 덜 spawn함). 10+ 파일 탐색은 subagent 위임
+- Effort 는 agent 기본 `high`, 단순 조회 `low`, `xhigh`·`max` 는 품질 향상을 측정한 작업만. **Claude Code 의 Opus·Sonnet·Haiku 5.5 기본은 `medium`** 이라 agent frontmatter 에 명시한다. skill 에는 넣지 않는다 (모델별 지원 표: [`effort-guide.md`](.claude/rules/effort-guide.md))
+- `max_tokens` 에 여유를 둔다 (agentic 코딩 128,000 제안). 최소 cacheable 길이는 5.5 세대 512 tokens
+- fan-out 이 필요하면 명시한다. 10+ 파일 탐색은 subagent 위임
 - 상세: `.claude/rules/token-budget.md` + 카테고리별 매핑 `.claude/rules/effort-guide.md`, 코드 예시·비용 계산은 `/token-budget` skill
 
 ### Claude-Only Features
@@ -292,22 +292,22 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 > **개수를 산문에 쓰지 않는다.** CI 는 inventory 신선도는 검사하지만 문서 본문에 박힌 숫자는 검사하지 않아 반드시 drift 한다. 실제로 이 문단의 이전 버전이 "274 skills / 43 commands" 로 3개월간 틀린 값을 유지했다 (실제 260 / 51). 근거: [2026-08-15 audit §2](docs/audit/2026-08-15-asset-tier-rebalance.md#2-사실-오류--drift-수정은-백로그).
 
-> ⚠️ **skill 경로 규격 (검증일 2026-08-24)**: Claude Code 는 `.claude/skills/<skill-name>/SKILL.md` — **한 단계 디렉토리 + `SKILL.md`** 만 로드한다. 카테고리 하위 디렉토리는 지원하지 않는다. 현재 이 레포의 `.claude/skills/<카테고리>/<이름>.md` 는 규격을 벗어나 **로드되지 않는다**. 복구 절차: [2026-08-24 audit §6 Step 2](docs/audit/2026-08-24-agent-harness-readiness.md).
+> ⚠️ **skill 경로 규격 (문서 재확인 2026-11-04)**: 문서화된 형태는 `.claude/skills/<skill-name>/SKILL.md` — **한 단계 디렉토리 + `SKILL.md`** 다. 카테고리 하위 디렉토리는 문서에 없다. 2026-08 이전 이 레포의 `<카테고리>/<이름>.md` 형태는 로드되지 않았다: [2026-08-24 audit §6 Step 2](docs/audit/2026-08-24-agent-harness-readiness.md).
 >
 > Custom commands 는 skills 로 병합됐다 — `.claude/commands/x.md` 와 `.claude/skills/x/SKILL.md` 는 둘 다 `/x` 를 만들고, 이름이 겹치면 skill 이 우선한다.
 
 **신규 skill / agent 작성 표준**: [`.claude/templates/SKILL-SPEC.md`](.claude/templates/SKILL-SPEC.md) / [`AGENT-SPEC.md`](.claude/templates/AGENT-SPEC.md). frontmatter / description 패턴 / Verification Criteria 섹션 강제.
 
-subagent frontmatter 는 16개 필드를 지원하며, 이 중 `permissionMode` / `disallowedTools` / `maxTurns` 는 산문 규약과 달리 **런타임이 강제**한다. §User Approval 의 "에이전트에 외부 게시 권한 위임 금지" 같은 제약은 산문으로만 두지 말고 frontmatter 로 승격할 수 있는지 매번 검토한다 ([AGENT-SPEC §1.2](.claude/templates/AGENT-SPEC.md)).
+subagent frontmatter 는 19개 필드를 지원하며, 이 중 `disallowedTools` / `maxTurns` / `hooks` 는 산문 규약과 달리 **런타임이 강제**한다 (`permissionMode` 는 조건부. plugin agent 에서는 `permissionMode`·`hooks`·`mcpServers`·`initialPrompt` 가 무시된다). §User Approval 의 "에이전트에 외부 게시 권한 위임 금지" 같은 제약은 산문으로만 두지 말고 frontmatter 로 승격할 수 있는지 매번 검토한다 ([AGENT-SPEC §1.2](.claude/templates/AGENT-SPEC.md)).
 
-### Opus 4.7 Behavioral Notes
+### Claude 5.5 Behavioral Notes
 
-기존 프롬프트 재조정 포인트:
-- **Literal interpretation** — 의도·제약·수락 기준 첫 턴 완전 명세
-- **Subagent 명시 spawn** — fan-out 필요 시 "Use subagents to investigate X in parallel"
-- **자체 검증 내장** — "double-check before returning" 같은 scaffolding 제거
-- **응답 길이 자동 calibration** — 고정 verbosity 지시 재검토
-- **Rules 100~150줄이 sweet spot** — 매 대화 자동 로딩이라 길면 묻힘. 상세는 skill로 분리
+Opus 5.5·Sonnet 5.5 공식 prompting 가이드 기준 ([검증 기록](docs/audit/2026-11-04-claude-spec-verification.md)). 프롬프트·agent 를 쓸 때의 조정 포인트:
+- **Effort 부터 정한다** — `medium` 에서 시작해 어렵거나 길면 `high`. `xhigh`·`max` 는 측정 근거가 있을 때만
+- **완료 보고 ≠ 완료** — "Treat a text-only end of turn as a report rather than as proof the task is done." Sonnet 5.5 는 낮은 effort 에서 검증 없이 완료를 보고할 수 있으니 검증 지시를 남긴다
+- **느슨한 작업은 자료부터** — 범위가 넓으면 행동 전에 관련 자료를 먼저 보라고 지시한다
+- **자율 진행은 명시** — Sonnet 5.5 는 low·medium 의 긴 작업에서 멈추고 확인하는 경우가 늘어난다
+- **Rules 100~150줄이 sweet spot** — 매 대화 자동 로딩이라 길면 묻힘. 상세는 skill로 분리 (레포 자체 기준)
 
 ---
 

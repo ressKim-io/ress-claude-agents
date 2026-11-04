@@ -37,17 +37,18 @@ deprecated: false
 
 ---
 
-## Opus 4.7 프롬프팅 주의사항 (2026-04)
+## Claude 5.5 프롬프팅 주의사항 (2026-11 검증)
 
-Claude Opus 4.7은 이전 버전과 몇 가지 중요한 해석 차이가 있다.
+Opus 5.5·Sonnet 5.5 공식 prompting 가이드 기준.
 
-- **Literal interpretation** — 느슨한 해석을 하지 않음. 의도·제약·수락 기준을 첫 턴에 완전 명세
-- **Positive framing 선호** — `"Don't do X"`보다 `"Do Y"`가 더 효과적. 부정형 지시는 예시와 함께 사용
-- **Scaffolding 제거** — `"double-check before returning"`, `"N회마다 진행 보고"` 같은 강제 지시는 제거. 4.7은 자체 검증과 progress update를 내장
-- **응답 길이 자동 calibration** — 고정 verbosity 지시 대신 예시로 원하는 톤 제시
-- **더 direct한 tone** — emoji/validation phrasing 감소. 따뜻한 스타일이 필요하면 명시적 예시 제공
+- **effort 부터 정한다** — Opus 5.5 는 `medium` 에서 시작한다. Sonnet 5.5 는 범위가 명확하면 `medium`, 어렵거나 길면 `high`. `xhigh`·`max` 는 "where you've measured a quality gain" 인 작업에만 쓴다
+- **느슨한 작업은 자료부터 보게 한다** — "on loosely specified tasks it helps to tell the model to look through the relevant sources before acting"
+- **완료 보고를 완료의 증거로 삼지 않는다** — Opus 5.5: "Treat a text-only end of turn as a report rather than as proof the task is done." Sonnet 5.5 는 낮은 effort 에서 "sometimes reports a change as done without running a check" 하므로 검증 지시를 넣는다
+- **긴 작업의 중간 확인** — Sonnet 5.5 는 low·medium 의 긴 agentic 작업에서 "more likely to stop and check in". 자율 진행이 필요하면 프롬프트에 명시한다
+- **샘플링 파라미터를 못 쓴다** — Opus·Sonnet 5.5 는 `temperature`·`top_p`·`top_k` 를 400 으로 거부한다. 아래 Self-Consistency 처럼 temperature 로 추론 경로를 흩뜨리는 기법은 다른 모델에서만 가능하다
+- **prefill 불가** — 지원 모델별 차이는 `rules/token-budget.md` 참조
 
-세부: `rules/token-budget.md` · Anthropic Migration Guide 참조
+세부: [Opus 5.5 가이드](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-5-5) · [Sonnet 5.5 가이드](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-sonnet-5-5)
 
 ---
 

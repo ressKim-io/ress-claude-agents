@@ -94,7 +94,7 @@ spec:
   agents:
     - name: code-agent
       type: code-generation
-      model: claude-opus-4-7
+      model: claude-opus-5-5
       capabilities:
         - code_generation
         - refactoring
@@ -105,7 +105,7 @@ spec:
 
     - name: test-agent
       type: test-generation
-      model: claude-sonnet-4-6
+      model: claude-sonnet-5-5
       capabilities:
         - unit_test_generation
         - integration_test
@@ -116,7 +116,7 @@ spec:
 
     - name: review-agent
       type: code-review
-      model: claude-opus-4-7
+      model: claude-opus-5-5
       capabilities:
         - security_review
         - performance_review

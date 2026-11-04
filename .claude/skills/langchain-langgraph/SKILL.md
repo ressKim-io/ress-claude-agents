@@ -108,7 +108,7 @@ from langchain_anthropic import ChatAnthropic
 gpt = ChatOpenAI(model="gpt-4o", temperature=0, max_tokens=1000)
 
 # Anthropic
-claude = ChatAnthropic(model="claude-sonnet-4-6", temperature=0)
+claude = ChatAnthropic(model="claude-sonnet-5-5")  # temperature 지정 시 Sonnet 5.5 는 400
 
 # 공통 인터페이스
 response = gpt.invoke("안녕하세요")

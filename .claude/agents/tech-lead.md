@@ -7,7 +7,7 @@ tools:
   - Glob
   - Bash
 model: opus
-effort: max
+effort: high
 ---
 
 # Tech Lead Agent
@@ -446,9 +446,8 @@ Tech Lead → Agent에게 plan_mode로 작업 할당
 - 각 작업에 명확한 인수/인계 기준 포함
 
 ## Step 4: 할당 및 실행
-- TaskCreate로 작업 생성
-- TaskUpdate로 의존성(blockedBy) 설정
-- SendMessage로 에이전트에게 컨텍스트 전달
+- 작업 목록과 의존 관계를 산출물로 작성 (`TaskCreate` 는 5.5 세대 모델에서 기본 제공되지 않는다)
+- 호출하는 쪽이 각 에이전트에 작업 범위와 컨텍스트를 전달
 
 ## Step 5: 통합 및 검증
 - 모든 에이전트 작업 완료 확인

@@ -96,7 +96,7 @@ data:
   config.yaml: |
     analyzer:
       enabled: true
-      model: claude-sonnet-4-6
+      model: claude-sonnet-5-5
 
       # Drift 분석
       drift:
@@ -172,7 +172,7 @@ jobs:
             4. 보안 영향
             5. 권장 배포 전략
 
-          model: claude-sonnet-4-6
+          model: claude-sonnet-5-5
         id: analysis
 
       - name: Comment PR
