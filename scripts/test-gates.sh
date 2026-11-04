@@ -590,6 +590,17 @@ should_fail_plugin_readme_when_new_skill_is_not_listed() {
     expect_fail 'README 가 오래됐다.*dx' python3 scripts/generate-plugin-readmes.py validate
 }
 
+should_fail_make_lint_when_shellcheck_reports_issue() {
+    # Given: make lint 가 shellcheck 실패를 버려 SC2059 가 CI 에서야 드러났다
+    cat >"$CASE_DIR/scripts/lint-bad.sh" <<'SCRIPT'
+#!/usr/bin/env bash
+value="$1"
+printf "$value"
+SCRIPT
+    # When/Then
+    expect_fail 'SC2059' make lint
+}
+
 # ---------------------------------------------------------------------------
 # 실행
 # ---------------------------------------------------------------------------
