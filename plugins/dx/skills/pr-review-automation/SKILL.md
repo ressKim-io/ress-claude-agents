@@ -1,9 +1,6 @@
 ---
 name: pr-review-automation
-category: dx
 description: "AI PR 자동 리뷰 도입 — GitHub Copilot Code Review / CodeRabbit / Claude Code Action / Claude Security Review / Qodo Merge 비교와 설정, 워크플로 파일 작성, Focus Area·컨벤션 주입, 비용 최적화, 리뷰 품질 메트릭. Use when PR 자동 리뷰 봇을 도입·비교·튜닝하거나 리뷰 봇이 노이즈를 낼 때."
-effort: xhigh
-deprecated: false
 ---
 
 # AI PR 자동 리뷰

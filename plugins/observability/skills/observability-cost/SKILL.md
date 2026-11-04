@@ -1,9 +1,6 @@
 ---
 name: observability-cost
-category: observability
 description: "Observability Cost Management — Metrics, Traces, Logs, Profiles 스택 전반의 비용 최적화 전략과 실행 가이드 Use when working with observability 도메인의 패턴 / 구현 선택."
-effort: xhigh
-deprecated: false
 ---
 
 # Observability Cost Management

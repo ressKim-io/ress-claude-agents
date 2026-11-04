@@ -1,6 +1,5 @@
 ---
 name: quarterly-review
-category: dx
 description: 분기 엔지니어링 회고 패턴 — DORA 4 metrics 추이, SLI/SLO 달성률, 인시던트 패턴, ADR hit rate, FinOps 추이, MRR cohort. dx/engineering-strategy(계획)의 짝, "지난 분기 무엇이 일어났나"를 데이터로 답한다.
 license: MIT
 ---

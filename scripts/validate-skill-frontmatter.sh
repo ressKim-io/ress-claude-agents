@@ -101,6 +101,22 @@ agent_in_legacy_list() {
     return 1
 }
 
+# 공식 skill frontmatter 필드 (2026-11-04 공식 docs). claude plugin validate 는 그 밖의 필드를 잡지 못하고,
+# Claude Code 는 조용히 무시하며, 패키징·업로드할 때만 오류가 된다.
+readonly SKILL_OFFICIAL_FIELDS=" name description when_to_use argument-hint arguments disable-model-invocation user-invocable allowed-tools disallowed-tools model effort context agent background hooks paths shell metadata license compatibility "
+
+# plugin skill 의 frontmatter 필드 위반을 한 줄씩 출력한다.
+plugin_skill_field_issues() {
+    local field
+    while IFS= read -r field; do
+        if [[ "$field" == "effort" ]]; then
+            printf 'frontmatter: effort 를 쓰지 않는다 (그 턴이 끝날 때까지 세션 effort 를 덮어쓴다)\n'
+        elif [[ "$SKILL_OFFICIAL_FIELDS" != *" $field "* ]]; then
+            printf 'frontmatter: 공식 필드가 아니다: %s\n' "$field"
+        fi
+    done < <(extract_frontmatter "$1" | awk -F: '/^[A-Za-z_-]+:/ {print $1}')
+}
+
 # ---------------------------------------------------------------------------
 # Agent 검증: frontmatter 필수 + 본문 H2 3섹션
 # ---------------------------------------------------------------------------
@@ -292,12 +308,13 @@ check_skills() {
             without_fm=$((without_fm + 1))
         fi
 
-        local issues
-        if issues=$(validate_skill "$file"); then
+        local issues field_issues
+        field_issues=$(plugin_skill_field_issues "$file")
+        if issues=$(validate_skill "$file") && [[ -z "$field_issues" ]]; then
             pass=$((pass + 1))
         else
             fail=$((fail + 1))
-            violations+=("$file|$issues")
+            violations+=("$file|$(printf '%s\n%s' "$issues" "$field_issues" | sed '/^$/d')")
         fi
     done < <(skill_files)
 

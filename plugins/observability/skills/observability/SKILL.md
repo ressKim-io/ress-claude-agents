@@ -1,9 +1,6 @@
 ---
 name: observability
-category: observability
 description: "Observability Patterns — 로깅, 트레이싱, 메트릭을 위한 기본 패턴 Use when working with observability 도메인의 패턴 / 구현 선택."
-effort: xhigh
-deprecated: false
 ---
 
 # Observability Patterns

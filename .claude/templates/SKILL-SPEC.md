@@ -22,7 +22,7 @@ description: "[What it does in 1 sentence]. Use when the user asks [trigger phra
 
 | 필드 | 필수 | 길이 | 설명 |
 |---|---|---|---|
-| `name` | ✅ | ≤50 자 | kebab-case, 파일명 (확장자 제외) 과 동일. 슬래시 `category:name` 또는 폴더 매핑 |
+| `name` | ✅ | ≤50 자 | kebab-case, 폴더명과 동일. plugin 에서는 `/<plugin>:<name>` 으로 호출한다 |
 | `description` | ✅ | 50-250 자 | F1 패턴 — `What. Use when X.` 형식. 공식 한도는 description + when_to_use 합산 1,536 자지만, 목록 예산 때문에 짧게 쓴다 (아래) |
 
 ### 공식 필드 (20개, 2026-11-04)
@@ -89,7 +89,7 @@ description: "Go AI Integration Patterns. Use when working with go 도메인의 
 
 ## 참조 스킬
 
-- `[[other-skill-name]]` — 한 줄 관계
+- `/plugin:other-skill` — 한 줄 관계
 - ...
 
 ## Sources / Verified
@@ -119,25 +119,11 @@ Anthropic 공식: "providing verification criteria is the single highest-leverag
 
 ---
 
-## 4. Deprecated 처리
+## 4. 폐지
 
-폐지된 skill 은 삭제 대신 frontmatter 갱신:
+폐지하는 skill 은 삭제하고, 그 skill 을 가리키던 언급을 대체 skill 로 옮긴다. `deprecated`, `replaced_by` 는 공식 필드가 아니고, redirect 만 남은 파일은 목록 예산을 계속 쓴다.
 
-```yaml
----
-name: old-skill
-description: "[기존 내용]. **DEPRECATED**: replaced by [[new-skill]]."
-deprecated: true
-replaced_by: new-skill
----
-
-# [기존 제목] — DEPRECATED
-
-> **이 skill 은 폐지되었습니다.** 대신 [[new-skill]] 을 사용하세요.
-> 폐지일: YYYY-MM-DD / 사유: [한 줄]
-
-[기존 내용 유지 — 점진 마이그레이션을 위해]
-```
+폐지 사실은 커밋 메시지와 migration 문서에 남긴다.
 
 ---
 
@@ -153,20 +139,20 @@ scripts/validate-skill-frontmatter.sh skills
 
 검증 항목:
 - frontmatter 존재
-- `name` 필드 + 파일명 일치
-- `description` 존재 + 50-300 자 + "Use when" 패턴
-- `deprecated: true` 일 때 `replaced_by` 존재
+- `name` 필드 + 폴더명 일치
+- `description` 존재
+- 공식 필드만 사용 (위 20개). `effort` 는 쓰지 않는다
 
 ---
 
 ## 6. Cross-link 패턴
 
-다른 skill 참조 시 `[[skill-name]]` 사용 — 향후 dependency graph 빌드 자동화 대비.
+설치본은 plugin 별로 따로 캐시된다. 같은 plugin 안에서는 상대 링크를, 다른 plugin 은 `/plugin:skill` 일반 텍스트를 쓴다. rule 과 docs 는 GitHub URL 로 가리킨다. 다른 plugin 으로 나가는 상대 링크는 `scripts/validate-links.sh` 가 실패시킨다.
 
 ```markdown
 ## 참조 스킬
-- [[effective-go]] — Go idiom 결정 트리
-- [[go-ai]] — LLM 통합 시 본 skill 의 패턴 적용
+- [go-testing](../go-testing/SKILL.md) — 같은 plugin
+- `/observability:observability-otel` — 다른 plugin
 ```
 
 ---
@@ -200,7 +186,7 @@ description: "예시 도메인의 패턴 가이드. Use when 예시 작업을 �
 1. ...
 
 ## 참조 스킬
-- [[other-skill]] — 관계
+- `/plugin:other-skill` — 관계
 
 ## Sources
 - [URL] — 2026-05-15

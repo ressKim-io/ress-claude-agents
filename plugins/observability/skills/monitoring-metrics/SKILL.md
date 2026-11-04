@@ -1,9 +1,6 @@
 ---
 name: monitoring-metrics
-category: observability
 description: "Metrics Monitoring Patterns — Prometheus 스케일링, Thanos, VictoriaMetrics 설정 가이드 Use when working with observability 도메인의 패턴 / 구현 선택."
-effort: xhigh
-deprecated: false
 ---
 
 # Metrics Monitoring Patterns

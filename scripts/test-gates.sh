@@ -251,6 +251,37 @@ should_fail_frontmatter_when_plugin_skill_name_mismatches() {
     expect_fail "name='wrong-name'" ./scripts/validate-skill-frontmatter.sh skills
 }
 
+should_fail_frontmatter_when_skill_has_unofficial_field() {
+    # Given: Claude Code 는 조용히 무시하고, 패키징·업로드할 때만 오류가 된다
+    add_plugin_skill a from
+    sed -i.bak 's/^name: from$/name: from\ncategory: go/' "$CASE_DIR/plugins/a/skills/from/SKILL.md"
+    # When/Then
+    expect_fail '공식 필드가 아니다.*category' ./scripts/validate-skill-frontmatter.sh skills
+}
+
+should_fail_frontmatter_when_skill_sets_effort() {
+    # Given: 공식 필드지만 그 턴이 끝날 때까지 세션 effort 를 덮어쓴다
+    add_plugin_skill a from
+    sed -i.bak 's/^name: from$/name: from\neffort: high/' "$CASE_DIR/plugins/a/skills/from/SKILL.md"
+    # When/Then
+    expect_fail 'effort 를 쓰지 않는다' ./scripts/validate-skill-frontmatter.sh skills
+}
+
+should_pass_frontmatter_when_skill_uses_every_allowed_field() {
+    # Given: 허용 목록의 오타를 잡는 대조군. effort 만 정책으로 뺀다
+    local field fields=""
+    for field in when_to_use argument-hint arguments disable-model-invocation user-invocable \
+        allowed-tools disallowed-tools model context agent background hooks paths shell \
+        metadata license compatibility; do
+        fields="$fields$field: x\n"
+    done
+    mkdir -p "$CASE_DIR/plugins/a/skills/full"
+    printf -- '---\nname: full\ndescription: "테스트 skill. Use when 테스트할 때."\n%b---\n\n# Test\n' "$fields" \
+        >"$CASE_DIR/plugins/a/skills/full/SKILL.md"
+    # When/Then
+    expect_pass ./scripts/validate-skill-frontmatter.sh skills
+}
+
 # ---------------------------------------------------------------------------
 # generate-inventory*.sh
 # ---------------------------------------------------------------------------

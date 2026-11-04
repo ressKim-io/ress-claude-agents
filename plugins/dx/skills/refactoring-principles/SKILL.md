@@ -1,9 +1,6 @@
 ---
 name: refactoring-principles
-category: dx
 description: "Refactoring Principles — 리팩토링 기본 원칙, 코드 스멜 식별, 점진적 개선 전략. Use when working with dx 도메인의 패턴 / 구현 선택."
-effort: low
-deprecated: false
 ---
 
 # Refactoring Principles
