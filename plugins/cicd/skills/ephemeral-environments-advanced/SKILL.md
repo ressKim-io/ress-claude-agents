@@ -196,7 +196,7 @@ spec:
 
 ## 참조 스킬
 
-- `/ephemeral-environments` - Ephemeral 환경 핵심 (ArgoCD ApplicationSet, Namespace 격리, Kyverno 정리)
-- `/gitops-argocd` - ArgoCD GitOps
-- `/finops` - FinOps 기초
-- `/k8s-scheduling` - 스케줄링 최적화
+- `/cicd:ephemeral-environments` - Ephemeral 환경 핵심 (ArgoCD ApplicationSet, Namespace 격리, Kyverno 정리)
+- `/cicd:gitops-argocd` - ArgoCD GitOps
+- `/sre:finops` - FinOps 기초
+- `/k8s:k8s-scheduling` - 스케줄링 최적화

@@ -452,8 +452,8 @@ spec:
 
 ## 참조 스킬
 
-- `/gateway-api` - Kubernetes Gateway API 리소스 설계
-- `/gateway-api-migration` - Ingress에서 Gateway API 마이그레이션
-- `/msa-resilience` - Circuit Breaker, Retry, Bulkhead 패턴
-- `/spring-security` - Spring Security OAuth2/JWT 심화
-- `/msa-event-driven` - 비동기 통신으로 Gateway 부하 분산
+- `/k8s:gateway-api` - Kubernetes Gateway API 리소스 설계
+- `/k8s:gateway-api-migration` - Ingress에서 Gateway API 마이그레이션
+- `/architecture:msa-resilience` - Circuit Breaker, Retry, Bulkhead 패턴
+- `/java:spring-security` - Spring Security OAuth2/JWT 심화
+- `/architecture:msa-event-driven` - 비동기 통신으로 Gateway 부하 분산

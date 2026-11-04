@@ -233,4 +233,4 @@ spec:
 - [ ] Circuit Breaker 설정
 - [ ] Outlier Detection 튜닝
 
-**관련 skill**: `/k8s-traffic`, `/istio-core`, `/istio-gateway`
+**관련 skill**: `/k8s:k8s-traffic`, `/service-mesh:istio-core`, `/service-mesh:istio-gateway`

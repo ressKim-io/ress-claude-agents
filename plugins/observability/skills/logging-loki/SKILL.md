@@ -492,7 +492,7 @@ count_over_time({app="api"} |= "error" [1h])
 - [ ] 개인정보 접근 모니터링
 - [ ] 알림 규칙 설정
 
-**관련 skill**: `/monitoring-logs`, `/logging-security`, `/logging-elk`
+**관련 skill**: `/observability:monitoring-logs`, `/observability:logging-security`, `/observability:logging-elk`
 
 ---
 

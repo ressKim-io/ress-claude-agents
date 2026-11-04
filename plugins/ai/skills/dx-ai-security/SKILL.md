@@ -357,4 +357,4 @@ groups:
 - [ ] AI 코드 리뷰 자동화
 - [ ] 생산성 메트릭 수집
 
-**관련 skill**: `/dx-ai-agents` (거버넌스/통합), `/dx:dx-metrics`, `/finops-advanced`
+**관련 skill**: `/ai:dx-ai-agents` (거버넌스/통합), `/dx:dx-metrics`, `/sre:finops-advanced`

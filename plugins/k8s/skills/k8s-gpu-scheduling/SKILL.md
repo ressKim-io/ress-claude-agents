@@ -335,7 +335,7 @@ groups:
 - [ ] 사용률 리포트 자동화
 
 **관련 agent**: `mlops-expert`
-**관련 skill**: `/k8s-gpu` (기본, GPU Operator, 공유 전략), `/ml-serving`, `/k8s-autoscaling`
+**관련 skill**: `/k8s:k8s-gpu` (기본, GPU Operator, 공유 전략), `/ai:ml-serving`, `/k8s:k8s-autoscaling`
 
 ---
 

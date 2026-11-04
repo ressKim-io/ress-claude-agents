@@ -586,12 +586,12 @@ groups:
 
 ## 참조 스킬
 
-- `/kafka-patterns` - Kafka Producer/Consumer, Exactly-Once 처리
-- `/distributed-lock` - 분산 락 (Semantic Lock 구현 시 참고)
-- `/observability-otel` - OpenTelemetry 기반 Saga 추적
-- `/deployment-strategies` - 무중단 배포 (Saga Worker 배포)
-- `/k8s-helm` - Helm Chart 관리 (Temporal 배포)
-- `/spring-data` - Spring Data JPA (Saga 상태 테이블)
+- `/messaging:kafka-patterns` - Kafka Producer/Consumer, Exactly-Once 처리
+- `/architecture:distributed-lock` - 분산 락 (Semantic Lock 구현 시 참고)
+- `/observability:observability-otel` - OpenTelemetry 기반 Saga 추적
+- `/cicd:deployment-strategies` - 무중단 배포 (Saga Worker 배포)
+- `/k8s:k8s-helm` - Helm Chart 관리 (Temporal 배포)
+- `/java:spring-data` - Spring Data JPA (Saga 상태 테이블)
 
 ## 참고 레퍼런스
 

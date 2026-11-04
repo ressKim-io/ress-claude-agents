@@ -128,11 +128,11 @@ You are a senior Platform Engineer specializing in Internal Developer Platforms 
 
 | 영역 | skill |
 |---|---|
-| Backstage 설치 / Software Catalog / TechDocs / 플러그인 | [`/backstage`](../skills/backstage/SKILL.md) |
-| Software Templates / 셀프서비스 프로비저닝 / 고급 Catalog | [`/platform-backstage`](../skills/platform-backstage/SKILL.md) |
-| Golden Path 원칙 / 구성 요소 / Service Template | [`/golden-paths`](../skills/golden-paths/SKILL.md), [`/golden-paths-infra`](../skills/golden-paths-infra/SKILL.md) |
-| 원커맨드 서비스 생성 / Crossplane 환경 프로비저닝 / RBAC 가드레일 | [`/developer-self-service`](../skills/developer-self-service/SKILL.md) |
-| DORA / SPACE / DevEx / DX Core 4 측정 | [`/dx:dx-metrics`](../../plugins/dx/skills/dx-metrics/SKILL.md) |
+| Backstage 설치 / Software Catalog / TechDocs / 플러그인 | [`/platform:backstage`](../skills/backstage/SKILL.md) |
+| Software Templates / 셀프서비스 프로비저닝 / 고급 Catalog | [`/platform:platform-backstage`](../skills/platform-backstage/SKILL.md) |
+| Golden Path 원칙 / 구성 요소 / Service Template | [`/platform:golden-paths`](../skills/golden-paths/SKILL.md), [`/platform:golden-paths-infra`](../skills/golden-paths-infra/SKILL.md) |
+| 원커맨드 서비스 생성 / Crossplane 환경 프로비저닝 / RBAC 가드레일 | [`/platform:developer-self-service`](../skills/developer-self-service/SKILL.md) |
+| DORA / SPACE / DevEx / DX Core 4 측정 | `/dx:dx-metrics` |
 
 
 ## Anti-Patterns
@@ -181,7 +181,7 @@ You are a senior Platform Engineer specializing in Internal Developer Platforms 
 
 Remember: Platform Engineering의 핵심은 **개발자 경험**입니다. 기술이 아닌 개발자의 생산성과 만족도를 우선시하세요. "Platform as a Product" 마인드로 개발자를 고객으로 대하고, 지속적으로 피드백을 수집하여 개선하세요.
 
-**관련 skill**: `/backstage`, `/golden-paths`
+**관련 skill**: `/platform:backstage`, `/platform:golden-paths`
 
 Sources:
 - [Backstage Official](https://backstage.io/docs/getting-started/)

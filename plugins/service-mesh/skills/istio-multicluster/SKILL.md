@@ -491,4 +491,4 @@ kubectl get secret -n istio-system -l istio/multiCluster=true
 - [ ] Locality-aware 로드밸런싱 확인
 - [ ] 장애 시 failover 테스트
 
-**관련 skill**: `/istio-core`, `/istio-security`, `/istio-gateway`, `/k8s-traffic`
+**관련 skill**: `/service-mesh:istio-core`, `/service-mesh:istio-security`, `/service-mesh:istio-gateway`, `/k8s:k8s-traffic`

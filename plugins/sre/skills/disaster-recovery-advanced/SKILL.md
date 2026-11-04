@@ -215,7 +215,7 @@ spec:
 
 ## 참조 스킬
 
-- `/disaster-recovery` - DR 기본 가이드 (RTO/RPO, Velero, 백업/복구)
-- `/sre-sli-slo` - SLI/SLO 기반 가용성 목표
-- `/aws-eks` - EKS 클러스터 설정
-- `/k8s-helm` - Helm 차트 관리
+- `/sre:disaster-recovery` - DR 기본 가이드 (RTO/RPO, Velero, 백업/복구)
+- `/sre:sre-sli-slo` - SLI/SLO 기반 가용성 목표
+- `/infra:aws-eks` - EKS 클러스터 설정
+- `/k8s:k8s-helm` - Helm 차트 관리

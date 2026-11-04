@@ -33,7 +33,7 @@ license: MIT
 - `platform/golden-paths.md` — 신규 서비스 runbook 템플릿 자동 생성
 
 **관련 agent**: `incident-responder`, `k8s-troubleshooter`, `debugging-expert`, `tech-lead`
-**관련 skill**: [`observability-otel`](../observability-otel/SKILL.md), [`broker-troubleshooting`](../broker-troubleshooting/SKILL.md)
+**관련 skill**: `/observability:observability-otel`, `/messaging:broker-troubleshooting`
 
 ---
 

@@ -284,4 +284,4 @@ data:
 
 ---
 
-**참조 스킬**: `/gitops-argocd` (기본 GitOps/ArgoCD), `/gitops-argocd-advanced` (ApplicationSet, Sync 전략, 시크릿), `/cicd-devsecops`, `/deployment-strategies`, `/aiops`
+**참조 스킬**: `/cicd:gitops-argocd` (기본 GitOps/ArgoCD), `/cicd:gitops-argocd-advanced` (ApplicationSet, Sync 전략, 시크릿), `/cicd:cicd-devsecops`, `/cicd:deployment-strategies`, `/observability:aiops`

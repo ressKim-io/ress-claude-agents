@@ -405,7 +405,7 @@ spec:
 
 ## 참조 스킬
 
-- `/observability-otel` — OTel Collector 기본 설정
-- `/observability-otel-collector-helm` — Helm chart 환경별 패턴
-- `/observability-alloy-to-otel` — Alloy → OTel 마이그레이션
-- `/monitoring-prometheus-operator` — PrometheusRule CRD
+- `/observability:observability-otel` — OTel Collector 기본 설정
+- `/observability:observability-otel-collector-helm` — Helm chart 환경별 패턴
+- `/observability:observability-alloy-to-otel` — Alloy → OTel 마이그레이션
+- `/observability:monitoring-prometheus-operator` — PrometheusRule CRD

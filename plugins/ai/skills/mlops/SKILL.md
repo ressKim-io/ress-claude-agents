@@ -247,6 +247,6 @@ spec:
 
 ## 참조 스킬
 
-- `/mlops-tracking` - MLflow 실험 추적, 모델 레지스트리
-- `/llmops` - RAG 운영, 프롬프트 관리, LLM 평가 & 가드레일
-- `/ml-serving` - ML 서빙 심화
+- `/ai:mlops-tracking` - MLflow 실험 추적, 모델 레지스트리
+- `/ai:llmops` - RAG 운영, 프롬프트 관리, LLM 평가 & 가드레일
+- `/ai:ml-serving` - ML 서빙 심화

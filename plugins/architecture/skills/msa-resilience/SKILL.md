@@ -487,8 +487,8 @@ envoy_cluster_outlier_detection_ejections_active{cluster_name="payment-service"}
 
 ## 참조 스킬
 
-- `/istio-core` - Istio Service Mesh 핵심 개념 및 모드 선택
-- `/k8s-traffic-istio` - Kubernetes Istio 트래픽 관리
-- `/spring-cache` - Redis 캐싱 전략 (Fallback 캐시 구현 시 참조)
-- `/observability` - 모니터링 및 관찰 가능성
-- `/monitoring-metrics` - Prometheus/Grafana 메트릭 설정
+- `/service-mesh:istio-core` - Istio Service Mesh 핵심 개념 및 모드 선택
+- `/service-mesh:k8s-traffic-istio` - Kubernetes Istio 트래픽 관리
+- `/java:spring-cache` - Redis 캐싱 전략 (Fallback 캐시 구현 시 참조)
+- `/observability:observability` - 모니터링 및 관찰 가능성
+- `/observability:monitoring-metrics` - Prometheus/Grafana 메트릭 설정

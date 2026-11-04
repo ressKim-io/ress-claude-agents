@@ -491,6 +491,6 @@ kubectl get vulnerabilityreports -A
     exit-code: '1'
 ```
 
-상세한 CI/CD 보안 통합은 `/cicd-devsecops` 스킬 참조
+상세한 CI/CD 보안 통합은 `/cicd:cicd-devsecops` 스킬 참조
 
-**관련 skill**: `/k8s-helm`, `/docker`, `/cicd-devsecops`
+**관련 skill**: `/k8s:k8s-helm`, `/infra:docker`, `/cicd:cicd-devsecops`

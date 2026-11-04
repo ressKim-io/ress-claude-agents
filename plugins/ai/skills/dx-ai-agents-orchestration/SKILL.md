@@ -409,8 +409,8 @@ sum(increase(ai_guardrail_triggered_total[1h])) by (rule, action)
 - `spring-ai.md` — Spring AI MCP 통합, Function Calling
 - `finops-ai.md` — AI 비용 관리, Model Routing 비용
 - `observability-genai.md` — GenAI 관측성, Agent 루프 감지
-- `/dx-ai-security` — 보안/품질
-- `/aiops` — AIOps
+- `/ai:dx-ai-security` — 보안/품질
+- `/observability:aiops` — AIOps
 
 ---
 

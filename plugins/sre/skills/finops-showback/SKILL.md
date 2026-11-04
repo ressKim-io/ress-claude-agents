@@ -309,4 +309,4 @@ def forecast_cost(prometheus_url, days_ahead=30):
 - [ ] 비용 예측 모델 구축
 - [ ] 예산 초과 알림
 
-**관련 skill**: `/finops-advanced` (허브), `/finops-automation` (자동화), `/monitoring-metrics`
+**관련 skill**: `/sre:finops-advanced` (허브), `/sre:finops-automation` (자동화), `/observability:monitoring-metrics`

@@ -286,4 +286,4 @@ groups:
 - [ ] 팀별 예산 알림
 - [ ] 유휴 리소스 알림
 
-**관련 skill**: `/finops-showback` (Showback/Chargeback), `/finops-automation` (자동화), `/finops`, `/k8s-autoscaling`
+**관련 skill**: `/sre:finops-showback` (Showback/Chargeback), `/sre:finops-automation` (자동화), `/sre:finops`, `/k8s:k8s-autoscaling`

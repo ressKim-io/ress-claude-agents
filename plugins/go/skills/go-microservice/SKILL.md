@@ -494,10 +494,10 @@ ENTRYPOINT ["/myservice"]
 
 ## 관련 Skills
 
-- `/effective-go`, `/go-gin`, `/go-testing` -- Go 관용 패턴(에러 포함)/프레임워크/테스트
-- `/grpc` -- gRPC, Protocol Buffers
-- `/msa-resilience` -- Circuit Breaker, Retry
-- `/msa-observability` -- 분산 추적, 메트릭
+- `/go:effective-go`, `/go:go-gin`, `/go:go-testing` -- Go 관용 패턴(에러 포함)/프레임워크/테스트
+- `/architecture:grpc` -- gRPC, Protocol Buffers
+- `/architecture:msa-resilience` -- Circuit Breaker, Retry
+- `/architecture:msa-observability` -- 분산 추적, 메트릭
 
 ## 참고 레퍼런스
 

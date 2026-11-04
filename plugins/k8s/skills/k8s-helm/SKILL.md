@@ -271,7 +271,7 @@ ArgoCD가 하지 않는 것:
 ### Helm Hook → ArgoCD Hook 교체
 
 ArgoCD는 `helm template`만 실행하므로 `helm.sh/hook`은 무시됨.
-반드시 `argocd.argoproj.io/hook`으로 교체. 상세: `/gitops-argocd-helm`
+반드시 `argocd.argoproj.io/hook`으로 교체. 상세: `/cicd:gitops-argocd-helm`
 
 ---
 
@@ -404,4 +404,4 @@ helm template myapp charts/myapp/ | kubeval
 | "YAML anchor 미지원" 확인 없이 단정 | 공식 문서 확인 후 판단 | Go YAML 파서는 anchor/alias 지원 |
 | 환경별 values에 기본값 중복 정의 | override만 작성 | 변경 시 동기화 누락 위험 |
 
-**관련 skill**: `/docker`, `/k8s-security`, `/gitops-argocd-helm`
+**관련 skill**: `/infra:docker`, `/k8s:k8s-security`, `/cicd:gitops-argocd-helm`

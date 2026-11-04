@@ -9,7 +9,7 @@ deprecated: false
 # Go 고성능 / 프로파일링
 
 동시성 기본기(Worker Pool, Mutex vs Channel, errgroup)는 [`effective-go`](../effective-go/SKILL.md) / [`concurrency-go`](../concurrency-go/SKILL.md),
-Circuit Breaker·Retry·Bulkhead 설계는 [`msa-resilience`](../msa-resilience/SKILL.md) 참조. 여기서는 **측정과 튜닝**을 다룬다.
+Circuit Breaker·Retry·Bulkhead 설계는 `/architecture:msa-resilience` 참조. 여기서는 **측정과 튜닝**을 다룬다.
 
 ## High-Traffic Patterns
 
@@ -423,6 +423,6 @@ func validateAll(items []Item) error {
 - [`effective-go`](../effective-go/SKILL.md) — 인터페이스 / 에러 / 동시성 관용구
 - [`concurrency-go`](../concurrency-go/SKILL.md) — Mutex / Channel / Race Detector
 - [`go-microservice`](../go-microservice/SKILL.md) — 프로젝트 구조 / Graceful Shutdown / Health Check
-- [`msa-resilience`](../msa-resilience/SKILL.md) — Circuit Breaker / Retry / Bulkhead 설계
-- [`observability-pyroscope`](../observability-pyroscope/SKILL.md) — 상시 프로파일링
+- `/architecture:msa-resilience` — Circuit Breaker / Retry / Bulkhead 설계
+- `/observability:observability-pyroscope` — 상시 프로파일링
 - [`go-security`](../go-security/SKILL.md) — Go 보안 리뷰 체크리스트

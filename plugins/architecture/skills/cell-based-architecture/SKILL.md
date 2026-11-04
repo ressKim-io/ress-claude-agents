@@ -494,4 +494,4 @@ spec:
 - [ ] Cell별 SLI/SLO 정의
 - [ ] 새 Cell 프로비저닝 자동화 (Crossplane/Terraform)
 
-**관련 스킬**: `/msa-resilience`, `/high-traffic-design`, `/disaster-recovery`, `/k8s-autoscaling`, `/istio-core`, `/database-sharding`
+**관련 스킬**: `/architecture:msa-resilience`, `/architecture:high-traffic-design`, `/sre:disaster-recovery`, `/k8s:k8s-autoscaling`, `/service-mesh:istio-core`, `/infra:database-sharding`

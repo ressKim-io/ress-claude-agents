@@ -464,4 +464,4 @@ OTEL_CONFIG_FILE=otel-config.yaml,otel-config-dev.yaml
 - [ ] 환경별 오버라이드 파일 구성
 - [ ] 기존 환경변수와 충돌 없는지 확인
 
-**관련 skill**: `/observability-otel`, `/observability-otel-scale`, `/observability-otel-optimization`
+**관련 skill**: `/observability:observability-otel`, `/observability:observability-otel-scale`, `/observability:observability-otel-optimization`

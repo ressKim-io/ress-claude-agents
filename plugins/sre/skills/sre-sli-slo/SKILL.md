@@ -467,4 +467,4 @@ slos:
 - [ ] Burn rate 기반
 - [ ] 적절한 severity
 
-**관련 skill**: `/observability`, `/monitoring-metrics`, `/monitoring-grafana`, `/monitoring-troubleshoot`
+**관련 skill**: `/observability:observability`, `/observability:monitoring-metrics`, `/observability:monitoring-grafana`, `/observability:monitoring-troubleshoot`

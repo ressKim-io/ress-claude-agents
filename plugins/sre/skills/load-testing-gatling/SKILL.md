@@ -17,8 +17,8 @@ Gatling 을 쓸 상황인가?
     │
     ├─ 팀이 JVM 스택(Scala/Java) ────────> Gatling
     ├─ 리포트 상세도가 중요 ─────────────> Gatling (HTML 리포트)
-    ├─ DevOps/JS 친화 ──────────────────> K6 (/load-testing)
-    └─ GUI 기반, 비개발자 참여 ──────────> nGrinder (/load-testing-analysis)
+    ├─ DevOps/JS 친화 ──────────────────> K6 (/sre:load-testing)
+    └─ GUI 기반, 비개발자 참여 ──────────> nGrinder (/sre:load-testing-analysis)
 ```
 
 | 상황 | 패턴 | 섹션 |
@@ -295,4 +295,4 @@ open target/gatling/*/index.html
 - [`load-testing`](../load-testing/SKILL.md) — 테스트 유형 / K6 / K8s 실행
 - [`load-testing-analysis`](../load-testing-analysis/SKILL.md) — nGrinder / 결과 분석 / SLO Threshold
 - [`sre-sli-slo`](../sre-sli-slo/SKILL.md) — assertion 에 넣을 SLO 정의
-- [`high-traffic-design`](../high-traffic-design/SKILL.md) — 부하 테스트로 검증할 설계 패턴
+- `/architecture:high-traffic-design` — 부하 테스트로 검증할 설계 패턴

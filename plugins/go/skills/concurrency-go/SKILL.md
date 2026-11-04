@@ -25,7 +25,7 @@ MSA/대규모 트래픽 환경에서의 Go 동시성 문제 해결 패턴
 DB 동시성?
     ├─ 충돌 드묾 ──────────> Optimistic (Version)
     ├─ 충돌 잦음 ──────────> Pessimistic (FOR UPDATE)
-    └─ MSA/다중 서버 ──────> Distributed Lock (/distributed-lock)
+    └─ MSA/다중 서버 ──────> Distributed Lock (/architecture:distributed-lock)
 ```
 
 ---
@@ -229,4 +229,4 @@ default:
 - [ ] 고루틴 수 제한 (Worker Pool)
 - [ ] Context로 타임아웃/취소 처리
 - [ ] `defer`로 락 해제, 채널 close
-- [ ] MSA 환경: `/distributed-lock` 참조
+- [ ] MSA 환경: `/architecture:distributed-lock` 참조

@@ -466,4 +466,4 @@ jobs:
 - [ ] CI에서 TechDocs 빌드
 - [ ] S3/GCS 스토리지 연결
 
-**관련 skill**: `/backstage` (기본 설치), `/golden-paths`, `/gitops-argocd`
+**관련 skill**: `/platform:backstage` (기본 설치), `/platform:golden-paths`, `/cicd:gitops-argocd`

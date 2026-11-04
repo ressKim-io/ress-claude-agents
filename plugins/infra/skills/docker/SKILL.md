@@ -378,4 +378,4 @@ docker buildx build \
 - [ ] Spring Boot layered JAR
 - [ ] `-XX:MaxRAMPercentage`
 
-**관련 skill**: `/k8s-helm`, `/k8s-security`
+**관련 skill**: `/k8s:k8s-helm`, `/k8s:k8s-security`

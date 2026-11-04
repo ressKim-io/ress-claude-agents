@@ -9,7 +9,7 @@ deprecated: false
 # 봇 / 매크로 방어
 
 탐지(행동·지문) → 챌린지 → 차단(WAF)의 다층 구조.
-요청량 제한 자체는 [`rate-limiting`](../rate-limiting/SKILL.md) 이 다루며, 여기서는 **누가 봇인지 판별**하는 축을 다룬다.
+요청량 제한 자체는 `/saas:rate-limiting` 이 다루며, 여기서는 **누가 봇인지 판별**하는 축을 다룬다.
 
 ## Multi-Layer Defense Architecture
 
@@ -34,7 +34,7 @@ deprecated: false
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-> 요청량 제한(Sliding Window / Token Bucket) 구현은 [`rate-limiting`](../rate-limiting/SKILL.md) 참조 — 여기서 중복 기술하지 않는다.
+> 요청량 제한(Sliding Window / Token Bucket) 구현은 `/saas:rate-limiting` 참조 — 여기서 중복 기술하지 않는다.
 
 ## Behavioral Analysis
 
@@ -245,8 +245,8 @@ meterRegistry.summary("behavior.score").record(score);
 
 ## 참조 스킬
 
-- [`rate-limiting`](../rate-limiting/SKILL.md) — 알고리즘 / 키 설계 / 429 응답
-- [`virtual-waiting-room`](../virtual-waiting-room/SKILL.md) — 대기열 우회 시도 차단
+- `/saas:rate-limiting` — 알고리즘 / 키 설계 / 429 응답
+- `/saas:virtual-waiting-room` — 대기열 우회 시도 차단
 - [`owasp-top10`](../owasp-top10/SKILL.md) — A04 Insecure Design, A07 인증 실패
 - [`threat-modeling`](../threat-modeling/SKILL.md) — 공격자 관점 시나리오 도출
-- [`high-traffic-design`](../high-traffic-design/SKILL.md) — CDN/Edge 에서의 선차단
+- `/architecture:high-traffic-design` — CDN/Edge 에서의 선차단

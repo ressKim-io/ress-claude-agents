@@ -83,7 +83,7 @@ You specialize in version upgrades and migrations across the entire technology s
 ```
 
 > ⚠️ **위 표의 Target 값은 예시다. 그대로 복사하지 말고 착수 시점에 재확인한다.**
-> 버전은 분기마다 바뀌고, 이 표는 마지막 검증일 기준이다 ([`deep-thinking.md`](../rules/core/deep-thinking.md) §1 knowledge cutoff 자각).
+> 버전은 분기마다 바뀌고, 이 표는 마지막 검증일 기준이다 ([`deep-thinking.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/deep-thinking.md) §1 knowledge cutoff 자각).
 > 최신 값은 §Verified Version Baseline 참조.
 
 #### Step 2: Breaking Changes 추출
@@ -633,9 +633,9 @@ grype myapp:latest
 
 ## 참조 스킬
 
-- `/strangler-fig-pattern` — 점진적 마이그레이션 패턴
-- `/database-migration` — DB 마이그레이션 전략
-- `/spring-patterns` — Spring Boot 패턴 가이드
+- `/architecture:strangler-fig-pattern` — 점진적 마이그레이션 패턴
+- `/infra:database-migration` — DB 마이그레이션 전략
+- `/java:spring-patterns` — Spring Boot 패턴 가이드
 
 **Remember**: 마이그레이션에서 가장 위험한 것은 "한번에 다 바꾸자"는 유혹이다. 모든 마이그레이션은 Phase로 분할하고, 각 Phase 사이에 검증 Gate를 둬라. 롤백 불가능한 마이그레이션은 존재하지 않는다 — 롤백 계획을 세우지 않은 마이그레이션만 존재할 뿐이다. 테스트 커버리지가 80% 미만이면 마이그레이션을 시작하지 말고, 테스트부터 보강하라.
 
@@ -643,7 +643,7 @@ grype myapp:latest
 
 이 agent 의 산출물이 다음을 만족해야 한다:
 
-1. **버전 사실성** — §Version Matrix / §Compatibility Matrix 의 값이 공식 릴리스 노트·호환성 문서 근거. 미검증 항목은 ⚠️ 표기 ([`deep-thinking.md`](../rules/core/deep-thinking.md))
+1. **버전 사실성** — §Version Matrix / §Compatibility Matrix 의 값이 공식 릴리스 노트·호환성 문서 근거. 미검증 항목은 ⚠️ 표기 ([`deep-thinking.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/deep-thinking.md))
 2. **breaking change 완전성** — 목표 버전까지의 중간 메이저를 건너뛰지 않고 누적 breaking change 를 열거
 3. **rollback 실행 가능성** — §Rollback Runbook 이 구체 명령과 트리거 조건을 갖춤. "되돌린다" 수준 금지
 4. **단계화** — 한 번에 바꾸는 범위가 검증 가능한 크기로 분할됨
@@ -652,6 +652,6 @@ grype myapp:latest
 ### Self-verification (제출 전 자가 점검)
 
 - [ ] 모든 버전 클레임에 출처 또는 ⚠️ unverified 표기가 있음
-- [ ] config 3단계(명시값 / 기본값 / 환경별 override)를 점검했음 ([`config-contract-audit.md`](../rules/core/config-contract-audit.md))
+- [ ] config 3단계(명시값 / 기본값 / 환경별 override)를 점검했음 ([`config-contract-audit.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/config-contract-audit.md))
 - [ ] 확인 못 한 항목은 단정하지 않고 "미확인"으로 표기
 - [ ] §Permission Boundary 위반 명령을 직접 실행하지 않았음

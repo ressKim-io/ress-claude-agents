@@ -157,4 +157,4 @@ spec:
 - [ ] Whitelist IP 설정
 - [ ] Kong Redis 연동 (분산 환경)
 
-**관련 skill**: `/k8s-traffic`, `/k8s-helm`, `/k8s-security`
+**관련 skill**: `/k8s:k8s-traffic`, `/k8s:k8s-helm`, `/k8s:k8s-security`

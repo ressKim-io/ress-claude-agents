@@ -76,8 +76,8 @@ VirtualService.http.rewrite → HTTPRoute.rules.filters[].type: URLRewrite
 
 | 패러다임 | Skill | 내용 |
 |----------|-------|------|
-| Istio Classic | `/istio-gateway-classic` | Gateway + VirtualService + TLS |
-| Gateway API | `/istio-gateway-api` | Gateway + HTTPRoute + ReferenceGrant |
+| Istio Classic | `/service-mesh:istio-gateway-classic` | Gateway + VirtualService + TLS |
+| Gateway API | `/service-mesh:istio-gateway-api` | Gateway + HTTPRoute + ReferenceGrant |
 
 ---
 
@@ -119,4 +119,4 @@ kubectl get gatewayclass
 - [ ] 트래픽 분배 테스트
 - [ ] 롤백 계획 수립
 
-**관련 skill**: `/istio-gateway-classic`, `/istio-gateway-api`, `/istio-core`, `/istio-observability`, `/k8s-traffic`
+**관련 skill**: `/service-mesh:istio-gateway-classic`, `/service-mesh:istio-gateway-api`, `/service-mesh:istio-core`, `/service-mesh:istio-observability`, `/k8s:k8s-traffic`

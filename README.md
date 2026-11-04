@@ -21,7 +21,7 @@ were removed on 2026-08-26 ([ADR 0011](docs/adr/0011-remove-install-sh.md)) beca
 To reuse an asset in another project, copy the file you need:
 
 ```bash
-cp -r .claude/skills/go-performance   /path/to/project/.claude/skills/
+cp -r plugins/go/skills/go-performance   /path/to/project/.claude/skills/
 cp    plugins/dx/agents/code-reviewer.md /path/to/project/.claude/agents/
 cp    .claude/rules/core/security.md       /path/to/project/.claude/rules/
 ```

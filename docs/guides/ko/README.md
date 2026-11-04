@@ -34,9 +34,9 @@
 
 | 시나리오 | 소요 시간 | 핵심 도구 |
 |----------|----------|----------|
-| [신규 MSA 서비스 개발](scenarios/new-microservice.md) | 2-3시간 | `architect-agent`, `/msa-ddd`, `/go-microservice` |
-| [프로덕션 장애 대응](scenarios/production-incident.md) | 30-60분 | `incident-responder`, `k8s-troubleshooter`, `/observability` |
-| [플랫폼 팀 환경 구축](scenarios/platform-bootstrap.md) | 1-2일 | `platform-engineer`, `/backstage`, `/gitops-argocd` |
+| [신규 MSA 서비스 개발](scenarios/new-microservice.md) | 2-3시간 | `architect-agent`, `/architecture:msa-ddd`, `/go:go-microservice` |
+| [프로덕션 장애 대응](scenarios/production-incident.md) | 30-60분 | `incident-responder`, `k8s-troubleshooter`, `/observability:observability` |
+| [플랫폼 팀 환경 구축](scenarios/platform-bootstrap.md) | 1-2일 | `platform-engineer`, `/platform:backstage`, `/cicd:gitops-argocd` |
 
 ---
 

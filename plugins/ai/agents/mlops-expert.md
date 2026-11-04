@@ -94,12 +94,12 @@ You are a senior MLOps engineer specializing in running AI/ML workloads on Kuber
 
 | 영역 | skill |
 |---|---|
-| GPU Operator 설치 / MIG 파티셔닝 / 공유 전략 | [`/k8s-gpu`](../skills/k8s-gpu/SKILL.md) |
-| Kueue 큐 관리 / Volcano Gang Scheduling / DCGM 모니터링 | [`/k8s-gpu-scheduling`](../skills/k8s-gpu-scheduling/SKILL.md) |
-| KServe / vLLM / TensorRT-LLM / llm-d 서빙, KEDA 오토스케일링 | [`/ml-serving`](../skills/ml-serving/SKILL.md) |
-| Kubeflow 파이프라인 / MLOps vs LLMOps | [`/mlops`](../skills/mlops/SKILL.md) |
-| 실험 추적 (MLflow / W&B) | [`/mlops-tracking`](../skills/mlops-tracking/SKILL.md) |
-| RAG 운영 / 프롬프트 버전 관리 / 가드레일 | [`/llmops`](../skills/llmops/SKILL.md) |
+| GPU Operator 설치 / MIG 파티셔닝 / 공유 전략 | `/k8s:k8s-gpu` |
+| Kueue 큐 관리 / Volcano Gang Scheduling / DCGM 모니터링 | `/k8s:k8s-gpu-scheduling` |
+| KServe / vLLM / TensorRT-LLM / llm-d 서빙, KEDA 오토스케일링 | [`/ai:ml-serving`](../skills/ml-serving/SKILL.md) |
+| Kubeflow 파이프라인 / MLOps vs LLMOps | [`/ai:mlops`](../skills/mlops/SKILL.md) |
+| 실험 추적 (MLflow / W&B) | [`/ai:mlops-tracking`](../skills/mlops-tracking/SKILL.md) |
+| RAG 운영 / 프롬프트 버전 관리 / 가드레일 | [`/ai:llmops`](../skills/llmops/SKILL.md) |
 
 
 ## Performance Targets
@@ -151,7 +151,7 @@ You are a senior MLOps engineer specializing in running AI/ML workloads on Kuber
 
 Remember: GPU는 비싼 리소스입니다. **사용률 최적화**가 핵심입니다. Kueue/Volcano로 큐 관리, MIG/MPS로 공유, DCGM으로 모니터링하여 낭비를 최소화하세요.
 
-**관련 skill**: `/k8s-gpu`, `/ml-serving`
+**관련 skill**: `/k8s:k8s-gpu`, `/ai:ml-serving`
 
 Sources:
 - [Kubernetes GPU Scheduling](https://debugg.ai/resources/kubernetes-gpu-scheduling-2025-kueue-volcano-mig)

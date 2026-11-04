@@ -23,7 +23,7 @@ deprecated: false
 
 **관련 skill**: `architecture/modular-monolith.md`, `security/auth-patterns.md`, `business/auth-oauth-social.md`
 **관련 agent**: `architect-agent`, `tech-lead`
-**관련 skill**: [`postgresql-operations`](../postgresql-operations/SKILL.md), [`mysql-operations`](../mysql-operations/SKILL.md)
+**관련 skill**: `/infra:postgresql-operations`, `/infra:mysql-operations`
 
 ---
 
@@ -240,7 +240,7 @@ Subscription은 Tenant 단위
 - Stripe Customer Portal 활용 (셀프 서비스)
 - Plan downgrade 시 limit check (over-limit 사용자 처리)
 
-→ 결제 통합: [.claude/skills/business/payment-integration.md](../payment-integration/SKILL.md)
+→ 결제 통합: [`payment-integration`](../payment-integration/SKILL.md)
 
 ---
 
@@ -328,7 +328,7 @@ Subscription은 Tenant 단위
 - `skills/business/auth-oauth-social.md` — 사용자 로그인 (이 skill과 결합)
 - `skills/business/payment-integration.md` — Tenant 단위 과금
 - `agents/architect-agent` — 격리 모델 설계 위임
-- [`postgresql-operations`](../postgresql-operations/SKILL.md) — DB 격리 구현
+- `/infra:postgresql-operations` — DB 격리 구현
 - `agents/tech-lead` — ADR 작성
 
 **외부 자원**:

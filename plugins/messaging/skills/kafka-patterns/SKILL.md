@@ -453,4 +453,4 @@ spec:
 - [ ] Under-replicated 알림
 - [ ] Grafana 대시보드
 
-**관련 skill**: `/kafka` (기본 개념, Strimzi), `/k8s-autoscaling`, `/sre-sli-slo`
+**관련 skill**: `/messaging:kafka` (기본 개념, Strimzi), `/k8s:k8s-autoscaling`, `/sre:sre-sli-slo`

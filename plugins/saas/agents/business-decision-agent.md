@@ -173,7 +173,7 @@ ADR 작성 시 포함:
 - Provider 1순위 + fallback
 - Token-first 결제 (PCI scope 최소화)
 - Webhook 수신 idempotency (`webhook-delivery` skill 참조)
-- Saga 패턴 적용 여부 (`/msa-saga` skill 참조)
+- Saga 패턴 적용 여부 (`/architecture:msa-saga` skill 참조)
 - 결제 실패 retry 정책 (`subscription-billing-flows` skill)
 - MRR/Churn 측정 지표 ADR 포함 (`subscription-billing-metrics`)
 
@@ -270,9 +270,9 @@ product-engineer는 *무엇을 만들지*(user-story, mvp-scope)를 결정. busi
 
 architect-agent는 *기술 아키텍처*(bounded-context, service-boundary, api-contract). business-decision-agent는 *비즈니스 결정*. 4 ADR이 bounded-context의 경계 결정에 영향을 주므로 동시 호출 가능 (단, business 결정이 *선행*해야 한다).
 
-### vs 구현 패턴 skill (`/msa-saga` / `/kafka-patterns` / `/high-traffic-design`)
+### vs 구현 패턴 skill (`/architecture:msa-saga` / `/messaging:kafka-patterns` / `/architecture:high-traffic-design`)
 
-이들은 *구현 패턴* 레퍼런스(skill). business-decision-agent의 ADR이 "정기결제 Saga 필요" 라고 정하면 구현 단계에서 `/msa-saga` 를 로드한다. ADR 작성 단계에서 참조하지 않는다.
+이들은 *구현 패턴* 레퍼런스(skill). business-decision-agent의 ADR이 "정기결제 Saga 필요" 라고 정하면 구현 단계에서 `/architecture:msa-saga` 를 로드한다. ADR 작성 단계에서 참조하지 않는다.
 
 ---
 
@@ -311,7 +311,7 @@ architect-agent는 *기술 아키텍처*(bounded-context, service-boundary, api-
 - **Primary**: PortOne (카카오페이 + 신용카드)
 - **Subscription**: PortOne 빌링키
 - **Webhook**: HMAC-SHA256 + idempotency
-- **Saga 패턴**: 적용 (`/msa-saga`)
+- **Saga 패턴**: 적용 (`/architecture:msa-saga`)
 
 ### ADR-004: Notification Channels
 - **Status**: Accepted
@@ -343,7 +343,7 @@ architect-agent는 *기술 아키텍처*(bounded-context, service-boundary, api-
 
 1. **결정 순서 준수** — §Decision Order 대로 tenancy → auth → payment → notification. 순서를 바꾸면 변경 비용이 커진다
 2. **4 ADR 상호 일관성** — 앞 결정의 제약이 뒤 ADR 에 실제로 반영됨 (예: 격리 모델이 인증 테넌트 해석과 모순 없음)
-3. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](../rules/process/documentation.md) §ADR 검증 규칙)
+3. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/documentation.md) §ADR 검증 규칙)
 4. **트레이드오프 인정** — 선택한 안의 단점·리스크를 명시. 장점만 나열한 ADR 은 미완성
 5. **프로젝트 맥락** — 일반론이 아니라 "이 프로젝트에서 왜 이것인가"로 논증
 6. **시장 가중치 근거** — 한국 B2C 가중치(Kakao / PortOne·Toss / 알림톡)를 적용했다면 그 전제를 명시

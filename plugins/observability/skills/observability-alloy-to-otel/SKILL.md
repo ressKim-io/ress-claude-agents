@@ -323,9 +323,9 @@ Alloy의 `otelcol.*` 컴포넌트와 OTel Collector는 **동일한 내부 메트
 
 ## 참조 스킬
 
-- `/observability-otel` — OTel Collector 기본 설정
-- `/observability-otel-optimization` — Kafka 버퍼, 비용 최적화
-- `/observability-otel-scale` — 대규모 트래픽 스케일링
-- `/observability-otel-collector-helm` — Helm chart 환경별 패턴
-- `/logging-loki` — Loki OTLP native 상세 설정
-- `/observability-mimir-monolithic` — Mimir 싱글바이너리 설정
+- `/observability:observability-otel` — OTel Collector 기본 설정
+- `/observability:observability-otel-optimization` — Kafka 버퍼, 비용 최적화
+- `/observability:observability-otel-scale` — 대규모 트래픽 스케일링
+- `/observability:observability-otel-collector-helm` — Helm chart 환경별 패턴
+- `/observability:logging-loki` — Loki OTLP native 상세 설정
+- `/observability:observability-mimir-monolithic` — Mimir 싱글바이너리 설정

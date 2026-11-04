@@ -230,9 +230,9 @@ data:
 ## Prometheus Alert Rules (참조)
 
 기본 알림 규칙(PodCrashLooping, NodeNotReady, HighErrorRate 등)은 아래 skill에 상세 정의:
-- `/monitoring-troubleshoot` — Pod/Node 알림 규칙 + 진단 가이드
-- `/kube-prometheus-stack` — kube-prometheus-stack 기본 제공 규칙
-- `/observability-incident-playbook` — 알림 기반 인시던트 대응 워크플로우
+- `/observability:monitoring-troubleshoot` — Pod/Node 알림 규칙 + 진단 가이드
+- `/observability:kube-prometheus-stack` — kube-prometheus-stack 기본 제공 규칙
+- `/observability:observability-incident-playbook` — 알림 기반 인시던트 대응 워크플로우
 
 ### 커스텀 규칙 작성 요점
 
@@ -444,4 +444,4 @@ alertmanager_silences{state="active"}
 - [ ] 알림 대시보드 구성
 - [ ] 정기 알림 리뷰
 
-**관련 skill**: `/sre-sli-slo`, `/monitoring-metrics`, `/monitoring-troubleshoot`
+**관련 skill**: `/sre:sre-sli-slo`, `/observability:monitoring-metrics`, `/observability:monitoring-troubleshoot`

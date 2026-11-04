@@ -476,12 +476,12 @@ Level 5: Autonomous    → 크로스 조직 Agent 네트워크 (A2A)
 
 ## 참조 스킬
 
-- `/msa-event-driven` - 이벤트 드리븐 아키텍처 (Agent 비동기 통신 기반)
-- `/msa-saga` - Saga 패턴 (Agent 오케스트레이션과 보상 트랜잭션)
-- `/dx-ai-agents` - AI Agent 개발 가이드라인 (프롬프트, 메모리)
-- `/dx-ai-agents-orchestration` - Agent 오케스트레이션 패턴 상세
-- `/msa-resilience` - 서킷브레이커, Retry, Bulkhead (Agent 안정성)
-- `/observability-otel` - OpenTelemetry 기반 Agent 추적
+- `/architecture:msa-event-driven` - 이벤트 드리븐 아키텍처 (Agent 비동기 통신 기반)
+- `/architecture:msa-saga` - Saga 패턴 (Agent 오케스트레이션과 보상 트랜잭션)
+- `/ai:dx-ai-agents` - AI Agent 개발 가이드라인 (프롬프트, 메모리)
+- `/ai:dx-ai-agents-orchestration` - Agent 오케스트레이션 패턴 상세
+- `/architecture:msa-resilience` - 서킷브레이커, Retry, Bulkhead (Agent 안정성)
+- `/observability:observability-otel` - OpenTelemetry 기반 Agent 추적
 
 ## 참고 레퍼런스
 

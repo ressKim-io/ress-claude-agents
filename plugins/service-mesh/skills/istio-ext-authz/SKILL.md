@@ -422,4 +422,4 @@ istioctl proxy-config log <pod> --level rbac:debug,ext_authz:debug
 - [ ] ext-authz 서버 모니터링/알림 설정
 - [ ] OPA 정책 단위 테스트
 
-**관련 skill**: `/istio-security`, `/istio-core`, `/k8s-security`
+**관련 skill**: `/service-mesh:istio-security`, `/service-mesh:istio-core`, `/k8s:k8s-security`

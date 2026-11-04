@@ -28,11 +28,11 @@
 
 2. Deployment
    → ci-optimizer for pipeline optimization
-   → /gitops-argocd for ArgoCD setup
+   → /cicd:gitops-argocd for ArgoCD setup
 
 3. Monitoring
-   → /observability-otel for observability setup
-   → /monitoring-grafana for dashboards
+   → /observability:observability-otel for observability setup
+   → /observability:monitoring-grafana for dashboards
 
 4. Incident response
    → incident-responder for auto-triage
@@ -55,28 +55,28 @@
 
 | Category | Skill | Key Content |
 |----------|-------|-------------|
-| Terraform | `/terraform-modules` | Module patterns |
-| Terraform | `/terraform-security` | Security best practices |
-| AWS | `/aws-eks` | EKS Terraform, IRSA, Add-ons |
-| AWS | `/aws-eks-advanced` | Karpenter, security hardening |
-| AWS | `/aws-lambda` | Serverless, cold start optimization |
-| K8s | `/k8s-security` | Pod Security, RBAC, Kyverno |
-| K8s | `/k8s-helm` | Helm chart best practices |
-| K8s | `/k8s-autoscaling` | HPA, VPA, KEDA, Karpenter |
-| IaC | `/crossplane` | Multi-cloud IaC, Compositions |
-| Docker | `/docker` | Dockerfile optimization, multi-stage builds |
+| Terraform | `/infra:terraform-modules` | Module patterns |
+| Terraform | `/infra:terraform-security` | Security best practices |
+| AWS | `/infra:aws-eks` | EKS Terraform, IRSA, Add-ons |
+| AWS | `/infra:aws-eks-advanced` | Karpenter, security hardening |
+| AWS | `/infra:aws-lambda` | Serverless, cold start optimization |
+| K8s | `/k8s:k8s-security` | Pod Security, RBAC, Kyverno |
+| K8s | `/k8s:k8s-helm` | Helm chart best practices |
+| K8s | `/k8s:k8s-autoscaling` | HPA, VPA, KEDA, Karpenter |
+| IaC | `/infra:crossplane` | Multi-cloud IaC, Compositions |
+| Docker | `/infra:docker` | Dockerfile optimization, multi-stage builds |
 
 ### Example Requests
 
 ```
 "Build an EKS cluster with Terraform"
-→ terraform-reviewer + /aws-eks + /aws-eks-advanced
+→ terraform-reviewer + /infra:aws-eks + /infra:aws-eks-advanced
 
 "Harden K8s security"
-→ k8s-troubleshooter + /k8s-security + /k8s-helm
+→ k8s-troubleshooter + /k8s:k8s-security + /k8s:k8s-helm
 
 "Set up HPA + KEDA autoscaling"
-→ /k8s-autoscaling + /k8s-autoscaling-advanced
+→ /k8s:k8s-autoscaling + /k8s:k8s-autoscaling-advanced
 ```
 
 ---
@@ -128,29 +128,29 @@
 
 | Skill | Key Content |
 |-------|-------------|
-| `/k8s-scheduling` | Node Affinity, Taint, Pod Affinity |
-| `/k8s-scheduling-advanced` | Topology Spread, debugging |
-| `/k8s-traffic` | Rate Limiting, queuing |
-| `/k8s-traffic-ingress` | Ingress traffic management |
-| `/k8s-traffic-istio` | Istio Rate Limiting, Circuit Breaker |
+| `/k8s:k8s-scheduling` | Node Affinity, Taint, Pod Affinity |
+| `/k8s:k8s-scheduling-advanced` | Topology Spread, debugging |
+| `/k8s:k8s-traffic` | Rate Limiting, queuing |
+| `/k8s:k8s-traffic-ingress` | Ingress traffic management |
+| `/service-mesh:k8s-traffic-istio` | Istio Rate Limiting, Circuit Breaker |
 
 ### Service Mesh
 
 ```
 Istio basics:
-  /istio-core → /istio-security → /istio-gateway
+  /service-mesh:istio-core → /service-mesh:istio-security → /service-mesh:istio-gateway
 
 Istio advanced:
-  /istio-advanced-traffic → /istio-otel → /istio-multicluster
+  /service-mesh:istio-advanced-traffic → /service-mesh:istio-otel → /service-mesh:istio-multicluster
 
 Istio Ambient:
-  /istio-ambient → /istio-gateway-api
+  /service-mesh:istio-ambient → /service-mesh:istio-gateway-api
 
 Linkerd (lightweight):
-  /linkerd
+  /service-mesh:linkerd
 
 Gateway API:
-  /gateway-api → /gateway-api-migration
+  /k8s:gateway-api → /k8s:gateway-api-migration
 ```
 
 ---
@@ -173,7 +173,7 @@ incident-responder → Auto-triage (severity, blast radius)
   ↓
 k8s-troubleshooter → Cluster diagnostics (pods, nodes, network)
   ↓
-/postgresql-operations → DB issue analysis (if needed)
+/infra:postgresql-operations → DB issue analysis (if needed)
   ↓
 /dx:log-trouble → Record troubleshooting
 ```
@@ -182,10 +182,10 @@ k8s-troubleshooter → Cluster diagnostics (pods, nodes, network)
 
 | Skill | Use Case |
 |-------|----------|
-| `/observability` | Logging, RED Method |
-| `/monitoring-troubleshoot` | Alert response, troubleshooting patterns |
-| `/chaos-engineering` | Chaos testing, GameDay |
-| `/disaster-recovery` | DR strategy, Velero backups |
+| `/observability:observability` | Logging, RED Method |
+| `/observability:monitoring-troubleshoot` | Alert response, troubleshooting patterns |
+| `/sre:chaos-engineering` | Chaos testing, GameDay |
+| `/sre:disaster-recovery` | DR strategy, Velero backups |
 
 ---
 
@@ -200,22 +200,22 @@ k8s-troubleshooter → Cluster diagnostics (pods, nodes, network)
 
 ```
 OpenTelemetry:
-  /observability-otel → /observability-otel-scale → /observability-otel-optimization
+  /observability:observability-otel → /observability:observability-otel-scale → /observability:observability-otel-optimization
 
 eBPF (Zero-Code):
-  /ebpf-observability → /ebpf-observability-advanced
+  /observability:ebpf-observability → /observability:ebpf-observability-advanced
 
 Grafana Stack:
-  /monitoring-grafana + /monitoring-metrics + /monitoring-logs
+  /observability:monitoring-grafana + /observability:monitoring-metrics + /observability:monitoring-logs
 
 Log analysis:
-  /logging-elk (ELK) or /logging-loki (Loki)
+  /observability:logging-elk (ELK) or /observability:logging-loki (Loki)
 
 Alerting:
-  /alerting-discord
+  /observability:alerting-discord
 
 AIOps:
-  /aiops → /aiops-remediation
+  /observability:aiops → /observability:aiops-remediation
 ```
 
 ---
@@ -233,16 +233,16 @@ AIOps:
 
 ```
 Basics:
-  /finops → /finops-tools
+  /sre:finops → /sre:finops-tools
 
 Advanced:
-  /finops-advanced → /finops-automation → /finops-showback
+  /sre:finops-advanced → /sre:finops-automation → /sre:finops-showback
 
 Tool selection:
-  /finops-tools → /finops-tools-advanced
+  /sre:finops-tools → /sre:finops-tools-advanced
 
 GreenOps:
-  /finops-greenops
+  /sre:finops-greenops
 ```
 
 ---
@@ -260,19 +260,19 @@ GreenOps:
 
 ```
 ArgoCD basics:
-  /gitops-argocd → /gitops-argocd-advanced
+  /cicd:gitops-argocd → /cicd:gitops-argocd-advanced
 
 AI GitOps:
-  /gitops-argocd-ai
+  /cicd:gitops-argocd-ai
 
 Deployment strategies:
-  /deployment-strategies → /deployment-canary
+  /cicd:deployment-strategies → /cicd:deployment-canary
 
 CI/CD:
-  /cicd-devsecops → /cicd-policy
+  /cicd:cicd-devsecops → /cicd:cicd-policy
 
 Supply chain:
-  /supply-chain-security → /supply-chain-compliance
+  /cicd:supply-chain-security → /cicd:supply-chain-compliance
 ```
 
 ---

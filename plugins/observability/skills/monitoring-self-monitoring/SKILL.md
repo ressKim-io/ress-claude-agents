@@ -23,7 +23,7 @@ Who watches the watchmen? — 모니터링 스택 자체의 건강 상태를 감
 | OOM/재시작 반복 | 모든 컴포넌트 | `kube_pod_container_status_restarts_total` |
 | 디스크 부족 | Prometheus, Loki, Tempo | `kubelet_volume_stats_available_bytes` |
 
-**관련 스킬**: `/monitoring-metrics`, `/monitoring-troubleshoot`, `/kube-prometheus-stack`, `/alerting-discord`
+**관련 스킬**: `/observability:monitoring-metrics`, `/observability:monitoring-troubleshoot`, `/observability:kube-prometheus-stack`, `/observability:alerting-discord`
 
 ---
 
@@ -190,7 +190,7 @@ rate(otelcol_receiver_refused_spans[5m]) > 0
 rate(otelcol_processor_dropped_spans[5m]) > 0
 ```
 
-> 상세 최적화 전략은 `/observability-otel-optimization` 참조. 여기서는 self-monitoring 관점만 다룬다.
+> 상세 최적화 전략은 `/observability:observability-otel-optimization` 참조. 여기서는 self-monitoring 관점만 다룬다.
 
 ---
 
@@ -487,4 +487,4 @@ $interval   = 1m / 5m / 15m
 ```
 
 > 대시보드 JSON 관리는 `grafana/dashboards/` SSOT 원칙을 따른다.
-> 상세 Grafana 운영은 `/monitoring-grafana` 참조.
+> 상세 Grafana 운영은 `/observability:monitoring-grafana` 참조.

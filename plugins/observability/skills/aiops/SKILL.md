@@ -279,4 +279,4 @@ sum(increase(remediation_attempts_total[7d]))
 - [ ] 서비스 의존성 맵핑
 
 **관련 agent**: `incident-responder`, `k8s-troubleshooter`
-**관련 skill**: `/aiops-remediation` (RCA, 자동 복구), `/observability`, `/alerting`
+**관련 skill**: `/observability:aiops-remediation` (RCA, 자동 복구), `/observability:observability`, `/alerting`

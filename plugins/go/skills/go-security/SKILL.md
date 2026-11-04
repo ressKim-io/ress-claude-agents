@@ -8,7 +8,7 @@ deprecated: false
 
 # Go 보안 리뷰
 
-언어 무관 원칙은 [`secure-coding`](../secure-coding/SKILL.md) / [`owasp-top10`](../owasp-top10/SKILL.md).
+언어 무관 원칙은 `/security:secure-coding` / `/security:owasp-top10`.
 여기서는 **Go 에서 실제로 틀리는 지점**을 코드 단위로 다룬다.
 
 ## Security Review Checklist
@@ -163,8 +163,8 @@ go test -fuzz=FuzzParseInput ./...
 
 ## 참조 스킬
 
-- [`secure-coding`](../secure-coding/SKILL.md) — 언어 공통 입력 검증 / 인코딩 / 암호화
-- [`owasp-top10`](../owasp-top10/SKILL.md) — A01~A10 매핑
-- [`supply-chain-security`](../supply-chain-security/SKILL.md) — 의존성 / SBOM / 서명
-- [`secrets-management`](../secrets-management/SKILL.md) — 시크릿 주입 경로
+- `/security:secure-coding` — 언어 공통 입력 검증 / 인코딩 / 암호화
+- `/security:owasp-top10` — A01~A10 매핑
+- `/cicd:supply-chain-security` — 의존성 / SBOM / 서명
+- `/security:secrets-management` — 시크릿 주입 경로
 - [`go-performance`](../go-performance/SKILL.md) — 동시성 안전성과 성능의 트레이드오프

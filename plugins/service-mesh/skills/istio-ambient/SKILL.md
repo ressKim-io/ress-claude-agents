@@ -406,4 +406,4 @@ istioctl proxy-config routes \
 
 ---
 
-**참조 스킬**: `/istio-core`, `/istio-gateway`, `/istio-otel`, `/istio-security`, `/k8s-security`, `/istio-ext-authz`
+**참조 스킬**: `/service-mesh:istio-core`, `/service-mesh:istio-gateway`, `/service-mesh:istio-otel`, `/service-mesh:istio-security`, `/k8s:k8s-security`, `/service-mesh:istio-ext-authz`

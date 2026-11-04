@@ -561,7 +561,7 @@ def generate_recommendations(carbon_data):
 - [ ] 팀별 탄소 할당 (Showback)
 
 **관련 agent**: `finops-advisor`, `cost-analyzer`
-**관련 skill**: `/finops`, `/finops-tools`
+**관련 skill**: `/sre:finops`, `/sre:finops-tools`
 
 ---
 

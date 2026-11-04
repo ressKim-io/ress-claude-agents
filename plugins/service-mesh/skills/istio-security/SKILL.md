@@ -570,4 +570,4 @@ Kiali 대시보드에서 mTLS 상태 확인:
 - [ ] AuthorizationPolicy로 필수 요구
 - [ ] 공개 경로 예외 처리
 
-**관련 skill**: `/istio-core`, `/istio-traffic`, `/k8s-security`
+**관련 skill**: `/service-mesh:istio-core`, `/istio-traffic`, `/k8s:k8s-security`

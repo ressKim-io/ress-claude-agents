@@ -284,4 +284,4 @@ data:
 - [ ] ResourceFlavor 정의
 
 **관련 agent**: `mlops-expert`
-**관련 skill**: `/k8s-gpu-scheduling` (Kueue, Volcano, 모니터링), `/ml-serving`, `/k8s-autoscaling`
+**관련 skill**: `/k8s:k8s-gpu-scheduling` (Kueue, Volcano, 모니터링), `/ai:ml-serving`, `/k8s:k8s-autoscaling`

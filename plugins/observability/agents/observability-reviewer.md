@@ -554,7 +554,7 @@ mimirtool analyze dashboard dashboard.json
 2. **완전성** — §Review Domains 9개 도메인을 모두 훑었고, 훑지 못한 도메인은 사유와 함께 명시
 3. **실행 가능성** — Critical / High 지적마다 구체 수정안(패치 diff 또는 대체 설정) 동반. "검토하세요" 수준 금지
 4. **등급 산정** — Category Budget 점수가 실제 발견 건수·심각도에서 계산됐고, 임의 조정이 없음
-5. **일관성** — [`monitoring.md`](../rules/infra/monitoring.md) 의 PromQL 안티패턴 / OTel 시맨틱 컨벤션 v2 와 모순 없음
+5. **일관성** — [`monitoring.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/infra/monitoring.md) 의 PromQL 안티패턴 / OTel 시맨틱 컨벤션 v2 와 모순 없음
 
 ### Self-verification (제출 전 자가 점검)
 

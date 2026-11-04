@@ -465,6 +465,6 @@ jobs:
 
 ## 관련 Skills
 
-- `/api-design` - REST API 설계 원칙, GraphQL과의 비교
-- `/msa-ddd` - Bounded Context 설계, Subgraph 경계 도출
-- `/grpc` - gRPC 서비스 통신, Subgraph 간 내부 통신 대안
+- `/architecture:api-design` - REST API 설계 원칙, GraphQL과의 비교
+- `/architecture:msa-ddd` - Bounded Context 설계, Subgraph 경계 도출
+- `/architecture:grpc` - gRPC 서비스 통신, Subgraph 간 내부 통신 대안

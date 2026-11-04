@@ -420,8 +420,8 @@ spec:
 ## 참조 스킬
 
 - `ebpf-observability-advanced.md` - Cilium Hubble, DeepFlow, eBPF 요구사항, OTel 연동
-- `/observability-otel` - OpenTelemetry 통합 가이드
-- `/monitoring-metrics` - 메트릭 수집/시각화
+- `/observability:observability-otel` - OpenTelemetry 통합 가이드
+- `/observability:monitoring-metrics` - 메트릭 수집/시각화
 - `/cilium-networking` - Cilium 네트워킹
 
 ---

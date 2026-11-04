@@ -496,6 +496,6 @@ spec:
 
 ## 참조 스킬
 
-- `/finops` - FinOps 기초
-- `/finops-tools-advanced` - 고급 최적화 도구 (Cast AI, Kubecost 고급, 4Rs Framework)
-- `/finops-greenops` - GreenOps & 지속가능성
+- `/sre:finops` - FinOps 기초
+- `/sre:finops-tools-advanced` - 고급 최적화 도구 (Cast AI, Kubecost 고급, 4Rs Framework)
+- `/sre:finops-greenops` - GreenOps & 지속가능성

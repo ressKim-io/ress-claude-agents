@@ -267,7 +267,7 @@ otel-collector:
 | 0.115+ | Zipkin exporter deprecated |
 | 0.100+ | Log body 구조 변경 |
 
-- **Grafana Agent EOL**: Alloy로 전환 필수. 마이그레이션 가이드: `/observability-otel-migration`
+- **Grafana Agent EOL**: Alloy로 전환 필수. 마이그레이션 가이드: `/observability:observability-otel-migration`
 
 ### Semantic Conventions 변경 추적
 
@@ -435,21 +435,21 @@ tracer_provider:
 ```
 
 - 코드 변경 없이 환경별 샘플링/엔드포인트 전환 가능
-- 상세 마이그레이션 가이드: `/observability-otel-migration`
+- 상세 마이그레이션 가이드: `/observability:observability-otel-migration`
 
 ## Zipkin Exporter Deprecation (2025-12)
 
 Zipkin exporter가 OTel Collector에서 deprecated. 2026-12 제거 예정.
 - 기존 Zipkin → OTLP exporter로 전환 필요
 - Tempo는 Zipkin/OTLP 모두 수신 가능하므로 exporter만 변경
-- 마이그레이션 가이드: `/observability-otel-migration`
+- 마이그레이션 가이드: `/observability:observability-otel-migration`
 
 ## Profiling Signal (OTLP v1.3.0)
 
 OTel에 네 번째 신호로 **Profiling** 추가. Pyroscope와 OTLP로 통합.
 - Alloy `pyroscope.ebpf` + `pyroscope.java` 컴포넌트로 수집
 - Span Profiles로 trace↔profile 연결
-- 상세 가이드: `/observability-pyroscope`
+- 상세 가이드: `/observability:observability-pyroscope`
 
 ---
 
@@ -504,4 +504,4 @@ OTel에 네 번째 신호로 **Profiling** 추가. Pyroscope와 OTLP로 통합.
 - [ ] Grafana 대시보드 구성
 - [ ] 알림 규칙 설정
 
-**관련 skill**: `/monitoring-grafana`, `/monitoring-metrics`, `/monitoring-logs`
+**관련 skill**: `/observability:monitoring-grafana`, `/observability:monitoring-metrics`, `/observability:monitoring-logs`

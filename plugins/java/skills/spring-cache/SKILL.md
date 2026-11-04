@@ -205,4 +205,4 @@ public class RedisService {
 - [ ] 키 네이밍 규칙 정의
 - [ ] Serializer 설정 (JSON 권장)
 - [ ] 변경 시 @CacheEvict 적용
-- [ ] 분산 락 필요시: `/distributed-lock` 참조
+- [ ] 분산 락 필요시: `/architecture:distributed-lock` 참조

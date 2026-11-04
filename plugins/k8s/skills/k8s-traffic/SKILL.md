@@ -31,8 +31,8 @@ deprecated: false
 
 | 인프라 | Skill | 내용 |
 |--------|-------|------|
-| Istio | `/k8s-traffic-istio` | Global/Local Rate Limit, Circuit Breaker |
-| Ingress | `/k8s-traffic-ingress` | NGINX Ingress, Kong Rate Limiting |
+| Istio | `/service-mesh:k8s-traffic-istio` | Global/Local Rate Limit, Circuit Breaker |
+| Ingress | `/k8s:k8s-traffic-ingress` | NGINX Ingress, Kong Rate Limiting |
 
 ---
 
@@ -167,4 +167,4 @@ VIP: 50 req/s
 - [ ] Outlier Detection 설정
 - [ ] 장애 시 Fallback
 
-**관련 skill**: `/k8s-traffic-istio`, `/k8s-traffic-ingress`, `/k8s-security`, `/k8s-helm`, `/distributed-lock`
+**관련 skill**: `/service-mesh:k8s-traffic-istio`, `/k8s:k8s-traffic-ingress`, `/k8s:k8s-security`, `/k8s:k8s-helm`, `/architecture:distributed-lock`

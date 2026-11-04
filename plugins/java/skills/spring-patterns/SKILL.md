@@ -481,10 +481,10 @@ void 결제_실패_시_롤백() {
 
 | 스킬 | 용도 |
 |------|------|
-| `/spring-data` | JPA + QueryDSL 데이터 액세스 패턴 |
-| `/spring-security` | 인증/인가, JWT, OAuth2 |
-| `/spring-testing` | 테스트 전략 심화 (Testcontainers 등) |
-| `/spring-cache` | Redis 캐싱 패턴 |
-| `/spring-jooq` | jOOQ SQL 중심 개발 |
-| `/effective-java` | Java 코드 품질 패턴 |
-| `/refactoring-spring` | Spring 리팩토링 패턴 |
+| `/java:spring-data` | JPA + QueryDSL 데이터 액세스 패턴 |
+| `/java:spring-security` | 인증/인가, JWT, OAuth2 |
+| `/java:spring-testing` | 테스트 전략 심화 (Testcontainers 등) |
+| `/java:spring-cache` | Redis 캐싱 패턴 |
+| `/java:spring-jooq` | jOOQ SQL 중심 개발 |
+| `/java:effective-java` | Java 코드 품질 패턴 |
+| `/java:refactoring-spring` | Spring 리팩토링 패턴 |

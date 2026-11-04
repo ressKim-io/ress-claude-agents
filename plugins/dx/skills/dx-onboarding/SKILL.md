@@ -210,4 +210,4 @@ avg(onboarding_satisfaction_score) by (team, quarter)
 - [ ] 첫 PR 리뷰 가이드라인
 - [ ] 정기 체크인 스케줄
 
-**관련 skill**: `/dx:dx-onboarding-environment` (개발 환경), `/dx:dx-onboarding-deploy` (첫 배포), `/dx:dx-metrics`, `/platform-backstage`
+**관련 skill**: `/dx:dx-onboarding-environment` (개발 환경), `/dx:dx-onboarding-deploy` (첫 배포), `/dx:dx-metrics`, `/platform:platform-backstage`

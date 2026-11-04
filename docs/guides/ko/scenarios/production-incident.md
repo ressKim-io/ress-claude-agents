@@ -137,7 +137,7 @@ kubectl rollout history deployment/order-service -n production
 
 ## Step 3: 관측성 데이터 분석
 
-**사용 도구**: `/observability-otel` + `/monitoring-troubleshoot`
+**사용 도구**: `/observability:observability-otel` + `/observability:monitoring-troubleshoot`
 
 ### 이렇게 요청하세요
 
@@ -174,7 +174,7 @@ rate(http_server_requests_seconds_count{service="order-service",status=~"5.."}[5
 
 ## Step 4: 수정 적용
 
-**사용 도구**: `code-reviewer` + `/k8s-autoscaling`
+**사용 도구**: `code-reviewer` + `/k8s:k8s-autoscaling`
 
 ### 즉시 조치 (긴급)
 
@@ -274,7 +274,7 @@ watch kubectl top pods -n production -l app=order-service
 
 ### 다음 단계
 
-- `/chaos-engineering` — 카오스 테스트로 유사 장애 사전 탐지
-- `/sre-sli-slo` — SLI/SLO 정의하여 에러 버짓 관리
-- `/aiops` — AIOps로 이상 탐지 자동화
+- `/sre:chaos-engineering` — 카오스 테스트로 유사 장애 사전 탐지
+- `/sre:sre-sli-slo` — SLI/SLO 정의하여 에러 버짓 관리
+- `/observability:aiops` — AIOps로 이상 탐지 자동화
 - [플랫폼 팀 환경 구축](platform-bootstrap.md) — 관측성 인프라 체계화

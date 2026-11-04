@@ -176,4 +176,4 @@ tfsec --format json --out results.json .
 | No encryption | KMS encryption | Data protection |
 | Public S3 buckets | Block public access | Data exposure |
 
-**관련 skill**: `/terraform-modules`
+**관련 skill**: `/infra:terraform-modules`

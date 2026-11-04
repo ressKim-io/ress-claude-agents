@@ -122,7 +122,7 @@ GET /security-logs-*/_search
 }
 ```
 
-자세한 보안 로그 분석은 `/logging-security` 참조.
+자세한 보안 로그 분석은 `/observability:logging-security` 참조.
 
 ---
 
@@ -442,7 +442,7 @@ logs-pii-{date}        → 개인정보 접근 (1년+)
 - [ ] RBAC 구성
 - [ ] 백업 정책
 
-**관련 skill**: `/monitoring-logs`, `/logging-security`, `/logging-loki`
+**관련 skill**: `/observability:monitoring-logs`, `/observability:logging-security`, `/observability:logging-loki`
 
 ---
 

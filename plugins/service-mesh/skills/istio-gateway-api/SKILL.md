@@ -253,4 +253,4 @@ spec:
 - [ ] parentRefs 정확히 지정
 - [ ] TLS 인증서 갱신 자동화
 
-**관련 skill**: `/istio-gateway`, `/istio-gateway-classic`, `/istio-core`
+**관련 skill**: `/service-mesh:istio-gateway`, `/service-mesh:istio-gateway-classic`, `/service-mesh:istio-core`

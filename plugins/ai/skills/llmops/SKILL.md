@@ -368,7 +368,7 @@ result = chain.invoke({"question": "..."})  # StructuredResponse 객체
 - [ ] 응답 품질 메트릭
 - [ ] 비용 알림 설정
 
-**관련 skill**: `/ml-serving`, `/k8s-gpu`, `/finops`
+**관련 skill**: `/ai:ml-serving`, `/k8s:k8s-gpu`, `/sre:finops`
 
 ---
 
@@ -385,6 +385,6 @@ result = chain.invoke({"question": "..."})  # StructuredResponse 객체
 
 ## 참조 스킬
 
-- `/mlops` - MLOps 기본 (Kubeflow, KServe)
-- `/mlops-tracking` - MLflow 실험 추적, 모델 레지스트리
-- `/ml-serving` - ML 서빙 심화
+- `/ai:mlops` - MLOps 기본 (Kubeflow, KServe)
+- `/ai:mlops-tracking` - MLflow 실험 추적, 모델 레지스트리
+- `/ai:ml-serving` - ML 서빙 심화

@@ -395,4 +395,4 @@ count(count by (endpoint) (http_requests_total))
 - [ ] scrape interval 15-30s
 - [ ] 다운샘플링 설정
 
-**관련 skill**: `/observability`, `/observability-otel`, `/monitoring-grafana`
+**관련 skill**: `/observability:observability`, `/observability:observability-otel`, `/observability:monitoring-grafana`

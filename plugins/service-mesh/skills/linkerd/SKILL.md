@@ -516,4 +516,4 @@ spec:
 
 ---
 
-**관련 스킬**: `/istio-core`, `/istio-ambient`, `/k8s-traffic`, `/gateway-api`
+**관련 스킬**: `/service-mesh:istio-core`, `/service-mesh:istio-ambient`, `/k8s:k8s-traffic`, `/k8s:gateway-api`

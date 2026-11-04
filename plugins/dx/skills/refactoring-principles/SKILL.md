@@ -314,4 +314,4 @@ git log --since="6 months ago" --name-only --format='' | sort | uniq -c | sort -
 
 ---
 
-**관련 skill**: `/refactoring-go`, `/refactoring-spring`
+**관련 skill**: `/go:refactoring-go`, `/java:refactoring-spring`

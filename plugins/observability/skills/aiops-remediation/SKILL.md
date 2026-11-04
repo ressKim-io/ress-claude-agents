@@ -330,7 +330,7 @@ spec:
 - [ ] 승인 게이트 설정
 
 **관련 agent**: `incident-responder`, `k8s-troubleshooter`
-**관련 skill**: `/aiops` (기본, 이상 탐지), `/observability`, `/alerting`
+**관련 skill**: `/observability:aiops` (기본, 이상 탐지), `/observability:observability`, `/alerting`
 
 ---
 

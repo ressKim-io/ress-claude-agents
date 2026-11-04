@@ -441,4 +441,4 @@ kafka-consumer-groups.sh --bootstrap-server localhost:9092 \
 - [ ] compression.type 설정 (zstd 권장)
 - [ ] Custom Partitioner 검토 (순서 보장 필요 시)
 
-**관련 skill**: `/kafka`, `/kafka-patterns`, `/msa-event-driven`, `/msa-cqrs-eventsourcing`
+**관련 skill**: `/messaging:kafka`, `/messaging:kafka-patterns`, `/architecture:msa-event-driven`, `/architecture:msa-cqrs-eventsourcing`

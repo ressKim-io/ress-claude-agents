@@ -475,10 +475,10 @@ kubectl patch pod api-server --subresource=resize --patch \
 
 ## 참조 스킬
 
-- `/k8s-autoscaling` - HPA, VPA, KEDA, Karpenter 상세
-- `/msa-resilience` - Circuit Breaker, Retry, Bulkhead
-- `/msa-event-driven` - 이벤트 기반 아키텍처, Saga
-- `/database-sharding` - DB 샤딩 전략
-- `/kafka-patterns` - Kafka Producer/Consumer 심화
-- `/load-testing` - k6, Gatling 부하 테스트
-- `/observability-otel` - OpenTelemetry 분산 추적
+- `/k8s:k8s-autoscaling` - HPA, VPA, KEDA, Karpenter 상세
+- `/architecture:msa-resilience` - Circuit Breaker, Retry, Bulkhead
+- `/architecture:msa-event-driven` - 이벤트 기반 아키텍처, Saga
+- `/infra:database-sharding` - DB 샤딩 전략
+- `/messaging:kafka-patterns` - Kafka Producer/Consumer 심화
+- `/sre:load-testing` - k6, Gatling 부하 테스트
+- `/observability:observability-otel` - OpenTelemetry 분산 추적

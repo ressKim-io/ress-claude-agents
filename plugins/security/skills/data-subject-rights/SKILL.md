@@ -33,7 +33,7 @@ license: MIT
 - `platform/secrets-management.md` — KMS 키 회전·폐기 (crypto-shredding)
 
 **관련 agent**: `compliance-auditor`, `security-scanner`, `tech-lead`
-**관련 skill**: [`postgresql-operations`](../postgresql-operations/SKILL.md), [`broker-troubleshooting`](../broker-troubleshooting/SKILL.md) (삭제 이벤트 전파)
+**관련 skill**: `/infra:postgresql-operations`, `/messaging:broker-troubleshooting` (삭제 이벤트 전파)
 
 ---
 

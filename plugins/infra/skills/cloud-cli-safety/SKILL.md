@@ -11,7 +11,7 @@ deprecated: false
 AI 코딩 어시스턴트가 실행해서는 안 되는 위험한 클라우드 CLI 명령 상세 카탈로그.
 **모든 항목이 주석 처리**되어 있으며, 프로젝트에서 사용하는 서비스만 주석 해제하여 활성화한다.
 
-> 활성화 방법: 해당 서비스 섹션의 `<!-- ... -->` 주석을 제거하고 [`.claude/rules/core/cloud-cli-safety.md`](../../rules/core/cloud-cli-safety.md) 에 복사 또는 본 skill 자체에서 활성화.
+> 활성화 방법: 해당 서비스 섹션의 `<!-- ... -->` 주석을 제거하고 [`cloud-cli-safety.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/cloud-cli-safety.md) 에 복사 또는 본 skill 자체에서 활성화.
 > 2026-03 기준 작성. 실제 사고 사례 기반.
 
 ---
@@ -213,12 +213,12 @@ AI 코딩 어시스턴트가 실행해서는 안 되는 위험한 클라우드 C
 
 ## 활성화 시 본 rule 과의 관계
 
-- 기본 룰: [`.claude/rules/core/cloud-cli-safety.md`](../../rules/core/cloud-cli-safety.md) — 활성화 가이드 + 분류 (rule 자동 로드)
+- 기본 룰: [`cloud-cli-safety.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/cloud-cli-safety.md) — 활성화 가이드 + 분류 (rule 자동 로드)
 - 본 skill: 상세 명령 카탈로그 (on-demand 로드)
 - 활성화 절차: skill 의 해당 섹션 주석 제거 → rule 에 복사 (rule 자동 적용) 또는 skill 자체 활성화 (Claude Code discovery)
 
 ## 관련 문서
 
-- [`rules/core/cloud-cli-safety.md`](../../rules/core/cloud-cli-safety.md) — 활성화 가이드 (자동 로드)
-- [`rules/core/user-approval.md`](../../rules/core/user-approval.md) — 외부 작업 사전 승인 룰
-- [`rules/core/security.md`](../../rules/core/security.md) — 시크릿 / 입력 검증
+- [`cloud-cli-safety.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/cloud-cli-safety.md) — 활성화 가이드 (자동 로드)
+- [`user-approval.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/user-approval.md) — 외부 작업 사전 승인 룰
+- [`security.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/security.md) — 시크릿 / 입력 검증

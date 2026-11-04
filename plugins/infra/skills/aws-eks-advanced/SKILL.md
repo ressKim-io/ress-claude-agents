@@ -178,7 +178,7 @@ spec:
 
 ## 참조 스킬
 
-- `/aws-eks` - EKS 기본 가이드 (VPC, 클러스터, IRSA, Add-ons)
-- `/k8s-autoscaling` - Autoscaling 가이드 (HPA, VPA, KEDA)
-- `/k8s-security` - Kubernetes 보안
-- `/terraform-security` - Terraform 보안 설정
+- `/infra:aws-eks` - EKS 기본 가이드 (VPC, 클러스터, IRSA, Add-ons)
+- `/k8s:k8s-autoscaling` - Autoscaling 가이드 (HPA, VPA, KEDA)
+- `/k8s:k8s-security` - Kubernetes 보안
+- `/infra:terraform-security` - Terraform 보안 설정

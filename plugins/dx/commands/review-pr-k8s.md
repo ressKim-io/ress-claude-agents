@@ -33,7 +33,7 @@ gh pr diff <PR번호> --repo <repo>
 
 #### 전체 에이전트 공통 원칙
 - **Confidence Score 필수**: 모든 발견 사항에 0-100 confidence score 부여. 50 미만은 보고하지 않음
-- **K8s 스킬 참조**: `/k8s-helm`, `/k8s-security`, `/gitops-argocd`, `/gitops-argocd-advanced`, `/gitops-argocd-helm` 기반
+- **K8s 스킬 참조**: `/k8s:k8s-helm`, `/k8s:k8s-security`, `/cicd:gitops-argocd`, `/cicd:gitops-argocd-advanced`, `/cicd:gitops-argocd-helm` 기반
 
 #### Agent 1: Helm Chart 구조 + values 검증
 - subagent_type: `dx:code-reviewer`

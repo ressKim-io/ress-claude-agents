@@ -362,7 +362,7 @@ namespaceResourceWhitelist:
 # ✅ namespace: '{team}-*'
 ```
 
-상세 예제: `/k8s-security` 스킬의 AppProject 섹션 참조
+상세 예제: `/k8s:k8s-security` 스킬의 AppProject 섹션 참조
 
 ---
 
@@ -399,7 +399,7 @@ App Deployment (반복 패턴 → ApplicationSet):
 
 ---
 
-**시크릿 관리**: `/gitops-argocd-helm` 스킬의 Secrets + Helm 통합 섹션 참조
+**시크릿 관리**: `/cicd:gitops-argocd-helm` 스킬의 Secrets + Helm 통합 섹션 참조
 
 ---
 
@@ -475,4 +475,4 @@ sum(argocd_app_sync_total{phase="Failed"}) by (name)
 - [ ] Health 체크 확인
 - [ ] Sync 상태 대시보드
 
-**참조 스킬**: `/gitops-argocd` (기본 GitOps/ArgoCD), `/gitops-argocd-ai` (AI-assisted GitOps), `/cicd-devsecops`, `/deployment-strategies`, `/k8s-helm`
+**참조 스킬**: `/cicd:gitops-argocd` (기본 GitOps/ArgoCD), `/cicd:gitops-argocd-ai` (AI-assisted GitOps), `/cicd:cicd-devsecops`, `/cicd:deployment-strategies`, `/k8s:k8s-helm`

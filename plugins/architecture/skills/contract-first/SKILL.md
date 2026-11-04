@@ -492,7 +492,7 @@ jobs:
 
 ## 관련 Skills
 
-- `/grpc` — gRPC 서비스 설계 상세
-- `/api-design` — REST API 설계 원칙
-- `/kafka` — Kafka 메시징 패턴
+- `/architecture:grpc` — gRPC 서비스 설계 상세
+- `/architecture:api-design` — REST API 설계 원칙
+- `/messaging:kafka` — Kafka 메시징 패턴
 - `/event-driven` — 이벤트 기반 아키텍처

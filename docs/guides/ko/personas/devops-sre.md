@@ -28,11 +28,11 @@
 
 2. 배포
    → ci-optimizer로 파이프라인 최적화
-   → /gitops-argocd로 ArgoCD 설정
+   → /cicd:gitops-argocd로 ArgoCD 설정
 
 3. 모니터링
-   → /observability-otel 로 관측성 구축
-   → /monitoring-grafana로 대시보드 설정
+   → /observability:observability-otel 로 관측성 구축
+   → /observability:monitoring-grafana로 대시보드 설정
 
 4. 장애 대응
    → incident-responder로 자동 트리아지
@@ -55,28 +55,28 @@
 
 | 카테고리 | 스킬 | 핵심 내용 |
 |---------|------|----------|
-| Terraform | `/terraform-modules` | 모듈 패턴 |
-| Terraform | `/terraform-security` | 보안 best practices |
-| AWS | `/aws-eks` | EKS Terraform, IRSA, Add-ons |
-| AWS | `/aws-eks-advanced` | Karpenter, 보안 강화 |
-| AWS | `/aws-lambda` | 서버리스, 콜드 스타트 최적화 |
-| K8s | `/k8s-security` | Pod Security, RBAC, Kyverno |
-| K8s | `/k8s-helm` | Helm chart best practices |
-| K8s | `/k8s-autoscaling` | HPA, VPA, KEDA, Karpenter |
-| IaC | `/crossplane` | Multi-cloud IaC, Compositions |
-| Docker | `/docker` | Dockerfile 최적화, 멀티스테이지 빌드 |
+| Terraform | `/infra:terraform-modules` | 모듈 패턴 |
+| Terraform | `/infra:terraform-security` | 보안 best practices |
+| AWS | `/infra:aws-eks` | EKS Terraform, IRSA, Add-ons |
+| AWS | `/infra:aws-eks-advanced` | Karpenter, 보안 강화 |
+| AWS | `/infra:aws-lambda` | 서버리스, 콜드 스타트 최적화 |
+| K8s | `/k8s:k8s-security` | Pod Security, RBAC, Kyverno |
+| K8s | `/k8s:k8s-helm` | Helm chart best practices |
+| K8s | `/k8s:k8s-autoscaling` | HPA, VPA, KEDA, Karpenter |
+| IaC | `/infra:crossplane` | Multi-cloud IaC, Compositions |
+| Docker | `/infra:docker` | Dockerfile 최적화, 멀티스테이지 빌드 |
 
 ### 상황별 요청 예시
 
 ```
 "EKS 클러스터 Terraform으로 구축해줘"
-→ terraform-reviewer + /aws-eks + /aws-eks-advanced
+→ terraform-reviewer + /infra:aws-eks + /infra:aws-eks-advanced
 
 "K8s 보안 강화해줘"
-→ k8s-troubleshooter + /k8s-security + /k8s-helm
+→ k8s-troubleshooter + /k8s:k8s-security + /k8s:k8s-helm
 
 "HPA + KEDA 오토스케일링 설정해줘"
-→ /k8s-autoscaling + /k8s-autoscaling-advanced
+→ /k8s:k8s-autoscaling + /k8s:k8s-autoscaling-advanced
 ```
 
 ---
@@ -128,29 +128,29 @@
 
 | 스킬 | 핵심 내용 |
 |------|----------|
-| `/k8s-scheduling` | Node Affinity, Taint, Pod Affinity |
-| `/k8s-scheduling-advanced` | Topology Spread, 디버깅 |
-| `/k8s-traffic` | Rate Limiting, 대기열 |
-| `/k8s-traffic-ingress` | Ingress 트래픽 관리 |
-| `/k8s-traffic-istio` | Istio Rate Limiting, Circuit Breaker |
+| `/k8s:k8s-scheduling` | Node Affinity, Taint, Pod Affinity |
+| `/k8s:k8s-scheduling-advanced` | Topology Spread, 디버깅 |
+| `/k8s:k8s-traffic` | Rate Limiting, 대기열 |
+| `/k8s:k8s-traffic-ingress` | Ingress 트래픽 관리 |
+| `/service-mesh:k8s-traffic-istio` | Istio Rate Limiting, Circuit Breaker |
 
 ### Service Mesh
 
 ```
 Istio 시작:
-  /istio-core → /istio-security → /istio-gateway
+  /service-mesh:istio-core → /service-mesh:istio-security → /service-mesh:istio-gateway
 
 Istio 고급:
-  /istio-advanced-traffic → /istio-otel → /istio-multicluster
+  /service-mesh:istio-advanced-traffic → /service-mesh:istio-otel → /service-mesh:istio-multicluster
 
 Istio Ambient:
-  /istio-ambient → /istio-gateway-api
+  /service-mesh:istio-ambient → /service-mesh:istio-gateway-api
 
 Linkerd (경량):
-  /linkerd
+  /service-mesh:linkerd
 
 Gateway API:
-  /gateway-api → /gateway-api-migration
+  /k8s:gateway-api → /k8s:gateway-api-migration
 ```
 
 ---
@@ -173,7 +173,7 @@ incident-responder → 자동 트리아지 (SEV 분류, 영향 범위)
   ↓
 k8s-troubleshooter → 클러스터 진단 (파드, 노드, 네트워크)
   ↓
-/postgresql-operations → DB 이슈 분석 (필요 시)
+/infra:postgresql-operations → DB 이슈 분석 (필요 시)
   ↓
 /dx:log-trouble → 트러블슈팅 기록
 ```
@@ -182,10 +182,10 @@ k8s-troubleshooter → 클러스터 진단 (파드, 노드, 네트워크)
 
 | 스킬 | 용도 |
 |------|------|
-| `/observability` | 로깅, RED Method |
-| `/monitoring-troubleshoot` | 알림 대응, 트러블슈팅 패턴 |
-| `/chaos-engineering` | 카오스 테스트, GameDay |
-| `/disaster-recovery` | DR 전략, Velero 백업 |
+| `/observability:observability` | 로깅, RED Method |
+| `/observability:monitoring-troubleshoot` | 알림 대응, 트러블슈팅 패턴 |
+| `/sre:chaos-engineering` | 카오스 테스트, GameDay |
+| `/sre:disaster-recovery` | DR 전략, Velero 백업 |
 
 ---
 
@@ -200,22 +200,22 @@ k8s-troubleshooter → 클러스터 진단 (파드, 노드, 네트워크)
 
 ```
 OpenTelemetry:
-  /observability-otel → /observability-otel-scale → /observability-otel-optimization
+  /observability:observability-otel → /observability:observability-otel-scale → /observability:observability-otel-optimization
 
 eBPF (Zero-Code):
-  /ebpf-observability → /ebpf-observability-advanced
+  /observability:ebpf-observability → /observability:ebpf-observability-advanced
 
 Grafana Stack:
-  /monitoring-grafana + /monitoring-metrics + /monitoring-logs
+  /observability:monitoring-grafana + /observability:monitoring-metrics + /observability:monitoring-logs
 
 로그 분석:
-  /logging-elk (ELK) 또는 /logging-loki (Loki)
+  /observability:logging-elk (ELK) 또는 /observability:logging-loki (Loki)
 
 알림:
-  /alerting-discord
+  /observability:alerting-discord
 
 AIOps:
-  /aiops → /aiops-remediation
+  /observability:aiops → /observability:aiops-remediation
 ```
 
 ---
@@ -233,16 +233,16 @@ AIOps:
 
 ```
 기본:
-  /finops → /finops-tools
+  /sre:finops → /sre:finops-tools
 
 고급:
-  /finops-advanced → /finops-automation → /finops-showback
+  /sre:finops-advanced → /sre:finops-automation → /sre:finops-showback
 
 도구 선택:
-  /finops-tools → /finops-tools-advanced
+  /sre:finops-tools → /sre:finops-tools-advanced
 
 GreenOps:
-  /finops-greenops
+  /sre:finops-greenops
 ```
 
 ---
@@ -260,19 +260,19 @@ GreenOps:
 
 ```
 ArgoCD 기본:
-  /gitops-argocd → /gitops-argocd-advanced
+  /cicd:gitops-argocd → /cicd:gitops-argocd-advanced
 
 AI GitOps:
-  /gitops-argocd-ai
+  /cicd:gitops-argocd-ai
 
 배포 전략:
-  /deployment-strategies → /deployment-canary
+  /cicd:deployment-strategies → /cicd:deployment-canary
 
 CI/CD:
-  /cicd-devsecops → /cicd-policy
+  /cicd:cicd-devsecops → /cicd:cicd-policy
 
 Supply Chain:
-  /supply-chain-security → /supply-chain-compliance
+  /cicd:supply-chain-security → /cicd:supply-chain-compliance
 ```
 
 ---

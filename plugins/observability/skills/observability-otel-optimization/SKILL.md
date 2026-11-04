@@ -524,7 +524,7 @@ db_client_connections_create_time_milliseconds_bucket
 
 ## 참조 스킬
 
-- `/observability-otel-scale` - 대규모 트래픽 OTel 아키텍처, 샘플링 전략
-- `/observability-otel` - OTel 기본 설정
-- `/monitoring-grafana` - Grafana 모니터링
-- `/finops` - FinOps 기초
+- `/observability:observability-otel-scale` - 대규모 트래픽 OTel 아키텍처, 샘플링 전략
+- `/observability:observability-otel` - OTel 기본 설정
+- `/observability:monitoring-grafana` - Grafana 모니터링
+- `/sre:finops` - FinOps 기초

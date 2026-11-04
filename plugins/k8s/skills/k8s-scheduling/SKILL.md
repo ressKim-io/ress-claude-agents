@@ -387,13 +387,13 @@ spec:
 - [ ] HA를 위한 Anti-Affinity
 - [ ] 데이터 지역성 고려
 
-**관련 skill**: `/k8s-autoscaling`, `/k8s-security`, `/k8s-helm`
+**관련 skill**: `/k8s:k8s-autoscaling`, `/k8s:k8s-security`, `/k8s:k8s-helm`
 
 ---
 
 ## 참조 스킬
 
 - `k8s-scheduling-advanced.md` - 실전 시나리오, Topology Spread, 디버깅
-- `/k8s-autoscaling` - 오토스케일링
-- `/k8s-security` - 보안 정책
-- `/k8s-helm` - Helm 차트 관리
+- `/k8s:k8s-autoscaling` - 오토스케일링
+- `/k8s:k8s-security` - 보안 정책
+- `/k8s:k8s-helm` - Helm 차트 관리

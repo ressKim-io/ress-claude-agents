@@ -485,10 +485,10 @@ backstage.internal → Create → "Spring Boot 서비스 생성" 선택
 
 ## 관련 Skills
 
-- `/backstage` - Developer Portal 구축 상세
-- `/golden-paths` - Golden Path 템플릿 설계
-- `/crossplane` - Crossplane Composition 상세
-- `/ephemeral-environments` - PR별 임시 환경
+- `/platform:backstage` - Developer Portal 구축 상세
+- `/platform:golden-paths` - Golden Path 템플릿 설계
+- `/infra:crossplane` - Crossplane Composition 상세
+- `/cicd:ephemeral-environments` - PR별 임시 환경
 - `/dx:dx-onboarding` - 개발자 온보딩 자동화
-- `/finops` - 비용 최적화 전략
-- `/gitops-argocd` - ArgoCD GitOps 배포
+- `/sre:finops` - 비용 최적화 전략
+- `/cicd:gitops-argocd` - ArgoCD GitOps 배포

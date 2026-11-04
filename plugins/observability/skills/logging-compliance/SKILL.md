@@ -316,7 +316,7 @@ spec:
 - [ ] S3 Lifecycle 정책
 - [ ] 백업 및 복구 테스트
 
-**관련 skill**: `/monitoring-logs`, `/logging-security`
+**관련 skill**: `/observability:monitoring-logs`, `/observability:logging-security`
 
 ---
 

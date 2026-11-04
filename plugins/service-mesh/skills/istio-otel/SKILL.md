@@ -507,4 +507,4 @@ kubectl exec <pod> -- curl -v -H "traceparent: 00-..." http://target-service/api
 - [ ] k8sattributes processor 활성화
 - [ ] 백엔드 연결 확인 (Tempo/Jaeger)
 
-**관련 skill**: `/istio-tracing`, `/istio-metrics`, `/istio-observability`, `/observability-otel`, `/observability-otel-scale`
+**관련 skill**: `/service-mesh:istio-tracing`, `/service-mesh:istio-metrics`, `/service-mesh:istio-observability`, `/observability:observability-otel`, `/observability:observability-otel-scale`

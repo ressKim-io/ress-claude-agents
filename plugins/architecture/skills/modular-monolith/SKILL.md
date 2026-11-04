@@ -304,4 +304,4 @@ Strangler Fig 추출 단계:
 - [ ] CDC 기반 데이터 동기화 준비
 - [ ] 추출 시점 기준 정의
 
-**관련 스킬**: `/msa-ddd`, `/msa-saga`, `/msa-event-driven`, `/msa-cqrs-eventsourcing`, `/strangler-fig-pattern`
+**관련 스킬**: `/architecture:msa-ddd`, `/architecture:msa-saga`, `/architecture:msa-event-driven`, `/architecture:msa-cqrs-eventsourcing`, `/architecture:strangler-fig-pattern`

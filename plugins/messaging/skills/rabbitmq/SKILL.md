@@ -480,4 +480,4 @@ spec:
 - [ ] cooldownPeriod + stabilizationWindow 설정
 - [ ] minReplicaCount >= 1 (콜드스타트 방지)
 
-**관련 skill**: `/kafka` (대용량 스트리밍 비교), `/msa-event-driven` (이벤트 기반 설계), `/k8s-autoscaling` (KEDA 고급 설정)
+**관련 skill**: `/messaging:kafka` (대용량 스트리밍 비교), `/architecture:msa-event-driven` (이벤트 기반 설계), `/k8s:k8s-autoscaling` (KEDA 고급 설정)

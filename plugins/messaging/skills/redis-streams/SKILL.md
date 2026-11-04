@@ -533,4 +533,4 @@ XADD 시 트리밍 (권장):
 - [ ] terminationGracePeriodSeconds 설정 (graceful shutdown)
 - [ ] Redis 비밀번호 Secret으로 관리
 
-**관련 skill**: `/kafka` (대규모 이벤트 스트리밍), `/kafka-patterns` (Producer/Consumer 패턴, KEDA), `/distributed-lock` (Redis 분산 락)
+**관련 skill**: `/messaging:kafka` (대규모 이벤트 스트리밍), `/messaging:kafka-patterns` (Producer/Consumer 패턴, KEDA), `/architecture:distributed-lock` (Redis 분산 락)

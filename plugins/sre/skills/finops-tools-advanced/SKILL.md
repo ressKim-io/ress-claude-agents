@@ -344,6 +344,6 @@ spec:
 
 ## 참조 스킬
 
-- `/finops-tools` - FinOps 기본 도구 (OpenCost, Kubecost, Infracost, KEDA+Karpenter)
-- `/finops` - FinOps 기초
-- `/finops-greenops` - GreenOps & 지속가능성
+- `/sre:finops-tools` - FinOps 기본 도구 (OpenCost, Kubecost, Infracost, KEDA+Karpenter)
+- `/sre:finops` - FinOps 기초
+- `/sre:finops-greenops` - GreenOps & 지속가능성

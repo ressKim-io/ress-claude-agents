@@ -104,7 +104,7 @@ IDP Architecture:
 
 ## Step 2: Backstage 구축
 
-**사용 도구**: `/backstage` + `/platform-backstage`
+**사용 도구**: `/platform:backstage` + `/platform:platform-backstage`
 
 ### 이렇게 요청하세요
 
@@ -133,7 +133,7 @@ IDP Architecture:
 
 ## Step 3: Golden Path 정의
 
-**사용 도구**: `architect-agent` + `/golden-paths` + `/golden-paths-infra`
+**사용 도구**: `architect-agent` + `/platform:golden-paths` + `/platform:golden-paths-infra`
 
 ### 이렇게 요청하세요
 
@@ -160,7 +160,7 @@ IDP Architecture:
 
 ## Step 4: GitOps 설정
 
-**사용 도구**: `ci-optimizer` + `/gitops-argocd` + `/gitops-argocd-advanced`
+**사용 도구**: `ci-optimizer` + `/cicd:gitops-argocd` + `/cicd:gitops-argocd-advanced`
 
 ### 이렇게 요청하세요
 
@@ -189,7 +189,7 @@ IDP Architecture:
 
 ## Step 5: 관측성 스택 구축
 
-**사용 도구**: `/observability-otel` + `/observability-otel-scale` + `/monitoring-grafana`
+**사용 도구**: `/observability:observability-otel` + `/observability:observability-otel-scale` + `/observability:monitoring-grafana`
 
 ### 이렇게 요청하세요
 
@@ -310,8 +310,8 @@ Level 3 (최적화):
 
 ### 다음 단계
 
-- `/developer-self-service` — 셀프서비스 플랫폼 심화
-- `/kratix` — Kratix Promise 기반 플랫폼 API
-- `/secrets-management` — 시크릿 관리 고도화
-- `/ephemeral-environments` — PR별 프리뷰 환경
+- `/platform:developer-self-service` — 셀프서비스 플랫폼 심화
+- `/platform:kratix` — Kratix Promise 기반 플랫폼 API
+- `/security:secrets-management` — 시크릿 관리 고도화
+- `/cicd:ephemeral-environments` — PR별 프리뷰 환경
 - `/dx:dx-onboarding` — 신규 개발자 온보딩 자동화

@@ -378,5 +378,5 @@ Remember: Your goal is to reduce MTTR by 25-40% through rapid triage and guided 
 
 - [ ] 모든 수치가 실제 조회 결과 — 추정치는 "추정"으로 표기
 - [ ] Action Item 에 우선순위(P0/P1/P2)와 근거를 붙였음
-- [ ] postmortem 작성 트리거([`documentation.md`](../rules/process/documentation.md))에 해당하는지 판단해 명시했음
+- [ ] postmortem 작성 트리거([`documentation.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/documentation.md))에 해당하는지 판단해 명시했음
 - [ ] §Permission Boundary 위반 명령을 직접 실행하지 않았음

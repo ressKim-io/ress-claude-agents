@@ -21,7 +21,7 @@ Spring Data JPA + QueryDSL 데이터 액세스 패턴
     │
     ├─ N+1 문제 ──────────> @EntityGraph / Fetch Join
     │
-    └─ 고성능 읽기 ────────> + Redis 캐싱 (/spring-cache)
+    └─ 고성능 읽기 ────────> + Redis 캐싱 (/java:spring-cache)
 ```
 
 ---
@@ -282,7 +282,7 @@ public class UserService {
      │
      └─ 동적 검색/필터? ──────> + QueryDSL
            │
-           └─ 읽기 성능? ─────> + Redis (/spring-cache)
+           └─ 읽기 성능? ─────> + Redis (/java:spring-cache)
 ```
 
-**관련 skill**: `/database`, `/spring-cache`
+**관련 skill**: `/infra:database`, `/java:spring-cache`

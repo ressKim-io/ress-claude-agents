@@ -30,7 +30,7 @@ Alert 수신 -> 진단 -> RCA -> 복구 -> 포스트모템까지 E2E 인시던�
     └─ 복합 증상 ────────────────> Metrics → Trace → Log → Profile 순차 피벗
 ```
 
-관련 스킬: `/monitoring-troubleshoot`, `/alerting-discord`, `/observability-otel`, `/observability-pyroscope`, `/monitoring-self-monitoring`
+관련 스킬: `/observability:monitoring-troubleshoot`, `/observability:alerting-discord`, `/observability:observability-otel`, `/observability:observability-pyroscope`, `/observability:monitoring-self-monitoring`
 
 ---
 

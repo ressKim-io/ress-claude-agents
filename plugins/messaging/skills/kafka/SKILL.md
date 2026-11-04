@@ -217,4 +217,4 @@ spec:
 - [ ] Consumer Group 설정
 - [ ] 에러 핸들링
 
-**관련 skill**: `/kafka-patterns` (Producer/Consumer 패턴, KEDA), `/k8s-autoscaling`, `/monitoring-metrics`
+**관련 skill**: `/messaging:kafka-patterns` (Producer/Consumer 패턴, KEDA), `/k8s:k8s-autoscaling`, `/observability:monitoring-metrics`

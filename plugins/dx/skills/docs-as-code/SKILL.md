@@ -503,5 +503,5 @@ jobs:
 ## 참조 스킬
 
 - `/dx:docs-as-code-automation` - API 문서 자동화, 문서 품질 측정
-- `/backstage` - Backstage 플랫폼
+- `/platform:backstage` - Backstage 플랫폼
 - `/dx:dx-onboarding` - 온보딩 가이드

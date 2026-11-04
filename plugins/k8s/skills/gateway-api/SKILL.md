@@ -492,5 +492,5 @@ spec:
 
 ## 참조 스킬
 
-- `/gateway-api-migration` - Ingress NGINX 마이그레이션, Istio Gateway API 통합
-- `/istio-gateway` - Istio Gateway 설정
+- `/k8s:gateway-api-migration` - Ingress NGINX 마이그레이션, Istio Gateway API 통합
+- `/service-mesh:istio-gateway` - Istio Gateway 설정

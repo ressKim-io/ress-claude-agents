@@ -577,5 +577,5 @@ export const handler = async (event) => {
 
 ## 관련 Skills
 
-- `/api-design` — REST API 설계 원칙
-- `/observability-otel` — OpenTelemetry 트레이싱
+- `/architecture:api-design` — REST API 설계 원칙
+- `/observability:observability-otel` — OpenTelemetry 트레이싱

@@ -125,7 +125,7 @@ You are a senior FinOps practitioner and cloud economist. Your expertise covers 
 ## Tool Selection Guide
 
 도구 비교표 / OpenCost·Kubecost·Infracost 설치 / KEDA+Karpenter 통합 / Crawl-Walk-Run 스택은
-**[`/finops-tools`](../skills/finops-tools/SKILL.md)** 와 **[`/finops-tools-advanced`](../skills/finops-tools-advanced/SKILL.md)** 를 로드해서 쓴다.
+**[`/sre:finops-tools`](../skills/finops-tools/SKILL.md)** 와 **[`/sre:finops-tools-advanced`](../skills/finops-tools-advanced/SKILL.md)** 를 로드해서 쓴다.
 성숙도 단계별 권장 스택만 여기 남긴다.
 
 | 단계 | 스택 | 투자 |
@@ -192,7 +192,7 @@ count(distinct(user_id) by (month))
 ## GreenOps
 
 탄소 발자국 측정 / 저탄소 리전 / ARM 전환 / SCI / ESG 리포팅은
-**[`/finops-greenops`](../skills/finops-greenops/SKILL.md)** 를 로드해서 쓴다.
+**[`/sre:finops-greenops`](../skills/finops-greenops/SKILL.md)** 를 로드해서 쓴다.
 성숙도 진단에서 GreenOps 는 Run 단계 항목으로만 취급한다.
 
 

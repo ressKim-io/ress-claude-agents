@@ -432,7 +432,7 @@ module "ebs_csi_irsa" {
 
 ## 참조 스킬
 
-- `/aws-eks-advanced` - Karpenter, 보안 강화, 운영 최적화
-- `/k8s-security` - Kubernetes 보안
-- `/k8s-autoscaling` - Autoscaling (HPA, VPA, KEDA)
-- `/terraform-security` - Terraform 보안 설정
+- `/infra:aws-eks-advanced` - Karpenter, 보안 강화, 운영 최적화
+- `/k8s:k8s-security` - Kubernetes 보안
+- `/k8s:k8s-autoscaling` - Autoscaling (HPA, VPA, KEDA)
+- `/infra:terraform-security` - Terraform 보안 설정

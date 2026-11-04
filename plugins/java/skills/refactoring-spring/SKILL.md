@@ -269,7 +269,7 @@ for (Order order : orders) {
 | Batch Size | application.yml | 전역 IN 쿼리 최적화 |
 | Projection | DTO 조회 | 필요한 필드만 조회 |
 
-자세한 JPA 패턴은 `/spring-data` 참조.
+자세한 JPA 패턴은 `/java:spring-data` 참조.
 
 ---
 
@@ -486,4 +486,4 @@ public class GlobalExceptionHandler {
 
 ---
 
-**관련 skill**: `/dx:refactoring-principles`, `/spring-data`, `/spring-testing`
+**관련 skill**: `/dx:refactoring-principles`, `/java:spring-data`, `/java:spring-testing`

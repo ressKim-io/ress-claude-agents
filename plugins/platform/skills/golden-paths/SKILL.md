@@ -337,4 +337,4 @@ spec:
 - [ ] 개발자 피드백 수집
 
 **관련 agent**: `platform-engineer`
-**관련 skill**: `/golden-paths-infra` (Infrastructure, CI/CD), `/backstage`, `/gitops-argocd`
+**관련 skill**: `/platform:golden-paths-infra` (Infrastructure, CI/CD), `/platform:backstage`, `/cicd:gitops-argocd`

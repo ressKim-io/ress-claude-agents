@@ -22,7 +22,7 @@ Audit Log — 누가 언제 무엇을 어떻게 변경했는가. Append-only 이
 
 **관련 skill**: `business/multi-tenancy.md`, `business/auth-oauth-social.md`, `security/compliance-frameworks.md`, `messaging/kafka-patterns.md`
 **관련 agent**: `compliance-auditor`, `security-scanner`
-**관련 skill**: [`postgresql-operations`](../postgresql-operations/SKILL.md) (append-only 테이블 파티셔닝)
+**관련 skill**: `/infra:postgresql-operations` (append-only 테이블 파티셔닝)
 
 ---
 
@@ -240,7 +240,7 @@ REVOKE UPDATE, DELETE ON audit_events FROM application_role;
 - Super Admin이 tenant 데이터 보면 → **Super Admin 자체가 audit 이벤트** (`admin.viewed_tenant_audit`)
 - Tenant context 미설정 시 audit 쿼리 **자동 거부** (RLS 또는 ORM scope)
 
-→ multi-tenancy: [.claude/skills/business/multi-tenancy.md](../multi-tenancy/SKILL.md)
+→ multi-tenancy: [`multi-tenancy`](../multi-tenancy/SKILL.md)
 
 ---
 
@@ -267,7 +267,7 @@ REVOKE UPDATE, DELETE ON audit_events FROM application_role;
 
 - 의심 액션(`login.failed` 5회, `permission.escalated`, `data.exported`) → Slack/Email 즉시 알림
 - 일별 요약 (Owner 대상): "어제 활동 요약 — 23 events"
-- alerting: [.claude/skills/observability/alerting-discord.md](../alerting-discord/SKILL.md)
+- alerting: `/observability:alerting-discord`
 
 ---
 

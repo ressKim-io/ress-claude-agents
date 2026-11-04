@@ -502,4 +502,4 @@ kubectl get kustomization -A  # Flux / kubectl get application -A # GitOps 동�
 
 ---
 
-**관련 Skills**: `/crossplane`, `/backstage`, `/golden-paths`, `/developer-self-service`, `/gitops-argocd`
+**관련 Skills**: `/infra:crossplane`, `/platform:backstage`, `/platform:golden-paths`, `/platform:developer-self-service`, `/cicd:gitops-argocd`

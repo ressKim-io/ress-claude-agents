@@ -155,7 +155,7 @@ processors:
 
 ## Traces 비용 최적화
 
-> 샘플링 전략 상세는 `/observability-otel-optimization` 참조.
+> 샘플링 전략 상세는 `/observability:observability-otel-optimization` 참조.
 > 여기서는 비용 관점의 핵심 전략만 다룬다.
 
 ### Retention 티어링 (Hot/Warm/Cold)
@@ -453,7 +453,7 @@ groups:
 
 ## 관련 스킬
 
-- `/observability-otel-optimization` — OTel Collector 샘플링, Kafka 버퍼 상세
-- `/monitoring-metrics` — Prometheus 스케일링, Thanos, VictoriaMetrics
+- `/observability:observability-otel-optimization` — OTel Collector 샘플링, Kafka 버퍼 상세
+- `/observability:monitoring-metrics` — Prometheus 스케일링, Thanos, VictoriaMetrics
 - `/sre-finops` — 클라우드 인프라 전체 비용 최적화
-- `/logging-loki` — Loki 설정 및 LogQL 상세
+- `/observability:logging-loki` — Loki 설정 및 LogQL 상세

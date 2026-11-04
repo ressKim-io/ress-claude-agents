@@ -427,4 +427,4 @@ spec:
 - [ ] 대시보드 구성
 - [ ] 알림 설정
 
-**관련 skill**: `/deployment-strategies` (기본 전략), `/gitops-argocd`, `/istio-traffic`, `/sre-sli-slo`
+**관련 skill**: `/cicd:deployment-strategies` (기본 전략), `/cicd:gitops-argocd`, `/istio-traffic`, `/sre:sre-sli-slo`

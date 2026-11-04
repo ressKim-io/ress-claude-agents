@@ -258,7 +258,7 @@ Origin (transcoded segments)
 
 - 라이브 직후: 7일 무료 보관 (replay 핫)
 - 7일 후: cold storage (Glacier / 네이버 Archive)
-- 청소년 콘텐츠: PIPA 14세 미만 보관 제한 ([`legal/child-data-protection.md`](../child-data-protection/SKILL.md))
+- 청소년 콘텐츠: PIPA 14세 미만 보관 제한 (`/security:child-data-protection`)
 
 ---
 
@@ -291,7 +291,7 @@ Origin (transcoded segments)
 
 - 시청 로그 (IP/디바이스) PII 가능 → 마스킹 + 30일 retention
 - 위치 기반 라이브 (예: GPS-trigger broadcast) → 위치 정보 처리 동의 의무
-- 자세한 법령: [`legal/kr-location-info-act.md`](../kr-location-info-act/SKILL.md), [`legal/data-subject-rights.md`](../data-subject-rights/SKILL.md)
+- 자세한 법령: `/security:kr-location-info-act`, `/security:data-subject-rights`
 
 ### 청소년 보호
 
@@ -321,7 +321,7 @@ Cloudflare:  포함 (구독 모델)
 5. **Replay 캐싱** — Live → VOD CDN cache 90%+ hit
 6. **시청자 cap** — 무료 ≤ N명, premium 이상 추가
 
-분기 비용 추적: [`observability/observability-cost.md`](../observability-cost/SKILL.md), [`dx/quarterly-review.md`](../../../plugins/dx/skills/quarterly-review/SKILL.md).
+분기 비용 추적: `/observability:observability-cost`, `/dx:quarterly-review`.
 
 ---
 
@@ -382,7 +382,7 @@ D. Cloudflare Stream (단순, $1/1K min)
 - Tier 1, 6개월 (트래픽 5x 시 즉시)
 ```
 
-[`dx/adr-retrospective.md`](../../../plugins/dx/skills/adr-retrospective/SKILL.md) 참조.
+`/dx:adr-retrospective` 참조.
 
 ---
 

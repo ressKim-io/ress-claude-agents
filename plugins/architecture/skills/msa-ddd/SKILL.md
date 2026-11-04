@@ -477,9 +477,9 @@ com.example.order/                     # Bounded Context: Order
 
 ## 참조 스킬
 
-- `/msa-saga` - Saga 패턴 (Choreography/Orchestration)
-- `/msa-cqrs-eventsourcing` - CQRS, Event Sourcing 패턴
-- `/msa-event-driven` - 이벤트 드리븐 아키텍처, Outbox 패턴
-- `/spring-data` - Spring Data JPA, Repository 패턴
-- `/kafka-patterns` - Kafka Producer/Consumer 구현
-- `/api-design` - API 설계 (Open Host Service 구현)
+- `/architecture:msa-saga` - Saga 패턴 (Choreography/Orchestration)
+- `/architecture:msa-cqrs-eventsourcing` - CQRS, Event Sourcing 패턴
+- `/architecture:msa-event-driven` - 이벤트 드리븐 아키텍처, Outbox 패턴
+- `/java:spring-data` - Spring Data JPA, Repository 패턴
+- `/messaging:kafka-patterns` - Kafka Producer/Consumer 구현
+- `/architecture:api-design` - API 설계 (Open Host Service 구현)

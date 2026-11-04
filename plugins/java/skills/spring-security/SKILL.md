@@ -16,13 +16,13 @@ Spring Security 기본 설정 및 Method Security 패턴
 인증 방식 선택
     │
     ├─ JWT 직접 발급 ────> JwtProvider + Filter
-    │                      (상세: /spring-oauth2 참조)
+    │                      (상세: /java:spring-oauth2 참조)
     │
     ├─ OAuth2 Authorization Server 구축
     │   └─ Spring Authorization Server (신규 프로젝트)
     │
     ├─ OAuth2 Provider ──> Resource Server 설정
-    │                      (상세: /spring-oauth2 참조)
+    │                      (상세: /java:spring-oauth2 참조)
     │
     └─ Session 기반 ─────> 기본 formLogin()
 ```
@@ -222,5 +222,5 @@ public class AuthServerConfig {
 - [ ] CORS 적절히 설정
 - [ ] Method Security 적용
 - [ ] Actuator 엔드포인트 보호
-- [ ] JWT 상세 설정: `/spring-oauth2` 참조
+- [ ] JWT 상세 설정: `/java:spring-oauth2` 참조
 - [ ] RSA 키 기반 JWT 서명 (HMAC 대신)

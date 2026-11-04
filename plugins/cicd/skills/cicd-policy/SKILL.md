@@ -387,4 +387,4 @@ sonarqube_quality_gate_status{project="myapp"}
 - [ ] 대시보드 구축
 - [ ] 알림 설정
 
-**관련 skill**: `/cicd-devsecops` (파이프라인), `/k8s-security`, `/monitoring-metrics`
+**관련 skill**: `/cicd:cicd-devsecops` (파이프라인), `/k8s:k8s-security`, `/observability:monitoring-metrics`

@@ -493,6 +493,6 @@ jobs:
 
 ## 참조 스킬
 
-- `/ephemeral-environments-advanced` - Qovery, 데이터베이스 전략, 비용 최적화
-- `/gitops-argocd` - ArgoCD GitOps
-- `/finops` - FinOps 기초
+- `/cicd:ephemeral-environments-advanced` - Qovery, 데이터베이스 전략, 비용 최적화
+- `/cicd:gitops-argocd` - ArgoCD GitOps
+- `/sre:finops` - FinOps 기초

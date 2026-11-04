@@ -208,4 +208,4 @@ data:
 - [ ] 헤더 전파 확인 (x-request-id, x-b3-*)
 - [ ] Access Log 필터링 적용
 
-**관련 skill**: `/istio-observability`, `/observability-otel`, `/monitoring-logs`
+**관련 skill**: `/service-mesh:istio-observability`, `/observability:observability-otel`, `/observability:monitoring-logs`

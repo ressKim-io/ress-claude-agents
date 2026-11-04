@@ -399,7 +399,7 @@ sum by (ip) (
 - [ ] 알림 규칙 설정
 - [ ] 정기 분석 리포트
 
-**관련 skill**: `/logging-compliance`, `/monitoring-grafana`
+**관련 skill**: `/observability:logging-compliance`, `/observability:monitoring-grafana`
 
 ---
 

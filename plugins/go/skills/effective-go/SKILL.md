@@ -484,10 +484,10 @@ func (r *UserRepo) FindByID(ctx context.Context, id int64) (*User, error) {
 
 ## 관련 Skills
 
-- `/concurrency-go` — 동시성 심화 (Race Detector, Distributed Lock)
-- `/go-testing` — 테스트 패턴, 테이블 드리븐 테스트
-- `/go-microservice` — MSA 구조, Clean Architecture
-- `/go-database` — pgx, sqlc, sqlx, ent, bun 패턴
+- `/go:concurrency-go` — 동시성 심화 (Race Detector, Distributed Lock)
+- `/go:go-testing` — 테스트 패턴, 테이블 드리븐 테스트
+- `/go:go-microservice` — MSA 구조, Clean Architecture
+- `/go:go-database` — pgx, sqlc, sqlx, ent, bun 패턴
 
 ## 참고 레퍼런스
 

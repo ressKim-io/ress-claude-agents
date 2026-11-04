@@ -381,4 +381,4 @@ spec:
 - [ ] GitHub Secrets 사용
 - [ ] External Secrets Operator (선택)
 
-**관련 skill**: `/cicd-policy` (Kyverno 정책), `/gitops-argocd`, `/k8s-security`, `/docker`
+**관련 skill**: `/cicd:cicd-policy` (Kyverno 정책), `/cicd:gitops-argocd`, `/k8s:k8s-security`, `/infra:docker`

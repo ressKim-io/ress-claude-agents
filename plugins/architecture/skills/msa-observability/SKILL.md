@@ -467,8 +467,8 @@ DaemonSet Collector ──(load_balancing_exporter)──> Deployment Collector
 ---
 
 ## 참조 스킬
-- `/observability-otel` - OpenTelemetry SDK 설정 (Spring Boot, Go)
-- `/observability-otel-scale` - 대규모 트래픽 OTel Collector 스케일링
-- `/monitoring-metrics` - Prometheus 메트릭 수집 및 PromQL
-- `/monitoring-grafana` - Grafana 대시보드 구성
-- `/kafka-patterns` - Kafka 메시징 패턴
+- `/observability:observability-otel` - OpenTelemetry SDK 설정 (Spring Boot, Go)
+- `/observability:observability-otel-scale` - 대규모 트래픽 OTel Collector 스케일링
+- `/observability:monitoring-metrics` - Prometheus 메트릭 수집 및 PromQL
+- `/observability:monitoring-grafana` - Grafana 대시보드 구성
+- `/messaging:kafka-patterns` - Kafka 메시징 패턴

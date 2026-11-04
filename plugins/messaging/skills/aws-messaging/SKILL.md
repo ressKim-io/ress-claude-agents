@@ -483,6 +483,6 @@ spec:
 
 ## 관련 Skills
 
-- `/aws-lambda` — Lambda 이벤트 소스 통합 (SQS, SNS, EventBridge 트리거)
-- `/aws-eks` — EKS 클러스터 구성, IRSA, Karpenter
-- `/msa-event-driven` — 이벤트 기반 아키텍처 패턴, Outbox, Saga
+- `/infra:aws-lambda` — Lambda 이벤트 소스 통합 (SQS, SNS, EventBridge 트리거)
+- `/infra:aws-eks` — EKS 클러스터 구성, IRSA, Karpenter
+- `/architecture:msa-event-driven` — 이벤트 기반 아키텍처 패턴, Outbox, Saga

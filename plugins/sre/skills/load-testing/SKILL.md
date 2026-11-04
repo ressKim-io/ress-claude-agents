@@ -401,13 +401,13 @@ k6 cloud run \
 - [ ] SLO 기반 Threshold 설정
 - [ ] 인증/데이터 처리
 
-**관련 skill**: `/sre-sli-slo`, `/k8s-autoscaling`, `/monitoring-metrics`
+**관련 skill**: `/sre:sre-sli-slo`, `/k8s:k8s-autoscaling`, `/observability:monitoring-metrics`
 
 ---
 
 ## 참조 스킬
 
 - `load-testing-analysis.md` - nGrinder, 결과 분석, SLO 기반 Threshold
-- `/sre-sli-slo` - SLI/SLO 정의 및 관리
-- `/k8s-autoscaling` - 오토스케일링 연동
-- `/monitoring-metrics` - 모니터링 메트릭
+- `/sre:sre-sli-slo` - SLI/SLO 정의 및 관리
+- `/k8s:k8s-autoscaling` - 오토스케일링 연동
+- `/observability:monitoring-metrics` - 모니터링 메트릭

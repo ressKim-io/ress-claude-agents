@@ -187,4 +187,4 @@ panels:
 - [ ] Ambient용 대시보드 조정
 - [ ] 알림 규칙 설정
 
-**관련 skill**: `/istio-observability`, `/istio-core`, `/monitoring-grafana`
+**관련 skill**: `/service-mesh:istio-observability`, `/service-mesh:istio-core`, `/observability:monitoring-grafana`

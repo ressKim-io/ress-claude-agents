@@ -342,7 +342,7 @@ API 인증은 [`business/admin-api-keys.md`](../admin-api-keys/SKILL.md) 패턴 
 - `circuit_open count > N` → endpoint 품질 저하 (대규모 사고 가능)
 - `p95 duration > 10s` → 수신자 felomada 또는 우리 worker 부하
 
-분기 회고에서 delivery 성공률, MTTR을 [`dx/quarterly-review.md`](../../../plugins/dx/skills/quarterly-review/SKILL.md)에 통합.
+분기 회고에서 delivery 성공률, MTTR을 `/dx:quarterly-review`에 통합.
 
 ---
 
@@ -379,7 +379,7 @@ API 인증은 [`business/admin-api-keys.md`](../admin-api-keys/SKILL.md) 패턴 
 - **금융권 webhook** — 금감원 가이드 (금융 데이터는 TLS 1.3 + 국가표준 암호화 추가 검토)
 - **카카오/네이버 talk biz** — 알림톡/채널 메시지 발송 webhook은 별도 표준 (자체 SDK)
 
-법령 추적: [`legal/data-subject-rights.md`](../data-subject-rights/SKILL.md)
+법령 추적: `/security:data-subject-rights`
 
 ---
 
@@ -415,7 +415,7 @@ C. Hookdeck — destination-side queue
 - Auto-trigger: 실패율 5%+, 비용 2x, scale 10x
 ```
 
-[`dx/adr-retrospective.md`](../../../plugins/dx/skills/adr-retrospective/SKILL.md) 참조.
+`/dx:adr-retrospective` 참조.
 
 ---
 
@@ -442,7 +442,7 @@ C. Hookdeck — destination-side queue
 - Per-event-type subscription (filter)
 - Webhook payload schema versioning (v1, v2 호환성)
 - Polyfill SDK (Node, Python, Go, Java) — 서명 검증 helper
-- 부하 테스트 ([`load-testing`](../load-testing/SKILL.md)): 100K event/min 시뮬레이션
+- 부하 테스트 (`/sre:load-testing`): 100K event/min 시뮬레이션
 - Hookdeck/Svix로 마이그레이션 (Gateway 추상화 활용)
 - mTLS subscriber (B2B 고객 요구 시)
 - E2E 테스트: webhook.site mock receiver

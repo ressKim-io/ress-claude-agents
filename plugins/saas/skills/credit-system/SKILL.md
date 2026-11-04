@@ -32,7 +32,7 @@ LLM 토큰·API 호출·연산 시간 등 **사용량 단위로 과금**하는 �
 - `ai/prompt-engineering.md`, `ai/rag-patterns.md` — 토큰 효율 (원가 절감)
 
 **관련 agent**: `tech-lead` (가격 모델 ADR), `cost-analyzer` (LLM provider 원가 추적)
-**관련 skill**: [`postgresql-operations`](../postgresql-operations/SKILL.md) (ledger 파티셔닝/아카이빙), [`broker-troubleshooting`](../broker-troubleshooting/SKILL.md) (usage 이벤트 큐), [`redis-operations`](../redis-operations/SKILL.md) (잔액 캐시)
+**관련 skill**: `/infra:postgresql-operations` (ledger 파티셔닝/아카이빙), `/messaging:broker-troubleshooting` (usage 이벤트 큐), `/infra:redis-operations` (잔액 캐시)
 
 ---
 
@@ -451,9 +451,9 @@ audit-log + 사용자 알림
 - `skills/observability/observability-cost.md` — provider 원가 추적, cardinality 주의 (account_id 라벨 회피)
 - `skills/messaging/redis-streams.md` / `kafka-*` — usage event 큐
 - `agents/tech-lead` — 가격 모델 ADR
-- [`postgresql-operations`](../postgresql-operations/SKILL.md) — ledger 파티셔닝/아카이빙
+- `/infra:postgresql-operations` — ledger 파티셔닝/아카이빙
 - `agents/cost-analyzer` — provider 원가 추적 + markup 분석
-- [`redis-operations`](../redis-operations/SKILL.md) — atomic decrement, 잔액 캐시
+- `/infra:redis-operations` — atomic decrement, 잔액 캐시
 - `rules/core/security.md`, `rules/process/documentation.md` — ADR/회계 문서
 
 **외부 표준 / 도구**:
@@ -470,5 +470,5 @@ audit-log + 사용자 알림
 1. **정기 빌링 결합 (Hybrid)** → `subscription-billing.md` (seat 모델 + Stripe Meters 합산 invoice)
 2. **메트릭 확장** → `subscription-billing-metrics.md` 패턴으로 MAU/ARPU/usage retention SQL 작성
 3. **AI 비용 최적화** → `ai/prompt-engineering.md`, `ai/rag-patterns.md` (cache hit 최대화로 원가 절감)
-4. **장애 시 보상** → [`msa-saga`](../msa-saga/SKILL.md) (LLM 실패 → 자동 refund saga)
+4. **장애 시 보상** → `/architecture:msa-saga` (LLM 실패 → 자동 refund saga)
 5. **엔터프라이즈 인보이스** → 충전식 → postpaid commitment + 월말 인보이스 (sales-led ADR)

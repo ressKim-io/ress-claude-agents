@@ -531,4 +531,4 @@ roi = calculate_dx_roi(
 - [ ] 팀별 목표 설정 (Elite 기준)
 - [ ] 분기별 리뷰 프로세스
 
-**관련 skill**: `/sre-sli-slo`, `/monitoring-grafana`, `/platform-backstage`
+**관련 skill**: `/sre:sre-sli-slo`, `/observability:monitoring-grafana`, `/platform:platform-backstage`

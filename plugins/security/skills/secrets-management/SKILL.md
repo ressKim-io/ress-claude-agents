@@ -501,7 +501,7 @@ spring:
 
 ## 12. 관련 Skills
 
-- `/k8s-security` - K8s 보안 강화 (RBAC, PSP, OPA)
-- `/terraform-security` - IaC 보안 (tfsec, Sentinel)
-- `/gitops-argocd` - ArgoCD GitOps 워크플로우
-- `/observability` - 모니터링 및 알림 설정
+- `/k8s:k8s-security` - K8s 보안 강화 (RBAC, PSP, OPA)
+- `/infra:terraform-security` - IaC 보안 (tfsec, Sentinel)
+- `/cicd:gitops-argocd` - ArgoCD GitOps 워크플로우
+- `/observability:observability` - 모니터링 및 알림 설정

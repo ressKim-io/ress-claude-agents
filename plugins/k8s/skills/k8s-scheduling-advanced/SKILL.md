@@ -227,13 +227,13 @@ kubectl describe node <node-name> | grep -A5 "Allocated resources"
 - [ ] 리소스 여유 확인
 - [ ] Pending Pod 알림 설정
 
-**관련 skill**: `/k8s-autoscaling`, `/k8s-security`, `/k8s-helm`
+**관련 skill**: `/k8s:k8s-autoscaling`, `/k8s:k8s-security`, `/k8s:k8s-helm`
 
 ---
 
 ## 참조 스킬
 
 - `k8s-scheduling.md` - 스케줄링 기초, Node Affinity, Taint/Toleration, Pod Affinity
-- `/k8s-autoscaling` - 오토스케일링
-- `/k8s-security` - 보안 정책
-- `/k8s-helm` - Helm 차트 관리
+- `/k8s:k8s-autoscaling` - 오토스케일링
+- `/k8s:k8s-security` - 보안 정책
+- `/k8s:k8s-helm` - Helm 차트 관리

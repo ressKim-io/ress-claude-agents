@@ -307,13 +307,13 @@ export const options = {
 - [ ] CI/CD 연동 (자동 Pass/Fail)
 - [ ] threshold 위반 알림 설정
 
-**관련 skill**: `/sre-sli-slo`, `/k8s-autoscaling`, `/monitoring-metrics`
+**관련 skill**: `/sre:sre-sli-slo`, `/k8s:k8s-autoscaling`, `/observability:monitoring-metrics`
 
 ---
 
 ## 참조 스킬
 
 - `load-testing.md` - K6 기본/고급 시나리오, K6 on Kubernetes
-- `/sre-sli-slo` - SLI/SLO 정의 및 관리
-- `/k8s-autoscaling` - 오토스케일링 연동
-- `/monitoring-metrics` - 모니터링 메트릭
+- `/sre:sre-sli-slo` - SLI/SLO 정의 및 관리
+- `/k8s:k8s-autoscaling` - 오토스케일링 연동
+- `/observability:monitoring-metrics` - 모니터링 메트릭

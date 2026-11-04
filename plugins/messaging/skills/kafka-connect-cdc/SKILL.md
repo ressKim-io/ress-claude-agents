@@ -481,4 +481,4 @@ FROM pg_replication_slots WHERE slot_name = 'debezium_outbox';
 - [ ] replicas >= 2 (HA)
 - [ ] 리소스 requests/limits 설정
 
-**관련 skill**: `/kafka`, `/kafka-patterns`, `/kafka-advanced`, `/msa-event-driven`, `/msa-cqrs-eventsourcing`
+**관련 skill**: `/messaging:kafka`, `/messaging:kafka-patterns`, `/messaging:kafka-advanced`, `/architecture:msa-event-driven`, `/architecture:msa-cqrs-eventsourcing`

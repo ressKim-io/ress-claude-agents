@@ -521,7 +521,7 @@ sum(
 - [ ] 불필요 리소스 정리
 - [ ] 자동화 정책 적용
 
-**관련 skill**: `/k8s-autoscaling`, `/k8s-scheduling`, `/monitoring-metrics`
+**관련 skill**: `/k8s:k8s-autoscaling`, `/k8s:k8s-scheduling`, `/observability:monitoring-metrics`
 
 > **AI 워크로드 비용 관리**: LLM API 토큰 비용, GPU 인스턴스 최적화, Model Routing,
 > Shift-Left FinOps for AI는 `finops-ai.md` 참조.

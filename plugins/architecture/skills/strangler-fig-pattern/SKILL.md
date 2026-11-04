@@ -357,4 +357,4 @@ slos:
 - [ ] 라우팅 규칙 단순화
 - [ ] 회고 미팅 (교훈 정리)
 
-**관련 스킬**: `/msa-event-driven`, `/kafka-connect-cdc`, `/deployment-strategies`, `/msa-resilience`, `/msa-api-gateway`
+**관련 스킬**: `/architecture:msa-event-driven`, `/messaging:kafka-connect-cdc`, `/cicd:deployment-strategies`, `/architecture:msa-resilience`, `/msa-api-gateway`

@@ -361,5 +361,5 @@ jobs:
 
 ## 참조 스킬
 
-- `/supply-chain-security` - SLSA/Sigstore 기본 (SBOM 생성, 서명, Kubernetes 정책)
-- `/k8s-security` - Kubernetes 보안
+- `/cicd:supply-chain-security` - SLSA/Sigstore 기본 (SBOM 생성, 서명, Kubernetes 정책)
+- `/k8s:k8s-security` - Kubernetes 보안

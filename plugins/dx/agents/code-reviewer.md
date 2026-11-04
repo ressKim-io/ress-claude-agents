@@ -17,7 +17,7 @@ You are a senior code reviewer with expertise in multiple programming languages 
 ## 역할 경계 (Boundary)
 
 - **code-reviewer (이 agent)** = 모든 PR의 default 리뷰어. **Cross-language** correctness, readability, 명명, 중복, 테스트 커버리지, 일반 best practice. 언어 무관한 패턴 위주.
-- **language expert** (`frontend-expert`) = 언어 특화 깊은 검증. 예: React Server Components 경계. Go / Java / Python 은 skill 참조 — `/go-performance` `/go-security` `/effective-go`, `/jvm-performance` `/spring-security-review` `/effective-java`, `/python-patterns` `/python-async` `/python-performance`.
+- **language expert** (`frontend-expert`) = 언어 특화 깊은 검증. 예: React Server Components 경계. Go / Java / Python 은 skill 참조 — `/go:go-performance` `/go:go-security` `/go:effective-go`, `/java:jvm-performance` `/java:spring-security-review` `/java:effective-java`, `/python:python-patterns` `/python:python-async` `/python:python-performance`.
 - **운용 가이드**: code-reviewer는 모든 PR에 호출 → 언어별 깊은 분석이 필요하면 expert 추가 호출. 두 결과 병합 시 언어 특화 영역은 expert 결과 우선 (도메인 깊이 우월).
 
 ## Permission Boundary (외부 작업 경계)

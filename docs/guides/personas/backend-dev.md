@@ -23,7 +23,7 @@
 
 ```
 1. While coding
-   → /jvm-performance or /go-performance suggests review feedback
+   → /java:jvm-performance or /go:go-performance suggests review feedback
 
 2. After code is ready
    → "Review my code" → code-reviewer runs
@@ -37,9 +37,9 @@
 
 | Daily | 1-2x per week | Project kickoff |
 |-------|--------------|----------------|
-| `/effective-java` or `/effective-go` | `/msa-resilience` | `/msa-ddd` |
-| `/spring-patterns` or `/go-microservice` | `/database` | `/api-design` |
-| `/spring-testing` or `/go-testing` | `/msa-event-driven` | `/hexagonal-clean-architecture` |
+| `/java:effective-java` or `/go:effective-go` | `/architecture:msa-resilience` | `/architecture:msa-ddd` |
+| `/java:spring-patterns` or `/go:go-microservice` | `/infra:database` | `/architecture:api-design` |
+| `/java:spring-testing` or `/go:go-testing` | `/architecture:msa-event-driven` | `/architecture:hexagonal-clean-architecture` |
 | `/dx:clean-code` | `/dx:refactoring-principles` | `/dx:clean-code` |
 
 ---
@@ -50,46 +50,46 @@
 
 | Agent / Skill | Use Case |
 |-------|----------|
-| `/jvm-performance` | Virtual Threads, WebFlux, JVM tuning, high-traffic |
+| `/java:jvm-performance` | Virtual Threads, WebFlux, JVM tuning, high-traffic |
 | `code-reviewer` | Code quality, pattern consistency, bug detection |
 
 ### Core Skills
 
 | Category | Skill | Key Content |
 |----------|-------|-------------|
-| Basics | `/effective-java` | Record, Builder, DI, immutability, Modern Java |
-| Basics | `/spring-patterns` | @Transactional, DTO/Entity, exception strategy, layering |
-| Data | `/spring-data` | JPA, QueryDSL patterns |
-| Data | `/spring-jooq` | jOOQ DSL, code generation, Keyset Pagination |
-| Caching | `/spring-cache` | Redis caching strategies |
-| Security | `/spring-security` | Security, Method Security |
-| Auth | `/spring-oauth2` | OAuth2, JWT |
-| Testing | `/spring-testing` | JUnit 5, Mockito |
-| Testing | `/spring-testcontainers` | Testcontainers, REST Assured |
-| Concurrency | `/concurrency-spring` | @Async, Virtual Threads |
-| Refactoring | `/refactoring-spring` | Spring refactoring patterns |
+| Basics | `/java:effective-java` | Record, Builder, DI, immutability, Modern Java |
+| Basics | `/java:spring-patterns` | @Transactional, DTO/Entity, exception strategy, layering |
+| Data | `/java:spring-data` | JPA, QueryDSL patterns |
+| Data | `/java:spring-jooq` | jOOQ DSL, code generation, Keyset Pagination |
+| Caching | `/java:spring-cache` | Redis caching strategies |
+| Security | `/java:spring-security` | Security, Method Security |
+| Auth | `/java:spring-oauth2` | OAuth2, JWT |
+| Testing | `/java:spring-testing` | JUnit 5, Mockito |
+| Testing | `/java:spring-testcontainers` | Testcontainers, REST Assured |
+| Concurrency | `/java:concurrency-spring` | @Async, Virtual Threads |
+| Refactoring | `/java:refactoring-spring` | Spring refactoring patterns |
 | Clean Code | `/dx:clean-code` | Guard Clause, Cognitive Complexity, naming, Tell Don't Ask |
 
 ### Example Requests
 
 ```
 "I want to migrate to Virtual Threads"
-→ /jvm-performance + /concurrency-spring
+→ /java:jvm-performance + /java:concurrency-spring
 
 "I have a JPA N+1 problem"
-→ /postgresql-operations + /spring-data + /database
+→ /infra:postgresql-operations + /java:spring-data + /infra:database
 
 "Implement OAuth2 + JWT authentication"
-→ /spring-oauth2 + /spring-security
+→ /java:spring-oauth2 + /java:spring-security
 
 "Write integration tests with Testcontainers"
-→ /spring-testcontainers + /spring-testing
+→ /java:spring-testcontainers + /java:spring-testing
 
 "Check clean code quality and readability"
-→ /jvm-performance + /dx:clean-code + /dx:refactoring-principles
+→ /java:jvm-performance + /dx:clean-code + /dx:refactoring-principles
 
 "Security review my Java code"
-→ /spring-security-review + security-scanner
+→ /java:spring-security-review + security-scanner
 ```
 
 ---
@@ -100,43 +100,43 @@
 
 | Agent / Skill | Use Case |
 |-------|----------|
-| `/go-performance` | Worker Pool, Fan-Out/In, sync.Pool, pprof |
+| `/go:go-performance` | Worker Pool, Fan-Out/In, sync.Pool, pprof |
 | `code-reviewer` | Code quality, Go idiom compliance |
 
 ### Core Skills
 
 | Category | Skill | Key Content |
 |----------|-------|-------------|
-| Basics | `/effective-go` | Go Proverbs, Modern Go (1.21+), pattern decision guide |
-| Basics | `/go-microservice` | MSA project structure, hexagonal architecture |
-| Errors | `/go-errors` | Error handling patterns, wrapping |
-| Web | `/go-gin` | Gin framework patterns |
-| DB | `/go-database` | pgx, sqlc, sqlx, ent, bun |
-| Concurrency | `/concurrency-go` | Mutex, Channel, Worker Pool |
-| Testing | `/go-testing` | Table-driven testing |
-| Refactoring | `/refactoring-go` | Go refactoring patterns |
+| Basics | `/go:effective-go` | Go Proverbs, Modern Go (1.21+), pattern decision guide |
+| Basics | `/go:go-microservice` | MSA project structure, hexagonal architecture |
+| Errors | `/go:effective-go` | Error handling patterns, wrapping |
+| Web | `/go:go-gin` | Gin framework patterns |
+| DB | `/go:go-database` | pgx, sqlc, sqlx, ent, bun |
+| Concurrency | `/go:concurrency-go` | Mutex, Channel, Worker Pool |
+| Testing | `/go:go-testing` | Table-driven testing |
+| Refactoring | `/go:refactoring-go` | Go refactoring patterns |
 | Clean Code | `/dx:clean-code` | Guard Clause, Cognitive Complexity, naming |
 
 ### Example Requests
 
 ```
 "Set up a Go MSA project structure"
-→ /go-performance + /go-microservice + /effective-go
+→ /go:go-performance + /go:go-microservice + /go:effective-go
 
 "Implement a Worker Pool pattern"
-→ /go-performance + /concurrency-go
+→ /go:go-performance + /go:concurrency-go
 
 "Design a DB layer with sqlc"
-→ /go-database + /database
+→ /go:go-database + /infra:database
 
 "Write table-driven tests"
-→ /go-testing + /effective-go
+→ /go:go-testing + /go:effective-go
 
 "Review Go error handling + OTel integration"
-→ /go-performance + /effective-go
+→ /go:go-performance + /go:effective-go
 
 "Clean code review for Go"
-→ /go-performance + /dx:clean-code + /refactoring-go
+→ /go:go-performance + /dx:clean-code + /go:refactoring-go
 ```
 
 ---
@@ -149,39 +149,39 @@ Combos for designing large-scale distributed systems.
 
 ```
 Defining service boundaries:
-  architect-agent + /msa-ddd + /msa-api-gateway-patterns
+  architect-agent + /architecture:msa-ddd + /architecture:msa-api-gateway-patterns
 
 Event-driven design:
-  architect-agent + /msa-event-driven + /msa-cqrs-eventsourcing
+  architect-agent + /architecture:msa-event-driven + /architecture:msa-cqrs-eventsourcing
 
 State machine design:
-  /state-machine + /msa-saga
+  /architecture:state-machine + /architecture:msa-saga
 ```
 
 ### Resilience / Reliability
 
 ```
 Failure isolation:
-  /msa-resilience + /cell-based-architecture
+  /architecture:msa-resilience + /architecture:cell-based-architecture
 
 Distributed transactions:
-  /msa-saga + /distributed-lock
+  /architecture:msa-saga + /architecture:distributed-lock
 
 High traffic:
-  /high-traffic-design + /database-sharding + /redis-streams
+  /architecture:high-traffic-design + /infra:database-sharding + /messaging:redis-streams
 ```
 
 ### Messaging
 
 ```
 Kafka-based:
-  /kafka + /kafka-patterns + /kafka-advanced
+  /messaging:kafka + /messaging:kafka-patterns + /messaging:kafka-advanced
 
 Event streaming:
-  /kafka-streams + /kafka-connect-cdc
+  /messaging:kafka-streams + /messaging:kafka-connect-cdc
 
 Lightweight messaging:
-  /rabbitmq or /nats-messaging
+  /messaging:rabbitmq or /messaging:nats-messaging
 ```
 
 ---

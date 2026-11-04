@@ -215,7 +215,7 @@ public void processWithRetry(Long id) {
            │
            ├─ 단일 서버 ──────> Pessimistic (@Lock)
            │
-           └─ MSA/다중 서버 ───> Distributed Lock (/distributed-lock)
+           └─ MSA/다중 서버 ───> Distributed Lock (/architecture:distributed-lock)
 ```
 
 ---
@@ -239,4 +239,4 @@ public void processWithRetry(Long id) {
 - [ ] Pessimistic 락 사용 시 타임아웃 설정
 - [ ] 트랜잭션 범위 최소화
 - [ ] 다중 락 획득 시 순서 일관성 확인
-- [ ] MSA 환경이면 분산 락 검토 (/distributed-lock)
+- [ ] MSA 환경이면 분산 락 검토 (/architecture:distributed-lock)

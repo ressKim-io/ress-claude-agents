@@ -15,7 +15,7 @@ jOOQ (Java Object Oriented Querying) — 타입 세이프 SQL 빌더 + 코드 �
 ```
 데이터 액세스 기술 선택
     │
-    ├─ 단순 CRUD ──────────> Spring Data JPA (/spring-data)
+    ├─ 단순 CRUD ──────────> Spring Data JPA (/java:spring-data)
     │
     ├─ 복잡한 SQL/분석 쿼리 ──> jOOQ (이 스킬)
     │
@@ -503,4 +503,4 @@ JPA가 적합한 경우              jOOQ가 적합한 경우
 Hibernate 생태계 활용         DB 벤더 특화 기능 (PostgreSQL jsonb 등)
 ```
 
-**관련 skill**: `/spring-data`, `/spring-testcontainers`, `/database`, `/database-migration`
+**관련 skill**: `/java:spring-data`, `/java:spring-testcontainers`, `/infra:database`, `/infra:database-migration`

@@ -488,4 +488,4 @@ plugins:
 - [ ] 벤더 교체 runbook 작성
 - [ ] Contract Testing (Pact/Spring Cloud Contract)
 
-**관련 스킬**: `/msa-api-gateway-patterns`, `/graphql-federation`, `/msa-event-driven`, `/msa-ddd`
+**관련 스킬**: `/architecture:msa-api-gateway-patterns`, `/architecture:graphql-federation`, `/architecture:msa-event-driven`, `/architecture:msa-ddd`

@@ -214,5 +214,5 @@ Phase 3: 완전 전환
 
 ## 참조 스킬
 
-- `/gateway-api` - Gateway API 핵심 개념 (Envoy Gateway, Kong, 리소스 구조)
-- `/istio-gateway` - Istio Gateway 설정
+- `/k8s:gateway-api` - Gateway API 핵심 개념 (Envoy Gateway, Kong, 리소스 구조)
+- `/service-mesh:istio-gateway` - Istio Gateway 설정

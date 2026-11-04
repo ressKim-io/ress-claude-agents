@@ -177,7 +177,7 @@ SELECT id, name, email FROM users WHERE status = 'active';
 
 ## 마이그레이션
 
-**상세 내용**: `/database-migration` skill 참조
+**상세 내용**: `/infra:database-migration` skill 참조
 
 ### 핵심 패턴
 
@@ -247,6 +247,6 @@ db.SetConnMaxLifetime(5 * time.Minute)
 - [ ] 페이지네이션 최적화 (cursor)
 - [ ] 불필요한 SELECT * 제거
 
-### 마이그레이션 (`/database-migration` 참조)
+### 마이그레이션 (`/infra:database-migration` 참조)
 - [ ] 버전 관리 도구 사용
 - [ ] 대용량 테이블은 CONCURRENTLY

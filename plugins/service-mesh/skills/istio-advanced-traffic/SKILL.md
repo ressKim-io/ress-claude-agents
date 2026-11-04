@@ -535,4 +535,4 @@ istioctl proxy-config cluster <pod-name> -n production
 - [ ] 모니터링 대시보드 준비
 - [ ] 자동 롤백 조건 정의
 
-**관련 skill**: `/istio-gateway-classic`, `/k8s-traffic-istio`, `/istio-security`, `/deployment-canary`
+**관련 skill**: `/service-mesh:istio-gateway-classic`, `/service-mesh:k8s-traffic-istio`, `/service-mesh:istio-security`, `/cicd:deployment-canary`

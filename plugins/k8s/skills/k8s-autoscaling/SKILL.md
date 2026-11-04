@@ -386,8 +386,8 @@ spec:
 
 ## 참조 스킬
 
-- `/k8s-autoscaling-advanced` - Karpenter, 조합 전략, 모니터링
-- `/kafka` - Kafka 기반 스케일링
-- `/k8s-scheduling` - Pod 스케줄링
-- `/finops` - 비용 최적화
-- `/monitoring-metrics` - 모니터링 메트릭
+- `/k8s:k8s-autoscaling-advanced` - Karpenter, 조합 전략, 모니터링
+- `/messaging:kafka` - Kafka 기반 스케일링
+- `/k8s:k8s-scheduling` - Pod 스케줄링
+- `/sre:finops` - 비용 최적화
+- `/observability:monitoring-metrics` - 모니터링 메트릭

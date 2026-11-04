@@ -126,6 +126,6 @@ spec:
 
 ## 참조 스킬
 
-- `/mlops` - MLOps 기본 (Kubeflow, KServe)
-- `/llmops` - RAG 운영, 프롬프트 관리, LLM 평가 & 가드레일
-- `/ml-serving` - ML 서빙 심화
+- `/ai:mlops` - MLOps 기본 (Kubeflow, KServe)
+- `/ai:llmops` - RAG 운영, 프롬프트 관리, LLM 평가 & 가드레일
+- `/ai:ml-serving` - ML 서빙 심화

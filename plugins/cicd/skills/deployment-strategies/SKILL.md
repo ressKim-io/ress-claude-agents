@@ -324,4 +324,4 @@ argo_rollouts_replicas{name="my-app"}
 - [ ] 알림 설정
 - [ ] 대시보드 구성
 
-**관련 skill**: `/deployment-canary` (Canary/A/B Testing), `/gitops-argocd`, `/istio-traffic`, `/sre-sli-slo`
+**관련 skill**: `/cicd:deployment-canary` (Canary/A/B Testing), `/cicd:gitops-argocd`, `/istio-traffic`, `/sre:sre-sli-slo`

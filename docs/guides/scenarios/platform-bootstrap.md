@@ -104,7 +104,7 @@ IDP Architecture:
 
 ## Step 2: Backstage Setup
 
-**Tools**: `/backstage` + `/platform-backstage`
+**Tools**: `/platform:backstage` + `/platform:platform-backstage`
 
 ### How to Request
 
@@ -133,7 +133,7 @@ IDP Architecture:
 
 ## Step 3: Define Golden Paths
 
-**Tools**: `architect-agent` + `/golden-paths` + `/golden-paths-infra`
+**Tools**: `architect-agent` + `/platform:golden-paths` + `/platform:golden-paths-infra`
 
 ### How to Request
 
@@ -160,7 +160,7 @@ IDP Architecture:
 
 ## Step 4: GitOps Setup
 
-**Tools**: `ci-optimizer` + `/gitops-argocd` + `/gitops-argocd-advanced`
+**Tools**: `ci-optimizer` + `/cicd:gitops-argocd` + `/cicd:gitops-argocd-advanced`
 
 ### How to Request
 
@@ -189,7 +189,7 @@ IDP Architecture:
 
 ## Step 5: Observability Stack
 
-**Tools**: `/observability-otel` + `/observability-otel-scale` + `/monitoring-grafana`
+**Tools**: `/observability:observability-otel` + `/observability:observability-otel-scale` + `/observability:monitoring-grafana`
 
 ### How to Request
 
@@ -310,8 +310,8 @@ Level 3 (Optimization):
 
 ### Next Steps
 
-- `/developer-self-service` — Advanced self-service platform
-- `/kratix` — Kratix Promise-based platform API
-- `/secrets-management` — Advanced secret management
-- `/ephemeral-environments` — Per-PR preview environments
+- `/platform:developer-self-service` — Advanced self-service platform
+- `/platform:kratix` — Kratix Promise-based platform API
+- `/security:secrets-management` — Advanced secret management
+- `/cicd:ephemeral-environments` — Per-PR preview environments
 - `/dx:dx-onboarding` — New developer onboarding automation

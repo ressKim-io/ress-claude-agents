@@ -309,4 +309,4 @@ kubernetes:
 - [ ] 사용량 메트릭 수집
 
 **관련 agent**: `platform-engineer`
-**관련 skill**: `/platform-backstage` (고급 패턴), `/golden-paths`, `/gitops-argocd`
+**관련 skill**: `/platform:platform-backstage` (고급 패턴), `/platform:golden-paths`, `/cicd:gitops-argocd`

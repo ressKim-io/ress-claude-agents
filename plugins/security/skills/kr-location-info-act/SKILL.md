@@ -32,7 +32,7 @@ license: MIT
 - `observability/logging-compliance.md` — 위치 로그 보존/파기
 
 **관련 agent**: `compliance-auditor`, `security-scanner`, `tech-lead`
-**관련 skill**: [`postgresql-operations`](../postgresql-operations/SKILL.md)
+**관련 skill**: `/infra:postgresql-operations`
 
 ---
 

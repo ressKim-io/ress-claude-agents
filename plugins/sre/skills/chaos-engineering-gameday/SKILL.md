@@ -220,7 +220,7 @@ litmuschaos_affected_pods_count
 
 ## 참조 스킬
 
-- `/chaos-engineering` - Chaos Engineering 기본 가이드 (LitmusChaos, 실험, Probe)
-- `/sre-sli-slo` - SLI/SLO 기반 Steady State 정의
-- `/load-testing` - 부하 테스트
-- `/monitoring-troubleshoot` - 모니터링 트러블슈팅
+- `/sre:chaos-engineering` - Chaos Engineering 기본 가이드 (LitmusChaos, 실험, Probe)
+- `/sre:sre-sli-slo` - SLI/SLO 기반 Steady State 정의
+- `/sre:load-testing` - 부하 테스트
+- `/observability:monitoring-troubleshoot` - 모니터링 트러블슈팅

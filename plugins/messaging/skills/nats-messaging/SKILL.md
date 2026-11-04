@@ -436,7 +436,7 @@ nc.Subscribe("$JS.EVENT.ADVISORY.CONSUMER.MAX_DELIVERIES.>", func(msg *nats.Msg)
 - [ ] 클라이언트: MaxReconnects(-1), Drain(), 메시지 ID 중복 방지
 - [ ] 모니터링: Prometheus Exporter, Consumer lag 알림, KEDA
 
-**관련 Skills**: `/kafka` (대용량 스트리밍), `/kafka-patterns` (이벤트 패턴), `/k8s-helm` (Helm), `/monitoring-metrics` (Prometheus)
+**관련 Skills**: `/messaging:kafka` (대용량 스트리밍), `/messaging:kafka-patterns` (이벤트 패턴), `/k8s:k8s-helm` (Helm), `/observability:monitoring-metrics` (Prometheus)
 
 ## 참고 레퍼런스
 

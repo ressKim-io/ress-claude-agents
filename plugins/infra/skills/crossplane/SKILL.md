@@ -481,6 +481,6 @@ spec:
 
 ## 참조 스킬
 
-- `/crossplane-advanced` - 멀티클라우드 패턴, GitOps 통합, Drift Detection
-- `/terraform-modules` - Terraform 모듈
-- `/gitops-argocd` - ArgoCD GitOps
+- `/infra:crossplane-advanced` - 멀티클라우드 패턴, GitOps 통합, Drift Detection
+- `/infra:terraform-modules` - Terraform 모듈
+- `/cicd:gitops-argocd` - ArgoCD GitOps

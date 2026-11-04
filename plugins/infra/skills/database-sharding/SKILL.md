@@ -488,7 +488,7 @@ spring:
 
 ## 참조 스킬
 
-- `/database` - 인덱스 최적화, N+1 해결, 쿼리 성능
-- `/msa-cqrs-eventsourcing` - CQRS, Event Sourcing, Saga 패턴
-- `/high-traffic-design` - 대규모 트래픽 아키텍처 설계
-- `/database-migration` - 스키마 마이그레이션, 무중단 배포
+- `/infra:database` - 인덱스 최적화, N+1 해결, 쿼리 성능
+- `/architecture:msa-cqrs-eventsourcing` - CQRS, Event Sourcing, Saga 패턴
+- `/architecture:high-traffic-design` - 대규모 트래픽 아키텍처 설계
+- `/infra:database-migration` - 스키마 마이그레이션, 무중단 배포

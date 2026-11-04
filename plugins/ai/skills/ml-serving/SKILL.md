@@ -449,7 +449,7 @@ groups:
 - [ ] 부하 테스트 완료
 
 **관련 agent**: `mlops-expert`
-**관련 skill**: `/k8s-gpu`
+**관련 skill**: `/k8s:k8s-gpu`
 
 ---
 

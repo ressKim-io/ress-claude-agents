@@ -9,7 +9,7 @@ deprecated: false
 # 메시지 브로커 트러블슈팅
 
 증상 → 진단 명령 → 대응. 브로커별 구현 패턴은 [`kafka-patterns`](../kafka-patterns/SKILL.md) / [`rabbitmq`](../rabbitmq/SKILL.md) / [`nats-messaging`](../nats-messaging/SKILL.md),
-DLQ·Outbox·Idempotent Consumer 같은 설계 패턴은 [`msa-event-driven`](../msa-event-driven/SKILL.md) / [`msa-resilience`](../msa-resilience/SKILL.md) 참조.
+DLQ·Outbox·Idempotent Consumer 같은 설계 패턴은 `/architecture:msa-event-driven` / `/architecture:msa-resilience` 참조.
 
 ## Broker Comparison Matrix
 
@@ -299,6 +299,6 @@ Broker:
 - [`kafka-k8s-operations`](../kafka-k8s-operations/SKILL.md) — Strimzi 운영, JMX→Prometheus
 - [`rabbitmq`](../rabbitmq/SKILL.md) — Publisher Confirms, DLX, Cluster Operator
 - [`nats-messaging`](../nats-messaging/SKILL.md) — JetStream, Consumer 패턴
-- [`msa-event-driven`](../msa-event-driven/SKILL.md) — Outbox / 이벤트 스키마
-- [`msa-resilience`](../msa-resilience/SKILL.md) — Retry / Circuit Breaker / Timeout
-- [`msa-saga`](../msa-saga/SKILL.md) — Idempotent Consumer, DLQ + 보상
+- `/architecture:msa-event-driven` — Outbox / 이벤트 스키마
+- `/architecture:msa-resilience` — Retry / Circuit Breaker / Timeout
+- `/architecture:msa-saga` — Idempotent Consumer, DLQ + 보상

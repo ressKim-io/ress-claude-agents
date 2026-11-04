@@ -9,7 +9,7 @@ deprecated: false
 # JVM / Spring 성능 튜닝
 
 언어 관용구는 [`effective-java`](../effective-java/SKILL.md), 락/동시성 문제는 [`concurrency-spring`](../concurrency-spring/SKILL.md),
-Circuit Breaker 설계는 [`msa-resilience`](../msa-resilience/SKILL.md) 참조. 여기서는 **런타임 측정과 튜닝**을 다룬다.
+Circuit Breaker 설계는 `/architecture:msa-resilience` 참조. 여기서는 **런타임 측정과 튜닝**을 다룬다.
 
 ## Virtual Threads vs WebFlux (2026)
 
@@ -274,6 +274,6 @@ hikari.maximum-pool-size: 200  // 보통 10-30이 최적
 - [`concurrency-spring`](../concurrency-spring/SKILL.md) — 낙관적/비관적 락, 데드락
 - [`spring-cache`](../spring-cache/SKILL.md) — `@Cacheable` 설정
 - [`spring-data`](../spring-data/SKILL.md) — JPA / N+1
-- [`msa-resilience`](../msa-resilience/SKILL.md) — Circuit Breaker / Retry / Bulkhead 설계
-- [`observability-pyroscope`](../observability-pyroscope/SKILL.md) — 상시 프로파일링
+- `/architecture:msa-resilience` — Circuit Breaker / Retry / Bulkhead 설계
+- `/observability:observability-pyroscope` — 상시 프로파일링
 - [`spring-security-review`](../spring-security-review/SKILL.md) — Spring 보안 리뷰

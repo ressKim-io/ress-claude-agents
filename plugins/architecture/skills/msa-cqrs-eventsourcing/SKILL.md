@@ -485,11 +485,11 @@ spec:
 
 ## 참조 스킬
 
-- `/kafka-patterns` - Kafka Producer/Consumer 패턴, KEDA 오토스케일링
-- `/kafka` - Kafka 기본 개념, Strimzi 클러스터 운영
-- `/spring-data` - Spring Data JPA, Repository 패턴
-- `/k8s-helm` - Kubernetes Helm 배포
-- `/deployment-strategies` - 배포 전략 (Blue-Green, Canary)
+- `/messaging:kafka-patterns` - Kafka Producer/Consumer 패턴, KEDA 오토스케일링
+- `/messaging:kafka` - Kafka 기본 개념, Strimzi 클러스터 운영
+- `/java:spring-data` - Spring Data JPA, Repository 패턴
+- `/k8s:k8s-helm` - Kubernetes Helm 배포
+- `/cicd:deployment-strategies` - 배포 전략 (Blue-Green, Canary)
 
 ## 참고 레퍼런스
 

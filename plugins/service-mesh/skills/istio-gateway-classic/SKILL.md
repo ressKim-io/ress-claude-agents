@@ -264,4 +264,4 @@ spec:
 - [ ] DestinationRule subset 정의
 - [ ] TLS 인증서 갱신 자동화
 
-**관련 skill**: `/istio-gateway`, `/istio-gateway-api`, `/istio-core`
+**관련 skill**: `/service-mesh:istio-gateway`, `/service-mesh:istio-gateway-api`, `/service-mesh:istio-core`

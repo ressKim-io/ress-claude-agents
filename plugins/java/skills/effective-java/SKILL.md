@@ -488,7 +488,7 @@ public record Account(Long id, BigDecimal balance) {
 
 ## 관련 스킬
 
-- `/spring-data` — JPA Entity 설계, Repository 패턴
-- `/spring-testing` — 불변 객체/Builder 테스트 전략
-- `/concurrency-spring` — 낙관적/비관적 락, 분산 락
-- `/refactoring-spring` — 레거시 코드 리팩토링 절차
+- `/java:spring-data` — JPA Entity 설계, Repository 패턴
+- `/java:spring-testing` — 불변 객체/Builder 테스트 전략
+- `/java:concurrency-spring` — 낙관적/비관적 락, 분산 락
+- `/java:refactoring-spring` — 레거시 코드 리팩토링 절차

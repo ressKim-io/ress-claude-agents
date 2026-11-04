@@ -9,7 +9,7 @@ deprecated: false
 # Virtual Waiting Room (대규모 티켓팅)
 
 순간 폭주 트래픽을 대기열로 흡수하고 좌석을 안전하게 선점시키는 패턴.
-일반 트래픽 설계는 [`high-traffic-design`](../high-traffic-design/SKILL.md), 봇/매크로 차단은 [`anti-bot`](../anti-bot/SKILL.md) 참조.
+일반 트래픽 설계는 `/architecture:high-traffic-design`, 봇/매크로 차단은 `/security:anti-bot` 참조.
 
 ## Scale Targets
 
@@ -265,10 +265,10 @@ public Page<SeatDTO> getSeatsBySection(String eventId, String section, Pageable 
 
 ## 참조 스킬
 
-- [`high-traffic-design`](../high-traffic-design/SKILL.md) — Backpressure, CDN/Edge, Queue-based Load Leveling
-- [`anti-bot`](../anti-bot/SKILL.md) — 매크로/봇 차단 (대기열 우회 방지)
+- `/architecture:high-traffic-design` — Backpressure, CDN/Edge, Queue-based Load Leveling
+- `/security:anti-bot` — 매크로/봇 차단 (대기열 우회 방지)
 - [`rate-limiting`](../rate-limiting/SKILL.md) — 대기열 진입/폴링 요청 제한
-- [`distributed-lock`](../distributed-lock/SKILL.md) — 좌석 잠금 Redlock / Fencing Token
-- [`msa-saga`](../msa-saga/SKILL.md) — 결제 실패 시 좌석 해제 보상 트랜잭션
-- [`redis-operations`](../redis-operations/SKILL.md) — 대기열 Redis 운영 (Cluster / 메모리 / eviction)
-- [`load-testing`](../load-testing/SKILL.md) — 대기열 시나리오 부하 검증
+- `/architecture:distributed-lock` — 좌석 잠금 Redlock / Fencing Token
+- `/architecture:msa-saga` — 결제 실패 시 좌석 해제 보상 트랜잭션
+- `/infra:redis-operations` — 대기열 Redis 운영 (Cluster / 메모리 / eviction)
+- `/sre:load-testing` — 대기열 시나리오 부하 검증

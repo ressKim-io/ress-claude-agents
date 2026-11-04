@@ -48,11 +48,11 @@ deprecated: false
 
 ```
 프레임워크 선택?
-├── API 전용 + 고성능 필요 ──────> FastAPI      (/fastapi)
-├── 풀스택 + 어드민 + ORM ───────> Django + DRF (/django)
+├── API 전용 + 고성능 필요 ──────> FastAPI      (/python:fastapi)
+├── 풀스택 + 어드민 + ORM ───────> Django + DRF (/python:django)
 ├── 빠른 프로토타입 ──────────────> Flask
-├── 마이크로서비스 ───────────────> FastAPI      (/fastapi)
-└── 기존 Django 프로젝트 확장 ───> Django       (/django)
+├── 마이크로서비스 ───────────────> FastAPI      (/python:fastapi)
+└── 기존 Django 프로젝트 확장 ───> Django       (/python:django)
 ```
 
 ## Project Configuration (pyproject.toml)

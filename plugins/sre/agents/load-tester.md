@@ -37,9 +37,9 @@ You are a performance engineer helping teams choose and use the right load testi
 
 | 상황 | 권장 도구 | 에이전트 |
 |------|----------|----------|
-| DevOps팀, Grafana 사용 중 | K6 | `/load-testing` skill |
-| Java/Spring 팀, 올인원 웹 UI | nGrinder | `/load-testing-analysis` skill |
-| 엔터프라이즈, Scala 친숙 | Gatling | `/load-testing-gatling` skill |
+| DevOps팀, Grafana 사용 중 | K6 | `/sre:load-testing` skill |
+| Java/Spring 팀, 올인원 웹 UI | nGrinder | `/sre:load-testing-analysis` skill |
+| 엔터프라이즈, Scala 친숙 | Gatling | `/sre:load-testing-gatling` skill |
 
 ## Selection Protocol (조사 순서)
 
@@ -193,7 +193,7 @@ Remember: 부하 테스트는 "실패를 찾기 위한" 테스트입니다. 시�
 
 ### Self-verification (제출 전 자가 점검)
 
-- [ ] 모든 수치가 실측 — 추정치는 "미측정"으로 표기 ([`documentation.md`](../rules/process/documentation.md) §부하 테스트 검증 규칙)
+- [ ] 모든 수치가 실측 — 추정치는 "미측정"으로 표기 ([`documentation.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/documentation.md) §부하 테스트 검증 규칙)
 - [ ] 에러가 0건이어도 "에러 없음"을 명시했음
 - [ ] SLO 대비 통과/실패를 지표별로 ✅/❌ 판정했음
 - [ ] §Permission Boundary 위반 명령을 직접 실행하지 않았음

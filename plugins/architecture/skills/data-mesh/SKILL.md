@@ -476,8 +476,8 @@ Phase 4 (18개월+): 최적화 — SLO 자동 알림, Data Marketplace
 
 ## 관련 스킬
 
-- `/msa-ddd` — Bounded Context 설계 (도메인 경계 = Data Product 경계)
-- `/msa-event-driven` — 이벤트 드리븐 아키텍처 (Data Product 소스)
-- `/kafka-connect-cdc` — CDC 기반 데이터 캡처 (Source-aligned Port)
-- `/developer-self-service` — 셀프서비스 플랫폼 패턴
-- `/backstage` — 개발자 포탈 (Data Product 카탈로그)
+- `/architecture:msa-ddd` — Bounded Context 설계 (도메인 경계 = Data Product 경계)
+- `/architecture:msa-event-driven` — 이벤트 드리븐 아키텍처 (Data Product 소스)
+- `/messaging:kafka-connect-cdc` — CDC 기반 데이터 캡처 (Source-aligned Port)
+- `/platform:developer-self-service` — 셀프서비스 플랫폼 패턴
+- `/platform:backstage` — 개발자 포탈 (Data Product 카탈로그)

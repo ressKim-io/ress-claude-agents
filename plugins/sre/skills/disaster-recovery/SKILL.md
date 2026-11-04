@@ -358,7 +358,7 @@ velero restore logs <restore-name>
 
 ## 참조 스킬
 
-- `/disaster-recovery-advanced` - 멀티 클러스터 DR, 데이터베이스 DR, 테스트
-- `/sre-sli-slo` - SLI/SLO 기반 가용성 목표
-- `/aws-eks` - EKS 클러스터 설정
-- `/k8s-helm` - Helm 차트 관리
+- `/sre:disaster-recovery-advanced` - 멀티 클러스터 DR, 데이터베이스 DR, 테스트
+- `/sre:sre-sli-slo` - SLI/SLO 기반 가용성 목표
+- `/infra:aws-eks` - EKS 클러스터 설정
+- `/k8s:k8s-helm` - Helm 차트 관리

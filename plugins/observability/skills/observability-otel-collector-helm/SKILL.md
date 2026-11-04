@@ -484,7 +484,7 @@ extraVolumeMounts:
 
 ## 참조 스킬
 
-- `/observability-alloy-to-otel` — Alloy → OTel 마이그레이션
-- `/observability-otel-optimization` — Kafka 버퍼, Strimzi 토픽 설정
-- `/observability-mimir-monolithic` — Mimir 싱글바이너리
-- `/observability-otel-scale` — 대규모 트래픽 스케일링
+- `/observability:observability-alloy-to-otel` — Alloy → OTel 마이그레이션
+- `/observability:observability-otel-optimization` — Kafka 버퍼, Strimzi 토픽 설정
+- `/observability:observability-mimir-monolithic` — Mimir 싱글바이너리
+- `/observability:observability-otel-scale` — 대규모 트래픽 스케일링

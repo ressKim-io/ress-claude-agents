@@ -9,7 +9,7 @@ deprecated: false
 # Redis 운영
 
 모드 선택 · 캐싱 전략 · HA · 메모리 · K8s 운영.
-Streams 를 메시지 브로커로 쓰는 경우는 [`redis-streams`](../redis-streams/SKILL.md), 분산 락 코드 패턴은 [`distributed-lock`](../distributed-lock/SKILL.md) 참조.
+Streams 를 메시지 브로커로 쓰는 경우는 `/messaging:redis-streams`, 분산 락 코드 패턴은 `/architecture:distributed-lock` 참조.
 
 ## Quick Reference
 
@@ -371,9 +371,9 @@ redis-cli info stats | grep -E "keyspace_hits|keyspace_misses|expired_keys"
 
 ## 참조 스킬
 
-- [`redis-streams`](../redis-streams/SKILL.md) — Consumer Group / PEL / DLQ (메시징 용도)
-- [`distributed-lock`](../distributed-lock/SKILL.md) — Redisson / Redsync / ShedLock / Fencing Token
-- [`spring-cache`](../spring-cache/SKILL.md) — Spring `@Cacheable` 연동
-- [`rate-limiting`](../rate-limiting/SKILL.md) — Redis Sliding Window 구현
-- [`high-traffic-design`](../high-traffic-design/SKILL.md) — 캐시가 흡수해야 할 트래픽 규모 산정
-- [`secrets-management`](../secrets-management/SKILL.md) — Redis 인증 정보 관리
+- `/messaging:redis-streams` — Consumer Group / PEL / DLQ (메시징 용도)
+- `/architecture:distributed-lock` — Redisson / Redsync / ShedLock / Fencing Token
+- `/java:spring-cache` — Spring `@Cacheable` 연동
+- `/saas:rate-limiting` — Redis Sliding Window 구현
+- `/architecture:high-traffic-design` — 캐시가 흡수해야 할 트래픽 규모 산정
+- `/security:secrets-management` — Redis 인증 정보 관리

@@ -22,7 +22,7 @@ JUnit 5, Mockito를 활용한 테스트 패턴
     ├─ Repository ───────> @DataJpaTest
     │
     └─ 전체 통합 ────────> @SpringBootTest + Testcontainers
-                          (상세: /spring-testcontainers 참조)
+                          (상세: /java:spring-testcontainers 참조)
 ```
 
 ---
@@ -177,7 +177,7 @@ class UserRepositoryTest {
 }
 ```
 
-**Testcontainers 사용**: `/spring-testcontainers` 참조
+**Testcontainers 사용**: `/java:spring-testcontainers` 참조
 
 ---
 

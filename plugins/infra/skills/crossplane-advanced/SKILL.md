@@ -258,6 +258,6 @@ spec:
 
 ## 참조 스킬
 
-- `/crossplane` - Crossplane 핵심 개념 (설치, Provider, Compositions, XRD)
-- `/terraform-modules` - Terraform 모듈
-- `/gitops-argocd` - ArgoCD GitOps
+- `/infra:crossplane` - Crossplane 핵심 개념 (설치, Provider, Compositions, XRD)
+- `/infra:terraform-modules` - Terraform 모듈
+- `/cicd:gitops-argocd` - ArgoCD GitOps

@@ -386,4 +386,4 @@ class CreateOrderHandlerTest {
 - [ ] "Rule of Three" 적용 (3번 중복 시 추출)
 - [ ] 슬라이스 간 이벤트 통신 모니터링
 
-**관련 스킬**: `/msa-cqrs-eventsourcing`, `/hexagonal-clean-architecture`, `/msa-ddd`, `/msa-saga`
+**관련 스킬**: `/architecture:msa-cqrs-eventsourcing`, `/architecture:hexagonal-clean-architecture`, `/architecture:msa-ddd`, `/architecture:msa-saga`

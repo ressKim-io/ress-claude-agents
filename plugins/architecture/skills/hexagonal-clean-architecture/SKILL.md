@@ -446,4 +446,4 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 - [ ] 비즈니스 규칙 변경 시 Domain Core만 수정하는가?
 - [ ] 기술 스택 변경 시 도메인 불변성 유지되는가?
 
-**관련 스킬**: `/msa-ddd`, `/go-microservice`, `/spring-testing`, `/msa-event-driven`, `/msa-resilience`
+**관련 스킬**: `/architecture:msa-ddd`, `/go:go-microservice`, `/java:spring-testing`, `/architecture:msa-event-driven`, `/architecture:msa-resilience`

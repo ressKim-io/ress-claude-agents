@@ -490,7 +490,7 @@ spec:
 
 ## 참조 스킬
 
-- `/redis-streams` - Redis Streams 기반 메시징 패턴
-- `/rabbitmq` - RabbitMQ 큐 설계, Exchange/Binding 패턴
-- `/k8s-autoscaling` - KEDA, HPA, VPA 오토스케일링 전략
-- `/msa-event-driven` - 이벤트 드리븐 아키텍처, Kafka, Outbox 패턴
+- `/messaging:redis-streams` - Redis Streams 기반 메시징 패턴
+- `/messaging:rabbitmq` - RabbitMQ 큐 설계, Exchange/Binding 패턴
+- `/k8s:k8s-autoscaling` - KEDA, HPA, VPA 오토스케일링 전략
+- `/architecture:msa-event-driven` - 이벤트 드리븐 아키텍처, Kafka, Outbox 패턴

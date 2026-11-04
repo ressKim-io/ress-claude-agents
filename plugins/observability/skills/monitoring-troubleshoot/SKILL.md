@@ -32,8 +32,8 @@ deprecated: false
 ### 개발자 (Developer)
 
 **봐야 할 skill:**
-- `/observability` - 기본 로깅, 메트릭
-- `/monitoring-grafana` - RED 대시보드
+- `/observability:observability` - 기본 로깅, 메트릭
+- `/observability:monitoring-grafana` - RED 대시보드
 
 **주요 관심사:**
 | 메트릭 | 정상 범위 | 알림 임계값 |
@@ -52,9 +52,9 @@ sum(rate(http_requests_total{service="$my_service",status=~"5.."}[5m]))
 ### DevOps/SRE
 
 **봐야 할 skill:**
-- `/monitoring-metrics` - Prometheus 스케일링
-- `/monitoring-logs` - 로그 파이프라인
-- `/monitoring-grafana` - 인프라 대시보드
+- `/observability:monitoring-metrics` - Prometheus 스케일링
+- `/observability:monitoring-logs` - 로그 파이프라인
+- `/observability:monitoring-grafana` - 인프라 대시보드
 
 **주요 관심사:**
 | 메트릭 | 정상 범위 | 알림 임계값 |
@@ -69,7 +69,7 @@ sum(rate(http_requests_total{service="$my_service",status=~"5.."}[5m]))
 ### 기획자/PM
 
 **봐야 할 skill:**
-- `/monitoring-grafana` (읽기 전용)
+- `/observability:monitoring-grafana` (읽기 전용)
 
 **주요 관심사:**
 | 메트릭 | 의미 |
@@ -475,6 +475,6 @@ receivers:
 4. 웹후크 URL 복사 → AlertManager 설정에 사용
 ```
 
-상세한 알림 설정은 `/alerting-discord` 스킬 참조
+상세한 알림 설정은 `/observability:alerting-discord` 스킬 참조
 
-**관련 skill**: `/monitoring-grafana`, `/monitoring-metrics`, `/monitoring-logs`, `/alerting-discord`, `/sre-sli-slo`
+**관련 skill**: `/observability:monitoring-grafana`, `/observability:monitoring-metrics`, `/observability:monitoring-logs`, `/observability:alerting-discord`, `/sre:sre-sli-slo`

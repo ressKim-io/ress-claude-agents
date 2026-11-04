@@ -240,4 +240,4 @@ service:
 - [ ] Grafana Explore 연동
 - [ ] 주요 LogQL 쿼리 저장
 
-**관련 skill**: `/observability`, `/observability-otel`, `/monitoring-grafana`
+**관련 skill**: `/observability:observability`, `/observability:observability-otel`, `/observability:monitoring-grafana`

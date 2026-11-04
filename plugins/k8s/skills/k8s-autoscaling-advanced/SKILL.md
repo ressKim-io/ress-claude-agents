@@ -208,8 +208,8 @@ karpenter_nodes_terminated_total
 
 ## 참조 스킬
 
-- `/k8s-autoscaling` - Autoscaling 기본 가이드 (HPA, VPA, KEDA)
-- `/aws-eks` - EKS 클러스터 설정
-- `/kafka` - Kafka 기반 스케일링
-- `/finops` - 비용 최적화
-- `/monitoring-metrics` - 모니터링 메트릭
+- `/k8s:k8s-autoscaling` - Autoscaling 기본 가이드 (HPA, VPA, KEDA)
+- `/infra:aws-eks` - EKS 클러스터 설정
+- `/messaging:kafka` - Kafka 기반 스케일링
+- `/sre:finops` - 비용 최적화
+- `/observability:monitoring-metrics` - 모니터링 메트릭

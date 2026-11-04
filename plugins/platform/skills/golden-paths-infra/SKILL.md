@@ -419,7 +419,7 @@ metrics:
 - [ ] Helm values 기본값
 - [ ] ServiceMonitor 설정
 
-**관련 skill**: `/golden-paths` (원칙, 서비스 템플릿), `/gitops-argocd`, `/cicd-devsecops`
+**관련 skill**: `/platform:golden-paths` (원칙, 서비스 템플릿), `/cicd:gitops-argocd`, `/cicd:cicd-devsecops`
 
 ---
 

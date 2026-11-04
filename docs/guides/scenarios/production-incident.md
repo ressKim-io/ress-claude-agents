@@ -137,7 +137,7 @@ Hypothesis 2: Memory leak
 
 ## Step 3: Observability Data Analysis
 
-**Tools**: `/observability-otel` + `/monitoring-troubleshoot`
+**Tools**: `/observability:observability-otel` + `/observability:monitoring-troubleshoot`
 
 ### How to Request
 
@@ -174,7 +174,7 @@ rate(http_server_requests_seconds_count{service="order-service",status=~"5.."}[5
 
 ## Step 4: Apply Fix
 
-**Tools**: `code-reviewer` + `/k8s-autoscaling`
+**Tools**: `code-reviewer` + `/k8s:k8s-autoscaling`
 
 ### Immediate Action (Emergency)
 
@@ -274,7 +274,7 @@ watch kubectl top pods -n production -l app=order-service
 
 ### Next Steps
 
-- `/chaos-engineering` — Proactively detect similar failures with chaos testing
-- `/sre-sli-slo` — Define SLIs/SLOs for error budget management
-- `/aiops` — Automate anomaly detection with AIOps
+- `/sre:chaos-engineering` — Proactively detect similar failures with chaos testing
+- `/sre:sre-sli-slo` — Define SLIs/SLOs for error budget management
+- `/observability:aiops` — Automate anomaly detection with AIOps
 - [Platform Team Bootstrap](platform-bootstrap.md) — Systematize observability infrastructure

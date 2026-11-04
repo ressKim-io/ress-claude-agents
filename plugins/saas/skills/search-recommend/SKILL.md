@@ -7,7 +7,7 @@ license: MIT
 
 # Search & Recommend — 사용자 노출용 검색 + 추천
 
-신규 SaaS에서 **사용자가 직접 사용하는 검색 + 추천**을 0에서 만들지 않도록 검증된 패턴 모음. RAG/임베딩 검색은 [`ai/vector-db.md`](../vector-db/SKILL.md) + [`ai/rag-patterns.md`](../rag-patterns/SKILL.md) 분담.
+신규 SaaS에서 **사용자가 직접 사용하는 검색 + 추천**을 0에서 만들지 않도록 검증된 패턴 모음. RAG/임베딩 검색은 `/ai:vector-db` + `/ai:rag-patterns` 분담.
 
 > 핵심 결정: (1) 검색 엔진 (관리형 vs self-host), (2) 한국어 토크나이저 (nori vs mecab), (3) DB↔Index 일관성 (Saga vs CDC), (4) 추천 알고리즘 (CF vs content vs hybrid).
 
@@ -306,7 +306,7 @@ DB binlog ──> Debezium ──> Kafka ──> ES Sink Connector ──> Elast
 - Vector로 의미 검색 → top 100
 - RRF (Reciprocal Rank Fusion)로 결합
 
-세부 ANN 운영은 [`ai/vector-db.md`](../vector-db/SKILL.md) §HNSW.
+세부 ANN 운영은 `/ai:vector-db` §HNSW.
 
 ---
 
@@ -353,7 +353,7 @@ ALS (Alternating Least Squares) 또는 implicit feedback
 
 - 콜드 스타트 강함 (임베딩만 있으면 OK)
 - LLM provider 비용 의존 (`business/credit-system.md` 패턴 적용)
-- 자세한 운영: [`ai/vector-db.md`](../vector-db/SKILL.md), [`ai/rag-patterns.md`](../rag-patterns/SKILL.md)
+- 자세한 운영: `/ai:vector-db`, `/ai:rag-patterns`
 
 ### 하이브리드 (실전)
 
@@ -388,7 +388,7 @@ ORDER BY position;
 
 **no-result top 100** → 동의어 사전 보강 / 인덱스 누락 / spelling.
 
-분석 결과는 [`dx/quarterly-review.md`](../../../plugins/dx/skills/quarterly-review/SKILL.md)에 통합 권장.
+분석 결과는 `/dx:quarterly-review`에 통합 권장.
 
 ---
 
@@ -427,7 +427,7 @@ ORDER BY position;
 
 - **PIPA (개인정보보호법)** — 검색 쿼리는 PII 가능 (이름/전화번호/주소 입력 사례). 로그 저장 시 마스킹 필수
 - **위치정보법** — geo radius 검색 시 위치 동의 의무
-- 자세한 법령 추적: [`legal/data-subject-rights.md`](../data-subject-rights/SKILL.md), [`legal/kr-location-info-act.md`](../kr-location-info-act/SKILL.md)
+- 자세한 법령 추적: `/security:data-subject-rights`, `/security:kr-location-info-act`
 
 ---
 
@@ -500,7 +500,7 @@ D. PostgreSQL FTS (DB만, ≤100K)
 - Auto-trigger: 트래픽 5x, no-result 10%+, 비용 1.5x
 ```
 
-자세한 retrospective 흐름은 [`dx/adr-retrospective.md`](../../../plugins/dx/skills/adr-retrospective/SKILL.md).
+자세한 retrospective 흐름은 `/dx:adr-retrospective`.
 
 ---
 
@@ -530,7 +530,7 @@ D. PostgreSQL FTS (DB만, ≤100K)
 - LLM 기반 query understanding (typo, intent, entity extraction)
 - 한국어 spell correction (한컴 사전 + 사용자 로그 기반)
 - Vector reranking (BM25 top 100 → embedding rerank top 10)
-- 검색 분석을 분기 회고에 통합 ([`dx/quarterly-review.md`](../../../plugins/dx/skills/quarterly-review/SKILL.md))
+- 검색 분석을 분기 회고에 통합 (`/dx:quarterly-review`)
 
 ---
 

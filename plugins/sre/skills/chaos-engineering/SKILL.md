@@ -375,7 +375,7 @@ probe:
 
 ## 참조 스킬
 
-- `/chaos-engineering-gameday` - GameDay 운영, 모니터링, 알림
-- `/sre-sli-slo` - SLI/SLO 기반 Steady State 정의
-- `/load-testing` - 부하 테스트
-- `/monitoring-troubleshoot` - 모니터링 트러블슈팅
+- `/sre:chaos-engineering-gameday` - GameDay 운영, 모니터링, 알림
+- `/sre:sre-sli-slo` - SLI/SLO 기반 Steady State 정의
+- `/sre:load-testing` - 부하 테스트
+- `/observability:monitoring-troubleshoot` - 모니터링 트러블슈팅

@@ -8,7 +8,7 @@ deprecated: false
 
 # Spring / Java 보안 리뷰
 
-설정 자체는 [`spring-security`](../spring-security/SKILL.md), 언어 무관 원칙은 [`secure-coding`](../secure-coding/SKILL.md) / [`owasp-top10`](../owasp-top10/SKILL.md).
+설정 자체는 [`spring-security`](../spring-security/SKILL.md), 언어 무관 원칙은 `/security:secure-coding` / `/security:owasp-top10`.
 여기서는 **Spring 코드에서 실제로 틀리는 지점**을 다룬다.
 
 ## Security Review Checklist
@@ -183,7 +183,7 @@ snyk code test
 
 - [`spring-security`](../spring-security/SKILL.md) — SecurityFilterChain / Method Security / CORS
 - [`spring-oauth2`](../spring-oauth2/SKILL.md) — OAuth2 / JWT 검증
-- [`secure-coding`](../secure-coding/SKILL.md) — 언어 공통 입력 검증 / 인코딩
-- [`owasp-top10`](../owasp-top10/SKILL.md) — A01~A10 매핑
-- [`supply-chain-security`](../supply-chain-security/SKILL.md) — 의존성 취약점 / SBOM
+- `/security:secure-coding` — 언어 공통 입력 검증 / 인코딩
+- `/security:owasp-top10` — A01~A10 매핑
+- `/cicd:supply-chain-security` — 의존성 취약점 / SBOM
 - [`jvm-performance`](../jvm-performance/SKILL.md) — 성능 튜닝

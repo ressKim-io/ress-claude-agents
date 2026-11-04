@@ -120,14 +120,14 @@ API Gateway/Proxy
 
 | 영역 | skill |
 |---|---|
-| OpenAPI 3.1 / Protobuf / AsyncAPI spec-first, 코드 생성 파이프라인 | [`/contract-first`](../skills/contract-first/SKILL.md) |
-| gRPC 서비스 구현 (Go / Spring), 스트리밍, 에러 모델 | [`/grpc`](../skills/grpc/SKILL.md) |
-| REST 리소스 설계, RFC 9457 에러, 페이지네이션, 버저닝 | [`/api-design`](../skills/api-design/SKILL.md) |
-| 이벤트 스키마 / 발행·수신 패턴 / Outbox | [`/msa-event-driven`](../skills/msa-event-driven/SKILL.md) |
-| Saga 오케스트레이션 / 보상 트랜잭션 | [`/msa-saga`](../skills/msa-saga/SKILL.md) |
-| DDD 전략·전술 설계, Event Storming 실행법 | [`/msa-ddd`](../skills/msa-ddd/SKILL.md) |
-| Strangler Fig 단계적 이관 | [`/strangler-fig-pattern`](../skills/strangler-fig-pattern/SKILL.md) |
-| Consumer-Driven Contract (Pact) 검증 | [`/consumer-driven-contracts`](../skills/consumer-driven-contracts/SKILL.md) |
+| OpenAPI 3.1 / Protobuf / AsyncAPI spec-first, 코드 생성 파이프라인 | [`/architecture:contract-first`](../skills/contract-first/SKILL.md) |
+| gRPC 서비스 구현 (Go / Spring), 스트리밍, 에러 모델 | [`/architecture:grpc`](../skills/grpc/SKILL.md) |
+| REST 리소스 설계, RFC 9457 에러, 페이지네이션, 버저닝 | [`/architecture:api-design`](../skills/api-design/SKILL.md) |
+| 이벤트 스키마 / 발행·수신 패턴 / Outbox | [`/architecture:msa-event-driven`](../skills/msa-event-driven/SKILL.md) |
+| Saga 오케스트레이션 / 보상 트랜잭션 | [`/architecture:msa-saga`](../skills/msa-saga/SKILL.md) |
+| DDD 전략·전술 설계, Event Storming 실행법 | [`/architecture:msa-ddd`](../skills/msa-ddd/SKILL.md) |
+| Strangler Fig 단계적 이관 | [`/architecture:strangler-fig-pattern`](../skills/strangler-fig-pattern/SKILL.md) |
+| Consumer-Driven Contract (Pact) 검증 | [`/architecture:consumer-driven-contracts`](../skills/consumer-driven-contracts/SKILL.md) |
 
 
 ## Dependency Analysis
@@ -306,7 +306,7 @@ Remember: MSA 설계의 핵심은 **비즈니스 도메인 정렬**입니다. �
 1. **경계 근거** — 각 서비스 경계가 도메인 이벤트·데이터 소유권 근거. 조직도나 팀 편의 기준 분해 금지
 2. **계약 완결성** — 서비스 간 호출마다 API 계약(protobuf/OpenAPI) 초안과 실패 모드가 정의됨
 3. **의존성 검증** — §Dependency Analysis 로 순환 의존이 없음을 확인했거나, 있으면 해소안 제시
-4. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](../rules/process/documentation.md) §ADR 검증 규칙)
+4. **대안 비교** — 각 결정에 대안 2개 이상과 탈락 사유가 있음. "X 를 선택했다" 만으로는 불충분 ([`documentation.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/documentation.md) §ADR 검증 규칙)
 5. **트레이드오프 인정** — 선택한 안의 단점·리스크를 명시. 장점만 나열한 ADR 은 미완성
 6. **upstream 반영** — consume 한 compliance-blueprint / 4 ADR 의 제약이 데이터 모델·계약에 실제로 반영됨
 

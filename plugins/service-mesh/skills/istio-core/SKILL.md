@@ -428,8 +428,8 @@ kubectl get peerauthentication -A
 istioctl x describe pod <pod-name> -n <namespace>
 ```
 
-상세한 Istio 보안 설정은 `/istio-security` 스킬 참조
+상세한 Istio 보안 설정은 `/service-mesh:istio-security` 스킬 참조
 
 ---
 
-**참조 스킬**: `/istio-ambient` (Ambient 심화: 아키텍처 상세, ztunnel, Waypoint 고급, Cilium 통합, 모니터링/트러블슈팅), `/istio-gateway`, `/istio-observability`, `/istio-security`, `/k8s-security`, `/ebpf-observability`
+**참조 스킬**: `/service-mesh:istio-ambient` (Ambient 심화: 아키텍처 상세, ztunnel, Waypoint 고급, Cilium 통합, 모니터링/트러블슈팅), `/service-mesh:istio-gateway`, `/service-mesh:istio-observability`, `/service-mesh:istio-security`, `/k8s:k8s-security`, `/observability:ebpf-observability`

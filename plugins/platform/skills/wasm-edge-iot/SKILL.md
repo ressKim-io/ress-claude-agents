@@ -160,6 +160,6 @@ strip = true        // 심볼 제거
 ## 참조 스킬
 
 - `wasm-edge.md` - WASM/WASI 기초, WasmEdge, Spin, Kubernetes 통합
-- `/docker` - 컨테이너 비교
-- `/k8s-scheduling` - 워크로드 스케줄링
-- `/finops` - 비용 최적화
+- `/infra:docker` - 컨테이너 비교
+- `/k8s:k8s-scheduling` - 워크로드 스케줄링
+- `/sre:finops` - 비용 최적화

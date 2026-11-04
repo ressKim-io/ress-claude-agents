@@ -35,7 +35,7 @@ license: MIT
 - `observability/alerting-discord.md` — 외부 통신 도구
 
 **관련 agent**: `incident-responder`, `tech-lead`, `debugging-expert`, `compliance-auditor`
-**관련 skill**: [`observability-otel`](../observability-otel/SKILL.md), [`observability-incident-playbook`](../observability-incident-playbook/SKILL.md)
+**관련 skill**: `/observability:observability-otel`, `/observability:observability-incident-playbook`
 
 ---
 

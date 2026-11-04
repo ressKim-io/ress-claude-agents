@@ -361,4 +361,4 @@ groups:
 - [ ] 유휴 리소스 알림 규칙
 - [ ] 대시보드 구축
 
-**관련 skill**: `/finops-advanced` (허브), `/finops-showback` (Showback/Chargeback)
+**관련 skill**: `/sre:finops-advanced` (허브), `/sre:finops-showback` (Showback/Chargeback)

@@ -473,13 +473,13 @@ kubectl annotate node my-node kwasm.sh/kwasm-node=true
 - [ ] runwasi 또는 Spin Operator 설치
 - [ ] WASM 이미지 레지스트리 준비
 
-**관련 skill**: `/docker`, `/k8s-scheduling`, `/finops`
+**관련 skill**: `/infra:docker`, `/k8s:k8s-scheduling`, `/sre:finops`
 
 ---
 
 ## 참조 스킬
 
 - `wasm-edge-iot.md` - Edge/IoT 활용 사례, 성능 최적화, AOT 컴파일
-- `/docker` - 컨테이너 비교
-- `/k8s-scheduling` - 워크로드 스케줄링
-- `/finops` - 비용 최적화
+- `/infra:docker` - 컨테이너 비교
+- `/k8s:k8s-scheduling` - 워크로드 스케줄링
+- `/sre:finops` - 비용 최적화

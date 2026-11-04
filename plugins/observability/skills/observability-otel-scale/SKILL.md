@@ -495,6 +495,6 @@ spec:
 
 ## 참조 스킬
 
-- `/observability-otel-optimization` - Kafka 버퍼, 비용 최적화, 모니터링 알림
-- `/observability-otel` - OTel 기본 설정
-- `/monitoring-grafana` - Grafana 모니터링
+- `/observability:observability-otel-optimization` - Kafka 버퍼, 비용 최적화, 모니터링 알림
+- `/observability:observability-otel` - OTel 기본 설정
+- `/observability:monitoring-grafana` - Grafana 모니터링

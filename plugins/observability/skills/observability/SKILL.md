@@ -17,7 +17,7 @@ Observability 구성
     │
     ├─ Logs ────────> 구조화 JSON + trace_id
     │
-    ├─ Traces ──────> OpenTelemetry (/observability-otel 참조)
+    ├─ Traces ──────> OpenTelemetry (/observability:observability-otel 참조)
     │
     └─ Metrics ─────> RED Method (Rate, Errors, Duration)
 ```
@@ -169,7 +169,7 @@ logger.With().
 
 ## OpenTelemetry
 
-**상세 설정**: `/observability-otel` skill 참조
+**상세 설정**: `/observability:observability-otel` skill 참조
 
 | 항목 | 내용 |
 |------|------|

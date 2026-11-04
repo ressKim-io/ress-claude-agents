@@ -340,9 +340,9 @@ test('상품을 장바구니에 추가할 수 있다', async () => {
 
 ## 참조 스킬
 
-- `/react-patterns`, `/nextjs`, `/typescript`
-- `/frontend-testing`, `/frontend-performance`
-- `/css-design-system`, `/state-management`
+- `/frontend:react-patterns`, `/frontend:nextjs`, `/frontend:typescript`
+- `/frontend:frontend-testing`, `/frontend:frontend-performance`
+- `/frontend:css-design-system`, `/frontend:state-management`
 
 Remember: 프론트엔드의 핵심은 **사용자 경험**입니다. 성능(Core Web Vitals), 접근성(WCAG 2.1 AA), 타입 안전성(strict TypeScript)을 항상 우선하세요. Server Component를 기본으로, 인터랙션 필요 부분만 Client Component로 전환하세요.
 

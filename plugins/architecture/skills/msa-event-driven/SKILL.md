@@ -476,13 +476,13 @@ Knative Eventing 구성 요소:
 
 ## 참조 스킬
 
-- `/kafka` - Kafka 클러스터, Strimzi Operator, 핵심 개념
-- `/kafka-patterns` - Producer/Consumer 구현, KEDA 오토스케일링
-- `/msa-saga` - Saga 패턴 (Choreography/Orchestration)
-- `/msa-cqrs-eventsourcing` - CQRS, Event Sourcing 패턴
-- `/observability-otel` - OpenTelemetry 분산 추적
-- `/nats-messaging` - NATS JetStream 기반 이벤트 드리븐
-- `/rabbitmq` - RabbitMQ Exchange, Quorum Queue
+- `/messaging:kafka` - Kafka 클러스터, Strimzi Operator, 핵심 개념
+- `/messaging:kafka-patterns` - Producer/Consumer 구현, KEDA 오토스케일링
+- `/architecture:msa-saga` - Saga 패턴 (Choreography/Orchestration)
+- `/architecture:msa-cqrs-eventsourcing` - CQRS, Event Sourcing 패턴
+- `/observability:observability-otel` - OpenTelemetry 분산 추적
+- `/messaging:nats-messaging` - NATS JetStream 기반 이벤트 드리븐
+- `/messaging:rabbitmq` - RabbitMQ Exchange, Quorum Queue
 
 ## 참고 레퍼런스
 

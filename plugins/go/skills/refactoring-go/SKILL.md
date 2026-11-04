@@ -347,7 +347,7 @@ if product.Stock < quantity {
 |------|------|
 | 단순 카운터/상태 보호 | `sync.Mutex` |
 | 복잡한 동기화/통신 | Channel |
-| 작업 분배 | Worker Pool (`/concurrency-go`) |
+| 작업 분배 | Worker Pool (`/go:concurrency-go`) |
 
 ```go
 // Mutex: 단순 상태 보호
@@ -363,7 +363,7 @@ func (c *Counter) Increment() {
 }
 ```
 
-자세한 패턴은 `/concurrency-go` 참조.
+자세한 패턴은 `/go:concurrency-go` 참조.
 
 ---
 
@@ -462,4 +462,4 @@ userMap := make(map[int]*User, len(users))
 
 ---
 
-**관련 skill**: `/dx:refactoring-principles`, `/effective-go`, `/concurrency-go`
+**관련 skill**: `/dx:refactoring-principles`, `/go:effective-go`, `/go:concurrency-go`

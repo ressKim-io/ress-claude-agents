@@ -439,4 +439,4 @@ Root Application의 `syncPolicy`에서 child Application의 `sync-wave` 순서�
 
 ---
 
-**참조 스킬**: `/gitops-argocd-advanced` (ApplicationSet, Sync 전략, 시크릿), `/gitops-argocd-ai` (AI-assisted GitOps, Spacelift Intent, 예측적 배포), `/cicd-devsecops`, `/deployment-strategies`, `/aiops`
+**참조 스킬**: `/cicd:gitops-argocd-advanced` (ApplicationSet, Sync 전략, 시크릿), `/cicd:gitops-argocd-ai` (AI-assisted GitOps, Spacelift Intent, 예측적 배포), `/cicd:cicd-devsecops`, `/cicd:deployment-strategies`, `/observability:aiops`

@@ -36,7 +36,7 @@ gh pr diff <PR번호> --repo <repo>
 - **한국어**로 리뷰 결과 작성
 
 #### Agent 1: 보안/IAM 검증
-- subagent_type: `terraform-reviewer`
+- subagent_type: `infra:terraform-reviewer`
 - 체크 항목:
   - Security Group inline + separate rule 혼용 감지
   - IAM policy 누락 (EKS 필수 정책: `AmazonEKSClusterPolicy`, `AmazonEKSVPCResourceController`)
@@ -47,7 +47,7 @@ gh pr diff <PR번호> --repo <repo>
   - 시크릿 하드코딩 여부
 
 #### Agent 2: 비용/리소스 검증
-- subagent_type: `cost-analyzer`
+- subagent_type: `sre:cost-analyzer`
 - 체크 항목:
   - VPC CIDR 크기 vs prefix delegation IP 소모량 계산
   - 인스턴스 타입 적정성 (over-provisioning)

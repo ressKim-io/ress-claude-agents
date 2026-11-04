@@ -178,9 +178,9 @@ staging 또는 pre-prod 환경에 prod 와 같은:
 
 ## 연계 skill
 
-- [`architecture/config-explicit-defaults.md`](../config-explicit-defaults/SKILL.md) — config sprawl(M3) 이 환경별로 다르면 M7 (snowflake)
-- [`kubernetes/multi-env-diff-checklist.md`](../multi-env-diff-checklist/SKILL.md) — 환경 diff 자동화 상세
-- [`migration/db-managed-service-checklist.md`](../db-managed-service-checklist/SKILL.md) — managed DB 환경 차이
+- `/architecture:config-explicit-defaults` — config sprawl(M3) 이 환경별로 다르면 M7 (snowflake)
+- `/k8s:multi-env-diff-checklist` — 환경 diff 자동화 상세
+- `/infra:db-managed-service-checklist` — managed DB 환경 차이
 
 ---
 

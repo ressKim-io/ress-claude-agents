@@ -414,10 +414,10 @@ Delivered --> Refunded : REFUND\n[반품기간내]
 
 ## 관련 Skills
 
-- **/msa-saga**: Saga 패턴에서 상태머신을 Orchestrator로 활용
-- **/msa-ddd**: Aggregate 내 상태 전이를 도메인 이벤트로 표현
-- **/msa-event-driven**: 이벤트 기반 아키텍처에서의 상태 변경 전파
-- **/msa-cqrs-eventsourcing**: Event Sourcing으로 상태 이력 관리 및 리플레이
+- **/architecture:msa-saga**: Saga 패턴에서 상태머신을 Orchestrator로 활용
+- **/architecture:msa-ddd**: Aggregate 내 상태 전이를 도메인 이벤트로 표현
+- **/architecture:msa-event-driven**: 이벤트 기반 아키텍처에서의 상태 변경 전파
+- **/architecture:msa-cqrs-eventsourcing**: Event Sourcing으로 상태 이력 관리 및 리플레이
 
 ## 참고 레퍼런스
 

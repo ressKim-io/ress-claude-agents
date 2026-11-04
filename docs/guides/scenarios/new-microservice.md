@@ -52,7 +52,7 @@
 
 ## Step 1: Service Design
 
-**Tools**: `architect-agent` + `/msa-ddd`
+**Tools**: `architect-agent` + `/architecture:msa-ddd`
 
 ### How to Request
 
@@ -81,13 +81,13 @@
 
 ## Step 2: Scaffold Project Structure
 
-**Tools**: `/go-performance` + `/go-microservice`
+**Tools**: `/go:go-performance` + `/go:go-microservice`
 
 ### How to Request
 
 ```
 "Generate a Go order service project with hexagonal architecture.
- - Reference /go-microservice skill
+ - Reference /go:go-microservice skill
  - cmd/server, internal/domain, internal/adapter, internal/port structure"
 ```
 
@@ -120,7 +120,7 @@ order-service/
 
 ## Step 3: Implement Core Business Logic
 
-**Tools**: `/go-performance` + `/go-database` + `/effective-go`
+**Tools**: `/go:go-performance` + `/go:go-database` + `/go:effective-go`
 
 ### How to Request
 
@@ -146,7 +146,7 @@ order-service/
 
 ## Step 4: Apply Resilience Patterns
 
-**Tools**: `/msa-saga` + `/msa-resilience` + `/msa-event-driven`
+**Tools**: `/architecture:msa-saga` + `/architecture:msa-resilience` + `/architecture:msa-event-driven`
 
 ### How to Request
 
@@ -174,7 +174,7 @@ order-service/
 
 ## Step 5: Write Tests
 
-**Tools**: `code-reviewer` + `/go-testing`
+**Tools**: `code-reviewer` + `/go:go-testing`
 
 ### How to Request
 
@@ -272,6 +272,6 @@ curl http://localhost:8080/health
 ### Next Steps
 
 - [Production Incident Response](production-incident.md) — Handle incidents in production
-- `/deployment-strategies` — Canary/Blue-Green deployment strategies
-- `/gitops-argocd` — Set up GitOps deployment with ArgoCD
-- `/observability-otel` — Add OpenTelemetry instrumentation
+- `/cicd:deployment-strategies` — Canary/Blue-Green deployment strategies
+- `/cicd:gitops-argocd` — Set up GitOps deployment with ArgoCD
+- `/observability:observability-otel` — Add OpenTelemetry instrumentation

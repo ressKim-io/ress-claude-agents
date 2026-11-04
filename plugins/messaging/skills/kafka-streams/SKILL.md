@@ -396,4 +396,4 @@ categorySales.toStream()
 - [ ] State Store 크기 모니터링
 - [ ] Consumer Lag / 처리 지연 알림
 
-**관련 skill**: `/kafka`, `/kafka-patterns`, `/kafka-advanced`, `/msa-cqrs-eventsourcing`
+**관련 skill**: `/messaging:kafka`, `/messaging:kafka-patterns`, `/messaging:kafka-advanced`, `/architecture:msa-cqrs-eventsourcing`

@@ -22,7 +22,7 @@ API 요청 제한 — 알고리즘 (Token Bucket / Sliding Window / Leaky Bucket
 - LLM API 비용 보호 (per-tenant token quota)
 
 **관련 skill**: `business/auth-oauth-social.md`, `business/payment-integration.md`, `business/multi-tenancy.md`, `security/auth-patterns.md`
-**관련 skill**: `/anti-bot`, `/virtual-waiting-room`, `/redis-operations`
+**관련 skill**: `/security:anti-bot`, `/saas:virtual-waiting-room`, `/infra:redis-operations`
 
 ---
 
@@ -115,7 +115,7 @@ if weighted > limit → 거부
 4) Endpoint  — 민감 액션 (login 5/15min)
 ```
 
-→ multi-tenancy: [.claude/skills/business/multi-tenancy.md](../multi-tenancy/SKILL.md)
+→ multi-tenancy: [`multi-tenancy`](../multi-tenancy/SKILL.md)
 
 ---
 
@@ -150,7 +150,7 @@ Hash 1개에 `tokens`, `ts` 저장. 매 호출 시:
 2. `tokens < 1` → 거부, 아니면 `-= 1`
 3. `HSET` + `EXPIRE`로 atomic 갱신
 
-→ Lua 전체 구현: redis-cell 모듈 또는 [`redis-operations`](../redis-operations/SKILL.md) 참조 (GCRA가 더 효율적).
+→ Lua 전체 구현: redis-cell 모듈 또는 `/infra:redis-operations` 참조 (GCRA가 더 효율적).
 
 ---
 
@@ -287,7 +287,7 @@ Pro:     1000 req/min, 100k req/day
 Enterprise: custom (계약)
 ```
 
-→ 인증 brute-force: [.claude/skills/business/auth-oauth-social.md](../auth-oauth-social/SKILL.md)
+→ 인증 brute-force: [`auth-oauth-social`](../auth-oauth-social/SKILL.md)
 
 ---
 
@@ -353,7 +353,7 @@ Burst: 일시 110% 허용 (10초 grace)
   - 한 tenant가 quota 80% 초과 (사전 안내)
 ```
 
-→ alerting: [.claude/skills/observability/alerting-discord.md](../alerting-discord/SKILL.md)
+→ alerting: `/observability:alerting-discord`
 
 ---
 
@@ -404,9 +404,9 @@ Burst: 일시 110% 허용 (10초 grace)
 - `skills/business/multi-tenancy.md` — per-tenant quota
 - `skills/business/admin-api-keys.md` — per-API-key quota
 - `skills/security/auth-patterns.md` — 보안 패턴
-- [`anti-bot`](../anti-bot/SKILL.md) — 봇 차단 통합
+- `/security:anti-bot` — 봇 차단 통합
 - [`virtual-waiting-room`](../virtual-waiting-room/SKILL.md) — high-traffic 사례
-- [`redis-operations`](../redis-operations/SKILL.md) — Redis 운영
+- `/infra:redis-operations` — Redis 운영
 
 **외부 자원**:
 - IETF draft: RFC RateLimit Header Fields for HTTP

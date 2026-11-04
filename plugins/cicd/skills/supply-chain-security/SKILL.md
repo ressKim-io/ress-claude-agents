@@ -458,5 +458,5 @@ jobs:
 
 ## 참조 스킬
 
-- `/supply-chain-compliance` - SBOM 자동화 & EU CRA 컴플라이언스
-- `/k8s-security` - Kubernetes 보안
+- `/cicd:supply-chain-compliance` - SBOM 자동화 & EU CRA 컴플라이언스
+- `/k8s:k8s-security` - Kubernetes 보안

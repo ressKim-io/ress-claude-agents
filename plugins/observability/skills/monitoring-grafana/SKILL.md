@@ -388,4 +388,4 @@ Trace ID를 클릭하면 Tempo에서 해당 트레이스를 직접 여는 intern
 - [ ] 우선순위별 알림 규칙 설정
 - [ ] Provisioning IaC 구성
 
-**관련 skill**: `/observability`, `/observability-otel`, `/monitoring-troubleshoot`
+**관련 skill**: `/observability:observability`, `/observability:observability-otel`, `/observability:monitoring-troubleshoot`

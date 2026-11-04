@@ -214,4 +214,4 @@ aws elbv2 describe-target-health \
 | SSM timeout < deploy 소요 시간 | timeout ≥ 예상 소요 시간 + 여유 | InProgress 중 타임아웃 |
 | CloudFront path `/{exact}/*` | 넓은 prefix `/{prefix}/*` | trailing slash 없는 경로 매칭 실패 |
 
-**관련 skill**: `/docker`, `/terraform-security`
+**관련 skill**: `/infra:docker`, `/infra:terraform-security`
