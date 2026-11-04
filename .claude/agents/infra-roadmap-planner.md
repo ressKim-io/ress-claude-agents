@@ -7,7 +7,7 @@ tools:
   - Glob
   - Bash
 model: sonnet
-effort: xhigh
+effort: high
 ---
 
 # Infrastructure Roadmap Planner Agent

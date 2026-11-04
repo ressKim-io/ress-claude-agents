@@ -7,7 +7,7 @@ tools:
   - Glob
   - Bash
 model: opus
-effort: max
+effort: high
 ---
 
 # MSA Architect Agent

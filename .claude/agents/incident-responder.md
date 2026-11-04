@@ -8,7 +8,7 @@ tools:
   - Glob
   - WebFetch
 model: sonnet
-effort: xhigh
+effort: high
 ---
 
 # Incident Responder Agent

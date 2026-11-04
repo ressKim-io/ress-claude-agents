@@ -7,7 +7,7 @@ tools:
   - Glob
   - Bash
 model: sonnet
-effort: xhigh
+effort: high
 ---
 
 # Code Reviewer Agent
