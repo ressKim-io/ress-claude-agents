@@ -9,7 +9,7 @@
 #   1. artifact는 명사 (user-story, k8s-manifest), 동사 X
 #   2. agent는 produces 한 artifact를 다음 단계 agent가 consume
 #   3. 외부 입력(idea, requirement-change)은 produces에 안 나옴
-#   4. 모든 agent가 _handoff.yml에 등록되어야 한다 (lint 강제)
+#   4. 모든 agent가 이 파일에 등록되어야 한다 (lint 강제)
 
 # ---------------------------------------------------------------------------
 # Artifact Vocabulary
