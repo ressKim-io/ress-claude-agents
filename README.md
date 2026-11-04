@@ -2,111 +2,97 @@
 
 # ress-claude-agents
 
-Production-ready agents, skills, and rules for Claude Code.
+Claude Code plugins by domain: skills, agents and commands for backend, infrastructure, operations and SaaS work. Install only the domains you need.
 
 [![CI](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ressKim-io/ress-claude-agents/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Quick Start
+## Which plugin do I need?
+
+Each plugin's README lists its skills, agents and commands, the plugins it pairs with, and the rules worth copying.
+
+| Area | Plugin | Install it when you work on |
+|---|---|---|
+| Languages | [`go`](plugins/go/README.md) | Go concurrency, database access, Gin, microservices, performance, testing |
+| | [`java`](plugins/java/README.md) | Java and Spring: Data, Security, Cache, jOOQ, JVM performance, testing |
+| | [`python`](plugins/python/README.md) | FastAPI, Django, asyncio, performance, testing |
+| | [`frontend`](plugins/frontend/README.md) | React, Next.js, TypeScript, state management, CSS, web performance |
+| Design | [`architecture`](plugins/architecture/README.md) | MSA, DDD, Saga, CQRS, API design, gRPC, modular monoliths, high traffic |
+| | [`messaging`](plugins/messaging/README.md) | Kafka, RabbitMQ, NATS, Redis Streams, AWS messaging, broker incidents |
+| Infrastructure | [`k8s`](plugins/k8s/README.md) | Scheduling, autoscaling, traffic, Helm, security, GPUs, manifest review |
+| | [`service-mesh`](plugins/service-mesh/README.md) | Istio core, Ambient, gateways, security, observability, and Linkerd |
+| | [`infra`](plugins/infra/README.md) | Terraform, AWS and EKS, Docker, Crossplane, database operations, cloud CLI safety |
+| | [`cicd`](plugins/cicd/README.md) | GitHub Actions, ArgoCD, deployment strategies, preview environments, pipeline review |
+| Operations | [`observability`](plugins/observability/README.md) | OpenTelemetry, Prometheus, Grafana, Loki, eBPF, AIOps |
+| | [`sre`](plugins/sre/README.md) | SLI/SLO, incident response, postmortems, chaos, DR, load testing, FinOps |
+| | [`platform`](plugins/platform/README.md) | Backstage, golden paths, self-service, Kratix, IDP strategy |
+| Security and product | [`security`](plugins/security/README.md) | OWASP, threat modeling, auth patterns, supply chain, secrets, PIPA, GDPR, SOC2 |
+| | [`saas`](plugins/saas/README.md) | Multi-tenancy, social login, payments, subscriptions, notifications, webhooks |
+| | [`ai`](plugins/ai/README.md) | RAG, vector databases, LLMOps, MLOps, model serving, agentic architecture |
+| Common | [`dx`](plugins/dx/README.md) | Code review, Git and PR workflow, ADR and doc templates, dev logs, token budgets |
+
+Not sure where to start? See the [persona guides and scenarios](docs/guides/README.md).
+
+## Install
+
+Inside Claude Code:
+
+```
+/plugin marketplace add ressKim-io/ress-claude-agents
+/plugin install go@ress
+```
+
+In a terminal, use `claude plugin marketplace add` and `claude plugin install` instead.
+
+Skills are picked automatically from their descriptions, or you can call one directly: `/go:go-testing`. Agents are named `<plugin>:<agent>`.
+
+**Install only what you use.** Every enabled plugin adds its skill list to each session (`claude plugin details <plugin>` shows the cost), and when the list outgrows its budget, skill descriptions start to drop out.
+
+## Copy a single asset
+
+```bash
+cp -r plugins/go/skills/go-testing       /path/to/project/.claude/skills/
+cp    plugins/dx/agents/code-reviewer.md /path/to/project/.claude/agents/
+cp    .claude/rules/core/security.md     /path/to/project/.claude/rules/
+```
+
+Copied skills have no plugin prefix (`/go-testing`), and a copy does not follow updates. Skills must keep the `<skill-name>/SKILL.md` layout, because Claude Code does not load any other shape.
+
+## What a plugin cannot carry
+
+- **Rules.** Copy them from [`.claude/rules/`](.claude/rules/). Each plugin README names the relevant ones.
+- **Permission rules** (`permissions.deny`). An agent's Permission Boundary section is advisory in an installed copy.
+
+## Working in this repo
 
 ```bash
 git clone https://github.com/ressKim-io/ress-claude-agents.git
 cd ress-claude-agents
+claude
 ```
 
-That's it — the assets under `.claude/` load automatically when you work **in this repo**.
-
-There is no installer. `install.sh` and its configuration surface (`plugins/`, `.claude/workflows/`)
-were removed on 2026-08-26 ([ADR 0011](docs/adr/0011-remove-install-sh.md)) because nothing used them.
-To reuse an asset in another project, copy the file you need:
+The repo enables only `dx`, once you trust the folder. To try another plugin here, run `claude --plugin-dir plugins/<plugin>`. Cloud sessions and uncommitted changes in a worktree also need `--plugin-dir plugins/dx`.
 
 ```bash
-cp -r plugins/go/skills/go-performance   /path/to/project/.claude/skills/
-cp    plugins/dx/agents/code-reviewer.md /path/to/project/.claude/agents/
-cp    .claude/rules/core/security.md       /path/to/project/.claude/rules/
+make all              # Catalog, enforcement and link gates
+make test-gates       # Break a copy of the repo and check each gate fails for the right reason
+make plugin-readmes   # Regenerate plugins/*/README.md from frontmatter
+make inventory        # Regenerate .claude/inventory.yml
+make lint             # ShellCheck
+make verify-plugins   # Check what actually loads (needs the claude CLI, no model calls)
 ```
 
-Skills must keep the `<skill-name>/SKILL.md` layout — Claude Code does not load any other shape.
-
-## What's Inside
-
-| | Count | Lines |
-|---|---|---|
-| Agents | 46 | ~18,800 |
-| Skills | 254 | ~97,500 |
-| Rules | 15 | ~1,840 |
-| Commands | 43 | ~4,000 |
-| Tests | 51 cases | - |
-| Plugins | 12 bundles | - |
-| Workflows | 10 scenarios | - |
-| **Total** | | **122,000+** |
-
-## Agents
-
-46 autonomous AI agents across 10 categories.
-
-| Category | Agents |
-|---|---|
-| Strategy | `tech-lead`, `product-engineer`, `migration-expert` |
-| Frontend | `frontend-expert` |
-| DevOps & SRE | `security-scanner`, `k8s-troubleshooter`, `terraform-reviewer`, `incident-responder`, `code-reviewer`, `cost-analyzer`, `finops-advisor`, `debugging-expert`, `compliance-auditor` |
-| DevOps Reviewers | `k8s-reviewer`, `dockerfile-reviewer`, `cicd-reviewer`, `gitops-reviewer`, `observability-reviewer` |
-| Security Reviewers | `k8s-security-reviewer`, `container-security-reviewer`, `cicd-security-reviewer`, `network-security-reviewer` |
-| Architecture | `architect-agent` |
-| Platform & MLOps | `platform-engineer`, `mlops-expert` |
-| Service Mesh & Messaging | `service-mesh-expert` |
-| Ticketing & Load Test | `load-tester` |
-| Workflow | `git-workflow`, `ci-optimizer`, `dev-logger` |
-
-## Skills
-
-254 on-demand knowledge files organized in 20 categories.
-
-| Category | Count | Topics |
-|---|---|---|
-| Go | 14 | Error handling, Gin, testing, microservice, AI integration, Effective Go |
-| Spring | 12 | JPA, Security, OAuth2, Spring AI, testing, Effective Java |
-| Python | 6 | FastAPI, Django, pytest, asyncio |
-| Frontend | 7 | React 19, Next.js 15, TypeScript, Vitest, Tailwind |
-| MSA | 15 | DDD, Saga, CQRS, Event Sourcing, gRPC, Contract-First |
-| Architecture | 10 | Hexagonal, Cell-based, Modular Monolith, Data Mesh |
-| Kubernetes | 20 | Security, Helm, HPA/VPA/KEDA, Gateway API, scheduling, autoscaling |
-| Service Mesh | 17 | Istio (Ambient, mTLS, multi-cluster), Linkerd |
-| Observability | 28 | OpenTelemetry, eBPF, Prometheus, Grafana, Pyroscope, AIOps |
-| CI/CD | 12 | GitHub Actions, ArgoCD, Canary, Supply Chain |
-| SRE | 15 | SLI/SLO, Chaos Engineering, DR, FinOps, GreenOps |
-| Platform | 16 | Backstage, MLOps, WASM, GPU scheduling |
-| DX | 26 | DORA, onboarding, RFC/ADR, SDD, Team Topologies, AI agents, token budget |
-| Infrastructure | 16 | AWS EKS, Terraform, Crossplane, Docker, EC2 CD |
-| Messaging | 9 | Kafka, RabbitMQ, NATS, Redis Streams |
-| Security | 5 | OWASP, auth patterns, compliance frameworks |
-| AI | 5 | RAG, prompt engineering, vector DB, LangChain, agentic coding |
-| Business | 16 | Multi-tenancy, payment, auth, notifications, search/recommend, webhook, streaming |
-| Legal | 3 | 한국 위치정보법/PIPA, 아동 보호, 글로벌 GDPR/SOC2 매핑 |
-| Operations | 2 | Runbook 표준, Blameless postmortem |
-
-## Development
-
-```bash
-make validate             # Documentation consistency
-make validate-enforcement # settings.json <-> user-approval.md rule drift
-make validate-links       # Internal markdown links resolve
-make inventory            # Regenerate .claude/inventory.yml
-make lint                 # ShellCheck static analysis
-make all                  # validate + enforcement + links
-make verify-enforcement   # Permission rules actually fire (needs claude CLI, local only)
-```
+Why the repo is laid out this way: [ADR 0012](docs/adr/0012-native-plugin-structure.md).
 
 ## Resources
 
-- [Claude Code Best Practices](https://www.anthropic.com/engineering/claude-code-best-practices)
-- [Claude Code Docs](https://docs.anthropic.com/claude-code)
+- [Claude Code docs](https://code.claude.com/docs)
+- [Claude Code best practices](https://www.anthropic.com/engineering/claude-code-best-practices)
 - [awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code)
-- [awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents)
 
 ## Contributing
 
-Issues and PRs welcome.
+Issues and PRs welcome. Skill and agent standards: [SKILL-SPEC](.claude/templates/SKILL-SPEC.md), [AGENT-SPEC](.claude/templates/AGENT-SPEC.md).
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/ress-claude-agents.git

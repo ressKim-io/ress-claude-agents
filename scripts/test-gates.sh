@@ -569,6 +569,13 @@ should_fail_plugin_refs_when_subagent_type_has_no_plugin_prefix() {
     expect_fail '없는 agent.*code-reviewer' ./scripts/validate-catalog.sh
 }
 
+should_fail_plugin_links_when_root_readme_has_broken_link() {
+    # Given: README 의 LICENSE 링크가 파일 없이 남아 있었다. 첫 화면이라 가장 먼저 눈에 띈다
+    printf '\n[x](docs/no-such-file.md)\n' >>"$CASE_DIR/README.md"
+    # When/Then
+    expect_fail 'README\.md.*no-such-file' ./scripts/validate-links.sh
+}
+
 should_fail_plugin_readme_when_stale() {
     # Given
     printf '\n손으로 고친 줄\n' >>"$CASE_DIR/plugins/dx/README.md"

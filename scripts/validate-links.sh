@@ -6,7 +6,7 @@
 # 79개 링크가 깨진 채 3일간 남아 있었고, 그중 4개는 매 세션 로드되는 AGENTS.md
 # 안에 있었다. 링크를 보는 CI job 이 하나도 없어 아무도 몰랐다 — PR #36 리뷰.
 #
-# 검증 범위: AGENTS.md / rules / skills / agents / commands / templates / plugin README /
+# 검증 범위: AGENTS.md / README / rules / skills / agents / commands / templates / plugin README /
 #            살아 있는 docs (architecture, guides, onboarding)
 # 원격 링크: 이 레포의 blob/main URL 은 실제 경로로 바꿔 검사한다. plugin 에 실리지 않는 rule 을
 # 가리키는 링크라서, 파일을 옮기면 조용히 404 가 된다.
@@ -43,6 +43,7 @@ trap 'rm -f "$TARGETS_FILE"' EXIT
         find plugins -mindepth 2 -maxdepth 2 -type f -name README.md
     fi
     find docs/architecture docs/guides docs/onboarding -type f -name '*.md'
+    printf 'README.md\nREADME.ko.md\n'
 } >"$TARGETS_FILE"
 
 TARGETS_FILE="$TARGETS_FILE" python3 - <<'PY'
