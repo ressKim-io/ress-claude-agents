@@ -112,13 +112,13 @@
       "type": "array",
       "items": { "type": "string", "minLength": 1 },
       "uniqueItems": true,
-      "description": "Artifact types this skill outputs. Vocabulary defined in .claude/agents/_handoff.yml; enforced by scripts/validate-agent-handoff.sh, not this schema."
+      "description": "Artifact types this skill outputs. Vocabulary defined in .claude/agent-handoff.yml; enforced by scripts/validate-agent-handoff.sh, not this schema."
     },
     "consumes": {
       "type": "array",
       "items": { "type": "string", "minLength": 1 },
       "uniqueItems": true,
-      "description": "Artifact types this skill expects as input. Vocabulary defined in .claude/agents/_handoff.yml."
+      "description": "Artifact types this skill expects as input. Vocabulary defined in .claude/agent-handoff.yml."
     },
     "security": {
       "type": "object",

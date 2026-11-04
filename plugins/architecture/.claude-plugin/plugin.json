@@ -1,0 +1,6 @@
+{
+  "name": "architecture",
+  "description": "아키텍처 설계 — MSA, DDD, Saga, CQRS, API 설계, gRPC, 모듈러 모놀리스, 대규모 트래픽",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

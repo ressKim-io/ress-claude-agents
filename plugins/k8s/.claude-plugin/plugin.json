@@ -1,0 +1,6 @@
+{
+  "name": "k8s",
+  "description": "Kubernetes — 스케줄링, 오토스케일링, 트래픽, Helm, 보안, GPU, manifest 리뷰와 장애 진단",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

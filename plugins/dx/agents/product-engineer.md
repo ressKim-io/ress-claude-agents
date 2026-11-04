@@ -278,7 +278,7 @@ Feature: 장바구니 할인 쿠폰 적용
 
 - `/dx:product-thinking` — 제품 사고 프레임워크
 - `/dx:rfc-adr` — RFC/ADR 작성 가이드
-- `/api-design` — API 설계 패턴
+- `/architecture:api-design` — API 설계 패턴
 
 ---
 

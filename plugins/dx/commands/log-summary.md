@@ -50,7 +50,7 @@ type: session-summary
 - path/to/file2 — {what changed}
 
 ## Logs Created
-- [{log title}](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/YYYY-MM-DD-slug.md)
+- [{log title}](../YYYY-MM-DD-slug.md)
 
 ## Notes
 {추가 관찰, 미완료 작업, 후속 할 일}

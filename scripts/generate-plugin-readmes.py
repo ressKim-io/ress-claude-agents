@@ -15,7 +15,8 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 REPO = "ressKim-io/ress-claude-agents"
-RULE_URL = f"https://github.com/{REPO}/blob/main/.claude/rules/"
+BLOB_URL = f"https://github.com/{REPO}/blob/main/"
+RULE_URL = f"{BLOB_URL}.claude/rules/"
 
 # plugin 은 rule 을 실을 수 없다 (2026-11-04 공식 docs). 함께 가져갈 rule 을 안내한다.
 RULES = {
@@ -30,6 +31,11 @@ RULES = {
     "cicd": ["core/user-approval.md"],
     "observability": ["infra/monitoring.md"],
     "security": ["core/security.md"],
+}
+# 다른 plugin 없이는 동작하지 않는 자산. "함께 쓰면 좋은" 정도가 아니라 호출이 실패한다.
+REQUIRES = {
+    "dx": "`/dx:review-pr-terraform` 은 `infra` 의 `terraform-reviewer` 와 `sre` 의 `cost-analyzer` 를 호출한다. "
+          "이 명령을 쓰려면 두 plugin 도 설치한다.",
 }
 SUMMARY_LIMIT = 110
 
@@ -71,13 +77,22 @@ def table(title, prefix, entries):
     return f"\n## {title} ({len(entries)})\n\n| 이름 | 설명 |\n|---|---|\n{rows}\n"
 
 
+def plugin_assets(plugin):
+    plugin_dir = ROOT / "plugins" / plugin
+    names = {p.parent.name for p in plugin_dir.glob("skills/*/SKILL.md")}
+    names |= {p.stem for p in plugin_dir.glob("agents/*.md")}
+    names |= {p.stem for p in plugin_dir.glob("commands/*.md")}
+    return names
+
+
 def related_plugins(plugin_dir, name, known):
+    assets = {plugin: plugin_assets(plugin) for plugin in known}
     counts = {}
     for path in plugin_dir.rglob("*.md"):
         if path.name == "README.md":
             continue
-        for other in re.findall(r"(?<![\w/.-])/?([a-z0-9-]+):[a-z0-9-]+", path.read_text(encoding="utf8")):
-            if other in known and other != name:
+        for other, asset in re.findall(r"(?<![\w/.-])/?([a-z0-9-]+):([a-z0-9-]+)", path.read_text(encoding="utf8")):
+            if other != name and asset in assets.get(other, ()):
                 counts[other] = counts.get(other, 0) + 1
     ordered = sorted(counts, key=lambda other: (-counts[other], other))
     return ordered
@@ -112,10 +127,13 @@ def render(entry, known):
         "```",
     ]
 
+    if name in REQUIRES:
+        out += ["", "## 필요한 plugin", "", REQUIRES[name]]
+
     related = related_plugins(plugin_dir, name, known)
     if related:
         out += ["", "## 함께 쓰면 좋은 plugin", "", "본문에서 참조하는 순서다. 없어도 동작하지만 해당 참조는 열리지 않는다.", ""]
-        out += [f"- [`{other}`](../{other}/README.md)" for other in related]
+        out += [f"- [`{other}`]({BLOB_URL}plugins/{other}/README.md)" for other in related]
 
     out += ["", "## 설치본에 포함되지 않는 것", ""]
     rules = RULES.get(name, [])

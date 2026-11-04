@@ -1,6 +1,6 @@
 # Agent 작성 표준 — AGENT-SPEC
 
-이 레포의 모든 `.claude/agents/**/*.md` 가 따라야 할 frontmatter / description / hand-off / 본문 표준.
+이 레포의 모든 `plugins/<plugin>/agents/*.md` 가 따라야 할 frontmatter / description / hand-off / 본문 표준.
 신규 agent 추가 시 본 spec 을 그대로 카피해 사용.
 
 > **출처 (F6)**: https://code.claude.com/docs/en/sub-agents (검증일 **2026-11-04**, 직전 2026-08-24)
@@ -269,7 +269,7 @@ Components) 은 go-/java-/python-/frontend-expert 를 함께 호출.
 ## 7. 검증 스크립트
 
 ```bash
-# Hand-off 정합성 (모든 agent 가 _handoff.yml 또는 description 에 등록)
+# Hand-off 정합성 (모든 agent 가 `.claude/agent-handoff.yml` 에 등록)
 scripts/validate-agent-handoff.sh
 
 # Frontmatter 검증 (model / tools / description)

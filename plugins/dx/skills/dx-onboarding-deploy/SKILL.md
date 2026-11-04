@@ -446,4 +446,4 @@ prompts:
 - [ ] Grafana 대시보드
 - [ ] 만족도 설문
 
-**관련 skill**: `/dx:dx-onboarding` (허브), `/dx:dx-onboarding-environment` (개발 환경), `/dx-ai-agents`
+**관련 skill**: `/dx:dx-onboarding` (허브), `/dx:dx-onboarding-environment` (개발 환경), `/ai:dx-ai-agents`

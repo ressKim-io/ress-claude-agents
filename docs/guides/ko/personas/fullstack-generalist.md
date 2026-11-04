@@ -34,9 +34,9 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 특정 스킬이 필요하면 슬래시 명령으로 직접 로드:
 
 ```
-/api-design         → REST API 설계 가이드 로드
-/docker             → Dockerfile 최적화 가이드 로드
-/effective-java     → Java 패턴 결정 가이드 로드
+/architecture:api-design         → REST API 설계 가이드 로드
+/infra:docker             → Dockerfile 최적화 가이드 로드
+/java:effective-java     → Java 패턴 결정 가이드 로드
 ```
 
 ---
@@ -48,12 +48,12 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 | 스킬 | 용도 |
 |------|------|
 | `/dx:local-dev-makefile` | `make up`으로 풀스택 실행, Hot Reload |
-| `/docker` | Dockerfile 최적화, 멀티스테이지 빌드 |
+| `/infra:docker` | Dockerfile 최적화, 멀티스테이지 빌드 |
 | `/dx:dx-onboarding-environment` | Dev Container 자동화 |
 
 ```
 "로컬 개발환경 Docker로 설정해줘"
-→ /dx:local-dev-makefile + /docker
+→ /dx:local-dev-makefile + /infra:docker
 ```
 
 ### 클라우드 IDE
@@ -82,12 +82,12 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 |------|------|
 | `/dx:clean-code` | Composed Method, Cognitive Complexity, Guard Clause, 네이밍 |
 | `/dx:refactoring-principles` | 언어 무관 기본 원칙 |
-| `/refactoring-spring` | Spring Boot 코드 |
-| `/refactoring-go` | Go 코드 |
+| `/java:refactoring-spring` | Spring Boot 코드 |
+| `/go:refactoring-go` | Go 코드 |
 
 ```
 클린 코드 리뷰:
-  /jvm-performance 또는 /go-performance → /dx:clean-code → /dx:refactoring-principles
+  /java:jvm-performance 또는 /go:go-performance → /dx:clean-code → /dx:refactoring-principles
 
 "코드 가독성 확인해줘"
 → /dx:clean-code + code-reviewer
@@ -105,7 +105,7 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 → architect-agent + 해당 도메인 스킬
 
 "Kafka vs RabbitMQ vs NATS 비교해줘"
-→ /kafka + /rabbitmq + /nats-messaging
+→ /messaging:kafka + /messaging:rabbitmq + /messaging:nats-messaging
 ```
 
 ---
@@ -160,15 +160,15 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 ```
 Week 1: 기본 사이클 익히기
   - code-reviewer, security-scanner, git-workflow
-  - /effective-java 또는 /effective-go, /dx:clean-code
+  - /java:effective-java 또는 /go:effective-go, /dx:clean-code
 
 Week 2: 프로젝트 구조
-  - /api-design, /docker, /dx:local-dev-makefile
+  - /architecture:api-design, /infra:docker, /dx:local-dev-makefile
   - architect-agent 활용
 
 Week 3: 테스트 + 관측성
-  - /spring-testing 또는 /go-testing
-  - /observability, /monitoring-grafana
+  - /java:spring-testing 또는 /go:go-testing
+  - /observability:observability, /observability:monitoring-grafana
 
 Week 4+: 도메인 심화
   - 관심 분야에 따라 MSA, K8s, 또는 Platform 스킬 확장

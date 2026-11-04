@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/ressKim/ress-claude-agents/schemas/agent-manifest.v1.json",
   "title": "Agent Manifest v1",
-  "description": "SSOT for agent (.claude/agents/<name>.md) frontmatter. Mirrors the official Claude Code subagent frontmatter spec (16 fields, verified 2026-08-25 against https://code.claude.com/docs/en/sub-agents) plus repo-local portability/handoff fields. Agents have no applies_when (LLM-routed) — they activate via directive description. Refs: docs/audit/2026-08-24-agent-harness-readiness.md",
+  "description": "SSOT for agent (plugins/<plugin>/agents/<name>.md) frontmatter. Mirrors the official Claude Code subagent frontmatter spec (16 fields, verified 2026-08-25 against https://code.claude.com/docs/en/sub-agents) plus repo-local portability/handoff fields. Agents have no applies_when (LLM-routed) — they activate via directive description. Refs: docs/audit/2026-08-24-agent-harness-readiness.md",
   "type": "object",
   "required": [
     "name",
@@ -90,7 +90,7 @@
         "minLength": 1
       },
       "uniqueItems": true,
-      "description": "Artifact types this agent outputs. Vocabulary defined in .claude/agents/_handoff.yml; enforced by scripts/validate-agent-handoff.sh."
+      "description": "Artifact types this agent outputs. Vocabulary defined in .claude/agent-handoff.yml; enforced by scripts/validate-agent-handoff.sh."
     },
     "consumes": {
       "type": "array",
@@ -99,7 +99,7 @@
         "minLength": 1
       },
       "uniqueItems": true,
-      "description": "Artifact types this agent expects. Vocabulary defined in .claude/agents/_handoff.yml."
+      "description": "Artifact types this agent expects. Vocabulary defined in .claude/agent-handoff.yml."
     },
     "effort": {
       "type": "string",

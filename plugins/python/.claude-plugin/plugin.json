@@ -1,0 +1,6 @@
+{
+  "name": "python",
+  "description": "Python — FastAPI, Django, 비동기, 성능, 테스트",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

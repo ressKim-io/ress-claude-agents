@@ -1,0 +1,6 @@
+{
+  "name": "frontend",
+  "description": "Frontend — React, Next.js, TypeScript, 상태 관리, CSS, 성능, 테스트",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

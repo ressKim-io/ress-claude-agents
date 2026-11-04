@@ -32,7 +32,7 @@ gh pr diff <PR번호> --repo <repo>
 
 #### 전체 에이전트 공통 원칙
 - **Confidence Score 필수**: 모든 발견 사항에 0-100 confidence score 부여. 50 미만은 보고하지 않음
-- **모니터링 스킬 참조**: `/monitoring-metrics`, `/monitoring-grafana`, `/observability-otel`, `/observability-otel-optimization` 기반
+- **모니터링 스킬 참조**: `/observability:monitoring-metrics`, `/observability:monitoring-grafana`, `/observability:observability-otel`, `/observability:observability-otel-optimization` 기반
 
 #### Agent 1: OTel 메트릭/레이블 정합성
 - subagent_type: `dx:code-reviewer`

@@ -34,9 +34,9 @@ Ask in natural language and the right agent is auto-selected.
 Load specific skills directly with slash commands:
 
 ```
-/api-design         → Load REST API design guide
-/docker             → Load Dockerfile optimization guide
-/effective-java     → Load Java pattern decision guide
+/architecture:api-design         → Load REST API design guide
+/infra:docker             → Load Dockerfile optimization guide
+/java:effective-java     → Load Java pattern decision guide
 ```
 
 ---
@@ -48,12 +48,12 @@ Load specific skills directly with slash commands:
 | Skill | Use Case |
 |-------|----------|
 | `/dx:local-dev-makefile` | `make up` for full-stack run, Hot Reload |
-| `/docker` | Dockerfile optimization, multi-stage builds |
+| `/infra:docker` | Dockerfile optimization, multi-stage builds |
 | `/dx:dx-onboarding-environment` | Dev Container automation |
 
 ```
 "Set up my local dev environment with Docker"
-→ /dx:local-dev-makefile + /docker
+→ /dx:local-dev-makefile + /infra:docker
 ```
 
 ### Cloud IDE
@@ -82,12 +82,12 @@ Load specific skills directly with slash commands:
 |-------|--------|
 | `/dx:clean-code` | Composed Method, Cognitive Complexity, Guard Clause, naming |
 | `/dx:refactoring-principles` | Language-agnostic fundamentals |
-| `/refactoring-spring` | Spring Boot code |
-| `/refactoring-go` | Go code |
+| `/java:refactoring-spring` | Spring Boot code |
+| `/go:refactoring-go` | Go code |
 
 ```
 Clean code review:
-  /jvm-performance or /go-performance → /dx:clean-code → /dx:refactoring-principles
+  /java:jvm-performance or /go:go-performance → /dx:clean-code → /dx:refactoring-principles
 
 "Check my code readability"
 → /dx:clean-code + code-reviewer
@@ -105,7 +105,7 @@ When you're stuck choosing between technologies:
 → architect-agent + relevant domain skills
 
 "Compare Kafka vs RabbitMQ vs NATS"
-→ /kafka + /rabbitmq + /nats-messaging
+→ /messaging:kafka + /messaging:rabbitmq + /messaging:nats-messaging
 ```
 
 ---
@@ -160,15 +160,15 @@ Before ending a session:
 ```
 Week 1: Learn the basic cycle
   - code-reviewer, security-scanner, git-workflow
-  - /effective-java or /effective-go, /dx:clean-code
+  - /java:effective-java or /go:effective-go, /dx:clean-code
 
 Week 2: Project structure
-  - /api-design, /docker, /dx:local-dev-makefile
+  - /architecture:api-design, /infra:docker, /dx:local-dev-makefile
   - Using architect-agent
 
 Week 3: Testing + Observability
-  - /spring-testing or /go-testing
-  - /observability, /monitoring-grafana
+  - /java:spring-testing or /go:go-testing
+  - /observability:observability, /observability:monitoring-grafana
 
 Week 4+: Domain deep dives
   - Expand into MSA, K8s, or Platform skills based on your interests

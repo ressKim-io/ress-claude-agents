@@ -1,0 +1,6 @@
+{
+  "name": "observability",
+  "description": "관측성 — OpenTelemetry, Prometheus, Grafana, Loki, eBPF, AIOps, 설정 리뷰",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

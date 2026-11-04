@@ -34,9 +34,9 @@ Follow step-by-step guides for real-world situations.
 
 | Scenario | Duration | Key Tools |
 |----------|----------|-----------|
-| [Build a New Microservice](scenarios/new-microservice.md) | 2-3 hours | `architect-agent`, `/msa-ddd`, `/go-microservice` |
-| [Production Incident Response](scenarios/production-incident.md) | 30-60 min | `incident-responder`, `k8s-troubleshooter`, `/observability` |
-| [Platform Team Bootstrap](scenarios/platform-bootstrap.md) | 1-2 days | `platform-engineer`, `/backstage`, `/gitops-argocd` |
+| [Build a New Microservice](scenarios/new-microservice.md) | 2-3 hours | `architect-agent`, `/architecture:msa-ddd`, `/go:go-microservice` |
+| [Production Incident Response](scenarios/production-incident.md) | 30-60 min | `incident-responder`, `k8s-troubleshooter`, `/observability:observability` |
+| [Platform Team Bootstrap](scenarios/platform-bootstrap.md) | 1-2 days | `platform-engineer`, `/platform:backstage`, `/cicd:gitops-argocd` |
 
 ---
 

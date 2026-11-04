@@ -1,0 +1,6 @@
+{
+  "name": "service-mesh",
+  "description": "서비스 메시 — Istio Core·Ambient·Gateway·보안·관측, Linkerd, Gateway API",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

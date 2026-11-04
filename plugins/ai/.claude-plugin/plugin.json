@@ -1,0 +1,6 @@
+{
+  "name": "ai",
+  "description": "AI — RAG, Vector DB, LLMOps, MLOps, 모델 서빙, Agentic 아키텍처, 프롬프트 엔지니어링",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

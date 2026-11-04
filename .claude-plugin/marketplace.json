@@ -3,6 +3,22 @@
   "owner": { "name": "ressKim-io" },
   "description": "영역별 Claude Code plugin 모음. 필요한 영역만 골라 설치한다.",
   "plugins": [
+    { "name": "go", "source": "./plugins/go", "category": "language" },
+    { "name": "java", "source": "./plugins/java", "category": "language" },
+    { "name": "python", "source": "./plugins/python", "category": "language" },
+    { "name": "frontend", "source": "./plugins/frontend", "category": "language" },
+    { "name": "architecture", "source": "./plugins/architecture", "category": "design" },
+    { "name": "messaging", "source": "./plugins/messaging", "category": "design" },
+    { "name": "k8s", "source": "./plugins/k8s", "category": "infra" },
+    { "name": "service-mesh", "source": "./plugins/service-mesh", "category": "infra" },
+    { "name": "infra", "source": "./plugins/infra", "category": "infra" },
+    { "name": "cicd", "source": "./plugins/cicd", "category": "infra" },
+    { "name": "observability", "source": "./plugins/observability", "category": "operations" },
+    { "name": "sre", "source": "./plugins/sre", "category": "operations" },
+    { "name": "platform", "source": "./plugins/platform", "category": "operations" },
+    { "name": "security", "source": "./plugins/security", "category": "product" },
+    { "name": "saas", "source": "./plugins/saas", "category": "product" },
+    { "name": "ai", "source": "./plugins/ai", "category": "product" },
     { "name": "dx", "source": "./plugins/dx", "category": "common" }
   ]
 }

@@ -16,6 +16,27 @@
 cp -r plugins/dx/skills/<이름> <프로젝트>/.claude/skills/
 ```
 
+## 필요한 plugin
+
+`/dx:review-pr-terraform` 은 `infra` 의 `terraform-reviewer` 와 `sre` 의 `cost-analyzer` 를 호출한다. 이 명령을 쓰려면 두 plugin 도 설치한다.
+
+## 함께 쓰면 좋은 plugin
+
+본문에서 참조하는 순서다. 없어도 동작하지만 해당 참조는 열리지 않는다.
+
+- [`platform`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/platform/README.md)
+- [`java`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/java/README.md)
+- [`observability`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/observability/README.md)
+- [`ai`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/ai/README.md)
+- [`cicd`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/cicd/README.md)
+- [`go`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/go/README.md)
+- [`sre`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/sre/README.md)
+- [`architecture`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/architecture/README.md)
+- [`python`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/python/README.md)
+- [`infra`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/infra/README.md)
+- [`k8s`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/k8s/README.md)
+- [`security`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/security/README.md)
+
 ## 설치본에 포함되지 않는 것
 
 **rule** 은 plugin 에 실을 수 없다. 필요하면 프로젝트의 `.claude/rules/` 로 복사한다.

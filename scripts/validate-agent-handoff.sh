@@ -2,7 +2,7 @@
 # Agent handoff 정의 검증
 #
 # 검증 항목:
-#   1. agents     : .claude/agents/_handoff.yml에 모든 agent가 등록됐는지
+#   1. agents     : .claude/agent-handoff.yml 에 모든 agent가 등록됐는지
 #                   (실제 .md 파일과 매핑 일치)
 #   2. vocabulary : agent의 produces/consumes에 정의되지 않은 artifact 사용 금지
 #
@@ -27,7 +27,7 @@ source "$(cd "$(dirname "$0")" && pwd)/lib/layout.sh"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-HANDOFF_FILE=".claude/agents/_handoff.yml"
+HANDOFF_FILE=".claude/agent-handoff.yml"
 
 EXIT_CODE=0
 FAILED=()
@@ -40,7 +40,7 @@ section()  { printf '\n=== %s ===\n' "$1"; }
 # YAML 파싱 헬퍼 (간단 grep/awk 기반)
 # ---------------------------------------------------------------------------
 
-# _handoff.yml에서 정의된 artifact 이름 추출
+# agent-handoff.yml 에서 정의된 artifact 이름 추출
 get_artifacts() {
     awk '
         /^artifacts:/ { in_section=1; next }
@@ -51,7 +51,7 @@ get_artifacts() {
     ' "$HANDOFF_FILE"
 }
 
-# _handoff.yml에서 정의된 agent 이름 추출
+# agent-handoff.yml 에서 정의된 agent 이름 추출
 get_handoff_agents() {
     awk '
         /^agents:/ { in_section=1; next }
@@ -79,10 +79,10 @@ get_agent_field() {
 }
 
 # ---------------------------------------------------------------------------
-# Check 1: 모든 agent가 _handoff.yml에 등록됐는지
+# Check 1: 모든 agent가 agent-handoff.yml 에 등록됐는지
 # ---------------------------------------------------------------------------
 check_agents_registered() {
-    section "Agent registration (_handoff.yml ↔ .claude/agents/)"
+    section "Agent registration (agent-handoff.yml ↔ plugins/*/agents/)"
 
     assert_floor agents || log_fail "agent 개수 하한 미달"
 
@@ -94,11 +94,11 @@ check_agents_registered() {
     extra=$(comm -13 <(printf '%s\n' "$actual_agents") <(printf '%s\n' "$handoff_agents"))
 
     if [[ -n "$missing" ]]; then
-        log_fail "_handoff.yml 미등록 agent ($(echo "$missing" | wc -l | tr -d ' ')개):"
+        log_fail "agent-handoff.yml 미등록 agent ($(echo "$missing" | wc -l | tr -d ' ')개):"
         printf '%s\n' "$missing" | sed 's/^/        /'
     fi
     if [[ -n "$extra" ]]; then
-        log_fail "_handoff.yml에는 있으나 실제 없는 agent ($(echo "$extra" | wc -l | tr -d ' ')개):"
+        log_fail "agent-handoff.yml 에는 있으나 실제 없는 agent ($(echo "$extra" | wc -l | tr -d ' ')개):"
         printf '%s\n' "$extra" | sed 's/^/        /'
     fi
     if [[ -z "$missing" && -z "$extra" ]]; then

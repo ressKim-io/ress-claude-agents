@@ -50,7 +50,7 @@
 
 ## Step 1: 서비스 설계
 
-**사용 도구**: `architect-agent` + `/msa-ddd`
+**사용 도구**: `architect-agent` + `/architecture:msa-ddd`
 
 ### 이렇게 요청하세요
 
@@ -79,13 +79,13 @@
 
 ## Step 2: 프로젝트 구조 생성
 
-**사용 도구**: `/go-performance` + `/go-microservice`
+**사용 도구**: `/go:go-performance` + `/go:go-microservice`
 
 ### 이렇게 요청하세요
 
 ```
 "Go 주문 서비스 프로젝트 구조를 헥사고날 아키텍처로 생성해줘.
- - /go-microservice 스킬 참고
+ - /go:go-microservice 스킬 참고
  - cmd/server, internal/domain, internal/adapter, internal/port 구조"
 ```
 
@@ -118,7 +118,7 @@ order-service/
 
 ## Step 3: 핵심 비즈니스 로직 구현
 
-**사용 도구**: `/go-performance` + `/go-database` + `/effective-go`
+**사용 도구**: `/go:go-performance` + `/go:go-database` + `/go:effective-go`
 
 ### 이렇게 요청하세요
 
@@ -144,7 +144,7 @@ order-service/
 
 ## Step 4: 복원력 패턴 적용
 
-**사용 도구**: `/msa-saga` + `/msa-resilience` + `/msa-event-driven`
+**사용 도구**: `/architecture:msa-saga` + `/architecture:msa-resilience` + `/architecture:msa-event-driven`
 
 ### 이렇게 요청하세요
 
@@ -172,7 +172,7 @@ order-service/
 
 ## Step 5: 테스트 작성
 
-**사용 도구**: `code-reviewer` + `/go-testing`
+**사용 도구**: `code-reviewer` + `/go:go-testing`
 
 ### 이렇게 요청하세요
 
@@ -270,6 +270,6 @@ curl http://localhost:8080/health
 ### 다음 단계
 
 - [프로덕션 장애 대응](production-incident.md) — 서비스 운영 중 장애 대응
-- `/deployment-strategies` — Canary/Blue-Green 배포 전략
-- `/gitops-argocd` — ArgoCD로 GitOps 배포 설정
-- `/observability-otel` — OpenTelemetry 계측 추가
+- `/cicd:deployment-strategies` — Canary/Blue-Green 배포 전략
+- `/cicd:gitops-argocd` — ArgoCD로 GitOps 배포 설정
+- `/observability:observability-otel` — OpenTelemetry 계측 추가

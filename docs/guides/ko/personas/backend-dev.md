@@ -23,7 +23,7 @@
 
 ```
 1. 코드 작성 중
-   → /jvm-performance 또는 /go-performance가 자동 리뷰 제안
+   → /java:jvm-performance 또는 /go:go-performance가 자동 리뷰 제안
 
 2. 코드 완성 후
    → "코드 리뷰해줘" → code-reviewer 실행
@@ -37,9 +37,9 @@
 
 | 매일 | 주 1-2회 | 프로젝트 초기 |
 |------|---------|-------------|
-| `/effective-java` 또는 `/effective-go` | `/msa-resilience` | `/msa-ddd` |
-| `/spring-patterns` 또는 `/go-microservice` | `/database` | `/api-design` |
-| `/spring-testing` 또는 `/go-testing` | `/msa-event-driven` | `/hexagonal-clean-architecture` |
+| `/java:effective-java` 또는 `/go:effective-go` | `/architecture:msa-resilience` | `/architecture:msa-ddd` |
+| `/java:spring-patterns` 또는 `/go:go-microservice` | `/infra:database` | `/architecture:api-design` |
+| `/java:spring-testing` 또는 `/go:go-testing` | `/architecture:msa-event-driven` | `/architecture:hexagonal-clean-architecture` |
 | `/dx:clean-code` | `/dx:refactoring-principles` | `/dx:clean-code` |
 
 ---
@@ -50,46 +50,46 @@
 
 | 에이전트 / 스킬 | 용도 |
 |---------|------|
-| `/jvm-performance` | Virtual Threads, WebFlux, JVM 튜닝, 대용량 트래픽 |
+| `/java:jvm-performance` | Virtual Threads, WebFlux, JVM 튜닝, 대용량 트래픽 |
 | `code-reviewer` | 코드 품질, 패턴 일관성, 버그 탐지 |
 
 ### 핵심 스킬
 
 | 카테고리 | 스킬 | 핵심 내용 |
 |---------|------|----------|
-| 기본 | `/effective-java` | Record, Builder, DI, 불변 객체, Modern Java |
-| 기본 | `/spring-patterns` | @Transactional, DTO/Entity, 예외 전략, 계층 구조 |
-| 데이터 | `/spring-data` | JPA, QueryDSL 패턴 |
-| 데이터 | `/spring-jooq` | jOOQ DSL, 코드 생성, Keyset Pagination |
-| 캐싱 | `/spring-cache` | Redis 캐싱 전략 |
-| 보안 | `/spring-security` | Security, Method Security |
-| 인증 | `/spring-oauth2` | OAuth2, JWT |
-| 테스트 | `/spring-testing` | JUnit 5, Mockito |
-| 테스트 | `/spring-testcontainers` | Testcontainers, REST Assured |
-| 동시성 | `/concurrency-spring` | @Async, Virtual Threads |
-| 리팩토링 | `/refactoring-spring` | Spring 리팩토링 패턴 |
+| 기본 | `/java:effective-java` | Record, Builder, DI, 불변 객체, Modern Java |
+| 기본 | `/java:spring-patterns` | @Transactional, DTO/Entity, 예외 전략, 계층 구조 |
+| 데이터 | `/java:spring-data` | JPA, QueryDSL 패턴 |
+| 데이터 | `/java:spring-jooq` | jOOQ DSL, 코드 생성, Keyset Pagination |
+| 캐싱 | `/java:spring-cache` | Redis 캐싱 전략 |
+| 보안 | `/java:spring-security` | Security, Method Security |
+| 인증 | `/java:spring-oauth2` | OAuth2, JWT |
+| 테스트 | `/java:spring-testing` | JUnit 5, Mockito |
+| 테스트 | `/java:spring-testcontainers` | Testcontainers, REST Assured |
+| 동시성 | `/java:concurrency-spring` | @Async, Virtual Threads |
+| 리팩토링 | `/java:refactoring-spring` | Spring 리팩토링 패턴 |
 | 클린 코드 | `/dx:clean-code` | Guard Clause, Cognitive Complexity, 네이밍, Tell Don't Ask |
 
 ### 상황별 요청 예시
 
 ```
 "Virtual Threads로 마이그레이션하고 싶어"
-→ /jvm-performance + /concurrency-spring
+→ /java:jvm-performance + /java:concurrency-spring
 
 "JPA N+1 문제가 발생해"
-→ /postgresql-operations + /spring-data + /database
+→ /infra:postgresql-operations + /java:spring-data + /infra:database
 
 "OAuth2 + JWT 인증 구현해줘"
-→ /spring-oauth2 + /spring-security
+→ /java:spring-oauth2 + /java:spring-security
 
 "Testcontainers로 통합 테스트 작성해줘"
-→ /spring-testcontainers + /spring-testing
+→ /java:spring-testcontainers + /java:spring-testing
 
 "클린 코드 품질 확인해줘"
-→ /jvm-performance + /dx:clean-code + /dx:refactoring-principles
+→ /java:jvm-performance + /dx:clean-code + /dx:refactoring-principles
 
 "Java 보안 리뷰해줘"
-→ /spring-security-review + security-scanner
+→ /java:spring-security-review + security-scanner
 ```
 
 ---
@@ -100,43 +100,43 @@
 
 | 에이전트 / 스킬 | 용도 |
 |---------|------|
-| `/go-performance` | Worker Pool, Fan-Out/In, sync.Pool, pprof |
+| `/go:go-performance` | Worker Pool, Fan-Out/In, sync.Pool, pprof |
 | `code-reviewer` | 코드 품질, Go idiom 준수 |
 
 ### 핵심 스킬
 
 | 카테고리 | 스킬 | 핵심 내용 |
 |---------|------|----------|
-| 기본 | `/effective-go` | Go Proverbs, Modern Go (1.21+), 패턴 결정 가이드 |
-| 기본 | `/go-microservice` | MSA 프로젝트 구조, 헥사고날 아키텍처 |
-| 에러 | `/go-errors` | 에러 처리 패턴, 래핑 |
-| 웹 | `/go-gin` | Gin 프레임워크 패턴 |
-| DB | `/go-database` | pgx, sqlc, sqlx, ent, bun |
-| 동시성 | `/concurrency-go` | Mutex, Channel, Worker Pool |
-| 테스트 | `/go-testing` | Table-driven testing |
-| 리팩토링 | `/refactoring-go` | Go 리팩토링 패턴 |
+| 기본 | `/go:effective-go` | Go Proverbs, Modern Go (1.21+), 패턴 결정 가이드 |
+| 기본 | `/go:go-microservice` | MSA 프로젝트 구조, 헥사고날 아키텍처 |
+| 에러 | `/go:effective-go` | 에러 처리 패턴, 래핑 |
+| 웹 | `/go:go-gin` | Gin 프레임워크 패턴 |
+| DB | `/go:go-database` | pgx, sqlc, sqlx, ent, bun |
+| 동시성 | `/go:concurrency-go` | Mutex, Channel, Worker Pool |
+| 테스트 | `/go:go-testing` | Table-driven testing |
+| 리팩토링 | `/go:refactoring-go` | Go 리팩토링 패턴 |
 | 클린 코드 | `/dx:clean-code` | Guard Clause, Cognitive Complexity, 네이밍 |
 
 ### 상황별 요청 예시
 
 ```
 "Go MSA 프로젝트 구조 잡아줘"
-→ /go-performance + /go-microservice + /effective-go
+→ /go:go-performance + /go:go-microservice + /go:effective-go
 
 "Worker Pool 패턴 구현해줘"
-→ /go-performance + /concurrency-go
+→ /go:go-performance + /go:concurrency-go
 
 "sqlc로 DB 레이어 설계해줘"
-→ /go-database + /database
+→ /go:go-database + /infra:database
 
 "Table-driven test 작성해줘"
-→ /go-testing + /effective-go
+→ /go:go-testing + /go:effective-go
 
 "Go 에러 핸들링 + OTel 통합 리뷰해줘"
-→ /go-performance + /effective-go
+→ /go:go-performance + /go:effective-go
 
 "Go 클린 코드 리뷰해줘"
-→ /go-performance + /dx:clean-code + /refactoring-go
+→ /go:go-performance + /dx:clean-code + /go:refactoring-go
 ```
 
 ---
@@ -149,39 +149,39 @@
 
 ```
 서비스 경계 정의:
-  architect-agent + /msa-ddd + /msa-api-gateway-patterns
+  architect-agent + /architecture:msa-ddd + /architecture:msa-api-gateway-patterns
 
 이벤트 드리븐 설계:
-  architect-agent + /msa-event-driven + /msa-cqrs-eventsourcing
+  architect-agent + /architecture:msa-event-driven + /architecture:msa-cqrs-eventsourcing
 
 상태머신 설계:
-  /state-machine + /msa-saga
+  /architecture:state-machine + /architecture:msa-saga
 ```
 
 ### 복원력/신뢰성
 
 ```
 장애 격리:
-  /msa-resilience + /cell-based-architecture
+  /architecture:msa-resilience + /architecture:cell-based-architecture
 
 분산 트랜잭션:
-  /msa-saga + /distributed-lock
+  /architecture:msa-saga + /architecture:distributed-lock
 
 대규모 트래픽:
-  /high-traffic-design + /database-sharding + /redis-streams
+  /architecture:high-traffic-design + /infra:database-sharding + /messaging:redis-streams
 ```
 
 ### 메시징
 
 ```
 Kafka 기반:
-  /kafka + /kafka-patterns + /kafka-advanced
+  /messaging:kafka + /messaging:kafka-patterns + /messaging:kafka-advanced
 
 이벤트 스트리밍:
-  /kafka-streams + /kafka-connect-cdc
+  /messaging:kafka-streams + /messaging:kafka-connect-cdc
 
 경량 메시징:
-  /rabbitmq 또는 /nats-messaging
+  /messaging:rabbitmq 또는 /messaging:nats-messaging
 ```
 
 ---

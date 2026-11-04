@@ -1,0 +1,6 @@
+{
+  "name": "java",
+  "description": "Java·Spring — Effective Java, Spring Data·Security·Cache, jOOQ, JVM 성능, 테스트",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

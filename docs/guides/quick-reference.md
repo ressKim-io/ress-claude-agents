@@ -37,49 +37,49 @@ Know these before you start.
 
 | Situation | Core Agent | Supporting Skills | How to Request |
 |-----------|-----------|-------------------|----------------|
-| Java code review | `/jvm-performance` | `/effective-java`, `/spring-patterns` | "Review my Java code" |
-| Go code review | `/go-performance` | `/effective-go`, `/go-microservice` | "Review my Go code" |
-| API design | `architect-agent` | `/api-design`, `/grpc` | "Review my REST API design" |
-| MSA service decomposition | `architect-agent` | `/msa-ddd`, `/hexagonal-clean-architecture` | "Design service boundaries" |
-| Distributed transactions | — | `/msa-saga`, `/msa-event-driven` | "Implement the Saga pattern" |
-| Resilience patterns | `/jvm-performance` | `/msa-resilience`, `/spring-cache` | "Set up a Circuit Breaker" |
-| DB performance issues | — | `/postgresql-operations`, `/mysql-operations`, `/database-sharding` | "Optimize this query" |
-| Redis caching | — | `/redis-operations`, `/spring-cache`, `/distributed-lock` | "Design a Redis caching strategy" |
-| Load testing | `load-tester` | `/load-testing` | "Write a K6 load test scenario" |
-| Writing tests | `code-reviewer` | `/spring-testing`, `/go-testing` | "Write test code" |
+| Java code review | `/java:jvm-performance` | `/java:effective-java`, `/java:spring-patterns` | "Review my Java code" |
+| Go code review | `/go:go-performance` | `/go:effective-go`, `/go:go-microservice` | "Review my Go code" |
+| API design | `architect-agent` | `/architecture:api-design`, `/architecture:grpc` | "Review my REST API design" |
+| MSA service decomposition | `architect-agent` | `/architecture:msa-ddd`, `/architecture:hexagonal-clean-architecture` | "Design service boundaries" |
+| Distributed transactions | — | `/architecture:msa-saga`, `/architecture:msa-event-driven` | "Implement the Saga pattern" |
+| Resilience patterns | `/java:jvm-performance` | `/architecture:msa-resilience`, `/java:spring-cache` | "Set up a Circuit Breaker" |
+| DB performance issues | — | `/infra:postgresql-operations`, `/infra:mysql-operations`, `/infra:database-sharding` | "Optimize this query" |
+| Redis caching | — | `/infra:redis-operations`, `/java:spring-cache`, `/architecture:distributed-lock` | "Design a Redis caching strategy" |
+| Load testing | `load-tester` | `/sre:load-testing` | "Write a K6 load test scenario" |
+| Writing tests | `code-reviewer` | `/java:spring-testing`, `/go:go-testing` | "Write test code" |
 | Clean code review | `/dx:clean-code` | `/dx:clean-code`, `/dx:refactoring-principles` | "Check clean code quality" |
-| Security code review | `/dx:clean-code` | `/effective-java` or `/effective-go` | "Security review my Java/Go code" |
+| Security code review | `/dx:clean-code` | `/java:effective-java` or `/go:effective-go` | "Security review my Java/Go code" |
 
 ### Java Combos
 
 ```
 New Spring project:
-  /spring-patterns → /effective-java → /spring-security → /spring-testing
+  /java:spring-patterns → /java:effective-java → /java:spring-security → /java:spring-testing
 
 Spring performance optimization:
-  /jvm-performance → /concurrency-spring → /spring-cache → /spring-jooq
+  /java:jvm-performance → /java:concurrency-spring → /java:spring-cache → /java:spring-jooq
 
 Clean code + refactoring:
-  /jvm-performance → /dx:clean-code → /dx:refactoring-principles → /refactoring-spring
+  /java:jvm-performance → /dx:clean-code → /dx:refactoring-principles → /java:refactoring-spring
 
 Security hardening:
-  /spring-security-review → security-scanner → /spring-security
+  /java:spring-security-review → security-scanner → /java:spring-security
 ```
 
 ### Go Combos
 
 ```
 New Go project:
-  /effective-go → /go-microservice → /go-database → /go-testing
+  /go:effective-go → /go:go-microservice → /go:go-database → /go:go-testing
 
 Go performance optimization:
-  /go-performance → /concurrency-go → /go-database → /refactoring-go
+  /go:go-performance → /go:concurrency-go → /go:go-database → /go:refactoring-go
 
 Clean code + refactoring:
-  /go-performance → /dx:clean-code → /dx:refactoring-principles → /refactoring-go
+  /go:go-performance → /dx:clean-code → /dx:refactoring-principles → /go:refactoring-go
 
 Error handling + OTel:
-  /go-performance → /observability-otel → /go-errors
+  /go:go-performance → /observability:observability-otel → /go:effective-go
 ```
 
 ---
@@ -90,33 +90,33 @@ Error handling + OTel:
 
 | Situation | Core Agent | Supporting Skills | How to Request |
 |-----------|-----------|-------------------|----------------|
-| K8s troubleshooting | `k8s-troubleshooter` | `/k8s-security`, `/k8s-autoscaling` | "My pods are crashing, analyze it" |
-| Production incident | `incident-responder` | `/observability`, `/monitoring-troubleshoot` | "Handle this production incident" |
-| Terraform review | `terraform-reviewer` | `/terraform-modules`, `/terraform-security` | "Review my Terraform plan" |
-| GitOps deployment | `ci-optimizer` | `/gitops-argocd`, `/deployment-strategies` | "Set up ArgoCD deployment" |
-| Observability setup | — | `/observability-otel`, `/observability-otel-scale`, `/monitoring-grafana` | "Configure OTel Collector" |
-| Service mesh | `k8s-troubleshooter` | `/istio-core`, `/linkerd` | "Review Istio configuration" |
-| Cost optimization | `cost-analyzer` | `/finops`, `/finops-tools` | "Analyze cloud costs" |
-| Chaos testing | `incident-responder` | `/chaos-engineering` | "Design a chaos experiment" |
-| DR planning | `k8s-troubleshooter` | `/disaster-recovery` | "Create a DR plan" |
-| CI/CD optimization | `ci-optimizer` | `/cicd-devsecops`, `/cicd-policy` | "Analyze the CI pipeline" |
-| K8s manifest review | `k8s-reviewer` | `/k8s-security`, `/k8s-helm` | "Review my K8s manifests" |
-| Dockerfile review | `dockerfile-reviewer` | `/docker` | "Review my Dockerfile" |
-| CI/CD pipeline review | `cicd-reviewer` | `/cicd-devsecops` | "Review my GitHub Actions" |
-| GitOps review | `gitops-reviewer` | `/gitops-argocd` | "Review my ArgoCD config" |
-| Observability review | `observability-reviewer` | `/observability-otel` | "Review my Prometheus rules" |
+| K8s troubleshooting | `k8s-troubleshooter` | `/k8s:k8s-security`, `/k8s:k8s-autoscaling` | "My pods are crashing, analyze it" |
+| Production incident | `incident-responder` | `/observability:observability`, `/observability:monitoring-troubleshoot` | "Handle this production incident" |
+| Terraform review | `terraform-reviewer` | `/infra:terraform-modules`, `/infra:terraform-security` | "Review my Terraform plan" |
+| GitOps deployment | `ci-optimizer` | `/cicd:gitops-argocd`, `/cicd:deployment-strategies` | "Set up ArgoCD deployment" |
+| Observability setup | — | `/observability:observability-otel`, `/observability:observability-otel-scale`, `/observability:monitoring-grafana` | "Configure OTel Collector" |
+| Service mesh | `k8s-troubleshooter` | `/service-mesh:istio-core`, `/service-mesh:linkerd` | "Review Istio configuration" |
+| Cost optimization | `cost-analyzer` | `/sre:finops`, `/sre:finops-tools` | "Analyze cloud costs" |
+| Chaos testing | `incident-responder` | `/sre:chaos-engineering` | "Design a chaos experiment" |
+| DR planning | `k8s-troubleshooter` | `/sre:disaster-recovery` | "Create a DR plan" |
+| CI/CD optimization | `ci-optimizer` | `/cicd:cicd-devsecops`, `/cicd:cicd-policy` | "Analyze the CI pipeline" |
+| K8s manifest review | `k8s-reviewer` | `/k8s:k8s-security`, `/k8s:k8s-helm` | "Review my K8s manifests" |
+| Dockerfile review | `dockerfile-reviewer` | `/infra:docker` | "Review my Dockerfile" |
+| CI/CD pipeline review | `cicd-reviewer` | `/cicd:cicd-devsecops` | "Review my GitHub Actions" |
+| GitOps review | `gitops-reviewer` | `/cicd:gitops-argocd` | "Review my ArgoCD config" |
+| Observability review | `observability-reviewer` | `/observability:observability-otel` | "Review my Prometheus rules" |
 
 ### Security Review Combos (Red Team Prep)
 
 ```
 K8s security audit:
-  k8s-security-reviewer + network-security-reviewer → /k8s-security
+  k8s-security-reviewer + network-security-reviewer → /k8s:k8s-security
 
 Container security:
-  container-security-reviewer + dockerfile-reviewer → /docker
+  container-security-reviewer + dockerfile-reviewer → /infra:docker
 
 CI/CD security:
-  cicd-security-reviewer → /supply-chain-security → /cicd-devsecops
+  cicd-security-reviewer → /cicd:supply-chain-security → /cicd:cicd-devsecops
 
 Full pre-pentest:
   k8s-security-reviewer + container-security-reviewer + cicd-security-reviewer + network-security-reviewer
@@ -126,20 +126,20 @@ Full pre-pentest:
 
 ```
 EKS cluster setup:
-  terraform-reviewer → /aws-eks → /aws-eks-advanced → /k8s-security
+  terraform-reviewer → /infra:aws-eks → /infra:aws-eks-advanced → /k8s:k8s-security
 
 Multi-cloud IaC:
-  terraform-reviewer → /crossplane → /crossplane-advanced → /terraform-modules
+  terraform-reviewer → /infra:crossplane → /infra:crossplane-advanced → /infra:terraform-modules
 ```
 
 ### Observability Combos
 
 ```
 Full Observability Stack:
-  /observability-otel → /monitoring-grafana → /monitoring-metrics → /alerting-discord
+  /observability:observability-otel → /observability:monitoring-grafana → /observability:monitoring-metrics → /observability:alerting-discord
 
 eBPF-based Zero-Code:
-  /ebpf-observability → /ebpf-observability-advanced
+  /observability:ebpf-observability → /observability:ebpf-observability-advanced
 ```
 
 ---
@@ -150,13 +150,13 @@ eBPF-based Zero-Code:
 
 | Situation | Core Agent | Supporting Skills | How to Request |
 |-----------|-----------|-------------------|----------------|
-| New project setup | `architect-agent` | `/api-design`, `/docker` | "Design the project structure" |
+| New project setup | `architect-agent` | `/architecture:api-design`, `/infra:docker` | "Design the project structure" |
 | Code cleanup | `code-reviewer` | `/dx:clean-code`, `/dx:refactoring-principles` | "Refactor this code" |
 | Clean code check | `/dx:clean-code` | `/dx:clean-code` | "Check code readability" |
 | PR automation | `git-workflow` | `/dx:conventional-commits`, `/dx:git-workflow` | "Create a PR" |
-| Dev environment setup | `platform-engineer` | `/dx:local-dev-makefile`, `/docker` | "Set up local dev environment" |
+| Dev environment setup | `platform-engineer` | `/dx:local-dev-makefile`, `/infra:docker` | "Set up local dev environment" |
 | Documentation | `dev-logger` | `/dx:docs-as-code` | "Generate API docs" |
-| Security check | `security-scanner` | `/k8s-security`, `/terraform-security` | "Run a security scan" |
+| Security check | `security-scanner` | `/k8s:k8s-security`, `/infra:terraform-security` | "Run a security scan" |
 | Tech decisions | `architect-agent` | Relevant domain skills | "Compare A vs B" |
 
 ---
@@ -172,15 +172,15 @@ Use multiple agents in sequence for complex workflows.
 ```
 1. architect-agent    → Design service boundaries, define API contracts
       ↓
-2. /jvm-performance or /go-performance → Implement code, apply patterns
+2. /java:jvm-performance or /go:go-performance → Implement code, apply patterns
       ↓
 3. code-reviewer      → Code review, quality verification
       ↓
-4. /jvm-performance or /go-performance → Clean code + security review (built-in checklists)
+4. /java:jvm-performance or /go:go-performance → Clean code + security review (built-in checklists)
       ↓
 5. security-scanner   → Security vulnerability check
       ↓
-6. /load-testing      → Performance verification
+6. /sre:load-testing      → Performance verification
       ↓
 7. git-workflow       → Create PR
 ```
@@ -194,9 +194,9 @@ Use multiple agents in sequence for complex workflows.
       ↓
 2. k8s-troubleshooter → Cluster diagnostics
       ↓
-3. /postgresql-operations → DB issue analysis (if needed)
+3. /infra:postgresql-operations → DB issue analysis (if needed)
       ↓
-4. /observability-otel → Trace/metrics analysis
+4. /observability:observability-otel → Trace/metrics analysis
       ↓
 5. dev-logger         → Incident record (/dx:log-trouble)
 ```
@@ -214,7 +214,7 @@ Use multiple agents in sequence for complex workflows.
       ↓
 4. ci-optimizer       → CI/CD pipeline optimization
       ↓
-5. /observability-otel → Observability defaults
+5. /observability:observability-otel → Observability defaults
       ↓
 6. finops-advisor     → Cost strategy
 ```

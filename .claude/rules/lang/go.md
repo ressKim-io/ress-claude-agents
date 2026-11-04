@@ -167,4 +167,4 @@ viper.Unmarshal(&cfg)
 
 ## 참조
 
-상세 가이드: `/effective-go` 스킬 참조
+상세 가이드: `/go:effective-go` 스킬 참조

@@ -158,5 +158,5 @@ depends_on: []
 
 - 관련 ADR: `docs/adr/{NNNN}-...md`
 - 관련 dev-logs: `docs/dev-logs/{YYYY-MM-DD-...}.md`
-- 관련 skill: `.claude/skills/{도메인}/{이름}.md`
+- 관련 skill: `.claude/skills/{이름}/SKILL.md`
 - 외부 자료: {vendor docs / paper / blog}

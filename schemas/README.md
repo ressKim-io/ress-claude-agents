@@ -6,9 +6,9 @@ Migration 0002 P1 결과물. JSON Schema Draft 2020-12 기반.
 
 | Schema | 검증 대상 | Required 필드 |
 |---|---|---|
-| `skill-manifest.v1.json` | `assets/skills/<cat>/<name>/SKILL.md` (P2~), 현재 `.claude/skills/**/*.md` | `name`, `description` |
+| `skill-manifest.v1.json` | `assets/skills/<cat>/<name>/SKILL.md` (P2~), 현재 `plugins/*/skills/*/SKILL.md` | `name`, `description` |
 | `project-profile.v1.json` | `claude-agents probe` 출력 (`project-profile.yml`) | 8개 (schema_version/generated_at/generator/repo/languages/frameworks/build_systems/files_signatures) |
-| `agent-manifest.v1.json` | `.claude/agents/*.md`, `assets/agents/<name>/AGENT.md` (P4~) | `name`, `description` |
+| `agent-manifest.v1.json` | `plugins/*/agents/*.md`, `assets/agents/<name>/AGENT.md` (P4~) | `name`, `description` |
 
 ## 사용처
 
