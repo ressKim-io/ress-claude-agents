@@ -1,6 +1,6 @@
 ---
 name: gitops-argocd
-description: "GitOps & ArgoCD 가이드 — ArgoCD를 활용한 선언적 GitOps 배포 및 App of Apps 패턴 Use when working with cicd 도메인의 패턴 / 구현 선택."
+description: "ArgoCD 기본 — GitOps 원칙, 설치, Application 정의, App of Apps, CLI, bootstrap sync-wave. Use when ArgoCD 를 처음 도입하거나 Application 을 정의할 때."
 ---
 
 # GitOps & ArgoCD 가이드

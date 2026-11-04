@@ -1,6 +1,6 @@
 ---
 name: cloud-cli-safety
-description: "AWS / GCP 위험 CLI 명령 카탈로그 — 데이터 손실 / 권한 / 비용 폭증 위험. Use when 클라우드 destructive operation 검토 또는 install 받는 프로젝트의 cloud-cli-safety rule 활성화 시."
+description: "AWS·GCP 위험 CLI 명령 카탈로그 — 데이터 손실, 권한, 비용 폭증 위험. Use when 클라우드 destructive operation 을 검토하거나 프로젝트에 cloud-cli-safety rule 을 켤 때."
 ---
 
 # Cloud CLI Safety — 위험 명령 카탈로그

@@ -43,28 +43,28 @@ cp -r plugins/infra/skills/<이름> <프로젝트>/.claude/skills/
 
 | 이름 | 설명 |
 |---|---|
-| `/infra:aws-eks` | AWS EKS 가이드 — EKS 클러스터 구성, VPC 설계, IRSA, Add-ons 관리 |
-| `/infra:aws-eks-advanced` | AWS EKS 고급 가이드 — Karpenter 설정, 보안 강화, 운영 최적화 |
-| `/infra:aws-lambda` | AWS Lambda & Serverless Patterns — AWS Lambda 기반 서버리스 아키텍처 설계, 콜드 스타트 최적화, 이벤트 소스 통합 |
-| `/infra:cloud-cli-safety` | AWS / GCP 위험 CLI 명령 카탈로그 — 데이터 손실 / 권한 / 비용 폭증 위험 |
-| `/infra:compatibility-matrix` | Compatibility Matrix 가이드 — K8s 에코시스템 버전 호환성 매트릭스 관리. EKS/GKE/kind 간 전환 시 버전 조합 검증 |
-| `/infra:compose-to-k8s` | Docker Compose → Kubernetes 전환 가이드 — Docker Compose에서 Kubernetes 매니페스트로의 전환 패턴. Kompose 활용 및 수동 전환 전략 |
-| `/infra:crossplane` | Crossplane 멀티클라우드 가이드 — Kubernetes-native 인프라 관리: Provider 설정, Compositions, 멀티클라우드 패턴 |
-| `/infra:crossplane-advanced` | Crossplane 고급 패턴 가이드 — 멀티클라우드 패턴, GitOps 통합, Drift Detection, Crossplane v2 |
-| `/infra:database` | Database Patterns — 인덱스 최적화, N+1 해결, 쿼리 성능, 마이그레이션 패턴 |
-| `/infra:database-migration` | Database Migration Patterns — Flyway, Liquibase, golang-migrate, 안전한 스키마 변경 패턴 |
-| `/infra:database-sharding` | 데이터베이스 샤딩 가이드 — 대규모 트래픽 환경에서 수평 확장을 위한 샤딩 전략, Shard Key 선택, Citus/Vitess 구현, Read Replica 패턴 |
-| `/infra:db-managed-service-checklist` | 매니지드 DB 서비스(RDS, Cloud SQL, Aurora 등)와 self-hosted/local DB의 차이를 점검하는 체크리스트. superuser 권한, schema, extension, … |
-| `/infra:docker` | Docker & Dockerfile Patterns — Dockerfile 최적화, 멀티스테이지 빌드, Go/Java 컨테이너 패턴 |
-| `/infra:eks-pitfalls` | EKS 운영 Pitfalls — EKS 운영 중 발생하는 실전 함정 카탈로그. 매니지드 노드그룹/IAM/networking/스케일링 |
-| `/infra:expand-contract-pattern` | Zero-downtime DB schema migration을 위한 Expand-Contract (Parallel Change) 패턴. NOT NULL 컬럼 추가/컬럼명 변경/타입 변경을 3단계 … |
+| `/infra:aws-eks` | AWS EKS 기본 — 클러스터 구성, VPC 설계, IRSA, Add-ons 관리 |
+| `/infra:aws-eks-advanced` | EKS 심화 — Karpenter 설정, 보안 강화, 운영 최적화 |
+| `/infra:aws-lambda` | AWS Lambda 서버리스 — 콜드 스타트 최적화, 이벤트 소스 통합, VPC 연결, 비용 최적화 |
+| `/infra:cloud-cli-safety` | AWS·GCP 위험 CLI 명령 카탈로그 — 데이터 손실, 권한, 비용 폭증 위험 |
+| `/infra:compatibility-matrix` | K8s 에코시스템 버전 호환성 매트릭스 — kind·EKS·GKE 버전 매핑, add-on 호환성, deprecated API 검증 |
+| `/infra:compose-to-k8s` | Docker Compose 에서 Kubernetes 매니페스트로 전환 — Kompose 자동 변환, 수동 패턴, StatefulSet |
+| `/infra:crossplane` | Crossplane 기본 — 설치, Provider, Managed Resources, Compositions, Terraform 과 비교 |
+| `/infra:crossplane-advanced` | Crossplane 심화 — GCP·Azure ProviderConfig, ArgoCD 연동, drift 감지와 수정, Crossplane v2 |
+| `/infra:database` | DB 성능 일반 — 인덱스 설계, N+1 해결, 쿼리 최적화, 커넥션 풀 설정 |
+| `/infra:database-migration` | DB 스키마 마이그레이션 도구 — Flyway, Liquibase, golang-migrate, 안전한 스키마 변경 |
+| `/infra:database-sharding` | DB 샤딩 — Shard Key 선택, Citus·Vitess, Resharding, cross-shard 쿼리, Read Replica, hot shard 해결 |
+| `/infra:db-managed-service-checklist` | self-hosted PostgreSQL·MySQL 에서 RDS, Cloud SQL, Aurora 로 이전할 때 체크리스트 — 권한·확장·설정 차이, pg_restore·mysqldump 주의 |
+| `/infra:docker` | Dockerfile 최적화 — 멀티스테이지 빌드, Go·Spring Boot 컨테이너, 레이어 캐시, 보안, 멀티 플랫폼 빌드, Compose |
+| `/infra:eks-pitfalls` | EKS 운영 함정 — VPC CNI prefix delegation·max-pods, 서브넷 CIDR, WARM_IP_TARGET, Kyverno webhook, IAM 누락, IMDS |
+| `/infra:expand-contract-pattern` | 무중단 DB 스키마 변경 3단계 Expand-Contract — NOT NULL 컬럼 추가, 컬럼명·타입 변경, backfill, 롤백 안전성 |
 | `/infra:mysql-operations` | MySQL/InnoDB 운영 — buffer pool·redo log 등 InnoDB 파라미터 튜닝, EXPLAIN 쿼리 최적화, ProxySQL 커넥션 풀링과 읽기/쓰기 분리, Group … |
 | `/infra:postgresql-operations` | PostgreSQL 운영 — postgresql.conf 파라미터 튜닝, EXPLAIN ANALYZE 쿼리 최적화, 잠금 진단, PgBouncer 커넥션 풀링, Percona Operator 기반 … |
 | `/infra:redis-operations` | Redis 운영 — Standalone/Sentinel/Cluster 모드 선택, Cache-Aside·Write-Through 캐싱 전략과 Cache Stampede 방지, … |
-| `/infra:terraform-k8s-bootstrap` | Terraform K8s Bootstrap 가이드 — Terraform→EKS/GKE→ArgoCD 부트스트랩 패턴, 책임 경계 정의, 순환 의존성 해결 |
-| `/infra:terraform-modules` | Terraform Module Patterns — Terraform 모듈 개발 패턴 및 best practices |
-| `/infra:terraform-pitfalls` | Terraform 실전 Pitfalls — Terraform/OpenTofu 운영 중 발생하는 실전 함정. state 관리/모듈 설계/순환 의존/secret 노출 |
-| `/infra:terraform-security` | Terraform Security Patterns — Terraform 보안 패턴 및 best practices |
+| `/infra:terraform-k8s-bootstrap` | Terraform 으로 EKS/GKE 를 만들고 ArgoCD 로 넘기는 부트스트랩 — 책임 경계, 순환 의존성, App of Apps |
+| `/infra:terraform-modules` | Terraform 모듈 작성 — 디렉터리 구조, variables·outputs·versions·locals 템플릿, 변수 validation, 네이밍 |
+| `/infra:terraform-pitfalls` | Terraform/OpenTofu 운영 함정 — Security Group 인라인 규칙 충돌, ENI IP 계산, create_before_destroy, ignore_changes, state … |
+| `/infra:terraform-security` | Terraform 보안 — sensitive 변수, IAM 최소 권한, 암호화, Security Group, S3 버킷, tfsec 검사 |
 
 ## Agents (5)
 

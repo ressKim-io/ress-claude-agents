@@ -1,6 +1,6 @@
 ---
 name: eks-pitfalls
-description: "EKS 운영 Pitfalls — EKS 운영 중 발생하는 실전 함정 카탈로그. 매니지드 노드그룹/IAM/networking/스케일링. Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "EKS 운영 함정 — VPC CNI prefix delegation·max-pods, 서브넷 CIDR, WARM_IP_TARGET, Kyverno webhook, IAM 누락, IMDS. Use when EKS 에서 IP 고갈이나 노드·네트워크 장애가 나거나 운영 전 점검할 때."
 ---
 
 # EKS 운영 Pitfalls

@@ -1,6 +1,6 @@
 ---
 name: expand-contract-pattern
-description: Zero-downtime DB schema migration을 위한 Expand-Contract (Parallel Change) 패턴. NOT NULL 컬럼 추가/컬럼명 변경/타입 변경을 3단계 PR로 분할. Atlas + Fowler bliki 기반.
+description: "무중단 DB 스키마 변경 3단계 Expand-Contract — NOT NULL 컬럼 추가, 컬럼명·타입 변경, backfill, 롤백 안전성. Use when 스키마 변경을 앱 배포와 분리해 zero-downtime 으로 진행할 때."
 ---
 
 # Expand-Contract Pattern (M8: Stateful 운영 가정 부재)

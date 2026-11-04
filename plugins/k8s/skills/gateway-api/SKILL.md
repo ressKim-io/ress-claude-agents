@@ -1,6 +1,6 @@
 ---
 name: gateway-api
-description: "Kubernetes Gateway API 가이드 — Ingress NGINX 지원 종료 대응: Gateway API, Envoy Gateway, Kong 마이그레이션 Use when working with kubernetes 도메인의 패턴 / 구현 선택."
+description: "Kubernetes Gateway API 개념과 리소스, Envoy Gateway·Kong 설정, Ingress NGINX EOL 대응 결정 트리. Use when Ingress NGINX 종료에 대비해 Gateway API 구현체를 고르고 구성할 때."
 ---
 
 # Kubernetes Gateway API 가이드

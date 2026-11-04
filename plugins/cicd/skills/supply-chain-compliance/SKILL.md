@@ -1,6 +1,6 @@
 ---
 name: supply-chain-compliance
-description: "Supply Chain 컴플라이언스 가이드 — EU Cyber Resilience Act, SBOM 자동화, VEX, 중앙 저장소 아키텍처 Use when working with cicd 도메인의 패턴 / 구현 선택."
+description: "공급망 컴플라이언스 — EU Cyber Resilience Act, SBOM 자동화, VEX, 중앙 저장소 아키텍처. Use when CRA 규제 대응용 SBOM 을 자동 생성하고 관리할 때."
 ---
 
 # Supply Chain 컴플라이언스 가이드

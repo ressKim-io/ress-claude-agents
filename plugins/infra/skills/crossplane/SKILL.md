@@ -1,6 +1,6 @@
 ---
 name: crossplane
-description: "Crossplane 멀티클라우드 가이드 — Kubernetes-native 인프라 관리: Provider 설정, Compositions, 멀티클라우드 패턴 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "Crossplane 기본 — 설치, Provider, Managed Resources, Compositions, Terraform 과 비교. Use when Kubernetes 로 클라우드 인프라를 선언적으로 관리하려고 Crossplane 을 도입할 때."
 ---
 
 # Crossplane 멀티클라우드 가이드

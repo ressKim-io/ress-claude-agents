@@ -1,6 +1,6 @@
 ---
 name: multi-env-diff-checklist
-description: dev / staging / prod 환경 manifest의 차이를 자동 검증하는 체크리스트. hardcoded 값과 환경별 override 누락을 사전에 검출. 멀티 클라우드(AWS/GCP) 분기까지 포함.
+description: "dev/staging/prod 또는 멀티 클라우드 간 manifest·values·config diff 점검 — 의도된 차이와 실수 구분, CI 검출 스크립트. Use when 환경별 설정 파일을 바꾸는 PR 에서 누락된 override 를 확인할 때."
 ---
 
 # Multi-Environment Diff Checklist

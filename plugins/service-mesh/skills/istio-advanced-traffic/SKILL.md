@@ -1,6 +1,6 @@
 ---
 name: istio-advanced-traffic
-description: "Istio 고급 트래픽 관리 — Fault Injection, Traffic Mirroring, Retry/Timeout 심화, JWT Claim 라우팅, Blue-Green/Canary 패턴 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "Istio 고급 트래픽 — Fault Injection, Traffic Mirroring, Retry/Timeout 심화, JWT claim 라우팅, Canary·Blue-Green. Use when VirtualService 로 카오스 테스트, 섀도 트래픽, 점진 배포를 구성할 때."
 ---
 
 # Istio 고급 트래픽 관리

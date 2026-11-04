@@ -1,6 +1,6 @@
 ---
 name: k8s-gpu
-description: "Kubernetes GPU 가이드 — NVIDIA GPU Operator, MIG 파티셔닝, GPU 공유 전략 Use when working with platform 도메인의 패턴 / 구현 선택."
+description: "Kubernetes GPU 기본 구성 — NVIDIA GPU Operator, MIG 파티셔닝, GPU 공유 전략. Use when 클러스터에 GPU 노드를 도입하거나 MIG·time-slicing 으로 GPU 를 나눠 쓸 때."
 ---
 
 # Kubernetes GPU 가이드

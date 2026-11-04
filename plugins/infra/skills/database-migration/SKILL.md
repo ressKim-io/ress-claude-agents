@@ -1,6 +1,6 @@
 ---
 name: database-migration
-description: "Database Migration Patterns — Flyway, Liquibase, golang-migrate, 안전한 스키마 변경 패턴 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "DB 스키마 마이그레이션 도구 — Flyway, Liquibase, golang-migrate, 안전한 스키마 변경. Use when 마이그레이션 도구를 고르거나 운영 DB 스키마를 안전하게 바꿀 때."
 ---
 
 # Database Migration Patterns

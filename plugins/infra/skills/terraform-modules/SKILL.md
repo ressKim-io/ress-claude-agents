@@ -1,6 +1,6 @@
 ---
 name: terraform-modules
-description: "Terraform Module Patterns — Terraform 모듈 개발 패턴 및 best practices. Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "Terraform 모듈 작성 — 디렉터리 구조, variables·outputs·versions·locals 템플릿, 변수 validation, 네이밍. Use when 재사용 가능한 Terraform 모듈을 만들거나 구조를 정리할 때."
 ---
 
 # Terraform Module Patterns

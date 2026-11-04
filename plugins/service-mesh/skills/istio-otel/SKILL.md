@@ -1,6 +1,6 @@
 ---
 name: istio-otel
-description: "Istio + OpenTelemetry 통합 가이드 — Telemetry API v1, ExtensionProviders, W3C Trace Context, OTel Collector 연동 Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "Istio 와 OpenTelemetry 통합 — Telemetry API v1, ExtensionProvider, W3C Trace Context 전파, access log 를 OTel Collector 로. Use when 메시 텔레메트리를 OTel Collector 로 보내도록 설정할 때."
 ---
 
 # Istio + OpenTelemetry 통합 가이드

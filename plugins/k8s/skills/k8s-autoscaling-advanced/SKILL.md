@@ -1,6 +1,6 @@
 ---
 name: k8s-autoscaling-advanced
-description: "Kubernetes Autoscaling 고급 가이드 — Karpenter, 조합 전략, 모니터링 Use when working with kubernetes 도메인의 패턴 / 구현 선택."
+description: "Karpenter 노드 오토스케일링, HPA·VPA·KEDA 조합 전략, 스케일링 모니터링. Use when Karpenter 를 구성하거나 여러 autoscaler 를 함께 쓰는 조합을 정할 때."
 ---
 
 # Kubernetes Autoscaling 고급 가이드

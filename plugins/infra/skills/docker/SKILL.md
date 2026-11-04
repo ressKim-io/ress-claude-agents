@@ -1,6 +1,6 @@
 ---
 name: docker
-description: "Docker & Dockerfile Patterns — Dockerfile 최적화, 멀티스테이지 빌드, Go/Java 컨테이너 패턴 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "Dockerfile 최적화 — 멀티스테이지 빌드, Go·Spring Boot 컨테이너, 레이어 캐시, 보안, 멀티 플랫폼 빌드, Compose. Use when Dockerfile 을 작성하거나 이미지 크기와 빌드 속도를 개선할 때."
 ---
 
 # Docker & Dockerfile Patterns

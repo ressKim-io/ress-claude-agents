@@ -1,6 +1,6 @@
 ---
 name: istio-multicluster
-description: "Istio 멀티클러스터 가이드 — Multi-Primary vs Primary-Remote, East-West Gateway, Shared Root CA, Cross-Cluster Discovery Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "Istio 멀티클러스터 — Multi-Primary, Primary-Remote, East-West Gateway, Shared Root CA, cross-cluster discovery. Use when 클러스터 여러 개를 하나의 메시로 묶거나 cross-cluster 호출이 실패할 때."
 ---
 
 # Istio 멀티클러스터 가이드

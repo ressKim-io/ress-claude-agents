@@ -1,6 +1,6 @@
 ---
 name: terraform-k8s-bootstrap
-description: "Terraform K8s Bootstrap 가이드 — Terraform→EKS/GKE→ArgoCD 부트스트랩 패턴, 책임 경계 정의, 순환 의존성 해결 Use when working with infrastructure 도메인의 패턴 / 구현 선택."
+description: "Terraform 으로 EKS/GKE 를 만들고 ArgoCD 로 넘기는 부트스트랩 — 책임 경계, 순환 의존성, App of Apps. Use when 클러스터 생성부터 GitOps 인계까지 구조를 설계할 때."
 ---
 
 # Terraform K8s Bootstrap 가이드

@@ -1,6 +1,6 @@
 ---
 name: gitops-argocd-helm
-description: "ArgoCD + Helm 통합 패턴 가이드 — ArgoCD Image Updater, Multi-source Application, Helm hooks 비교, Secrets+Helm 통합 Use when working with cicd 도메인의 패턴 / 구현 선택."
+description: "ArgoCD 와 Helm 통합 — Image Updater, multi-source Application, Helm hooks vs ArgoCD hooks, secrets, ECR CronJob. Use when Helm chart 를 ArgoCD 로 배포하며 이미지 갱신·hook 을 맞출 때."
 ---
 
 # ArgoCD + Helm 통합 패턴 가이드

@@ -1,6 +1,6 @@
 ---
 name: supply-chain-security
-description: "Supply Chain Security 가이드 — SBOM, SLSA, Sigstore를 활용한 소프트웨어 공급망 보안 Use when working with cicd 도메인의 패턴 / 구현 선택."
+description: "소프트웨어 공급망 보안 — SBOM, SLSA 레벨과 provenance, Sigstore/Cosign 서명, K8s 정책 적용. Use when 이미지·아티팩트 서명과 출처 검증을 파이프라인에 넣을 때."
 ---
 
 # Supply Chain Security 가이드

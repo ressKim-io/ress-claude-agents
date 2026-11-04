@@ -1,6 +1,6 @@
 ---
 name: istio-tracing
-description: "Istio Distributed Tracing — Jaeger/Tempo 연동, Span 생성, Access Logging Use when working with service-mesh 도메인의 패턴 / 구현 선택."
+description: "Istio 분산 트레이싱 — Jaeger·Tempo 연동, span 생성, Ambient 트레이싱, access logging. Use when 메시 요청을 Jaeger/Tempo 로 추적하도록 구성할 때."
 ---
 
 # Istio Distributed Tracing

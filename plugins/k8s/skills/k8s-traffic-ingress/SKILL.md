@@ -1,6 +1,6 @@
 ---
 name: k8s-traffic-ingress
-description: "Ingress Rate Limiting — NGINX Ingress, Kong 기반 Rate Limiting Use when working with kubernetes 도메인의 패턴 / 구현 선택."
+description: "Ingress 레벨 Rate Limiting — NGINX Ingress annotation, Kong rate-limiting 플러그인. Use when Ingress 컨트롤러나 Kong 에서 요청 수를 제한해야 할 때."
 ---
 
 # Ingress Rate Limiting

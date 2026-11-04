@@ -1,6 +1,6 @@
 ---
 name: cicd-policy
-description: "CI/CD Policy as Code 가이드 — Kyverno 정책, 보안 점수 대시보드, 통합 DevSecOps 파이프라인 Use when working with cicd 도메인의 패턴 / 구현 선택."
+description: "CI/CD 정책 자동화 — Kyverno 정책과 CLI 검증, 보안 점수 대시보드, 통합 DevSecOps 파이프라인. Use when 배포 전에 정책 위반을 Kyverno 로 CI 단계에서 막고 싶을 때."
 ---
 
 # CI/CD Policy as Code 가이드
