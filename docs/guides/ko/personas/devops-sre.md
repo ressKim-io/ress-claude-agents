@@ -8,7 +8,7 @@
 
 ## 설치 후 첫 5분
 
-- [ ] `./install.sh --global --all --with-skills` 실행
+- [ ] `/plugin marketplace add ressKim-io/ress-claude-agents` 후 `k8s@ress`, `infra@ress`, `cicd@ress`, `observability@ress`, `sre@ress`, `dx@ress` 를 `/plugin install`
 - [ ] Claude Code에서 `/agents` 입력 → 에이전트 목록 확인
 - [ ] `"K8s 클러스터 상태 확인해줘"` 시도
 - [ ] `"Terraform plan 리뷰해줘"` 시도

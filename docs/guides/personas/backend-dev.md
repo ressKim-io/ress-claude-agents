@@ -8,7 +8,7 @@
 
 ## First 5 Minutes After Install
 
-- [ ] Run `./install.sh --global --all --with-skills`
+- [ ] Run `/plugin marketplace add ressKim-io/ress-claude-agents`, then `/plugin install` `go@ress`, `java@ress`, `architecture@ress`, `dx@ress`
 - [ ] Type `/agents` in Claude Code to see the agent list
 - [ ] Try `"Review my Java code"` or `"Review my Go code"`
 - [ ] Try `"Run a security scan"`
