@@ -7,7 +7,7 @@
 #   model_dependency : high (모델/시간 가변) | low (안정적, 도메인 패턴)
 #                      → AI 관련 기술은 high (모델 발전 시 약화)
 #   portability      : universal (모든 도구 적용) | claude-only (Claude 전용)
-#                      → Slash command, Subagent, .claude/agents 직접 의존이면 claude-only
+#                      → Slash command, Subagent 직접 의존이면 claude-only
 #   domain_specificity : project-specific | general
 #                        → business/legal/operations 카테고리는 project-specific
 #
@@ -62,9 +62,8 @@ classify_model_dependency() {
 # claude-only 조건 (cross-link은 제외, 진짜 의존만 카운트):
 #   - subagent_type (Agent tool 호출)
 #   - Agent(...) / Skill(...) 직접 호출
-#   - agents/ 또는 commands/ 경로 참조 (.claude/ 또는 plugins/<plugin>/, commands는 Claude-only)
+#   - agents/ 또는 commands/ 경로 참조 (plugins/<plugin>/, commands는 Claude-only)
 #   - 본문에서 ^/명령어 형태 슬래시 커맨드
-# .claude/skills/...는 cross-link이라 제외 — 모든 도구가 같은 디렉토리 쓸 수 있음
 classify_portability() {
     local file="$1"
     local hits

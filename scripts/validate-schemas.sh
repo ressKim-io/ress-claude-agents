@@ -4,7 +4,7 @@
 # 1. schemas/*.v1.json 자체 compile (JSON Schema Draft 2020-12 meta-schema 통과)
 # 2. P1 sample frontmatter validate
 #    - .agents/skills/source-command-log-summary/SKILL.md → skill-manifest.v1.json
-#    - .claude/agents/code-reviewer.md                    → agent-manifest.v1.json
+#    - plugins/dx/agents/code-reviewer.md                 → agent-manifest.v1.json
 # 3. 모든 변환된 SKILL.md (assets/skills/*/*/SKILL.md) → skill-manifest.v1.json
 #    + strict 모드 (description >=40 chars + applies_when 존재)
 #    + 최소 카운트 게이트 (P2=10, P6=15, P7=점진 증가)
@@ -182,7 +182,7 @@ section "Agent frontmatter validation (전수)"
 # 존재하지 않았고, skill-manifest.v1 검증은 아래 §4 가 assets/skills/ 전수로 이미 커버한다.
 # 근거: docs/audit/2026-08-24-agent-harness-readiness.md (Step 2)
 #
-# 2026-08-25: code-reviewer 1건 샘플 → .claude/agents/ 전수로 확대. 샘플 방식은
+# 2026-08-25: code-reviewer 1건 샘플 → 전체 agent 전수로 확대. 샘플 방식은
 # 이미 `effort` 를 쓰던 agent 5개가 구 스키마(additionalProperties:false)를 위반하고도
 # 통과하도록 방치했다. 근거: 같은 audit F8.
 AGENT_FILES=()

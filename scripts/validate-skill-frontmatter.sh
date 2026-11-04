@@ -2,10 +2,10 @@
 # SKILL.md / Agent frontmatter 검증
 #
 # 검증 대상:
-#   - .claude/agents/*.md      : frontmatter 필수 + 본문 H2 3섹션
+#   - plugins/*/agents/*.md    : frontmatter 필수 + 본문 H2 3섹션
 #                                (Permission Boundary / Escalation / Verification Criteria
 #                                 — 신규 agent hard fail, LEGACY 화이트리스트는 soft 경고)
-#   - .claude/skills/**/*.md   : frontmatter 있으면 형식 검증, 없으면 우리 컨벤션 검증
+#   - plugins/*/skills/*/SKILL.md : frontmatter 있으면 형식 검증, 없으면 우리 컨벤션 검증
 #
 # Frontmatter 표준 (Anthropic SKILL.md):
 #   ---
