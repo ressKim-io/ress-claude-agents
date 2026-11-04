@@ -1,7 +1,7 @@
 # Makefile for ress-claude-agents
 # Claude Code Custom Commands & Skills Management
 
-.PHONY: help validate validate-enforcement validate-links validate-yaml test-gates verify-enforcement inventory lint setup-hooks all
+.PHONY: help validate validate-enforcement validate-links validate-yaml test-gates verify-enforcement plugin-readmes verify-plugins inventory lint setup-hooks all
 
 # Default target
 help:
@@ -16,6 +16,8 @@ help:
 	@echo "  test-gates            Break a copy of the repo and check each gate fails for the right reason"
 	@echo "  verify-enforcement    Check permission rules actually fire (runtime, needs claude CLI)"
 	@echo "  inventory      Generate .claude/inventory.yml"
+	@echo "  plugin-readmes Generate plugins/*/README.md from frontmatter"
+	@echo "  verify-plugins Validate manifests with the claude CLI (local only, no model calls)"
 	@echo "  lint           Run shellcheck on shell scripts"
 	@echo "  setup-hooks    Setup pre-commit git hooks"
 	@echo "  all            Run validate + enforcement + links"
@@ -49,6 +51,14 @@ verify-enforcement:
 inventory:
 	@echo "Generating inventory..."
 	@./scripts/generate-inventory.sh generate
+
+# plugin README 생성 (CI 가 신선도를 검사한다)
+plugin-readmes:
+	@python3 scripts/generate-plugin-readmes.py generate
+
+# claude CLI 로 매니페스트 검증. version 은 일부러 비워 두므로 --strict 대신 경고를 걸러 본다 (ADR 0012)
+verify-plugins:
+	@./scripts/verify-plugins.sh
 
 # Run shellcheck on shell scripts
 lint:
