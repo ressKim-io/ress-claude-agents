@@ -22,6 +22,7 @@ cp -r plugins/security/skills/<이름> <프로젝트>/.claude/skills/
 
 - [`saas`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/saas/README.md)
 - [`infra`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/infra/README.md)
+- [`ai`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/ai/README.md)
 - [`architecture`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/architecture/README.md)
 - [`cicd`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/cicd/README.md)
 - [`k8s`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/k8s/README.md)
@@ -36,7 +37,7 @@ cp -r plugins/security/skills/<이름> <프로젝트>/.claude/skills/
 
 **권한 규칙** (`permissions.deny`) 도 실리지 않는다. agent 의 Permission Boundary 는 설치본에서 강제되지 않는 안내문이다.
 
-## Skills (10)
+## Skills (11)
 
 | 이름 | 설명 |
 |---|---|
@@ -46,6 +47,7 @@ cp -r plugins/security/skills/<이름> <프로젝트>/.claude/skills/
 | `/security:compliance-frameworks` | SOC2, HIPAA, GDPR, PCI-DSS 컴플라이언스 프레임워크 비교와 통제 항목 매핑, K8s 적용, 자동 증거 수집 |
 | `/security:data-subject-rights` | 정보주체 권리 행사 DSR 자동화 — PIPA·GDPR·CCPA 열람·정정·삭제·이동, 본인 인증, 삭제 vs 익명화, Crypto-Shredding, 수탁자 통지 |
 | `/security:kr-location-info-act` | 위치정보법 운영 — 사업 신고·허가, 별도 동의(제18조), 보유·파기, 국외 이전, 위반 처벌, PIPA·GDPR 비교 |
+| `/security:ops-mcp-security` | 운영 시스템에 붙는 MCP 서버를 자격 증명 경계, 서버 read-only 모드, Claude Code deny 규칙의 세 겹으로 묶고 운영 데이터를 신뢰하지 않는 입력으로 다룬다 |
 | `/security:owasp-top10` | OWASP Top 10(2021) A01~A10 취약점 설명과 언어별 방어 패턴 — Broken Access Control, Injection, SSRF, 암호화 실패 등 |
 | `/security:secrets-management` | 시크릿 관리 — External Secrets Operator, HashiCorp Vault, Infisical, SOPS+age, 로테이션 자동화, Go·Spring 연동 |
 | `/security:secure-coding` | 시큐어 코딩 — 입력 검증, 출력 인코딩, 암호화, 안전한 에러 처리, 파일 업로드, HTTP 보안 헤더, secure random, CI 보안 테스트 |
