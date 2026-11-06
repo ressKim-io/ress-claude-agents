@@ -320,7 +320,7 @@ spec:
 
         - type: notify
           channel: "#platform-alerts"
-          message: "Scaled up after approval due to memory pressure"
+          message: "Scale-up requested due to memory pressure"
 
   # 학습 및 개선
   learning:
