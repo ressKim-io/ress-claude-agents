@@ -100,6 +100,8 @@ description: "Go AI Integration Patterns. Use when working with go 도메인의 
 - ...
 ```
 
+**기준 시점은 검증일로 남긴다.** Claude Code 처럼 자주 릴리스되는 도구는 패치 버전(`2.1.x`)을 본문과 Sources 에 쓰지 않는다. 본문은 검증일 시점의 최신 버전을 기준으로 쓴다. 예전 버전의 동작이 여전히 위험할 때만 "이전 버전에서는" 으로 적고 번호는 붙이지 않는다. 측정 환경의 버전은 측정 기록(`docs/audit`, ADR)에만 남긴다.
+
 ---
 
 ## 3. Verification Criteria 섹션 (필수, F7)
