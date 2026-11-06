@@ -22,7 +22,15 @@ RCA 방식?
 
 자동 복구?
     │
-    ├─ Runbook 자동화 ────> 조건부 스크립트 실행
+    ├─ Runbook 자동화 ────> 사람 승인 후 조건부 실행
+    │       │
+    │       └─ 승인 없는 실행은 T3(/dx:agent-autonomy-tiers) 조건을 모두 갖춘 액션만
+    │            ├─ 사전 열거: 명령·대상·파라미터 범위까지 목록에 있다
+    │            ├─ 실패 비용 상한: 한 번 틀렸을 때 최대 피해가 정해져 있다
+    │            ├─ 사후 검증: 실행 뒤 자동으로 확인하고, 실패하면 되돌린다
+    │            ├─ 재시도 상한: n회 뒤 멈추고 사람에게 넘긴다
+    │            └─ 측정 뒤 승격: review·shadow 측정 절차를 통과한 뒤에만 T3 로 올린다
+    │
     └─ KEDA 스케일링 ─────> 메트릭 기반 자동 스케일
 ```
 
@@ -170,6 +178,8 @@ data:
 
 ### Runbook 자동화
 
+> 상태를 바꾸는 `remediate-oom`·`restart-pod` 는 사람 승인 후에만 실행하고, 승인 시간(`approvalTimeout`)이 지나면 실행하지 않는다. `kubectl` 로 직접 바꾸는 것은 비프로덕션까지다. 프로덕션 변경은 GitOps PR(manifest·values 수정 → 리뷰·머지 → sync)로 반영한다. 승인이 필요한 행동의 기준은 `/dx:agent-autonomy-tiers` 를 따른다.
+
 ```yaml
 # runbook-operator CRD
 apiVersion: aiops.io/v1
@@ -204,6 +214,8 @@ spec:
     - name: remediate-oom
       type: kubectl
       condition: "{{ .check-resources.result == true }}"
+      requireApproval: true
+      approvalTimeout: 5m
       command: |
         kubectl patch deployment {{ .deployment }} -n {{ .namespace }} \
           -p '{"spec":{"template":{"spec":{"containers":[{
@@ -214,6 +226,8 @@ spec:
     - name: restart-pod
       type: kubectl
       condition: "{{ .check-resources.result == false }}"
+      requireApproval: true
+      approvalTimeout: 5m
       command: |
         kubectl delete pod {{ .pod }} -n {{ .namespace }}
 
@@ -221,7 +235,7 @@ spec:
     slack:
       channel: "#incidents"
       message: |
-        Auto-remediation executed for {{ .pod }}
+        Remediation runbook finished for {{ .pod }}
         Action: {{ .executed_action }}
         Result: {{ .result }}
 ```
