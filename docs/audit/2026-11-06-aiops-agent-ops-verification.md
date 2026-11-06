@@ -1,22 +1,35 @@
 # AIOps·에이전트 운영 skill 사실 검증 기록 (2026-11-06)
 
-새 skill 3개(`security/ops-mcp-security`, `dx/agent-autonomy-tiers`, `dx/claude-unattended-ops`)가 인용할 외부 사실을 1차 출처 원문과 다시 대조했다. 2026-11-05 조사 노트(로컬 자료, 커밋하지 않음)는 대부분 요약형 fetch를 거쳤으므로, skill에는 이 기록에서 상태가 확인된 문장만 옮긴다. skill 초안을 독립 검토하면서 기록에 행이 없던 문장을 더 대조해 각 절에 합쳤고, `claude -p` 동작 일부는 로컬에서 실측했다(§3.1). 2.1.245~2.1.318 CHANGELOG의 ask·bypass 전체 목록은 ADR 0009 `ask` 재측정 때 다루고, 이 기록에는 skill이 인용한 항목만 행으로 남긴다.
+새 skill 3개(`security/ops-mcp-security`, `dx/agent-autonomy-tiers`, `dx/claude-unattended-ops`)가 인용할 외부 사실을 1차 출처 원문과 다시 대조했다. 2026-11-05 조사 노트(로컬 자료, 커밋하지 않음)는 대부분 요약형 fetch를 거쳤으므로, skill에는 이 기록에서 상태가 확인된 문장만 옮긴다. skill을 독립 검토하면서 기록에 행이 없던 문장을 더 대조해 각 절에 합쳤고, `claude -p` 동작 일부는 로컬에서 실측했다(§3.1). 2.1.245~2.1.318 CHANGELOG의 ask·bypass 전체 목록은 ADR 0009 `ask` 재측정 때 다루고, 이 기록에는 skill이 인용한 항목만 행으로 남긴다.
 
 | 항목 | 값 |
 |---|---|
 | 검증일 | 2026-11-06 |
 | 검증 방법 | code.claude.com·platform.claude.com·modelcontextprotocol.io는 `curl -sL`(기본 User-Agent)로 `.md` 원문을 받았다. 그 밖의 1차 페이지는 HTML을 받아 태그 제거 스크립트로 텍스트화했다. GitHub 권고·이슈·PR·README·소스는 `gh api`, CVE 레코드는 CVE Services API(`cveawg.mitre.org`), PDF는 macOS PDFKit로 텍스트만 뽑았다. WebFetch·WebSearch는 쓰지 않았다. 로컬 실측은 `claude -p`로 했다(§3.1) |
-| 조회량 | 1차 대조: 웹 60건, `gh api` 35건. 독립 검토: 웹 16건, `gh api` 약 51건(skill B 검토분은 건수를 기록하지 않았다). 웹 조회는 전부 HTTP 200, 차단 0건. `gh api` 404는 1차 1건과 독립 검토 4건을 "전역 DB·저장소 권고에 없음"의 근거로 썼고, 셸 인자 분리 실수로 보낸 잘못된 경로 4건은 결과에 쓰지 않았다 |
+| 조회량 | 1차 대조: 웹 60건, `gh api` 35건. 독립 검토: 웹 16건, `gh api` 약 51건(`claude-unattended-ops` 검토분은 건수를 기록하지 않았다). 리뷰 반영: 웹 2건(pip secure installs, headless). 웹 조회는 전부 HTTP 200, 차단 0건. `gh api` 404는 1차 1건과 독립 검토 4건을 "전역 DB·저장소 권고에 없음"의 근거로 썼고, 셸 인자 분리 실수로 보낸 잘못된 경로 4건은 결과에 쓰지 않았다 |
 | 검증자 | subagent (원문 대조), Claude 메인 세션 (로컬 실측) |
 | Claude Code | 2.1.318 (`claude --version`) |
 | 인용 규칙 | 따옴표 안은 원문 문자열이다. 링크·강조·인용 블록 마크업과 줄바꿈만 정규화했다 |
 | 다음 재검증 | 2027-02. MCP 서버 기본값·버전·권고는 분기마다 |
 
-상태 표기: ✅ verified (raw 대조) / ✅ 로컬 실측 (CLI 버전 병기, §3.1) / ⚠️ unverified (사유 1줄) / ❌ mismatch (정정값 병기). 수치 라벨 `vendor-claimed`·`customer-stated`는 skill에 옮길 때 그대로 붙인다. 연구 수치는 저자 실험값이다. 독립 검토에서 더한 행은 관련 행 뒤에 붙였다.
+상태 표기: ✅ verified (raw 대조) / ✅ 로컬 실측 (CLI 버전 병기, §3.1) / ⚠️ unverified (사유 1줄) / ❌ mismatch (정정값 병기). 독립 검토에서 더한 행은 관련 행 뒤에 붙였다.
+
+수치·점수 라벨은 아래 어휘만 쓰고, skill에 옮길 때 그대로 붙인다.
+
+| 라벨 | 뜻 |
+|---|---|
+| `vendor-claimed` | 제품·서비스 제공자가 자기 문서·글·사후 보고에서 밝힌 값 |
+| `customer-stated` | 고객·사고 당사자가 밝힌 값 (고객 사례 페이지, 제보) |
+| `independently confirmed` | 이해관계 없는 제3자가 확인한 값. 세 skill에 이 라벨이 붙은 수치는 없다 |
+| `author-reported` | 저자가 자기 운영 배포에서 잰 값 (예: BiAn) |
+| `researcher-experiment` | 연구 testbed·연구자 스캔에서 나온 실험값 |
+| `maintainer-entered` | 권고 작성자나 maintainer가 넣은 점수 (저장소 권고, 제조사 권고) |
+| `CNA-entered` | CVE 레코드의 CNA가 넣은 점수 |
+| `global-DB` | 전역 권고 DB(GitHub Advisory Database)에 기재된 점수 |
 
 ---
 
-## 1. `security/ops-mcp-security` (skill C)
+## 1. `security/ops-mcp-security`
 
 | 사실 | URL | 검증일 | 검증자 | 상태 |
 |---|---|---|---|---|
@@ -45,8 +58,8 @@
 | kubernetes-mcp-server #1415(2026-09-05): read-only 모드에서 "with the `configuration_view` tool my agent gained full cluster access by exporting the kubeconfig". PR #1442(2026-09-25 merge)로 닫혔고 범위는 http 모드다: "This by default disables the configuration_view tool in http mode." | [#1415](https://github.com/containers/kubernetes-mcp-server/issues/1415), [#1442](https://github.com/containers/kubernetes-mcp-server/pull/1442) | 2026-11-06 | subagent | ✅ verified |
 | kubernetes-mcp-server v0.1.2(2026-11-04): stdio에서 `configuration_view`가 남는다. `ShouldIncludeConfigurationViewTool`은 `!isHTTP \|\| tool.Tool.Name != configurationViewToolName \|\| slices.Contains(enabledTools, …)`를 반환하고, `httpTransport`는 `configuration.Port.Get() != ""`다. 이 도구는 기본 toolset `config`(README Default ✓)에 속하고 annotation이 `ReadOnlyHint: true`라 `read_only`에서도 남는다. 서버 쪽에서 빼는 수단은 `disabled_tools`("Denylist of specific tools to disable")다. 문서 예시는 `disabled_tools = ["resources_delete", "pods_delete"]`다 | [tool_filter.go](https://github.com/containers/kubernetes-mcp-server/blob/v0.1.2/pkg/mcp/tool_filter.go), [configuration.go](https://github.com/containers/kubernetes-mcp-server/blob/v0.1.2/pkg/toolsets/config/configuration.go), [configuration.md](https://github.com/containers/kubernetes-mcp-server/blob/v0.1.2/docs/configuration.md) | 2026-11-06 | subagent | ✅ verified (v0.1.2 소스 대조이며 실행 측정은 아니다) |
 | awslabs postgres-mcp-server CVE-2026-87911(GHSA-fph8-pg5w-78fv): critical 9.6, `< 1.1.7`, 2026-09-09. "Read-only enforcement bypass enabling operating system command execution" | [GHSA](https://github.com/awslabs/mcp/security/advisories/GHSA-fph8-pg5w-78fv) | 2026-11-06 | subagent | ✅ verified |
-| kubectl-mcp-server CVE-2025-65719(GHSA-94gr-w3q5-rfqr): critical 9.8, `< 1.2.0`. 내용은 "arbitrary code execution via user interaction with crafted HTML page"이고 read-only 우회가 아니다 | [GHSA](https://github.com/advisories/GHSA-94gr-w3q5-rfqr) | 2026-11-06 | subagent | ❌ mismatch: 계획의 "read-only가 경계가 아니었던 사례" 분류가 틀림. 명령 주입 사례로 옮긴다 |
-| CVE-2025-65719(GHSA-94gr-w3q5-rfqr) 전역 DB 상태: type `reviewed`, critical 9.8, `repository_advisory_url` 없음. CVE 레코드 assigner는 `mitre`이고 CNA metrics가 없다. 그래서 9.8은 maintainer나 CNA가 아니라 전역 DB 쪽 값으로 적는다 | [GHSA](https://github.com/advisories/GHSA-94gr-w3q5-rfqr), [CVE record](https://cveawg.mitre.org/api/cve/CVE-2025-65719) | 2026-11-06 | subagent | ✅ verified |
+| kubectl-mcp-server CVE-2025-65719(GHSA-94gr-w3q5-rfqr): critical 9.8, `< 1.2.0`. 내용은 "arbitrary code execution via user interaction with crafted HTML page"이고 read-only 우회가 아니다 | [GHSA](https://github.com/advisories/GHSA-94gr-w3q5-rfqr) | 2026-11-06 | subagent | ❌ mismatch: 이전 조사 노트의 값이 틀림("read-only가 경계가 아니었던 사례"로 분류). 코드 실행 사례로 옮긴다 |
+| CVE-2025-65719(GHSA-94gr-w3q5-rfqr) 전역 DB 상태: type `reviewed`, critical 9.8, `repository_advisory_url` 없음. CVE 레코드 assigner는 `mitre`이고 CNA metrics가 없다. 그래서 9.8은 `maintainer-entered`나 `CNA-entered`가 아니라 `global-DB`로 적는다 | [GHSA](https://github.com/advisories/GHSA-94gr-w3q5-rfqr), [CVE record](https://cveawg.mitre.org/api/cve/CVE-2025-65719) | 2026-11-06 | subagent | ✅ verified |
 | AIOpsDoom(arXiv 2508.06394 v2, 연구 testbed): 오류를 유발하는 요청으로 텔레메트리를 오염시킨다. "adversaries can manipulate system telemetry to mislead AIOps agents into taking actions that compromise the integrity of the infrastructure they manage". 본문: AIOpsLab 36개 조합 × 5회(180회), 평균 성공률 90% | [abs](https://arxiv.org/abs/2508.06394), [html](https://arxiv.org/html/2508.06394v2) | 2026-11-06 | subagent | ✅ verified |
 | LogJack(arXiv 2604.15368, 2026-04-15): "verbatim command execution rates range from 0% (Claude Sonnet 4.6) to 86.2% (Llama 3.3 70B)". "Azure Prompt Shield detected only the most obvious payload (1/32), while GCP Model Armor detected none" | [abs](https://arxiv.org/abs/2604.15368) | 2026-11-06 | subagent | ✅ verified |
 | LogInject(arXiv 2607.14493, 2026-07-16): "up to 88.2% attack success rate (83.4% average across models)". 다층 방어 후에도 "90.4% attack reduction, although 8.4% residual vulnerability persists" | [abs](https://arxiv.org/abs/2607.14493) | 2026-11-06 | subagent | ✅ verified |
@@ -56,7 +69,7 @@
 | MCP tools 사양: "clients MUST consider tool annotations to be untrusted unless they come from trusted servers." | [tools](https://modelcontextprotocol.io/specification/2026-07-28/server/tools.md) | 2026-11-06 | subagent | ✅ verified |
 | Rule of Two(Meta, 2025-10-31): "agents must satisfy no more than two of the following three properties within a session". ops 예시가 실린 절 제목은 "Hypothetical Examples and Implementations of the Agents Rule of Two"라 배포 사례가 아니다 | [Meta AI](https://ai.meta.com/blog/practical-ai-agent-security/) | 2026-11-06 | subagent | ✅ verified |
 | Rule of Two 세 속성: [A] "An agent can process untrustworthy inputs", [B] "An agent can have access to sensitive systems or private data", [C] "An agent can change state or communicate externally". 셋이 모두 필요하면 새 세션 없이는 "the agent should not be permitted to operate autonomously and at a minimum requires supervision — via human-in-the-loop approval or another reliable means of validation". "The Agents Rule of Two is a supplement — and not a substitute — for common security principles such as least-privilege." 운영 계열 예는 가상 예 절의 "High-Velocity Internal Coder [BC]"다(production systems [B]와 stateful changes [C]를 갖고, [A]에 예방 통제를 둔다) | [Meta AI](https://ai.meta.com/blog/practical-ai-agent-security/) | 2026-11-06 | subagent | ✅ verified |
-| HolmesGPT CVE-2026-63473(GHSA-6m4w-cmhp-f95f, 저장소 권고, maintainer 기재 점수): critical 9.8. "When the built-in `bash` toolset is enabled, this becomes unauthenticated command execution as the HolmesGPT server process." 전역 DB `cve_id` 조회는 `type` 값과 관계없이 `[]` | [GHSA](https://github.com/HolmesGPT/holmesgpt/security/advisories/GHSA-6m4w-cmhp-f95f) | 2026-11-06 | subagent | ✅ verified (버전 불일치는 §5) |
+| HolmesGPT CVE-2026-63473(GHSA-6m4w-cmhp-f95f, 저장소 권고, `maintainer-entered`): critical 9.8. "When the built-in `bash` toolset is enabled, this becomes unauthenticated command execution as the HolmesGPT server process." 전역 DB `cve_id` 조회는 `type` 값과 관계없이 `[]` | [GHSA](https://github.com/HolmesGPT/holmesgpt/security/advisories/GHSA-6m4w-cmhp-f95f) | 2026-11-06 | subagent | ✅ verified (버전 불일치는 §5) |
 | argocd-mcp GHSA-rp45-5x3v-48mr(저장소 권고): critical 10.0, `= 0.8.0` → `0.9.0`, CVE 없음, 전역 DB 404. "a network caller can create an MCP session without presenting any inbound credential" | [GHSA](https://github.com/argoproj-labs/mcp-for-argocd/security/advisories/GHSA-rp45-5x3v-48mr) | 2026-11-06 | subagent | ✅ verified |
 | CVE-2026-61459(GHSA-wmg3-h8mf-wgvr, 전역 DB reviewed): critical 9.8, `< 3.9.0`. "Attackers can inject the --server flag to redirect kubectl commands to an attacker-controlled API server" | [GHSA](https://github.com/advisories/GHSA-wmg3-h8mf-wgvr) | 2026-11-06 | subagent | ✅ verified |
 | CVE-2026-61459(GHSA-wmg3-h8mf-wgvr) 대상: npm `mcp-server-kubernetes`(source_code_location `Flux159/mcp-server-kubernetes`), `< 3.9.0`, patched `3.9.0`, CWE-88, type `reviewed`. 구조화 도구 `kubectl_get`·`kubectl_describe`·`kubectl_delete`에서 앞에 대시를 붙인 인자로 `assertNoDangerousFlags`를 우회한다. 결과는 "causing the operator's bearer token to be transmitted externally and enabling full cluster compromise". `repository_advisory_url`은 없다 | [GHSA](https://github.com/advisories/GHSA-wmg3-h8mf-wgvr) | 2026-11-06 | subagent | ✅ verified |
@@ -70,12 +83,13 @@
 | LiteLLM 공식 공지(상태 "Active investigation"): "The compromised PyPI packages were litellm==1.82.7 and litellm==1.82.8." | [LiteLLM](https://docs.litellm.ai/blog/security-update-march-2026) | 2026-11-06 | subagent | ✅ verified |
 | LiteLLM `1.107.0`: GHSA-92x9-889m-jgmw(type `malware`, 2026-10-29 갱신)의 버전 목록에 `= 1.107.0`이 있고 참조에 #47826이 있다. #47826 작성자는 `author_association: NONE`이고 댓글 34건 중 MEMBER·OWNER·COLLABORATOR 댓글은 0건이다 | [GHSA](https://github.com/advisories/GHSA-92x9-889m-jgmw), [#47826](https://github.com/BerriAI/litellm/issues/47826) | 2026-11-06 | subagent | ⚠️ unverified: 권고 기재만 확인. LiteLLM 공식 공지나 maintainer 확인은 찾지 못함 |
 | pip 해시 고정: hash-checking mode는 "uses local hashes, embedded in a requirements.txt file"이고 문법은 `FooProject == 1.2 --hash=sha256:<hash>`다. "Hashes are required for all requirements." "Hashes are required for all dependencies." "Requirements must be pinned (either to a URL, filesystem path or using ==)." `--require-hashes`로 강제한다. secure install은 이것과 `--only-binary :all:`(소스 배포 금지)를 함께 쓴다 | [pip secure installs](https://pip.pypa.io/en/stable/topics/secure-installs/) | 2026-11-06 | subagent | ✅ verified |
+| pip 해시 모드 자동 활성화: "Specifying --hash against any requirement will activate this mode globally." 그러면 위 행의 조건(모든 요구사항·의존성에 해시, `==`·URL·경로로 고정)이 전체에 걸린다. 기본 동작이다: "By default, when at least one requirement has hashes, hashes become required for all requirements." 이를 끄는 `--no-require-hashes`는 26.2에 추가됐다(페이지 v26.3) | [pip secure installs](https://pip.pypa.io/en/stable/topics/secure-installs/) | 2026-11-06 | subagent | ✅ verified |
 | npm lockfile·`npm ci`: package-lock.json은 "describes the exact tree that was generated, such that subsequent installs are able to generate identical trees"다. `integrity`는 "A sha512 or sha1 Standard Subresource Integrity string for the artifact that was unpacked in this location."다. `npm ci`는 lockfile이 있어야 하고, "If dependencies in the package lock do not match those in package.json, npm ci will exit with an error, instead of updating the package lock." "It will never write to package.json or any of the package-locks" | [package-lock.json](https://docs.npmjs.com/cli/v11/configuring-npm/package-lock-json), [npm ci](https://docs.npmjs.com/cli/v11/commands/npm-ci) | 2026-11-06 | subagent | ✅ verified |
 | MCP: "The current protocol version is 2026-07-28." "Authorization is OPTIONAL for MCP implementations." STDIO 구현은 "SHOULD NOT follow this specification, and instead retrieve credentials from the environment" | [versioning](https://modelcontextprotocol.io/specification/versioning.md), [authorization](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization.md) | 2026-11-06 | subagent | ✅ verified |
 | 서버는 RFC 9728, 클라이언트는 RFC 8707을 MUST로 구현한다. "MCP servers MUST NOT accept or transit any other tokens." 상류 API 호출 시 "The MCP server MUST NOT pass through the token it received from the MCP client." | [authorization](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization.md), [security-considerations](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/security-considerations.md) | 2026-11-06 | subagent | ✅ verified |
 | "MCP extensions are optional additions to the specification". OAuth Client Credentials와 Enterprise-Managed Authorization은 둘 다 `Stable` | [extensions](https://modelcontextprotocol.io/extensions/overview.md) | 2026-11-06 | subagent | ✅ verified |
 
-## 2. `dx/agent-autonomy-tiers` (skill A)
+## 2. `dx/agent-autonomy-tiers`
 
 | 사실 | URL | 검증일 | 검증자 | 상태 |
 |---|---|---|---|---|
@@ -89,13 +103,13 @@
 | T3 예, Vantage: "Autopilot cannot and will never change your underlying infrastructure." "Automatic Savings Plans purchases are initially disabled." 구매는 24시간 대기열에 있고 그 안에 삭제할 수 있다 | [Vantage docs](https://docs.vantage.sh/autopilot) | 2026-11-06 | subagent | ✅ verified |
 | T3 예, LaunchDarkly: "LaunchDarkly rolls back a release with an SRM whether or not you have automatic rollback enabled." | [LaunchDarkly docs](https://launchdarkly.com/docs/home/releases/managing-guarded-rollouts) | 2026-11-06 | subagent | ✅ verified |
 | 승격 일정, Relay Network(Sedai 고객 페이지, `customer-stated`): "By May 2025, ~55% of production resources were running on Autopilot." "By February 2026, Brendan confirmed what the team had been working toward since September 2023: all eligible workloads were on full Autopilot." 2023-09~2026-02는 29개월(계산) | [Sedai](https://sedai.io/customers/relay-network) | 2026-11-06 | subagent | ✅ verified |
-| BiAn(Alibaba, SIGCOMM'25): 10개월 배포 중 shadow operator로 "BiAn versus those done fully manually"를 비교해 "reducing time to root causing by 20.5% (55.2% for high-risk incidents)". 조사 보조의 TTR이며 자동 실행을 켜기 전에 정밀도를 잰 사례가 아니다 | [PDF](https://ennanzhai.github.io/pub/sigcomm25-bian.pdf) | 2026-11-06 | subagent | ❌ mismatch: 계획의 "켜기 전 정밀도 측정(audit/shadow, BiAn)" 표현을 "shadow A/B로 조사 시간 측정"으로 고친다. 정밀도 사전 측정 예는 Defender audit mode |
-| BiAn 수치의 주체: 저자 소속은 Nanjing University, Alibaba Cloud, NYU Shanghai, Peking University. "BiAn has been deployed in Alibaba Cloud’s global network infrastructure for ten months." 20.5%·55.2%는 개발·운영 주체가 자기 배포에서 잰 값이다 | [PDF](https://ennanzhai.github.io/pub/sigcomm25-bian.pdf) | 2026-11-06 | subagent | ✅ verified |
+| BiAn(Alibaba, SIGCOMM'25): 10개월 배포 중 shadow operator로 "BiAn versus those done fully manually"를 비교해 "reducing time to root causing by 20.5% (55.2% for high-risk incidents)". 조사 보조의 TTR이며 자동 실행을 켜기 전에 정밀도를 잰 사례가 아니다 | [PDF](https://ennanzhai.github.io/pub/sigcomm25-bian.pdf) | 2026-11-06 | subagent | ❌ mismatch: 이전 조사 노트의 값이 틀림("켜기 전 정밀도 측정(audit/shadow, BiAn)"). "shadow A/B로 조사 시간 측정"으로 고친다. 정밀도 사전 측정 예는 Defender audit mode |
+| BiAn 수치의 주체: 저자 소속은 Nanjing University, Alibaba Cloud, NYU Shanghai, Peking University. "BiAn has been deployed in Alibaba Cloud’s global network infrastructure for ten months." 20.5%·55.2%는 개발·운영 주체가 자기 배포에서 잰 값이다(`author-reported`) | [PDF](https://ennanzhai.github.io/pub/sigcomm25-bian.pdf) | 2026-11-06 | subagent | ✅ verified |
 | BiAn A/B 조건: "Since it is impractical for a single operator to perform the task with and without assistance simultaneously on the same incident, we assigned operators of comparable expertise to each approach at best effort to ensure fairness." 각주: "we acknowledge that absolute fairness is hard to achieve" | [PDF](https://ennanzhai.github.io/pub/sigcomm25-bian.pdf) | 2026-11-06 | subagent | ✅ verified |
 | deny: "Deny rules block in every mode, including `bypassPermissions`." | [permission-modes](https://code.claude.com/docs/en/permission-modes.md) | 2026-11-06 | subagent | ✅ verified |
 | deny는 문자열 패턴이다: `Bash(git push *)`는 `git -C . push origin main`, `git 'push' origin main`과 매칭되지 않는다(문서 표). "A push written another way, such as `git -C . push`, isn't matched" | [permissions](https://code.claude.com/docs/en/permissions.md) | 2026-11-06 | subagent | ✅ verified |
 | mod 예외: "With neither managed settings nor a Team or Enterprise `/login` as the session's credential, the mod can approve a call that a deny rule refuses or a `PreToolUse` hook blocked." API 키나 `CLAUDE_CODE_OAUTH_TOKEN`으로 도는 세션이 여기에 해당한다 | [permissions](https://code.claude.com/docs/en/permissions.md) | 2026-11-06 | subagent | ✅ verified |
-| ask(문서): "Claude Code doesn't auto-approve the following in any mode, including `bypassPermissions`", 첫 항목은 "Tools matched by an explicit ask rule". 실제 동작은 PR-A 재측정 전까지 미정(ADR 0009 P8, v2.1.245 관찰과 반대) | [permission-modes](https://code.claude.com/docs/en/permission-modes.md) | 2026-11-06 | subagent | ✅ verified (문서) / ⚠️ 동작은 PR-A |
+| ask(문서): "Claude Code doesn't auto-approve the following in any mode, including `bypassPermissions`", 첫 항목은 "Tools matched by an explicit ask rule". 실제 동작은 ADR 0009 재측정(후속 작업) 전까지 미정(ADR 0009 P8, v2.1.245 관찰과 반대) | [permission-modes](https://code.claude.com/docs/en/permission-modes.md) | 2026-11-06 | subagent | ✅ verified (문서) / ⚠️ 동작은 ADR 0009 재측정(후속 작업)에서 확인 |
 | CHANGELOG 2.1.245~2.1.318: 구간 항목 3,965건을 ask·bypass·permission prompt·permission mode 패턴으로 걸러 195건을 봤다. bypass에서 명시적 ask 규칙의 동작을 바꿨다는 항목은 없고, ADR 0009 P8(v2.1.245) 관찰을 설명하는 항목도 없다. 구간 밖 2.1.98에 "Fixed compound Bash commands bypassing forced permission prompts for safety checks and explicit ask rules in auto and bypass-permissions modes"가 있다. 항목 전체 목록은 이 기록에 싣지 않는다 | [CHANGELOG](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) | 2026-11-06 | subagent | ✅ verified (패턴 검색. 인용 선별은 판단) |
 | allow: "Allow rules have no effect in `bypassPermissions`." | [permission-modes](https://code.claude.com/docs/en/permission-modes.md) | 2026-11-06 | subagent | ✅ verified |
 | hook: "If your hook is meant to enforce a policy, use `exit 2`." "On most events, when a hook fails or times out, Claude Code still carries out the action." 실패를 차단으로 바꾸는 `onFailure: "block"`은 v2.1.295+ | [hooks](https://code.claude.com/docs/en/hooks.md) | 2026-11-06 | subagent | ✅ verified |
@@ -115,7 +129,7 @@
 | #27063 본문: 에이전트가 "autonomously executed `drizzle-kit push --force` against my production PostgreSQL database on Railway". 위 인용문의 "it"은 `--force` 플래그다: "The `--force` flag exists specifically to skip interactive confirmation prompts. Claude Code used it to avoid being blocked by an interactive prompt". 작성자 `author_association: NONE` | [#27063](https://github.com/anthropics/claude-code/issues/27063) | 2026-11-06 | subagent | ✅ verified (제보자 주장) |
 | skill frontmatter `metadata`: "Free-form YAML map for your own key-value data, such as entitlement or catalog fields, read by your own tooling from `SKILL.md`. Claude Code doesn't act on its contents, and drops a value that isn't a map. Don't reuse frontmatter field names such as `paths` as keys." claude.ai 업로드·Skills API·`package_skill.py` 경로의 허용 필드 목록에도 든다 | [skills](https://code.claude.com/docs/en/skills.md) | 2026-11-06 | subagent | ✅ verified |
 
-## 3. `dx/claude-unattended-ops` (skill B)
+## 3. `dx/claude-unattended-ops`
 
 | 사실 | URL | 검증일 | 검증자 | 상태 |
 |---|---|---|---|---|
@@ -207,21 +221,21 @@
 
 ## 5. 충돌·인용 금지 목록
 
-- **ITBench 13.8% / 47% / 56.2%**: 13.8%는 2025-02 원 ITBench의 SRE 해결률, 47%와 56.2%는 ITBench-AA의 average precision at full recall(2026-05-27, 2026-09 이후 스냅샷)이다. 나란히 쓰지 않는다. "전 모델 50% 미만"은 2026-05-27 한정이다. 근거는 2026-11-05 노트의 raw 대조(항목 A1)이고 이번 패스에서는 다시 받지 않았다.
+- **ITBench 13.8% / 47% / 56.2%**: 13.8%는 2025-02 원 ITBench의 SRE 해결률, 47%와 56.2%는 ITBench-AA의 average precision at full recall(2026-05-27, 2026-09 이후 스냅샷)이다. 나란히 쓰지 않는다. "전 모델 50% 미만"은 2026-05-27 한정이다. 근거는 2026-11-05 노트의 raw 대조이고 이번 패스에서는 다시 받지 않았다.
 - **`-p` auto mode 반복 차단**: 현행 문서는 "Claude Code doesn't stop the run."이다. 2026-03-25 Anthropic 글은 "In headless mode (claude -p) there is no UI to ask the human, so we instead terminate the process."라고 썼다. 문서를 따른다. 바뀐 버전은 changelog에서 찾지 못했다. 단, 분류기가 답하지 못한 경우는 2.1.280부터 "the turn stops with a message after ten in a row"다. cloud task가 이때 실패로 표시되지 않던 문제는 2.1.316에서 고쳐졌다. "run이 멈추지 않는다"는 반복 차단 임계값에만 쓴다.
 - **HolmesGPT 패치 버전**: 구조화 필드는 범위 `>= 0.27.0, < 0.32.0`에 patched `0.34.0`이고, 본문은 0.32.0(인증 우회, 2026-06-11)과 0.34.0(승인 위조, 2026-06-28) 두 단계다. "0.34.0 이상"으로만 쓴다.
 - **LiteLLM `1.107.0`**: 전역 권고에 기재돼 있으나 근거는 제3자 이슈다. "제3자 신고, 공식 확인 없음"을 붙인다. 1.82.7·1.82.8은 공식 공지로 확인된다. Trivy와의 인과는 LiteLLM 측 판단이다(공지 표현 "We believe").
 - **`-p` 기본 권한 모드 이력**: 2.1.285는 third-party provider·telemetry off의 `-p`를 auto로 시작하게 바꿨고, 2.1.302가 다시 `default`로 돌렸다. "Manual 기본"은 v2.1.302+ 조건으로만 쓴다.
-- ❌ **"Deny rules block in every mode" 출처**: 이 문장과 "Allow rules have no effect in `bypassPermissions`."는 permission-modes 페이지에 있다. 2026-11-05 노트(항목 D1-c)의 permissions URL은 출처 위치가 틀렸다.
+- ❌ **"Deny rules block in every mode" 출처**: 이 문장과 "Allow rules have no effect in `bypassPermissions`."는 permission-modes 페이지에 있다. 2026-11-05 노트의 permissions URL은 출처 위치가 틀렸다.
 - ❌ **Actions 60일**: code.claude.com 현행판에서 사라졌다. GitHub 문서를 출처로 쓰고 공개 저장소 한정이라고 적는다.
 - ❌ **`system/init` 오류 키 (T2 실측으로 확인)**: 문서는 오류가 없으면 `plugin_errors`·`mcp_server_errors` 키를 생략한다고 쓰지만 2.1.318에서는 두 키가 `null`이었다. 게이트는 `// []`로 받는다. `mcp_server_errors`는 `--mcp-config` 검증 실패만 잡고, 연결에 실패한 서버는 `mcp_servers[].status`에만 `failed`로 나왔으며 run은 `success`로 끝났다. 연결 실패는 status로 따로 판정한다. "The run continues and exits cleanly"를 plugin 오류까지 넓혀 인용하지 않는다.
 - ❌ **kubectl-mcp-server**: CVE-2025-65719는 악성 HTML 페이지를 통한 코드 실행이다. read-only 우회 사례로 쓰지 않는다. 이 서버의 `--read-only`는 호출 단계에서도 거부한다.
 - ❌ **Flux159 read-only 스위치 위치**: `ALLOW_ONLY_READONLY_TOOLS`·`ALLOWED_TOOLS`는 README가 아니라 ADVANCED_README에 있다(노트는 README로 기록).
 - **#1415 수정 범위 (해소)**: PR #1442는 http 모드 기본값만 바꿨다. stdio에서 `configuration_view`가 남는 것은 v0.1.2 소스로 확인했다(`ShouldIncludeConfigurationViewTool`은 HTTP일 때만 거른다). `ReadOnlyHint: true`라 `read_only`를 켜도 남고, 서버 쪽에서는 `disabled_tools`로 뺀다. 소스 대조이며 실행 측정은 하지 않았다.
-- ❌ **BiAn**: shadow A/B로 잰 조사 시간(TTR) 단축이다. 자율 실행 승격 근거로 쓰지 않는다. 수치는 고객 진술(`customer-stated`)이 아니라 개발·운영 주체(저자 소속에 Alibaba Cloud 포함)의 자체 배포 보고라 skill에는 "저자 보고값"으로 적는다.
+- ❌ **BiAn**: shadow A/B로 잰 조사 시간(TTR) 단축이다. 자율 실행 승격 근거로 쓰지 않는다. 수치는 고객 진술(`customer-stated`)이 아니라 개발·운영 주체(저자 소속에 Alibaba Cloud 포함)의 자체 배포 보고라 skill에는 `author-reported`로 적는다.
 - **Azure SRE Agent 기본 모드**: "Review is the default mode."와 표의 Autonomous 기본값이 한 페이지에 함께 있다. 둘 다 조건과 함께 쓴다.
 - **CVE-2026-46519 공개일**: 저장소 권고 2026-05-17, 전역 DB 2026-05-21. 어느 DB 기준인지 밝힌다.
-- **권고 점수의 입력 주체**: 저장소 권고(GHSA-cr22·-6m4w·-fph8·-rp45)의 점수는 게시 권한상 maintainer 측이 넣은 값이다. CVE-2026-61459는 저장소 권고 목록에 없고 점수는 CNA VulnCheck 입력이다. CVE-2025-65719의 9.8은 CNA metrics가 없는 레코드(assigner `mitre`)라 전역 DB 기재값으로 적는다. 셋을 같은 "maintainer 점수"로 묶지 않는다.
+- **권고 점수의 입력 주체**: 저장소 권고(GHSA-cr22·-6m4w·-fph8·-rp45)의 점수는 게시 권한상 maintainer 측이 넣은 값(`maintainer-entered`)이다. CVE-2026-61459는 저장소 권고 목록에 없고 점수는 CNA VulnCheck 입력(`CNA-entered`)이다. CVE-2025-65719의 9.8은 CNA metrics가 없는 레코드(assigner `mitre`)라 `global-DB`로 적는다. 셋을 같은 `maintainer-entered`로 묶지 않는다.
 - **전역 DB 반영**: GitHub 문서는 검토 후 전역 DB에 넣는 과정이 "can take up to 72 hours"라고 쓰지만, 2026-07~09에 게시된 저장소 권고 3건(GHSA-6m4w, -rp45, -fph8)은 2026-11-06 조회에서 전역 DB 404였다. `cve_id` 조회는 unreviewed도 돌려주므로(CVE-2026-19516로 확인) HolmesGPT CVE의 `[]`는 전역 DB에 권고가 없다는 뜻이다. 72시간을 반영 보장으로 인용하지 않고 두 경로를 다 조회한다.
 - **Replit**: Register는 "has claimed"라고만 쓴다. "Register도 독립 검증 안 했다고 명시"(노트)는 원문에 없다. 임원 1,200명·회사 1,190개와 CEO 발언은 Fortune 403으로 미대조다.
 - **Kiro**: 13시간·삭제 후 재생성은 FT 측 주장(2차 출처 경유), "user error"·2차 사건 "entirely false"는 Amazon 측 주장이다. 한쪽만 인용하지 않는다.
