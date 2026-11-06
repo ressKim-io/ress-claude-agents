@@ -24,7 +24,7 @@ related:
   - 운영 MCP 연결 보안: `security` plugin에 MCP, prompt injection 언급이 없다.
 - 사용자 결정(2026-11-06)
   - 1~3순위만 새 skill로 만든다. 4~7순위는 후속으로 둔다.
-  - ADR 0009 `ask` 재측정을 선행 단계(PR-A)로 둔다.
+  - ADR 0009 `ask` 재측정을 선행 단계(PR-A)로 둔다. 이 순서는 뒤에 바꿨다(§브랜치 스택의 순서 변경).
   - 기존 자산은 무승인 실행 예시 2건만 고친다.
   - 검증 기록만 `docs/audit`에 커밋한다. 조사 원문과 초안은 로컬에 둔다.
 
@@ -32,14 +32,16 @@ related:
 
 PR 하나에 목적 하나를 둔다. 앞 PR이 머지되기 전이라 로컬에서 브랜치를 쌓았다. `blob/main` 링크 게이트는 로컬 파일만 보므로 쌓인 상태에서 통과한다. 앞 PR이 머지되면 다음 브랜치의 base를 최신 `main`으로 옮긴다. push와 PR 생성은 아직 하지 않았다.
 
+순서 변경: PR-A를 먼저 머지할 계획이었지만, 사용자가 모바일 Remote Control로 작업하고 있어 대화형 측정을 실행할 수 없었다. 그래서 PR-B~F를 먼저 올리고 PR-A는 후속으로 미뤘다. 그때까지 세 skill의 `ask` 행은 `⚠️ 재측정 대기`로 둔다. [ADR 0013](../adr/0013-ops-perspective-placement.md) §진행 순서도 이 순서로 고쳤다.
+
 | PR | 브랜치 | 내용 |
 |---|---|---|
-| PR-A | `docs/update-adr-0009-ask-remeasure` | ADR 0009 `ask` 재측정 반영. **아직 없다** (아래 남은 일) |
 | PR-B | `docs/update-aiops-agent-ops-verification` | 검증 기록, ADR 0013 |
 | PR-C | `feature/security-ops-mcp-security` | `/security:ops-mcp-security`, skill 하한 270 |
 | PR-D | `feature/dx-agent-autonomy-tiers` | `/dx:agent-autonomy-tiers`, 하한 271 |
 | PR-E | `feature/dx-claude-unattended-ops` | `/dx:claude-unattended-ops`, 앞 두 skill에 역참조, 하한 272 |
 | PR-F | `fix/unapproved-remediation-examples` | 무승인 실행 예시 2건 수정, 이 dev-log |
+| PR-A (후속) | `docs/update-adr-0009-ask-remeasure` | ADR 0009 `ask` 재측정 반영. **아직 없다** (아래 남은 일) |
 
 - 각 브랜치에서 생성기 3종을 다시 돌리고, 생성 파일은 원인이 된 변경과 같은 커밋에 넣었다.
 - 각 브랜치에서 CI 게이트 전부와 `test-gates.sh`를 돌렸다. 마지막 브랜치에서는 `verify-plugins.sh`도 돌렸다.
@@ -74,7 +76,7 @@ PR 하나에 목적 하나를 둔다. 앞 PR이 머지되기 전이라 로컬에
 
 - 배치: `dx` 2개와 `security` 1개. 새 plugin과 새 agent는 만들지 않는다. 근거와 대안 비교는 [ADR 0013](../adr/0013-ops-perspective-placement.md).
 - skill의 외부 사실은 검증 기록에 행이 있는 것만 쓴다. 기록에 없는 문장은 넣지 않거나 ⚠️로 둔다.
-- `ask`는 재측정 전까지 강제 근거로 세지 않는다. 세 skill 모두 deny만 강제 근거로 쓴다.
+- `ask`는 재측정 전까지 강제 근거로 세지 않는다. 권한 규칙 중에서는 deny 만 강제 근거로 쓴다.
 - PR-F는 승인 게이트(`requireApproval: true`, `approvalTimeout: 5m`)와 문구만 바꿨다. `scale` 단계에도 `approvalTimeout`을 붙여 세 승인 단계의 형태를 맞췄다. 키는 예시의 가상 스키마라 동작 검증 대상이 아니다.
 
 ## 남은 일
@@ -83,7 +85,18 @@ PR 하나에 목적 하나를 둔다. 앞 PR이 머지되기 전이라 로컬에
   - 준비: `claude --version` 기록, `.claude/settings.local.json`이 없는지 확인. 측정 중 "don't ask again"을 고르지 않는다.
   - 양성 대조: `claude --permission-mode manual --allowedTools "Bash(git *)" "Bash(gh *)" "Bash(kubectl *)"`에서 `/permissions` 출력을 남기고, allow·deny·ask 대조 명령마다 다이얼로그 여부를 기록한다. ask 대조군에 다이얼로그가 뜨지 않으면 측정이 무효다.
   - 측정: 같은 명령을 `--permission-mode bypassPermissions`로, 평소 쓰는 형태라면 `--dangerously-skip-permissions`로도 실행한다. auto 모드는 선택이다.
-  - 결과가 나오면 ADR 0009, `user-approval.md`, AGENT-SPEC과 세 skill의 `ask` 행(지금은 ⚠️ 재측정 대기)을 고친다. CHANGELOG 목록은 PR-A 자료로 따로 두었다.
+  - 결과가 나오면 아래를 고친다.
+    - 검증 기록의 `ask` 행
+    - ADR 0013 §진행 순서의 순서 메모
+    - 세 skill의 `ask` 행(지금은 ⚠️ 재측정 대기)
+    - ADR 0009
+    - `.claude/rules/core/user-approval.md`
+    - `AGENTS.md`
+    - `.claude/templates/AGENT-SPEC.md:54`
+    - `README.ko.md:291`
+    - `scripts/verify-enforcement-runtime.sh`의 주석과 메시지
+    - `docs/audit/2026-11-04-claude-spec-verification.md`에 후속 메모
+  - CHANGELOG 자료: 이번에 뽑은 ask·bypass CHANGELOG 목록은 레포 밖(로컬 자료)에 두었다. ADR 0009를 고칠 때 CHANGELOG에서 다시 뽑는다.
 - `--bare` deny 적용 측정: API 키를 둔 환경에서 skill의 Verification Criteria 1 dry-run을 `--bare`로 돌린다.
 - description 목록 예산: 대화형 `/doctor`, `/skill-doctor`로 사용자가 확인한다.
 - push, PR 생성, 리뷰 코멘트, 머지는 PR마다 사용자 승인을 받는다.
@@ -91,7 +104,6 @@ PR 하나에 목적 하나를 둔다. 앞 PR이 머지되기 전이라 로컬에
 ## 범위 밖 (발견만 함)
 
 - Permission Boundary 선언과 본문이 어긋난 agent: `incident-responder`(:328-345), `k8s-troubleshooter`(:239-255), `cost-analyzer`(:356, :397-412)
-- 로컬 조사 노트에 정리한 레포 내부 모순 20건
 - plugin 예시 오류
   - `pr-review-automation`: `trigger_phrase: ""`가 틀렸을 가능성, PR 코멘트 자동 게시가 `user-approval.md`와 충돌
   - `gitops-argocd-ai:156-173`: `anthropic/` org, 없는 `model:` 입력
