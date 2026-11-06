@@ -233,6 +233,7 @@ metadata:
 
 ## 참조 스킬
 
+- [claude-unattended-ops](../claude-unattended-ops/SKILL.md) — 사람 없는 run의 실행 경로, deny 배치, 실패한 run 판정. 무인 실행에 맡긴 행동의 강제 수단을 구성할 때
 - `/security:ops-mcp-security` — 운영 MCP 서버의 자격 증명·서버 read-only·deny 세 겹. T0 강제의 구현
 - `/sre:runbook-driven-ops` — runbook 실행 자동화와 자동화 후보 기준. T3 행동 목록과 실행기의 출처
 - `/sre:incident-postmortem` — 에이전트가 낀 사고의 사후 분석. action item 을 등급 강등이나 강제 수단 추가로 남긴다
