@@ -277,6 +277,8 @@ npm ci   # package-lock.json 그대로 설치한다. package.json 과 맞지 않
 - [secrets-management](../secrets-management/SKILL.md) — 서버에 넘길 read-only 자격 증명을 K8s Secret·Vault 등으로 주입하고 회전할 때
 - [threat-modeling](../threat-modeling/SKILL.md) — 운영 MCP 연결의 공격 표면을 STRIDE로 정리해 위협 모델 문서로 남길 때
 - `/ai:agentic-ai-architecture` — MCP·A2A 비교와 가드레일 아키텍처. 이 skill은 그중 운영 서버 연결의 권한과 보안만 다룬다
+- `/dx:agent-autonomy-tiers` — 운영 MCP 도구 호출을 행동 단위 등급(T0~T3)으로 나누고 등급마다 강제 수단을 짝지을 때
+- `/dx:claude-unattended-ops` — 운영 MCP 서버를 `claude -p`·Agent SDK 무인 run에 붙일 때의 `.mcp.json` 로딩, 권한 배치, 실패한 run 판정
 
 ## Sources / Verified
 
