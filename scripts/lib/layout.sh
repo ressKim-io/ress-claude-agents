@@ -8,7 +8,7 @@
 
 # 개수 하한. 늘어나는 건 자유이고, 의도적으로 줄일 때만 같은 커밋에서 낮춘다.
 # 일부만 사라져도 잡히도록 여유 없이 현재 개수로 둔다.
-MIN_SKILLS=269
+MIN_SKILLS=270
 MIN_AGENTS=34
 MIN_COMMANDS=43
 MIN_RULES=26
