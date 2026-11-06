@@ -24,18 +24,18 @@ cp -r plugins/dx/skills/<이름> <프로젝트>/.claude/skills/
 
 본문에서 참조하는 순서다. 없어도 동작하지만 해당 참조는 열리지 않는다.
 
+- [`ai`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/ai/README.md)
+- [`sre`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/sre/README.md)
+- [`observability`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/observability/README.md)
+- [`cicd`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/cicd/README.md)
 - [`platform`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/platform/README.md)
 - [`java`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/java/README.md)
-- [`observability`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/observability/README.md)
-- [`ai`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/ai/README.md)
-- [`cicd`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/cicd/README.md)
 - [`go`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/go/README.md)
-- [`sre`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/sre/README.md)
+- [`security`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/security/README.md)
 - [`architecture`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/architecture/README.md)
 - [`python`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/python/README.md)
 - [`infra`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/infra/README.md)
 - [`k8s`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/k8s/README.md)
-- [`security`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/security/README.md)
 
 ## 설치본에 포함되지 않는 것
 
@@ -53,11 +53,12 @@ cp -r plugins/dx/skills/<이름> <프로젝트>/.claude/skills/
 
 **권한 규칙** (`permissions.deny`) 도 실리지 않는다. agent 의 Permission Boundary 는 설치본에서 강제되지 않는 안내문이다.
 
-## Skills (24)
+## Skills (25)
 
 | 이름 | 설명 |
 |---|---|
 | `/dx:adr-retrospective` | Accepted ADR 사후 검토 — 6/12개월 재평가 트리거, 예측 vs 실측 비교, Superseded·Deprecated 판단, decision log 누적 분석 |
+| `/dx:agent-autonomy-tiers` | 에이전트 행동을 조사·제안·승인 후 실행·열거된 자동 실행 단계로 나누고 단계마다 승격 조건과 실제로 막는 강제 수단을 짝짓는다 |
 | `/dx:clean-code` | Clean Code 실전 — Composed Method, Cognitive Complexity, Guard Clause, 네이밍, WHY 주석, Tell Don't Ask 를 BAD/GOOD … |
 | `/dx:conventional-commits` | Conventional Commits — type·scope 규칙, 커밋 메시지 포맷, commitlint·semantic-release 자동화, Go 프로젝트 설정, PR 전략 |
 | `/dx:docs-as-code` | Docs as Code 사이트 구축 — MkDocs Material, Docusaurus, Backstage TechDocs, Mermaid 다이어그램, 문서 CI |
