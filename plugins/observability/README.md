@@ -22,6 +22,7 @@ cp -r plugins/observability/skills/<이름> <프로젝트>/.claude/skills/
 
 - [`sre`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/sre/README.md)
 - [`architecture`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/architecture/README.md)
+- [`dx`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/dx/README.md)
 
 ## 설치본에 포함되지 않는 것
 
