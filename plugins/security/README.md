@@ -22,6 +22,7 @@ cp -r plugins/security/skills/<이름> <프로젝트>/.claude/skills/
 
 - [`saas`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/saas/README.md)
 - [`infra`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/infra/README.md)
+- [`dx`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/dx/README.md)
 - [`ai`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/ai/README.md)
 - [`architecture`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/architecture/README.md)
 - [`cicd`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/cicd/README.md)
