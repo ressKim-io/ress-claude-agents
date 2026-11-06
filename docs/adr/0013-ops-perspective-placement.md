@@ -44,7 +44,7 @@
 |---|---|---|---|
 | a. 새 `aiops`/`agentops` plugin | 관점이 한 폴더에 모인다. `dx` 예산이 늘지 않는다 | 이 레포에서 켜지 않는다. 켜면 예산 문제가 돌아온다 (ADR 0012 §Decision 2). README 의 plugin 표에서 AIOps 는 이미 `observability` 영역이다. `token-budget`·`threat-modeling` 같은 관련 skill 참조가 전부 plugin 경계를 넘는다. 루트 `README.md`·`README.ko.md` 의 plugin 표와 `scripts/generate-plugin-readmes.py` 의 `RULES`·`REQUIRES` 맵을 손으로 고쳐야 한다. 생성기는 plugin 폴더의 README 만 만든다 | ❌ |
 | b. `.claude/rules` 규범 | 이 레포에서는 자동 로딩된다. skill 목록 예산을 쓰지 않는다 | 설치본에 실리지 않는다. 세 주제는 분기가 있는 결정 트리라 ADR 0008 §Decision 1 의 판정으로는 skill 이다. 외부 작업 승인 규범은 이미 `.claude/rules/core/user-approval.md` 에 있다 | ❌ |
-| c. `ai` plugin | 에이전트 거버넌스(`/ai:dx-ai-agents`)와 Claude Code 운영 전략(`/ai:ai-first-playbook`)이 있고, 자율성 척도 여럿도 여기 있다. 새 plugin 작업이 없다 | `plugin.json` 의 범위가 RAG·Vector DB·LLMOps·모델 서빙 같은 AI 기능 구축이라, plugin 으로 설치하면 무관한 skill 까지 목록 예산을 쓴다. 이 레포에서 켜지 않는다. MCP 보안이 `security` 의 위협 모델링·시크릿 관리와 떨어진다 | ❌ |
+| c. `ai` plugin | 에이전트 거버넌스(`/ai:dx-ai-agents`)와 Claude Code 운영 전략(`/ai:ai-first-playbook`)이 있고, 자율성 척도 여럿도 여기 있다. 새 plugin 작업이 없다 | `plugin.json` 의 description 은 "AI — RAG, Vector DB, LLMOps, MLOps, 모델 서빙, Agentic 아키텍처, 프롬프트 엔지니어링" 이다. 범위가 AI 기능 구축이고 Agentic 아키텍처도 제품에 넣을 agent 설계(`/ai:agentic-ai-architecture`)라, plugin 으로 설치하면 무관한 skill 까지 목록 예산을 쓴다. 이 레포에서 켜지 않는다. MCP 보안이 `security` 의 위협 모델링·시크릿 관리와 떨어진다 | ❌ |
 | **d. `dx` 2 + `security` 1** | `dx` 의 두 skill 은 이 레포가 직접 쓴다. 이 레포도 `claude -p` 를 돌리고(`scripts/verify-plugins.sh`, `scripts/verify-enforcement-runtime.sh`) `permissions` 를 둔다. `token-budget`·`pr-review-automation`, `threat-modeling`·`secrets-management` 와 같은 plugin 이라 상대 링크로 묶인다. 새 plugin 등록이 없다 | `dx` 상시 토큰이 더 커지고, 예산을 넘으면 description 이 빠진다. `security` skill 은 이 레포에서 로드되지 않는다. `dx` 와 `security` 사이의 참조는 상대 plugin 이 없으면 열리지 않는다 | ✅ 채택 |
 
 a·c 의 "이 레포에서 켜지 않는다" 는 d 의 `security` skill 에도 해당한다. d 는 그 범위를 skill 하나로 줄인다.
@@ -57,7 +57,7 @@ a·c 의 "이 레포에서 켜지 않는다" 는 d 의 `security` skill 에도 �
 - 새 plugin 등록, 루트 README 표, 생성기 맵을 고치지 않는다
 
 **잃는 것 / 위험**
-- `dx` 에 description 2개가 더해진다 (계획 초안 기준 136자, 160자). 목록 예산을 넘었는지는 대화형 `/doctor`·`/skill-doctor` 로만 확인된다. Migration 0003 의 전후 비교도 2026-11-06 현재 실행하지 않았다 ⚠️
+- `dx` 에 description 2개가 더해진다 (136자, 160자). 목록 예산을 넘었는지는 대화형 `/doctor`·`/skill-doctor` 로만 확인된다. Migration 0003 의 전후 비교도 2026-11-06 현재 실행하지 않았다 ⚠️
 - `security` skill 은 이 레포에서 로드되지 않아 `--plugin-dir plugins/security` 로 확인한다
 - 새 skill 이 가리키는 도메인 skill 은 그 plugin 이 없으면 열리지 않는다. 생성되는 plugin README 의 "함께 쓰면 좋은 plugin" 이 안내한다
 - 설치본에는 rule 과 `permissions` 가 없다. 그래서 새 skill 의 일관성 기준은 사용자 자신의 settings 와 승인 규칙으로 쓰고, 설치본에서 막지 못하는 것을 막는다고 쓰지 않는다
@@ -68,16 +68,18 @@ ADR 0008 §검증의 미결 목표 "skill 총수 ≤ 160" 과 반대 방향이�
 
 **진행 순서**
 
-PR 하나에 목적 하나를 두고, 앞 PR 이 머지된 뒤 `main` 에서 다음 브랜치를 딴다. `scripts/validate-catalog.sh` 가 없는 `/plugin:skill` 참조를 실패시키므로 참조되는 skill 부터 넣는다.
+PR 하나에 목적 하나를 둔다. 브랜치는 PR-B 부터 PR-F 까지 로컬에 쌓아 만들었고, 앞 PR 이 머지되면 다음 브랜치를 `main` 위로 옮겨 하나씩 올린다. `scripts/validate-catalog.sh` 가 없는 `/plugin:skill` 참조를 실패시키므로 참조되는 skill 부터 넣는다.
+
+ADR 0009 `ask` 재측정(PR-A)은 사용자가 대화형 세션에서 해야 하는데, 이번 작업 중에는 사용자가 그 측정을 실행할 수 없었다. 그래서 PR-B~F 를 먼저 올리고 PR-A 는 후속으로 둔다. 그때까지 세 skill 의 `ask` 행은 `⚠️ 재측정 대기` 로 두고 강제 근거로 세지 않는다.
 
 | 순서 | PR | 내용 |
 |---|---|---|
-| 0 | PR-A | ADR 0009 `ask` 재측정 반영. 측정은 사용자가 대화형 세션에서 한다 |
 | 1 | PR-B | 검증 기록과 이 ADR |
 | 2 | PR-C | `security/ops-mcp-security` |
-| 3 | PR-D | `dx/agent-autonomy-tiers`. 강제 수단 표의 `ask` 행은 PR-A 결과를 따른다 |
+| 3 | PR-D | `dx/agent-autonomy-tiers`. 강제 수단 표의 `ask` 행은 `⚠️ 재측정 대기` |
 | 4 | PR-E | `dx/claude-unattended-ops`, 앞 두 skill 에 역참조 추가 |
 | 5 | PR-F | 무승인 실행 예시 2건 수정(`/observability:aiops-remediation`, `/ai:dx-ai-agents-orchestration`)과 dev-log |
+| 후속 | PR-A | ADR 0009 `ask` 재측정 반영. 측정은 사용자가 대화형 세션에서 한다. 결과에 따라 세 skill 의 `ask` 행과 이 순서 메모를 고친다 |
 
 **범위 밖 (후속)**
 - Permission Boundary 선언과 본문이 어긋난 agent: `sre:incident-responder`, `k8s:k8s-troubleshooter` 는 kubectl 읽기 전용을 선언하고 본문에서 확인 후 `kubectl delete`·`scale` 을 허용한다. `sre:cost-analyzer` 는 결과만 반환한다고 선언하고 본문에 승인된 절감안 자동 적용을 둔다
