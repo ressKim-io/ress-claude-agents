@@ -24,12 +24,13 @@ description: "Claude Code를 사람 없이 돌릴 때 실행 경로, 권한 배�
     │
     ├─ 2) 권한 배치 (위에서부터 채운다)
     │       ├─ deny ─> managed settings 또는 신뢰 경로의 --settings·--disallowedTools
-    │       │          (PR 체크아웃의 project settings는 PR이 바꿀 수 있다)  ← 유일한 강제 근거
+    │       │          (PR 체크아웃의 project settings는 PR이 바꿀 수 있다)  ← 모든 모드에서 남는 유일한 권한 규칙
     │       ├─ mode ─> --permission-mode 항상 명시 (기본값이 버전마다 달랐다)
     │       │     ├─ 기본 ─────────────────> dontAsk + allowedTools (열거한 도구만)
     │       │     └─ bypassPermissions ────> deny 있음 + 컨테이너·VM·sandbox + 비 root 일 때만
     │       ├─ ask ──> ⚠️ bypass 동작 재측정 대기. 강제 근거로 세지 않는다
-    │       └─ hook ─> 보조 수단 (fail-open, --bare 에서는 --settings 로 넘긴 hook 미실행)
+    │       └─ hook ─> 보조 수단 (fail-open)
+    │                  --bare 에서는 settings 와 plugin 의 hook 이 실행되지 않는다(--settings 로 넘긴 hook 포함)
     │
     └─ 3) 결과 판정 (exit 0 ≠ 성공. deny 차단·MCP 연결 실패도 exit 0)
             ├─ exit code ≠ 0 ────────────────────────────> 실패 (143 = SIGTERM, --max-turns 초과 = 1)
@@ -57,7 +58,7 @@ description: "Claude Code를 사람 없이 돌릴 때 실행 경로, 권한 배�
 GitHub Actions의 CLI 옵션은 `claude_args`로 넘긴다. `claude-code-action@v1`에는 `model`, `allowed_tools` 입력이 없다(action.yml 재대조 2026-11-06). 문서는 `claude_args`가 "accepts any Claude Code CLI argument"라고 쓰고, 비용을 줄이는 방법으로 "Set `--max-turns` in `claude_args` to limit iterations"를 든다. deny도 `claude_args`의 `--disallowedTools`로 넘긴다. `--max-budget-usd`는 문서에 이름이 없다. Action 코드는 이 플래그를 CLI로 그대로 넘기지만, Action 안에서 효과가 있는지는 ⚠️ 측정하지 않았다.
 
 ```yaml
-# 발췌 — 트리거·인증 입력과 전체 workflow 는 pr-review-automation 참조
+# 발췌 — 인증 입력·workflow 구성은 pr-review-automation 참조
 - uses: anthropics/claude-code-action@v1
   with:
     claude_args: >-
@@ -244,18 +245,18 @@ Managed Agents는 `status: beta`(헤더 `managed-agents-2026-04-01`)이고, "Age
 
 | 안티패턴 | 왜 깨지는가 | 대신 |
 |---|---|---|
-| `-p`·`--bare` run의 가드레일을 hook으로만 둔다 | bare에서는 `--settings`로 넘긴 hook이 돌지 않고, `--bare`는 앞으로 `-p` 기본값이 된다. hook은 실패·timeout이면 대부분 그대로 실행한다 | deny로 옮기고 hook은 보조로 쓴다 |
+| `-p`·`--bare` run의 가드레일을 hook으로만 둔다 | `--bare` 에서는 settings 와 plugin 의 hook 이 실행되지 않는다(`--settings` 로 넘긴 hook 포함). `--bare`는 앞으로 `-p` 기본값이 된다. hook은 실패·timeout이면 대부분 그대로 실행한다 | deny로 옮기고 hook은 보조로 쓴다 |
 | CI에서 deny 없이 `--dangerously-skip-permissions` | bypass에서는 allow가 효과가 없어 열거한 도구만 쓰게 할 수 없다. ask 동작은 재측정 대기다 | deny + 컨테이너·비 root, 아니면 `dontAsk` + `--allowedTools` |
 | exit 0을 성공으로 판정 | deny에 막힌 run과 MCP 연결에 실패한 run도 exit 0, `subtype: "success"`였다(✅ 로컬 실측). 흔적은 `permission_denials`와 `mcp_servers[].status`에만 남는다 | §실패한 run 판정의 게이트 |
 | 개인 cloud scheduled task를 팀 on-call로 쓴다 | 개인 계정 소유라 팀원과 공유되지 않고, 결과물이 소유자 명의로 나가고, ask·반복 차단이면 사람을 기다린다. GitHub 연결이 72시간 끊기면 꺼진다 | 팀이 소유하는 CI cron |
-| `allowed_non_write_users: "*"`에 Bash까지 준다 | Cline post-mortem(2026-02-23): triage workflow가 `claude-code-action`에 이 조합을 줬고, 탈취된 토큰으로 `cline@2.3.0`이 게시됐다. "The exposure window was approximately 8 hours." | write 권한 없는 사용자가 부르는 workflow에는 상태를 바꾸는 도구를 주지 않는다 |
+| `allowed_non_write_users: "*"`에 Bash까지 준다 | Cline post-mortem(2026-02-23): triage workflow가 `claude-code-action`에 이 조합을 줬고, 탈취된 토큰으로 `cline@2.3.0`이 게시됐다. "The exposure window was approximately 8 hours."(`vendor-claimed`, 자사 사후 보고) | write 권한 없는 사용자가 부르는 workflow에는 상태를 바꾸는 도구를 주지 않는다 |
 
 ## Verification Criteria
 
 이 skill 을 적용한 결과가 다음 조건을 만족해야 한다:
 
 1. **[기능 검증]** — deny 대상 명령을 일부러 시킨 dry-run에서 `permission_denials`가 비어 있지 않고 게이트가 0이 아닌 코드로 끝난다. claude 자신은 exit 0, `subtype: "success"`로 끝나도 정상이다(✅ 로컬 실측)
-   예: `--allowedTools "Bash(echo *)"`와 deny `Bash(echo DENY_PROBE *)`를 담은 `--settings`, `--permission-mode dontAsk`, `--output-format stream-json --verbose`로 `echo DENY_PROBE ok`를 시키는 `-p` run(`--max-turns 3 --max-budget-usd 0.05 --model claude-haiku-5-5`). bare job이면 `--bare`로도 돌린다
+   예: `--allowedTools "Bash(echo *)"`와 deny `Bash(echo PROBE_DENY *)`를 담은 `--settings`, `--permission-mode dontAsk`, `--output-format stream-json --verbose`로 `echo PROBE_DENY ok`를 시키는 `-p` run(`--max-turns 3 --max-budget-usd 0.05 --model claude-haiku-5-5`). bare job이면 `--bare`로도 돌린다
 2. **[성능 / 안전성]** — deny 없는 bypass run이 0건이고, 모든 `claude -p` run에 `--max-budget-usd`와 `--max-turns`가, 모든 Action run의 `claude_args`에 `--max-turns`가 있다
    예: CI 정의에서 `bypassPermissions`·`--dangerously-skip-permissions`를 쓰는 job마다 deny 출처(managed settings, `--settings`, `--disallowedTools`)를 대조
 3. **[일관성]** — 무인 run에 넘기는 deny·ask가 사용자 자신의 settings·승인 규칙과 같은 범위이고, ask에 기대는 부분은 ADR 0009 재측정 결과를 따른다
@@ -295,5 +296,4 @@ Managed Agents는 `status: beta`(헤더 `managed-agents-2026-04-01`)이고, "Age
 - [Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode) — 검증일 2026-11-06 · ✅ verified · subagent. 수치는 `vendor-claimed`, 글은 `/research/` 경로로 이동
 - [Cline post-mortem](https://cline.bot/blog/post-mortem-unauthorized-cline-cli-npm) — 검증일 2026-11-06 · ✅ verified · subagent
 - [claude-code-action action.yml](https://raw.githubusercontent.com/anthropics/claude-code-action/main/action.yml), [parse-sdk-options.ts](https://github.com/anthropics/claude-code-action/blob/main/base-action/src/parse-sdk-options.ts) — 검증일 2026-11-06 · ✅ verified · subagent. 입력 목록과 `claude_args` 처리(코드 확인, 동작 측정 아님)
-- [claude-code-action migration guide](https://github.com/anthropics/claude-code-action/blob/main/docs/migration-guide.md) — 검증일 2026-11-04 · ✅ verified · Claude (subagent 조사 + 메인 세션 확인). 기록: [2026-11-04 사양 검증](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/audit/2026-11-04-claude-spec-verification.md)
 - [로컬 실측, Claude Code 2.1.318](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/audit/2026-11-06-aiops-agent-ops-verification.md) — 검증일 2026-11-06 · ✅ 로컬 실측 · Claude (메인 세션). deny 차단, MCP 연결 실패, `--max-turns` 초과, `stream-json`과 `--verbose`, 키 없는 `--bare`, `--help`. ⚠️ bare에서 `--settings` deny 적용은 미측정
