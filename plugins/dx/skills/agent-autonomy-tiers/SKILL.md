@@ -6,7 +6,7 @@ description: "에이전트 행동을 조사·제안·승인 후 실행·열거�
 # Agent Autonomy Tiers — 행동 단위 자율성 등급
 
 에이전트 권한을 에이전트 단위가 아니라 **행동 하나 단위**로 T0~T3 에 두고, 등급마다 모델 밖에서 실제로 막는 수단을 짝짓는다.
-외부 사례와 수치는 2026-11-06 검증 기록 기준이다. 수치에는 `vendor-claimed` / `customer-stated` / `independently confirmed` 라벨과 조건을 붙이고, 논문 수치는 저자 보고값으로 적는다. 이 문서에 `independently confirmed` 수치는 없다. 로컬 실측은 CLI 버전과 함께 적는다.
+외부 사례와 수치는 2026-11-06 검증 기록 기준이다. 수치에는 `vendor-claimed` / `customer-stated` / `independently confirmed` 라벨과 조건을 붙이고, 논문 수치는 `author-reported` 로 적는다. 이 문서에 `independently confirmed` 수치는 없다. 로컬 실측은 CLI 버전과 함께 적는다.
 
 ## Quick Reference (결정 트리)
 
@@ -73,7 +73,7 @@ T3 의 핵심은 열거다. OWASP 는 Agentjacking(연구자 보고) 정리에�
 |---|---|---|
 | 실패 비용 상한 | 한 번 틀렸을 때 최대 피해, 되돌리는 방법과 시간 | Vantage 구매 대기열 24시간(`vendor-claimed`). Railway 는 사고 뒤 "all deletes now soft delete for 48 hours"(`vendor-claimed`, 사고 후 변경) |
 | 켜기 전 정밀도 | 실행하지 않고 판정만 기록해 맞은 비율을 잰다 | Defender audit mode (위 표) |
-| shadow 비교 | 같은 사건을 에이전트 경로와 사람 경로로 나란히 처리해 차이를 잰다 | BiAn(Alibaba Cloud, SIGCOMM'25): 10개월 배포 중 shadow operator 로 "BiAn versus those done fully manually" 를 A/B 비교했고 "reducing time to root causing by 20.5% (55.2% for high-risk incidents)" (저자 보고값: 개발·운영 주체의 자체 배포. 같은 사건을 한 사람이 양쪽으로 처리할 수 없어 비슷한 숙련도의 운영자를 "at best effort" 로 나눴다). **shadow A/B 로 잰 조사 시간 단축이다.** 켜기 전 정밀도나 자동 실행 승격 근거로 쓰지 않는다 |
+| shadow 비교 | 같은 사건을 에이전트 경로와 사람 경로로 나란히 처리해 차이를 잰다 | BiAn(Alibaba Cloud, SIGCOMM'25): 10개월 배포 중 shadow operator 로 "BiAn versus those done fully manually" 를 A/B 비교했고 "reducing time to root causing by 20.5% (55.2% for high-risk incidents)" (`author-reported`: 개발·운영 주체의 자체 배포. 같은 사건을 한 사람이 양쪽으로 처리할 수 없어 비슷한 숙련도의 운영자를 "at best effort" 로 나눴다). **shadow A/B 로 잰 조사 시간 단축이다.** 켜기 전 정밀도나 자동 실행 승격 근거로 쓰지 않는다 |
 | 사후 검증 | 실행 뒤 자동 확인과 실패 시 되돌림 | Azure SQL·Marvis·LaunchDarkly (위 표) |
 | 재시도 상한 → 사람 | n회 뒤 멈추고 넘긴다 | Marvis 세 번(`vendor-claimed`) |
 | 범위 단계 확대 | 비프로덕션 → 일부 → 전체, 단계마다 같은 지표 | Azure: "Start with review mode. Observe what the agent recommends for two to four weeks." (`vendor-claimed`, 권고). Relay Network: "By May 2025, ~55% of production resources were running on Autopilot." 이후 2026-02 에 eligible workload 전체가 full Autopilot 이 됐다. 2023-09 시작부터 29개월이다 (`customer-stated`, Sedai 고객 페이지, 개월 수는 날짜로 계산) |
@@ -104,7 +104,7 @@ T3 의 핵심은 열거다. OWASP 는 Agentjacking(연구자 보고) 정리에�
 | credential proxy | 실행 환경 | 자격 증명 노출: "The agent can make API calls, but it never sees the credential itself." | 허용된 호출은 그대로 나간다. 호출 범위는 프록시 뒤 자격 증명의 권한이 정한다 | ✅ |
 | sandbox · 내장 egress 프록시 | OS·네트워크 | shell 명령의 파일·네트워크 접근, 허용 목록 밖 호스트 | "The sandbox covers shell commands only." 프록시는 호스트 이름으로 허용 목록을 강제하고 "by default, does not terminate or inspect TLS traffic" | ✅ |
 | `permissions.deny` | 사용자·managed settings, CLI `--settings`·`--disallowedTools` | 패턴이 일치하는 호출. "Deny rules block in every mode, including `bypassPermissions`." | 문자열 패턴이다. `Bash(git push *)` 는 `git -C . push origin main`, `git 'push' origin main` 과 매칭되지 않는다. managed settings 도 Team·Enterprise `/login` 도 없는 세션(API 키, `CLAUDE_CODE_OAUTH_TOKEN`)에서는 "the mod can approve a call that a deny rule refuses or a `PreToolUse` hook blocked." 막혀도 `-p` run 은 exit 0 으로 끝난다(아래 실측) | ✅ · 로컬 실측 ✅ |
-| `PreToolUse` hook | settings·managed·plugin | 임의 로직으로 호출 거부: "If your hook is meant to enforce a policy, use `exit 2`." | 실패하면 열린다: "On most events, when a hook fails or times out, Claude Code still carries out the action." 실패를 차단으로 바꾸는 `onFailure: "block"` 은 v2.1.295+. `--bare` 에서는 돌지 않는다: "Hooks still don't run in bare mode when you pass them with `--settings`". frontmatter `hooks` 가 무시되는 것은 plugin agent 뿐이고, "Hooks from settings files, managed policy settings, and plugins also run inside subagents." | ✅ |
+| `PreToolUse` hook | settings·managed·plugin | 임의 로직으로 호출 거부: "If your hook is meant to enforce a policy, use `exit 2`." | 실패하면 열린다: "On most events, when a hook fails or times out, Claude Code still carries out the action." 실패를 차단으로 바꾸는 `onFailure: "block"` 은 v2.1.295+. `--bare` 에서는 settings 와 plugin 의 hook 이 실행되지 않는다(`--settings` 로 넘긴 hook 포함): "Hooks still don't run in bare mode when you pass them with `--settings`". frontmatter `hooks` 가 무시되는 것은 plugin agent 뿐이고, "Hooks from settings files, managed policy settings, and plugins also run inside subagents." | ✅ |
 | `permissions.ask` | 사용자·managed settings | 문서: "Claude Code doesn't auto-approve the following in any mode, including `bypassPermissions`", 첫 항목은 "Tools matched by an explicit ask rule" | 이 레포 [ADR 0009](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/adr/0009-enforcement-layer-placement.md) P8(v2.1.245)은 대화형 bypass 에서 ask 규칙이 그냥 실행된 것을 관찰했다. 2.1.245~2.1.318 CHANGELOG 에서 이 동작을 바꾼 항목은 찾지 못했다 | ⚠️ 재측정 대기. 재측정 전까지 권한 규칙 중에서는 deny 만 강제 근거로 센다 |
 | `permissions.allow` | settings | 없음. 허용 범위 선언이다 | "Allow rules have no effect in `bypassPermissions`." Agent SDK 문서: "`allowed_tools` does not constrain `bypassPermissions`." | ✅ (통제 아님) |
 | auto mode classifier | Claude Code | 모델이 위험하다고 판정한 호출 | "17% FNR"(실제 overeager 행동 n=52), "0.4% FPR"(정상 트래픽), 둘 다 `vendor-claimed`. "Auto mode reduces permission prompts but does not guarantee safety." | ✅ |
@@ -253,7 +253,7 @@ metadata:
 - [Vantage Autopilot](https://docs.vantage.sh/autopilot) — 검증일 2026-11-06 · ✅ verified · subagent
 - [LaunchDarkly guarded rollouts](https://launchdarkly.com/docs/home/releases/managing-guarded-rollouts) — 검증일 2026-11-06 · ✅ verified · subagent
 - [Sedai — Relay Network](https://sedai.io/customers/relay-network) — 검증일 2026-11-06 · ✅ verified (`customer-stated`) · subagent
-- [BiAn, SIGCOMM'25 (PDF)](https://ennanzhai.github.io/pub/sigcomm25-bian.pdf) — 검증일 2026-11-06 · ✅ verified (기록의 ❌ 정정값 적용: shadow A/B 로 잰 조사 시간, 켜기 전 정밀도 예 아님. 수치는 저자 보고값) · subagent
+- [BiAn, SIGCOMM'25 (PDF)](https://ennanzhai.github.io/pub/sigcomm25-bian.pdf) — 검증일 2026-11-06 · ✅ verified (기록의 ❌ 정정값 적용: shadow A/B 로 잰 조사 시간, 켜기 전 정밀도 예 아님. 수치는 `author-reported`) · subagent
 - [OWASP GenAI exploit roundup Q2 2026](https://genai.owasp.org/2026/07/08/genai-and-agentic-ai-exploit-roundup-q2-2026/) — 검증일 2026-11-06 · ✅ verified · subagent
 
 **강제 수단**
