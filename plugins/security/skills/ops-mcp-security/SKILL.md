@@ -6,7 +6,7 @@ description: "운영 시스템에 붙는 MCP 서버를 자격 증명 경계, 서
 # 운영 MCP 서버 보안
 
 Kubernetes·관측·CI 같은 운영 시스템에 MCP 서버를 붙일 때 권한을 세 겹으로 묶고, 서버가 돌려주는 운영 데이터를 신뢰하지 않는 입력으로 다루는 기준이다. 경계는 서버 플래그가 아니라 서버가 쓰는 자격 증명이다.
-외부 사실은 2026-11-06 원문 대조 기록 기준이다. 점수와 수치에는 입력 주체를 붙인다: `maintainer-entered`(저장소·제조사 권고에 maintainer 측이 넣은 점수), CNA 입력, 전역 DB 기재, `researcher experiment`(논문·연구자 보고의 실험값). 독립 검증된 수치는 없다.
+외부 사실은 2026-11-06 원문 대조 기록 기준이다. 점수와 수치에는 입력 주체를 붙인다: `maintainer-entered`(저장소·제조사 권고에 maintainer 측이 넣은 점수), `CNA-entered`(CVE 레코드의 CNA가 넣은 점수), `global-DB`(전역 권고 DB 기재 점수), `researcher-experiment`(논문·연구자 보고의 실험값). 독립 검증된 수치는 없다.
 
 ## Quick Reference (결정 트리)
 
@@ -172,10 +172,10 @@ claude mcp add kubernetes --scope local --env KUBECONFIG="$RO_KUBECONFIG" -- "$S
 
 | 연구·보고 | 보인 것 (원문) | 수치 라벨과 조건 |
 |---|---|---|
-| AIOpsDoom (arXiv 2508.06394 v2) | 오류를 유발하는 요청으로 텔레메트리를 오염시킨다. "adversaries can manipulate system telemetry to mislead AIOps agents into taking actions that compromise the integrity of the infrastructure they manage" | 평균 성공률 90%: `researcher experiment`, 연구 testbed (AIOpsLab 36개 조합 × 5회 = 180회) |
-| LogJack (arXiv 2604.15368, 2026-04-15) | "verbatim command execution rates range from 0% (Claude Sonnet 4.6) to 86.2% (Llama 3.3 70B)". "Azure Prompt Shield detected only the most obvious payload (1/32), while GCP Model Armor detected none" | `researcher experiment`. 모델과 탐지기에 따라 크게 갈린다 |
-| LogInject (arXiv 2607.14493, 2026-07-16) | "up to 88.2% attack success rate (83.4% average across models)". 다층 방어 후에도 "90.4% attack reduction, although 8.4% residual vulnerability persists" | `researcher experiment` |
-| Agentjacking (Tenet, 2026-06-17) | 공개된 write-only Sentry DSN으로 가짜 오류를 넣는다. "Prompt-layer defenses failed." | "2,388 organizations found exposed with valid injectable DSNs": `researcher experiment`(연구자 스캔). OWASP Q2: "These are researcher-reported results, not a count of confirmed criminal breaches." |
+| AIOpsDoom (arXiv 2508.06394 v2) | 오류를 유발하는 요청으로 텔레메트리를 오염시킨다. "adversaries can manipulate system telemetry to mislead AIOps agents into taking actions that compromise the integrity of the infrastructure they manage" | 평균 성공률 90%: `researcher-experiment`, 연구 testbed (AIOpsLab 36개 조합 × 5회 = 180회) |
+| LogJack (arXiv 2604.15368, 2026-04-15) | "verbatim command execution rates range from 0% (Claude Sonnet 4.6) to 86.2% (Llama 3.3 70B)". "Azure Prompt Shield detected only the most obvious payload (1/32), while GCP Model Armor detected none" | `researcher-experiment`. 모델과 탐지기에 따라 크게 갈린다 |
+| LogInject (arXiv 2607.14493, 2026-07-16) | "up to 88.2% attack success rate (83.4% average across models)". 다층 방어 후에도 "90.4% attack reduction, although 8.4% residual vulnerability persists" | `researcher-experiment` |
+| Agentjacking (Tenet, 2026-06-17) | 공개된 write-only Sentry DSN으로 가짜 오류를 넣는다. "Prompt-layer defenses failed." | "2,388 organizations found exposed with valid injectable DSNs": `researcher-experiment`(연구자 스캔). OWASP Q2: "These are researcher-reported results, not a count of confirmed criminal breaches." |
 | GrafanaGhost (Noma, 2026-04-07) | 로그에 심은 지시로 Grafana AI를 거쳐 데이터를 유출하는 체인 | 수치 없음. 제조사 반박(Grafana CISO, CyberScoop): "the end user would have to repeatedly instruct our AI assistant to follow malicious instructions contained in logs" |
 | mcp-grafana #680 (2026-03-24 개설) | "Dashboard titles, panel descriptions, annotation text, or alert rule names can carry injected instructions" | 수치 없음. 2026-11-06 기준 open, `stale` 라벨 |
 
@@ -201,8 +201,8 @@ claude mcp add kubernetes --scope local --env KUBECONFIG="$RO_KUBECONFIG" -- "$S
 | CVE-2026-63473 / GHSA-6m4w-cmhp-f95f | HolmesGPT (pip `holmesgpt`), 0.34.0 이상으로 올린다 | "When the built-in `bash` toolset is enabled, this becomes unauthenticated command execution as the HolmesGPT server process." | critical 9.8 (`maintainer-entered`, 저장소 권고) | `cve_id` 조회 결과 `[]` (`type` 무관) |
 | GHSA-rp45-5x3v-48mr | argocd-mcp (npm `argocd-mcp`) `= 0.8.0` → `0.9.0` | "a network caller can create an MCP session without presenting any inbound credential" | critical 10.0 (`maintainer-entered`, 저장소 권고) | CVE 없음, 조회 404 |
 | CVE-2026-19516 / GHSA-fr94-7cqc-vjrq | mcp-grafana, 수정 `>=1.1.0` (2026-08-11 공개) | `grafana_api_request`의 `X-Grafana-URL` 헤더로 목적지를 바꾸는 SSRF. 호출자가 "direct requests at internal, loopback, and link-local network services (including metadata endpoints) and read the responses" | CVSS 9.1 (`maintainer-entered`, Grafana Labs 권고) | `unreviewed`, 저장소 권고 0건 |
-| CVE-2026-61459 / GHSA-wmg3-h8mf-wgvr | mcp-server-kubernetes (Flux159, npm) `< 3.9.0` → `3.9.0` | "Attackers can inject the --server flag to redirect kubectl commands to an attacker-controlled API server" | critical 9.8 (CNA 입력, VulnCheck) | reviewed. 저장소 권고 목록에는 없다 |
-| CVE-2025-65719 / GHSA-94gr-w3q5-rfqr | kubectl-mcp-server `< 1.2.0` | "arbitrary code execution via user interaction with crafted HTML page" | critical 9.8 (전역 DB 기재) | reviewed |
+| CVE-2026-61459 / GHSA-wmg3-h8mf-wgvr | mcp-server-kubernetes (Flux159, npm) `< 3.9.0` → `3.9.0` | "Attackers can inject the --server flag to redirect kubectl commands to an attacker-controlled API server" | critical 9.8 (`CNA-entered`, VulnCheck) | reviewed. 저장소 권고 목록에는 없다 |
+| CVE-2025-65719 / GHSA-94gr-w3q5-rfqr | kubectl-mcp-server `< 1.2.0` | "arbitrary code execution via user interaction with crafted HTML page" | critical 9.8 (`global-DB`) | reviewed |
 
 - CVE-2025-65719는 악성 HTML 페이지를 통한 코드 실행이고 read-only 우회 사례가 아니다. kubectl-mcp-server의 `--read-only`는 쓰기 도구를 호출 단계에서도 거부한다.
 - CVE-2026-61459는 `kubectl_get`·`kubectl_describe`·`kubectl_delete` 인자 주입이고, 결과는 "the operator's bearer token to be transmitted externally"다. 읽기 도구도 자격 증명을 내보내는 통로가 된다.
