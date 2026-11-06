@@ -253,6 +253,8 @@ spec:
 
 ### Self-Healing 인프라
 
+> 이 예시는 개발 환경용이다. 프로덕션에는 에이전트 접근을 주지 않고(아래 Anti-Patterns 의 "AI에게 프로덕션 접근 허용" 행) 변경은 GitOps PR 로 반영한다. 상태를 바꾸는 `remediate`·`scale` 은 사람 승인 후에만 실행하고, 승인 시간(`approvalTimeout`)이 지나면 실행하지 않는다. 승인이 필요한 행동의 기준은 `/dx:agent-autonomy-tiers` 를 따른다.
+
 ```yaml
 # ai-self-healing.yaml
 apiVersion: platform.company.io/v1
@@ -284,7 +286,8 @@ spec:
             - restart_pod
             - scale_replicas
             - rollback_deployment
-          requireApproval: false
+          requireApproval: true
+          approvalTimeout: 5m
           maxAttempts: 3
 
     - name: high-error-rate
@@ -312,10 +315,12 @@ spec:
           direction: up
           increment: 2
           maxReplicas: 10
+          requireApproval: true
+          approvalTimeout: 5m
 
         - type: notify
           channel: "#platform-alerts"
-          message: "Auto-scaled due to memory pressure"
+          message: "Scaled up after approval due to memory pressure"
 
   # 학습 및 개선
   learning:
