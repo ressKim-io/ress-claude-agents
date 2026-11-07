@@ -104,8 +104,8 @@ T3 의 핵심은 열거다. OWASP 는 Agentjacking(연구자 보고) 정리에�
 | credential proxy | 실행 환경 | 자격 증명 노출: "The agent can make API calls, but it never sees the credential itself." | 허용된 호출은 그대로 나간다. 호출 범위는 프록시 뒤 자격 증명의 권한이 정한다 | ✅ |
 | sandbox · 내장 egress 프록시 | OS·네트워크 | shell 명령의 파일·네트워크 접근, 허용 목록 밖 호스트 | "The sandbox covers shell commands only." 프록시는 호스트 이름으로 허용 목록을 강제하고 "by default, does not terminate or inspect TLS traffic" | ✅ |
 | `permissions.deny` | 사용자·managed settings, CLI `--settings`·`--disallowedTools` | 패턴이 일치하는 호출. "Deny rules block in every mode, including `bypassPermissions`." | 문자열 패턴이다. `Bash(git push *)` 는 `git -C . push origin main`, `git 'push' origin main` 과 매칭되지 않는다. managed settings 도 Team·Enterprise `/login` 도 없는 세션(API 키, `CLAUDE_CODE_OAUTH_TOKEN`)에서는 "the mod can approve a call that a deny rule refuses or a `PreToolUse` hook blocked." 막혀도 `-p` run 은 exit 0 으로 끝난다(아래 실측) | ✅ · 로컬 실측 ✅ |
-| `PreToolUse` hook | settings·managed·plugin | 임의 로직으로 호출 거부: "If your hook is meant to enforce a policy, use `exit 2`." | 실패하면 열린다: "On most events, when a hook fails or times out, Claude Code still carries out the action." 실패를 차단으로 바꾸는 `onFailure: "block"` 은 v2.1.295+. `--bare` 에서는 settings 와 plugin 의 hook 이 실행되지 않는다(`--settings` 로 넘긴 hook 포함): "Hooks still don't run in bare mode when you pass them with `--settings`". frontmatter `hooks` 가 무시되는 것은 plugin agent 뿐이고, "Hooks from settings files, managed policy settings, and plugins also run inside subagents." | ✅ |
-| `permissions.ask` | 사용자·managed settings | 문서: "Claude Code doesn't auto-approve the following in any mode, including `bypassPermissions`", 첫 항목은 "Tools matched by an explicit ask rule" | 이 레포 [ADR 0009](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/adr/0009-enforcement-layer-placement.md) P8(v2.1.245)은 대화형 bypass 에서 ask 규칙이 그냥 실행된 것을 관찰했다. 2.1.245~2.1.318 CHANGELOG 에서 이 동작을 바꾼 항목은 찾지 못했다 | ⚠️ 재측정 대기. 재측정 전까지 권한 규칙 중에서는 deny 만 강제 근거로 센다 |
+| `PreToolUse` hook | settings·managed·plugin | 임의 로직으로 호출 거부: "If your hook is meant to enforce a policy, use `exit 2`." | 실패하면 열린다: "On most events, when a hook fails or times out, Claude Code still carries out the action." 실패를 차단으로 바꾸려면 `onFailure: "block"` 을 쓴다. `--bare` 에서는 settings 와 plugin 의 hook 이 실행되지 않는다(`--settings` 로 넘긴 hook 포함): "Hooks still don't run in bare mode when you pass them with `--settings`". frontmatter `hooks` 가 무시되는 것은 plugin agent 뿐이고, "Hooks from settings files, managed policy settings, and plugins also run inside subagents." | ✅ |
+| `permissions.ask` | 사용자·managed settings | 문서: "Claude Code doesn't auto-approve the following in any mode, including `bypassPermissions`", 첫 항목은 "Tools matched by an explicit ask rule" | 이 레포 [ADR 0009](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/adr/0009-enforcement-layer-placement.md) P8(2026-08-25 실측)은 대화형 bypass 에서 ask 규칙이 그냥 실행된 것을 관찰했다. 그 뒤 검증일까지 CHANGELOG 에서 이 동작을 바꾼 항목은 찾지 못했다 | ⚠️ 재측정 대기. 재측정 전까지 권한 규칙 중에서는 deny 만 강제 근거로 센다 |
 | `permissions.allow` | settings | 없음. 허용 범위 선언이다 | "Allow rules have no effect in `bypassPermissions`." Agent SDK 문서: "`allowed_tools` does not constrain `bypassPermissions`." | ✅ (통제 아님) |
 | auto mode classifier | Claude Code | 모델이 위험하다고 판정한 호출 | "17% FNR"(실제 overeager 행동 n=52), "0.4% FPR"(정상 트래픽), 둘 다 `vendor-claimed`. "Auto mode reduces permission prompts but does not guarantee safety." | ✅ |
 | 사람 승인 프롬프트 | 사람 | 사람이 거절한 호출 | "Manual prompts sit in the middle, and in practice users accept 93% of them anyway." (`vendor-claimed`, 측정 방법 미공개, 2026-03-25 글) | ✅ |
@@ -113,7 +113,7 @@ T3 의 핵심은 열거다. OWASP 는 Agentjacking(연구자 보고) 정리에�
 
 평가 순서(Agent SDK 문서)는 Hooks → Deny rules → Ask rules → Permission mode → Allow rules → canUseTool callback 이다. hook 의 허용도 뒤 규칙을 건너뛰지 못한다: "A hook that returns `allow` doesn't skip the deny and ask rules below".
 
-로컬 실측(2026-11-06, CLI v2.1.318, 1회): `claude -p --permission-mode dontAsk` 에 `--allowedTools "Bash(echo *)"` 와 `--settings` 의 deny `Bash(echo PROBE_DENY *)` 를 함께 주고 `echo PROBE_DENY hello` 를 시켰다. deny 가 allow 보다 우선해 실행되지 않았지만 run 은 exit 0, `subtype` `success` 로 끝났고 거부는 결과 JSON 의 `permission_denials` 에만 남았다. 사람 없는 실행에서 차단 여부는 exit code 가 아니라 이 필드로 판정한다. `--bare` 에서 `--settings` 로 넘긴 deny 가 적용되는지는 ⚠️ 측정하지 못했다(API 키 없이 실행해 모델 호출 전에 끝났다).
+로컬 실측(2026-11-06, 1회): `claude -p --permission-mode dontAsk` 에 `--allowedTools "Bash(echo *)"` 와 `--settings` 의 deny `Bash(echo PROBE_DENY *)` 를 함께 주고 `echo PROBE_DENY hello` 를 시켰다. deny 가 allow 보다 우선해 실행되지 않았지만 run 은 exit 0, `subtype` `success` 로 끝났고 거부는 결과 JSON 의 `permission_denials` 에만 남았다. 사람 없는 실행에서 차단 여부는 exit code 가 아니라 이 필드로 판정한다. `--bare` 에서 `--settings` 로 넘긴 deny 가 적용되는지는 ⚠️ 측정하지 못했다(API 키 없이 실행해 모델 호출 전에 끝났다).
 
 ```
 [추론] 강도 순서. 출처가 직접 말한 순서가 아니라 위 한계에서 이끈 판단이다
@@ -269,9 +269,9 @@ metadata:
 - [Agent SDK secure deployment](https://code.claude.com/docs/en/agent-sdk/secure-deployment.md) — 검증일 2026-11-06 · ✅ verified · subagent
 - [Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode) — 검증일 2026-11-06 · ✅ verified (URL 은 `/research/` 아래로 이동, 수치는 `vendor-claimed`) · subagent
 - [AKS-MCP README](https://github.com/Azure/aks-mcp) — 검증일 2026-11-06 · ✅ verified (v0.0.22) · subagent
-- [Claude Code CHANGELOG](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) — 검증일 2026-11-06 · ✅ 2.1.245~2.1.318 구간 패턴 검색, 검증 기록 §2 · subagent
-- [ADR 0009](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/adr/0009-enforcement-layer-placement.md) — 검증일 2026-08-25 · ⚠️ P8(v2.1.245) 관찰이 현행 문서와 반대, 재측정 대기 · 레포 실측
-- [로컬 실측 (검증 기록)](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/audit/2026-11-06-aiops-agent-ops-verification.md) — 검증일 2026-11-06 · ✅ 로컬 실측 (CLI v2.1.318, 1회: `dontAsk` 의 deny 판정과 종료 상태) / ⚠️ `--bare` 의 deny 적용은 미측정 · Claude (메인 세션)
+- [Claude Code CHANGELOG](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) — 검증일 2026-11-06 · ✅ 패턴 검색, 검증 기록 §2 · subagent
+- [ADR 0009](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/adr/0009-enforcement-layer-placement.md) — 검증일 2026-08-25 · ⚠️ P8 관찰이 현행 문서와 반대, 재측정 대기 · 레포 실측
+- [로컬 실측 (검증 기록)](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/audit/2026-11-06-aiops-agent-ops-verification.md) — 검증일 2026-11-06 · ✅ 로컬 실측 (1회: `dontAsk` 의 deny 판정과 종료 상태) / ⚠️ `--bare` 의 deny 적용은 미측정 · Claude (메인 세션)
 - [skills](https://code.claude.com/docs/en/skills.md) — 검증일 2026-11-06 · ✅ verified (`metadata` 정의) · subagent
 
 **공개 사고**

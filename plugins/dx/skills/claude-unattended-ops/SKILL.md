@@ -6,7 +6,7 @@ description: "Claude Code를 사람 없이 돌릴 때 실행 경로, 권한 배�
 # Claude Code 무인 실행 운영
 
 사람이 지켜보지 않는 Claude Code run의 실행 경로를 고르고, 강제력이 있는 층에 권한을 두고, exit code가 아니라 출력 내용으로 성공을 판정한다.
-외부 사실은 2026-11-06 원문 대조 기록과 CLI 2.1.318 로컬 실측에서 확인된 것만 싣고, 버전이 붙지 않은 문장은 그날 현행 문서 기준이다(CHANGELOG는 2.1.318까지 대조).
+외부 사실은 2026-11-06 원문 대조 기록과 같은 날 로컬 실측에서 확인된 것만 싣는다. 기준은 검증일 시점의 최신 Claude Code와 현행 문서다.
 
 ## Quick Reference (결정 트리)
 
@@ -45,8 +45,8 @@ description: "Claude Code를 사람 없이 돌릴 때 실행 경로, 권한 배�
 
 | 경로 | 트리거 | 소유·인증 | 권한 기본값 | hook·plugin 로딩 | 상한·수명 | 상태 |
 |---|---|---|---|---|---|---|
-| `claude -p` (CI job) | CI가 실행 | runner에 둔 자격 증명 | v2.1.302+ Manual (승인이 필요한 호출은 거부) | bare가 아니면 project hook 실행·`.mcp.json` 연결, plugin monitor 미시작 | `--max-turns`(기본 무제한), `--max-budget-usd` | 문서에 preview 표기 없음 (2026-11-06) |
-| Agent SDK | 내 코드 | — | v2.1.302+ Manual, `canUseTool` 콜백 | `--bare` 권장 | — | 문서에 preview 표기 없음 (2026-11-06) |
+| `claude -p` (CI job) | CI가 실행 | runner에 둔 자격 증명 | Manual (승인이 필요한 호출은 거부) | bare가 아니면 project hook 실행·`.mcp.json` 연결, plugin monitor 미시작 | `--max-turns`(기본 무제한), `--max-budget-usd` | 문서에 preview 표기 없음 (2026-11-06) |
+| Agent SDK | 내 코드 | — | Manual, `canUseTool` 콜백 | `--bare` 권장 | — | 문서에 preview 표기 없음 (2026-11-06) |
 | GitHub Actions (`claude-code-action@v1`) | PR·issue 이벤트, schedule | 저장소 workflow. 이슈·PR 이벤트는 write 권한 사용자만 (예외 `allowed_non_write_users`) | schedule 평문 프롬프트는 도구를 줄 때까지 shell·GitHub API 없음 | — | `claude_args`의 `--max-turns`. schedule은 공개 저장소에서 60일 비활성 시 꺼짐 (GitHub Docs) | 문서에 preview 표기 없음 (2026-11-06) |
 | cloud scheduled task | 일정, Run now, API fire, GitHub 이벤트 | 개인 claude.ai 계정, 결과물은 소유자 명의 | auto 모드로 시작, 연결된 connector 전부 포함 (쓰기 포함) | — | §예약·클라우드 실행 | research preview |
 | `/loop` | 세션 안 주기 실행 | 그 세션 | — | — | 세션당 50개, 반복 작업은 7일 후 만료 | 문서에 preview 표기 없음 (2026-11-06) |
@@ -73,25 +73,25 @@ GitHub Actions의 CLI 옵션은 `claude_args`로 넘긴다. `claude-code-action@
 
 | 층 | 무인 run에서의 효과 | 두는 곳 |
 |---|---|---|
-| deny | "Deny rules block in every mode, including `bypassPermissions`." 단 문자열 패턴이라 `Bash(git push *)`는 `git -C . push origin main`과 매칭되지 않는다. `-p`에서 `--settings`의 deny가 `--allowedTools "Bash(echo *)"`보다 우선해 막았다(✅ 로컬 실측 2026-11-06, v2.1.318) | managed settings, 신뢰 경로의 `--settings`, `--disallowedTools` |
+| deny | "Deny rules block in every mode, including `bypassPermissions`." 단 문자열 패턴이라 `Bash(git push *)`는 `git -C . push origin main`과 매칭되지 않는다. `-p`에서 `--settings`의 deny가 `--allowedTools "Bash(echo *)"`보다 우선해 막았다(✅ 로컬 실측 2026-11-06) | managed settings, 신뢰 경로의 `--settings`, `--disallowedTools` |
 | ask | ⚠️ 재측정 대기 (아래) | 강제 근거로 세지 않는다 |
 | mode | 기본값이 버전마다 달랐다 (아래) | `--permission-mode`로 항상 명시 |
 | allow | "Allow rules have no effect in `bypassPermissions`." | `dontAsk` + `--allowedTools` |
 | hook | 실패하거나 timeout이 나면 대부분 그대로 실행된다 | 보조 수단 (§hook·plugin이 돌지 않는 경우) |
 
-- **mode 기본값.** "In Claude Code v2.1.302 or later, `claude -p` and Agent SDK runs with no permission mode set start in Manual mode." 이 모드에서는 "Calls needing approval are denied unless you approve them with an allow rule, hook, `canUseTool` callback, or `--permission-prompt-tool`." 2.1.285~2.1.301에서는 third-party provider나 telemetry off 환경의 `-p`가 모드 지정 없이 auto로 시작했고, 2.1.302가 `default`(Manual)로 되돌렸다. 2.1.318에서 모드를 주지 않은 `-p`의 `system/init`은 `"permissionMode":"default"`였다(✅ 로컬 실측 2026-11-06, v2.1.318). 버전에 휘둘리지 않으려면 모드를 플래그로 적는다.
-- **잠근 run.** Agent SDK 문서의 권장 조합은 `allowedTools` + `dontAsk`다. `dontAsk`는 CLI `--permission-mode` 값으로도 받는다(✅ 로컬 실측 2026-11-06, v2.1.318 `--help`. cli-reference도 같은 값을 나열한다). SDK에서 "`allowed_tools` does not constrain `bypassPermissions`." 그래서 "If you need `bypassPermissions` but want specific tools blocked, use `disallowed_tools`."
-- **bypass.** `-p`에서는 "In this `-p` run, the few calls that would still prompt are denied instead". 문서는 이 형태에 컨테이너·VM·sandbox runtime과 비 root 사용자를 요구한다. 2.1.257부터 `.claude/settings.json`·`.claude/settings.local.json`의 `defaultMode: "bypassPermissions"`는 무시된다. user·managed settings나 `--permission-mode`로 켠다.
+- **mode 기본값.** 모드를 지정하지 않은 `claude -p`와 Agent SDK run은 Manual 모드로 시작한다. 이 모드에서는 "Calls needing approval are denied unless you approve them with an allow rule, hook, `canUseTool` callback, or `--permission-prompt-tool`." 모드를 주지 않은 `-p`의 `system/init`은 `"permissionMode":"default"`였다(✅ 로컬 실측 2026-11-06). 이 기본값은 버전에 따라 바뀐 적이 있으므로 모드는 플래그로 적는다.
+- **잠근 run.** Agent SDK 문서의 권장 조합은 `allowedTools` + `dontAsk`다. `dontAsk`는 CLI `--permission-mode` 값으로도 받는다(✅ 로컬 실측 2026-11-06, `--help`. cli-reference도 같은 값을 나열한다). SDK에서 "`allowed_tools` does not constrain `bypassPermissions`." 그래서 "If you need `bypassPermissions` but want specific tools blocked, use `disallowed_tools`."
+- **bypass.** `-p`에서는 "In this `-p` run, the few calls that would still prompt are denied instead". 문서는 이 형태에 컨테이너·VM·sandbox runtime과 비 root 사용자를 요구한다. `.claude/settings.json`·`.claude/settings.local.json`의 `defaultMode: "bypassPermissions"`는 무시된다. user·managed settings나 `--permission-mode`로 켠다.
 - **bypass 차단.** `permissions.disableBypassPermissionsMode`를 `"disable"`로 둔다. "These are most useful in managed settings where they can't be overridden."
-- **auto.** "Auto mode reduces permission prompts but does not guarantee safety." 분류기는 실제 overeager 행동 n=52에서 "17% FNR"이다(`vendor-claimed`). `-p`에서 차단이 "3 times in a row or 20 times total"에 이르러도 "Claude Code doesn't stop the run." 이 문장은 반복 차단 임계값에만 해당한다. 분류기가 답을 주지 못하면 2.1.280부터 10회 연속 뒤 턴이 멈춘다.
-- **`--permission-prompts none`(v2.1.259+).** "Anything that would prompt is denied unless a `PermissionRequest` hook allows it". 활성 모드(auto 포함)는 계속 판정한다.
+- **auto.** "Auto mode reduces permission prompts but does not guarantee safety." 분류기는 실제 overeager 행동 n=52에서 "17% FNR"이다(`vendor-claimed`). `-p`에서 차단이 "3 times in a row or 20 times total"에 이르러도 "Claude Code doesn't stop the run." 이 문장은 반복 차단 임계값에만 해당한다. 분류기가 답을 주지 못하면 10회 연속 뒤 턴이 멈춘다.
+- **`--permission-prompts none`.** "Anything that would prompt is denied unless a `PermissionRequest` hook allows it". 활성 모드(auto 포함)는 계속 판정한다.
 - **subagent.** "The subagent inherits `plan`, `acceptEdits`, `auto`, or `bypassPermissions` from the main session". 메인이 `default`나 `dontAsk`이면 subagent에 지정한 `bypassPermissions`는 적용되지 않는다.
 - **mod 예외.** "With neither managed settings nor a Team or Enterprise `/login` as the session's credential, the mod can approve a call that a deny rule refuses or a `PreToolUse` hook blocked." managed settings 없이 API 키나 `CLAUDE_CODE_OAUTH_TOKEN`으로 도는 무인 run이 여기에 해당한다. runner에 mod를 설치하지 않거나 managed settings를 둔다.
 
 ### ask 규칙 — ⚠️ 재측정 대기
 
 - 공식 permission-modes 문서: "Claude Code doesn't auto-approve the following in any mode, including `bypassPermissions`". 그 목록의 첫 항목이 "Tools matched by an explicit ask rule"이다.
-- 이 레포의 ADR 0009 P8(v2.1.245, 대화형 bypass)은 ask 규칙에 걸린 명령이 그대로 실행되는 것을 관찰했다. 2.1.245~2.1.318 CHANGELOG에는 이 동작을 바꿨다는 항목이 없다.
+- 이 레포의 ADR 0009 P8(2026-08-25 실측, 대화형 bypass)은 ask 규칙에 걸린 명령이 그대로 실행되는 것을 관찰했다. 그 뒤 검증일까지 CHANGELOG에는 이 동작을 바꿨다는 항목이 없다.
 - 재측정 전까지 무인 run의 강제 근거는 deny뿐이다. ask에 기대는 승인 절차를 설계하지 않는다. 재측정 결과는 [ADR 0009](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/adr/0009-enforcement-layer-placement.md)에 기록된다.
 
 ## hook·plugin이 돌지 않는 경우
@@ -105,13 +105,12 @@ GitHub Actions의 CLI 옵션은 `claude_args`로 넘긴다. `claude-code-action@
 | plugin `settings.json` | "Two keys take effect, `agent` and `subagentStatusLine`, and every other key is dropped." |
 | plugin agent frontmatter | `hooks`, `mcpServers`, `permissionMode`는 무시된다 |
 | hook 실패·timeout | "On most events, when a hook fails or times out, Claude Code still carries out the action." command hook 기본 timeout은 600초다 |
-| `PermissionRequest` + `--print` | 2.1.268 이전에는 발화하지 않았다 ("Fixed PermissionRequest hooks not firing in `--print` mode") |
 
-- 정책 hook은 "If your hook is meant to enforce a policy, use `exit 2`." 실패를 차단으로 바꾸려면 `onFailure: "block"`(v2.1.295+)을 쓴다.
+- 정책 hook은 "If your hook is meant to enforce a policy, use `exit 2`." 실패를 차단으로 바꾸려면 `onFailure: "block"`을 쓴다.
 - `PermissionRequest`는 "Exit code 2 isn't honored for this event"라서 decision 객체로 거부한다. 프롬프트를 띄울 수 없는 세션에서도 "Claude Code still runs these hooks, and if no hook returns a decision, it denies the tool call."
 - settings 파일·managed policy·plugin의 hook은 subagent 안에서도 돈다: "Hooks from settings files, managed policy settings, and plugins also run inside subagents." 무시되는 것은 plugin agent frontmatter의 `hooks`다.
 - 외부 PR을 체크아웃한 job에서 bare가 아닌 `-p`를 돌리면, PR이 바꾼 hook과 `.mcp.json`이 그대로 실행·연결된다(위 문서 문장에서 바로 나오는 결과). 이런 job은 `--bare`로 돌린다. bare에서 settings는 `--settings`로 넘긴다.
-- bare는 "never reads OAuth credentials or the system keychain"이라 `ANTHROPIC_API_KEY`나 `--settings`의 `apiKeyHelper`가 있어야 한다. 구독 OAuth 토큰만으로 인증하는 job은 bare로 돌릴 수 없다. 키 없이 돌린 bare run은 모델을 부르지 않고 exit 1로 끝났다(✅ 로컬 실측 2026-11-06, v2.1.318).
+- bare는 "never reads OAuth credentials or the system keychain"이라 `ANTHROPIC_API_KEY`나 `--settings`의 `apiKeyHelper`가 있어야 한다. 구독 OAuth 토큰만으로 인증하는 job은 bare로 돌릴 수 없다. 키 없이 돌린 bare run은 모델을 부르지 않고 exit 1로 끝났다(✅ 로컬 실측 2026-11-06).
 - ⚠️ bare에서 `--settings`로 넘긴 deny가 적용되는지는 측정하지 못했다. 위 실측은 API 키가 없어 모델 호출 전에 끝났고, 문서에도 이 내용이 없다. bare job은 §Verification Criteria 1의 dry-run을 `--bare`로도 돌려 `permission_denials`를 확인한다.
 
 정리하면, 가드레일은 deny에 두고 hook은 기록·알림 같은 보조 용도로 쓴다.
@@ -119,16 +118,15 @@ GitHub Actions의 CLI 옵션은 `claude_args`로 넘긴다. `claude-code-action@
 ## MCP 로딩 (`-p`·SDK)
 
 - `-p`와 Agent SDK는 `.mcp.json` 승인 프롬프트를 띄울 수 없어서 "it loads project-scoped servers without asking".
-- 막는 수단: `disabledMcpjsonServers`("blocks it in every permission mode"), `--setting-sources`, `--strict-mcp-config`(승인 프롬프트 생략은 v2.1.246+). `--bare`에서는 "only servers supplied on the command line connect". 필요한 서버는 `--mcp-config`로만 넘긴다.
+- 막는 수단: `disabledMcpjsonServers`("blocks it in every permission mode"), `--setting-sources`, `--strict-mcp-config`. `--bare`에서는 "only servers supplied on the command line connect". 필요한 서버는 `--mcp-config`로만 넘긴다.
 - runner에 `managed-mcp.json`이 있으면 `--strict-mcp-config`는 시작 시 종료된다. 이 파일은 배타 제어다: "Users can't add, modify, or use any other MCP servers, including plugin-provided servers and servers passed with the `--mcp-config` CLI flag."
 - OAuth: "A `claude -p` or Agent SDK run has no `/mcp` panel, so Claude Code can't run the OAuth flow there." OAuth가 필요한 서버는 `-p`에서 인증을 끝낼 수 없으므로 게이트에서 `mcp_servers[].status`가 `"connected"`가 아닌 것으로 잡는다.
 - 권한 규칙: 서버 전체는 `mcp__<server>__*`, 도구 하나는 `mcp__<server>__<tool>`. "To match a parameter on an MCP tool, pass a deny rule with `--disallowedTools`. When Claude Code loads a settings file, it skips any `mcp__` rule that has parentheses."
-- print·SDK 세션에서 꺼 둔 MCP 서버가 이후 권한 프롬프트로 다시 연결되던 문제는 2.1.309에서 고쳐졌다.
 - 운영 MCP 서버의 자격 증명 경계, 서버 read-only 모드, 운영 데이터 불신은 `/security:ops-mcp-security`에서 다룬다.
 
 ## 실패한 run 판정
 
-exit 0은 성공의 증거가 아니다. deny에 막힌 run과 MCP 서버 연결에 실패한 run은 둘 다 exit 0, `subtype: "success"`로 끝났고, 흔적은 `permission_denials`와 `mcp_servers[].status`에만 남았다(✅ 로컬 실측 2026-11-06, v2.1.318). 문서도 `--mcp-config` 항목이 검증에서 빠질 때 "The run continues and exits cleanly"라고 쓴다.
+exit 0은 성공의 증거가 아니다. deny에 막힌 run과 MCP 서버 연결에 실패한 run은 둘 다 exit 0, `subtype: "success"`로 끝났고, 흔적은 `permission_denials`와 `mcp_servers[].status`에만 남았다(✅ 로컬 실측 2026-11-06). 문서도 `--mcp-config` 항목이 검증에서 빠질 때 "The run continues and exits cleanly"라고 쓴다.
 
 | 신호 | 위치 | 실패 조건 |
 |---|---|---|
@@ -140,7 +138,7 @@ exit 0은 성공의 증거가 아니다. deny에 막힌 run과 MCP 서버 연결
 | `mcp_server_errors` | `system/init` | 비어 있지 않음("so a CI gate can fail on a non-empty array"). 단 "`--mcp-config` entries skipped by config validation"만 담고, 연결 실패는 여기 오지 않았다(✅ 로컬 실측) |
 | `mcp_servers[].status` | `system/init` | `"connected"`가 아님. 실행 파일이 없는 서버는 `"failed"`였다(✅ 로컬 실측) |
 
-- **빈 값.** 문서는 오류가 없으면 `plugin_errors`·`mcp_server_errors` 키를 생략한다고 쓰지만, 2.1.318에서는 두 키가 `null`로 나왔다(❌ 문서와 불일치, ✅ 로컬 실측). 게이트는 둘 다 `// []`로 받는다.
+- **빈 값.** 문서는 오류가 없으면 `plugin_errors`·`mcp_server_errors` 키를 생략한다고 쓰지만, 실측에서는 두 키가 `null`로 나왔다(❌ 문서와 불일치, ✅ 로컬 실측 2026-11-06). 게이트는 둘 다 `// []`로 받는다.
 - **status 값.** SDK 레퍼런스의 `McpServerStatus`는 `"connected" | "failed" | "needs-auth" | "pending" | "disabled"`다. `system/init` 타입은 `status: string`으로만 선언하므로 게이트는 `"connected"`가 아닌 값을 모두 실패로 본다. `disabled`는 독자가 일부러 끈 서버만 이름을 `disabled_ok`에 적어 통과시킨다. 문서상 도구 목록이 캐시된 원격 서버는 init에 `pending`으로 나오고 첫 도구 호출 때 연결되는데, 이 게이트는 그것도 실패로 본다.
 - **출력 형식.** 문서는 `system/init`을 `stream-json`의 이벤트("the first event in the stream")로 설명한다. `-p`에서 `stream-json`은 `--verbose` 없이 exit 1로 끝난다(✅ 로컬 실측). 게이트는 출력 줄을 `jq -s`로 모아서 보고, init이 없으면 실패한다.
 
@@ -186,7 +184,7 @@ fi
 
 - run.sh는 claude가 0이 아닌 코드로 끝나도 게이트를 돌려 원인을 로그에 남긴다. 게이트 인자 `schema`·`disabled_ok`를 빠뜨리면 jq가 컴파일 오류(exit 3)로 끝나 닫힌 쪽으로 실패한다. 두 파일은 실측 출력(deny 차단, MCP 연결 실패, `--max-turns` 초과, 빈 출력)에서 옮긴 형태와 통과 표본으로 확인했다(2026-11-06, jq 1.7.1, `bash -n`).
 - 상한: `--max-turns`는 "No limit by default." `--max-budget-usd`는 "Stop the run once estimated spend on API calls reaches this amount (print mode only)." 추정치는 "can differ from your bill"이고, "Spend can pass the cap, so leave headroom." ⚠️ `--max-budget-usd`에 걸린 run의 exit code와 result는 측정하지 않았다. SDK 레퍼런스의 `error_max_budget_usd` subtype으로 끝나면 게이트의 subtype 조건이 잡는다.
-- auto 모드 run은 반복 차단 임계값을 넘어도 멈추지 않는다. 차단을 run 종료로 알아챌 수 없으니 출력과 이벤트에서 찾는다. 분류기가 답을 주지 못해 턴이 멈춘 경우(2.1.280+) cloud scheduled task가 실패로 표시되지 않던 문제는 2.1.316에서 고쳐졌다.
+- auto 모드 run은 반복 차단 임계값을 넘어도 멈추지 않는다. 차단을 run 종료로 알아챌 수 없으니 출력과 이벤트에서 찾는다.
 
 ## 예약·클라우드 실행
 
@@ -292,8 +290,8 @@ Managed Agents는 `status: beta`(헤더 `managed-agents-2026-04-01`)이고, "Age
 - [agent-teams](https://code.claude.com/docs/en/agent-teams.md) — 검증일 2026-11-06 · ✅ verified · subagent
 - [Managed Agents overview](https://platform.claude.com/docs/en/managed-agents/overview.md) — 검증일 2026-11-06 · ✅ verified · subagent
 - [GitHub Docs: events that trigger workflows](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows) — 검증일 2026-11-06 · ✅ verified · subagent. 60일 규칙의 출처(code.claude.com 아님)
-- [Claude Code CHANGELOG (raw)](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) — 검증일 2026-11-06 · ✅ verified (2.1.245~2.1.318 구간) · subagent
+- [Claude Code CHANGELOG (raw)](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) — 검증일 2026-11-06 · ✅ verified · subagent
 - [Claude Code auto mode](https://www.anthropic.com/engineering/claude-code-auto-mode) — 검증일 2026-11-06 · ✅ verified · subagent. 수치는 `vendor-claimed`, 글은 `/research/` 경로로 이동
 - [Cline post-mortem](https://cline.bot/blog/post-mortem-unauthorized-cline-cli-npm) — 검증일 2026-11-06 · ✅ verified · subagent
 - [claude-code-action action.yml](https://raw.githubusercontent.com/anthropics/claude-code-action/main/action.yml), [parse-sdk-options.ts](https://github.com/anthropics/claude-code-action/blob/main/base-action/src/parse-sdk-options.ts) — 검증일 2026-11-06 · ✅ verified · subagent. 입력 목록과 `claude_args` 처리(코드 확인, 동작 측정 아님)
-- [로컬 실측, Claude Code 2.1.318](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/audit/2026-11-06-aiops-agent-ops-verification.md) — 검증일 2026-11-06 · ✅ 로컬 실측 · Claude (메인 세션). deny 차단, MCP 연결 실패, `--max-turns` 초과, `stream-json`과 `--verbose`, 키 없는 `--bare`, `--help`. ⚠️ bare에서 `--settings` deny 적용은 미측정
+- [로컬 실측](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/audit/2026-11-06-aiops-agent-ops-verification.md) — 검증일 2026-11-06 · ✅ 로컬 실측 · Claude (메인 세션). deny 차단, MCP 연결 실패, `--max-turns` 초과, `stream-json`과 `--verbose`, 키 없는 `--bare`, `--help`. ⚠️ bare에서 `--settings` deny 적용은 미측정

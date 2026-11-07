@@ -48,7 +48,7 @@
 | Haiku 5.5 | `medium` | `medium` |
 | 이전 모델 | — | `high` (Opus 4.7 만 `xhigh`) |
 
-명시하지 않으면 이 기본값으로 돈다. v2.1.317 부터 다른 모델로 도는 subagent 는 세션 effort 를 물려받지 않는다. **이것이 전 agent 에 `effort` 를 명시하는 이유다.**
+명시하지 않으면 이 기본값으로 돈다. 다른 모델로 도는 subagent 는 세션 effort 를 물려받지 않는다. **이것이 전 agent 에 `effort` 를 명시하는 이유다.**
 
 ---
 

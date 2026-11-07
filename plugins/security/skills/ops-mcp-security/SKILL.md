@@ -107,10 +107,10 @@ kubectl auth can-i create deployments.apps -A --as="system:serviceaccount:$NS:$S
 - `<쓰기 도구>`에는 서버의 `tools/list`에 나온 이름을 그대로 쓴다. 이름을 나열한 deny는 새 버전에 추가된 쓰기 도구를 막지 못하므로, 서버를 올릴 때마다 목록을 다시 대조한다.
 - 조사에 필요 없는 서버는 `mcp__<server>__*`로 통째로, MCP가 아예 필요 없는 무인 job은 `mcp__*`로 막는다.
 - settings에 `mcp__<server>__<tool>(…)`처럼 괄호를 붙인 규칙은 로드할 때 건너뛴다. 적혀 있어도 막지 않는다.
-- 서버 이름에 `__`를 넣지 않는다. 정규화된 서버 이름에 이중 밑줄이 있으면 v2.1.299 전에는 그 서버의 deny·ask가 적용되지 않았다(CHANGELOG 2.1.299).
+- 서버 이름에 `__`를 넣지 않는다. 이전 버전에서는 정규화된 서버 이름에 이중 밑줄이 있으면 그 서버의 deny·ask가 적용되지 않았다(CHANGELOG).
 - deny는 자신의 user·project settings나 조직의 managed settings에 둔다. 외부 PR을 체크아웃하는 무인 run이라면 PR이 바꿀 수 있는 project settings 대신 managed settings나 신뢰 경로의 `--settings`·`--disallowedTools`에 둔다. plugin으로는 배포되지 않는다. plugin `settings.json`은 "Two keys take effect, `agent` and `subagentStatusLine`, and every other key is dropped."
 - 예외가 있다. "With neither managed settings nor a Team or Enterprise `/login` as the session's credential, the mod can approve a call that a deny rule refuses or a `PreToolUse` hook blocked." API 키나 `CLAUDE_CODE_OAUTH_TOKEN`으로 도는 세션이 여기에 해당한다.
-- ask 규칙은 경계로 쓰지 않는다. 공식 문서는 "Claude Code doesn't auto-approve the following in any mode, including `bypassPermissions`"의 첫 항목으로 "Tools matched by an explicit ask rule"을 든다. 그러나 이 레포의 [ADR 0009](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/adr/0009-enforcement-layer-placement.md) P8 측정(CLI v2.1.245, 대화형 `bypassPermissions`)에서는 ask 규칙에 걸린 명령이 프롬프트 없이 실행됐고, 2.1.245~2.1.318 CHANGELOG에는 이 동작을 바꿨다는 항목이 없다. ⚠️ 재측정 대기 — 결과가 나올 때까지 쓰기 차단의 근거는 deny다.
+- ask 규칙은 경계로 쓰지 않는다. 공식 문서는 "Claude Code doesn't auto-approve the following in any mode, including `bypassPermissions`"의 첫 항목으로 "Tools matched by an explicit ask rule"을 든다. 그러나 이 레포의 [ADR 0009](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/adr/0009-enforcement-layer-placement.md) P8 측정(2026-08-25, 대화형 `bypassPermissions`)에서는 ask 규칙에 걸린 명령이 프롬프트 없이 실행됐고, 그 뒤 검증일까지 CHANGELOG에는 이 동작을 바꿨다는 항목이 없다. ⚠️ 재측정 대기 — 결과가 나올 때까지 쓰기 차단의 근거는 deny다.
 - sandbox는 이 세 겹에 들어가지 않는다. "The sandbox covers shell commands only."
 
 ### 등록 범위와 조직 통제
@@ -122,7 +122,7 @@ kubectl auth can-i create deployments.apps -A --as="system:serviceaccount:$NS:$S
 claude mcp add kubernetes --scope local --env KUBECONFIG="$RO_KUBECONFIG" -- "$SERVER_BIN"
 ```
 
-- **무인 실행과 `.mcp.json`:** `claude -p`·Agent SDK는 `.mcp.json` 승인 프롬프트를 띄울 수 없어 "it loads project-scoped servers without asking". 막는 수단은 `disabledMcpjsonServers`("blocks it in every permission mode"), `--setting-sources`, `--strict-mcp-config`(승인 프롬프트 생략은 v2.1.246+)다.
+- **무인 실행과 `.mcp.json`:** `claude -p`·Agent SDK는 `.mcp.json` 승인 프롬프트를 띄울 수 없어 "it loads project-scoped servers without asking". 막는 수단은 `disabledMcpjsonServers`("blocks it in every permission mode"), `--setting-sources`, `--strict-mcp-config`다.
 - **조직 배타 제어:** `managed-mcp.json`을 배포하면 "Users can't add, modify, or use any other MCP servers, including plugin-provided servers and servers passed with the `--mcp-config` CLI flag." 경로는 macOS `/Library/Application Support/ClaudeCode/managed-mcp.json`, Linux·WSL `/etc/claude-code/managed-mcp.json`이다. 이 파일이 있으면 `--strict-mcp-config`는 시작 시 종료되므로 CI 스크립트와 함께 점검한다.
 - **조직 허용·거부 목록:** 키는 `allowedMcpServers`와 `deniedMcpServers`이고, 항목마다 `serverUrl`·`serverCommand`·`serverName` 중 한 키를 쓴다. 허용 목록을 강제하려면 "set `allowedMcpServers` and `allowManagedMcpServersOnly: true` together". 잠그지 않으면 사용자 설정의 허용 목록이 병합돼 범위를 넓힐 수 있다. 거부 목록은 모든 범위에서 병합되고 "Nothing overrides a denylist match." `--strict-mcp-config`도 두 목록을 우회하지 못한다.
 
@@ -292,8 +292,8 @@ npm ci   # package-lock.json 그대로 설치한다. package.json 과 맞지 않
 - [plugins/components](https://code.claude.com/docs/en/plugins/components.md) — 검증일 2026-11-06 · ✅ verified · subagent
 - [sandboxing](https://code.claude.com/docs/en/sandboxing.md) — 검증일 2026-11-06 · ✅ verified · subagent
 - [agent-sdk/secure-deployment](https://code.claude.com/docs/en/agent-sdk/secure-deployment.md) — 검증일 2026-11-06 · ✅ verified · subagent
-- [Claude Code CHANGELOG (raw)](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) — 검증일 2026-11-06 · ✅ verified (2.1.245~2.1.318 구간, 2.1.299 포함) · subagent
-- [ADR 0009](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/adr/0009-enforcement-layer-placement.md) — 검증일 2026-08-25 · ⚠️ P8(v2.1.245) 관찰이 현행 문서와 반대, 재측정 대기 · 레포 실측
+- [Claude Code CHANGELOG (raw)](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) — 검증일 2026-11-06 · ✅ verified · subagent
+- [ADR 0009](https://github.com/ressKim-io/ress-claude-agents/blob/main/docs/adr/0009-enforcement-layer-placement.md) — 검증일 2026-08-25 · ⚠️ P8 관찰이 현행 문서와 반대, 재측정 대기 · 레포 실측
 
 **MCP 서버 문서·소스**
 - [kubernetes-mcp-server configuration.md](https://github.com/containers/kubernetes-mcp-server/blob/main/docs/configuration.md) — 검증일 2026-11-06 · ✅ verified · subagent

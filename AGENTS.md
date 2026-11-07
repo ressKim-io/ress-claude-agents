@@ -239,7 +239,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 ## Claude Code-Specific
 
-> Claude Code가 본 파일을 읽는다 (Linux Foundation AGENTS.md 표준). `CLAUDE.md`는 본 파일의 symlink — 동일 내용을 보며 한 번만 읽힌다. Claude Code 는 v2.1.277 부터 `AGENTS.md` 를 직접 읽지만, `CLAUDE.md` 가 있으면 이 symlink 처럼 연결해 둬야 한다. 다른 도구는 자기에게 무관한 본 섹션을 무시.
+> Claude Code가 본 파일을 읽는다 (Linux Foundation AGENTS.md 표준). `CLAUDE.md`는 본 파일의 symlink — 동일 내용을 보며 한 번만 읽힌다. Claude Code 는 `AGENTS.md` 를 직접 읽지만, `CLAUDE.md` 가 있으면 이 symlink 처럼 연결해 둬야 한다. 다른 도구는 자기에게 무관한 본 섹션을 무시.
 
 ### Auto-Loaded Rules
 
