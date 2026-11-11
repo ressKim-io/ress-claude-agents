@@ -40,7 +40,7 @@ Agent 위임할까?
     │
     ├─ 탐색 + 이해 필요 ─────> Agent(Explore agent)
     │
-    ├─ 독립적 다수 작업 ─────> Task 병렬 실행
+    ├─ 독립적 다수 작업 ─────> Agent 병렬 실행
     │
     └─ 복잡한 코드 작성 ─────> Agent(general-purpose) + 줄 수 예산
 ```

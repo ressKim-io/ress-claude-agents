@@ -54,7 +54,7 @@ Claude Code 는 런타임이 관리하므로 **신경 쓰지 않는다.** Messag
 | assistant prefill | 400 | 400 | 400 | 400 |
 | forced `tool_choice` (`any`, `tool`) | 400 | 400 | 허용 | 400 |
 
-- `thinking.budget_tokens` 는 Opus·Sonnet 5.5 에서 400. 깊이는 `output_config.effort` 로 제어한다
+- `thinking.budget_tokens` 는 Opus·Sonnet 5.5 와 Fable 5.x 에서 400. 깊이는 `output_config.effort` 로 제어한다
 - Opus 5.5 는 thinking 이 항상 켜져 있다. `thinking` 생략 = adaptive, `disabled` 는 400
 - Sonnet 5.5 에서 thinking 을 끄려면 `{"type": "between_tools"}`
 
