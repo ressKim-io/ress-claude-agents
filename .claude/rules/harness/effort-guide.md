@@ -25,11 +25,11 @@
 
 > ⚠️ **정정 (2026-11-04)**: 이전 판은 레벨별 비용 배수와 "xhigh 대비 max 의 품질 향상폭" 을 "Anthropic 공식" 표로 실었다. 현행 공식 문서에는 그런 수치가 없어 삭제했다. `xhigh` 를 레포 기본으로 삼던 정책도 Opus 4.7 기준이어서 폐기했다.
 
-**모델별 지원** (✅ 2026-11-04 공식 docs):
+**모델별 지원** (✅ 2026-11-04 공식 docs, Fable 5.2 는 2026-11-11 보강):
 
 | 모델 | `low`/`medium`/`high` | `xhigh` | `max` |
 |---|---|---|---|
-| Fable 5.1 / Opus 5.5 / Sonnet 5.5 / Haiku 5.5 | ✅ | ✅ | ✅ |
+| Fable 5.2 / Fable 5.1 / Opus 5.5 / Sonnet 5.5 / Haiku 5.5 | ✅ | ✅ | ✅ |
 | Fable 5 / Opus 5 / Sonnet 5 / Opus 4.8 / Opus 4.7 | ✅ | ✅ | ✅ |
 | Opus 4.6 / Sonnet 4.6 | ✅ | ❌ (`high` 로 동작) | ✅ |
 | Haiku 4.5 | ❌ effort 자체 미지원 | ❌ | ❌ |
@@ -42,11 +42,11 @@
 
 | 모델 | API | Claude Code |
 |---|---|---|
-| Fable 5.1 | `high` | `high` |
+| Fable 5.2 | `high` | `medium` |
 | Opus 5.5 | `medium` | `medium` |
 | Sonnet 5.5 | `high` | `medium` |
 | Haiku 5.5 | `medium` | `medium` |
-| 이전 모델 | — | `high` (Opus 4.7 만 `xhigh`) |
+| 이전 모델 (Fable 5.1 포함) | — | `high` (Opus 4.7 만 `xhigh`) |
 
 명시하지 않으면 이 기본값으로 돈다. 다른 모델로 도는 subagent 는 세션 effort 를 물려받지 않는다. **이것이 전 agent 에 `effort` 를 명시하는 이유다.**
 

@@ -63,9 +63,9 @@ AI 비용 유형?
 | Economy (Haiku 5.5) | $0.10 | $0.50 | 분류, 추출, 포맷팅 |
 | Standard (Sonnet 5.5) | $2 | $10 | 코드 생성, 분석 |
 | Frontier (Opus 5.5) | $4 | $20 | 복잡한 추론, 아키텍처 |
-| Top (Fable 5.1) | $10 | $50 | 측정으로 효과를 확인한 작업 |
+| Top (Fable 5.2) | $8 | $40 | 측정으로 효과를 확인한 작업 |
 
-> Claude 공시가, 2026-11-04 확인. 가격은 자주 바뀌므로 [공식 표](https://platform.claude.com/docs/en/about-claude/pricing)로 다시 확인한다. Haiku 5.5 는 100k 토큰 초과 프롬프트에 더 높은 단가가 붙는다.
+> Claude 공시가, 2026-11-04 확인 (Fable 5.2 행은 2026-11-11 보강). 가격은 자주 바뀌므로 [공식 표](https://platform.claude.com/docs/en/about-claude/pricing)로 다시 확인한다. Haiku 5.5 는 100k 토큰 초과 프롬프트에 더 높은 단가가 붙는다.
 
 ### GPU 인스턴스 비용
 
