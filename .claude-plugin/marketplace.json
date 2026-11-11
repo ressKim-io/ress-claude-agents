@@ -19,6 +19,7 @@
     { "name": "security", "source": "./plugins/security", "category": "product" },
     { "name": "saas", "source": "./plugins/saas", "category": "product" },
     { "name": "ai", "source": "./plugins/ai", "category": "product" },
-    { "name": "dx", "source": "./plugins/dx", "category": "common" }
+    { "name": "dx", "source": "./plugins/dx", "category": "common" },
+    { "name": "devlog", "source": "./plugins/devlog", "category": "common" }
   ]
 }

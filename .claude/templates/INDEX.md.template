@@ -36,12 +36,12 @@
 | "이거 어디 있지?" | `/dx:where <키워드>` | INDEX + repo-cards + memory + dev-log 횡단 검색 |
 | "이거 어떻게 흘러왔지?" | `/dx:related <개념>` | timeline 재구성 + CURRENT STATE 합성 |
 | 메모리 정리 | `/dx:consolidate-memory` | stale/duplicate/orphan 분류 (dry-run) |
-| dev-log Tier 산출 | `/dx:consolidate-devlogs` | frontmatter 기반 자동 분류 |
-| Tier 2 → ADR/skill | `/dx:promote-devlog <slug>` | episodic → semantic 승격 |
-| Tier 4 archive | `/dx:archive-devlog <slug>` | superseded 이동 |
-| 트러블 기록 | `/dx:log-trouble` | dev-log troubleshoot |
-| 결정 기록 | `/dx:log-decision` | ADR or decision dev-log |
-| meta 기록 | `/dx:log-meta` | AI 워크플로우 변경 |
+| dev-log Tier 산출 | `/devlog:consolidate-devlogs` | frontmatter 기반 자동 분류 |
+| Tier 2 → ADR/skill | `/devlog:promote-devlog <slug>` | episodic → semantic 승격 |
+| Tier 4 archive | `/devlog:archive-devlog <slug>` | superseded 이동 |
+| 트러블 기록 | `/devlog:log-trouble` | dev-log troubleshoot |
+| 결정 기록 | `/devlog:log-decision` | ADR or decision dev-log |
+| meta 기록 | `/devlog:log-meta` | AI 워크플로우 변경 |
 
 ---
 

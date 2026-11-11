@@ -118,15 +118,15 @@ Records your development process as structured markdown.
 
 | Command | Use Case | Example |
 |---------|----------|---------|
-| `/dx:log-feedback` | Record AI correction requests | Pattern mismatch, omissions |
-| `/dx:log-decision` | Record tech decisions | A vs B selection rationale |
-| `/dx:log-meta` | Record rule/skill changes | Workflow improvements |
-| `/dx:log-trouble` | Record troubleshooting | Error cause, resolution |
-| `/dx:log-summary` | Session summary | Run before ending a session |
+| `/devlog:log-feedback` | Record AI correction requests | Pattern mismatch, omissions |
+| `/devlog:log-decision` | Record tech decisions | A vs B selection rationale |
+| `/devlog:log-meta` | Record rule/skill changes | Workflow improvements |
+| `/devlog:log-trouble` | Record troubleshooting | Error cause, resolution |
+| `/devlog:log-summary` | Session summary | Run before ending a session |
 
 ```
 Before ending a session:
-  /dx:log-summary → Auto-generates today's work summary
+  /devlog:log-summary → Auto-generates today's work summary
 ```
 
 ---

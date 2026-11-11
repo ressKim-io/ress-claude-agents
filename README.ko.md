@@ -67,7 +67,8 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 | 보안·제품 | [`security`](plugins/security/README.md) | OWASP, 위협 모델링, 인증 패턴, 공급망, 시크릿, PIPA·GDPR·SOC2 |
 | | [`saas`](plugins/saas/README.md) | 멀티테넌시, 소셜 로그인, 결제, 구독, 알림, Webhook |
 | | [`ai`](plugins/ai/README.md) | RAG, Vector DB, LLMOps, MLOps, 모델 서빙, Agentic 아키텍처 |
-| 공통 | [`dx`](plugins/dx/README.md) | 코드 리뷰, Git·PR 워크플로우, ADR·문서 템플릿, dev-log, 토큰 운영 |
+| 공통 | [`dx`](plugins/dx/README.md) | 코드 리뷰, Git·PR 워크플로우, ADR·문서 템플릿, 토큰 운영 |
+| | [`devlog`](plugins/devlog/README.md) | 트러블슈팅·결정·meta·피드백 dev-log 기록, Tier 정리 |
 
 ---
 
@@ -110,7 +111,7 @@ cp    .claude/rules/core/security.md     /path/to/project/.claude/rules/
 
 ### 이 레포에서 작업할 때
 
-폴더를 신뢰하면 `dx` 만 켜집니다. 다른 plugin 은 `claude --plugin-dir plugins/<plugin>` 으로 띄웁니다. 클라우드 세션과 worktree 의 수정분도 `--plugin-dir plugins/dx` 가 필요합니다. 구조를 이렇게 정한 이유는 [ADR 0012](docs/adr/0012-native-plugin-structure.md) 에 있습니다.
+폴더를 신뢰하면 `dx`·`devlog` 가 켜집니다. 다른 plugin 은 `claude --plugin-dir plugins/<plugin>` 으로 띄웁니다. 클라우드 세션과 worktree 의 수정분도 `--plugin-dir plugins/dx` 가 필요합니다. 구조를 이렇게 정한 이유는 [ADR 0012](docs/adr/0012-native-plugin-structure.md) 에 있습니다.
 
 ---
 
@@ -310,7 +311,7 @@ ress-claude-agents/
 ├── .claude/
 │   ├── rules/<그룹>/         # 자동 로딩 룰 (paths: frontmatter 로 조건부 로딩)
 │   ├── templates/            # SKILL-SPEC / AGENT-SPEC / 문서 템플릿
-│   ├── settings.json         # permissions deny/ask, dx 활성화
+│   ├── settings.json         # permissions deny/ask, dx·devlog 활성화
 │   ├── agent-handoff.yml     # agent 산출물 어휘
 │   ├── inventory.yml         # 자산 인덱스 (자동 생성)
 │   └── standards.yml

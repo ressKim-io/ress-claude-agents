@@ -2,7 +2,7 @@
 description: "docs/dev-logs/*.md tier 자동 산출, 클러스터 발견, superseded 식별. dry-run 기본, 사용자 승인 후 적용."
 ---
 
-# /dx:consolidate-devlogs
+# /devlog:consolidate-devlogs
 
 dev-logs 자동 정리 패스. `/dx:consolidate-memory`와 동형 패턴 — Sleep-time computation으로 Tier 정책 ([`devlog-lifecycle.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/devlog-lifecycle.md))을 dev-logs 152개에 적용한다.
 
@@ -39,11 +39,11 @@ dev-logs 자동 정리 패스. `/dx:consolidate-memory`와 동형 패턴 — Sle
 ### 4. SUPERSEDED (Tier 4, archive 후보)
 - `status: superseded` + `replaced_by` 명시
 - 또는 본문에 명시적 "이 결정은 dev-logs/... 로 대체됨" 표지
-- 권장 액션: `/dx:archive-devlog <slug>` 사용
+- 권장 액션: `/devlog:archive-devlog <slug>` 사용
 
 ### 5. CLUSTER (통합·승격 후보)
 - 같은 주제 dev-log 3건+ 발견
-- 권장 액션: `/dx:promote-devlog` (ADR/skill로 semantic 정착) 또는 통합 dev-log 작성
+- 권장 액션: `/devlog:promote-devlog` (ADR/skill로 semantic 정착) 또는 통합 dev-log 작성
 
 ## frontmatter 부재 처리
 
@@ -60,6 +60,7 @@ dev-logs 자동 정리 패스. `/dx:consolidate-memory`와 동형 패턴 — Sle
 | `category: decision` | "선택", "vs", "결정", ADR 후보 |
 | `category: migration` | "전환", "이관", "→", "마이그레이션" |
 | `category: meta` | rules/skills/commands/agents 변경 |
+| `category: feedback` | "수정 요청", "AI 출력", "잘못 생성" |
 
 추정 결과는 리포트에서 **"backfill 권장"** 으로 별도 표시.
 
@@ -114,14 +115,14 @@ dev-logs 자동 정리 패스. `/dx:consolidate-memory`와 동형 패턴 — Sle
 
    ## SUPERSEDED (Tier 4, archive 후보)
    - {file} → replaced_by: {target}
-     - 권장: /dx:archive-devlog {slug}
+     - 권장: /devlog:archive-devlog {slug}
 
    ## CLUSTERS (통합·승격 후보)
    - 그룹: redis (3건)
      - 2026-MM-DD-redis-A.md
      - 2026-MM-DD-redis-B.md
      - 2026-MM-DD-redis-C.md
-     - 권장: /dx:promote-devlog → ADR-NNNN-redis-... 또는 통합 dev-log
+     - 권장: /devlog:promote-devlog → ADR-NNNN-redis-... 또는 통합 dev-log
 
    ## FRONTMATTER BACKFILL (휴리스틱 추정)
    - {file}: 추정 status={s}, importance={i}, category={c}
@@ -145,8 +146,8 @@ dev-logs 자동 정리 패스. `/dx:consolidate-memory`와 동형 패턴 — Sle
 |--------|------|-------------|
 | **frontmatter backfill** | 파일 상단에 frontmatter 추가/보강 | (직접 Edit) |
 | **demote to Tier 3** | frontmatter `tier: 3` 추가 | (직접 Edit) |
-| **archive (Tier 4)** | `_archive/` 이동, INDEX 정정 | `/dx:archive-devlog` 권장 |
-| **promote to ADR/skill** | ADR/skill 신규 생성, 원본에 `replaced_by` 추가 | `/dx:promote-devlog` 권장 |
+| **archive (Tier 4)** | `_archive/` 이동, INDEX 정정 | `/devlog:archive-devlog` 권장 |
+| **promote to ADR/skill** | ADR/skill 신규 생성, 원본에 `replaced_by` 추가 | `/devlog:promote-devlog` 권장 |
 | **cluster merge** | 통합 dev-log 작성, 원본들 archive | 사용자 검토 필수 |
 
 ## 안전 장치
@@ -172,12 +173,12 @@ dry-run 기본. 5개 분류별로 대상과 근거를 표로 출력한다.
 ```
 [tier 재산출]      <slug>  tier 1 → 2   (status: resolved, importance: major)
 [superseded 후보]  <slug>  → replaced_by <대체 자료>
-[클러스터]         <주제>  <slug> 3건 — /dx:promote-devlog 후보
+[클러스터]         <주제>  <slug> 3건 — /devlog:promote-devlog 후보
 [frontmatter 부재] <slug>  (본문 추론값 제시)
 [변경 없음]        <건수>
 ```
 
-마지막에 `적용하려면: /dx:consolidate-devlogs --apply <category>` 안내를 붙인다.
+마지막에 `적용하려면: /devlog:consolidate-devlogs --apply <category>` 안내를 붙인다.
 사용자 승인 없이 파일을 변경하지 않는다.
 
 ## 출력 외 부수 효과

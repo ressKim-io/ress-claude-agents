@@ -9,13 +9,13 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 
 ## Project Overview
 
-이 레포는 **AI 코딩 에이전트용 룰/스킬/에이전트 컬렉션**이다. 자산은 영역별 plugin 으로 나뉘어 있어 필요한 영역만 설치하거나 폴더를 복사해 가져간다 ([ADR 0012](docs/adr/0012-native-plugin-structure.md)). 이 레포에서는 `dx` 만 켠다. 다른 plugin 을 여기서 쓰려면 `claude --plugin-dir plugins/<plugin>` 으로 띄운다.
+이 레포는 **AI 코딩 에이전트용 룰/스킬/에이전트 컬렉션**이다. 자산은 영역별 plugin 으로 나뉘어 있어 필요한 영역만 설치하거나 폴더를 복사해 가져간다 ([ADR 0012](docs/adr/0012-native-plugin-structure.md)). 이 레포에서는 `dx`·`devlog` 를 켠다. 다른 plugin 을 여기서 쓰려면 `claude --plugin-dir plugins/<plugin>` 으로 띄운다.
 
 > **개수는 여기 쓰지 않는다.** CI 는 [inventory.yml](.claude/inventory.yml) 신선도는 검사하지만 산문에 박힌 숫자는 검사하지 않아 반드시 drift 한다 — 실제로 "274 skills"(실제 260) / "25 rules"(실제 26) 가 각각 방치됐다. 현재 수치는 `summary` 참조: `yq '.summary' .claude/inventory.yml`
 
 | 자산 | 위치 | 내용 |
 |---|---|---|
-| Skills, Agents, Commands (영역별) | `plugins/<plugin>/` | 언어 `go` `java` `python` `frontend` · 설계 `architecture` `messaging` · 인프라 `k8s` `service-mesh` `infra` `cicd` · 운영 `observability` `sre` `platform` · 보안·제품 `security` `saas` `ai` · 공통 `dx` |
+| Skills, Agents, Commands (영역별) | `plugins/<plugin>/` | 언어 `go` `java` `python` `frontend` · 설계 `architecture` `messaging` · 인프라 `k8s` `service-mesh` `infra` `cicd` · 운영 `observability` `sre` `platform` · 보안·제품 `security` `saas` `ai` · 공통 `dx` `devlog` |
 | Rules (코딩/보안/워크플로우) | `.claude/rules/` | 이 AGENTS.md의 상세판. effort-guide, multi-tool-adapter 포함 |
 | Templates (작성 표준) | `.claude/templates/` | SKILL-SPEC, AGENT-SPEC + 문서 template (신규 자산 작성 spec) |
 
@@ -224,7 +224,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 
 | 도구 | 추가 설정 | 변환 |
 |---|---|---|
-| **Claude Code** | 본 파일 §Claude Code-Specific + `.claude/rules/`, `plugins/dx/` 자동 로딩 | 원본 |
+| **Claude Code** | 본 파일 §Claude Code-Specific + `.claude/rules/`, `plugins/dx/`·`plugins/devlog/` 자동 로딩 | 원본 |
 | **Cursor** | 본 파일 자동 인식 + `.cursor/rules/*.mdc` | 자동 (adapter) |
 | **Kiro** | 본 파일 루트 자동 인식 + `.kiro/{skills,agents,steering}/` | **수동** ([ADR 0006](docs/adr/0006-kiro-adapter-strategy.md) Option 1) |
 | **Codex / Copilot / Gemini CLI / Windsurf** | 본 파일 자동 인식 — 추가 설정 불필요 | 불필요 |

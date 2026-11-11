@@ -1,0 +1,6 @@
+{
+  "name": "devlog",
+  "description": "dev-log — 트러블슈팅·결정·meta·피드백 기록, Tier 산출·승격·archive",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}

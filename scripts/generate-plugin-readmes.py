@@ -22,7 +22,8 @@ RULE_URL = f"{BLOB_URL}.claude/rules/"
 RULES = {
     "dx": ["core/workflow.md", "core/git.md", "core/security.md", "process/code-review.md",
            "process/debugging.md", "process/testing.md", "process/documentation.md",
-           "process/devlog-lifecycle.md", "process/phase-workflow.md"],
+           "process/phase-workflow.md"],
+    "devlog": ["process/devlog-lifecycle.md"],
     "go": ["lang/go.md"],
     "java": ["lang/java.md", "lang/spring.md"],
     "k8s": ["infra/k8s-manifest.md", "infra/version-compatibility.md", "core/user-approval.md"],

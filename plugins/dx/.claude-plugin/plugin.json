@@ -1,6 +1,6 @@
 {
   "name": "dx",
-  "description": "개발 공통 — 코드 리뷰, Git·PR 워크플로우, ADR·문서 템플릿, dev-log, 온보딩, 토큰 운영",
+  "description": "개발 공통 — 코드 리뷰, Git·PR 워크플로우, ADR·문서 템플릿, 온보딩, 토큰 운영",
   "author": { "name": "ressKim-io" },
   "license": "MIT"
 }

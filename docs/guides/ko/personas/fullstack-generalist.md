@@ -118,15 +118,15 @@ Claude Code에 자연어로 요청하면 적절한 에이전트가 자동 선택
 
 | 명령 | 용도 | 예시 |
 |------|------|------|
-| `/dx:log-feedback` | AI 수정 요청 기록 | 코드 패턴 불일치, 누락 등 |
-| `/dx:log-decision` | 기술 의사결정 기록 | A vs B 선택 근거 |
-| `/dx:log-meta` | Rule/Skill 변경 기록 | 워크플로우 개선 |
-| `/dx:log-trouble` | 트러블슈팅 기록 | 에러 원인, 해결 과정 |
-| `/dx:log-summary` | 세션 요약 | 세션 종료 전 실행 |
+| `/devlog:log-feedback` | AI 수정 요청 기록 | 코드 패턴 불일치, 누락 등 |
+| `/devlog:log-decision` | 기술 의사결정 기록 | A vs B 선택 근거 |
+| `/devlog:log-meta` | Rule/Skill 변경 기록 | 워크플로우 개선 |
+| `/devlog:log-trouble` | 트러블슈팅 기록 | 에러 원인, 해결 과정 |
+| `/devlog:log-summary` | 세션 요약 | 세션 종료 전 실행 |
 
 ```
 세션 종료 전:
-  /dx:log-summary → 오늘 작업 요약 자동 생성
+  /devlog:log-summary → 오늘 작업 요약 자동 생성
 ```
 
 ---

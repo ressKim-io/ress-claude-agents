@@ -175,7 +175,7 @@ k8s-troubleshooter → 클러스터 진단 (파드, 노드, 네트워크)
   ↓
 /infra:postgresql-operations → DB 이슈 분석 (필요 시)
   ↓
-/dx:log-trouble → 트러블슈팅 기록
+/devlog:log-trouble → 트러블슈팅 기록
 ```
 
 ### 관련 스킬

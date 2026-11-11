@@ -2,7 +2,7 @@
 description: "현재 세션의 주요 활동을 자동 요약합니다. 세션 종료 전에 실행 권장."
 ---
 
-# /dx:log-summary
+# /devlog:log-summary
 
 현재 세션에서 수행한 주요 활동을 요약하여 기록하라.
 
@@ -65,7 +65,7 @@ type: session-summary
 ## 사용법
 
 ```
-/dx:log-summary                          # 현재 세션 활동 자동 요약
+/devlog:log-summary                          # 현재 세션 활동 자동 요약
 ```
 
 인자를 받지 않는다. 세션 종료 전에 실행해 그 세션의 작업을 한 번에 정리한다.

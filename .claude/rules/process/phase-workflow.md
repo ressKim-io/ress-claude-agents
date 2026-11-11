@@ -108,7 +108,7 @@ Phase 시작 시 아래 체크리스트를 출력하고 진행 상황을 추적�
 [ ] Gemini 리뷰 확인 + 갭 기록
 [ ] 피드백 반영 → push → merge
 [ ] main pull
-[ ] 트러블슈팅 로그 (/dx:log-trouble) — 문제 발생 시
+[ ] 트러블슈팅 로그 (/devlog:log-trouble) — 문제 발생 시
 ```
 
 ---
@@ -117,7 +117,7 @@ Phase 시작 시 아래 체크리스트를 출력하고 진행 상황을 추적�
 
 Phase 진행 중 문제 발생 시:
 1. `rules/process/debugging.md`의 가설-검증 루프를 따른다
-2. 해결 후 `/dx:log-trouble`로 기록한다 (failure_type 태그 포함)
+2. 해결 후 `/devlog:log-trouble`로 기록한다 (failure_type 태그 포함)
 3. SDD에 영향이 있으면 SDD를 업데이트한다
 
 ---

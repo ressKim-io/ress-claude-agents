@@ -29,7 +29,8 @@ Each plugin's README lists its skills, agents and commands, the plugins it pairs
 | Security and product | [`security`](plugins/security/README.md) | OWASP, threat modeling, auth patterns, supply chain, secrets, PIPA, GDPR, SOC2 |
 | | [`saas`](plugins/saas/README.md) | Multi-tenancy, social login, payments, subscriptions, notifications, webhooks |
 | | [`ai`](plugins/ai/README.md) | RAG, vector databases, LLMOps, MLOps, model serving, agentic architecture |
-| Common | [`dx`](plugins/dx/README.md) | Code review, Git and PR workflow, ADR and doc templates, dev logs, token budgets |
+| Common | [`dx`](plugins/dx/README.md) | Code review, Git and PR workflow, ADR and doc templates, token budgets |
+| | [`devlog`](plugins/devlog/README.md) | Dev logs for troubleshooting, decisions, meta changes and feedback, tier upkeep |
 
 Not sure where to start? See the [persona guides and scenarios](docs/guides/README.md).
 
@@ -71,7 +72,7 @@ cd ress-claude-agents
 claude
 ```
 
-The repo enables only `dx`, once you trust the folder. To try another plugin here, run `claude --plugin-dir plugins/<plugin>`. Cloud sessions and uncommitted changes in a worktree also need `--plugin-dir plugins/dx`.
+The repo enables `dx` and `devlog`, once you trust the folder. To try another plugin here, run `claude --plugin-dir plugins/<plugin>`. Cloud sessions and uncommitted changes in a worktree also need `--plugin-dir plugins/dx`.
 
 ```bash
 make all              # Catalog, enforcement and link gates
