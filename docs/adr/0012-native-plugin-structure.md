@@ -1,6 +1,6 @@
 # ADR 0012 — 영역별 native plugin 구조와 marketplace
 
-- **Status**: Accepted
+- **Status**: Accepted. §Decision 2 의 "`dx` 만 켠다" 는 [ADR 0014](0014-devlog-plugin.md) 로 "`dx`·`devlog` 를 켠다" 가 됐다
 - **Date**: 2026-11-04
 - **Driver**: 사용자 결정 — "한번에 주르륵 몰려 있어서 구분하고 사람들이 내꺼에서 뭘 들고가야되는지 판단하기 어려워"
 - **Partially supersedes**: [ADR 0011](0011-remove-install-sh.md) 의 "배포 수단을 두지 않는다" 부분. `install.sh` 제거 자체는 유지한다.
