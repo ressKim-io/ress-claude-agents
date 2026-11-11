@@ -30,9 +30,12 @@ description: "기술/아키텍처 의사결정을 기록합니다. A vs B 선택
 ```markdown
 ---
 date: {today}
-category: decision
-project: {project-name or repo-name}
+category: decision   # 환경·버전·아키텍처 전환 완료를 기록하면 migration
+tier: {1|2}
+importance: {critical|major|minor}
+status: {open|resolved}
 tags: [{tag1}, {tag2}]
+related: []
 ---
 
 # {제목: 결정 내용을 한 줄로}
@@ -62,6 +65,15 @@ tags: [{tag1}, {tag2}]
 - path/to/file
 ```
 
+## frontmatter 값
+
+[`devlog-lifecycle`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/devlog-lifecycle.md) 표준을 따른다.
+
+- `status`: 끝난 일이면 `resolved`, 진행 중이면 `open`
+- `tier`: `open` 이면 `1`, `resolved` 면 `2`. 이후 재산출은 `/dx:consolidate-devlogs` 가 한다
+- `importance`: 직접 판단한다. `critical` 프로덕션 장애·핵심 결정 / `major` 재발 가능한 패턴·교훈 / `minor` 단순 작업 기록
+- `related`: 관련 dev-log·ADR 경로. 없으면 `[]`
+
 ## 사용법
 
 ```
@@ -70,7 +82,7 @@ tags: [{tag1}, {tag2}]
 ```
 
 ADR 수준의 큰 결정은 `docs/adr/` 로, 그보다 가벼운 결정은 본 명령으로 기록한다.
-산출물: `docs/dev-logs/YYYY-MM-DD-{slug}.md` (`category: decision`).
+산출물: `docs/dev-logs/YYYY-MM-DD-{slug}.md` (`category: decision`, 전환 완료 기록이면 `migration`).
 
 오늘 날짜: $CURRENT_DATE
 인자가 주어지면 해당 내용을 제목/Context로 활용하라: $ARGUMENTS

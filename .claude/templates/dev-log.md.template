@@ -1,6 +1,6 @@
 ---
 date: {YYYY-MM-DD}
-category: {troubleshoot|decision|migration|meta}
+category: {troubleshoot|decision|migration|meta|feedback}
 tier: {1|2|3|4}
 importance: {critical|major|minor}
 status: {open|resolved|superseded}

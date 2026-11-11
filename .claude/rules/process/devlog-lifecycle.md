@@ -40,7 +40,7 @@ dev-logs (`docs/dev-logs/*.md`) 작성·갱신·정리 시 반드시 따라야 �
 ```yaml
 ---
 date: YYYY-MM-DD
-category: troubleshoot | decision | migration | meta
+category: troubleshoot | decision | migration | meta | feedback
 tier: 1 | 2 | 3 | 4
 importance: critical | major | minor
 status: open | resolved | superseded
@@ -56,7 +56,7 @@ replaced_by: dev-logs/YYYY-MM-DD-...md   # superseded 만
 ### 필수 필드
 
 - `date`: 파일명 날짜와 일치 (YYYY-MM-DD ISO 8601)
-- `category`: 4종 (troubleshoot/decision/migration/meta)
+- `category`: 5종 (troubleshoot/decision/migration/meta/feedback)
 - `tier`: 작성 시점 산출값. 자동 산출은 `/dx:consolidate-devlogs` 사용
 - `importance`: 영향도 (critical: 프로덕션 장애·아키텍처 결정 / major: 의미 있는 패턴·교훈 / minor: 단순 작업 기록)
 - `status`: open(진행 중) / resolved(완료) / superseded(대체됨)
@@ -77,6 +77,7 @@ replaced_by: dev-logs/YYYY-MM-DD-...md   # superseded 만
 | `decision` | 기술/아키텍처 결정 (ADR보다 가벼움) | Tier 정책, 도구 선택 |
 | `migration` | 환경/버전/아키텍처 전환 | AWS→GCP, K8s 1.33→1.34 |
 | `meta` | AI 워크플로우·rules·commands 변경 | rule 추가, skill 보강 |
+| `feedback` | AI 출력 수정 요청 | 패턴 불일치, 누락된 처리 |
 
 ---
 

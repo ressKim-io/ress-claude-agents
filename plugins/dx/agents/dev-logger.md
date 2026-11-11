@@ -1,6 +1,6 @@
 ---
 name: dev-logger
-description: "개발 과정 기록 에이전트. AI 수정 요청(feedback), 아키텍처 결정(decision), 시스템 개선(meta), 트러블슈팅(trouble) 기록을 구조화된 마크다운으로 저장. Use when /log-* commands are invoked."
+description: "개발 과정 기록 에이전트. AI 수정 요청(feedback), 아키텍처 결정(decision), 시스템 개선(meta), 트러블슈팅(troubleshoot) 기록을 구조화된 마크다운으로 저장. Use when /log-* commands are invoked."
 tools:
   - Read
   - Grep
@@ -57,51 +57,25 @@ docs/dev-logs/
 | Decision | `decision` | 기술/아키텍처 의사결정 — A vs B 선택과 근거 |
 | Meta | `meta` | Rule, Skill, Agent 추가/변경 — AI 워크플로우 자체 개선 |
 | Troubleshoot | `troubleshoot` | 버그 수정, 에러 해결 — 원인 분석과 해결 과정 |
-
-## Log Entry Template
-
-Every log entry MUST follow this structure:
-
-```markdown
----
-date: YYYY-MM-DD
-category: feedback|decision|meta|troubleshoot
-project: {project-name}
-tags: [tag1, tag2, tag3]
----
-
-# {Title}
-
-## Context
-{무엇을 하고 있었는지. 배경 상황 설명.}
-
-## Issue
-{왜 개입/판단이 필요했는지. AI가 처음에 뭘 잘못했는지(feedback), 어떤 선택지가 있었는지(decision), 왜 변경이 필요했는지(meta), 어떤 에러가 발생했는지(troubleshoot).}
-
-## Action
-{구체적으로 뭘 했는지. 코드 변경, 설정 추가, 패턴 교체 등.}
-- 변경 항목 1
-- 변경 항목 2
-
-## Result
-{어떻게 됐는지. 문제가 해결됐는지, 이후 영향은 뭔지.}
-
-## Related Files
-- path/to/file1
-- path/to/file2
-```
+| Migration | `migration` | 환경·버전·아키텍처 전환 완료 기록 |
 
 ## Output Format
 
 `docs/dev-logs/YYYY-MM-DD-<slug>.md` 한 파일을 산출한다 (slug 규칙은 아래 §Slug Generation Rules).
+frontmatter 는 [`devlog-lifecycle`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/devlog-lifecycle.md) 표준이다.
 
 ```markdown
 ---
 date: YYYY-MM-DD
-category: feedback | decision | meta | trouble
-title: <한 줄 제목>
-related: [<파일 경로 / 커밋 / 이슈>]
+category: troubleshoot | decision | migration | meta | feedback
+tier: 1 | 2            # open 이면 1, resolved 면 2
+importance: critical | major | minor
+status: open | resolved
+tags: [tag1, tag2]
+related: [<dev-log / ADR 경로>]
 ---
+
+# <한 줄 제목>
 
 ## Context
 [무엇을 하던 중이었는가 — 1-3 문장]
@@ -123,7 +97,7 @@ related: [<파일 경로 / 커밋 / 이슈>]
 
 | category | 추가로 반드시 포함 |
 |---|---|
-| `trouble` | 재현 조건 / 근본 원인 / 회귀 방지 조치 ([`workflow.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/workflow.md) §Trouble → 회귀 방지 SOP 5단계) |
+| `troubleshoot` | 재현 조건 / 근본 원인 / 회귀 방지 조치 ([`workflow.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/workflow.md) §Trouble → 회귀 방지 SOP 5단계) |
 | `decision` | 대안과 탈락 사유. 대안이 2개 이상이면 ADR 로 승격 제안 |
 | `feedback` | 어떤 지시가 어떻게 잘못 해석됐는가 — 재발 방지 문구 제안 |
 | `meta` | 변경한 자산 경로와 그 영향 범위 |
@@ -234,7 +208,7 @@ duration: ~{estimated}
 1. **사실성** — 기록된 내용이 실제 세션에서 일어난 일. 요약 과정에서 없던 결론을 만들지 않음
 2. **카테고리 정합성** — §Log Categories 분류가 사건 성격과 일치
 3. **추적 가능성** — 관련 파일 경로 / 커밋 / 이슈 링크가 붙음
-4. **재발 방지 연결** — trouble 카테고리는 [`workflow.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/workflow.md) §Trouble → 회귀 방지 SOP 항목을 포함
+4. **재발 방지 연결** — troubleshoot 카테고리는 [`workflow.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/core/workflow.md) §Trouble → 회귀 방지 SOP 항목을 포함
 5. **출력 계약** — §Output Format 의 파일명 규칙과 frontmatter 를 그대로 사용
 
 ### Self-verification (제출 전 자가 점검)

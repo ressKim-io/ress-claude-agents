@@ -89,7 +89,7 @@ cp -r plugins/dx/skills/<이름> <프로젝트>/.claude/skills/
 | 이름 | 설명 |
 |---|---|
 | `dx:code-reviewer` | Cross-language 시니어 코드 리뷰어 — correctness, readability, 명명, 중복, 테스트 커버리지, 일반 best practice |
-| `dx:dev-logger` | 개발 과정 기록 에이전트. AI 수정 요청(feedback), 아키텍처 결정(decision), 시스템 개선(meta), 트러블슈팅(trouble) 기록을 구조화된 마크다운으로 저장 |
+| `dx:dev-logger` | 개발 과정 기록 에이전트. AI 수정 요청(feedback), 아키텍처 결정(decision), 시스템 개선(meta), 트러블슈팅(troubleshoot) 기록을 구조화된 마크다운으로 저장 |
 | `dx:git-workflow` | Git 워크플로우 자동화 에이전트. 커밋 메시지 생성, PR 자동화, Changelog 생성, 브랜치 전략 가이드 |
 | `dx:product-engineer` | 요구사항 분석, 유저스토리 작성, 우선순위 결정, MVP 스코핑 에이전트. 비즈니스 목표와 기술 구현 사이의 번역자 |
 | `dx:security-scanner` | AI-powered security vulnerability scanner |

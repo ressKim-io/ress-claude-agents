@@ -31,8 +31,11 @@ AI 워크플로우(rule, skill, agent, command) 추가/변경 사유를 기록�
 ---
 date: {today}
 category: meta
-project: {project-name or repo-name}
+tier: {1|2}
+importance: {critical|major|minor}
+status: {open|resolved}
 tags: [{tag1}, {tag2}]
+related: []
 ---
 
 # {제목: 변경 내용을 한 줄로}
@@ -54,6 +57,15 @@ tags: [{tag1}, {tag2}]
 ## Related Files
 - path/to/file
 ```
+
+## frontmatter 값
+
+[`devlog-lifecycle`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/devlog-lifecycle.md) 표준을 따른다.
+
+- `status`: 끝난 일이면 `resolved`, 진행 중이면 `open`
+- `tier`: `open` 이면 `1`, `resolved` 면 `2`. 이후 재산출은 `/dx:consolidate-devlogs` 가 한다
+- `importance`: 직접 판단한다. `critical` 프로덕션 장애·핵심 결정 / `major` 재발 가능한 패턴·교훈 / `minor` 단순 작업 기록
+- `related`: 관련 dev-log·ADR 경로. 없으면 `[]`
 
 ## 사용법
 

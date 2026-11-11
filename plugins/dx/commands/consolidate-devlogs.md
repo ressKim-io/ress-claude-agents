@@ -60,6 +60,7 @@ dev-logs 자동 정리 패스. `/dx:consolidate-memory`와 동형 패턴 — Sle
 | `category: decision` | "선택", "vs", "결정", ADR 후보 |
 | `category: migration` | "전환", "이관", "→", "마이그레이션" |
 | `category: meta` | rules/skills/commands/agents 변경 |
+| `category: feedback` | "수정 요청", "AI 출력", "잘못 생성" |
 
 추정 결과는 리포트에서 **"backfill 권장"** 으로 별도 표시.
 
