@@ -37,6 +37,7 @@
     }
   },
   "enabledPlugins": {
-    "dx@ress": true
+    "dx@ress": true,
+    "devlog@ress": true
   }
 }

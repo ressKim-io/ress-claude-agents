@@ -2,7 +2,7 @@
 description: "기술/아키텍처 의사결정을 기록합니다. A vs B 선택, 트레이드오프, 근거 등."
 ---
 
-# /dx:log-decision
+# /devlog:log-decision
 
 기술 또는 아키텍처 의사결정 내용을 기록하라.
 
@@ -70,15 +70,15 @@ related: []
 [`devlog-lifecycle`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/devlog-lifecycle.md) 표준을 따른다.
 
 - `status`: 끝난 일이면 `resolved`, 진행 중이면 `open`
-- `tier`: `open` 이면 `1`, `resolved` 면 `2`. 이후 재산출은 `/dx:consolidate-devlogs` 가 한다
+- `tier`: `open` 이면 `1`, `resolved` 면 `2`. 이후 재산출은 `/devlog:consolidate-devlogs` 가 한다
 - `importance`: 직접 판단한다. `critical` 프로덕션 장애·핵심 결정 / `major` 재발 가능한 패턴·교훈 / `minor` 단순 작업 기록
 - `related`: 관련 dev-log·ADR 경로. 없으면 `[]`
 
 ## 사용법
 
 ```
-/dx:log-decision                         # 현재 대화의 결정 내용 자동 추출
-/dx:log-decision Kafka vs RabbitMQ       # 결정 주제 전달
+/devlog:log-decision                         # 현재 대화의 결정 내용 자동 추출
+/devlog:log-decision Kafka vs RabbitMQ       # 결정 주제 전달
 ```
 
 ADR 수준의 큰 결정은 `docs/adr/` 로, 그보다 가벼운 결정은 본 명령으로 기록한다.

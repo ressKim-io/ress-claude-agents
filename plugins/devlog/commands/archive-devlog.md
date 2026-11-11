@@ -2,7 +2,7 @@
 description: "Tier 4 dev-log를 _archive/ 로 이동, replaced_by 링크 보존. superseded 처리."
 ---
 
-# /dx:archive-devlog
+# /devlog:archive-devlog
 
 `status: superseded` dev-log를 `docs/dev-logs/_archive/` 로 이동한다. forward link (`replaced_by`)는 새 자료에 보존, INDEX는 정리.
 
@@ -119,7 +119,7 @@ INDEX 영향:
 ### 단일 archive
 
 ```
-/dx:archive-devlog 2026-03-15-old-decision
+/devlog:archive-devlog 2026-03-15-old-decision
 →
 [archive 미리보기]
 이동: docs/dev-logs/2026-03-15-old-decision.md → _archive/
@@ -135,7 +135,7 @@ y
 ### 일괄 archive (Phase 1.6 R5)
 
 ```
-/dx:archive-devlog --all-superseded
+/devlog:archive-devlog --all-superseded
 →
 superseded 5건 발견:
   1. 2026-03-15-A.md → adr/0015 (인용 1건)

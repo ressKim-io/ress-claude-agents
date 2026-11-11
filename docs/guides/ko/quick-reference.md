@@ -198,7 +198,7 @@ eBPF 기반 Zero-Code:
       ↓
 4. /observability:observability-otel → 트레이스/메트릭 분석
       ↓
-5. dev-logger         → 인시던트 기록 (/dx:log-trouble)
+5. dev-logger         → 인시던트 기록 (/devlog:log-trouble)
 ```
 
 ### IDP 구축 (Platform Bootstrap)

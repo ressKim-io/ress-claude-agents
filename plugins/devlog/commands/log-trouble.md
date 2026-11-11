@@ -2,7 +2,7 @@
 description: "트러블슈팅 과정을 기록합니다. 에러 원인 분석, 해결 과정, 회귀 테스트."
 ---
 
-# /dx:log-trouble
+# /devlog:log-trouble
 
 트러블슈팅(버그 수정, 에러 해결) 과정을 기록하라.
 
@@ -77,15 +77,15 @@ related: []
 [`devlog-lifecycle`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/devlog-lifecycle.md) 표준을 따른다.
 
 - `status`: 끝난 일이면 `resolved`, 진행 중이면 `open`
-- `tier`: `open` 이면 `1`, `resolved` 면 `2`. 이후 재산출은 `/dx:consolidate-devlogs` 가 한다
+- `tier`: `open` 이면 `1`, `resolved` 면 `2`. 이후 재산출은 `/devlog:consolidate-devlogs` 가 한다
 - `importance`: 직접 판단한다. `critical` 프로덕션 장애·핵심 결정 / `major` 재발 가능한 패턴·교훈 / `minor` 단순 작업 기록
 - `related`: 관련 dev-log·ADR 경로. 없으면 `[]`
 
 ## 사용법
 
 ```
-/dx:log-trouble                          # 현재 대화 맥락에서 자동 추출
-/dx:log-trouble ArgoCD sync stuck        # 제목/Context 로 활용할 요약 전달
+/devlog:log-trouble                          # 현재 대화 맥락에서 자동 추출
+/devlog:log-trouble ArgoCD sync stuck        # 제목/Context 로 활용할 요약 전달
 ```
 
 인자를 생략하면 대화 맥락에서 증상·원인·해결을 추출한다. 부족한 정보는 질문한다.

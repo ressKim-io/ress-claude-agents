@@ -175,7 +175,7 @@ k8s-troubleshooter → Cluster diagnostics (pods, nodes, network)
   ↓
 /infra:postgresql-operations → DB issue analysis (if needed)
   ↓
-/dx:log-trouble → Record troubleshooting
+/devlog:log-trouble → Record troubleshooting
 ```
 
 ### Related Skills

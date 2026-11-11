@@ -1,7 +1,7 @@
 <!-- 자동 생성: scripts/generate-plugin-readmes.py. 직접 수정하지 않는다. -->
 # dx
 
-개발 공통 — 코드 리뷰, Git·PR 워크플로우, ADR·문서 템플릿, dev-log, 온보딩, 토큰 운영
+개발 공통 — 코드 리뷰, Git·PR 워크플로우, ADR·문서 템플릿, 온보딩, 토큰 운영
 
 ## 설치
 
@@ -34,6 +34,7 @@ cp -r plugins/dx/skills/<이름> <프로젝트>/.claude/skills/
 - [`go`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/go/README.md)
 - [`architecture`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/architecture/README.md)
 - [`python`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/python/README.md)
+- [`devlog`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/devlog/README.md)
 - [`infra`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/infra/README.md)
 - [`k8s`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/k8s/README.md)
 
@@ -48,7 +49,6 @@ cp -r plugins/dx/skills/<이름> <프로젝트>/.claude/skills/
 - [`process/debugging.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/debugging.md)
 - [`process/testing.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/testing.md)
 - [`process/documentation.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/documentation.md)
-- [`process/devlog-lifecycle.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/devlog-lifecycle.md)
 - [`process/phase-workflow.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/phase-workflow.md)
 
 **권한 규칙** (`permissions.deny`) 도 실리지 않는다. agent 의 Permission Boundary 는 설치본에서 강제되지 않는 안내문이다.
@@ -84,38 +84,29 @@ cp -r plugins/dx/skills/<이름> <프로젝트>/.claude/skills/
 | `/dx:token-budget` | Claude 5.5 세대 토큰·컨텍스트·effort 운영 심화 가이드 — Subagent 위임, Effort, Task Budget, Prompt Caching, Thinking, … |
 | `/dx:token-efficiency` | Claude Code 토큰 절약 — 컨텍스트 윈도우 관리, 파일 읽기·쓰기·검색 최적화, Agent 위임, 프롬프트 효율, 세션 관리 |
 
-## Agents (6)
+## Agents (5)
 
 | 이름 | 설명 |
 |---|---|
 | `dx:code-reviewer` | Cross-language 시니어 코드 리뷰어 — correctness, readability, 명명, 중복, 테스트 커버리지, 일반 best practice |
-| `dx:dev-logger` | 개발 과정 기록 에이전트. AI 수정 요청(feedback), 아키텍처 결정(decision), 시스템 개선(meta), 트러블슈팅(troubleshoot) 기록을 구조화된 마크다운으로 저장 |
 | `dx:git-workflow` | Git 워크플로우 자동화 에이전트. 커밋 메시지 생성, PR 자동화, Changelog 생성, 브랜치 전략 가이드 |
 | `dx:product-engineer` | 요구사항 분석, 유저스토리 작성, 우선순위 결정, MVP 스코핑 에이전트. 비즈니스 목표와 기술 구현 사이의 번역자 |
 | `dx:security-scanner` | AI-powered security vulnerability scanner |
 | `dx:tech-lead` | 기술 전략 수립, RFC/ADR 주도, 팀 오케스트레이션 에이전트. Claude Code Team의 리더 역할 |
 
-## Commands (26)
+## Commands (18)
 
 | 이름 | 설명 |
 |---|---|
-| `/dx:archive-devlog` | Tier 4 dev-log를 _archive/ 로 이동, replaced_by 링크 보존. superseded 처리 |
 | `/dx:backend-api-doc` | OpenAPI/Swagger 어노테이션을 추가합니다 |
 | `/dx:backend-refactor` | 코드 품질 개선을 위한 리팩토링을 제안합니다 |
 | `/dx:backend-review` | Java/Kotlin 백엔드 코드를 리뷰합니다 |
 | `/dx:backend-test-gen` | JUnit 테스트 코드를 생성합니다 |
 | `/dx:changelog` | 커밋 히스토리 기반으로 CHANGELOG를 생성합니다 |
-| `/dx:consolidate-devlogs` | docs/dev-logs/*.md tier 자동 산출, 클러스터 발견, superseded 식별. dry-run 기본, 사용자 승인 후 적용 |
 | `/dx:consolidate-memory` | MEMORY.md + memory/*.md 정리. stale/duplicate/orphan/repo-card 이관 후보 분류. dry-run 기본, 사용자 승인 후 적용 |
 | `/dx:issue-create` | 템플릿 기반으로 Issue를 생성합니다 |
-| `/dx:log-decision` | 기술/아키텍처 의사결정을 기록합니다. A vs B 선택, 트레이드오프, 근거 등 |
-| `/dx:log-feedback` | AI 출력 수정 요청을 기록합니다. 코드 패턴 불일치, 누락, 잘못된 접근 등을 기록 |
-| `/dx:log-meta` | Rule, Skill, Agent 추가/변경 사유를 기록합니다. AI 워크플로우 자체의 개선 기록 |
-| `/dx:log-summary` | 현재 세션의 주요 활동을 자동 요약합니다. 세션 종료 전에 실행 권장 |
-| `/dx:log-trouble` | 트러블슈팅 과정을 기록합니다. 에러 원인 분석, 해결 과정, 회귀 테스트 |
 | `/dx:phase-start` | Phase 기반 작업(SDD 게이트 강제) 시작. 11항목 체크리스트 출력 + Gate 1-5 흐름 안내 |
 | `/dx:pr-create` | 커밋 기반으로 PR을 자동 생성합니다 |
-| `/dx:promote-devlog` | Tier 2 dev-log를 ADR/skill로 승격 (Episodic → Semantic). 패턴 정착 시 사용 |
 | `/dx:related` | 개념/주제로 dev-logs + ADR + memory + repo-cards를 timeline 순으로 묶어 반환. 컨텍스트 복원용 |
 | `/dx:release` | 버전 태그 및 GitHub Release를 생성합니다 |
 | `/dx:review-pr-k8s` | K8s/Helm/ArgoCD 영역 PR을 3개 전문 관점으로 병렬 리뷰합니다 |

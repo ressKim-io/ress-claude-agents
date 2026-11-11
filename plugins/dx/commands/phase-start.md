@@ -72,7 +72,7 @@ Phase: <phase-slug>
 [ ] Gate 5: Gemini 리뷰 확인 + 갭 기록 (docs/review-gaps.md)
 [ ] Gate 5: 피드백 반영 → push → merge
 [ ] main pull
-[ ] 트러블슈팅 로그 (/dx:log-trouble) — 문제 발생 시
+[ ] 트러블슈팅 로그 (/devlog:log-trouble) — 문제 발생 시
 ```
 
 체크리스트는 SDD `## Phase Gates` 섹션에 복사하여 진행 상태를 추적한다.
@@ -92,7 +92,7 @@ Phase 진행 중 다음을 감지하면 작업을 중단하고 안내한다:
 ### 5. 후속 권장
 
 - Phase 종료 시 회고: `docs/retrospective/$CURRENT_DATE-<phase-slug>.md` 작성 권장
-- Tier 2+ dev-log 누적 시 `/dx:promote-devlog`로 ADR/skill 정착
+- Tier 2+ dev-log 누적 시 `/devlog:promote-devlog`로 ADR/skill 정착
 - Phase 간 SDD가 dependency를 가지면 SDD frontmatter `depends_on:`로 명시
 
 ## 사용 예시

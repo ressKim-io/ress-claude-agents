@@ -2,7 +2,7 @@
 description: "AI 출력 수정 요청을 기록합니다. 코드 패턴 불일치, 누락, 잘못된 접근 등을 기록."
 ---
 
-# /dx:log-feedback
+# /devlog:log-feedback
 
 개발 과정에서 AI의 출력을 수정 요청한 내용을 기록하라.
 
@@ -63,15 +63,15 @@ related: []
 [`devlog-lifecycle`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/devlog-lifecycle.md) 표준을 따른다.
 
 - `status`: 끝난 일이면 `resolved`, 진행 중이면 `open`
-- `tier`: `open` 이면 `1`, `resolved` 면 `2`. 이후 재산출은 `/dx:consolidate-devlogs` 가 한다
+- `tier`: `open` 이면 `1`, `resolved` 면 `2`. 이후 재산출은 `/devlog:consolidate-devlogs` 가 한다
 - `importance`: 직접 판단한다. `critical` 프로덕션 장애·핵심 결정 / `major` 재발 가능한 패턴·교훈 / `minor` 단순 작업 기록
 - `related`: 관련 dev-log·ADR 경로. 없으면 `[]`
 
 ## 사용법
 
 ```
-/dx:log-feedback                         # 직전 수정 요청 맥락에서 자동 추출
-/dx:log-feedback 커밋 메시지 형식 어긋남   # 피드백 요지 전달
+/devlog:log-feedback                         # 직전 수정 요청 맥락에서 자동 추출
+/devlog:log-feedback 커밋 메시지 형식 어긋남   # 피드백 요지 전달
 ```
 
 같은 지적이 3회 누적되면 rule 또는 skill 보강 후보다.

@@ -2,7 +2,7 @@
 description: "Rule, Skill, Agent 추가/변경 사유를 기록합니다. AI 워크플로우 자체의 개선 기록."
 ---
 
-# /dx:log-meta
+# /devlog:log-meta
 
 AI 워크플로우(rule, skill, agent, command) 추가/변경 사유를 기록하라.
 
@@ -63,15 +63,15 @@ related: []
 [`devlog-lifecycle`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/devlog-lifecycle.md) 표준을 따른다.
 
 - `status`: 끝난 일이면 `resolved`, 진행 중이면 `open`
-- `tier`: `open` 이면 `1`, `resolved` 면 `2`. 이후 재산출은 `/dx:consolidate-devlogs` 가 한다
+- `tier`: `open` 이면 `1`, `resolved` 면 `2`. 이후 재산출은 `/devlog:consolidate-devlogs` 가 한다
 - `importance`: 직접 판단한다. `critical` 프로덕션 장애·핵심 결정 / `major` 재발 가능한 패턴·교훈 / `minor` 단순 작업 기록
 - `related`: 관련 dev-log·ADR 경로. 없으면 `[]`
 
 ## 사용법
 
 ```
-/dx:log-meta                             # 현재 세션의 rule/skill/agent 변경 자동 추출
-/dx:log-meta add multi-tool-adapter rule # 변경 대상 전달
+/devlog:log-meta                             # 현재 세션의 rule/skill/agent 변경 자동 추출
+/devlog:log-meta add multi-tool-adapter rule # 변경 대상 전달
 ```
 
 rules / skills / agents / commands 를 추가·변경한 직후 호출한다.

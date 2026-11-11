@@ -198,7 +198,7 @@ Use multiple agents in sequence for complex workflows.
       ↓
 4. /observability:observability-otel → Trace/metrics analysis
       ↓
-5. dev-logger         → Incident record (/dx:log-trouble)
+5. dev-logger         → Incident record (/devlog:log-trouble)
 ```
 
 ### IDP Bootstrap (Platform)

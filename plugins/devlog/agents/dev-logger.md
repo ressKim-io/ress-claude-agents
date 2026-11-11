@@ -152,7 +152,7 @@ When debugging a problem:
 
 ## Session Summary
 
-When generating a session summary (`/dx:log-summary`):
+When generating a session summary (`/devlog:log-summary`):
 
 1. **Scan** conversation context for significant activities
 2. **Group** by category (feedback, decision, meta, troubleshoot)
