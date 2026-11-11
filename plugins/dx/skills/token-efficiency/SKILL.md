@@ -29,7 +29,7 @@ Claude Code 세션에서 토큰 낭비를 줄이고 컨텍스트 윈도우를 �
     │
     ├─ 코드 내 문자열 ────────> Grep
     │
-    ├─ 구조적 탐색 ──────────> Task(Explore agent)
+    ├─ 구조적 탐색 ──────────> Agent(Explore agent)
     │
     └─ 외부 정보 필요 ────────> WebSearch (3-4회 이내)
 
@@ -38,11 +38,11 @@ Agent 위임할까?
     │
     ├─ 단순 1-2개 파일 수정 ──> 직접 처리
     │
-    ├─ 탐색 + 이해 필요 ─────> Task(Explore agent)
+    ├─ 탐색 + 이해 필요 ─────> Agent(Explore agent)
     │
-    ├─ 독립적 다수 작업 ─────> Task 병렬 실행
+    ├─ 독립적 다수 작업 ─────> Agent 병렬 실행
     │
-    └─ 복잡한 코드 작성 ─────> Task(general-purpose) + 줄 수 예산
+    └─ 복잡한 코드 작성 ─────> Agent(general-purpose) + 줄 수 예산
 ```
 
 ---
@@ -199,14 +199,14 @@ Read(file)   # 방금 쓴 내용을 다시 전체 읽기
 독립적인 작업은 반드시 동시 실행:
 
 # ✅ 병렬 실행 (1 turn에 모두)
-Task(Explore, "auth 구조 파악")     ─┐
-Task(Explore, "database 구조 파악")  ├─ 동시 실행
-Task(Explore, "API 엔드포인트 파악") ─┘
+Agent(Explore, "auth 구조 파악")     ─┐
+Agent(Explore, "database 구조 파악")  ├─ 동시 실행
+Agent(Explore, "API 엔드포인트 파악") ─┘
 
 # ❌ 순차 실행 (3 turns 소비)
-Task(Explore, "auth 구조 파악")      → 완료 대기
-Task(Explore, "database 구조 파악")  → 완료 대기
-Task(Explore, "API 엔드포인트 파악") → 완료 대기
+Agent(Explore, "auth 구조 파악")      → 완료 대기
+Agent(Explore, "database 구조 파악")  → 완료 대기
+Agent(Explore, "API 엔드포인트 파악") → 완료 대기
 ```
 
 ---
@@ -300,7 +300,7 @@ WebSearch("Next.js 15 changes")
 3. Read(specific_file) → 필요한 파일만 읽기
 
 # ✅ 구조적 탐색이 필요하면
-Task(Explore, "auth 시스템이 어떻게 구현되어 있는지 파악해줘")
+Agent(Explore, "auth 시스템이 어떻게 구현되어 있는지 파악해줘")
 
 # ❌ 비효율적 탐색
 Read(file1)  # 관련 없을 수도 있는 파일

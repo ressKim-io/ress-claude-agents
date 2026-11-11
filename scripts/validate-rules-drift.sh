@@ -41,7 +41,7 @@ section()  { printf '\n=== %s ===\n' "$1"; }
 #   - claude-(opus|sonnet|haiku)-3...      : 3-suffix 형식 (claude-haiku-3-20250522 등)
 #   - claude-(opus|sonnet|haiku)-4...      : 4.x 세대 (claude-opus-4-7 등)
 #
-# 정상: 현행 5.x 세대 (claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5, claude-fable-5-1)
+# 정상: 현행 5.x 세대 (claude-opus-5-5, claude-sonnet-5-5, claude-haiku-5-5, claude-fable-5-2, claude-fable-5-1)
 # 예시 코드가 복사돼 쓰이므로 활성 자산에는 현행 ID 만 둔다. 역사 기록(docs/)은 대상이 아니다.
 #
 # 검증 대상: .claude/ 활성 자산 + plugins/ + AGENTS.md

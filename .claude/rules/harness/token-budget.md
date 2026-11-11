@@ -39,8 +39,8 @@ Rules는 매 대화마다 주입되므로 핵심만 유지 — 상세는 `/dx:to
 - Opus 4.7 부터 쓰는 tokenizer: 같은 텍스트가 이전 모델보다 **최대 약 35%** 더 많은 토큰 사용. Opus 5.5·Sonnet 5.5 도 동일 계열
 - MUST `max_tokens` 에 여유를 둔다 — 공식 제안은 agentic 코딩 128,000 (상한 128K)
 - MUST 클라이언트 쪽 토큰 추정 로직 **재검증** (fixed ratio 가정 파기)
-- **최소 cacheable 길이**: 512 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5 / Fable 5.1), 2,048 (Opus 4.7), 4,096 (Opus 4.6 / 4.5 / Haiku 4.5). 짧은 prompt 는 cache 안 됨 (no error)
-- **캐시 단가**: 쓰기 5분 1.25x, 1시간 2x. 읽기 0.05x (Opus·Sonnet 5.5), 0.025x (Fable 5.1), 0.1x (Haiku 5.5 및 이전)
+- **최소 cacheable 길이**: 512 (Opus 5.5 / Sonnet 5.5 / Haiku 5.5 / Fable 5.2 / Fable 5.1), 2,048 (Opus 4.7), 4,096 (Opus 4.6 / 4.5 / Haiku 4.5). 짧은 prompt 는 cache 안 됨 (no error)
+- **캐시 단가**: 쓰기 5분 1.25x, 1시간 2x. 읽기 0.05x (Opus·Sonnet 5.5), 0.025x (Fable 5.2 / 5.1), 0.1x (Haiku 5.5 및 이전)
 - 요청 사이에 top-level effort 를 바꾸면 캐시가 깨진다
 - 5-min TTL (default, 자동 refresh) / 1-hour TTL
 
@@ -48,13 +48,13 @@ Rules는 매 대화마다 주입되므로 핵심만 유지 — 상세는 `/dx:to
 
 Claude Code 는 런타임이 관리하므로 **신경 쓰지 않는다.** Messages API 를 직접 호출할 때:
 
-| 항목 | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 | Fable 5.1 |
+| 항목 | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 | Fable 5.2 |
 |---|---|---|---|---|
 | `temperature` / `top_p` / `top_k` | 400 | 400 | 생략 권장 | 400 |
 | assistant prefill | 400 | 400 | 400 | 400 |
 | forced `tool_choice` (`any`, `tool`) | 400 | 400 | 허용 | 400 |
 
-- `thinking.budget_tokens` 는 Opus·Sonnet 5.5 에서 400. 깊이는 `output_config.effort` 로 제어한다
+- `thinking.budget_tokens` 는 Opus·Sonnet 5.5 와 Fable 5.x 에서 400. 깊이는 `output_config.effort` 로 제어한다
 - Opus 5.5 는 thinking 이 항상 켜져 있다. `thinking` 생략 = adaptive, `disabled` 는 400
 - Sonnet 5.5 에서 thinking 을 끄려면 `{"type": "between_tools"}`
 

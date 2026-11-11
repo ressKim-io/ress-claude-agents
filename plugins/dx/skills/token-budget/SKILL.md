@@ -158,7 +158,7 @@ output_config={"effort": "high"}
 
 > **Claude Code 미지원**. Messages API 직접 호출 시만 해당.
 >
-> 지원 모델: Fable 5.1, Fable 5, Mythos 5.1, Mythos 5, Opus 5.5, Opus 5, Sonnet 5.5, Haiku 5.5, Opus 4.8, Opus 4.7. Sonnet 5, Opus 4.6, Sonnet 4.6, Haiku 4.5 는 미지원.
+> 지원 모델: Fable 5.2, Fable 5.1, Fable 5, Mythos 5.2, Mythos 5.1, Mythos 5, Opus 5.5, Opus 5, Sonnet 5.5, Haiku 5.5, Opus 4.8, Opus 4.7. Sonnet 5, Opus 4.6, Sonnet 4.6, Haiku 4.5 는 미지원.
 
 ### 핵심 특성
 
@@ -223,7 +223,7 @@ output_config = {"task_budget": {"total": 128000, "remaining": 89000}}  # 매 tu
 | 1시간 캐시 쓰기 | 2.0x | $8/MTok |
 | **캐시 읽기** | **0.05x** | **$0.20/MTok (95% 절감)** |
 
-읽기 배수는 모델마다 다르다: Opus·Sonnet 5.5 는 0.05x, Fable 5.1 은 0.025x, Haiku 5.5 와 그 이전 모델은 0.1x.
+읽기 배수는 모델마다 다르다: Opus·Sonnet 5.5 는 0.05x, Fable 5.2·5.1 은 0.025x, Haiku 5.5 와 그 이전 모델은 0.1x.
 
 ROI: 1회 재사용만 해도 5분 TTL 회수, 2회면 1시간 TTL 회수.
 
@@ -332,10 +332,10 @@ thinking = {
 
 ### 거부되는 파라미터
 
-| 파라미터 | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 | Fable 5.1 |
+| 파라미터 | Opus 5.5 | Sonnet 5.5 | Haiku 5.5 | Fable 5.2 |
 |---|---|---|---|---|
 | `temperature` / `top_p` / `top_k` | 400 | 400 | 생략 권장 (400 여부 ⚠️ 문서 미기재) | 400 |
-| `thinking.budget_tokens` | 400 | 400 | ⚠️ 문서 미확인 | ⚠️ 문서 미확인 |
+| `thinking.budget_tokens` | 400 | 400 | ⚠️ 문서 미확인 | 400 |
 | assistant prefill | 400 | 400 | 400 | 400 |
 | forced `tool_choice` (`any`, `tool`) | 400 | 400 | **허용** | 400 |
 

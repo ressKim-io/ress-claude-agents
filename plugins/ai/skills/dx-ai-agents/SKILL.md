@@ -305,39 +305,26 @@ jobs:
 ### MCP (Model Context Protocol) 서버 설정
 
 ```json
-// .claude/mcp-config.json
+// .mcp.json (프로젝트 루트)
 {
   "mcpServers": {
     "github": {
       "command": "mcp-server-github",
-      "args": ["--repo", "org/repo"],
-      "permissions": {
-        "read": ["issues", "pull_requests", "code"],
-        "write": ["issues", "pull_requests"],
-        "admin": []
-      }
+      "args": ["--repo", "org/repo"]
     },
     "kubernetes": {
       "command": "mcp-server-kubernetes",
-      "args": ["--context", "development"],
-      "permissions": {
-        "read": ["pods", "deployments", "services"],
-        "write": [],
-        "admin": []
-      }
+      "args": ["--context", "development"]
     },
     "filesystem": {
       "command": "mcp-server-filesystem",
-      "args": ["--root", "/workspace"],
-      "permissions": {
-        "read": ["**/*"],
-        "write": ["src/**", "tests/**"],
-        "deny": ["**/.env*", "**/secrets/**"]
-      }
+      "args": ["--root", "/workspace"]
     }
   }
 }
 ```
+
+> `.mcp.json` 에는 서버별 권한 필드가 없다. 접근 범위는 서버 인자(`--context development`, `--root /workspace`)와 토큰 스코프로 좁히고, 도구 호출 허용 여부는 Claude Code settings 의 `permissions` 규칙으로 정한다 ([MCP docs](https://code.claude.com/docs/en/mcp)).
 
 ---
 

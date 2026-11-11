@@ -20,13 +20,15 @@
 
 | 모델 | ID | Context / 최대 출력 | 입력 | 5분 쓰기 | 1시간 쓰기 | 읽기 | 출력 | 상태 |
 |---|---|---|---|---|---|---|---|---|
+| Fable 5.2 | `claude-fable-5-2` | 1M / 128K | $8 | $10 | $16 | $0.20 | $40 | ✅ (2026-11-11 보강) |
 | Fable 5.1 | `claude-fable-5-1` | 1M / 128K | $10 | $12.50 | $20 | $0.25 | $50 | ✅ |
 | Opus 5.5 | `claude-opus-5-5` | 1M / 128K | $4 | $5 | $8 | $0.20 | $20 | ✅ |
 | Sonnet 5.5 | `claude-sonnet-5-5` | 1M / 128K | $2 | $2.50 | $4 | $0.10 | $10 | ✅ |
 | Haiku 5.5 | `claude-haiku-5-5` | 1M / 128K | $0.10 | $0.125 | $0.20 | $0.01 | $0.50 | ✅ |
 
 - 단위는 $/MTok. Haiku 5.5 는 100k 토큰 초과 프롬프트에 더 높은 단가가 적용된다 ✅
-- 캐시 읽기 배수는 Opus·Sonnet 5.5 가 0.05x, Fable 5.1 이 0.025x, 그 외 0.1x 다 ✅
+- 캐시 읽기 배수는 Opus·Sonnet 5.5 가 0.05x, Fable 5.2·5.1 이 0.025x, 그 외 0.1x 다 ✅
+- **2026-11-11 보강 (Fable 5.2)**: ID·가격·캐시 읽기 단가는 번들 `claude-api` skill(cached 2026-11-03), 쓰기 단가는 1.25x/2x 배수로 계산했다. "Fable 5.2 requires Claude Code v2.1.321 or later" ✅ ([model-config](https://code.claude.com/docs/en/model-config)). Claude Code 기본 effort `medium` 은 model-config 요약본을 두 번 거쳐 같은 값을 얻었다 ⚠️. API 기본 effort 는 `high` 다 (claude-api skill). Fable 5.2 도 `budget_tokens`·샘플링 파라미터·prefill·forced `tool_choice` 가 400 이다 (claude-api skill). Task budget 지원 목록의 Fable 5.2·Mythos 5.2 도 같은 skill 의 Task Budgets 절을 근거로 추가했다
 - Sonnet 4.5 는 2026-11-30 은퇴 예정이다. 대체 모델은 `claude-sonnet-5-5` 다 ✅
 
 ## 2. Effort
