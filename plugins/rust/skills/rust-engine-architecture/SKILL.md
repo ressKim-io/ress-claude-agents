@@ -208,7 +208,7 @@ impl Room {
 }
 ```
 
-- `BTreeMap::extract_if` (1.91+) 는 조건에 맞는 항목을 key 순서로 꺼내며 지운다. 그래서 `PeerLeft` 순서도 실행마다 같다. 테스트는 `room.handle_timeout(30_000)` 처럼 시각을 값으로 넘긴다. sleep 도 tokio runtime 도 필요 없다. `std::time::Instant` 는 숫자로 만들 수 없는 opaque 값(`now()` 에서 출발한다)이라 fixture 로 저장할 core 경계에서는 `u64` ms 나 newtype 을 쓴다. shell 은 `poll_timeout()` 시각에 `handle_timeout(now)` 을, 메시지가 오면 `handle_client(.., now)` 를 부르고 받은 `Outbound` 를 보낸다. 루프와 `select!` 는 [rust-async-tokio](../rust-async-tokio/SKILL.md), yrs 를 감싼 실제 Room 은 rust-crdt-sync.
+- `BTreeMap::extract_if` (1.91+) 는 조건에 맞는 항목을 key 순서로 꺼내며 지운다. 그래서 `PeerLeft` 순서도 실행마다 같다. 테스트는 `room.handle_timeout(30_000)` 처럼 시각을 값으로 넘긴다. sleep 도 tokio runtime 도 필요 없다. `std::time::Instant` 는 숫자로 만들 수 없는 opaque 값(`now()` 에서 출발한다)이라 fixture 로 저장할 core 경계에서는 `u64` ms 나 newtype 을 쓴다. shell 은 `poll_timeout()` 시각에 `handle_timeout(now)` 을, 메시지가 오면 `handle_client(.., now)` 를 부르고 받은 `Outbound` 를 보낸다. 루프와 `select!` 는 [rust-async-tokio](../rust-async-tokio/SKILL.md), yrs 를 감싼 실제 Room 은 [rust-crdt-sync](../rust-crdt-sync/SKILL.md).
 - **모든 엔진에 쓰지 않는다.** Polar Signals 는 이 방식의 단점으로 인지 부하와 driver 로 새는 로직을 꼽는다. 상태 없는 track-engine 은 `judge()` 하나로 충분하다.
 
 ## Spring 계층 → 엔진 매핑
@@ -343,7 +343,7 @@ pub const ENGINE_VERSION: u32 = 3;
 
 - [rust-idioms](../rust-idioms/SKILL.md) — Composed Method, lint 템플릿 전체, newtype 기본, 모듈·파일 분할 · rust-error-handling — 경계별 에러 enum, 분류 지점 한 곳, panic 정책 · [rust-async-tokio](../rust-async-tokio/SKILL.md) — CPU 오프로드(rayon vs spawn_blocking + Semaphore), 종료, 관측성
 - [rust-testing](../rust-testing/SKILL.md) — golden fixture, insta, fake vs mockall · rust-from-spring — Spring 개념 → Rust 대응표
-- [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) · rust-og-image-render · rust-crdt-sync · rust-geo-track — 엔진별 shell·core 세부 · `/architecture:hexagonal-clean-architecture` — Ports & Adapters 일반론 · `/dx:clean-code` — Composed Method·SLAP 원칙
+- [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) · rust-og-image-render · [rust-crdt-sync](../rust-crdt-sync/SKILL.md) · rust-geo-track — 엔진별 shell·core 세부 · `/architecture:hexagonal-clean-architecture` — Ports & Adapters 일반론 · `/dx:clean-code` — Composed Method·SLAP 원칙
 
 ## Sources / Verified
 

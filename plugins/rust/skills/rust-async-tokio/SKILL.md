@@ -138,7 +138,7 @@ impl StoreHandle {
 | `mpsc` (bounded) | 가득 차면 `send().await` 가 기다린다 → backpressure | actor 끼리 bounded 채널로 순환(A→B→A)하면 deadlock. 되돌리는 쪽은 `oneshot`·`try_send` |
 | `oneshot` | 요청 1번에 응답 1번 | 받는 쪽이 사라졌으면 `send` 가 Err — 무시해도 된다 |
 | `watch` | 마지막 값만 보관 | 중간 값은 건너뛴다 |
-| `broadcast` | 모든 receiver 에 복제 | 느린 receiver 는 `Lagged(n)` 뒤 계속 받는다. receiver 0개면 `send` 가 Err 다. 이후 send 까지 실패한다는 뜻은 아니다(새로 `subscribe` 가능). 버려도 되는 값이면 무시한다. Lagged 면 `resubscribe()` 먼저, 그다음 snapshot (rust-crdt-sync) |
+| `broadcast` | 모든 receiver 에 복제 | 느린 receiver 는 `Lagged(n)` 뒤 계속 받는다. receiver 0개면 `send` 가 Err 다. 이후 send 까지 실패한다는 뜻은 아니다(새로 `subscribe` 가능). 버려도 되는 값이면 무시한다. Lagged 면 `resubscribe()` 먼저, 그다음 snapshot ([rust-crdt-sync](../rust-crdt-sync/SKILL.md)) |
 
 ## 3. select! 와 취소 안전성
 
@@ -263,7 +263,7 @@ let processed = {
 sink.flush(processed).await;
 ```
 
-- 공개 trait 의 `async fn` 은 future 의 `Send` 를 보장하지 않는다 → `-> impl Future<Output = T> + Send`. dyn 이 필요할 때는 [rust-engine-architecture](../rust-engine-architecture/SKILL.md). yrs `Awareness` 는 기본 설정에서 `Send` 가 아니다 → rust-crdt-sync.
+- 공개 trait 의 `async fn` 은 future 의 `Send` 를 보장하지 않는다 → `-> impl Future<Output = T> + Send`. dyn 이 필요할 때는 [rust-engine-architecture](../rust-engine-architecture/SKILL.md). yrs `Awareness` 는 기본 설정에서 `Send` 가 아니다 → [rust-crdt-sync](../rust-crdt-sync/SKILL.md).
 
 ## 6. 관측성 — tracing, OpenTelemetry, metrics, health
 
@@ -359,7 +359,7 @@ pub fn load() -> Result<Settings, config::ConfigError> {
 
 ## 참조 스킬
 
-- [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) — 큐 루프, PgListener 전용 task, lease 반납 drain, heartbeat `/healthz` · rust-og-image-render — `try_acquire` → 503, 렌더 CPU 격리, 요청 timeout · rust-crdt-sync — 문서별 actor, 느린 클라이언트 backpressure, `Awareness` 의 Send
+- [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) — 큐 루프, PgListener 전용 task, lease 반납 drain, heartbeat `/healthz` · rust-og-image-render — `try_acquire` → 503, 렌더 CPU 격리, 요청 timeout · [rust-crdt-sync](../rust-crdt-sync/SKILL.md) — 문서별 actor, 느린 클라이언트 backpressure, `Awareness` 의 Send
 - rust-error-handling — `JoinError::is_panic`, panic 정책, 에러 enum 설계 · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — core crate 에 tokio 를 두지 않는 이유, async trait 의 Send·dyn 제약 · [rust-testing](../rust-testing/SKILL.md) — 동시성 테스트 배치와 이름
 - `/go:concurrency-go` — Go 의 goroutine·channel·Mutex 판단과 비교할 때 · `/observability:observability-otel` — Collector·샘플링 (계측 이후 단계)
 
