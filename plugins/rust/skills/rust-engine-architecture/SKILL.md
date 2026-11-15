@@ -343,7 +343,7 @@ pub const ENGINE_VERSION: u32 = 3;
 
 - [rust-idioms](../rust-idioms/SKILL.md) — Composed Method, lint 템플릿 전체, newtype 기본, 모듈·파일 분할 · [rust-error-handling](../rust-error-handling/SKILL.md) — 경계별 에러 enum, 분류 지점 한 곳, panic 정책 · [rust-async-tokio](../rust-async-tokio/SKILL.md) — CPU 오프로드(rayon vs spawn_blocking + Semaphore), 종료, 관측성
 - [rust-testing](../rust-testing/SKILL.md) — golden fixture, insta, fake vs mockall · rust-from-spring — Spring 개념 → Rust 대응표
-- [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) · rust-og-image-render · [rust-crdt-sync](../rust-crdt-sync/SKILL.md) · rust-geo-track — 엔진별 shell·core 세부 · `/architecture:hexagonal-clean-architecture` — Ports & Adapters 일반론 · `/dx:clean-code` — Composed Method·SLAP 원칙
+- [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) · rust-og-image-render · [rust-crdt-sync](../rust-crdt-sync/SKILL.md) · [rust-geo-track](../rust-geo-track/SKILL.md) — 엔진별 shell·core 세부 · `/architecture:hexagonal-clean-architecture` — Ports & Adapters 일반론 · `/dx:clean-code` — Composed Method·SLAP 원칙
 
 ## Sources / Verified
 
