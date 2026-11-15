@@ -309,7 +309,7 @@ let png = tokio::task::spawn_blocking(move || {
 | Dockerfile·빌드 이미지 변경 | `infra:dockerfile-reviewer` | release profile 은 이 agent, 이미지 구성은 dockerfile-reviewer |
 | tracing·metrics·OpenTelemetry 설정 | `observability:observability-reviewer` | 이 agent 는 async·종료 경로만 본다 |
 | 운영 중 멈춤·deadlock 이 재현됨 | `sre:debugging-expert` | 이 agent 는 정적으로 의심되는 지점만, 재현·근본 원인은 debugging-expert |
-| 메인 대화에서 가볍게 | `review` command | 같은 체크리스트의 경량판. cargo 실행과 8개 관점 전수가 필요하면 이 agent |
+| 메인 대화에서 가볍게 | `/rust:review` command | 같은 체크리스트의 경량판. cargo 실행과 8개 관점 전수가 필요하면 이 agent |
 
 ## Examples
 
@@ -350,7 +350,7 @@ let png = tokio::task::spawn_blocking(move || {
 ## 참조 스킬
 
 - `/rust:rust-idioms` · `/rust:rust-error-handling` · `/rust:rust-async-tokio` · `/rust:rust-engine-architecture` · `/rust:rust-testing` · `/rust:rust-from-spring`
-- 도메인: `/rust:rust-pg-queue-worker` · `/rust:rust-geo-track` · `/rust:rust-og-image-render` · `/rust:rust-crdt-sync` / command: `review` · `/rust:lint` / 언어 공통: `/dx:clean-code` · `/dx:negative-path-coverage`
+- 도메인: `/rust:rust-pg-queue-worker` · `/rust:rust-geo-track` · `/rust:rust-og-image-render` · `/rust:rust-crdt-sync` / command: `/rust:review` · `/rust:lint` / 언어 공통: `/dx:clean-code` · `/dx:negative-path-coverage`
 - rule: [Rust rule](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/lang/rust.md) · [code-review rule](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/process/code-review.md)
 
 ## Sources / Verified

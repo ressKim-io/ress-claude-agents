@@ -10,7 +10,7 @@
 # 일부만 사라져도 잡히도록 여유 없이 현재 개수로 둔다.
 MIN_SKILLS=282
 MIN_AGENTS=35
-MIN_COMMANDS=44
+MIN_COMMANDS=47
 MIN_RULES=27
 
 # plugins/ 가 없으면 빈 목록을 돌려주고, 하한 검사(assert_floor)가 실패시킨다.
