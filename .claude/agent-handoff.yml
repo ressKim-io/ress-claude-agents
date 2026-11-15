@@ -151,6 +151,10 @@ agents:
     consumes: [pr, code]
     produces: [code-review-comment]
 
+  rust-reviewer:
+    consumes: [pr, code]
+    produces: [code-review-comment]
+
   k8s-reviewer:
     consumes: [k8s-manifest, helm-chart]
     produces: [code-review-comment]
