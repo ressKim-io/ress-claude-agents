@@ -340,7 +340,7 @@ pub fn next_state(state: JobState, event: JobEvent) -> Option<JobState> {
 ## 참조 스킬
 
 - [rust-error-handling](../rust-error-handling/SKILL.md) — `check_x()?` 가 돌려주는 에러 타입 설계, `expect`·panic 정책 · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — core/shell workspace, core 전용 clippy.toml, 단위 newtype
-- [rust-testing](../rust-testing/SKILL.md) — `#[cfg(test)] mod tests`·`tests/` 배치, `should_x_when_y` 이름 · rust-from-spring — Spring 개념 → Rust 대응표
+- [rust-testing](../rust-testing/SKILL.md) — `#[cfg(test)] mod tests`·`tests/` 배치, `should_x_when_y` 이름 · [rust-from-spring](../rust-from-spring/SKILL.md) — Spring 개념 → Rust 대응표
 - `/dx:clean-code` — Composed Method·SLAP·Guard Clause 원칙 (Java·Go 예시) · `/dx:refactoring-principles` — 동작을 유지하며 단계적으로 쪼개는 절차
 
 ## Sources / Verified
