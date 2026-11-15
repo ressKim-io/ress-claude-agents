@@ -7,6 +7,7 @@
     { "name": "java", "source": "./plugins/java", "category": "language" },
     { "name": "python", "source": "./plugins/python", "category": "language" },
     { "name": "frontend", "source": "./plugins/frontend", "category": "language" },
+    { "name": "rust", "source": "./plugins/rust", "category": "language" },
     { "name": "architecture", "source": "./plugins/architecture", "category": "design" },
     { "name": "messaging", "source": "./plugins/messaging", "category": "design" },
     { "name": "k8s", "source": "./plugins/k8s", "category": "infra" },

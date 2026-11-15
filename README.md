@@ -16,6 +16,7 @@ Each plugin's README lists its skills, agents and commands, the plugins it pairs
 | Languages | [`go`](plugins/go/README.md) | Go concurrency, database access, Gin, microservices, performance, testing |
 | | [`java`](plugins/java/README.md) | Java and Spring: Data, Security, Cache, jOOQ, JVM performance, testing |
 | | [`python`](plugins/python/README.md) | FastAPI, Django, asyncio, performance, testing |
+| | [`rust`](plugins/rust/README.md) | Rust engines: core/shell crates, error boundaries, Tokio, Postgres queue workers, OG image rendering, CRDT sync, GPS track matching |
 | | [`frontend`](plugins/frontend/README.md) | React, Next.js, TypeScript, state management, CSS, web performance |
 | Design | [`architecture`](plugins/architecture/README.md) | MSA, DDD, Saga, CQRS, API design, gRPC, modular monoliths, high traffic |
 | | [`messaging`](plugins/messaging/README.md) | Kafka, RabbitMQ, NATS, Redis Streams, AWS messaging, broker incidents |

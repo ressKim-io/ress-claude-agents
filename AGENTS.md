@@ -15,7 +15,7 @@ Claude Code, Cursor, GitHub Copilot, Codex, Gemini CLI, Windsurf 등 [Linux Foun
 
 | 자산 | 위치 | 내용 |
 |---|---|---|
-| Skills, Agents, Commands (영역별) | `plugins/<plugin>/` | 언어 `go` `java` `python` `frontend` · 설계 `architecture` `messaging` · 인프라 `k8s` `service-mesh` `infra` `cicd` · 운영 `observability` `sre` `platform` · 보안·제품 `security` `saas` `ai` · 공통 `dx` `devlog` |
+| Skills, Agents, Commands (영역별) | `plugins/<plugin>/` | 언어 `go` `java` `python` `frontend` `rust` · 설계 `architecture` `messaging` · 인프라 `k8s` `service-mesh` `infra` `cicd` · 운영 `observability` `sre` `platform` · 보안·제품 `security` `saas` `ai` · 공통 `dx` `devlog` |
 | Rules (코딩/보안/워크플로우) | `.claude/rules/` | 이 AGENTS.md의 상세판. effort-guide, multi-tool-adapter 포함 |
 | Templates (작성 표준) | `.claude/templates/` | SKILL-SPEC, AGENT-SPEC + 문서 template (신규 자산 작성 spec) |
 
@@ -195,6 +195,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | Java/Spring | [.claude/rules/lang/java.md](.claude/rules/lang/java.md), [spring.md](.claude/rules/lang/spring.md) | `plugins/java/` |
 | Python | — | `plugins/python/` |
 | Frontend (React/Next.js/TS) | — | `plugins/frontend/` |
+| Rust | [.claude/rules/lang/rust.md](.claude/rules/lang/rust.md) | `plugins/rust/` |
 
 ---
 
@@ -259,7 +260,7 @@ EXPLORE/PLAN 생략한 multi-file 변경 금지.
 | `documentation.md` | 11종 템플릿 | Documentation |
 | `user-approval.md` | 외부 작업 승인 | User Approval |
 | `cloud-cli-safety.md` | AWS/GCP 위험 명령 | Cloud CLI Safety |
-| `go.md`, `java.md`, `spring.md` | 언어별 | Language-Specific |
+| `go.md`, `java.md`, `spring.md`, `rust.md` | 언어별 | Language-Specific |
 | `version-compatibility.md` | 의존성 매트릭스 관리 (K8s/Istio/ArgoCD/OTel) | (path-scoped: Chart.yaml, values, build.gradle 등) |
 | `config-contract-audit.md` | 명시값+기본값+환경별 override 3단계 검증 | (universal — 모든 config 작업) |
 | `professional-writing.md` | 포트폴리오/슬라이드 카피 원칙 | (rare — 자기 어필 글쓰기 시) |

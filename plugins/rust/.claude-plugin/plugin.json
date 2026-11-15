@@ -1,0 +1,6 @@
+{
+  "name": "rust",
+  "description": "Rust — 관용 패턴, 에러 경계, 엔진 core/shell 구조, Tokio, Postgres 큐 워커, OG 이미지 렌더, CRDT 동기화, GPS 트랙 판정, 테스트",
+  "author": { "name": "ressKim-io" },
+  "license": "MIT"
+}
