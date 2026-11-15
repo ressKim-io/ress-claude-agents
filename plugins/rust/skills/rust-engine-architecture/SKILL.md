@@ -169,7 +169,7 @@ pub struct Judgement { pub engine_version: u32, pub verdict: Verdict }
 ```
 
 - `#[must_use]` 는 함수에도 붙일 수 있지만, **타입**에 붙이면 그 타입 값을 버리는 모든 호출에 적용된다. 그래서 `judge()` 에 또 붙이지 않는다 (fn 에 메시지 없는 `#[must_use]` 를 더 붙이면 clippy `double_must_use`). `#[non_exhaustive]` 는 정의한 crate 밖의 match 에 wildcard 를 강제한다. workspace 내부 enum 에 붙이면 worker 가 새 variant 누락을 컴파일 에러로 잡지 못한다.
-- 인자가 늘면 `Params` 구조체로 묶는다 (`too_many_arguments` 기본 7). 에러 enum 설계는 rust-error-handling, og-render 의 `render(spec, assets)` 도 같은 모양이다 (rust-og-image-render). shell 이 `spawn_blocking` 으로 돌린 계산은 시작된 뒤에는 abort 할 수 없다. 입력 크기 상한(포인트 수 등)은 core 의 `validate_input` 이 `Rejected` 로 처리한다.
+- 인자가 늘면 `Params` 구조체로 묶는다 (`too_many_arguments` 기본 7). 에러 enum 설계는 [rust-error-handling](../rust-error-handling/SKILL.md), og-render 의 `render(spec, assets)` 도 같은 모양이다 (rust-og-image-render). shell 이 `spawn_blocking` 으로 돌린 계산은 시작된 뒤에는 abort 할 수 없다. 입력 크기 상한(포인트 수 등)은 core 의 `validate_input` 이 `Rejected` 로 처리한다.
 
 ### sans-IO 상태기계 (CRDT sync engine)
 
@@ -222,7 +222,7 @@ impl Room {
 | DI 컨테이너 | `main` 에서 직접 조립 | config → pool → listener → loops | `#[derive(Clone)] AppState` + `State<T>` | 같음 |
 | 패키지(`controller`·`service`·`repository`) | 기능별 파일 (예시) | track-worker `main.rs`(조립)·`runner.rs`(loop·fill·`process_job`)·`claim.rs`·`store.rs`(입력 load·fencing finish)·`outcome.rs`(`classify_*`·`apply_outcome`)·`listener.rs`·`reaper.rs`·`ops.rs`(`/healthz`·`/metrics`). core 는 위 §상태 없는 판정 함수 | og-server `render.rs` + `render/{handler,limits}.rs`·`error.rs`(`OgError`). og-core 는 rust-og-image-render §1 | sync-core `room.rs`·`authorize.rs`·`error.rs`(`RoomError`). sync-server `connect.rs`(토큰·upgrade)·`peer.rs`(연결 task)·`actor.rs`·`registry.rs`·`journal.rs`·`error.rs`(`SyncError`) |
 
-rust-analyzer 아키텍처 문서도 core 가 외부와 통신하지 않는다는 점을 "Architecture Invariant" 로 적는다. shell 의 작업 하나는 "값을 읽는다 → 순수 계산 → 결과를 쓴다" 순서다. 실패는 `classify_*` 가 `JobFailure` 로 바꾼다. `classify_*` 는 원인을 감싸기만 하는 변환이 아니라 재시도·dead 를 가르는 분류다. rule 이 `map_err` 를 허용하는 자리가 바로 이것이다. 계산은 `CpuGate::run` 으로 보낸다. `CpuGate` 는 [rust-async-tokio](../rust-async-tokio/SKILL.md), `JobFailure`·`classify_join` 은 rust-error-handling, `ComputeError`·`classify_sqlx`·`classify_compute` 와 lease 를 확인하는 finish(`judge_and_finish`, lease 를 잃으면 `JobFailure::LeaseLost`)는 [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) 에 있다. 아래 `save_result` 는 그 finish 를 줄여 쓴 것이다. `load_inputs` 는 `fetch_optional` 로 읽어 `Option` 을 돌려준다. Go 가 activity 를 지운 경우는 장애가 아니라 core 의 `Rejected` 판정으로 저장한다. `fetch_one` 을 쓰면 `RowNotFound` 가 `classify_sqlx` 에서 Transient 가 되어 재시도를 다 쓴 뒤 dead 로 간다 (rust-pg-queue-worker §4). core 진입점의 정식 모양은 `judge(raw, course, params)` 이고, 다른 skill 의 `judge(..)` 호출은 이것을 줄여 쓴 것이다.
+rust-analyzer 아키텍처 문서도 core 가 외부와 통신하지 않는다는 점을 "Architecture Invariant" 로 적는다. shell 의 작업 하나는 "값을 읽는다 → 순수 계산 → 결과를 쓴다" 순서다. 실패는 `classify_*` 가 `JobFailure` 로 바꾼다. `classify_*` 는 원인을 감싸기만 하는 변환이 아니라 재시도·dead 를 가르는 분류다. rule 이 `map_err` 를 허용하는 자리가 바로 이것이다. 계산은 `CpuGate::run` 으로 보낸다. `CpuGate` 는 [rust-async-tokio](../rust-async-tokio/SKILL.md), `JobFailure`·`classify_join` 은 [rust-error-handling](../rust-error-handling/SKILL.md), `ComputeError`·`classify_sqlx`·`classify_compute` 와 lease 를 확인하는 finish(`judge_and_finish`, lease 를 잃으면 `JobFailure::LeaseLost`)는 [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) 에 있다. 아래 `save_result` 는 그 finish 를 줄여 쓴 것이다. `load_inputs` 는 `fetch_optional` 로 읽어 `Option` 을 돌려준다. Go 가 activity 를 지운 경우는 장애가 아니라 core 의 `Rejected` 판정으로 저장한다. `fetch_one` 을 쓰면 `RowNotFound` 가 `classify_sqlx` 에서 Transient 가 되어 재시도를 다 쓴 뒤 dead 로 간다 (rust-pg-queue-worker §4). core 진입점의 정식 모양은 `judge(raw, course, params)` 이고, 다른 skill 의 `judge(..)` 호출은 이것을 줄여 쓴 것이다.
 
 ```rust
 pub(crate) async fn process_job(
@@ -341,7 +341,7 @@ pub const ENGINE_VERSION: u32 = 3;
 
 ## 참조 스킬
 
-- [rust-idioms](../rust-idioms/SKILL.md) — Composed Method, lint 템플릿 전체, newtype 기본, 모듈·파일 분할 · rust-error-handling — 경계별 에러 enum, 분류 지점 한 곳, panic 정책 · [rust-async-tokio](../rust-async-tokio/SKILL.md) — CPU 오프로드(rayon vs spawn_blocking + Semaphore), 종료, 관측성
+- [rust-idioms](../rust-idioms/SKILL.md) — Composed Method, lint 템플릿 전체, newtype 기본, 모듈·파일 분할 · [rust-error-handling](../rust-error-handling/SKILL.md) — 경계별 에러 enum, 분류 지점 한 곳, panic 정책 · [rust-async-tokio](../rust-async-tokio/SKILL.md) — CPU 오프로드(rayon vs spawn_blocking + Semaphore), 종료, 관측성
 - [rust-testing](../rust-testing/SKILL.md) — golden fixture, insta, fake vs mockall · rust-from-spring — Spring 개념 → Rust 대응표
 - [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) · rust-og-image-render · [rust-crdt-sync](../rust-crdt-sync/SKILL.md) · rust-geo-track — 엔진별 shell·core 세부 · `/architecture:hexagonal-clean-architecture` — Ports & Adapters 일반론 · `/dx:clean-code` — Composed Method·SLAP 원칙
 

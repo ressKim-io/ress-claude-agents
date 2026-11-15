@@ -71,7 +71,7 @@ fn check_duplicate_nickname(repo: &UserRepo, nickname: &str) -> Result<(), UserE
 }
 ```
 
-- **clippy 는 BAD 를 잡지 못한다.** 아래 템플릿(`excessive-nesting-threshold = 4`)으로 돌려도 경고가 없다 (로컬 실측). Composed Method 는 리뷰 기준이다. async service 도 모양은 같다: `check_duplicate_nickname(repo, nickname.as_str()).await?`. `UserError` 설계는 rust-error-handling
+- **clippy 는 BAD 를 잡지 못한다.** 아래 템플릿(`excessive-nesting-threshold = 4`)으로 돌려도 경고가 없다 (로컬 실측). Composed Method 는 리뷰 기준이다. async service 도 모양은 같다: `check_duplicate_nickname(repo, nickname.as_str()).await?`. `UserError` 설계는 [rust-error-handling](../rust-error-handling/SKILL.md)
 
 ```rust
 let job_label = {
@@ -222,7 +222,7 @@ src/
 ```
 
 - `foo.rs` + `foo/` 를 쓴다 (Book 7.5 "most idiomatic"). `foo/mod.rs` 는 older style 이고, 같은 모듈에 둘 다 있으면 E0761. 예외는 `tests/common/mod.rs` (Book 11.3). 파일 이름은 주 타입 이름, non-leaf 모듈은 선언·re-export 만 둔다 (Google). `user/user.rs` 처럼 같은 이름을 중첩하면 clippy `module_inception`(style) 경고
-- 모듈은 기능(`user`, `order`) 단위로 묶고 `utils`·`traits`·`errors` 같은 기술 분류는 피한다 (`traits`·`errors` 는 M-BALANCED-MODULES — library 지침을 앱에 유추 적용, `utils` 는 같은 이유로 확장). 앱 경계 `AppError` 하나를 담는 `error.rs` 는 예외 (rust-error-handling)
+- 모듈은 기능(`user`, `order`) 단위로 묶고 `utils`·`traits`·`errors` 같은 기술 분류는 피한다 (`traits`·`errors` 는 M-BALANCED-MODULES — library 지침을 앱에 유추 적용, `utils` 는 같은 이유로 확장). 앱 경계 `AppError` 하나를 담는 `error.rs` 는 예외 ([rust-error-handling](../rust-error-handling/SKILL.md))
 
 가시성은 Java 와 경계가 다르다. **Rust 의 캡슐화 단위는 타입이 아니라 모듈**이라, 같은 모듈 안 코드는 private 필드도 본다.
 
@@ -339,7 +339,7 @@ pub fn next_state(state: JobState, event: JobEvent) -> Option<JobState> {
 
 ## 참조 스킬
 
-- rust-error-handling — `check_x()?` 가 돌려주는 에러 타입 설계, `expect`·panic 정책 · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — core/shell workspace, core 전용 clippy.toml, 단위 newtype
+- [rust-error-handling](../rust-error-handling/SKILL.md) — `check_x()?` 가 돌려주는 에러 타입 설계, `expect`·panic 정책 · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — core/shell workspace, core 전용 clippy.toml, 단위 newtype
 - [rust-testing](../rust-testing/SKILL.md) — `#[cfg(test)] mod tests`·`tests/` 배치, `should_x_when_y` 이름 · rust-from-spring — Spring 개념 → Rust 대응표
 - `/dx:clean-code` — Composed Method·SLAP·Guard Clause 원칙 (Java·Go 예시) · `/dx:refactoring-principles` — 동작을 유지하며 단계적으로 쪼개는 절차
 
