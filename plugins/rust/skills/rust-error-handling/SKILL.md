@@ -313,7 +313,7 @@ pub fn error_chain(e: &dyn std::error::Error) -> String {
 ## 참조 스킬
 
 - [rust-idioms](../rust-idioms/SKILL.md) — `fn -> Result` + `?` 로 쓰는 Composed Method, newtype 검증(`Email::parse`) · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — core/shell 분리, `Verdict` 가 core 에 있는 이유 · [rust-async-tokio](../rust-async-tokio/SKILL.md) — `JoinSet`·`TaskTracker` 실패 전파, graceful shutdown · [rust-testing](../rust-testing/SKILL.md) — 테스트 배치·이름·실제 DB 테스트
-- [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) — `classify_sqlx`·SQLSTATE 표, `apply_outcome` SQL, backoff, dead, lease fencing · [rust-crdt-sync](../rust-crdt-sync/SKILL.md) — WebSocket 메시지별 권한, 문서 actor, `RoomError`(yrs 에러 분류) · rust-og-image-render — `OgError` 400/503/500 적용 · rust-from-spring — `@ControllerAdvice` 밖의 Spring 대응표
+- [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) — `classify_sqlx`·SQLSTATE 표, `apply_outcome` SQL, backoff, dead, lease fencing · [rust-crdt-sync](../rust-crdt-sync/SKILL.md) — WebSocket 메시지별 권한, 문서 actor, `RoomError`(yrs 에러 분류) · [rust-og-image-render](../rust-og-image-render/SKILL.md) — `OgError` 400/503/500 적용 · rust-from-spring — `@ControllerAdvice` 밖의 Spring 대응표
 - `/java:spring-patterns` — Spring `@RestControllerAdvice` 쪽 비교 · `/architecture:api-design` — 에러 응답 body 형식(RFC 9457) · `/dx:negative-path-coverage` — 에러 경로 테스트 목록
 
 ## Sources / Verified

@@ -144,7 +144,7 @@ async fn check_duplicate_nickname(repo: &UserRepo, nickname: &str) -> Result<(),
 - `/rust:rust-async-tokio` — CPU 오프로드, 채널·actor, graceful shutdown, 관측
 - `/rust:rust-testing` — 테스트 배치, proptest·insta, 실제 DB 테스트
 - `/rust:rust-pg-queue-worker` — Postgres 테이블 큐 워커
-- `rust-og-image-render` — OG 미리보기 이미지 렌더링
+- `/rust:rust-og-image-render` — OG 미리보기 이미지 렌더링
 - `/rust:rust-crdt-sync` — CRDT 협업 편집 동기화
 - `/rust:rust-geo-track` — GPS 트랙 구간 판정·부정 기록 필터
 - 언어 공통 원칙: `/dx:clean-code`

@@ -81,7 +81,7 @@ let job_label = {
 };
 ```
 
-사용자에게 보이는 텍스트는 char 가 아니라 grapheme 단위로 자른다 (이모지·결합 문자). rust-og-image-render 참고.
+사용자에게 보이는 텍스트는 char 가 아니라 grapheme 단위로 자른다 (이모지·결합 문자). [rust-og-image-render](../rust-og-image-render/SKILL.md) 참고.
 
 ## helper 추출 시 borrow 충돌 (E0502)
 
