@@ -35,7 +35,7 @@ cp -r plugins/rust/skills/<이름> <프로젝트>/.claude/skills/
 
 **권한 규칙** (`permissions.deny`) 도 실리지 않는다. agent 의 Permission Boundary 는 설치본에서 강제되지 않는 안내문이다.
 
-## Skills (7)
+## Skills (8)
 
 | 이름 | 설명 |
 |---|---|
@@ -43,6 +43,7 @@ cp -r plugins/rust/skills/<이름> <프로젝트>/.claude/skills/
 | `/rust:rust-crdt-sync` | Rust CRDT 협업 편집 동기화 — yrs·automerge·loro 선택, 문서당 actor, y-sync·awareness, 메시지 단위 권한 필터, update … |
 | `/rust:rust-engine-architecture` | Rust 계산 엔진 구조 — IO 없는 core·얇은 shell crate(Functional Core·sans-IO), 경계 CI 검사, concrete·generic·dyn 의존성 선택, … |
 | `/rust:rust-error-handling` | Rust 에러 설계 — thiserror·anyhow 선택, From 과 ? 로 변환 모으기, 판정 결과(Ok)와 Err 구분, HTTP·큐 워커·WebSocket 경계마다 분류 지점 하나, … |
+| `/rust:rust-geo-track` | Rust GPS 트랙 판정 — geo crate 거리 API·미터 평면 투영, 방향 게이트·순서 체크포인트·corridor 커버리지 구간 판정, 순간이동·과속·시간 역행 탐지, 수치 안정성, … |
 | `/rust:rust-idioms` | Rust 관용 패턴 — Composed Method 를 ?·free fn 으로 쓰기, helper 추출 시 borrow 충돌(E0502) 회피, let-else·let chains 로 중첩 … |
 | `/rust:rust-pg-queue-worker` | Postgres 테이블 큐 워커 (Rust·sqlx) — FOR UPDATE SKIP LOCKED claim, LISTEN/NOTIFY 와 polling fallback, … |
 | `/rust:rust-testing` | Rust 테스트 — #[cfg(test)] 단위와 tests/ 통합 테스트 배치, proptest 속성 테스트, insta·golden fixture, #[sqlx::test] 실제 DB, … |
