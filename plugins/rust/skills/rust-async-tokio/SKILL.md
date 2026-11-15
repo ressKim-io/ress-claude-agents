@@ -263,7 +263,7 @@ let processed = {
 sink.flush(processed).await;
 ```
 
-- 공개 trait 의 `async fn` 은 future 의 `Send` 를 보장하지 않는다 → `-> impl Future<Output = T> + Send`. dyn 이 필요할 때는 rust-engine-architecture. yrs `Awareness` 는 기본 설정에서 `Send` 가 아니다 → rust-crdt-sync.
+- 공개 trait 의 `async fn` 은 future 의 `Send` 를 보장하지 않는다 → `-> impl Future<Output = T> + Send`. dyn 이 필요할 때는 [rust-engine-architecture](../rust-engine-architecture/SKILL.md). yrs `Awareness` 는 기본 설정에서 `Send` 가 아니다 → rust-crdt-sync.
 
 ## 6. 관측성 — tracing, OpenTelemetry, metrics, health
 
@@ -360,7 +360,7 @@ pub fn load() -> Result<Settings, config::ConfigError> {
 ## 참조 스킬
 
 - rust-pg-queue-worker — 큐 루프, PgListener 전용 task, lease 반납 drain, heartbeat `/healthz` · rust-og-image-render — `try_acquire` → 503, 렌더 CPU 격리, 요청 timeout · rust-crdt-sync — 문서별 actor, 느린 클라이언트 backpressure, `Awareness` 의 Send
-- rust-error-handling — `JoinError::is_panic`, panic 정책, 에러 enum 설계 · rust-engine-architecture — core crate 에 tokio 를 두지 않는 이유, async trait 의 Send·dyn 제약 · rust-testing — 동시성 테스트 배치와 이름
+- rust-error-handling — `JoinError::is_panic`, panic 정책, 에러 enum 설계 · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — core crate 에 tokio 를 두지 않는 이유, async trait 의 Send·dyn 제약 · rust-testing — 동시성 테스트 배치와 이름
 - `/go:concurrency-go` — Go 의 goroutine·channel·Mutex 판단과 비교할 때 · `/observability:observability-otel` — Collector·샘플링 (계측 이후 단계)
 
 ## Sources / Verified
