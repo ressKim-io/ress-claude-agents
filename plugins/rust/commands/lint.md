@@ -5,7 +5,7 @@ description: "cargo fmt·clippy 로 이슈를 찾고 요청하면 수정합니�
 # Rust Lint
 
 `cargo fmt --check` 와 `cargo clippy` 로 경고를 보고합니다. `--fix` 로 부르면 작업 트리가 깨끗할 때만 기계적으로 고칠 수 있는 것을 고치고 다시 검사합니다.
-lint 레벨·threshold 의 근거와 전체 템플릿은 `rust-idioms` (Lint 로 강제) 에 있습니다.
+lint 레벨·threshold 의 근거와 전체 템플릿은 `/rust:rust-idioms` (Lint 로 강제) 에 있습니다.
 
 ## Contract
 
