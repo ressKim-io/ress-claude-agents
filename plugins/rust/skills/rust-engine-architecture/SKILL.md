@@ -269,7 +269,7 @@ pub(crate) trait JobStore {
 }
 ```
 
-- stable 에서는 trait 에 그냥 `async fn` 을 쓰면 반환 future 에 `Send` 를 요구할 수 없다 (return type notation `S: Trait<method(..): Send>` 은 로컬 1.96 에서 E0658 experimental, 최신 stable(1.100) 릴리스 노트까지 안정화 기록 없음). 로컬 실측(rustc 1.96)에서 generic 코드의 `tokio::spawn` 이 "future cannot be sent between threads safely" 로 실패했고, bin crate 의 `pub trait` 에서도 `async_fn_in_trait` 경고가 났다. 위처럼 쓰거나 `#[trait_variant::make(Send)]` 로 trait 를 Send bound 판으로 다시 쓴다. 구현(`impl JobStore for ActivityStore`)과 fake 는 `async fn` 으로 써도 된다. fake 는 `Mutex<Vec<..>>` 에 저장 결과를 모으는 struct 하나면 된다 (rust-testing). port 의 `StoreError` 는 `#[error("database error")] Db(#[from] sqlx::Error)` 처럼 원인을 담는 enum 으로 둔다. 분류는 그 안의 `sqlx::Error` 를 꺼내 `classify_sqlx` 에 넘긴다 (`StoreError::Db(e) => classify_sqlx(e)`). 원인을 버리는 `From` 은 SQLSTATE 분류를 깨뜨린다. rust-testing 의 fake·mock 이 쓰는 `StoreError::Db` 와 같은 모양이다.
+- stable 에서는 trait 에 그냥 `async fn` 을 쓰면 반환 future 에 `Send` 를 요구할 수 없다 (return type notation `S: Trait<method(..): Send>` 은 로컬 1.96 에서 E0658 experimental, 최신 stable(1.100) 릴리스 노트까지 안정화 기록 없음). 로컬 실측(rustc 1.96)에서 generic 코드의 `tokio::spawn` 이 "future cannot be sent between threads safely" 로 실패했고, bin crate 의 `pub trait` 에서도 `async_fn_in_trait` 경고가 났다. 위처럼 쓰거나 `#[trait_variant::make(Send)]` 로 trait 를 Send bound 판으로 다시 쓴다. 구현(`impl JobStore for ActivityStore`)과 fake 는 `async fn` 으로 써도 된다. fake 는 `Mutex<Vec<..>>` 에 저장 결과를 모으는 struct 하나면 된다 ([rust-testing](../rust-testing/SKILL.md)). port 의 `StoreError` 는 `#[error("database error")] Db(#[from] sqlx::Error)` 처럼 원인을 담는 enum 으로 둔다. 분류는 그 안의 `sqlx::Error` 를 꺼내 `classify_sqlx` 에 넘긴다 (`StoreError::Db(e) => classify_sqlx(e)`). 원인을 버리는 `From` 은 SQLSTATE 분류를 깨뜨린다. [rust-testing](../rust-testing/SKILL.md) 의 fake·mock 이 쓰는 `StoreError::Db` 와 같은 모양이다.
 - axum 의 dependency-injection 예제는 "Using trait objects is recommended unless you really need generics" 라고 쓰지만 예제 trait 가 **sync** 다. async repository 에 옮기면 위 E0038 이 난다. Google 가이드: "Don't use traits merely to organize code". `XxxService` + `XxxServiceImpl` 쌍을 만들지 않는다.
 
 ## 결정성 — 같은 입력이면 같은 출력
@@ -304,7 +304,7 @@ impl Peer {
 pub const ENGINE_VERSION: u32 = 3;
 ```
 
-- `CARGO_PKG_VERSION` 에 묶으면 출력과 무관한 변경에도 재판정이 쏟아지고, 반대로 geo·libm·툴체인을 올려 출력이 바뀐 경우는 놓친다. 결과는 `(activity_id, engine_version)` 으로 upsert 한다. 이전 버전 결과가 남아 비교와 롤백이 된다. SQL 은 [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md). golden snapshot 본문에 `engine_version` 을 넣어 버전과 출력이 함께 리뷰되게 한다 (rust-testing).
+- `CARGO_PKG_VERSION` 에 묶으면 출력과 무관한 변경에도 재판정이 쏟아지고, 반대로 geo·libm·툴체인을 올려 출력이 바뀐 경우는 놓친다. 결과는 `(activity_id, engine_version)` 으로 upsert 한다. 이전 버전 결과가 남아 비교와 롤백이 된다. SQL 은 [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md). golden snapshot 본문에 `engine_version` 을 넣어 버전과 출력이 함께 리뷰되게 한다 ([rust-testing](../rust-testing/SKILL.md)).
 - 올리는 규칙은 업계 표준 출처가 없는 **설계 제안**이다 (⚠️ 팀 합의 필요): golden diff 가 생기면 올리고, 없으면 유지한다. 올린 뒤 기존 결과를 다시 판정할지(backfill)는 운영 결정이다.
 
 **먼저 정할 것 — 판정 임계값(Params)의 위치.**
@@ -342,7 +342,7 @@ pub const ENGINE_VERSION: u32 = 3;
 ## 참조 스킬
 
 - [rust-idioms](../rust-idioms/SKILL.md) — Composed Method, lint 템플릿 전체, newtype 기본, 모듈·파일 분할 · rust-error-handling — 경계별 에러 enum, 분류 지점 한 곳, panic 정책 · [rust-async-tokio](../rust-async-tokio/SKILL.md) — CPU 오프로드(rayon vs spawn_blocking + Semaphore), 종료, 관측성
-- rust-testing — golden fixture, insta, fake vs mockall · rust-from-spring — Spring 개념 → Rust 대응표
+- [rust-testing](../rust-testing/SKILL.md) — golden fixture, insta, fake vs mockall · rust-from-spring — Spring 개념 → Rust 대응표
 - [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) · rust-og-image-render · rust-crdt-sync · rust-geo-track — 엔진별 shell·core 세부 · `/architecture:hexagonal-clean-architecture` — Ports & Adapters 일반론 · `/dx:clean-code` — Composed Method·SLAP 원칙
 
 ## Sources / Verified

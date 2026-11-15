@@ -319,7 +319,7 @@ async fn should_not_hand_out_same_job_twice_when_claims_race(pool: PgPool) -> sq
 }
 ```
 
-- `#[sqlx::test]` 는 `migrate` feature 와 `PgPool` 인자가 있으면 테스트마다 새 DB 를 만든다. superuser `DATABASE_URL` 이 필요하고, 없으면 `DATABASE_URL must be set` 으로 panic 한다. 같은 방식으로 "reaper 뒤 finish 는 `Fenced::LeaseLost`", "attempts 가 max 에 닿은 만료 job 은 dead", "반납된 job 이 max+1 번째로 claim 되지 않는다" 를 고정한다. DB 없이 도는 것(`next_step`, `backoff`, `permanent_by_sqlstate`, `classify_compute`)은 단위 테스트로 둔다. 테스트 배치와 testcontainers 는 rust-testing.
+- `#[sqlx::test]` 는 `migrate` feature 와 `PgPool` 인자가 있으면 테스트마다 새 DB 를 만든다. superuser `DATABASE_URL` 이 필요하고, 없으면 `DATABASE_URL must be set` 으로 panic 한다. 같은 방식으로 "reaper 뒤 finish 는 `Fenced::LeaseLost`", "attempts 가 max 에 닿은 만료 job 은 dead", "반납된 job 이 max+1 번째로 claim 되지 않는다" 를 고정한다. DB 없이 도는 것(`next_step`, `backoff`, `permanent_by_sqlstate`, `classify_compute`)은 단위 테스트로 둔다. 테스트 배치와 testcontainers 는 [rust-testing](../rust-testing/SKILL.md).
 
 ## Build vs Buy
 
@@ -339,7 +339,7 @@ async fn should_not_hand_out_same_job_twice_when_claims_race(pool: PgPool) -> sq
 
 이 skill 을 적용한 결과가 다음 조건을 만족해야 한다:
 
-1. **[기능 검증]** — 실제 Postgres(`#[sqlx::test]` 또는 testcontainers)에서 다음이 통과한다: 동시 claim 두 개가 겹치지 않는다, reaper 뒤 finish 가 `LeaseLost` 를 돌려주고 결과를 쓰지 않는다, attempts 가 `max_attempts` 에 닿은 job 이 dead 가 된다, 같은 activity 가 done 뒤 다시 enqueue·처리돼도 `(activity_id, engine_version)` 결과 행은 1개다 (예: `DATABASE_URL=... cargo test --features db-tests --test db`. 배치는 rust-testing §실제 DB)
+1. **[기능 검증]** — 실제 Postgres(`#[sqlx::test]` 또는 testcontainers)에서 다음이 통과한다: 동시 claim 두 개가 겹치지 않는다, reaper 뒤 finish 가 `LeaseLost` 를 돌려주고 결과를 쓰지 않는다, attempts 가 `max_attempts` 에 닿은 job 이 dead 가 된다, 같은 activity 가 done 뒤 다시 enqueue·처리돼도 `(activity_id, engine_version)` 결과 행은 1개다 (예: `DATABASE_URL=... cargo test --features db-tests --test db`. 배치는 [rust-testing](../rust-testing/SKILL.md) §실제 DB)
 2. **[오류 경로]** — `next_step`·`backoff`·SQLSTATE·sqlx 오류 분류(`23505`·`22P02` → Bug, `42703`·`ColumnNotFound` → Schema, 재시도 목록 → Transient)·`classify_compute` 를 표의 행마다 단위 테스트로 고정하고, 처음 보는 오류가 Transient 로 간다는 테스트가 있다 (예: `cargo test --lib`)
 3. **[sqlx 정합]** — CI 에서 `cargo sqlx prepare --check` 가 통과하고 `.sqlx` 가 커밋되어 있다. `query!` 계열에 const 를 넘긴 곳이 없다
 4. **[운영]** — listener 세션을 `SELECT pg_terminate_backend(pid)` 로 끊어도 polling 주기 안에 job 이 처리된다. lease 보다 긴 job 이 모든 슬롯을 채운 동안에도 `/healthz` heartbeat 가 poll 주기마다 갱신된다. SIGTERM 뒤 예산 안에 프로세스가 끝난다. 예산 안에 끝난 job 은 done·pending·dead 중 하나로 기록되고, 예산을 넘긴 job 은 반납을 구현했다면 바로 pending·dead, 아니면 lease 만료 뒤 reaper 가 되돌린다
@@ -347,7 +347,7 @@ async fn should_not_hand_out_same_job_twice_when_claims_race(pool: PgPool) -> sq
 
 ## 참조 스킬
 
-- rust-error-handling (`JobFailure`·`next_step`·panic 정책. 이 skill 은 그 분류를 SQL 로 실행한다) · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) (core/shell 분리, `ENGINE_VERSION`·`params_hash` 와 결과 키) · [rust-async-tokio](../rust-async-tokio/SKILL.md) (`CpuGate`, `select!` 취소 안전성, 고정 컴포넌트 종료와 예산, 메트릭 exporter 설정) · rust-testing (`#[sqlx::test]`·testcontainers 배치, Given-When-Then 이름 규칙) · `/dx:negative-path-coverage` (timeout·재시도·부분 실패 테스트 체크리스트)
+- rust-error-handling (`JobFailure`·`next_step`·panic 정책. 이 skill 은 그 분류를 SQL 로 실행한다) · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) (core/shell 분리, `ENGINE_VERSION`·`params_hash` 와 결과 키) · [rust-async-tokio](../rust-async-tokio/SKILL.md) (`CpuGate`, `select!` 취소 안전성, 고정 컴포넌트 종료와 예산, 메트릭 exporter 설정) · [rust-testing](../rust-testing/SKILL.md) (`#[sqlx::test]`·testcontainers 배치, Given-When-Then 이름 규칙) · `/dx:negative-path-coverage` (timeout·재시도·부분 실패 테스트 체크리스트)
 
 ## Sources / Verified
 

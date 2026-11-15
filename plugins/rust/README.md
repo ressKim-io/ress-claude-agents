@@ -22,6 +22,7 @@ cp -r plugins/rust/skills/<이름> <프로젝트>/.claude/skills/
 
 - [`dx`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/dx/README.md)
 - [`architecture`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/architecture/README.md)
+- [`java`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/java/README.md)
 - [`go`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/go/README.md)
 - [`observability`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/observability/README.md)
 
@@ -33,7 +34,7 @@ cp -r plugins/rust/skills/<이름> <프로젝트>/.claude/skills/
 
 **권한 규칙** (`permissions.deny`) 도 실리지 않는다. agent 의 Permission Boundary 는 설치본에서 강제되지 않는 안내문이다.
 
-## Skills (4)
+## Skills (5)
 
 | 이름 | 설명 |
 |---|---|
@@ -41,6 +42,7 @@ cp -r plugins/rust/skills/<이름> <프로젝트>/.claude/skills/
 | `/rust:rust-engine-architecture` | Rust 계산 엔진 구조 — IO 없는 core·얇은 shell crate(Functional Core·sans-IO), 경계 CI 검사, concrete·generic·dyn 의존성 선택, … |
 | `/rust:rust-idioms` | Rust 관용 패턴 — Composed Method 를 ?·free fn 으로 쓰기, helper 추출 시 borrow 충돌(E0502) 회피, let-else·let chains 로 중첩 … |
 | `/rust:rust-pg-queue-worker` | Postgres 테이블 큐 워커 (Rust·sqlx) — FOR UPDATE SKIP LOCKED claim, LISTEN/NOTIFY 와 polling fallback, … |
+| `/rust:rust-testing` | Rust 테스트 — #[cfg(test)] 단위와 tests/ 통합 테스트 배치, proptest 속성 테스트, insta·golden fixture, #[sqlx::test] 실제 DB, … |
 
 ## Commands (1)
 

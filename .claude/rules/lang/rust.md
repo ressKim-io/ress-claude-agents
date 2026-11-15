@@ -142,7 +142,7 @@ async fn check_duplicate_nickname(repo: &UserRepo, nickname: &str) -> Result<(),
 - `rust-error-handling` — thiserror·anyhow, 경계별 에러 분류, panic 정책
 - `/rust:rust-engine-architecture` — core/shell workspace, 결정성, 의존성 주입
 - `/rust:rust-async-tokio` — CPU 오프로드, 채널·actor, graceful shutdown, 관측
-- `rust-testing` — 테스트 배치, proptest·insta, 실제 DB 테스트
+- `/rust:rust-testing` — 테스트 배치, proptest·insta, 실제 DB 테스트
 - `/rust:rust-pg-queue-worker` — Postgres 테이블 큐 워커
 - `rust-og-image-render` — OG 미리보기 이미지 렌더링
 - `rust-crdt-sync` — CRDT 협업 편집 동기화
