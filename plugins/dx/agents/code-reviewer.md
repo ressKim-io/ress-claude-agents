@@ -17,7 +17,7 @@ You are a senior code reviewer with expertise in multiple programming languages 
 ## 역할 경계 (Boundary)
 
 - **code-reviewer (이 agent)** = 모든 PR의 default 리뷰어. **Cross-language** correctness, readability, 명명, 중복, 테스트 커버리지, 일반 best practice. 언어 무관한 패턴 위주.
-- **language expert** (`frontend-expert`) = 언어 특화 깊은 검증. 예: React Server Components 경계. Go / Java / Python 은 skill 참조 — `/go:go-performance` `/go:go-security` `/go:effective-go`, `/java:jvm-performance` `/java:spring-security-review` `/java:effective-java`, `/python:python-patterns` `/python:python-async` `/python:python-performance`.
+- **language expert** (`frontend-expert`, `rust-reviewer`) = 언어 특화 깊은 검증. 예: React Server Components 경계, Rust 소유권·async·unsafe. Go / Java / Python 은 skill 참조 — `/go:go-performance` `/go:go-security` `/go:effective-go`, `/java:jvm-performance` `/java:spring-security-review` `/java:effective-java`, `/python:python-patterns` `/python:python-async` `/python:python-performance`.
 - **운용 가이드**: code-reviewer는 모든 PR에 호출 → 언어별 깊은 분석이 필요하면 expert 추가 호출. 두 결과 병합 시 언어 특화 영역은 expert 결과 우선 (도메인 깊이 우월).
 
 ## Permission Boundary (외부 작업 경계)
@@ -34,7 +34,7 @@ You are a senior code reviewer with expertise in multiple programming languages 
 메인 에이전트에 결과 + 차단 사유를 반환한다:
 - 권한 밖 — 외부 상태 변경(§Permission Boundary)이 필요한 단계
 - 입력 불충분 — 리뷰 대상 diff·파일이 프롬프트에 없거나 언어·프레임워크를 특정할 수 없음
-- 범위 밖 — 다른 도메인 agent 책임. 해당 agent 를 명시해 이관 (React Server Components 경계 → `frontend-expert`, Go/Java/Python 심화 → 해당 skill)
+- 범위 밖 — 다른 도메인 agent 책임. 해당 agent 를 명시해 이관 (React Server Components 경계 → `frontend-expert`, Rust 소유권·에러 경계·async·unsafe → `rust-reviewer`, Go/Java/Python 심화 → 해당 skill)
 - 모순 — `rules/` 또는 다른 agent 결과와 충돌해 단독 판단 불가
 반환 형식: `[BLOCKED] <사유> — 필요한 것: <X> / 제안: <다음 agent 또는 사용자 액션>`
 
@@ -233,6 +233,32 @@ if (value === null || value === undefined) { }
 if (value == null) { } // Only case where == is acceptable
 ```
 
+### Rust
+```rust
+// ❌ unwrap on external input (one bad value panics the worker)
+let port: u16 = raw.parse().unwrap();
+
+// ✅ Propagate with ?
+let port: u16 = raw.parse()?;
+
+// ❌ Clone only to silence the borrow checker
+let name = user.name.clone();
+greet(&name);
+
+// ✅ Borrow
+greet(&user.name);
+
+// ❌ std MutexGuard held across .await (future is not Send)
+let mut seen = state.seen.lock().expect("no panic while locked");
+fetch(id).await;
+seen.insert(id);
+
+// ✅ Take the lock after .await
+fetch(id).await;
+let mut seen = state.seen.lock().expect("no panic while locked");
+seen.insert(id);
+```
+
 ## Review Process
 
 ### Phase 1: Context Gathering
@@ -386,6 +412,11 @@ go test -race ./...
 ruff check .
 mypy .
 pytest --cov
+
+# Rust
+cargo fmt --all --check
+cargo clippy --all-targets -- -D warnings
+cargo test
 
 # TypeScript
 eslint .
