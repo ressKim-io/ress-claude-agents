@@ -33,13 +33,14 @@ cp -r plugins/rust/skills/<이름> <프로젝트>/.claude/skills/
 
 **권한 규칙** (`permissions.deny`) 도 실리지 않는다. agent 의 Permission Boundary 는 설치본에서 강제되지 않는 안내문이다.
 
-## Skills (3)
+## Skills (4)
 
 | 이름 | 설명 |
 |---|---|
 | `/rust:rust-async-tokio` | Tokio 비동기 운영 패턴 — CPU 작업 rayon·spawn_blocking 분리, actor·bounded channel, select! 취소 안전성, CancellationToken 종료 … |
 | `/rust:rust-engine-architecture` | Rust 계산 엔진 구조 — IO 없는 core·얇은 shell crate(Functional Core·sans-IO), 경계 CI 검사, concrete·generic·dyn 의존성 선택, … |
 | `/rust:rust-idioms` | Rust 관용 패턴 — Composed Method 를 ?·free fn 으로 쓰기, helper 추출 시 borrow 충돌(E0502) 회피, let-else·let chains 로 중첩 … |
+| `/rust:rust-pg-queue-worker` | Postgres 테이블 큐 워커 (Rust·sqlx) — FOR UPDATE SKIP LOCKED claim, LISTEN/NOTIFY 와 polling fallback, … |
 
 ## Commands (1)
 
