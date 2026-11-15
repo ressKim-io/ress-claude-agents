@@ -26,7 +26,7 @@ Composed Method·Guard Clause·파일 쪼개기 습관은 Rust 에서도 그대�
 파일이 커졌다
 ├── 기능 여러 개가 섞였다 ──> foo.rs + foo/ 하위 파일 (책임별 모듈)
 ├── 한 타입의 impl 이 크다 ──> 하위 파일에 impl 분할, 부모가 부를 method 는 pub(super)
-└── 테스트가 길다 ───────────> 공개 API 만 쓰는 테스트는 tests/ 로 (rust-testing)
+└── 테스트가 길다 ───────────> 공개 API 만 쓰는 테스트는 tests/ 로 (/rust:rust-testing)
 ```
 
 ## Composed Method 를 Rust 로
@@ -340,7 +340,7 @@ pub fn next_state(state: JobState, event: JobEvent) -> Option<JobState> {
 ## 참조 스킬
 
 - rust-error-handling — `check_x()?` 가 돌려주는 에러 타입 설계, `expect`·panic 정책 · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — core/shell workspace, core 전용 clippy.toml, 단위 newtype
-- rust-testing — `#[cfg(test)] mod tests`·`tests/` 배치, `should_x_when_y` 이름 · rust-from-spring — Spring 개념 → Rust 대응표
+- [rust-testing](../rust-testing/SKILL.md) — `#[cfg(test)] mod tests`·`tests/` 배치, `should_x_when_y` 이름 · rust-from-spring — Spring 개념 → Rust 대응표
 - `/dx:clean-code` — Composed Method·SLAP·Guard Clause 원칙 (Java·Go 예시) · `/dx:refactoring-principles` — 동작을 유지하며 단계적으로 쪼개는 절차
 
 ## Sources / Verified

@@ -354,13 +354,13 @@ pub fn load() -> Result<Settings, config::ConfigError> {
 
 1. **[기능 검증]** — `cargo clippy --all-targets -- -D warnings` 와 `cargo test` 가 통과한다. 바이너리에 `kill -TERM <pid>` 를 보내면 `DRAIN_BUDGET` 안에 exit 0 으로 끝나고 "shutdown signal received" 가 찍힌다(종료 때 `spawn_blocking` 계산이 남을 수 있으면 `shutdown_timeout` 형태의 main 이어야 한다). drain 중에도 `/healthz`·`/metrics` 는 200 이고, 요청을 받는 HTTP·WS 서버라면 `/readyz` 는 503 이다. 컴포넌트 하나가 Err·panic 으로 끝나거나 drain 예산을 넘기면 error 로그(panic 메시지 포함)와 exit code 1 로 끝난다
 2. **[성능 / 안전성]** — `grep -rn "spawn_blocking" src/` 의 모든 호출이 상한 Semaphore(CPU 는 `CpuGate`, blocking IO 는 별도 gate)를 거치고 permit 이 클로저 안에 있다. 루프 안 `select!` 분기는 §3 표의 cancel safe 목록만 쓴다. `cargo tree -d -e normal | grep -E '^(opentelemetry|opentelemetry_sdk|opentelemetry-otlp|tracing-opentelemetry) v'` 가 비어 있다. release 프로필에 `panic = "unwind"` 가 있고 `preStop + DRAIN_BUDGET + OPS_CLOSE_BUDGET + flush < terminationGracePeriodSeconds` 를 manifest 값으로 확인한다
-3. **[회귀 테스트]** — 세마포어를 공유하면 `tokio::time::timeout` 이 만료되고 분리하면 끝나는지, rayon 클로저 panic 이 `Err` 로 오는지, 호출이 취소돼도 CPU permit 이 계산 종료까지 유지되는지, `log_exit` 가 Err·panic 을, `drain` 이 예산 초과를 실패로 판정하는지, TaskTracker task 가 Ok 로 끝나면 루트 토큰을 취소하지 않고 치명 Err·panic 이면 `drop_guard` 로 취소하는지 테스트로 고정한다 (rust-testing)
+3. **[회귀 테스트]** — 세마포어를 공유하면 `tokio::time::timeout` 이 만료되고 분리하면 끝나는지, rayon 클로저 panic 이 `Err` 로 오는지, 호출이 취소돼도 CPU permit 이 계산 종료까지 유지되는지, `log_exit` 가 Err·panic 을, `drain` 이 예산 초과를 실패로 판정하는지, TaskTracker task 가 Ok 로 끝나면 루트 토큰을 취소하지 않고 치명 Err·panic 이면 `drop_guard` 로 취소하는지 테스트로 고정한다 ([rust-testing](../rust-testing/SKILL.md))
 4. **[일관성]** — [rust.md rule](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/lang/rust.md) 의 async·`unwrap_used` 규칙, rust-error-handling 의 panic 정책(`panic = "unwind"`, `JoinError::is_panic`)과 어긋나지 않는다
 
 ## 참조 스킬
 
 - [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) — 큐 루프, PgListener 전용 task, lease 반납 drain, heartbeat `/healthz` · rust-og-image-render — `try_acquire` → 503, 렌더 CPU 격리, 요청 timeout · rust-crdt-sync — 문서별 actor, 느린 클라이언트 backpressure, `Awareness` 의 Send
-- rust-error-handling — `JoinError::is_panic`, panic 정책, 에러 enum 설계 · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — core crate 에 tokio 를 두지 않는 이유, async trait 의 Send·dyn 제약 · rust-testing — 동시성 테스트 배치와 이름
+- rust-error-handling — `JoinError::is_panic`, panic 정책, 에러 enum 설계 · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — core crate 에 tokio 를 두지 않는 이유, async trait 의 Send·dyn 제약 · [rust-testing](../rust-testing/SKILL.md) — 동시성 테스트 배치와 이름
 - `/go:concurrency-go` — Go 의 goroutine·channel·Mutex 판단과 비교할 때 · `/observability:observability-otel` — Collector·샘플링 (계측 이후 단계)
 
 ## Sources / Verified
