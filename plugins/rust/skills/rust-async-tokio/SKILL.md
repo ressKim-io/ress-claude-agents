@@ -81,7 +81,7 @@ where
 }
 ```
 
-- 컨테이너에서는 스레드 수를 CPU limit 에 맞춰 명시한다 (`TOKIO_WORKER_THREADS`, `RAYON_NUM_THREADS`). `available_parallelism` 은 cgroup 정보를 읽지 못하면 실제보다 크게 셀 수 있다. job permit 은 claim(lease 획득) 전에 얻어, 처리하지 못할 lease 를 쥔 채 기다리지 않는다. DB 트랜잭션(`FOR UPDATE`)을 연 채로 계산하지 않는다 ([rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md)). 요청을 거절할 수 있는 서버는 `try_acquire_owned` 실패를 503 으로 돌려준다 (rust-og-image-render).
+- 컨테이너에서는 스레드 수를 CPU limit 에 맞춰 명시한다 (`TOKIO_WORKER_THREADS`, `RAYON_NUM_THREADS`). `available_parallelism` 은 cgroup 정보를 읽지 못하면 실제보다 크게 셀 수 있다. job permit 은 claim(lease 획득) 전에 얻어, 처리하지 못할 lease 를 쥔 채 기다리지 않는다. DB 트랜잭션(`FOR UPDATE`)을 연 채로 계산하지 않는다 ([rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md)). 요청을 거절할 수 있는 서버는 `try_acquire_owned` 실패를 503 으로 돌려준다 ([rust-og-image-render](../rust-og-image-render/SKILL.md)).
 
 ## 2. Actor 와 채널 — 공유 상태 대신 소유자 하나
 
@@ -359,7 +359,7 @@ pub fn load() -> Result<Settings, config::ConfigError> {
 
 ## 참조 스킬
 
-- [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) — 큐 루프, PgListener 전용 task, lease 반납 drain, heartbeat `/healthz` · rust-og-image-render — `try_acquire` → 503, 렌더 CPU 격리, 요청 timeout · [rust-crdt-sync](../rust-crdt-sync/SKILL.md) — 문서별 actor, 느린 클라이언트 backpressure, `Awareness` 의 Send
+- [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) — 큐 루프, PgListener 전용 task, lease 반납 drain, heartbeat `/healthz` · [rust-og-image-render](../rust-og-image-render/SKILL.md) — `try_acquire` → 503, 렌더 CPU 격리, 요청 timeout · [rust-crdt-sync](../rust-crdt-sync/SKILL.md) — 문서별 actor, 느린 클라이언트 backpressure, `Awareness` 의 Send
 - [rust-error-handling](../rust-error-handling/SKILL.md) — `JoinError::is_panic`, panic 정책, 에러 enum 설계 · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — core crate 에 tokio 를 두지 않는 이유, async trait 의 Send·dyn 제약 · [rust-testing](../rust-testing/SKILL.md) — 동시성 테스트 배치와 이름
 - `/go:concurrency-go` — Go 의 goroutine·channel·Mutex 판단과 비교할 때 · `/observability:observability-otel` — Collector·샘플링 (계측 이후 단계)
 
