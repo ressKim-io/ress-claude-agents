@@ -8,7 +8,7 @@ paths:
 
 # Rust 코드 패턴 규칙
 
-Rust Book·API Guidelines·Clippy·Tokio 문서와 Microsoft·Google Rust 가이드 기준 핵심 규칙. Java/Spring 에서 왔다면 `rust-from-spring`(대응표) → `/rust:rust-idioms`(함수·모듈 나누기) → `/rust:rust-engine-architecture`(엔진 구조) 순으로 본다.
+Rust Book·API Guidelines·Clippy·Tokio 문서와 Microsoft·Google Rust 가이드 기준 핵심 규칙. Java/Spring 에서 왔다면 `/rust:rust-from-spring`(대응표) → `/rust:rust-idioms`(함수·모듈 나누기) → `/rust:rust-engine-architecture`(엔진 구조) 순으로 본다.
 공식·대기업 가이드에는 함수·파일 길이 숫자가 없다 (함수 길이의 유일한 숫자는 clippy `too_many_lines` 기본 threshold 100). 나머지 숫자는 레포 **house rule** 이다.
 
 ## 에러 처리
@@ -137,7 +137,7 @@ async fn check_duplicate_nickname(repo: &UserRepo, nickname: &str) -> Result<(),
 
 ## 참조
 
-- `rust-from-spring` — Spring 개념 → Rust 대응표 (Java/Spring 출신의 시작점)
+- `/rust:rust-from-spring` — Spring 개념 → Rust 대응표 (Java/Spring 출신의 시작점)
 - `/rust:rust-idioms` — Composed Method·중첩·모듈 분할·lint 템플릿
 - `/rust:rust-error-handling` — thiserror·anyhow, 경계별 에러 분류, panic 정책
 - `/rust:rust-engine-architecture` — core/shell workspace, 결정성, 의존성 주입
