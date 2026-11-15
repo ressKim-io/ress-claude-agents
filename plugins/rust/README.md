@@ -58,8 +58,11 @@ cp -r plugins/rust/skills/<이름> <프로젝트>/.claude/skills/
 |---|---|
 | `rust:rust-reviewer` | Rust 고유 위험 리뷰어 — 소유권·clone 남용, 에러 경계와 도메인 결과 구분, panic 경로, async blocking·Send·취소 안전성, core 순수성·결정성, unsafe, … |
 
-## Commands (1)
+## Commands (4)
 
 | 이름 | 설명 |
 |---|---|
 | `/rust:lint` | cargo fmt·clippy 로 이슈를 찾고 요청하면 수정합니다 |
+| `/rust:refactor` | Rust 코드 리팩토링을 제안합니다 |
+| `/rust:review` | Rust 코드를 리뷰하고 개선점을 제안합니다 |
+| `/rust:test-gen` | Rust 단위·통합 테스트 코드를 생성합니다 |

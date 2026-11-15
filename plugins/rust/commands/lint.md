@@ -35,7 +35,7 @@ lint 레벨·threshold 의 근거와 전체 템플릿은 `/rust:rust-idioms` (Li
 ### 수동 처리
 - [ ] 경고를 `#[allow]` 로 덮지 않는다 — 고치거나 `#[expect(lint, reason = "…")]`
 - [ ] 코드에 `#![deny(warnings)]` 를 넣지 않는다 — CI 의 `-D warnings` 로 막는다
-- [ ] `too_many_lines`·`excessive_nesting` 경고는 `refactor` 로 넘긴다
+- [ ] `too_many_lines`·`excessive_nesting` 경고는 `/rust:refactor` 로 넘긴다
 
 ## Output Format
 
