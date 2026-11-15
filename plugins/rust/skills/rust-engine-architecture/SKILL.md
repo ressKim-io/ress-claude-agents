@@ -222,7 +222,7 @@ impl Room {
 | DI 컨테이너 | `main` 에서 직접 조립 | config → pool → listener → loops | `#[derive(Clone)] AppState` + `State<T>` | 같음 |
 | 패키지(`controller`·`service`·`repository`) | 기능별 파일 (예시) | track-worker `main.rs`(조립)·`runner.rs`(loop·fill·`process_job`)·`claim.rs`·`store.rs`(입력 load·fencing finish)·`outcome.rs`(`classify_*`·`apply_outcome`)·`listener.rs`·`reaper.rs`·`ops.rs`(`/healthz`·`/metrics`). core 는 위 §상태 없는 판정 함수 | og-server `render.rs` + `render/{handler,limits}.rs`·`error.rs`(`OgError`). og-core 는 rust-og-image-render §1 | sync-core `room.rs`·`authorize.rs`·`error.rs`(`RoomError`). sync-server `connect.rs`(토큰·upgrade)·`peer.rs`(연결 task)·`actor.rs`·`registry.rs`·`journal.rs`·`error.rs`(`SyncError`) |
 
-rust-analyzer 아키텍처 문서도 core 가 외부와 통신하지 않는다는 점을 "Architecture Invariant" 로 적는다. shell 의 작업 하나는 "값을 읽는다 → 순수 계산 → 결과를 쓴다" 순서다. 실패는 `classify_*` 가 `JobFailure` 로 바꾼다. `classify_*` 는 원인을 감싸기만 하는 변환이 아니라 재시도·dead 를 가르는 분류다. rule 이 `map_err` 를 허용하는 자리가 바로 이것이다. 계산은 `CpuGate::run` 으로 보낸다. `CpuGate` 는 [rust-async-tokio](../rust-async-tokio/SKILL.md), `JobFailure`·`classify_join` 은 rust-error-handling, `ComputeError`·`classify_sqlx`·`classify_compute` 와 lease 를 확인하는 finish(`judge_and_finish`, lease 를 잃으면 `JobFailure::LeaseLost`)는 rust-pg-queue-worker 에 있다. 아래 `save_result` 는 그 finish 를 줄여 쓴 것이다. `load_inputs` 는 `fetch_optional` 로 읽어 `Option` 을 돌려준다. Go 가 activity 를 지운 경우는 장애가 아니라 core 의 `Rejected` 판정으로 저장한다. `fetch_one` 을 쓰면 `RowNotFound` 가 `classify_sqlx` 에서 Transient 가 되어 재시도를 다 쓴 뒤 dead 로 간다 (rust-pg-queue-worker §4). core 진입점의 정식 모양은 `judge(raw, course, params)` 이고, 다른 skill 의 `judge(..)` 호출은 이것을 줄여 쓴 것이다.
+rust-analyzer 아키텍처 문서도 core 가 외부와 통신하지 않는다는 점을 "Architecture Invariant" 로 적는다. shell 의 작업 하나는 "값을 읽는다 → 순수 계산 → 결과를 쓴다" 순서다. 실패는 `classify_*` 가 `JobFailure` 로 바꾼다. `classify_*` 는 원인을 감싸기만 하는 변환이 아니라 재시도·dead 를 가르는 분류다. rule 이 `map_err` 를 허용하는 자리가 바로 이것이다. 계산은 `CpuGate::run` 으로 보낸다. `CpuGate` 는 [rust-async-tokio](../rust-async-tokio/SKILL.md), `JobFailure`·`classify_join` 은 rust-error-handling, `ComputeError`·`classify_sqlx`·`classify_compute` 와 lease 를 확인하는 finish(`judge_and_finish`, lease 를 잃으면 `JobFailure::LeaseLost`)는 [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) 에 있다. 아래 `save_result` 는 그 finish 를 줄여 쓴 것이다. `load_inputs` 는 `fetch_optional` 로 읽어 `Option` 을 돌려준다. Go 가 activity 를 지운 경우는 장애가 아니라 core 의 `Rejected` 판정으로 저장한다. `fetch_one` 을 쓰면 `RowNotFound` 가 `classify_sqlx` 에서 Transient 가 되어 재시도를 다 쓴 뒤 dead 로 간다 (rust-pg-queue-worker §4). core 진입점의 정식 모양은 `judge(raw, course, params)` 이고, 다른 skill 의 `judge(..)` 호출은 이것을 줄여 쓴 것이다.
 
 ```rust
 pub(crate) async fn process_job(
@@ -304,7 +304,7 @@ impl Peer {
 pub const ENGINE_VERSION: u32 = 3;
 ```
 
-- `CARGO_PKG_VERSION` 에 묶으면 출력과 무관한 변경에도 재판정이 쏟아지고, 반대로 geo·libm·툴체인을 올려 출력이 바뀐 경우는 놓친다. 결과는 `(activity_id, engine_version)` 으로 upsert 한다. 이전 버전 결과가 남아 비교와 롤백이 된다. SQL 은 rust-pg-queue-worker. golden snapshot 본문에 `engine_version` 을 넣어 버전과 출력이 함께 리뷰되게 한다 (rust-testing).
+- `CARGO_PKG_VERSION` 에 묶으면 출력과 무관한 변경에도 재판정이 쏟아지고, 반대로 geo·libm·툴체인을 올려 출력이 바뀐 경우는 놓친다. 결과는 `(activity_id, engine_version)` 으로 upsert 한다. 이전 버전 결과가 남아 비교와 롤백이 된다. SQL 은 [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md). golden snapshot 본문에 `engine_version` 을 넣어 버전과 출력이 함께 리뷰되게 한다 (rust-testing).
 - 올리는 규칙은 업계 표준 출처가 없는 **설계 제안**이다 (⚠️ 팀 합의 필요): golden diff 가 생기면 올리고, 없으면 유지한다. 올린 뒤 기존 결과를 다시 판정할지(backfill)는 운영 결정이다.
 
 **먼저 정할 것 — 판정 임계값(Params)의 위치.**
@@ -343,7 +343,7 @@ pub const ENGINE_VERSION: u32 = 3;
 
 - [rust-idioms](../rust-idioms/SKILL.md) — Composed Method, lint 템플릿 전체, newtype 기본, 모듈·파일 분할 · rust-error-handling — 경계별 에러 enum, 분류 지점 한 곳, panic 정책 · [rust-async-tokio](../rust-async-tokio/SKILL.md) — CPU 오프로드(rayon vs spawn_blocking + Semaphore), 종료, 관측성
 - rust-testing — golden fixture, insta, fake vs mockall · rust-from-spring — Spring 개념 → Rust 대응표
-- rust-pg-queue-worker · rust-og-image-render · rust-crdt-sync · rust-geo-track — 엔진별 shell·core 세부 · `/architecture:hexagonal-clean-architecture` — Ports & Adapters 일반론 · `/dx:clean-code` — Composed Method·SLAP 원칙
+- [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) · rust-og-image-render · rust-crdt-sync · rust-geo-track — 엔진별 shell·core 세부 · `/architecture:hexagonal-clean-architecture` — Ports & Adapters 일반론 · `/dx:clean-code` — Composed Method·SLAP 원칙
 
 ## Sources / Verified
 

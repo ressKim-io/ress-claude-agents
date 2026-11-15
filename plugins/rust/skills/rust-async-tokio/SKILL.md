@@ -28,7 +28,7 @@ spawn 한 task 를 어떻게 모을까?
 └── 결과가 필요 없는 요청 task ──────────> TaskTracker — Err 는 task 안에서 처리, 치명 실패만 drop_guard (성공 시 disarm)
 ```
 
-- 루프 안 `select!` 에서 매번 새로 만드는 future, 진 쪽의 부분 진행을 잃으면 안 되는 future 는 cancel safe 여야 한다 (§3). 한 번만 도는 `select!`(종료 신호 대기)는 진 쪽을 버려도 되는지만 확인한다. 슬롯을 채우는 job 루프는 rust-pg-queue-worker §6 이다. 종료 예산은 `preStop + drain + ops 종료 + telemetry flush < terminationGracePeriodSeconds` (§4).
+- 루프 안 `select!` 에서 매번 새로 만드는 future, 진 쪽의 부분 진행을 잃으면 안 되는 future 는 cancel safe 여야 한다 (§3). 한 번만 도는 `select!`(종료 신호 대기)는 진 쪽을 버려도 되는지만 확인한다. 슬롯을 채우는 job 루프는 [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) §6 이다. 종료 예산은 `preStop + drain + ops 종료 + telemetry flush < terminationGracePeriodSeconds` (§4).
 
 ## 1. CPU 작업 분리 — spawn_blocking 과 rayon
 
@@ -81,7 +81,7 @@ where
 }
 ```
 
-- 컨테이너에서는 스레드 수를 CPU limit 에 맞춰 명시한다 (`TOKIO_WORKER_THREADS`, `RAYON_NUM_THREADS`). `available_parallelism` 은 cgroup 정보를 읽지 못하면 실제보다 크게 셀 수 있다. job permit 은 claim(lease 획득) 전에 얻어, 처리하지 못할 lease 를 쥔 채 기다리지 않는다. DB 트랜잭션(`FOR UPDATE`)을 연 채로 계산하지 않는다 (rust-pg-queue-worker). 요청을 거절할 수 있는 서버는 `try_acquire_owned` 실패를 503 으로 돌려준다 (rust-og-image-render).
+- 컨테이너에서는 스레드 수를 CPU limit 에 맞춰 명시한다 (`TOKIO_WORKER_THREADS`, `RAYON_NUM_THREADS`). `available_parallelism` 은 cgroup 정보를 읽지 못하면 실제보다 크게 셀 수 있다. job permit 은 claim(lease 획득) 전에 얻어, 처리하지 못할 lease 를 쥔 채 기다리지 않는다. DB 트랜잭션(`FOR UPDATE`)을 연 채로 계산하지 않는다 ([rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md)). 요청을 거절할 수 있는 서버는 `try_acquire_owned` 실패를 503 으로 돌려준다 (rust-og-image-render).
 
 ## 2. Actor 와 채널 — 공유 상태 대신 소유자 하나
 
@@ -179,11 +179,11 @@ where
 }
 ```
 
-- `Some(x) = rx.recv()` 처럼 패턴을 쓰면 안 맞는 분기는 꺼진다. 모든 분기가 꺼질 수 있는데 `else` 가 없으면 **panic** 이다. 위처럼 `match` 로 `None` 을 처리하거나, 꺼지지 않는 분기를 함께 둔다(§4 main 의 종료 신호 분기). 주기 polling 은 `interval` + `set_missed_tick_behavior(MissedTickBehavior::Delay)`. 기본값 Burst 는 긴 처리 뒤 밀린 tick 을 몰아서 낸다. sqlx `PgListener::recv`·`try_recv` 는 문서에 cancel safety 가 없다. 전용 task 로 감싼다 (rust-pg-queue-worker).
+- `Some(x) = rx.recv()` 처럼 패턴을 쓰면 안 맞는 분기는 꺼진다. 모든 분기가 꺼질 수 있는데 `else` 가 없으면 **panic** 이다. 위처럼 `match` 로 `None` 을 처리하거나, 꺼지지 않는 분기를 함께 둔다(§4 main 의 종료 신호 분기). 주기 polling 은 `interval` + `set_missed_tick_behavior(MissedTickBehavior::Delay)`. 기본값 Burst 는 긴 처리 뒤 밀린 tick 을 몰아서 낸다. sqlx `PgListener::recv`·`try_recv` 는 문서에 cancel safety 가 없다. 전용 task 로 감싼다 ([rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md)).
 
 ## 4. 종료 처리 — CancellationToken + JoinSet
 
-K8s 는 `preStop` 을 먼저 실행하고 그다음 SIGTERM 을 보낸다. `preStop` 도 grace(기본 30초) 안에서 돌고, grace 가 끝나면 SIGKILL 이다. `ctrl_c()` 는 Unix 에서 SIGINT 만 받는다. SIGTERM·SIGINT 둘 다 `signal()` 로 시작할 때 설치해 설치 실패를 바로 드러낸다. ops 서버(`/healthz`·`/metrics`, 요청을 받는 서버는 `/readyz` 도)는 워커와 다른 토큰을 받아 워커 drain 이 끝난 뒤 닫는다. 같은 토큰이면 drain 구간에 `/healthz` 가 connection refused 가 되고 메트릭이 사라진다. `/readyz` 와 `start_draining` 은 Service 트래픽을 받는 HTTP·WS 서버(og-render, sync)용이다. 트래픽이 없는 큐 워커는 `/healthz`·`/metrics` 만 두고 그 줄을 빼며, ops 토큰은 그래도 분리한다 (rust-pg-queue-worker §9). 컴포넌트는 모두 `anyhow::Result<()>` 를 반환한다.
+K8s 는 `preStop` 을 먼저 실행하고 그다음 SIGTERM 을 보낸다. `preStop` 도 grace(기본 30초) 안에서 돌고, grace 가 끝나면 SIGKILL 이다. `ctrl_c()` 는 Unix 에서 SIGINT 만 받는다. SIGTERM·SIGINT 둘 다 `signal()` 로 시작할 때 설치해 설치 실패를 바로 드러낸다. ops 서버(`/healthz`·`/metrics`, 요청을 받는 서버는 `/readyz` 도)는 워커와 다른 토큰을 받아 워커 drain 이 끝난 뒤 닫는다. 같은 토큰이면 drain 구간에 `/healthz` 가 connection refused 가 되고 메트릭이 사라진다. `/readyz` 와 `start_draining` 은 Service 트래픽을 받는 HTTP·WS 서버(og-render, sync)용이다. 트래픽이 없는 큐 워커는 `/healthz`·`/metrics` 만 두고 그 줄을 빼며, ops 토큰은 그래도 분리한다 ([rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) §9). 컴포넌트는 모두 `anyhow::Result<()>` 를 반환한다.
 
 ```rust
 #[tokio::main] // 종료 때 spawn_blocking 계산이 drain 예산을 넘길 수 있으면 아래 bullet 의 Builder + shutdown_timeout 형태로
@@ -237,7 +237,7 @@ async fn serve_ops(app: Router, token: CancellationToken) -> anyhow::Result<()> 
 }
 ```
 
-- 결과가 필요 없고 수가 정해지지 않은 요청 task 는 `TaskTracker`(tokio-util `rt` feature)로 모으고, 종료 때 `close()` 다음 `wait()` 한다. close 하지 않으면 wait 가 끝나지 않는다. TaskTracker 는 결과를 모아 주지 않으므로(`spawn` 이 돌려준 `JoinHandle` 을 버리면 Err·panic 도 사라진다) `Err` 는 task 안에서 처리한다(요청은 500). 동시 수를 세어 빈 슬롯만큼 claim 하는 job 은 TaskTracker 가 아니라 루프가 쥔 `JoinSet` 에 담고 `join_next` 를 `select!` 분기로 받는다. drain 함수 안에서 기다리면 그동안 슬롯을 못 채우고 heartbeat 가 멈춘다 (rust-pg-queue-worker §6). 프로세스를 멈춰야 하는 실패만 루트 토큰을 취소한다. 그럴 때는 `root.clone().drop_guard()` 를 task 안으로 옮기고, 정상 경로와 처리한 실패 경로에서 `guard.disarm()` 한다. **`DropGuard` 는 drop 될 때 무조건 cancel 하므로, disarm 하지 않으면 요청이 성공할 때마다 서비스 전체가 종료된다.** panic 이면 tokio 가 poll 의 panic 을 잡는 과정에서 task future 를 drop 하므로 guard 도 drop 되어 루트가 취소된다(`panic = "unwind"` 전제, §7). child 토큰을 취소해도 부모는 취소되지 않는다.
+- 결과가 필요 없고 수가 정해지지 않은 요청 task 는 `TaskTracker`(tokio-util `rt` feature)로 모으고, 종료 때 `close()` 다음 `wait()` 한다. close 하지 않으면 wait 가 끝나지 않는다. TaskTracker 는 결과를 모아 주지 않으므로(`spawn` 이 돌려준 `JoinHandle` 을 버리면 Err·panic 도 사라진다) `Err` 는 task 안에서 처리한다(요청은 500). 동시 수를 세어 빈 슬롯만큼 claim 하는 job 은 TaskTracker 가 아니라 루프가 쥔 `JoinSet` 에 담고 `join_next` 를 `select!` 분기로 받는다. drain 함수 안에서 기다리면 그동안 슬롯을 못 채우고 heartbeat 가 멈춘다 ([rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) §6). 프로세스를 멈춰야 하는 실패만 루트 토큰을 취소한다. 그럴 때는 `root.clone().drop_guard()` 를 task 안으로 옮기고, 정상 경로와 처리한 실패 경로에서 `guard.disarm()` 한다. **`DropGuard` 는 drop 될 때 무조건 cancel 하므로, disarm 하지 않으면 요청이 성공할 때마다 서비스 전체가 종료된다.** panic 이면 tokio 가 poll 의 panic 을 잡는 과정에서 task future 를 drop 하므로 guard 도 drop 되어 루트가 취소된다(`panic = "unwind"` 전제, §7). child 토큰을 취소해도 부모는 취소되지 않는다.
 - `with_graceful_shutdown` 은 진행 중 요청을 끝까지 기다린다. 멈춘 요청이 종료를 막지 않게 `TimeoutLayer::with_status_code(..)` 를 건다 (`new` 는 deprecated). `spawn_blocking` 계산은 abort 되지 않는다. `#[tokio::main]` 은 runtime 을 감추므로 main 이 반환해도 runtime drop 이 남은 계산을 **무기한** 기다린다. 예산을 강제하려면 `Builder::new_multi_thread().enable_all().build()?` 로 runtime 을 직접 만들고 `rt.block_on(run())` 뒤에 `rt.shutdown_timeout(..)` 을 부른다. 예: grace 30초 = preStop 5초 + drain 20초 + ops 종료 2초 + flush 여유. preStop 이 넘치면 2초를 한 번 더 줄 뿐이다. shell 이 없는 distroless 이미지는 `lifecycle.preStop.sleep`(K8s 1.34 GA)을 쓴다.
 
 ## 5. Mutex 선택과 Send 에러
@@ -359,7 +359,7 @@ pub fn load() -> Result<Settings, config::ConfigError> {
 
 ## 참조 스킬
 
-- rust-pg-queue-worker — 큐 루프, PgListener 전용 task, lease 반납 drain, heartbeat `/healthz` · rust-og-image-render — `try_acquire` → 503, 렌더 CPU 격리, 요청 timeout · rust-crdt-sync — 문서별 actor, 느린 클라이언트 backpressure, `Awareness` 의 Send
+- [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) — 큐 루프, PgListener 전용 task, lease 반납 drain, heartbeat `/healthz` · rust-og-image-render — `try_acquire` → 503, 렌더 CPU 격리, 요청 timeout · rust-crdt-sync — 문서별 actor, 느린 클라이언트 backpressure, `Awareness` 의 Send
 - rust-error-handling — `JoinError::is_panic`, panic 정책, 에러 enum 설계 · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — core crate 에 tokio 를 두지 않는 이유, async trait 의 Send·dyn 제약 · rust-testing — 동시성 테스트 배치와 이름
 - `/go:concurrency-go` — Go 의 goroutine·channel·Mutex 판단과 비교할 때 · `/observability:observability-otel` — Collector·샘플링 (계측 이후 단계)
 
