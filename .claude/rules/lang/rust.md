@@ -8,7 +8,7 @@ paths:
 
 # Rust 코드 패턴 규칙
 
-Rust Book·API Guidelines·Clippy·Tokio 문서와 Microsoft·Google Rust 가이드 기준 핵심 규칙. Java/Spring 에서 왔다면 `rust-from-spring`(대응표) → `rust-idioms`(함수·모듈 나누기) → `rust-engine-architecture`(엔진 구조) 순으로 본다.
+Rust Book·API Guidelines·Clippy·Tokio 문서와 Microsoft·Google Rust 가이드 기준 핵심 규칙. Java/Spring 에서 왔다면 `rust-from-spring`(대응표) → `/rust:rust-idioms`(함수·모듈 나누기) → `rust-engine-architecture`(엔진 구조) 순으로 본다.
 공식·대기업 가이드에는 함수·파일 길이 숫자가 없다 (함수 길이의 유일한 숫자는 clippy `too_many_lines` 기본 threshold 100). 나머지 숫자는 레포 **house rule** 이다.
 
 ## 에러 처리
@@ -118,7 +118,7 @@ async fn check_duplicate_nickname(repo: &UserRepo, nickname: &str) -> Result<(),
 - MUST 그룹을 켤 때는 `{ level = "warn", priority = -1 }` — 같은 priority 로 레벨이 다른 개별 lint(예: `missing_errors_doc = "allow"`)와 함께 쓰면 `lint_groups_priority` 에러
 - MUST `too_many_lines = "warn"` + `too-many-lines-threshold = 100` 명시 (house rule: 켜고 기본값 100 을 명시. pedantic 이라 기본 꺼져 있고, 빈 줄·주석 줄은 세지 않는다)
 - MUST `excessive-nesting-threshold = 4` 로 시작해 실제 코드의 경고 수를 잰 뒤 조정 (house rule. 기본값 0 이면 동작 안 함. `impl`·함수 본문도 1단계로 세서 4 면 method 안 `if` 3단부터 경고)
-- MUST `unwrap_used = "warn"` + `allow-unwrap-in-tests = true` (house rule) — 불변식은 `expect("…")` 로 허용. 1.96 은 이 설정을 `#[test]`·`#[cfg(test)]` 에만 적용해 `tests/common` helper 를 경고한다. 1.100 CHANGELOG 는 integration test 로 넓혔다고 적지만 workspace member(`crates/<x>/tests/`)에도 적용되는지는 ⚠️ 로컬이 1.96 이라 미측정 — helper 는 버전과 상관없이 `expect("…")` (세부 `rust-idioms`)
+- MUST `unwrap_used = "warn"` + `allow-unwrap-in-tests = true` (house rule) — 불변식은 `expect("…")` 로 허용. 1.96 은 이 설정을 `#[test]`·`#[cfg(test)]` 에만 적용해 `tests/common` helper 를 경고한다. 1.100 CHANGELOG 는 integration test 로 넓혔다고 적지만 workspace member(`crates/<x>/tests/`)에도 적용되는지는 ⚠️ 로컬이 1.96 이라 미측정 — helper 는 버전과 상관없이 `expect("…")` (세부 `/rust:rust-idioms`)
 - MUST correctness 그룹은 기본값 deny 유지, restriction 그룹 통째로 켜기 NEVER — 필요한 lint 만 골라 켠다
 - MUST 국소 예외는 `#[expect(clippy::lint_name, reason = "…")]` — 더 이상 lint 가 안 나면 경고가 떠서 `#[allow]` 처럼 남지 않는다
 - NEVER 코드에 `#![deny(warnings)]` — CI 에서 `cargo clippy --all-targets -- -D warnings`
@@ -138,7 +138,7 @@ async fn check_duplicate_nickname(repo: &UserRepo, nickname: &str) -> Result<(),
 ## 참조
 
 - `rust-from-spring` — Spring 개념 → Rust 대응표 (Java/Spring 출신의 시작점)
-- `rust-idioms` — Composed Method·중첩·모듈 분할·lint 템플릿
+- `/rust:rust-idioms` — Composed Method·중첩·모듈 분할·lint 템플릿
 - `rust-error-handling` — thiserror·anyhow, 경계별 에러 분류, panic 정책
 - `rust-engine-architecture` — core/shell workspace, 결정성, 의존성 주입
 - `rust-async-tokio` — CPU 오프로드, 채널·actor, graceful shutdown, 관측

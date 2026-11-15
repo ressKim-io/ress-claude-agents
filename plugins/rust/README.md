@@ -16,6 +16,12 @@ Rust — 관용 패턴, 에러 경계, 엔진 core/shell 구조, Tokio, Postgres
 cp -r plugins/rust/skills/<이름> <프로젝트>/.claude/skills/
 ```
 
+## 함께 쓰면 좋은 plugin
+
+본문에서 참조하는 순서다. 없어도 동작하지만 해당 참조는 열리지 않는다.
+
+- [`dx`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/dx/README.md)
+
 ## 설치본에 포함되지 않는 것
 
 **rule** 은 plugin 에 실을 수 없다. 필요하면 프로젝트의 `.claude/rules/` 로 복사한다.
@@ -23,6 +29,12 @@ cp -r plugins/rust/skills/<이름> <프로젝트>/.claude/skills/
 - [`lang/rust.md`](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/lang/rust.md)
 
 **권한 규칙** (`permissions.deny`) 도 실리지 않는다. agent 의 Permission Boundary 는 설치본에서 강제되지 않는 안내문이다.
+
+## Skills (1)
+
+| 이름 | 설명 |
+|---|---|
+| `/rust:rust-idioms` | Rust 관용 패턴 — Composed Method 를 ?·free fn 으로 쓰기, helper 추출 시 borrow 충돌(E0502) 회피, let-else·let chains 로 중첩 … |
 
 ## Commands (1)
 
