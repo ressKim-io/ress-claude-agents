@@ -21,6 +21,9 @@ cp -r plugins/rust/skills/<이름> <프로젝트>/.claude/skills/
 본문에서 참조하는 순서다. 없어도 동작하지만 해당 참조는 열리지 않는다.
 
 - [`dx`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/dx/README.md)
+- [`architecture`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/architecture/README.md)
+- [`go`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/go/README.md)
+- [`observability`](https://github.com/ressKim-io/ress-claude-agents/blob/main/plugins/observability/README.md)
 
 ## 설치본에 포함되지 않는 것
 
@@ -30,10 +33,11 @@ cp -r plugins/rust/skills/<이름> <프로젝트>/.claude/skills/
 
 **권한 규칙** (`permissions.deny`) 도 실리지 않는다. agent 의 Permission Boundary 는 설치본에서 강제되지 않는 안내문이다.
 
-## Skills (1)
+## Skills (2)
 
 | 이름 | 설명 |
 |---|---|
+| `/rust:rust-async-tokio` | Tokio 비동기 운영 패턴 — CPU 작업 rayon·spawn_blocking 분리, actor·bounded channel, select! 취소 안전성, CancellationToken 종료 … |
 | `/rust:rust-idioms` | Rust 관용 패턴 — Composed Method 를 ?·free fn 으로 쓰기, helper 추출 시 borrow 충돌(E0502) 회피, let-else·let chains 로 중첩 … |
 
 ## Commands (1)
