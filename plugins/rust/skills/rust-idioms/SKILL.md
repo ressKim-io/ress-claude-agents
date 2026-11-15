@@ -206,7 +206,7 @@ pub fn create_user(repo: &mut UserRepo, req: CreateUserRequest) -> Result<UserId
 ```
 
 - service 에는 IO 가 필요한 검사(중복 확인)만 남고, 이후 코드는 `Email` 을 받으므로 다시 검사하지 않는다. 약한 타입에서의 변환은 `TryFrom`·`FromStr`·`parse` 로 하고, 검증을 건너뛰는 infallible `From<String>` 은 두지 않는다 (M-STRONG-TYPES-GUARD — library 지침, 앱에 유추 적용)
-- fallible 생성자 이름은 출처마다 다르다 (Microsoft `TryFrom`·`from_x`, Google `try_new`, Comprehensive Rust `new -> Result`). crate 안에서 하나로 통일한다. getter 는 `get_` 없이 `as_str()`·`email()` 로 쓴다 (C-GETTER). 단위 newtype(`Meters`)과 `uom` 선택은 rust-engine-architecture
+- fallible 생성자 이름은 출처마다 다르다 (Microsoft `TryFrom`·`from_x`, Google `try_new`, Comprehensive Rust `new -> Result`). crate 안에서 하나로 통일한다. getter 는 `get_` 없이 `as_str()`·`email()` 로 쓴다 (C-GETTER). 단위 newtype(`Meters`)과 `uom` 선택은 [rust-engine-architecture](../rust-engine-architecture/SKILL.md)
 - bool flag 인자도 타입으로 바꾼다: ❌ `send_welcome(&user, true, false)` → ✅ `send_welcome(&email, Channel::Email, Timing::Now)` (2-variant enum, 이름 있는 두 함수, options struct 중 하나). bool 인자 4개부터 pedantic `fn_params_excessive_bools`(기본 3)가 잡는다
 
 ## 모듈·파일 분할
@@ -339,7 +339,7 @@ pub fn next_state(state: JobState, event: JobEvent) -> Option<JobState> {
 
 ## 참조 스킬
 
-- rust-error-handling — `check_x()?` 가 돌려주는 에러 타입 설계, `expect`·panic 정책 · rust-engine-architecture — core/shell workspace, core 전용 clippy.toml, 단위 newtype
+- rust-error-handling — `check_x()?` 가 돌려주는 에러 타입 설계, `expect`·panic 정책 · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — core/shell workspace, core 전용 clippy.toml, 단위 newtype
 - rust-testing — `#[cfg(test)] mod tests`·`tests/` 배치, `should_x_when_y` 이름 · rust-from-spring — Spring 개념 → Rust 대응표
 - `/dx:clean-code` — Composed Method·SLAP·Guard Clause 원칙 (Java·Go 예시) · `/dx:refactoring-principles` — 동작을 유지하며 단계적으로 쪼개는 절차
 
