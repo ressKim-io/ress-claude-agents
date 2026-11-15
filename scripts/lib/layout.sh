@@ -10,8 +10,8 @@
 # 일부만 사라져도 잡히도록 여유 없이 현재 개수로 둔다.
 MIN_SKILLS=272
 MIN_AGENTS=34
-MIN_COMMANDS=43
-MIN_RULES=26
+MIN_COMMANDS=44
+MIN_RULES=27
 
 # plugins/ 가 없으면 빈 목록을 돌려주고, 하한 검사(assert_floor)가 실패시킨다.
 skill_files() {

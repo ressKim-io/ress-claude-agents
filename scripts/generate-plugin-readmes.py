@@ -26,6 +26,7 @@ RULES = {
     "devlog": ["process/devlog-lifecycle.md"],
     "go": ["lang/go.md"],
     "java": ["lang/java.md", "lang/spring.md"],
+    "rust": ["lang/rust.md"],
     "k8s": ["infra/k8s-manifest.md", "infra/version-compatibility.md", "core/user-approval.md"],
     "service-mesh": ["infra/istio.md"],
     "infra": ["infra/terraform.md", "core/cloud-cli-safety.md"],

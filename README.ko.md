@@ -55,6 +55,7 @@ Runbook 찾아서 수동 실행               → incident-responder 가 자동 
 | | [`java`](plugins/java/README.md) | Java·Spring Data·Security·Cache, jOOQ, JVM 성능, 테스트 |
 | | [`python`](plugins/python/README.md) | FastAPI, Django, asyncio, 성능, 테스트 |
 | | [`frontend`](plugins/frontend/README.md) | React, Next.js, TypeScript, 상태 관리, CSS, 웹 성능 |
+| | [`rust`](plugins/rust/README.md) | Rust 엔진: core/shell crate 분리, 에러 경계, Tokio, Postgres 큐 워커, OG 이미지 렌더, CRDT 동기화, GPS 트랙 판정 |
 | 설계 | [`architecture`](plugins/architecture/README.md) | MSA, DDD, Saga, CQRS, API 설계, gRPC, 모듈러 모놀리스, 대규모 트래픽 |
 | | [`messaging`](plugins/messaging/README.md) | Kafka, RabbitMQ, NATS, Redis Streams, AWS 메시징, 브로커 장애 |
 | 인프라 | [`k8s`](plugins/k8s/README.md) | 스케줄링, 오토스케일링, 트래픽, Helm, 보안, GPU, manifest 리뷰 |
@@ -163,6 +164,7 @@ cp    .claude/rules/core/security.md     /path/to/project/.claude/rules/
 | ☕ `java` | `**/*.java` | Effective Java: Record, Builder, DI, 불변 객체, Modern Java |
 | 🦫 `go` | `**/*.go` | Go Proverbs: 인터페이스, 에러 래핑, Context, Functional Options |
 | 🌱 `spring` | `**/*.java` | Spring Boot: @Transactional, DTO/Entity, 예외 전략, 계층 구조 |
+| 🦀 `rust` | `**/*.rs`, `**/Cargo.toml`, `**/clippy.toml` | Composed Method, 에러 경계·도메인 결과 구분, newtype, core/shell 분리, lint 설정 |
 
 > **Skills vs Rules**: Rules는 "항상 자동 적용"되는 짧은 지시문, Skills는 "필요 시 로드"되는 상세 가이드입니다.
 > `.java` 파일 편집 시 `java.md` + `spring.md`가 자동 적용되고, 상세 내용은 `/java:effective-java`, `/java:spring-patterns` 스킬을 참조합니다.
