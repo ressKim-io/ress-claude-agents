@@ -107,7 +107,7 @@ pub async fn finish(pool: &PgPool, job: &ClaimedJob, row: &ResultRow<'_>) -> Res
 
 ## 4. 실패 — 분류는 한 함수, 상태 전이는 apply_outcome 한 곳
 
-구간 미통과·부정 의심·입력 거부는 오류가 아니라 `Ok(Judgement)` 다. finish 로 done 이 되고 dead 로 가지 않는다 (rust-error-handling). Go 가 activity 를 지운 경우도 같다. `load_input` 은 `fetch_optional` 로 읽어 `Option` 을 돌려주고 core 가 '입력 없음' 을 판정한다. `fetch_one` 이 내는 `RowNotFound` 는 아래 `_ => None` 으로 Transient 가 되어, 재시도를 다 쓴 뒤 인프라 장애처럼 dead 로 간다. 오류만 아래 표로 나눈다.
+구간 미통과·부정 의심·입력 거부는 오류가 아니라 `Ok(Judgement)` 다. finish 로 done 이 되고 dead 로 가지 않는다 ([rust-error-handling](../rust-error-handling/SKILL.md)). Go 가 activity 를 지운 경우도 같다. `load_input` 은 `fetch_optional` 로 읽어 `Option` 을 돌려주고 core 가 '입력 없음' 을 판정한다. `fetch_one` 이 내는 `RowNotFound` 는 아래 `_ => None` 으로 Transient 가 되어, 재시도를 다 쓴 뒤 인프라 장애처럼 dead 로 간다. 오류만 아래 표로 나눈다.
 
 | 오류 | 언제 나나 | 분류 → 전이 |
 |---|---|---|
@@ -185,7 +185,7 @@ pub async fn apply_outcome(pool: &PgPool, job: &ClaimedJob, failure: &JobFailure
 }
 ```
 
-- **타입 출처**: `JobFailure`·`PermanentKind`·`Next`·`next_step`·`classify_join` 은 rust-error-handling, `CpuGate` 는 [rust-async-tokio](../rust-async-tokio/SKILL.md) 의 것이다. `summary()` 의 `{kind:?}` 와 테스트의 `assert_eq!` 는 rust-error-handling 정의의 `Debug`·`PartialEq`·`Eq` derive 에 기대므로 그 derive 를 지우지 않는다. 위 `ComputeError` 는 `CpuGate::run`·`on_rayon` 이 돌려주는 타입이고, rust-async-tokio 가 말하는 "`AcquireError`·`JoinError` 를 `#[from]` 으로 받는 enum" 에 variant 이름을 붙인 것이다. `ResultRow` 는 core 의 `Judgement` 를 컬럼 값(`verdict: &str`, `reason: Option<&str>`)으로 옮긴 shell 쪽 타입이다.
+- **타입 출처**: `JobFailure`·`PermanentKind`·`Next`·`next_step`·`classify_join` 은 [rust-error-handling](../rust-error-handling/SKILL.md), `CpuGate` 는 [rust-async-tokio](../rust-async-tokio/SKILL.md) 의 것이다. `summary()` 의 `{kind:?}` 와 테스트의 `assert_eq!` 는 rust-error-handling 정의의 `Debug`·`PartialEq`·`Eq` derive 에 기대므로 그 derive 를 지우지 않는다. 위 `ComputeError` 는 `CpuGate::run`·`on_rayon` 이 돌려주는 타입이고, rust-async-tokio 가 말하는 "`AcquireError`·`JoinError` 를 `#[from]` 으로 받는 enum" 에 variant 이름을 붙인 것이다. `ResultRow` 는 core 의 `Judgement` 를 컬럼 값(`verdict: &str`, `reason: Option<&str>`)으로 옮긴 shell 쪽 타입이다.
 - `next_step`·`backoff`·`permanent_by_sqlstate`·`classify_compute` 는 IO 가 없으니 표의 행마다 단위 테스트로 고정한다. `backoff` 는 `min(2^attempts 초, 10분)` 같은 순수 함수다(값은 예시). 지수는 상한을 둬 shift overflow 를 막는다. `apply_outcome` 자체가 실패하면(DB 장애) 로그만 남긴다. lease 가 만료되면 reaper 가 되돌리므로 안에서 재시도 루프를 돌지 않는다. dead 전이에는 메트릭과 알람을 건다. `summary()` 는 길이만 묶는다. SQLSTATE `22xxx` 메시지는 입력값을 되풀이한다(`22P02` 는 `invalid input syntax for type integer: "<값>"`). PII 가 걸리면 `last_error` 에는 분류와 SQLSTATE 만 남긴다.
 - `judge` 는 CPU 작업이라 `CpuGate`(permit 수는 코어 수에서 시작해 측정 후 조정, permit 은 클로저 안)로 보낸다. job 동시성(worker 의 `concurrency` = JoinSet 슬롯)과 CPU 동시성을 따로 묶는 것은 [rust.md](https://github.com/ressKim-io/ress-claude-agents/blob/main/.claude/rules/lang/rust.md) 의 MUST 다. 측정해서 CPU 가 처리량을 좌우하면 rayon 경로로 옮기고, 그쪽 panic 은 `ComputeError::Panicked` 로 와서 같은 Permanent(Bug) 가 된다.
 
@@ -347,7 +347,7 @@ async fn should_not_hand_out_same_job_twice_when_claims_race(pool: PgPool) -> sq
 
 ## 참조 스킬
 
-- rust-error-handling (`JobFailure`·`next_step`·panic 정책. 이 skill 은 그 분류를 SQL 로 실행한다) · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) (core/shell 분리, `ENGINE_VERSION`·`params_hash` 와 결과 키) · [rust-async-tokio](../rust-async-tokio/SKILL.md) (`CpuGate`, `select!` 취소 안전성, 고정 컴포넌트 종료와 예산, 메트릭 exporter 설정) · [rust-testing](../rust-testing/SKILL.md) (`#[sqlx::test]`·testcontainers 배치, Given-When-Then 이름 규칙) · `/dx:negative-path-coverage` (timeout·재시도·부분 실패 테스트 체크리스트)
+- [rust-error-handling](../rust-error-handling/SKILL.md) (`JobFailure`·`next_step`·panic 정책. 이 skill 은 그 분류를 SQL 로 실행한다) · [rust-engine-architecture](../rust-engine-architecture/SKILL.md) (core/shell 분리, `ENGINE_VERSION`·`params_hash` 와 결과 키) · [rust-async-tokio](../rust-async-tokio/SKILL.md) (`CpuGate`, `select!` 취소 안전성, 고정 컴포넌트 종료와 예산, 메트릭 exporter 설정) · [rust-testing](../rust-testing/SKILL.md) (`#[sqlx::test]`·testcontainers 배치, Given-When-Then 이름 규칙) · `/dx:negative-path-coverage` (timeout·재시도·부분 실패 테스트 체크리스트)
 
 ## Sources / Verified
 

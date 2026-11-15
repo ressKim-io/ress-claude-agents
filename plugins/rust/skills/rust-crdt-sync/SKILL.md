@@ -5,7 +5,7 @@ description: "Rust CRDT 협업 편집 동기화 — yrs·automerge·loro 선택,
 
 # Rust CRDT Sync — 실시간 동시 편집 서버
 
-기본 조합은 **yrs + `yrs::sync` 직접 구성, 문서마다 actor 하나**다. 이 skill 은 sync engine 고유의 결정(라이브러리·프로토콜·권한·저장·수렴성 테스트)만 다룬다. core/shell 분리는 [rust-engine-architecture](../rust-engine-architecture/SKILL.md), actor·종료 공통 규칙은 [rust-async-tokio](../rust-async-tokio/SKILL.md), close code 매핑은 rust-error-handling 이 맡는다.
+기본 조합은 **yrs + `yrs::sync` 직접 구성, 문서마다 actor 하나**다. 이 skill 은 sync engine 고유의 결정(라이브러리·프로토콜·권한·저장·수렴성 테스트)만 다룬다. core/shell 분리는 [rust-engine-architecture](../rust-engine-architecture/SKILL.md), actor·종료 공통 규칙은 [rust-async-tokio](../rust-async-tokio/SKILL.md), close code 매핑은 [rust-error-handling](../rust-error-handling/SKILL.md) 이 맡는다.
 
 ## Quick Reference (결정 트리)
 
@@ -208,7 +208,7 @@ pub async fn connect(grant: Grant, State(app): State<AppState>, ws: WebSocketUpg
 }
 ```
 
-- 브라우저의 `WebSocket` 생성자는 URL 과 subprotocol 목록만 받으므로 `Authorization` 헤더를 붙일 수 없다. 토큰은 query string·`Sec-WebSocket-Protocol`·cookie 중 하나로 오고, 그래서 `verify` 가 `Parts` 전체를 받는다. cookie 라면 RFC 6455 §10.2 대로 `Origin` 이 기대한 출처인지 보고 아니면 403 으로 답한다. `open` 은 Postgres 에서 문서를 읽으므로 실패할 수 있고, extractor 가 모두 통과한 뒤에만 불린다. 이 엔드포인트의 HTTP 실패는 503 하나라 `AppError: IntoResponse` 를 두지 않았다. 종류가 늘면 rust-error-handling 의 `IntoResponse` 한 곳으로 옮긴다. `DocId` 는 uuid newtype 이다(parse, don't validate: [rust-idioms](../rust-idioms/SKILL.md)). axum 기본값은 메시지 64 MB, frame 16 MB, write buffer 128 KiB, `max_write_buffer_size` 무제한이다. write buffer 는 쓰기가 실패할 때만 쌓이므로 느린 클라이언트 방어가 아니다(§2 의 bounded mpsc 가 맡는다). 반대로 `max_message_size` 를 너무 낮추면 큰 문서의 첫 SyncStep2 나 오프라인 편집 뒤 SyncStep2 가 거절되어 재동기화가 영영 실패한다.
+- 브라우저의 `WebSocket` 생성자는 URL 과 subprotocol 목록만 받으므로 `Authorization` 헤더를 붙일 수 없다. 토큰은 query string·`Sec-WebSocket-Protocol`·cookie 중 하나로 오고, 그래서 `verify` 가 `Parts` 전체를 받는다. cookie 라면 RFC 6455 §10.2 대로 `Origin` 이 기대한 출처인지 보고 아니면 403 으로 답한다. `open` 은 Postgres 에서 문서를 읽으므로 실패할 수 있고, extractor 가 모두 통과한 뒤에만 불린다. 이 엔드포인트의 HTTP 실패는 503 하나라 `AppError: IntoResponse` 를 두지 않았다. 종류가 늘면 [rust-error-handling](../rust-error-handling/SKILL.md) 의 `IntoResponse` 한 곳으로 옮긴다. `DocId` 는 uuid newtype 이다(parse, don't validate: [rust-idioms](../rust-idioms/SKILL.md)). axum 기본값은 메시지 64 MB, frame 16 MB, write buffer 128 KiB, `max_write_buffer_size` 무제한이다. write buffer 는 쓰기가 실패할 때만 쌓이므로 느린 클라이언트 방어가 아니다(§2 의 bounded mpsc 가 맡는다). 반대로 `max_message_size` 를 너무 낮추면 큰 문서의 첫 SyncStep2 나 오프라인 편집 뒤 SyncStep2 가 거절되어 재동기화가 영영 실패한다.
 
 **메시지 단위 필터.** read-only 판정은 메시지 앞 2바이트로 한다. `00 00`(SyncStep1)은 허용, `00 01`(SyncStep2)·`00 02`(Update)는 거부다. 이것을 frame 에 적용하면 뚫린다.
 
@@ -243,7 +243,7 @@ impl From<yrs::sync::Error> for RoomError {
 }
 ```
 
-- 클라이언트 잘못: 깨진 bytes(`DecodingError`), 디코딩은 되지만 구조가 틀린 update(`Update`, yrs 0.28 의 `UpdateError` 는 `InvalidParent` 하나), 모르는 태그(`Unsupported`), 거부 사유를 담아 보낸 Auth(`PermissionDenied`). 서버 내부 오류(1011)로 보내지 않는다(깨진 update·모르는 태그·거부 Auth 가 `Client` 인 것은 로컬 테스트). sync-server 의 `SyncError` 가 `Room(#[from] RoomError)` 으로 감싸고, `close_frame()` 한 곳에서 `Client` → 1008, `Internal` → 1011 을 고른다(rust-error-handling). core 가 axum `CloseFrame` 을 알면 core 가 tokio 를 끌어온다.
+- 클라이언트 잘못: 깨진 bytes(`DecodingError`), 디코딩은 되지만 구조가 틀린 update(`Update`, yrs 0.28 의 `UpdateError` 는 `InvalidParent` 하나), 모르는 태그(`Unsupported`), 거부 사유를 담아 보낸 Auth(`PermissionDenied`). 서버 내부 오류(1011)로 보내지 않는다(깨진 update·모르는 태그·거부 Auth 가 `Client` 인 것은 로컬 테스트). sync-server 의 `SyncError` 가 `Room(#[from] RoomError)` 으로 감싸고, `close_frame()` 한 곳에서 `Client` → 1008, `Internal` → 1011 을 고른다([rust-error-handling](../rust-error-handling/SKILL.md)). core 가 axum `CloseFrame` 을 알면 core 가 tokio 를 끌어온다.
 
 ## 5. 트랜잭션 — 좁게, 중첩 없이
 
@@ -349,7 +349,7 @@ proptest! {
 
 ## 참조 스킬
 
-- [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — sans-IO `Room`, `sync-core`/`sync-server` workspace, 순수성 CI · [rust-async-tokio](../rust-async-tokio/SKILL.md) — actor·`select!` 취소 안전성, 종료 처리, metrics exporter · rust-error-handling — `SyncError::close_frame()`, close code 선택 · [rust-testing](../rust-testing/SKILL.md) — proptest·테스트 배치·이름 규칙 · [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) — sqlx 사용, LISTEN/NOTIFY, lease·fencing · `/architecture:distributed-lock`(fencing token 일반론) · `/security:auth-patterns`(단기 토큰과 권한 모델) · `/dx:negative-path-coverage`(단절·느린 peer·부분 실패 테스트 목록)
+- [rust-engine-architecture](../rust-engine-architecture/SKILL.md) — sans-IO `Room`, `sync-core`/`sync-server` workspace, 순수성 CI · [rust-async-tokio](../rust-async-tokio/SKILL.md) — actor·`select!` 취소 안전성, 종료 처리, metrics exporter · [rust-error-handling](../rust-error-handling/SKILL.md) — `SyncError::close_frame()`, close code 선택 · [rust-testing](../rust-testing/SKILL.md) — proptest·테스트 배치·이름 규칙 · [rust-pg-queue-worker](../rust-pg-queue-worker/SKILL.md) — sqlx 사용, LISTEN/NOTIFY, lease·fencing · `/architecture:distributed-lock`(fencing token 일반론) · `/security:auth-patterns`(단기 토큰과 권한 모델) · `/dx:negative-path-coverage`(단절·느린 peer·부분 실패 테스트 목록)
 
 ## Sources / Verified
 

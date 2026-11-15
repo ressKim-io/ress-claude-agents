@@ -55,7 +55,7 @@ pub async fn create_user(repo: &UserRepo, req: SignupRequest) -> Result<UserId, 
 }
 
 async fn check_duplicate_nickname(repo: &UserRepo, nickname: &str) -> Result<(), SignupError> {
-    // 사전 검사는 친절한 에러용 — 동시 가입 경합은 DB unique 제약이 막고, 그 위반을 DuplicateNickname 으로 바꾸는 분류는 rust-error-handling
+    // 사전 검사는 친절한 에러용 — 동시 가입 경합은 DB unique 제약이 막고, 그 위반을 DuplicateNickname 으로 바꾸는 분류는 /rust:rust-error-handling
     if repo.nickname_exists(nickname).await? {
         return Err(SignupError::DuplicateNickname);
     }
@@ -139,7 +139,7 @@ async fn check_duplicate_nickname(repo: &UserRepo, nickname: &str) -> Result<(),
 
 - `rust-from-spring` — Spring 개념 → Rust 대응표 (Java/Spring 출신의 시작점)
 - `/rust:rust-idioms` — Composed Method·중첩·모듈 분할·lint 템플릿
-- `rust-error-handling` — thiserror·anyhow, 경계별 에러 분류, panic 정책
+- `/rust:rust-error-handling` — thiserror·anyhow, 경계별 에러 분류, panic 정책
 - `/rust:rust-engine-architecture` — core/shell workspace, 결정성, 의존성 주입
 - `/rust:rust-async-tokio` — CPU 오프로드, 채널·actor, graceful shutdown, 관측
 - `/rust:rust-testing` — 테스트 배치, proptest·insta, 실제 DB 테스트
